@@ -9,11 +9,13 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
 
+use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as BaseLocationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
@@ -54,12 +56,20 @@ class Handler implements BaseLocationHandler
     protected $contentMapper;
 
     /**
+     * Object state handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler
+     */
+    protected $objectStateHandler;
+
+    /**
      * Construct from userGateway
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Handler $contentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler $objectStateHandler
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
      */
@@ -67,13 +77,15 @@ class Handler implements BaseLocationHandler
         LocationGateway $locationGateway,
         LocationMapper $locationMapper,
         ContentHandler $contentHandler,
-        ContentMapper $contentMapper
+        ContentMapper $contentMapper,
+        ObjectStateHandler $objectStateHandler
     )
     {
         $this->locationGateway = $locationGateway;
         $this->locationMapper = $locationMapper;
         $this->contentHandler = $contentHandler;
         $this->contentMapper = $contentMapper;
+        $this->objectStateHandler = $objectStateHandler;
     }
 
     /**
@@ -153,6 +165,44 @@ class Handler implements BaseLocationHandler
     }
 
     /**
+     * Returns an array of default content states with content state group id as key.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState[]
+     */
+    protected function getDefaultContentStates()
+    {
+        $defaultObjectStatesMap = array();
+
+        foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
+        {
+            foreach ( $this->objectStateHandler->loadObjectStates( $objectStateGroup->id ) as $objectState )
+            {
+                // Only register the first object state which is the default one.
+                $defaultObjectStatesMap[$objectStateGroup->id] = $objectState;
+                break;
+            }
+        }
+
+        return $defaultObjectStatesMap;
+    }
+
+    /**
+     * @param Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState[] $contentStates
+     */
+    protected function setContentStates( Content $content, array $contentStates )
+    {
+        foreach ( $contentStates as $contentStateGroupId => $contentState )
+        {
+            $this->objectStateHandler->setContentState(
+                $content->versionInfo->contentInfo->id,
+                $contentStateGroupId,
+                $contentState->id
+            );
+        }
+    }
+
+    /**
      * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
      *
      * Performs a deep copy of the location identified by $sourceId and all of
@@ -171,6 +221,7 @@ class Handler implements BaseLocationHandler
     {
         $children = $this->locationGateway->getSubtreeContent( $sourceId );
         $destinationParentData = $this->locationGateway->getBasicNodeData( $destinationParentId );
+        $defaultObjectStates = $this->getDefaultContentStates();
         $contentMap = array();
         $locationMap = array(
             $children[0]["parent_node_id"] => array(
@@ -199,6 +250,8 @@ class Handler implements BaseLocationHandler
                     $child["contentobject_id"],
                     $child["contentobject_version"]
                 );
+
+                $this->setContentStates( $content, $defaultObjectStates );
 
                 $content = $this->contentHandler->publish(
                     $content->versionInfo->contentInfo->id,
