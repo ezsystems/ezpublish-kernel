@@ -1,4 +1,3 @@
-
 ==========================
 eZ Publish REST API V2 RFC
 ==========================
@@ -2113,7 +2112,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
       <public>false</public>
       <Query>
         <Criteria>
-          <FullTextCritierion>Title</FieldCritierion>
+          <FullTextCritierion>Title</FullTextCritierion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
