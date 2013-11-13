@@ -12,12 +12,13 @@ interface URLLookupService
      *
      * @param string $url
      * @param string $languageCode
+     * @param string $context
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function lookup( $url, $languageCode = null );
+    public function lookup( $url, $languageCode = null, $context = null );
 
     /**
      * Returns the URL alias for the given location in the given language.
@@ -28,8 +29,9 @@ interface URLLookupService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $languageCode
+     * @param string $context
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
-    public function reverseLookup( Location $location, $languageCode = null );
+    public function reverseLookup( Location $location, $languageCode = null, $context = null );
 }
