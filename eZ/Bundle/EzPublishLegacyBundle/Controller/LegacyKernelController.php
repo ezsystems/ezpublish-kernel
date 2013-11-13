@@ -9,7 +9,6 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
-use DateTime;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse\LegacyResponseManager;
 use eZ\Publish\Core\MVC\Legacy\Kernel\URIHelper;

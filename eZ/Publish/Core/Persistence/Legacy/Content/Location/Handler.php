@@ -17,7 +17,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 
 /**

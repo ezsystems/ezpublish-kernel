@@ -13,7 +13,6 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use Exception;
 use DateTime;
-use DateTimeZone;
 
 /**
  * Value for Time field type

@@ -12,7 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Controller;
 use eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService as CoreBundlePageService;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\Controller\PageController as BasePageController;
-use Symfony\Component\HttpFoundation\Response;
 
 class PageController extends BasePageController
 {

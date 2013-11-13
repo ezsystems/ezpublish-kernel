@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Image;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;

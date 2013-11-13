@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\Base;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Exceptions;

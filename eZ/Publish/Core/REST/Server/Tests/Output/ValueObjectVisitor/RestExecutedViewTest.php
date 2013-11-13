@@ -16,7 +16,6 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\REST\Server\Values\RestExecutedView;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class RestExecutedViewTest extends ValueObjectVisitorBaseTest
 {

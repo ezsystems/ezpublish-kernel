@@ -8,8 +8,6 @@
  */
 namespace eZ\Publish\Core\REST\Common\Output;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Output\Visitor as OutputVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator as OutputGenerator;
 
 /**

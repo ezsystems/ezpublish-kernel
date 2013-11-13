@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Limitation\Tests;
 
-use eZ\Publish\API\Repository\Values\User\User;
 use PHPUnit_Framework_TestCase;
 
 abstract class Base extends PHPUnit_Framework_TestCase

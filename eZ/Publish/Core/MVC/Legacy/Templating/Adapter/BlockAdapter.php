@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Legacy\Templating\Adapter;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZFlowPool;
-use eZPageBlock;
 
 /**
  * Adapter for page Block objects.

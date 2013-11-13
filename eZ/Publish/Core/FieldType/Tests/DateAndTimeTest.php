@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime;
 use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
-use ReflectionObject;
 use DateTime;
 use DateInterval;
 use stdClass;

@@ -10,7 +10,6 @@
 namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation;
-use eZ\Publish\API\Repository\Tests\Values\User\Limitation\BaseLimitationTest;
 
 /**
  * Test case for the {@link \eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation}

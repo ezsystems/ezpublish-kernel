@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
-use ReflectionObject;
 
 /**
  * @group fieldType

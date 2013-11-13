@@ -10,9 +10,6 @@
 namespace eZ\Publish\SPI\Persistence\User;
 
 use eZ\Publish\SPI\Persistence\User;
-use eZ\Publish\SPI\Persistence\User\Role;
-use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
-use eZ\Publish\SPI\Persistence\User\Policy;
 
 /**
  * Storage Engine handler for user module

@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\SignalSlot\Tests\SignalDispatcher;
 
 use eZ\Publish\Core\SignalSlot;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use PHPUnit_Framework_TestCase;
 
 /**

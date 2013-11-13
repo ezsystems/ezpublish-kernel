@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Selection\Type as Selection;
 use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue;
-use ReflectionObject;
 
 /**
  * @group fieldType

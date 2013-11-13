@@ -11,7 +11,6 @@ namespace eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface;
 use DateTime;
 use ezpKernelResult;

@@ -10,8 +10,6 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\Core\Repository\DomainMapper;
-use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -34,7 +32,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use DateTime;
 use Exception;
 
 /**

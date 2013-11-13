@@ -10,9 +10,7 @@
 namespace eZ\Publish\Core\MVC\Legacy\Templating;
 
 use Symfony\Component\Templating\EngineInterface;
-use Symfony\Component\Templating\TemplateNameParserInterface;
 use eZ\Publish\Core\MVC\Legacy\Templating\Converter\MultipleObjectConverter;
-use eZ\Publish\Core\MVC\Legacy\Templating\LegacyCompatible;
 use eZTemplate;
 
 class LegacyEngine implements EngineInterface

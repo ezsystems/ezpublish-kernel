@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\UrlAlias;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\XmlText\Converter\EzLinkToHtml5;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as APINotFoundException;

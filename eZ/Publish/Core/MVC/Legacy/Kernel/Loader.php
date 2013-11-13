@@ -14,7 +14,6 @@ use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use ezpKernelHandler;
-use eZURI;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;

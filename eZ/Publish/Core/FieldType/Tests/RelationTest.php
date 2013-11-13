@@ -11,8 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Relation\Type as RelationType;
 use eZ\Publish\Core\FieldType\Relation\Value;
-use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
