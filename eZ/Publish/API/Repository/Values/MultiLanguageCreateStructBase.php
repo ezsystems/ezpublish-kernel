@@ -46,6 +46,8 @@ abstract class MultiLanguageCreateStructBase extends ValueObject
     /**
      * the main language code used as fallback
      *
+     * @required
+     *
      * @var string
      */
     public $mainLanguageCode;
