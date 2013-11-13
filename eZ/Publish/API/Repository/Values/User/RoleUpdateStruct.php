@@ -9,17 +9,12 @@
 
 namespace eZ\Publish\API\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageUpdateStructBase;
 
 /**
  * This class is used to update a role
  */
-class RoleUpdateStruct extends ValueObject
+class RoleUpdateStruct extends MultiLanguageUpdateStructBase
 {
-    /**
-     * Readable string identifier of a role
-     *
-     * @var string
-     */
-    public $identifier;
+
 }

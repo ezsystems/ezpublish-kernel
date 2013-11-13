@@ -9,19 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageCreateStructBase;
 
 /**
  * This class is used to create a new role
  */
-abstract class RoleCreateStruct extends ValueObject
+abstract class RoleCreateStruct extends MultiLanguageCreateStructBase
 {
-    /**
-     * Readable string identifier of a role
-     *
-     * @var string
-     */
-    public $identifier;
 
     /**
      * Returns policies associated with the role

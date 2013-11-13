@@ -9,16 +9,15 @@
 
 namespace eZ\Publish\API\Repository\Values\User;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageValueBase;
 
 /**
  * This class represents a role
  *
  * @property-read mixed $id the internal id of the role
- * @property-read string $identifier the identifier of the role
  * @property-read array $policies an array of the policies {@link \eZ\Publish\API\Repository\Values\User\Policy} of the role.
  */
-abstract class Role extends ValueObject
+abstract class Role extends MultiLanguageValueBase
 {
     /**
      * ID of the user rule
@@ -26,14 +25,6 @@ abstract class Role extends ValueObject
      * @var mixed
      */
     protected $id;
-
-     /**
-     * Readable string identifier of a role
-     * in 4.x. this is mapped to the role name
-     *
-     * @var string
-     */
-    protected $identifier;
 
     /**
      * Returns the list of policies of this role
