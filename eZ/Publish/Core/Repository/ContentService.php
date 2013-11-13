@@ -1727,6 +1727,7 @@ class ContentService implements ContentServiceInterface
             $destinationContentInfo = $this->internalLoadContentInfo( $spiRelation->destinationContentId );
             if ( !$this->repository->canUser( 'content', 'read', $destinationContentInfo ) )
                 continue;
+
             $relations[] = $this->domainMapper->buildRelationDomainObject(
                 $spiRelation,
                 $contentInfo,
@@ -1763,6 +1764,7 @@ class ContentService implements ContentServiceInterface
             $sourceContentInfo = $this->internalLoadContentInfo( $spiRelation->sourceContentId );
             if ( !$this->repository->canUser( 'content', 'read', $sourceContentInfo ) )
                 continue;
+
             $returnArray[] = $this->domainMapper->buildRelationDomainObject(
                 $spiRelation,
                 $sourceContentInfo,
