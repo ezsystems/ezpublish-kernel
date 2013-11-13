@@ -23,6 +23,8 @@ interface URLAliasService
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     *
+     * @TODO Do we need the $context for URL alias creation, too?
      */
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false );
 
@@ -46,6 +48,8 @@ interface URLAliasService
      * @param boolean $alwaysAvailable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     *
+     * @TODO Do we need the $context for URL alias creation, too?
      */
     public function createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false );
 
@@ -58,7 +62,7 @@ interface URLAliasService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias[]
      */
-    public function listLocationAliases( Location $location, $custom = true, $languageCode = null );
+    public function listLocationAliases( Location $location, $custom = null, $languageCode = null, $context = null  );
 
     /**
      * List global aliases
