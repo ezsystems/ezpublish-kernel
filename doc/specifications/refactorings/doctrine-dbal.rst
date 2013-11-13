@@ -90,3 +90,32 @@ Tasks
     3.1 Refactor all Gateways and Search Condition Generators
     3.2 Convert SQL schema into `Doctrine\DBAL\Schema\Schema` instance to allow
         generating SQL for all database platforms.
+
+API
+---
+
+Currently the aliasing/quoting code is pretty dominant in the Gateways, because
+of the way the ezc Query Objects work. Hiding this implementation detail
+behind a simple Table Gateway helps simplify the code alot. ::
+
+    <?php
+    interface TableGateway
+    {
+        public function __construct(Connection $conn, TableMetadata $metadata);
+        public function insert(array $data);
+        public function update(array $data, array $where);
+        public function delete(array $where);
+        public function createSelectQuery();
+        public function createUpdateQuery();
+        public function createDeleteQuery();
+        public function createInsertQuery();
+    }
+
+    class TableMetadata
+    {
+        public $name;
+        public $sequenceName;
+        public $primaryKeys = array();
+        public $columns = array();
+    }
+
