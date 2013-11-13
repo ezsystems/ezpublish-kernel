@@ -43,7 +43,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      *
      * @var bool
      */
-    protected $isEnabled = true;
+    protected $enabled = true;
 
     /**
      * @var Psr\Log\LoggerInterface
@@ -71,7 +71,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function all()
     {
-        if ( $this->isEnabled === false )
+        if ( $this->enabled === false )
             return;
 
         $this->cache->clear();
@@ -107,9 +107,9 @@ class PersistenceCachePurger implements CacheClearerInterface
      *
      * @param bool $isEnabled
      */
-    public function setIsEnabled( $isEnabled )
+    public function setEnabled( $isEnabled )
     {
-        $this->isEnabled = (bool)$isEnabled;
+        $this->enabled = (bool)$isEnabled;
     }
 
     /**
@@ -119,7 +119,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function isEnabled()
     {
-        return $this->isEnabled;
+        return $this->enabled;
     }
 
     /**
@@ -135,7 +135,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function content( $locationIds = null )
     {
-        if ( $this->allCleared === true || $this->isEnabled === false )
+        if ( $this->allCleared === true || $this->enabled === false )
             return;
 
         if ( $locationIds === null )
@@ -183,7 +183,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function contentType( $id = null )
     {
-        if ( $this->allCleared === true || $this->isEnabled === false )
+        if ( $this->allCleared === true || $this->enabled === false )
             return;
 
         if ( $id === null )
@@ -210,7 +210,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function contentTypeGroup( $id = null )
     {
-        if ( $this->allCleared === true || $this->isEnabled === false )
+        if ( $this->allCleared === true || $this->enabled === false )
             return;
 
         if ( $id === null )
@@ -238,7 +238,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function section( $id = null )
     {
-        if ( $this->allCleared === true || $this->isEnabled === false )
+        if ( $this->allCleared === true || $this->enabled === false )
             return;
 
         if ( $id === null )
@@ -262,7 +262,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function languages( $ids )
     {
-        if ( $this->allCleared === true || $this->isEnabled === false )
+        if ( $this->allCleared === true || $this->enabled === false )
             return;
 
         $ids = (array)$ids;
@@ -278,7 +278,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function user( $id = null )
     {
-        if ( $this->allCleared === true || $this->isEnabled === false )
+        if ( $this->allCleared === true || $this->enabled === false )
             return;
 
         if ( $id === null )
