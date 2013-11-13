@@ -12,7 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use InvalidArgumentException;
 
 class View extends AbstractParser
 {
@@ -20,8 +19,6 @@ class View extends AbstractParser
      * Adds semantic configuration definition.
      *
      * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $nodeBuilder Node just under ezpublish.system.<siteaccess>
-     *
-     * @throws \InvalidArgumentException
      */
     public function addSemanticConfig( NodeBuilder $nodeBuilder )
     {

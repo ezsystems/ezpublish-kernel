@@ -9,10 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
-use eZ\Publish\Core\REST\Common\RequestParser;
-use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
 use eZ\Publish\SPI\Variation\VariationHandler;

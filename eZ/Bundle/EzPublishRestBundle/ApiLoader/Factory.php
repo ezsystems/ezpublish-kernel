@@ -1,8 +1,6 @@
 <?php
 namespace eZ\Bundle\EzPublishRestBundle\ApiLoader;
 
-use eZ\Publish\Core\REST\Server\Input;
-use eZ\Publish\Core\REST\Server\Output;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\IO\IOService;

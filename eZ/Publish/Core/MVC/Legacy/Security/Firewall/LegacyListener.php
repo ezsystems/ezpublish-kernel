@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Legacy\Security\Firewall;
 
 use Symfony\Component\Security\Http\Firewall\AbstractPreAuthenticatedListener;
 use Symfony\Component\HttpFoundation\Request;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
 
 class LegacyListener extends AbstractPreAuthenticatedListener
 {
