@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\MVC\Symfony\View\Provider\Block;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Configured as BaseConfigured;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Block as BlockProvider;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\Core\MVC\Symfony\View\BlockViewProvider\Configured\Matcher;
 
 class Configured extends BaseConfigured implements BlockProvider
 {

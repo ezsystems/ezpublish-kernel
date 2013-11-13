@@ -13,7 +13,6 @@ use eZ\Publish\Core\FieldType\Page\PageService as BasePageService;
 use eZ\Publish\Core\MVC\RepositoryAwareInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\API\Repository\Values\Content\Query;
 
 class PageService extends BasePageService implements RepositoryAwareInterface
 {

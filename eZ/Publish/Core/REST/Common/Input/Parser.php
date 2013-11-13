@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Common\Input;
 
-use eZ\Publish\Core\REST\Common\RequestParser;
-
 /**
  * Base class for input parser
  */
