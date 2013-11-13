@@ -17,6 +17,13 @@ interface URLAliasGenerationService
     public function onContentVersionPublished( $contentId, $versionNo );
 
     /**
+     * Triggers removal of URL aliases when a content is deleted.
+     *
+     * @param string $contentId
+     */
+    public function onContentDeleted( $contentId );
+
+    /**
      * Triggers update of URL aliases when a location was moved.
      *
      * @param string $locationId
