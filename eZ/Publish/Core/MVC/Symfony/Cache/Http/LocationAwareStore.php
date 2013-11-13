@@ -93,6 +93,7 @@ class LocationAwareStore extends Store implements ContentPurger
             $key = substr( $key, $pos + 1 );
 
             list( $locationCacheDir, $locationId ) = explode( '/', $prefix );
+            unset( $locationCacheDir );
             // If cache purge is in progress, serve stale cache instead of regular cache.
             // We first check for a global cache purge, then for the current location.
             foreach ( array( $this->getLocationCacheLockName(), $this->getLocationCacheLockName( $locationId ) ) as $cacheLockFile )

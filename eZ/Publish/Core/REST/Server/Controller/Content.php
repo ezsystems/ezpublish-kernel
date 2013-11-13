@@ -178,9 +178,6 @@ class Content extends RestController
      */
     public function loadContentInVersion( $contentId, $versionNumber )
     {
-        $questionMark = strpos( $this->request->getPathInfo(), '?' );
-        $requestPath = $questionMark !== false ? substr( $this->request->getPathInfo(), 0, $questionMark ) : $this->request->getPathInfo();
-
         $languages = null;
         if ( $this->request->query->has( 'languages' ) )
         {

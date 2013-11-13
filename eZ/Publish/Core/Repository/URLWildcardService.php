@@ -251,27 +251,6 @@ class URLWildcardService implements URLWildcardServiceInterface
     }
 
     /**
-     * Map by specificity
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard[] $spiUrlWildcards
-     *
-     * @todo use or remove
-     *
-     * @return array
-     */
-    private function buildSpecificityScoreMap( array $spiUrlWildcards )
-    {
-        $map = array();
-
-        foreach ( $spiUrlWildcards as $spiUrlWildcard )
-        {
-            $map[$spiUrlWildcard->id] = preg_replace( "/[\\D]/", "", strtr( $spiUrlWildcard->sourceUrl, "/*", "10" ) );
-        }
-
-        return $map;
-    }
-
-    /**
      * Tests if the given url matches against the given url wildcard.
      *
      * if the wildcard matches on the given url this method will return a ready
