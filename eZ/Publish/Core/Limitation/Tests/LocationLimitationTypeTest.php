@@ -374,6 +374,7 @@ class LocationLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestEvaluate
      * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::evaluate
+     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::evaluateForContentCreateStruct
      */
     public function testEvaluate(
         LocationLimitation $limitation,
