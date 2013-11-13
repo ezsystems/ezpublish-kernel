@@ -469,7 +469,6 @@ class ContentExtension extends Twig_Extension
             return array( $name => $this->blocks[$name] );
         }
 
-        $blocks = array();
         foreach ( $this->{$resourcesName} as &$template )
         {
             if ( !$template instanceof Twig_Template )

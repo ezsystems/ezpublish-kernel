@@ -37,7 +37,7 @@ abstract class BinaryInputProcessor extends FieldTypeProcessor
 
             file_put_contents(
                 $tempFile,
-                $binaryContent = base64_decode( $incomingValueHash['data'] )
+                base64_decode( $incomingValueHash['data'] )
             );
 
             unset( $incomingValueHash['data'] );

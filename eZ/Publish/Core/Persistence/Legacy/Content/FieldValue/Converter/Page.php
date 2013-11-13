@@ -368,7 +368,7 @@ class Page implements Converter
             }
         }
 
-        return $page = new Parts\Page(
+        return new Parts\Page(
             array(
                 'zones'        => $zones,
                 'layout'       => $layout,

@@ -250,7 +250,7 @@ class SectionService implements APISectionService, Sessionable
         $inputMessage->headers['Accept'] = $this->outputVisitor->getMediaType( 'Content' );
         $inputMessage->headers['X-HTTP-Method-Override'] = 'PATCH';
 
-        $response = $this->client->request(
+        $this->client->request(
             'POST',
             $contentInfo->id,
             $inputMessage

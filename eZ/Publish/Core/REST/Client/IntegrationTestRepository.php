@@ -26,13 +26,6 @@ use eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthent
 class IntegrationTestRepository extends Repository implements Sessionable
 {
     /**
-     * Optional session identifier
-     *
-     * @var string
-     */
-    private $session;
-
-    /**
      * Integration test authenticator
      *
      * @var \eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthentication
