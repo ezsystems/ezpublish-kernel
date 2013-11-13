@@ -9,16 +9,15 @@
 
 namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageValueBase;
 
 /**
  * This class represents a section
  *
  * @property-read mixed $id the id of the section
- * @property-read string $identifier the identifier of the section
- * @property-read string $name human readable name of the section
+ * @property-read string $name the name of the section in the main language i.e. getName( $mainLanguageCode )
  */
-class Section extends ValueObject
+abstract class Section extends MultiLanguageValueBase
 {
     /**
      * Id of the section
@@ -27,17 +26,4 @@ class Section extends ValueObject
      */
     protected $id;
 
-    /**
-     * Unique identifier of the section
-     *
-     * @var string
-     */
-    protected $identifier;
-
-    /**
-     * Name of the section
-     *
-     * @var string
-     */
-    protected $name;
 }

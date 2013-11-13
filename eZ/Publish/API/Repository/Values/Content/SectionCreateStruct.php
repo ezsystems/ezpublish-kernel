@@ -9,29 +9,15 @@
 
 namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageCreateStructBase;
 
 /**
- * This class represents a section
+ * This class is used to create a section
+ *
+ * @property-write string $name - BC: if only $identifier (from base class) and this $name is specified, then the attribute
+ *                 $names['eng-GB'] will be set in the base class instead.
  */
-class SectionCreateStruct extends ValueObject
+class SectionCreateStruct extends MultiLanguageCreateStructBase
 {
 
-    /**
-     * Unique string identifier of the section
-     *
-     * @required
-     *
-     * @var string
-     */
-    public $identifier;
-
-    /**
-     * Name of the section
-     *
-     * @required
-     *
-     * @var string
-     */
-    public $name;
 }
