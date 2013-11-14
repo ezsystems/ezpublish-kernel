@@ -9,19 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageUpdateStructBase;
 
 /**
  * This class is used for updating a content type
  */
-class ContentTypeUpdateStruct extends ValueObject
+class ContentTypeUpdateStruct extends MultiLanguageUpdateStructBase
 {
-    /**
-     * If set the unique identifier of a type is changed to this value
-     *
-     * @var string
-     */
-    public $identifier;
 
     /**
      * If set the remote ID is changed to this value
@@ -50,13 +44,6 @@ class ContentTypeUpdateStruct extends ValueObject
      * @var boolean
      */
     public $isContainer;
-
-    /**
-     * If set the main language is changed to this value
-     *
-     * @var mixed
-     */
-    public $mainLanguageCode;
 
     /**
      * If set the default sort field is changed to this value
@@ -93,17 +80,4 @@ class ContentTypeUpdateStruct extends ValueObject
      */
     public $modificationDate = null;
 
-    /**
-     * If set this array of names with languageCode keys replace the complete name collection
-     *
-     * @var array an array of string
-     */
-    public $names;
-
-    /**
-     * If set this array of descriptions with languageCode keys replace the complete description collection
-     *
-     * @var array an array of string
-     */
-    public $descriptions;
 }

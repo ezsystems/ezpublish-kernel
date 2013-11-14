@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageCreateStructBase;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
@@ -17,26 +17,8 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  *
  * @property \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct[] $fieldDefinitions the collection of field definitions
  */
-abstract class ContentTypeCreateStruct extends ValueObject
+abstract class ContentTypeCreateStruct extends MultiLanguageCreateStructBase
 {
-    /**
-     * String unique identifier of a type
-     *
-     * @required
-     *
-     * @var string
-     */
-    public $identifier;
-
-    /**
-     * Main language Code.
-     *
-     * @required
-     *
-     * @var string
-     */
-    public $mainLanguageCode;
-
     /**
      * The remote id
      *
@@ -90,22 +72,6 @@ abstract class ContentTypeCreateStruct extends ValueObject
      * @var boolean
      */
     public $defaultAlwaysAvailable = true;
-
-    /**
-     * An array of names with languageCode keys
-     *
-     * @required - at least one name in the main language is required
-     *
-     * @var array an array of string
-     */
-    public $names;
-
-    /**
-     * An array of descriptions with languageCode keys
-     *
-     * @var array an array of string
-     */
-    public $descriptions;
 
     /**
      * Adds a new field definition
