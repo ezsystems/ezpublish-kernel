@@ -9,21 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageCreateStructBase;
 
 /**
  * This class is used for creating a content type group
  */
-class ContentTypeGroupCreateStruct extends ValueObject
+class ContentTypeGroupCreateStruct extends MultiLanguageCreateStructBase
 {
-    /**
-     * Readable & unique string identifier of a group
-     *
-     * @required
-     *
-     * @var string
-     */
-    public $identifier;
 
     /**
      * If set this value overrides the current user as creator
