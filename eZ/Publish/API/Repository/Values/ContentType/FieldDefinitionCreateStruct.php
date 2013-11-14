@@ -26,11 +26,20 @@ class FieldDefinitionCreateStruct extends MultiLanguageCreateStructBase
     public $fieldTypeIdentifier;
 
     /**
-     * Field group name
+     * @deprecated
+     *
+     * Field group identifier
      *
      * @var string
      */
     public $fieldGroup;
+
+    /**
+     * The id of the field group
+     *
+     * @var mixed
+     */
+    public $fieldGroupId;
 
     /**
      * The position of the field definition in the content type

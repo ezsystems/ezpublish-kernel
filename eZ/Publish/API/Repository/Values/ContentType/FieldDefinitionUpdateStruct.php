@@ -18,11 +18,20 @@ class FieldDefinitionUpdateStruct extends MultiLanguageUpdateStructBase
 {
 
     /**
-     * If set the field group is changed to this name
+     * @deprecated
+     *
+     * If set the field group is changed to the one with the given identifier $fieldGroup
      *
      * @var string
      */
     public $fieldGroup;
+
+    /**
+     * If set the field group is changed
+     *
+     * @var mixed
+     */
+    public $fieldGroupId;
 
     /**
      * If set the position of the field in the content type
@@ -30,49 +39,42 @@ class FieldDefinitionUpdateStruct extends MultiLanguageUpdateStructBase
      * @var int
      */
     public $position;
-
     /**
      * If set translatable flag is set to this value
      *
      * @var boolean
      */
     public $isTranslatable;
-
     /**
      * If set the required flag is set to this value
      *
      * @var boolean
      */
     public $isRequired;
-
     /**
      * If set the information collector flag is set to this value
      *
      * @var boolean
      */
     public $isInfoCollector;
-
     /**
      * If set this validator configuration supported by the field type replaces the existing one
      *
      * @var mixed
      */
     public $validatorConfiguration;
-
     /**
      * If set this settings supported by the field type replaces the existing ones
      *
      * @var mixed
      */
     public $fieldSettings;
-
     /**
      * If set the default value for this field is changed to the given value
      *
      * @var mixed
      */
     public $defaultValue;
-
     /**
      * If set the the searchable flag is set to this value.
      *

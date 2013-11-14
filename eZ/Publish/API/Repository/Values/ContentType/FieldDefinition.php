@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\MultiLanguageValueBase;
  * @property-read mixed $validatorConfiguration calls getValidatorConfiguration()
  * @property-read mixed $id the id of the field definition
  * @property-read string $fieldGroup the field group name
+ * @property-read mixed $fieldGroupId the id of the field group
  * @property-read int $position the position of the field definition in the content type
  * @property-read string $fieldTypeIdentifier String identifier of the field type
  * @property-read boolean $isTranslatable indicates if fields of this definition are translatable
@@ -36,11 +37,20 @@ abstract class FieldDefinition extends MultiLanguageValueBase
     protected $id;
 
     /**
-     * Field group name
+     * @deprecated
+     *
+     * Field group identifier.
      *
      * @var string
      */
     protected $fieldGroup;
+
+    /**
+     * the field group id
+     *
+     * @var mixed
+     */
+    protected $fieldGroupId;
 
     /**
      * the position of the field definition in the content typr
