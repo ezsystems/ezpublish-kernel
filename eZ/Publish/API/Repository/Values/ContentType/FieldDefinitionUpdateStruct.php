@@ -9,35 +9,13 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageUpdateStructBase;
 
 /**
  * this class is used to update a field definition
  */
-class FieldDefinitionUpdateStruct extends ValueObject
+class FieldDefinitionUpdateStruct extends MultiLanguageUpdateStructBase
 {
-    /**
-     * If set the identifier of a field definition is changed to this value
-     *
-     * Needs to be unique within the context of the Content Type this is added to.
-     *
-     * @var string
-     */
-    public $identifier;
-
-    /**
-     * If set this array of names with languageCode keys replace the complete name collection
-     *
-     * @var array an array of string
-     */
-    public $names;
-
-    /**
-     * If set this array of descriptions with languageCode keys replace the complete description collection
-     *
-     * @var array an array of string
-     */
-    public $descriptions;
 
     /**
      * If set the field group is changed to this name

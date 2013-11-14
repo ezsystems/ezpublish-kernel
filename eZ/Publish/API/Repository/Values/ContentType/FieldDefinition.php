@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageValueBase;
 
 /**
  * This class represents a field definition
@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $fieldSettings calls getFieldSettings()
  * @property-read mixed $validatorConfiguration calls getValidatorConfiguration()
  * @property-read mixed $id the id of the field definition
- * @property-read string $identifier the identifier of the field definition
  * @property-read string $fieldGroup the field group name
  * @property-read int $position the position of the field definition in the content type
  * @property-read string $fieldTypeIdentifier String identifier of the field type
@@ -27,7 +26,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
  * @property-read $defaultValue the default value of the field
  */
-abstract class FieldDefinition extends ValueObject
+abstract class FieldDefinition extends MultiLanguageValueBase
 {
     /**
      * the unique id of this field definition
@@ -35,56 +34,6 @@ abstract class FieldDefinition extends ValueObject
      * @var mixed
      */
     protected $id;
-
-    /**
-     * Readable string identifier of a field definition
-     *
-     * @var string
-     */
-    protected $identifier;
-
-    /**
-     * This method returns the human readable name of this field in all provided languages
-     * of the content type
-     *
-     * The structure of the return value is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    abstract public function getNames();
-
-    /**
-     * This method returns the name of the field in the given language
-     *
-     * @param string $languageCode
-     *
-     * @return string the name for the given language or null if none exists.
-     */
-    abstract public function getName( $languageCode );
-
-    /**
-     * This method returns the human readable description of the field
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    abstract public function getDescriptions();
-
-    /**
-     * This method returns the name of the field in the given language
-     *
-     * @param string $languageCode
-     *
-     * @return string the description for the given language or null if none exists.
-     */
-    abstract public function getDescription( $languageCode );
 
     /**
      * Field group name

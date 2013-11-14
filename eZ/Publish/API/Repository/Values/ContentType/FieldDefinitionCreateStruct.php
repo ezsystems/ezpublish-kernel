@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageCreateStructBase;
 
 /**
  * this class is used to create a field definition
  */
-class FieldDefinitionCreateStruct extends ValueObject
+class FieldDefinitionCreateStruct extends MultiLanguageCreateStructBase
 {
     /**
      * String identifier of the field type
@@ -24,31 +24,6 @@ class FieldDefinitionCreateStruct extends ValueObject
      * @var string
      */
     public $fieldTypeIdentifier;
-
-    /**
-     * Readable string identifier of a field definition
-     *
-     * Needs to be unique within the context of the Content Type this is added to.
-     *
-     * @required
-     *
-     * @var string
-     */
-    public $identifier;
-
-    /**
-     * An array of names with languageCode keys
-     *
-     * @var array an array of string
-     */
-    public $names;
-
-    /**
-     * An array of descriptions with languageCode keys
-     *
-     * @var array an array of string
-     */
-    public $descriptions;
 
     /**
      * Field group name
