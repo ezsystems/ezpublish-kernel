@@ -14,10 +14,9 @@ use eZ\Publish\API\Repository\Values\MultiLanguageValueBase;
 /**
  * This class represents a object state value
  *
- * @property-read mixed $id the id of the content type group
- * @property-read string $identifier the identifier of the content type group
+ * @property-read mixed $id the id of the object state
  * @property-read int $priority the priority in the group ordering
- * @property-read string $defaultLanguageCode the default language of the object state group names and description used for fallback.
+ * @property-read string $defaultLanguageCode the default language of the object state names and description used for fallback.
  * @property-read string[] $languageCodes the available languages
  */
 abstract class ObjectState extends MultiLanguageValueBase
