@@ -16,6 +16,9 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\Values\ContentType\FieldGroup;
+use eZ\Publish\API\Repository\Values\ContentType\FieldGroupCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\FieldGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
@@ -246,6 +249,64 @@ interface ContentTypeService
     public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup );
 
     /**
+     * create a field group
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the given identifier in $fieldGroupCreateStruct in already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a field group
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldGroupCreateStruct $fieldGroupCreateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldGroup
+     */
+    public function createFieldGroup( FieldGroupCreateStruct $fieldGroupCreateStruct );
+
+    /**
+     * loads a field group for the given $fieldGroupId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read field groups
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the field group with $fieldGroupId does not exist
+     *
+     * @param mixed $fieldGroupId
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldGroup
+     */
+    public function loadFieldGroup( $fieldGroupId );
+
+    /**
+     * loads a field group for the given $fieldGroupIdentifier
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read field groups
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the field group with $fieldGroupId does not exist
+     *
+     * @param string $fieldGroupIdentifier
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldGroup
+     */
+    public function loadFieldGroupByIdentifier( $fieldGroupIdentifier );
+
+    /**
+     * loads all field groups
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read field groups
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldGroup[]
+     */
+    public function loadFieldGroups();
+
+    /**
+     * updates a field group
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the given identifier in $fieldGroupUpdateStruct already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update a field group
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldGroup $fieldGroup
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldGroupUpdateStruct $fieldGroupUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldGroup
+     */
+    public function updateFieldGroup( FieldGroup $fieldGroup, FieldGroupUpdateStruct $fieldGroupUpdateStruct );
+
+    /**
      * Adds a new field definition to an existing content type.
      *
      * The content type must be in state DRAFT.
@@ -349,4 +410,20 @@ interface ContentTypeService
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
     public function newFieldDefinitionUpdateStruct();
+
+    /**
+     * Instantiates a new field group create class
+     *
+     * @param string $identifier
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldGroupCreateStruct
+     */
+    public function newFieldGroupCreateStruct( $identifier );
+
+    /**
+     * Instantiates a new field group update struct
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldGroupUpdateStruct
+     */
+    public function newFieldGroupUpdateStruct();
 }
