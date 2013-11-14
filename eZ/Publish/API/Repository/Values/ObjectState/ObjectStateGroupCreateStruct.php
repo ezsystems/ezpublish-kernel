@@ -9,45 +9,21 @@
 
 namespace eZ\Publish\API\Repository\Values\ObjectState;
 
-use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\MultiLanguageCreateStructBase;
 
 /**
  * This class represents a value for creating object state groups
  */
-class ObjectStateGroupCreateStruct extends ValueObject
+class ObjectStateGroupCreateStruct extends MultiLanguageCreateStructBase
 {
-    /**
-     * Readable unique string identifier of a group
-     *
-     * @required
-     *
-     * @var string
-     */
-    public $identifier;
 
     /**
      * The default language code
      *
-     * @required
+     * @deprecated use mainLanguageCode in base class instead
      *
      * @var string
      */
     public $defaultLanguageCode;
-
-    /**
-     * An array of names with languageCode keys
-     *
-     * @required - at least one name in the main language is required
-     *
-     * @var string[]
-     */
-    public $names;
-
-    /**
-     * An array of descriptions with languageCode keys
-     *
-     * @var string[]
-     */
-    public $descriptions;
 
 }
