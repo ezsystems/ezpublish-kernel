@@ -49,11 +49,15 @@ abstract class AbstractDoctrineQuery
      */
     private $boundValuesType = array();
 
+    /**
+     * @var \eZ\Publish\Core\Persistence\Database\Expression
+     */
     public $expr;
 
     public function __construct( Connection $connection )
     {
         $this->connection = $connection;
+        $this->expr = new DoctrineExpression( $connection );
     }
 
     /**
