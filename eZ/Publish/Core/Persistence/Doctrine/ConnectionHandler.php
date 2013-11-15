@@ -143,7 +143,7 @@ class ConnectionHandler implements DatabaseHandler
      *
      * @return string
      */
-    public function aliasedColumn( SelectQuery $query, $columnName, $tableName = null )
+    public function aliasedColumn( $query, $columnName, $tableName = null )
     {
         return $this->alias(
             $this->quoteColumn( $columnName, $tableName ),
