@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
@@ -23,7 +23,7 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
@@ -37,10 +37,10 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new EzcDatabase ObjectState Gateway
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator
      */
-    public function __construct( EzcDbHandler $dbHandler, MaskGenerator $maskGenerator )
+    public function __construct( DatabaseHandler $dbHandler, MaskGenerator $maskGenerator )
     {
         $this->dbHandler = $dbHandler;
         $this->maskGenerator = $maskGenerator;

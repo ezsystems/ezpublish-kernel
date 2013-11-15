@@ -647,8 +647,7 @@ class Handler implements HandlerInterface
         if ( !isset( $this->contentTypeGateway ) )
         {
             $this->contentTypeGateway = new Type\Gateway\ExceptionConversion(
-                new Type\Gateway\DoctrineDbalGateway(
-                    $this->getConnection(),
+                new Type\Gateway\EzcDatabase(
                     $this->dbHandler,
                     $this->getLanguageMaskGenerator()
                 )

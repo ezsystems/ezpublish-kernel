@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -29,18 +29,18 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \EzcDbHandler
+     * @var \DatabaseHandler
      */
     protected $handler;
 
     /**
      * Construct from database handler
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      *
      * @return void
      */
-    public function __construct( EzcDbHandler $handler )
+    public function __construct( DatabaseHandler $handler )
     {
         $this->handler = $handler;
     }

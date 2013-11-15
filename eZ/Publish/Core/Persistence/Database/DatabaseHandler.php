@@ -88,7 +88,7 @@ interface DatabaseHandler
      *
      * @return string
      */
-    public function aliasedColumn( SelectQuery $query, $columnName, $tableName = null );
+    public function aliasedColumn( $query, $columnName, $tableName = null );
 
     /**
      * Returns a qualified identifier for $columnName in $tableName.
