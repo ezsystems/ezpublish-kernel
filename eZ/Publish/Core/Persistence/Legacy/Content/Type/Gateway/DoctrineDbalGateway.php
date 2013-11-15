@@ -16,9 +16,6 @@ use ezcQuerySelect;
 
 use Doctrine\DBAL\Connection;
 
-use eZ\Publish\Core\Persistence\Doctrine\TableGateway;
-use eZ\Publish\Core\Persistence\Doctrine\TableMetadata;
-
 /**
  * Doctrine DBAL implementation for the type gateway
  */
@@ -95,11 +92,6 @@ class DoctrineDbalGateway extends Gateway
     protected $languageMaskGenerator;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Doctrine\TableGateway
-     */
-    protected $contentClassGroup;
-
-    /**
      * Creates a new gateway based on $db
      *
      * @param \Doctrine\DBAL\Connection $connection
@@ -113,29 +105,6 @@ class DoctrineDbalGateway extends Gateway
     }
 
     /**
-     * @return \eZ\Publish\Core\Persistence\Doctrine\TableGateway
-     */
-    protected function getContentClassGroupTable()
-    {
-        if ( $this->contentClassGroup === null )
-        {
-            $metadata = new TableMetadata( 'ezcontentclassgroup' );
-            $metadata
-                ->addColumn( 'id', 'integer' )
-                ->addColumn( 'created', 'integer' )
-                ->addColumn( 'creator_id', 'integer' )
-                ->addColumn( 'modified', 'integer' )
-                ->addColumn( 'modifier_id', 'integer' )
-                ->addColumn( 'name', 'string' )
-            ;
-
-            $this->contentClassGroup = new TableGateway($this->connection, $metadata);
-        }
-
-        return $this->contentClassGroup;
-    }
-
-    /**
      * Inserts the given $group.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $group
@@ -144,16 +113,32 @@ class DoctrineDbalGateway extends Gateway
      */
     public function insertGroup( Group $group )
     {
-        $gateway = $this->getContentClassGroupTable();
+        $q = $this->dbHandler->createInsertQuery();
+        $q->insertInto(
+            $this->dbHandler->quoteTable( 'ezcontentclassgroup' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentclassgroup', 'id' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'created' ),
+            $q->bindValue( $group->created, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'creator_id' ),
+            $q->bindValue( $group->creatorId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'modified' ),
+            $q->bindValue( $group->modified, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'modifier_id' ),
+            $q->bindValue( $group->modifierId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'name' ),
+            $q->bindValue( $group->identifier )
+        );
+        $q->prepare()->execute();
 
-        return $gateway->insert(
-            array(
-                'created'     => $group->created,
-                'creator_id'  => $group->creatorId,
-                'modified'    => $group->modified,
-                'modifier_id' => $group->modifierId,
-                'name'        => $group->identifier,
-            )
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentclassgroup', 'id' )
         );
     }
 
@@ -197,18 +182,25 @@ class DoctrineDbalGateway extends Gateway
      */
     public function countTypesInGroup( $groupId )
     {
-        $q = $this->connection->createQueryBuilder();
-        $q->select( 'COUNT(contentclass_id) AS count'
+        $q = $this->dbHandler->createSelectQuery();
+        $q->select(
+            $q->alias(
+                $q->expr->count(
+                    $this->dbHandler->quoteColumn( 'contentclass_id' )
+                ),
+                'count'
+            )
         )->from(
-            'ezcontentclass_classgroup', 'ezcontentclass_classgroup'
+            $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' )
         )->where(
-            $q->expr()->eq(
-                'group_id',
-                $q->createNamedParameter( $groupId, \PDO::PARAM_INT )
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'group_id' ),
+                $q->bindValue( $groupId, null, \PDO::PARAM_INT )
             )
         );
 
-        $stmt = $q->execute();
+        $stmt = $q->prepare();
+        $stmt->execute();
 
         return (int)$stmt->fetchColumn();
     }
