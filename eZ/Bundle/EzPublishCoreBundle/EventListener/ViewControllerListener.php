@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Controller\ManagerInterface as ControllerManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ViewControllerListener implements EventSubscriberInterface
 {
@@ -71,18 +73,24 @@ class ViewControllerListener implements EventSubscriberInterface
         {
             return;
         }
-
-        if ( $request->attributes->has( 'locationId' ) )
+        try
         {
-            $valueObject = $this->repository->getLocationService()->loadLocation(
-                $request->attributes->get( 'locationId' )
-            );
+            if ( $request->attributes->has( 'locationId' ) )
+            {
+                $valueObject = $this->repository->getLocationService()->loadLocation(
+                    $request->attributes->get( 'locationId' )
+                );
+            }
+            else if ( $request->attributes->has( 'contentId' ) )
+            {
+                $valueObject = $this->repository->getContentService()->loadContentInfo(
+                    $request->attributes->get( 'contentId' )
+                );
+            }
         }
-        else if ( $request->attributes->has( 'contentId' ) )
+        catch ( UnauthorizedException $e)
         {
-            $valueObject = $this->repository->getContentService()->loadContentInfo(
-                $request->attributes->get( 'contentId' )
-            );
+            throw new AccessDeniedException( 'Access Denied', $e );
         }
 
         if ( !isset( $valueObject ) )

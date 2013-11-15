@@ -14,6 +14,7 @@ use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use DateTime;
@@ -106,6 +107,10 @@ class ViewController extends Controller
 
             return $response;
         }
+        catch ( UnauthorizedException $e )
+        {
+            throw new AccessDeniedException( 'Access Denied', $e );
+        }
         catch ( Exception $e )
         {
             return $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
@@ -145,6 +150,10 @@ class ViewController extends Controller
             );
 
             return $response;
+        }
+        catch ( UnauthorizedException $e )
+        {
+            throw new AccessDeniedException( 'Access Denied', $e );
         }
         catch ( Exception $e )
         {
