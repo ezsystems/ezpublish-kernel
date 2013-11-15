@@ -2,10 +2,10 @@
 
 namespace eZ\Publish\Core\Persistence\Doctrine;
 
-use eZ\Publish\Core\Persistence\Database\UpdateQuery;
 use eZ\Publish\Core\Persistence\Database\QueryException;
+use eZ\Publish\Core\Persistence\Database\DeleteQuery;
 
-class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
+class DeleteDoctrineQuery extends AbstractDoctrineQuery implements DeleteQuery
 {
     /**
      * @var string
@@ -15,38 +15,19 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
     /**
      * @var array
      */
-    private $values = array();
-
-    /**
-     * @var array
-     */
-    private $where = array();
+    private $where;
 
     /**
      * Opens the query and sets the target table to $table.
      *
-     * update() returns a pointer to $this.
+     * deleteFrom() returns a pointer to $this.
      *
      * @param string $table
-     * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
+     * @return \eZ\Publish\Core\Persistence\Database\DeleteQuery
      */
-    public function update( $table )
+    public function deleteFrom( $table )
     {
         $this->table = $table;
-
-        return $this;
-    }
-
-    /**
-     * The update query will set the column $column to the value $expression.
-     *
-     * @param string $column
-     * @param string $expression
-     * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
-     */
-    public function set( $column, $expression )
-    {
-        $this->values[$column] = $expression;
 
         return $this;
     }
@@ -56,21 +37,20 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
      *
      * where() accepts an arbitrary number of parameters. Each parameter
      * must contain a logical expression or an array with logical expressions.
-     * If you specify multiple logical expression they are connected using
-     * a logical and.
      * where() could be invoked several times. All provided arguments
      * added to the end of $whereString and form final WHERE clause of the query.
-     *
+     * If you specify multiple logical expression they are connected using
+     * a logical and.
      *
      * Example:
      * <code>
-     * $q->update( 'MyTable' )->where( $q->expr->eq( 'id', 1 ) );
+     * $q->deleteFrom( 'MyTable' )->where( $q->eq( 'id', 1 ) );
      * </code>
      *
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
      * @param string|array(string) $... Either a string with a logical expression name
      * or an array with logical expressions.
-     * @return \eZ\Publish\Core\Persistence\Database\UpdateQuery
+     * @return \eZ\Publish\Core\Persistence\Database\DeleteQuery
      */
     public function where()
     {
@@ -94,24 +74,12 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
             throw new QueryException( 'Missing table name' );
         }
 
-        if ( count( $this->values ) === 0 )
-        {
-            throw new QueryException( 'Missing values' );
-        }
-
         if ( count( $this->where ) === 0 )
         {
-            throw new QueryException( 'Executing update with where clause not allowed' );
+            throw new QueryException( 'Executing delete with where clause not allowed' );
         }
 
-        $set = array();
-
-        foreach ($this->values as $column => $expression )
-        {
-            $set[] = $column . ' = ' . $expression;
-        }
-
-        return 'UPDATE ' . $this->table . ' SET ' . implode( ', ', $set )
+        return 'DELETE FROM ' . $this->table
              . ' WHERE ' . implode( ' AND ', $this->where );
     }
 }
