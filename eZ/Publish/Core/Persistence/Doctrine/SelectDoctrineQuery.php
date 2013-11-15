@@ -1,11 +1,39 @@
 <?php
 
-namespace eZ\Publish\Core\Persistence\Database;
+namespace eZ\Publish\Core\Persistence\Doctrine;
 
-interface SelectQuery extends Query
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Database\QueryException;
+
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+
+class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
 {
-    const ASC = 'ASC';
-    const DESC = 'DESC';
+    private $parts = array(
+        'select' => array(),
+        'from'   => array(),
+        'where'  => array(),
+        'orderBy' => array(),
+        'groupBy' => array(),
+        'having' => array(),
+        'orderBy' => array(),
+    );
+
+    /**
+     * @var bool
+     */
+    private $distinct = false;
+
+    /**
+     * @var integer
+     */
+    private $limit;
+
+    /**
+     * @var integer
+     */
+    private $offset;
 
     /**
      * Opens the query and selects which columns you want to return with
@@ -38,7 +66,38 @@ interface SelectQuery extends Query
      * @param string|array(string) $... Either a string with a column name or an array of column names.
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery returns a pointer to $this.
      */
-    public function select();
+    public function select()
+    {
+        $args = $this->parseArguments( func_get_args() );
+
+        foreach ( $args as $selectPart )
+        {
+            $this->parts['select'][] = $selectPart;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Parse the arguments and validate for existance of values.
+     *
+     * @param array $args
+     * @return array
+     */
+    private function parseArguments( array $args )
+    {
+        if ( count ( $args ) === 1 && is_array( $args[0] ) )
+        {
+            $args = $args[0];
+        }
+
+        if ( count( $args ) === 0 )
+        {
+            throw new QueryException('No arguments given');
+        }
+
+        return $args;
+    }
 
     /**
      * Returns SQL to create an alias
@@ -57,7 +116,10 @@ interface SelectQuery extends Query
      * @param string $alias
      * @return string the query string "columnname as targetname"
      */
-    public function alias( $name, $alias );
+    public function alias( $name, $alias )
+    {
+        return $name . ' ' . $alias;
+    }
 
     /**
      * Opens the query and uses a distinct select on the columns you want to
@@ -95,7 +157,12 @@ interface SelectQuery extends Query
      * @param string|array(string) $... Either a string with a column name or an array of column names.
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery returns a pointer to $this.
      */
-    public function selectDistinct();
+    public function selectDistinct()
+    {
+        $this->distinct = true;
+
+        return call_user_func_array(array($this, 'select'), func_get_args());
+    }
 
     /**
      * Select which tables you want to select from.
@@ -117,7 +184,20 @@ interface SelectQuery extends Query
      * @param string|array(string) $... Either a string with a table name or an array of table names.
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery a pointer to $this
      */
-    public function from();
+    public function from()
+    {
+        $args = $this->parseArguments( func_get_args() );
+
+        foreach ( $args as $tableName )
+        {
+            $this->parts['from'][] = array(
+                'table' => $tableName,
+                'type' => 'FROM',
+            );
+        }
+
+        return $this;
+    }
 
     /**
      * Returns the SQL for an inner join or prepares $fromString for an inner join.
@@ -171,7 +251,45 @@ interface SelectQuery extends Query
      *                           two join columns, or a join condition.
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    public function innerJoin();
+    public function innerJoin()
+    {
+        return $this->doJoin( 'INNER', func_get_args() );
+    }
+
+    /**
+     * Helper function to generate join
+     *
+     * @param string $type
+     * @param array $args
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     */
+    protected function doJoin( $type, array $args )
+    {
+        if ( count( $args ) === 0 )
+        {
+            throw new QueryException('No arguments given');
+        }
+
+        $tableName = $args[0];
+        $condition = '';
+
+        if ( count( $args ) == 2 )
+        {
+            $condition = $args[1];
+        }
+        elseif ( count( $args ) == 3 )
+        {
+            $condition = $args[1] . ' = ' . $args[2];
+        }
+
+        $this->parts['from'][] = array(
+            'table'     => $tableName,
+            'type'      => $type,
+            'condition' => $condition,
+        );
+
+        return $this;
+    }
 
     /**
      * Returns the SQL for a left join or prepares $fromString for a left join.
@@ -225,15 +343,18 @@ interface SelectQuery extends Query
      *                           two join columns, or a join condition.
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    public function leftJoin();
+    public function leftJoin()
+    {
+        return $this->doJoin( 'LEFT', func_get_args() );
+    }
 
     /**
      * Returns the SQL for a right join or prepares $fromString for a right join.
-     * 
+     *
      * This method could be used in two forms:
      *
      * <b>rightJoin( 't2', $joinCondition )</b>
-     * 
+     *
      * Takes 2 string arguments and returns \eZ\Publish\Core\Persistence\Database\SelectQuery.
      *
      * The first parameter is the name of the table to join with. The table to
@@ -250,14 +371,14 @@ interface SelectQuery extends Query
      * </code>
      *
      * <b>rightJoin( 't2', 't1.id', 't2.id' )</b>
-     * 
+     *
      * Takes 3 string arguments and returns \eZ\Publish\Core\Persistence\Database\SelectQuery. This is a simplified form
      * of the 2 parameter version.  rightJoin( 't2', 't1.id', 't2.id' ) is
      * equal to rightJoin( 't2', $this->expr->eq('t1.id', 't2.id' ) );
      *
      * The first parameter is the name of the table to join with. The table to
      * which is joined should have been previously set with the from() method.
-     * 
+     *
      * The second parameter is the name of the column on the table set
      * previously with the from() method and the third parameter the name of
      * the column to join with on the table that was specified in the first
@@ -279,7 +400,10 @@ interface SelectQuery extends Query
      *                           two join columns, or a join condition.
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    public function rightJoin();
+    public function rightJoin()
+    {
+        return $this->doJoin( 'RIGHT', func_get_args() );
+    }
 
     /**
      * Adds a where clause with logical expressions to the query.
@@ -301,7 +425,22 @@ interface SelectQuery extends Query
      * or an array with logical expressions.
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuerySelect
      */
-    public function where();
+    public function where()
+    {
+        $args = func_get_args();
+
+        if ( count( $args ) === 0 )
+        {
+            throw new QueryException('No arguments given');
+        }
+
+        foreach ( $args as $whereCondition )
+        {
+            $this->parts['where'][] = $whereCondition;
+        }
+
+        return $this;
+    }
 
     /**
      * Returns SQL that limits the result set.
@@ -324,7 +463,11 @@ interface SelectQuery extends Query
      * @param string $offset integer expression
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuerySelect
      */
-    public function limit( $limit, $offset = '' );
+    public function limit( $limit, $offset = '' )
+    {
+        $this->limit = $limit;
+        $this->offset = $offset;
+    }
 
     /**
      * Returns SQL that orders the result set by a given column.
@@ -340,10 +483,21 @@ interface SelectQuery extends Query
      *
      * @param string $column a column name in the result set
      * @param string $type if the column should be sorted ascending or descending.
-     *        you can specify this using \eZ\Publish\Core\Persistence\Database\SelectQuerySelect::ASC or \eZ\Publish\Core\Persistence\Database\SelectQuerySelect::DESC
+     *        you can specify this using \eZ\Publish\Core\Persistence\Database\SelectQuery::ASC
+     *        or \eZ\Publish\Core\Persistence\Database\SelectQuery::DESC
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery a pointer to $this
      */
-    public function orderBy( $column, $type = self::ASC );
+    public function orderBy( $column, $type = self::ASC )
+    {
+        if ( $type !== self::ASC && $type !== self::DESC )
+        {
+            throw new QueryException('Invalid value for type of order by orientation.');
+        }
+
+        $this->parts['orderBy'][] = $column . ' ' . $type;
+
+        return $this;
+    }
 
     /**
      * Returns SQL that groups the result set by a given column.
@@ -361,7 +515,17 @@ interface SelectQuery extends Query
      * @param string $column a column name in the result set
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery a pointer to $this
      */
-    public function groupBy();
+    public function groupBy()
+    {
+        $args = $this->parseArguments( func_get_args() );
+
+        foreach ( $args as $groupByExpression )
+        {
+            $this->parts['groupBy'][] = $groupByExpression;
+        }
+
+        return $this;
+    }
 
     /**
      * Returns SQL that set having by a given expression.
@@ -381,5 +545,103 @@ interface SelectQuery extends Query
      *                             or an array with logical expressions.
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery a pointer to $this
      */
-    public function having();
+    public function having()
+    {
+        $args = func_get_args();
+
+        if ( count( $args ) === 0 )
+        {
+            throw new QueryException('No arguments given');
+        }
+
+        foreach ( $args as $whereCondition )
+        {
+            $this->parts['having'][] = $whereCondition;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns the query string for this query object.
+     *
+     * @throws \eZ\Publish\Core\Persistence\Database\QueryException if it was not possible to build a valid query.
+     * @return string
+     */
+    public function getQuery()
+    {
+        if ( count($this->parts['select']) === 0 )
+        {
+            throw new QueryException( 'Missing "select" parts to generate query.' );
+        }
+
+        $sql = 'SELECT ';
+
+        if ($this->distinct) {
+            $sql .= 'DISTINCT ';
+        }
+
+        $sql .= implode( ', ', $this->parts['select'] ) . ' FROM';
+
+        if ( count($this->parts['from']) === 0 )
+        {
+            throw new QueryException( 'Missing "from" parts to generate query.' );
+        }
+
+        $renderedFromBefore = false;
+
+        foreach ( $this->parts['from'] as $fromPart )
+        {
+            if ( $fromPart['type'] === 'FROM' )
+            {
+                if ( $renderedFromBefore === true )
+                {
+                    $sql .= ',';
+                }
+
+                $sql .= ' ' . $fromPart['table'];
+                $renderedFromBefore = true;
+            }
+            else
+            {
+                $sql .= ' ' . $fromPart['type'] . ' JOIN ' . $fromPart['table'];
+
+                if ( $fromPart['condition'] )
+                {
+                    $sql .= ' ON ' . $fromPart['condition'];
+                }
+            }
+        }
+
+        if ( count( $this->parts['where'] ) > 0 )
+        {
+            $sql .= ' WHERE ' . implode( ' AND ', $this->parts['where'] );
+        }
+
+        if ( count( $this->parts['groupBy'] ) > 0)
+        {
+            $sql .= ' GROUP BY ' . implode( ', ', $this->parts['groupBy'] );
+        }
+
+        if ( count( $this->parts['having'] ) > 0 )
+        {
+            $sql .= ' HAVING ' . implode( ' AND ', $this->parts['having'] );
+        }
+
+        if ( count( $this->parts['orderBy'] ) > 0 )
+        {
+            $sql .= ' ORDER BY ' . implode( ', ', $this->parts['orderBy'] );
+        }
+
+        if ( $this->limit || $this->offset )
+        {
+            $sql = $this->connection->getDatabasePlatform()->modifyLimitQuery(
+                $sql,
+                $this->limit,
+                $this->offset
+            );
+        }
+
+        return $sql;
+    }
 }
