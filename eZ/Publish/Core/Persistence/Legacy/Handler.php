@@ -309,6 +309,7 @@ class Handler implements HandlerInterface
     )
     {
         $this->dbHandler = $dbHandler;
+        $this->dbHandler = new \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler($this->getConnection());
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->converterRegistry = $converterRegistry;
         $this->storageRegistry = $storageRegistry;
