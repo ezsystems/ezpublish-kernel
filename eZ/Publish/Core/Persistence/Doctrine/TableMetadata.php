@@ -38,6 +38,8 @@ class TableMetadata
     public function addColumn( $columnName, $type = 'string' )
     {
         $this->columns[$columnName] = array( 'type' => $type );
+
+        return $this;
     }
 
     public function setPrimaryKey( array $columns )
@@ -57,6 +59,8 @@ class TableMetadata
         }
 
         $this->primaryKeyColumns = $columns;
+
+        return $this;
     }
 
     /**
