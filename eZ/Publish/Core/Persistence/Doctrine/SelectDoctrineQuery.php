@@ -79,27 +79,6 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
     }
 
     /**
-     * Parse the arguments and validate for existance of values.
-     *
-     * @param array $args
-     * @return array
-     */
-    private function parseArguments( array $args )
-    {
-        if ( count ( $args ) === 1 && is_array( $args[0] ) )
-        {
-            $args = $args[0];
-        }
-
-        if ( count( $args ) === 0 )
-        {
-            throw new QueryException('No arguments given');
-        }
-
-        return $args;
-    }
-
-    /**
      * Returns SQL to create an alias
      *
      * This method can be used to create an alias for either a
