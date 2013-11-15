@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
@@ -100,10 +100,10 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new gateway based on $db
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $db
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
-    public function __construct( EzcDbHandler $db, MaskGenerator $languageMaskGenerator )
+    public function __construct( DatabaseHandler $db, MaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler = $db;
         $this->languageMaskGenerator = $languageMaskGenerator;

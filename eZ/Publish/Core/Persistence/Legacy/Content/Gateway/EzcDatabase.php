@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\SPI\Persistence\Content;
@@ -37,7 +37,7 @@ class EzcDatabase extends Gateway
     /**
      * Zeta Components database handler.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
@@ -65,13 +65,13 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new gateway based on $db
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $db
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder $queryBuilder
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(
-        EzcDbHandler $db,
+        DatabaseHandler $db,
         QueryBuilder $queryBuilder,
         LanguageHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )

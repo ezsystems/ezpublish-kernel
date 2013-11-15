@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
@@ -27,16 +27,16 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new EzcDatabase Section Gateway
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      */
-    public function __construct ( EzcDbHandler $dbHandler )
+    public function __construct ( DatabaseHandler $dbHandler )
     {
         $this->dbHandler = $dbHandler;
     }

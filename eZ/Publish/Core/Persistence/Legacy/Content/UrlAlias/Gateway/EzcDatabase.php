@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use ezcQuery;
 
@@ -64,11 +64,11 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new EzcDatabase UrlAlias Gateway
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct (
-        EzcDbHandler $dbHandler,
+        DatabaseHandler $dbHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler = $dbHandler;

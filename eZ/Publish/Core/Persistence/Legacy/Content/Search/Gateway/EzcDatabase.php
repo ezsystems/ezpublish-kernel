@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
@@ -33,7 +33,7 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var EzcDbHandler
+     * @var DatabaseHandler
      */
     protected $handler;
 
@@ -75,12 +75,12 @@ class EzcDatabase extends Gateway
     /**
      * Construct from handler handler
      *
-     * @param \EzcDbHandler $handler
+     * @param \DatabaseHandler $handler
      *
      * @return void
      */
     public function __construct(
-        EzcDbHandler $handler,
+        DatabaseHandler $handler,
         CriteriaConverter $criteriaConverter,
         SortClauseConverter $sortClauseConverter,
         QueryBuilder $queryBuilder,
