@@ -73,4 +73,18 @@ interface Query
      * @return string the placeholder name used.
      */
     public function bindParam( &$param, $placeHolder = null, $type = PDO::PARAM_STR );
+
+    /**
+     * Return the SQL string for this query.
+     *
+     * @return string
+     */
+    public function getQuery();
+
+    /**
+     * Return the SQL string for this query.
+     *
+     * @return string
+     */
+    public function __toString();
 }

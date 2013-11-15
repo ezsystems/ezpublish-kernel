@@ -40,7 +40,16 @@ interface DatabaseHandler
      *
      * @param string $query
      */
-    public function exec($query);
+    public function exec( $query );
+
+    /**
+     * Prepare and return a statement
+     *
+     * Statements are ducktyped, but need to work like PDOStatement.
+     *
+     * @return object
+     */
+    public function prepare( $query );
 
     /**
      * Create Select Query object.
