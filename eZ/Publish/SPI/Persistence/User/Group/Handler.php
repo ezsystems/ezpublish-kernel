@@ -70,4 +70,36 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\User[]
      */
     public function loadUsersOfGroup( $groupId );
+
+    /**
+     * Assigns role to a user group with given limitations
+     *
+     * The limitation array looks like:
+     * <code>
+     *  array(
+     *      'Subtree' => array(
+     *          '/1/2/',
+     *          '/1/4/',
+     *      ),
+     *      'Foo' => array( 'Bar' ),
+     *      …
+     *  )
+     * </code>
+     *
+     * Where the keys are the limitation identifiers, and the respective values
+     * are an array of limitation values. The limitation parameter is optional.
+     *
+     * @param mixed $groupId The groupId to assign the role to.
+     * @param mixed $roleId
+     * @param array $limitation
+     */
+    public function assignRole( $groupId, $roleId, array $limitation = null );
+
+    /**
+     * Un-assign a role
+     *
+     * @param mixed $groupId The group Id to un-assign the role from.
+     * @param mixed $roleId
+     */
+    public function unAssignRole( $groupId, $roleId );
 }

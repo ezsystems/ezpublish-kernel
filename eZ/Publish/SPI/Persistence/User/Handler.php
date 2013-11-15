@@ -203,7 +203,7 @@ interface Handler
     public function loadPoliciesByUserId( $userId );
 
     /**
-     * Assigns role to a user or user group with given limitations
+     * Assigns role to a user with given limitations
      *
      * The limitation array looks like:
      * <code>
@@ -220,17 +220,21 @@ interface Handler
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @param mixed $contentId The groupId or userId to assign the role to.
+     * @param mixed $userId The userId to assign the role to.
      * @param mixed $roleId
      * @param array $limitation
+     *
+     * @todo: Adjust usage in API to only use this for users, not for groups anymore.
      */
-    public function assignRole( $contentId, $roleId, array $limitation = null );
+    public function assignRole( $userId, $roleId, array $limitation = null );
 
     /**
      * Un-assign a role
      *
-     * @param mixed $contentId The user or user group Id to un-assign the role from.
+     * @param mixed $userId The user Id to un-assign the role from.
      * @param mixed $roleId
+     *
+     * @todo: Adjust usage in API to only use this for users, not for groups anymore.
      */
-    public function unAssignRole( $contentId, $roleId );
+    public function unAssignRole( $userId, $roleId );
 }
