@@ -23,6 +23,12 @@ class TableGateway
         $this->metadata = $metadata;
     }
 
+    /**
+     * Insert data into the table and return the inserted id.
+     *
+     * @param array $data
+     * @return integer
+     */
     public function insert(array $data)
     {
         $types = $this->getTypes( $data );
@@ -45,6 +51,35 @@ class TableGateway
         return $data[$primaryKeyColumn];
     }
 
+    /**
+     * Update the table with the given data matching all rows in where clause.
+     *
+     * @param array $data
+     * @param array $where
+     *
+     * @return int
+     */
+    public function update(array $data, array $where)
+    {
+        $types = array_merge( $this->getTypes( $data ), $this->getTypes( $where ) );
+
+        return $this->connection->update( $this->metadata->getTableName(), $data, $where, $types );
+    }
+
+    /**
+     * Delete rows from the table matching the where clause.
+     *
+     * @param array $where
+     *
+     * @return int
+     */
+    public function delete(array $where)
+    {
+        $types = $this->getTypes( $where );
+
+        return $this->connection->delete( $this->metadata->getTableName(), $where, $types );
+    }
+
     private function getTypes(array $data)
     {
         $types = array();
@@ -55,19 +90,5 @@ class TableGateway
         }
 
         return $types;
-    }
-
-    public function update(array $data, array $where)
-    {
-        $types = array_merge( $this->getTypes( $data ), $this->getTypes( $where ) );
-
-        return $this->connection->update( $this->metadata->getTableName(), $data, $where, $types );
-    }
-
-    public function delete(array $where)
-    {
-        $types = $this->getTypes( $where );
-
-        return $this->connection->delete( $this->metadata->getTableName(), $where, $types );
     }
 }
