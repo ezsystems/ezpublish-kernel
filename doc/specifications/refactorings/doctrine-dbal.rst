@@ -55,13 +55,16 @@ Missing abstractions are:
   might be simpler to write a simple Code-Generator Visitor for a loaded
   Schema from the database.
 
-Refactoring Approach
---------------------
+Refactoring Approaches
+----------------------
 
-Zeta Components Query API and Doctrine Query API for SELECTs are very similar,
-allowing the opportunity to switch them in a very simple way through a small
-compatibility abstraction for the Handler and Query APIs and simple search and
-replace operations for the SQL Expression generation.
+1. Port API to Doctrine DBAL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Zeta Components Query API and Doctrine Query API for SELECTs are similar,
+allowing the opportunity to switch them in a simple way through a small
+compatibility abstraction for the Handler and Query APIs routine translation
+work.
 
 The Update operations are a bit more cumbersome to change, because the
 parameter binding and type binding works so differently.
@@ -75,47 +78,66 @@ Refactoring steps:
 Repeat for every gateway:
 
 4. Copy one Gateway at a time from EzcDatabase to DoctrineDatabase DBAL implementation
-5. Switch Persistence Handler to return the new Doctrine implementation
-6. Extend ExceptionConvertion Gateway to handle `DBALException` as well.
-
-Tasks
------
-
-1. Introduce basic DBAL abstractions
-2. Legacy Persistence
-    2.1 Refactor all Gateways and Search Condition Generators
-    2.2 Convert SQL schema into `Doctrine\DBAL\Schema\Schema` instance to allow
-        generating SQL for all database platforms.
-3. Sql-NG Persistence
-    3.1 Refactor all Gateways and Search Condition Generators
-    3.2 Convert SQL schema into `Doctrine\DBAL\Schema\Schema` instance to allow
-        generating SQL for all database platforms.
-
-API
----
+5. Adjust DBAL gateway to Doctrine APIs
+6. Switch Persistence Handler to return the new Doctrine implementation
+7. Extend ExceptionConvertion Gateway to handle `DBALException` as well.
 
 Currently the aliasing/quoting code is pretty dominant in the Gateways, because
 of the way the ezc Query Objects work. Hiding this implementation detail
 behind a simple Table Gateway helps simplify the code alot. ::
 
+   <?php
+   interface TableGateway
+   {
+       public function __construct(Connection $conn, TableMetadata $metadata);
+       public function insert(array $data);
+       public function update(array $data, array $where);
+       public function delete(array $where);
+       public function createSelectQuery();
+       public function createUpdateQuery();
+       public function createDeleteQuery();
+       public function createInsertQuery();
+   }
+
+   class TableMetadata
+   {
+       public $name;
+       public $sequenceName;
+       public $primaryKeys = array();
+       public $columns = array();
+   }
+
+
+2. Introduce Compatibility API
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The first approach would require lots of tedious routine work to convert all
+APIs. Another approach would be not to use Doctrine's DBAL QueryBuilder, but
+use the Zeta Query API and write a new API-compatible implementation using
+Doctrine.
+
+This would only require writing this API to instantly convert all gateways
+in both Legacy and Sql-Ng APIs.
+
+Key is the introduction of an interface for the query objects and the handler:
+
     <?php
-    interface TableGateway
+    interface DatabaseHandler
     {
-        public function __construct(Connection $conn, TableMetadata $metadata);
-        public function insert(array $data);
-        public function update(array $data, array $where);
-        public function delete(array $where);
         public function createSelectQuery();
+        public function createInsertQuery();
         public function createUpdateQuery();
         public function createDeleteQuery();
-        public function createInsertQuery();
+        public function aliasedColumn( SelectQuery $query, $columnName, $tableName = null );
+        public function quoteColumn( $columnName, $tableName = null );
+        public function quoteTable( $tableName );
+        public function alias( $name, $alias );
+        public function quoteIdentifier( $identifier );
+        public function getAutoIncrementValue( $table, $column );
+        public function getSequenceName( $table, $column );
     }
 
-    class TableMetadata
-    {
-        public $name;
-        public $sequenceName;
-        public $primaryKeys = array();
-        public $columns = array();
-    }
+The Query objets have the same API that Zeta Database has, including
+the expression object `$q->expr->...`.
 
+This can be translated to SQL executable by Doctrine DBAL.
