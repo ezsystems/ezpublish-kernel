@@ -14,7 +14,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\FieldType\RelationList\Value as RelationListValue;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use DOMDocument;
 
 class RelationList implements Converter
@@ -27,9 +28,9 @@ class RelationList implements Converter
     /**
      * Create instance of RelationList converter
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $db
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
      */
-    public function __construct( EzcDbHandler $db )
+    public function __construct( DatabaseHandler $db )
     {
         $this->db = $db;
     }

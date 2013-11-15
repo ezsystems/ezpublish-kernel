@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FieldValue;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator;
 use ezcQuerySelect;
@@ -24,7 +24,7 @@ abstract class Handler
     /**
      * DB handler to fetch additional field information
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\ezcDbHandler
      */
     protected $dbHandler;
 
@@ -53,10 +53,10 @@ abstract class Handler
     /**
      * Creates a new criterion handler
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      */
-    public function __construct( EzcDbHandler $dbHandler, TransformationProcessor $transformationProcessor )
+    public function __construct( DatabaseHandler $dbHandler, TransformationProcessor $transformationProcessor )
     {
         $this->dbHandler = $dbHandler;
         $this->transformationProcessor = $transformationProcessor;
