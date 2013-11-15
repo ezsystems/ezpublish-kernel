@@ -44,6 +44,8 @@ use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use ezcDbTransactionException;
 use RuntimeException;
 
+use Doctrine\DBAL\DriverManager;
+
 /**
  * The repository handler for the legacy storage engine
  */
@@ -286,6 +288,11 @@ class Handler implements HandlerInterface
     protected $config;
 
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
      * Creates a new repository handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler The database handler
@@ -315,6 +322,26 @@ class Handler implements HandlerInterface
         $this->storageRegistry = $storageRegistry;
         $this->transformationProcessor = $transformationProcessor;
         $this->config = $config;
+
+    }
+
+    /**
+     * Get Doctrine database connection.
+     *
+     * @return \Doctrine\DBAL\Connection
+     */
+    protected function getConnection()
+    {
+        if ($this->connection === null)
+        {
+            $this->connection = DriverManager::getConnection(
+                array(
+                    'pdo' => $this->dbHandler->getDbHandler()
+                )
+            );
+        }
+
+        return $this->connection;
     }
 
     /**
@@ -631,7 +658,8 @@ class Handler implements HandlerInterface
         if ( !isset( $this->contentTypeGateway ) )
         {
             $this->contentTypeGateway = new Type\Gateway\ExceptionConversion(
-                new Type\Gateway\EzcDatabase(
+                new Type\Gateway\DoctrineDbalGateway(
+                    $this->getConnection(),
                     $this->dbHandler,
                     $this->getLanguageMaskGenerator()
                 )
