@@ -85,7 +85,7 @@ class SelectDoctrineQueryTest extends TestCase
     public function testLimitGeneration()
     {
         $query = $this->handler->createSelectQuery();
-        $query->selectDistinct(
+        $query->select(
             '*'
         )->from(
             'query_test'
@@ -97,5 +97,25 @@ class SelectDoctrineQueryTest extends TestCase
         $limitSql = $this->connection->getDatabasePlatform()->modifyLimitQuery( $sql, 10, 10 );
 
         $this->assertEquals($limitSql, (string)$query);
+    }
+
+    public function testSubselect()
+    {
+        $query = $this->handler->createSelectQuery();
+
+        $subselect = $query->subSelect();
+        $subselect->select(
+            '*'
+        )->from(
+            'query_test'
+        );
+
+        $query->select(
+            '*'
+        )->from(
+            $subselect
+        );
+
+        $this->assertEquals('SELECT * FROM ( SELECT * FROM query_test )', (string)$query);
     }
 }
