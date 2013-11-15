@@ -3,7 +3,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
@@ -97,7 +97,7 @@ class DoctrineDbalGateway extends Gateway
      * @param \Doctrine\DBAL\Connection $connection
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
-    public function __construct( Connection $connection, EzcDbHandler $dbHandler, MaskGenerator $languageMaskGenerator )
+    public function __construct( Connection $connection, DatabaseHandler $dbHandler, MaskGenerator $languageMaskGenerator )
     {
         $this->connection = $connection;
         $this->dbHandler = $dbHandler;

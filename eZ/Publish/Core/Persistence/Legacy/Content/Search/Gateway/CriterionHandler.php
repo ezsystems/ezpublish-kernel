@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator;
 use ezcQuerySelect;
@@ -37,16 +37,16 @@ abstract class CriterionHandler
     /**
      * Database handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new criterion handler
      *
-     * @param \EzcDbHandler $dbHandler
+     * @param \DatabaseHandler $dbHandler
      */
-    public function __construct( EzcDbHandler $dbHandler )
+    public function __construct( DatabaseHandler $dbHandler )
     {
         $this->dbHandler = $dbHandler;
     }
