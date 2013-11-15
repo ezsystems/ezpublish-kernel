@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Please replicate changes to this file to phpunit-integration-legacy-coverage.xml -->
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
          bootstrap="bootstrap.php"
@@ -52,11 +51,23 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">eZ/Publish/API/Repository</directory>
+            <directory suffix=".php">eZ/Publish/Core</directory>
+            <directory suffix=".php">eZ/Publish/API</directory>
+            <directory suffix=".php">eZ/Publish/SPI</directory>
             <exclude>
-                <directory>eZ/Publish/API/Repository/Tests</directory>
-                <directory>eZ/Publish/API/Repository/Tutorials</directory>
+                <directory>eZ/Publish/*/Tests</directory>
+                <directory>eZ/Publish/*/*/Tests</directory>
+                <directory>eZ/Publish/*/*/*/Tests</directory>
+                <directory>eZ/Publish/*/*/*/*/Tests</directory>
+                <directory>eZ/Bundle/*/Tests</directory>
+                <directory>eZ/Bundle/*/_fixtures</directory>
+                <directory>eZ/Publish/Core/Persistence/Legacy/docs</directory>
+                <directory>doc</directory>
+                <directory>design</directory>
+                <directory>vendor</directory>
+                <directory>eZ/Publish/API/Repository/Examples</directory>
             </exclude>
         </whitelist>
     </filter>
 </phpunit>
+
