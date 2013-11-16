@@ -80,7 +80,7 @@ class Sqlite extends EzcDbHandler
         return parent::getAutoIncrementValue( $table, $column );
     }
 
-    public function lastInsertId( $sequenceName )
+    public function lastInsertId( $sequenceName = null )
     {
         if ( isset( $this->lastInsertedIds[$sequenceName] ) )
         {

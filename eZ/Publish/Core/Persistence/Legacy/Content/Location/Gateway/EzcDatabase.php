@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\Core\Persistence\Database\Query as DatabaseQuery;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -346,7 +347,7 @@ class EzcDatabase extends Gateway
      *
      * @return void
      */
-    protected function applySubtreeLimitation( \ezcQuery $query, $rootLocationId )
+    protected function applySubtreeLimitation( DatabaseQuery $query, $rootLocationId )
     {
         $query->where(
             $query->expr->like(

@@ -78,6 +78,17 @@ class ConnectionHandler implements DatabaseHandler
     }
 
     /**
+     * Retrieve the last auto incremet or sequence id
+     *
+     * @param string $sequenceName
+     * @return string
+     */
+    public function lastInsertId( $sequenceName = null )
+    {
+        return $this->connection->lastInsertId( $sequenceName );
+    }
+
+    /**
      * Execute a query against the database
      *
      * @param string $query

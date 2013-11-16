@@ -424,7 +424,7 @@ class EzcDatabase extends Gateway
             $this->handler->quoteColumn( 'id', 'ezcontentobject' )
         )->from(
             $this->handler->quoteTable( 'ezcontentobject_tree' )
-        )->rightJoin(
+        )->innerJoin(
             $this->handler->quoteTable( 'ezcontentobject' ),
             $query->expr->eq(
                 $this->handler->quoteColumn( 'id', 'ezcontentobject' ),

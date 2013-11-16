@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\ValueObject;
-use ezcQuery;
+use eZ\Publish\Core\Persistence\Database\Query;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
@@ -364,7 +364,7 @@ class EzcDatabase extends Gateway
      *
      * @return void
      */
-    protected function setCommonTypeColumns( ezcQuery $q, ValueObject $type )
+    protected function setCommonTypeColumns( Query $q, ValueObject $type )
     {
         $q->set(
             $this->dbHandler->quoteColumn( 'serialized_name_list' ),

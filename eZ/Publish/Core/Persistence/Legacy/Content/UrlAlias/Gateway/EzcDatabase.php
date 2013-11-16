@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
-use ezcQuery;
+use eZ\Publish\Core\Persistence\Database\Query;
 
 /**
  * UrlAlias Gateway
@@ -573,7 +573,7 @@ class EzcDatabase extends Gateway
      *
      * @return void
      */
-    protected function setQueryValues( ezcQuery $query, $values )
+    protected function setQueryValues( Query $query, $values )
     {
         foreach ( $values as $column => $value )
         {

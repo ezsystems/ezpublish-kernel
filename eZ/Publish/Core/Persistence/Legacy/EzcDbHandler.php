@@ -166,6 +166,11 @@ class EzcDbHandler implements DatabaseHandler
         return $this->ezcDbHandler->exec( $query );
     }
 
+    public function lastInsertId( $sequenceName = null )
+    {
+        return $this->ezcDbHandler->lastInsertId( $sequenceName );
+    }
+
     public function prepare( $query )
     {
         return $this->ezcDbHandler->prepare( $query );
