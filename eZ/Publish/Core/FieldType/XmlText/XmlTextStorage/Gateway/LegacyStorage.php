@@ -107,7 +107,7 @@ class LegacyStorage extends Gateway
      */
     protected function getLinksUrl( array $linkIds )
     {
-        /** @var $q \ezcQuerySelect */
+        /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
         $q = $this->getConnection()->createSelectQuery();
         $q
             ->select( "id", "url" )
@@ -237,7 +237,7 @@ class LegacyStorage extends Gateway
 
         if ( !empty( $linksUrls ) )
         {
-            /** @var $q \ezcQuerySelect */
+            /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
             $q = $this->getConnection()->createSelectQuery();
             $q
                 ->select( "id", "url" )
@@ -269,7 +269,7 @@ class LegacyStorage extends Gateway
 
         if ( !empty( $linksRemoteIds ) )
         {
-            /** @var $q \ezcQuerySelect */
+            /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
             $q = $this->getConnection()->createSelectQuery();
             $q
                 ->select( "id", "remote_id" )
