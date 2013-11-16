@@ -359,7 +359,7 @@ class DoctrineExpression implements Expression
             throw new QueryException( 'Expected two or more parameters to in()' );
         }
 
-        if ( is_array( $args[1] ) && count( $args[1] ) == 0 )
+        if ( is_array( $args[1] ) )
         {
             $values = $args[1];
         }

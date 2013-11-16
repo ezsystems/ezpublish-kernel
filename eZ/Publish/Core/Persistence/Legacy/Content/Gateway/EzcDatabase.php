@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\Core\Persistence\Database\UpdateQuery;
+use eZ\Publish\Core\Persistence\Database\InsertQuery;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\SPI\Persistence\Content;
@@ -25,7 +27,6 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
-use ezcQueryUpdate;
 use PDO;
 
 /**
@@ -633,7 +634,7 @@ class EzcDatabase extends Gateway
      *
      * @return int|null Maybe a new field ID
      */
-    protected function setInsertFieldValues( \ezcQueryInsert $q, Content $content, Field $field, StorageFieldValue $value )
+    protected function setInsertFieldValues( InsertQuery $q, Content $content, Field $field, StorageFieldValue $value )
     {
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
@@ -717,7 +718,7 @@ class EzcDatabase extends Gateway
      *
      * @return void
      */
-    protected function setFieldUpdateValues( ezcQueryUpdate $q, StorageFieldValue $value  )
+    protected function setFieldUpdateValues( UpdateQuery $q, StorageFieldValue $value  )
     {
         $q->update(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )

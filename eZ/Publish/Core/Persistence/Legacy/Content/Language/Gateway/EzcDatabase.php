@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use ezcQuery;
+use eZ\Publish\Core\Persistence\Database\Query;
 use RuntimeException;
 
 /**
@@ -88,7 +88,7 @@ class EzcDatabase extends Gateway
      *
      * @return void
      */
-    protected function setCommonLanguageColumns( ezcQuery $query, Language $language )
+    protected function setCommonLanguageColumns( Query $query, Language $language )
     {
         $query->set(
             $this->dbHandler->quoteColumn( 'locale' ),

@@ -36,6 +36,14 @@ interface DatabaseHandler
     public function rollBack();
 
     /**
+     * Retrieve the last auto incremet or sequence id
+     *
+     * @param string $sequenceName
+     * @return string
+     */
+    public function lastInsertId( $sequenceName = null );
+
+    /**
      * Execute a query against the database
      *
      * @param string $query

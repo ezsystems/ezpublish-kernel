@@ -47,7 +47,7 @@ class CriteriaConverter
      *
      * @return \ezcQueryExpression
      */
-    public function convertCriteria( eZ\Publish\Core\Persistence\Database\SelectQuery $query, Criterion $criterion )
+    public function convertCriteria( SelectQuery $query, Criterion $criterion )
     {
         foreach ( $this->handler as $handler )
         {
