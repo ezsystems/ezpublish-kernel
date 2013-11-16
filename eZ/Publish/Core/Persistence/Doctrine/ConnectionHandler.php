@@ -11,12 +11,10 @@ use Doctrine\DBAL\DBALException;
 
 class ConnectionHandler implements DatabaseHandler
 {
-    protected $lastInsertedIds = array();
-
     /**
      * @var \Doctrine\DBAL\Connection
      */
-    private $connection;
+    protected $connection;
 
     public function __construct( Connection $connection )
     {
@@ -87,13 +85,6 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function lastInsertId( $sequenceName = null )
     {
-        if ( isset( $this->lastInsertedIds[$sequenceName] ) )
-        {
-            $lastInsertId = $this->lastInsertedIds[$sequenceName];
-            unset( $this->lastInsertedIds[$sequenceName] );
-            return $lastInsertId;
-        }
-
         return $this->connection->lastInsertId( $sequenceName );
     }
 
@@ -255,59 +246,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function getAutoIncrementValue( $table, $column )
     {
-        if ( $this->connection->getDatabasePlatform()->getName() === 'sqlite' )
-        {
-            return $this->getAutoIncrementValueSqlite( $table, $column );
-        }
-
         return "null";
-    }
-
-    private function getAutoIncrementValueSqlite( $table, $column )
-    {
-        if ( ( $table === "ezcontentobject_attribute" ) && ( $column === "id" ) )
-        {
-            // This is a @HACK -- since this table has a multi-column key with
-            // auto-increment, which is not easy to simulate in SQLite. This
-            // solves it for now.
-            $q = $this->createSelectQuery();
-            $q->select( $q->expr->max( "id" ) )->from( "ezcontentobject_attribute" );
-            $statement = $q->prepare();
-            $statement->execute();
-
-            $this->lastInsertedIds["ezcontentobject_attribute.id"] = (int)$statement->fetchColumn() + 1;
-            return $this->lastInsertedIds["ezcontentobject_attribute.id"];
-        }
-
-        if ( ( $table === "ezcontentclass" ) && ( $column === "id" ) )
-        {
-            // This is a @HACK -- since this table has a multi-column key with
-            // auto-increment, which is not easy to simulate in SQLite. This
-            // solves it for now.
-            $q = $this->createSelectQuery();
-            $q->select( $q->expr->max( "id" ) )->from( "ezcontentclass" );
-            $statement = $q->prepare();
-            $statement->execute();
-
-            $this->lastInsertedIds["ezcontentclass.id"] = (int)$statement->fetchColumn() + 1;
-            return $this->lastInsertedIds["ezcontentclass.id"];
-        }
-
-        if ( ( $table === "ezcontentclass_attribute" ) && ( $column === "id" ) )
-        {
-            // This is a @HACK -- since this table has a multi-column key with
-            // auto-increment, which is not easy to simulate in SQLite. This
-            // solves it for now.
-            $q = $this->createSelectQuery();
-            $q->select( $q->expr->max( "id" ) )->from( "ezcontentclass_attribute" );
-            $statement = $q->prepare();
-            $statement->execute();
-
-            $this->lastInsertedIds["ezcontentclass_attribute.id"] = (int)$statement->fetchColumn() + 1;
-            return $this->lastInsertedIds["ezcontentclass_attribute.id"];
-        }
-
-        return "NULL";
     }
 
     /**
