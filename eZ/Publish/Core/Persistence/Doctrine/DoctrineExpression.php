@@ -361,7 +361,7 @@ class DoctrineExpression implements Expression
 
         if ( is_array( $args[1] ) )
         {
-            $values = $args[1];
+            $values = array_values( $args[1] );
         }
         else
         {
