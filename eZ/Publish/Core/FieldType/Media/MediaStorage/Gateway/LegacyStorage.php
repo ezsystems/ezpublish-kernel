@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\LegacyStorage as BaseLegacyStorage;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class LegacyStorage extends BaseLegacyStorage
 {
@@ -75,13 +76,13 @@ class LegacyStorage extends BaseLegacyStorage
      * add additional columns to be fetched from the database. Please do not
      * forget to call the parent when overwriting this method.
      *
-     * @param \\eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery
      * @param int $fieldId
      * @param int $versionNo
      *
      * @return void
      */
-    protected function setFetchColumns( \\eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery, $fieldId, $versionNo )
+    protected function setFetchColumns( SelectQuery $selectQuery, $fieldId, $versionNo )
     {
         $connection = $this->getConnection();
 

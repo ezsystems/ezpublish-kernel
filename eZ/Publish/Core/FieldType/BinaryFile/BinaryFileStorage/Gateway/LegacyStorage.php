@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\LegacyStorage as BaseLegacyStorage;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Database\InsertQuery;
 
 class LegacyStorage extends BaseLegacyStorage
 {
@@ -53,7 +55,7 @@ class LegacyStorage extends BaseLegacyStorage
      *
      * @return void
      */
-    protected function setFetchColumns( \\eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery, $fieldId, $versionNo )
+    protected function setFetchColumns( SelectQuery $selectQuery, $fieldId, $versionNo )
     {
         $connection = $this->getConnection();
 
@@ -76,7 +78,7 @@ class LegacyStorage extends BaseLegacyStorage
      *
      * @return void
      */
-    protected function setInsertColumns( \ezcQueryInsert $insertQuery, VersionInfo $versionInfo, Field $field )
+    protected function setInsertColumns( InsertQuery $insertQuery, VersionInfo $versionInfo, Field $field )
     {
         $connection = $this->getConnection();
 

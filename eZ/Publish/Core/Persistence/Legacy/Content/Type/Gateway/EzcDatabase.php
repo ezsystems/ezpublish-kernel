@@ -646,14 +646,14 @@ class EzcDatabase extends Gateway
     /**
      * Set common columns for insert/update of FieldDefinition.
      *
-     * @param \ezcQuery $q
+     * @param \eZ\Publish\Core\Persistence\Database\Query $q
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      *
      * @return void
      */
     protected function setCommonFieldColumns(
-        ezcQuery $q, FieldDefinition $fieldDefinition,
+        Query $q, FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
     )
     {
