@@ -470,7 +470,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
     {
         if ( $type !== self::ASC && $type !== self::DESC )
         {
-            throw new QueryException('Invalid value for type of order by orientation.');
+            throw new QueryException('Invalid value for type of order by orientation: ' . $type);
         }
 
         $this->parts['orderBy'][] = $column . ' ' . $type;

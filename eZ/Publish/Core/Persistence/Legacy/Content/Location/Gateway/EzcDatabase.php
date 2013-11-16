@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Database\Query as DatabaseQuery;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -1105,7 +1106,7 @@ class EzcDatabase extends Gateway
                     $query->bindValue( $locationId, null, \PDO::PARAM_INT )
                 )
             )
-        )->orderBy( "node_id", Query::SORT_ASC )->limit( 1 );
+        )->orderBy( "node_id", SelectQuery::ASC )->limit( 1 );
         $statement = $query->prepare();
         $statement->execute();
 
@@ -1252,7 +1253,7 @@ class EzcDatabase extends Gateway
         $sort = $sort ?: array();
         foreach ( $sort as $condition )
         {
-            $sortDirection = $condition->direction === Query::SORT_ASC ? \eZ\Publish\Core\Persistence\Database\SelectQuery::ASC : \eZ\Publish\Core\Persistence\Database\SelectQuery::DESC;
+            $sortDirection = $condition->direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC;
             switch ( true )
             {
                 case $condition instanceof SortClause\LocationDepth:
