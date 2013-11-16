@@ -67,7 +67,7 @@ class SectionName extends SortClauseHandler
      *
      * @return void
      */
-    public function applyJoin( eZ\Publish\Core\Persistence\Database\SelectQuery $query, SortClause $sortClause, $number )
+    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number )
     {
         $table = $this->getSortTableName( $number );
         $query

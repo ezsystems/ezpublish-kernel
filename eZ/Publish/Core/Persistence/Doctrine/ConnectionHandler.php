@@ -89,6 +89,14 @@ class ConnectionHandler implements DatabaseHandler
     }
 
     /**
+     * @return bool
+     */
+    public function useSequences()
+    {
+        return $this->connection->getDatabasePlatform()->supportsSequences();
+    }
+
+    /**
      * Execute a query against the database
      *
      * @param string $query

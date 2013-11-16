@@ -176,6 +176,11 @@ class EzcDbHandler implements DatabaseHandler
         return $this->ezcDbHandler->prepare( $query );
     }
 
+    public function useSequences()
+    {
+        return $this->getName() === 'pgsql';
+    }
+
     /**
      * Creates an alias for $tableName, $columnName in $query.
      *
