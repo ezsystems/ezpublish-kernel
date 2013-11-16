@@ -19,9 +19,9 @@ class SubselectDoctrineQuery extends SelectDoctrineQuery
      * The subSelect() method of the ezcQuery object creates an object of this
      * class, and passes itself as $outer parameter to this constructor.
      *
-     * @param \eZ\Publish\Core\Persistence\Doctrine\SelectDoctrineQuery $outer
+     * @param \eZ\Publish\Core\Persistence\Doctrine\AbstractDoctrineQuery $outer
      */
-    public function __construct( SelectDoctrineQuery $outer )
+    public function __construct( AbstractDoctrineQuery $outer )
     {
         $this->outerQuery = $outer;
 

@@ -41,6 +41,8 @@ use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
+use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler\SqliteConnectionHandler;
+use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use ezcDbTransactionException;
 use RuntimeException;
 
@@ -316,8 +318,7 @@ class Handler implements HandlerInterface
         array $config = array()
     )
     {
-        $this->dbHandler = $dbHandler;
-        $this->dbHandler = new \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler($this->getConnection());
+        $this->dbHandler = $this->getDoctrineHandler($dbHandler);
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->converterRegistry = $converterRegistry;
         $this->storageRegistry = $storageRegistry;
@@ -331,15 +332,24 @@ class Handler implements HandlerInterface
      *
      * @return \Doctrine\DBAL\Connection
      */
-    protected function getConnection()
+    protected function getDoctrineHandler($dbHandler)
     {
         if ($this->connection === null)
         {
-            $this->connection = DriverManager::getConnection(
+            $connection = DriverManager::getConnection(
                 array(
-                    'pdo' => $this->dbHandler->getDbHandler()
+                    'pdo' => $dbHandler->getDbHandler()
                 )
             );
+
+            if ($connection->getDatabasePlatform()->getName() === 'sqlite')
+            {
+                $this->connection = new SqliteConnectionHandler($connection);
+            }
+            else
+            {
+                $this->connection = new ConnectionHandler($connection);
+            }
         }
 
         return $this->connection;
