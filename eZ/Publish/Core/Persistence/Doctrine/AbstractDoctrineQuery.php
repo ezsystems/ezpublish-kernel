@@ -3,6 +3,7 @@
 namespace eZ\Publish\Core\Persistence\Doctrine;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Statement;
 use PDO;
 
 abstract class AbstractDoctrineQuery
@@ -77,7 +78,30 @@ abstract class AbstractDoctrineQuery
     {
         $stmt = $this->connection->prepare($this->getQuery());
 
+        $this->doBind( $stmt );
+
         return $stmt;
+    }
+
+    /**
+     * Performs binding of variables bound with bindValue and bindParam on the statement $stmt.
+     *
+     * This method must be called if you have used the bind methods
+     * in your query and you build the method yourself using build.
+     *
+     * @param PDOStatement $stmt
+     * @return void
+     */
+    private function doBind( Statement $stmt )
+    {
+        foreach ( $this->boundValues as $key => $value )
+        {
+            $stmt->bindValue( $key, $value, $this->boundValuesType[$key] );
+        }
+        foreach ( $this->boundParameters as $key => &$value )
+        {
+            $stmt->bindParam( $key, $value, $this->boundParametersType[$key] );
+        }
     }
 
     /**

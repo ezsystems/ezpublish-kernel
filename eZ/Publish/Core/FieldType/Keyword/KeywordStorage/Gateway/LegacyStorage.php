@@ -355,7 +355,7 @@ class LegacyStorage extends Gateway
     {
         $dbHandler = $this->getConnection();
 
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \\eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $dbHandler->createSelectQuery();
         $query->select(
             "ezkeyword.id"

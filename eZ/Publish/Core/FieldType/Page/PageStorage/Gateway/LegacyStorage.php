@@ -15,7 +15,7 @@ use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use RuntimeException;
 use DateTime;
-use ezcQuerySelect;
+use \eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class LegacyStorage extends Gateway
 {
@@ -73,7 +73,7 @@ class LegacyStorage extends Gateway
     public function getValidBlockItems( Block $block )
     {
         $dbHandler = $this->getConnection();
-        /** @var $q \ezcQuerySelect */
+        /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
         $q = $dbHandler->createSelectQuery();
         $q
             ->select( 'object_id, node_id, priority, ts_publication, ts_visible, rotation_until, moved_to' )
@@ -83,7 +83,7 @@ class LegacyStorage extends Gateway
                 $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
                 $q->expr->eq( 'ts_hidden', $q->bindValue( 0, null, \PDO::PARAM_INT ) )
             )
-            ->orderBy( 'priority', ezcQuerySelect::DESC );
+            ->orderBy( 'priority', \eZ\Publish\Core\Persistence\Database\SelectQuery::DESC );
 
         $stmt = $q->prepare();
         $stmt->execute();
@@ -113,7 +113,7 @@ class LegacyStorage extends Gateway
     public function getLastValidBlockItem( Block $block )
     {
         $dbHandler = $this->getConnection();
-        /** @var $q \ezcQuerySelect */
+        /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
         $q = $dbHandler->createSelectQuery();
         $q
             ->select( 'object_id, node_id, priority, ts_publication, ts_visible, rotation_until, moved_to' )
@@ -123,7 +123,7 @@ class LegacyStorage extends Gateway
                 $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
                 $q->expr->eq( 'ts_hidden', $q->bindValue( 0, null, \PDO::PARAM_INT ) )
             )
-            ->orderBy( 'ts_visible', ezcQuerySelect::DESC )
+            ->orderBy( 'ts_visible', \eZ\Publish\Core\Persistence\Database\SelectQuery::DESC )
             ->limit( 1 );
 
         $stmt = $q->prepare();
@@ -150,7 +150,7 @@ class LegacyStorage extends Gateway
     public function getWaitingBlockItems( Block $block )
     {
         $dbHandler = $this->getConnection();
-        /** @var $q \ezcQuerySelect */
+        /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
         $q = $dbHandler->createSelectQuery();
         $q
             ->select( 'object_id, node_id, priority, ts_publication, rotation_until, moved_to' )
@@ -191,7 +191,7 @@ class LegacyStorage extends Gateway
     public function getArchivedBlockItems( Block $block )
     {
         $dbHandler = $this->getConnection();
-        /** @var $q \ezcQuerySelect */
+        /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
         $q = $dbHandler->createSelectQuery();
         $q
             ->select( 'object_id, node_id, priority, ts_publication, ts_visible, ts_hidden, rotation_until, moved_to' )
