@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content locator gateway implementation using the zeta database component.
@@ -58,13 +58,13 @@ class Field extends SortClauseHandler
      * Returns the name of the (aliased) column, which information should be
      * used for sorting.
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      *
      * @return string
      */
-    public function applySelect( ezcQuerySelect $query, SortClause $sortClause, $number )
+    public function applySelect( SelectQuery $query, SortClause $sortClause, $number )
     {
         $query
             ->select(
@@ -90,13 +90,13 @@ class Field extends SortClauseHandler
     /**
      * Applies joins to the query, required to fetch sort data
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      *
      * @return void
      */
-    public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number )
+    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number )
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
         $fieldTarget = $sortClause->targetData;

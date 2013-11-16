@@ -12,7 +12,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use ezcQuery;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 use Doctrine\DBAL\Connection;
 
@@ -539,7 +539,7 @@ class DoctrineDbalGateway extends Gateway
     /**
      * Creates the basic query to load Group data.
      *
-     * @return ezcQuerySelect
+     * @return eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function createGroupLoadQuery()
     {
@@ -988,7 +988,7 @@ class DoctrineDbalGateway extends Gateway
     /**
      * Returns a basic query to retrieve Type data.
      *
-     * @return ezcQuerySelect
+     * @return eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function getLoadTypeQuery()
     {
@@ -1300,10 +1300,10 @@ class DoctrineDbalGateway extends Gateway
     /**
      * Creates an array of select columns for $tableName.
      *
-     * @param \ezcQuerySelect $q
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $q
      * @param string $tableName
      */
-    protected function selectColumns( ezcQuerySelect $q, $tableName )
+    protected function selectColumns( SelectQuery $q, $tableName )
     {
         foreach ( $this->columns[$tableName] as $col )
         {

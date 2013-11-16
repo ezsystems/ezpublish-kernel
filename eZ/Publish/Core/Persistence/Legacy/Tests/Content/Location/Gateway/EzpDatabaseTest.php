@@ -150,7 +150,7 @@ class EzpDatabaseTest extends TestCase
             )
         );
 
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(

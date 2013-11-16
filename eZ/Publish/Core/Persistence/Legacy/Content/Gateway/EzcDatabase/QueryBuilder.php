@@ -38,11 +38,11 @@ class QueryBuilder
      *
      * @param string[] $translations
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function createFindQuery( array $translations = null )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             // Content object
@@ -155,11 +155,11 @@ class QueryBuilder
     /**
      * Creates a select query for content relations
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function createRelationFindQuery()
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_link' ),
@@ -181,11 +181,11 @@ class QueryBuilder
      * Creates a select query with all necessary joins to fetch a complete
      * content object. Does not apply any WHERE conditions.
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function createVersionInfoFindQuery()
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             // Content object version

@@ -719,7 +719,7 @@ class DoctrineExpression implements Expression
     private function basicMath( $type )
     {
         $args = func_get_args();
-        $elements = ezcQuerySelect::arrayFlatten( array_slice( $args, 1 ) );
+        $elements = eZ\Publish\Core\Persistence\Database\SelectQuery::arrayFlatten( array_slice( $args, 1 ) );
         $elements = $this->getIdentifiers( $elements );
         if ( count( $elements ) < 1 )
         {

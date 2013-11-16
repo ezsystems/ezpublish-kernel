@@ -848,7 +848,7 @@ class EzcDatabase extends Gateway
      */
     private function internalLoadContentInfo( $column, $id )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "ezcontentobject.*",
@@ -1001,7 +1001,7 @@ class EzcDatabase extends Gateway
      * Helper for {@see listVersions()} and {@see listVersionsForUser()} that filters duplicates
      * that are the result of the cartesian product performed by createVersionInfoFindQuery()
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @return string[][]
      */
     private function listVersionsHelper( $query )
@@ -1600,7 +1600,7 @@ class EzcDatabase extends Gateway
     {
         // Legacy Storage stores COMMON, LINK and EMBED types using bitmask, therefore first load
         // existing relation type by given $relationId for comparison
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "relation_type" )

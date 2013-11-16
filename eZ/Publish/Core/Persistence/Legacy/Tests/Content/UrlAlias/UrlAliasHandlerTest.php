@@ -2854,7 +2854,7 @@ class UrlAliasHandlerTest extends TestCase
      */
     protected function countRows()
     {
-        /** @var \ezcQuerySelect $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $query->expr->count( "*" )
@@ -2873,7 +2873,7 @@ class UrlAliasHandlerTest extends TestCase
      */
     protected function dump()
     {
-        /** @var \ezcQuerySelect $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "*"

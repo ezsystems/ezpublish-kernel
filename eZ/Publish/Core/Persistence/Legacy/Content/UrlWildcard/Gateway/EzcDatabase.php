@@ -118,7 +118,7 @@ class EzcDatabase extends Gateway
      */
     public function loadUrlWildcardData( $id )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "*"
@@ -148,7 +148,7 @@ class EzcDatabase extends Gateway
     {
         $limit = $limit === -1 ? self::MAX_LIMIT : $limit;
 
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "*"
