@@ -74,11 +74,6 @@ class DeleteDoctrineQuery extends AbstractDoctrineQuery implements DeleteQuery
             throw new QueryException( 'Missing table name' );
         }
 
-        if ( count( $this->where ) === 0 )
-        {
-            throw new QueryException( 'Executing delete with where clause not allowed' );
-        }
-
         return 'DELETE FROM ' . $this->table
              . ' WHERE ' . implode( ' AND ', $this->where );
     }

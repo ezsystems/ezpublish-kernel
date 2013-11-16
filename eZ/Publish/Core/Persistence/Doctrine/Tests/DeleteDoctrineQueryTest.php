@@ -21,15 +21,4 @@ class DeleteDoctrineQueryTest extends TestCase
 
         $deleteQuery->getQuery();
     }
-
-    public function testExceptionWithoutWhereClause()
-    {
-        $deleteQuery = $this->handler->createDeleteQuery();
-
-        $deleteQuery->deleteFrom( 'query_test' );
-
-        $this->setExpectedException('eZ\Publish\Core\Persistence\Database\QueryException');
-
-        $deleteQuery->getQuery();
-    }
 }
