@@ -621,7 +621,7 @@ class EzcDatabase extends Gateway
         // as a result we are forced to check which database is currently used
         // to generate the correct SQL query
         // see https://jira.ez.no/browse/EZP-20652
-        if ( $this->dbHandler->getName() === 'pgsql' )
+        if ( $this->dbHandler->useSequences() )
         {
             $query->set(
                 $this->dbHandler->quoteColumn( "id" ),

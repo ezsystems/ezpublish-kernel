@@ -36,6 +36,13 @@ interface DatabaseHandler
     public function rollBack();
 
     /**
+     * Check for sequence based driver or not
+     *
+     * @return bool
+     */
+    public function useSequences();
+
+    /**
      * Retrieve the last auto incremet or sequence id
      *
      * @param string $sequenceName

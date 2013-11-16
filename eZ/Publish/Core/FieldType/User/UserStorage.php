@@ -25,7 +25,7 @@ use eZ\Publish\SPI\Persistence\Content\Field;
  *   - connection (the connection handler)
  * For example, using Legacy storage engine, $context will be:
  *   - identifier = 'LegacyStorage'
- *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
+ *   - connection = {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler} object handler (for DB connection),
  *                  to be used accordingly to
  *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
  *
@@ -60,7 +60,7 @@ class UserStorage extends GatewayBasedStorage
      *   - connection (the connection handler)
      * For example, using Legacy storage engine, $context will be:
      *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
+     *   - connection = {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler} object handler (for DB connection),
      *                  to be used accordingly to
      * The context array provides some context for the field handler about the
      * currently used storage engine.
@@ -69,7 +69,7 @@ class UserStorage extends GatewayBasedStorage
      *   - connection (the connection handler)
      * For example, using Legacy storage engine, $context will be:
      *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
+     *   - connection = {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler} object handler (for DB connection),
      *                  to be used accordingly to
      *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
      *

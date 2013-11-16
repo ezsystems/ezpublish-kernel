@@ -265,10 +265,10 @@ class EzcDatabase extends Gateway
         if ( $maxPriority === null )
         {
             // @todo Hm... How do we perform this with query object?
-            $this->dbHandler->query(
+            $this->dbHandler->prepare(
                 "INSERT INTO ezcobj_state_link (contentobject_id, contentobject_state_id)
                 SELECT id, {$objectState->id} FROM ezcontentobject"
-            );
+            )->execute();
         }
     }
 

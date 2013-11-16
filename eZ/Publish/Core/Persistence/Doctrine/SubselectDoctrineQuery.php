@@ -2,6 +2,8 @@
 
 namespace eZ\Publish\Core\Persistence\Doctrine;
 
+use PDO;
+
 class SubselectDoctrineQuery extends SelectDoctrineQuery
 {
     /**

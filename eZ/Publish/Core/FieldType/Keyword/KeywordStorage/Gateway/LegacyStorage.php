@@ -4,7 +4,6 @@ namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 class LegacyStorage extends Gateway
 {
@@ -22,7 +21,7 @@ class LegacyStorage extends Gateway
      *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
+     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
      */
     public function setConnection( $dbHandler )
     {
@@ -30,7 +29,7 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof EzcDbHandler )
+        if ( !$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler )
         {
             throw new \RuntimeException( "Invalid dbHandler passed" );
         }
@@ -43,7 +42,7 @@ class LegacyStorage extends Gateway
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\ezcDbHandler
      */
     protected function getConnection()
     {

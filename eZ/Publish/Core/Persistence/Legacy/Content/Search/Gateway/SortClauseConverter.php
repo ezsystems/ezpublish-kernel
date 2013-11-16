@@ -111,7 +111,7 @@ class SortClauseConverter
         {
             $query->orderBy(
                 $column,
-                $direction === Query::SORT_ASC ? eZ\Publish\Core\Persistence\Database\SelectQuery::ASC : eZ\Publish\Core\Persistence\Database\SelectQuery::DESC
+                $direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC
             );
         }
 
