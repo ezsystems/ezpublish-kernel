@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content locator gateway implementation using the zeta database component.
@@ -43,12 +43,12 @@ class CriteriaConverter
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException if criterion is not supported
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param Criterion $criterion
      *
      * @return \ezcQueryExpression
      */
-    public function convertCriteria( ezcQuerySelect $query, Criterion $criterion )
+    public function convertCriteria( eZ\Publish\Core\Persistence\Database\SelectQuery $query, Criterion $criterion )
     {
         foreach ( $this->handler as $handler )
         {

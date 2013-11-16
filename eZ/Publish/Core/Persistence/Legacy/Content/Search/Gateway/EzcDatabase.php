@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content locator gateway implementation using the zeta handler component.
@@ -131,12 +131,12 @@ class EzcDatabase extends Gateway
      * Get query condition
      *
      * @param Criterion $filter
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param mixed $translations
      *
      * @return string
      */
-    protected function getQueryCondition( Criterion $filter, ezcQuerySelect $query, $translations )
+    protected function getQueryCondition( Criterion $filter, SelectQuery $query, $translations )
     {
         $condition = $query->expr->lAnd(
             $this->criteriaConverter->convertCriteria( $query, $filter ),

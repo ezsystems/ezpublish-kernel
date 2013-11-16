@@ -179,7 +179,7 @@ class EzcDatabase extends Gateway
     /**
      * Creates a Language find query
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function createFindQuery()
     {

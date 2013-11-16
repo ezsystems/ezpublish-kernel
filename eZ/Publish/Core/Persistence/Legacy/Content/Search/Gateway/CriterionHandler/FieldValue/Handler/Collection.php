@@ -13,7 +13,7 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FieldValue\Handler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content locator gateway implementation using the zeta database component.
@@ -48,13 +48,13 @@ class Collection extends Handler
     /**
      * Generates query expression for operator and value of a Field Criterion.
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $column
      *
      * @return \ezcQueryExpression
      */
-    public function handle( ezcQuerySelect $query, Criterion $criterion, $column )
+    public function handle( SelectQuery $query, Criterion $criterion, $column )
     {
         switch ( $criterion->operator )
         {

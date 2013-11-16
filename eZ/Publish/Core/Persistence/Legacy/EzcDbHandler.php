@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy;
 
 use ezcDbHandler as ezcDbHandlerWrapped;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite;
 use ezcDbFactory;
@@ -174,7 +174,7 @@ class EzcDbHandler implements DatabaseHandler
     /**
      * Creates an alias for $tableName, $columnName in $query.
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $columnName
      * @param string|null $tableName
      *

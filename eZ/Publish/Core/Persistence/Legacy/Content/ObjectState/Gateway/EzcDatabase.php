@@ -645,7 +645,7 @@ class EzcDatabase extends Gateway
     /**
      * Creates a generalized query for fetching object state(s)
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function createObjectStateFindQuery()
     {
@@ -678,7 +678,7 @@ class EzcDatabase extends Gateway
     /**
      * Creates a generalized query for fetching object state group(s)
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function createObjectStateGroupFindQuery()
     {

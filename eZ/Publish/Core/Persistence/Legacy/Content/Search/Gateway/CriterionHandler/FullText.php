@@ -14,7 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Full text criterion handler
@@ -123,12 +123,12 @@ class FullText extends CriterionHandler
      * converter wildcards are either transformed into the respective LIKE
      * queries, or everything is just compared using equal.
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $token
      *
      * @return \ezcQueryExpression
      */
-    protected function getWordExpression( ezcQuerySelect $query, $token )
+    protected function getWordExpression( SelectQuery $query, $token )
     {
         if ( $this->configuration['enableWildcards'] &&
              $token[0] === '*' )
@@ -160,7 +160,7 @@ class FullText extends CriterionHandler
      * @param \ezcQuerySelect $query
      * @param string $string
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function getWordIdSubquery( ezcQuerySelect $query, $string )
     {
@@ -195,12 +195,12 @@ class FullText extends CriterionHandler
      * accept() must be called before calling this method.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $converter
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return \ezcQueryExpression
      */
-    public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
+    public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
         $subSelect = $query->subSelect();
         $subSelect

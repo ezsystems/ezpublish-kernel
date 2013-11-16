@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content locator gateway implementation using the zeta database component.
@@ -68,12 +68,12 @@ abstract class CriterionHandler
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
      * @param CriteriaConverter $converter
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param Criterion $criterion
      *
      * @return \ezcQueryExpression
      */
-    abstract public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion );
+    abstract public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion );
 
     /**
      * Returns a unique table name

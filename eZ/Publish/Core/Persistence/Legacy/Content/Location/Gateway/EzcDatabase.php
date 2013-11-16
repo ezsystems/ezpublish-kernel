@@ -265,7 +265,7 @@ class EzcDatabase extends Gateway
      */
     public function loadParentLocationsDataForDraftContent( $contentId, $drafts = null )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $query->selectDistinct(
             "ezcontentobject_tree.*"
@@ -396,7 +396,7 @@ class EzcDatabase extends Gateway
     {
         $fromPathString = $sourceNodeData["path_string"];
 
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $query
             ->select(
@@ -1368,7 +1368,7 @@ class EzcDatabase extends Gateway
         $sort = $sort ?: array();
         foreach ( $sort as $condition )
         {
-            $sortDirection = $condition->direction === Query::SORT_ASC ? \ezcQuerySelect::ASC : \ezcQuerySelect::DESC;
+            $sortDirection = $condition->direction === Query::SORT_ASC ? \eZ\Publish\Core\Persistence\Database\SelectQuery::ASC : \eZ\Publish\Core\Persistence\Database\SelectQuery::DESC;
             switch ( true )
             {
                 case $condition instanceof SortClause\LocationDepth:

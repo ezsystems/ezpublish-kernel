@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use PHPUnit_Framework_TestCase;
 use InvalidArgumentException;
 use PDOException;
@@ -242,7 +242,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * Assert query result as correct
      *
      * Builds text representations of the asserted and fetched query result,
-     * based on a ezcQuerySelect object. Compares them using classic diff for
+     * based on a eZ\Publish\Core\Persistence\Database\SelectQuery object. Compares them using classic diff for
      * maximum readability of the differences between expectations and real
      * results.
      *
@@ -250,12 +250,12 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * rows of columns.
      *
      * @param array $expectation
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $message
      *
      * @return void
      */
-    public static function assertQueryResult( array $expectation, ezcQuerySelect $query, $message = null )
+    public static function assertQueryResult( array $expectation, SelectQuery $query, $message = null )
     {
         $statement = $query->prepare();
         $statement->execute();

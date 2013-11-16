@@ -20,7 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStr
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\ValueObject;
 use ezcQuery;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Zeta Component Database based content type gateway.
@@ -544,7 +544,7 @@ class EzcDatabase extends Gateway
     /**
      * Creates the basic query to load Group data.
      *
-     * @return ezcQuerySelect
+     * @return eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function createGroupLoadQuery()
     {
@@ -993,7 +993,7 @@ class EzcDatabase extends Gateway
     /**
      * Returns a basic query to retrieve Type data.
      *
-     * @return ezcQuerySelect
+     * @return eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function getLoadTypeQuery()
     {
@@ -1305,10 +1305,10 @@ class EzcDatabase extends Gateway
     /**
      * Creates an array of select columns for $tableName.
      *
-     * @param \ezcQuerySelect $q
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $q
      * @param string $tableName
      */
-    protected function selectColumns( ezcQuerySelect $q, $tableName )
+    protected function selectColumns( SelectQuery $q, $tableName )
     {
         foreach ( $this->columns[$tableName] as $col )
         {

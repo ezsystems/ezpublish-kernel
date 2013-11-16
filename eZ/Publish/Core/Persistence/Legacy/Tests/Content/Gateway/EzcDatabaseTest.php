@@ -1565,7 +1565,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
         $gateway->deleteRelation( 11, RelationValue::COMMON );
 
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
             array( array( 'relation_type' => RelationValue::LINK, ), ),
