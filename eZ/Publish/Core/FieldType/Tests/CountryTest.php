@@ -18,6 +18,11 @@ use eZ\Publish\Core\FieldType\Country\Value as CountryValue;
  */
 class CountryTest extends FieldTypeTest
 {
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezcountry';
+    }
+
     /**
      * Returns the field type under test.
      *

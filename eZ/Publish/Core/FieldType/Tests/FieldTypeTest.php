@@ -38,6 +38,13 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns the identifier of the field type under test.
+     *
+     * @return string
+     */
+    abstract protected function provideFieldTypeIdentifier();
+
+    /**
      * Returns the field type under test.
      *
      * This method is used by all test cases to retrieve the field type under
@@ -381,6 +388,14 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
             $this->fieldTypeUnderTest = $this->createFieldTypeUnderTest();
         }
         return $this->fieldTypeUnderTest;
+    }
+
+    public function testGetFieldTypeIdentifier()
+    {
+        self::assertSame(
+            $this->provideFieldTypeIdentifier(),
+            $this->getFieldTypeUnderTest()->getFieldTypeIdentifier()
+        );
     }
 
     public function testValidatorConfigurationSchema()
