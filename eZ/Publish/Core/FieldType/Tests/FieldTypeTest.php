@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use PHPUnit_Framework_TestCase;
 use Exception;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 {
@@ -209,6 +210,13 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     abstract public function provideInputForFromHash();
 
     /**
+     * Provides data for the getName() test.
+     *
+     * @return array
+     */
+    abstract public function provideDataForGetName();
+
+    /**
      * Provide data sets with field settings which are considered valid by the
      * {@link validateFieldSettings()} method.
      *
@@ -395,6 +403,20 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
         self::assertSame(
             $this->provideFieldTypeIdentifier(),
             $this->getFieldTypeUnderTest()->getFieldTypeIdentifier()
+        );
+    }
+
+    /**
+     * @dataProvider provideDataForGetName
+     *
+     * @param SPIValue $spiValue
+     * @param string $expected
+     */
+    public function testGetName( SPIValue $value, $expected )
+    {
+        self::assertSame(
+            $expected,
+            $this->getFieldTypeUnderTest()->getName( $value )
         );
     }
 
