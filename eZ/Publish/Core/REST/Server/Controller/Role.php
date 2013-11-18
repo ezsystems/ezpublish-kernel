@@ -194,9 +194,9 @@ class Role extends RestController
     {
         $loadedRole = $this->roleService->loadRole( $roleId );
 
-        foreach ( $loadedRole->getPolicies() as $rolePolicy )
+        foreach ( $loadedRole->getPolicies() as $policy )
         {
-            $this->roleService->removePolicy( $loadedRole, $rolePolicy );
+            $this->roleService->deletePolicy( $policy );
         }
 
         return new Values\NoContent();
@@ -332,7 +332,7 @@ class Role extends RestController
 
         if ( $policy !== null )
         {
-            $this->roleService->removePolicy( $role, $policy );
+            $this->roleService->deletePolicy( $policy );
             return new Values\NoContent();
         }
 
