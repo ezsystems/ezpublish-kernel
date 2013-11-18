@@ -30,19 +30,45 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 abstract class Location extends ValueObject
 {
-    // @todo Rename these to better fit current naming, also reuse these in Persistence or copy the change over.
     const SORT_FIELD_PATH = 1;
     const SORT_FIELD_PUBLISHED = 2;
     const SORT_FIELD_MODIFIED = 3;
     const SORT_FIELD_SECTION = 4;
     const SORT_FIELD_DEPTH = 5;
+
+    /**
+     * @deprecated
+     */
     const SORT_FIELD_CLASS_IDENTIFIER = 6;
+
+    /**
+     * @deprecated
+     */
     const SORT_FIELD_CLASS_NAME = 7;
+
+    const SORT_FIELD_CONTENT_TYPE_IDENTIFIER = 6;
+    const SORT_FIELD_CONTENT_TYPE_NAME = 7;
+
     const SORT_FIELD_PRIORITY = 8;
     const SORT_FIELD_NAME = 9;
+
+    /**
+     * @deprecated
+     */
     const SORT_FIELD_MODIFIED_SUBNODE = 10;
+
+    /**
+     * @deprecated
+     */
     const SORT_FIELD_NODE_ID = 11;
+
+    /**
+     * @deprecated
+     */
     const SORT_FIELD_CONTENTOBJECT_ID = 12;
+
+    const SORT_FIELD_LOCATION_ID = 11;
+    const SORT_FIELD_CONTENT_ID = 12;
 
     const SORT_ORDER_DESC = 0;
     const SORT_ORDER_ASC = 1;
