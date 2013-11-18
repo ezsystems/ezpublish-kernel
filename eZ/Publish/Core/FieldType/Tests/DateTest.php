@@ -374,6 +374,10 @@ class DateTest extends FieldTypeTest
     {
         return array(
             array(
+                $this->getEmptyValueExpectation(),
+                ''
+            ),
+            array(
                 new DateValue( new DateTime( '11/24/1983' ) ),
                 'Thursday 24 November 1983'
             )
