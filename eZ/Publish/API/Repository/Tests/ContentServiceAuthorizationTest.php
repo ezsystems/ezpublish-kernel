@@ -1451,4 +1451,112 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         return $pseudoEditor;
     }
+
+    /**
+     * Test loadRelations() with non authorized (readable) relations should not
+     * throw any exception
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::loadRelations()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
+     */
+    public function testLoadRelationsWithUnauthorizedRelations()
+    {
+        $repository = $this->getRepository();
+        $mainLanguage = "eng-GB";
+
+        $contentService = $repository->getContentService();
+        $contenTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $sectionService = $repository->getSectionService();
+        $userService = $repository->getUserService();
+
+        // login as admin user
+        $repository->setCurrentUser( $userService->loadUserByLogin( 'admin' ) );
+
+        // create section
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        $sectionCreate->identifier = "private";
+        $sectionCreate->name = "Private Section";
+        $section = $sectionService->createSection( $sectionCreate );
+
+        // create objects
+        // create main folder
+        $mainFolderCreate = $contentService->newContentCreateStruct(
+            $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
+            $mainLanguage
+        );
+        $mainFolderCreate->setField( 'name', 'Main Folder' );
+        $mainFolder = $contentService->publishVersion(
+            $contentService->createContent(
+                $mainFolderCreate,
+                array( $locationService->newLocationCreateStruct( 2 ) )
+            )->versionInfo
+        );
+
+        // create available folder inside main one
+        $availableFolderCreate = $contentService->newContentCreateStruct(
+            $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
+            $mainLanguage
+        );
+        $availableFolderCreate->setField( 'name', 'Avaliable Folder' );
+        $availableFolder = $contentService->publishVersion(
+            $contentService->createContent(
+                $availableFolderCreate,
+                array( $locationService->newLocationCreateStruct( $mainFolder->id ) )
+            )->versionInfo
+        );
+
+        // create restricted folder
+        $restrictedFolderCreate = $contentService->newContentCreateStruct(
+            $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
+            $mainLanguage
+        );
+        $restrictedFolderCreate->setField( 'name', 'Restricted Folder' );
+        $restrictedFolderCreate->sectionId = $section->id;
+        $restrictedFolder = $contentService->publishVersion(
+            $contentService->createContent(
+                $restrictedFolderCreate,
+                array( $locationService->newLocationCreateStruct( 2 ) )
+            )->versionInfo
+        );
+
+        // create unavailable folder inside restricted one
+        $unavailableFolderCreate = $contentService->newContentCreateStruct(
+            $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
+            $mainLanguage
+        );
+        $unavailableFolderCreate->setField( 'name', 'Unavailable Folder' );
+        $unavailableFolder = $contentService->publishVersion(
+            $contentService->createContent(
+                $unavailableFolderCreate,
+                array( $locationService->newLocationCreateStruct( $restrictedFolder->id ) )
+            )->versionInfo
+        );
+
+        // create test (folder) object
+        $testFolderCreate = $contentService->newContentCreateStruct(
+            $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
+            $mainLanguage
+        );
+        $testFolderCreate->setField( 'name', 'Test Folder' );
+        $testFolderDraft = $contentService->createContent(
+            $testFolderCreate,
+            array( $locationService->newLocationCreateStruct( 2 ) )
+        )->versionInfo;
+
+        // add relations
+        $contentService->addRelation( $testFolderDraft, $mainFolder->getVersionInfo()->getContentInfo() );
+        $contentService->addRelation( $testFolderDraft, $availableFolder->getVersionInfo()->getContentInfo() );
+        $contentService->addRelation( $testFolderDraft, $restrictedFolder->getVersionInfo()->getContentInfo() );
+        $contentService->addRelation( $testFolderDraft, $unavailableFolder->getVersionInfo()->getContentInfo() );
+
+        $testFolder = $contentService->publishVersion( $testFolderDraft );
+
+        // login with user
+        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+
+        // finaly load relations and verify no exception is thrown
+        $contentService->loadRelations( $testFolder->getVersionInfo() );
+    }
 }
