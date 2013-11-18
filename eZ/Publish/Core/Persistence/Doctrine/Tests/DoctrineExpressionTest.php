@@ -10,6 +10,6 @@ class DoctrineExpressionTest extends TestCase
     {
         $expression = new DoctrineExpression( $this->connection );
 
-        $this->assertEquals('( 1 AND 1 )', $expression->lAnd('1', '1'));
+        $this->assertEquals( '( 1 AND 1 )', $expression->lAnd('1', '1') );
     }
 }

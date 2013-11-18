@@ -89,7 +89,7 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
      */
     public function getQuery()
     {
-        if ( strlen( $this->table ) === 0)
+        if ( strlen( $this->table ) === 0 )
         {
             throw new QueryException( 'Missing table name' );
         }
@@ -106,7 +106,7 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
 
         $set = array();
 
-        foreach ($this->values as $column => $expression )
+        foreach ( $this->values as $column => $expression )
         {
             $set[] = $column . ' = ' . $expression;
         }

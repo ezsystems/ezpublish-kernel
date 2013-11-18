@@ -28,7 +28,7 @@ class UpdateDoctrineQueryTest extends TestCase
     {
         $updateQuery = $this->handler->createUpdateQuery();
 
-        $this->setExpectedException('eZ\Publish\Core\Persistence\Database\QueryException');
+        $this->setExpectedException( 'eZ\Publish\Core\Persistence\Database\QueryException' );
 
         $updateQuery->getQuery();
     }
@@ -39,7 +39,7 @@ class UpdateDoctrineQueryTest extends TestCase
 
         $updateQuery->update( 'query_test ');
 
-        $this->setExpectedException('eZ\Publish\Core\Persistence\Database\QueryException');
+        $this->setExpectedException( 'eZ\Publish\Core\Persistence\Database\QueryException' );
 
         $updateQuery->getQuery();
     }
@@ -50,7 +50,7 @@ class UpdateDoctrineQueryTest extends TestCase
 
         $updateQuery->update( 'query_test ')->set( 'val1', '?' );
 
-        $this->setExpectedException('eZ\Publish\Core\Persistence\Database\QueryException');
+        $this->setExpectedException( 'eZ\Publish\Core\Persistence\Database\QueryException' );
 
         $updateQuery->getQuery();
     }

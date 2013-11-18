@@ -64,7 +64,7 @@ class InsertDoctrineQuery extends AbstractDoctrineQuery implements InsertQuery
         }
 
         return 'INSERT INTO ' . $this->table
-               . ' (' . implode(', ', array_keys($this->values)) . ')'
-               . ' VALUES (' . implode(', ', $this->values) . ')';
+               . ' (' . implode( ', ', array_keys( $this->values ) ) . ')'
+               . ' VALUES (' . implode( ', ', $this->values ) . ')';
     }
 }

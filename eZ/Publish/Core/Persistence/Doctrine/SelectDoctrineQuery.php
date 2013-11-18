@@ -140,7 +140,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
     {
         $this->distinct = true;
 
-        return call_user_func_array(array($this, 'select'), func_get_args());
+        return call_user_func_array( array( $this, 'select' ), func_get_args() );
     }
 
     /**
@@ -246,7 +246,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
     {
         if ( count( $args ) === 0 )
         {
-            throw new QueryException('No arguments given');
+            throw new QueryException( 'No arguments given' );
         }
 
         $tableName = $args[0];
@@ -256,7 +256,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
         {
             $condition = $args[1];
         }
-        elseif ( count( $args ) == 3 )
+        else if ( count( $args ) == 3 )
         {
             $condition = $args[1] . ' = ' . $args[2];
         }
@@ -410,7 +410,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
 
         if ( count( $args ) === 0 )
         {
-            throw new QueryException('No arguments given');
+            throw new QueryException( 'No arguments given' );
         }
 
         foreach ( $args as $whereCondition )
@@ -470,7 +470,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
     {
         if ( $type !== self::ASC && $type !== self::DESC )
         {
-            throw new QueryException('Invalid value for type of order by orientation: ' . $type);
+            throw new QueryException( 'Invalid value for type of order by orientation: ' . $type );
         }
 
         $this->parts['orderBy'][] = $column . ' ' . $type;
@@ -530,7 +530,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
 
         if ( count( $args ) === 0 )
         {
-            throw new QueryException('No arguments given');
+            throw new QueryException( 'No arguments given' );
         }
 
         foreach ( $args as $whereCondition )
@@ -549,20 +549,21 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      */
     public function getQuery()
     {
-        if ( count($this->parts['select']) === 0 )
+        if ( count( $this->parts['select'] ) === 0 )
         {
             throw new QueryException( 'Missing "select" parts to generate query.' );
         }
 
         $sql = 'SELECT ';
 
-        if ($this->distinct) {
+        if ( $this->distinct )
+        {
             $sql .= 'DISTINCT ';
         }
 
         $sql .= implode( ', ', $this->parts['select'] ) . ' FROM';
 
-        if ( count($this->parts['from']) === 0 )
+        if ( count( $this->parts['from'] ) === 0 )
         {
             throw new QueryException( 'Missing "from" parts to generate query.' );
         }
@@ -597,7 +598,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
             $sql .= ' WHERE ' . implode( ' AND ', $this->parts['where'] );
         }
 
-        if ( count( $this->parts['groupBy'] ) > 0)
+        if ( count( $this->parts['groupBy'] ) > 0 )
         {
             $sql .= ' GROUP BY ' . implode( ', ', $this->parts['groupBy'] );
         }

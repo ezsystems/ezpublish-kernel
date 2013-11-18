@@ -69,7 +69,7 @@ class DeleteDoctrineQuery extends AbstractDoctrineQuery implements DeleteQuery
      */
     public function getQuery()
     {
-        if ( strlen( $this->table ) === 0)
+        if ( strlen( $this->table ) === 0 )
         {
             throw new QueryException( 'Missing table name' );
         }

@@ -120,7 +120,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function createSelectQuery()
     {
-        return new SelectDoctrineQuery($this->connection);
+        return new SelectDoctrineQuery( $this->connection );
     }
 
     /**
@@ -130,7 +130,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function createInsertQuery()
     {
-        return new InsertDoctrineQuery($this->connection);
+        return new InsertDoctrineQuery( $this->connection );
     }
 
     /**
@@ -140,7 +140,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function createUpdateQuery()
     {
-        return new UpdateDoctrineQuery($this->connection);
+        return new UpdateDoctrineQuery( $this->connection );
     }
 
     /**
@@ -150,7 +150,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function createDeleteQuery()
     {
-        return new DeleteDoctrineQuery($this->connection);
+        return new DeleteDoctrineQuery( $this->connection );
     }
 
     /**
