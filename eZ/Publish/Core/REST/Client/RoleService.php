@@ -280,6 +280,18 @@ class RoleService implements APIRoleService, Sessionable
     }
 
     /**
+     * Deletes a policy
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
+     */
+    public function deletePolicy( APIPolicy $policy )
+    {
+        throw new \Exception( "@todo: Implement." );
+    }
+
+    /**
      * Updates the limitations of a policy. The module and function cannot be changed and
      * the limitations are replaced by the ones in $roleUpdateStruct
      *
