@@ -319,4 +319,17 @@ class MapLocationTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezgmaplocation';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new MapLocation\Value( array( 'address' => 'Bag End, The Shire' ) ), "Bag End, The Shire" )
+        );
+    }
 }

@@ -414,4 +414,17 @@ class IntegerTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezinteger';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new IntegerValue( 42 ), "42" )
+        );
+    }
 }
