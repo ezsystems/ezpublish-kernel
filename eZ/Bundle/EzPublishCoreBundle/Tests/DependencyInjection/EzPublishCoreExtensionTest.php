@@ -96,14 +96,31 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testImageMagickConfigurationBasic()
     {
-        $this->load();
+        if ( !isset( $_ENV['imagemagickConvertPath'] ) || !is_executable( $_ENV['imagemagickConvertPath'] ) )
+        {
+            $this->markTestSkipped( 'Missing or mis-configured Imagemagick convert path.' );
+        }
+
+        $this->load(
+            array(
+                'imagemagick' => array(
+                    'enabled' => true,
+                    'path' => $_ENV['imagemagickConvertPath']
+                )
+            )
+        );
         $this->assertContainerBuilderHasParameter( 'ezpublish.image.imagemagick.enabled', true );
-        $this->assertContainerBuilderHasParameter( 'ezpublish.image.imagemagick.executable_path', dirname( $this->minimalConfig['imagemagick']['path'] ) );
-        $this->assertContainerBuilderHasParameter( 'ezpublish.image.imagemagick.executable', basename( $this->minimalConfig['imagemagick']['path'] ) );
+        $this->assertContainerBuilderHasParameter( 'ezpublish.image.imagemagick.executable_path', dirname( $_ENV['imagemagickConvertPath'] ) );
+        $this->assertContainerBuilderHasParameter( 'ezpublish.image.imagemagick.executable', basename( $_ENV['imagemagickConvertPath'] ) );
     }
 
     public function testImageMagickConfigurationFilters()
     {
+        if ( !isset( $_ENV['imagemagickConvertPath'] ) || !is_executable( $_ENV['imagemagickConvertPath'] ) )
+        {
+            $this->markTestSkipped( 'Missing or mis-configured Imagemagick convert path.' );
+        }
+
         $customFilters = array(
             'foobar' => '-foobar',
             'wow' => '-amazing'
@@ -111,6 +128,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->load(
             array(
                 'imagemagick' => array(
+                    'enabled' => true,
+                    'path' => $_ENV['imagemagickConvertPath'],
                     'filters' => $customFilters
                 )
             )

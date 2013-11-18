@@ -1,6 +1,5 @@
 imagemagick:
-    enabled: true
-    path: /opt/local/bin/convert
+    enabled: false
 
 http_cache:
     purge_type: local

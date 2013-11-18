@@ -58,6 +58,7 @@ if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
     // Exposing in env variables in order be able to use them in test cases.
     $_ENV['legacyKernel'] = $legacyKernel;
     $_ENV['legacyPath'] = $settings['service']['parameters']['legacy_dir'];
+    $_ENV['imagemagickConvertPath'] = $settings['service']['parameters']['imagemagick_convert_path'];
 }
 
 return include 'container.php';

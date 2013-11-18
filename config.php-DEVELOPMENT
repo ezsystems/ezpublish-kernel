@@ -61,6 +61,7 @@ return array(
                 getcwd() . '/ezpublish_legacy' :
                 __DIR__ . '/vendor/ezsystems/ezpublish-legacy'
             ),
+            'imagemagick_convert_path' => '/usr/bin/convert'
         )
     )
 );
