@@ -9,7 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 class LegacyDbHandlerFactory
@@ -32,7 +32,7 @@ class LegacyDbHandlerFactory
      */
     public function buildLegacyDbHandler()
     {
-        return EzcDbHandler::create(
+        return ConnectionHandler::createFromDSN(
             $this->configResolver->getParameter( 'database.params' )
         );
     }

@@ -306,7 +306,7 @@ class Legacy extends SetupFactory
      */
     protected function getDatabaseHandler()
     {
-        return $this->getServiceContainer()->get( 'legacy_db_handler' );
+        return $this->getServiceContainer()->get( 'doctrine_db_handler' );
     }
 
     /**

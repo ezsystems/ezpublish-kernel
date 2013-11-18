@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use PHPUnit_Framework_TestCase;
 use InvalidArgumentException;
@@ -38,7 +38,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * Database handler -- to not be constructed twice for one test
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $handler;
 
@@ -84,7 +84,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         if ( !$this->handler )
         {
-            $this->handler = EzcDbHandler::create( $this->getDsn() );
+            $this->handler = ConnectionHandler::createFromDSN( $this->getDsn() );
+            $this->db = $this->handler->getName();
         }
 
         return $this->handler;
