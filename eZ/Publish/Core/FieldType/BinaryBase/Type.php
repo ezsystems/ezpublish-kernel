@@ -55,7 +55,7 @@ abstract class Type extends FieldType
      */
     public function getName( SPIValue $value )
     {
-        return $value->fileName;
+        return (string)$value->fileName;
     }
 
     /**
