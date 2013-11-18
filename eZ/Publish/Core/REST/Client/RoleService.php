@@ -242,7 +242,10 @@ class RoleService implements APIRoleService, Sessionable
     /**
      * removes a policy from the role
      *
+     * @deprecated since 5.3, use {@link deletePolicy()} instead.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
