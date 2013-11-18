@@ -1345,6 +1345,52 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the deleteLocation() method
+     *
+     * Related issue: EZP-21904
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteContentObjectLastLocation()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use case */
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $contentTypeService = $repository->getContentTypeService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        // prepare Content object
+        $createStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            'eng-GB'
+        );
+        $createStruct->setField( 'name', 'Test folder' );
+
+        // creata Content object
+        $content = $contentService->publishVersion(
+            $contentService->createContent(
+                $createStruct,
+                array( $locationService->newLocationCreateStruct( 2 ) )
+            )->versionInfo
+        );
+
+        // delete location
+        $locationService->deleteLocation(
+            $locationService->loadLocation(
+                $urlAliasService->lookup( "/Test-folder" )->destination
+            )
+        );
+
+        // this should throw a not found exception
+        $contentService->loadContent( $content->versionInfo->contentInfo->id );
+        /* END: Use case*/
+    }
+
+    /**
      * Test for the copySubtree() method.
      *
      * @return void
@@ -1851,5 +1897,4 @@ class LocationServiceTest extends BaseTest
             $overwrite
         );
     }
-
 }
