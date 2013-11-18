@@ -15,6 +15,7 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use DateTime;
@@ -138,7 +139,38 @@ class ViewController extends Controller
 
         try
         {
-            $content = $this->getRepository()->getContentService()->loadContent( $contentId );
+            switch ( $viewType )
+            {
+                // If a 'view_emded' permission exists, do not rely on the repository's 'content/read' check.
+                case 'embed':
+                    {
+                        $content = $this->getRepository()->sudo(
+                            function ( $repository ) use ( $contentId )
+                            {
+                                return $repository->getContentService()->loadContent( $contentId );
+                            }
+                        );
+
+                        if (
+                            !$this->getRepository()->canUser( 'content', 'read', $content )
+                            && !$this->getRepository()->canUser( 'content', 'view_embed', $content )
+                        )
+                            throw new UnauthorizedException( 'content', 'read' );
+
+                        // also check of content publish status, since sudo allows loading unpublished content.
+                        if (
+                            $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+                            && !$this->getRepository()->canUser( 'content', 'versionread', $content )
+                        )
+                            throw new UnauthorizedException( 'content', 'versionread' );
+                        break;
+                    }
+                default:
+                    {
+                        $content = $this->getRepository()->getContentService()->loadContent( $contentId );
+                        break;
+                    }
+            }
 
             if ( $response->isNotModified( $this->getRequest() ) )
             {
