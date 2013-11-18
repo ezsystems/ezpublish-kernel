@@ -196,13 +196,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
     /**
      * @dataProvider cacheConfigurationProvider
      *
-     * @param array $customCachConfig
+     * @param array $customCacheConfig
      * @param string $expectedPurgeService
      * @param int $expectedTimeout
      */
-    public function testCacheConfiguration( array $customCachConfig, $expectedPurgeService, $expectedTimeout )
+    public function testCacheConfiguration( array $customCacheConfig, $expectedPurgeService, $expectedTimeout )
     {
-        $this->load( $customCachConfig );
+        $this->load( $customCacheConfig );
 
         $this->assertContainerBuilderHasAlias( 'ezpublish.http_cache.purge_client', $expectedPurgeService );
         $this->assertContainerBuilderHasParameter( 'ezpublish.http_cache.purge_client.http_client.timeout', $expectedTimeout );

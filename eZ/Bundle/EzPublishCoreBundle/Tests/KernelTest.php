@@ -62,7 +62,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             ->setMethods( array( 'handle', 'getCachePool' ) )
             ->getMockForAbstractClass();
 
-        // Set expectactions for cache.
+        // Set expectations for cache.
         // Note that we will call generateUserHash() twice.
         // The first time, cache is being generated, the second time hash is stored in memory.
         $cacheItem = $this

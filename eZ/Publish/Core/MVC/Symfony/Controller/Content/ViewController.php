@@ -141,7 +141,7 @@ class ViewController extends Controller
         {
             switch ( $viewType )
             {
-                // If a 'view_emded' permission exists, do not rely on the repository's 'content/read' check.
+                // If a 'view_embed' permission exists, do not rely on the repository's 'content/read' check.
                 case 'embed':
                     {
                         $content = $this->getRepository()->sudo(

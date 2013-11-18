@@ -62,7 +62,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
     }
 
     /**
-     * Injectes route names that are allowed to run with legacy_mode: true.
+     * Injects route names that are allowed to run with legacy_mode: true.
      *
      * @param array $routes
      */
