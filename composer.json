@@ -47,7 +47,8 @@
     "require-dev": {
         "ezsystems/ezpublish-legacy": "@dev",
         "mikey179/vfsStream": "1.1.0",
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "3.7.*",
+        "matthiasnoback/symfony-dependency-injection-test": "0.2.*"
     },
     "replace": {
         "ezsystems/ezpublish": "*"

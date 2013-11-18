@@ -18,7 +18,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AddFieldTypePass implements CompilerPassInterface
 {
-
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *

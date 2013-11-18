@@ -55,7 +55,7 @@ class LegacyStorageEnginePass implements CompilerPassInterface
             foreach ( $attributes as $attribute )
             {
                 if ( !isset( $attribute['alias'] ) )
-                    throw new \LogicException( 'ezpublish.storageEngine.legacy.converter service tag needs an "alias" attribute to identify the field type. None given.' );
+                    throw new LogicException( 'ezpublish.storageEngine.legacy.converter service tag needs an "alias" attribute to identify the field type. None given.' );
 
                 if ( isset( $attribute['lazy'] ) && $attribute['lazy'] === true )
                 {

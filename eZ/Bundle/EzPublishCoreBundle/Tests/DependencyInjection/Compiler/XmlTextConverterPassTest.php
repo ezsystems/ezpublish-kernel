@@ -7,14 +7,16 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\Tests;
+namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\XmlTextConverterPass;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
-class XmlTextConverterPassTest extends PHPUnit_Framework_TestCase
+class XmlTextConverterPassTest extends AbstractCompilerPassTest
 {
     public function testProcess()
     {
@@ -36,5 +38,33 @@ class XmlTextConverterPassTest extends PHPUnit_Framework_TestCase
         $this->assertSame( 'addPreConverter', $method );
         $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $arguments[0] );
         $this->assertSame( 'foo.converter', (string)$arguments[0] );
+    }
+
+    /**
+     * Register the compiler pass under test, just like you would do inside a bundle's load()
+     * method:
+     *
+     *   $container->addCompilerPass(new MyCompilerPass());
+     */
+    protected function registerCompilerPass( ContainerBuilder $container )
+    {
+        $container->addCompilerPass( new XmlTextConverterPass() );
+    }
+
+    public function testAddPreConverter()
+    {
+        $this->setDefinition( 'ezpublish.fieldType.ezxmltext.converter.html5', new Definition() );
+        $serviceId = 'service_id';
+        $def = new Definition();
+        $def->addTag( 'ezpublish.ezxml.converter' );
+        $this->setDefinition( $serviceId, $def );
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'ezpublish.fieldType.ezxmltext.converter.html5',
+            'addPreConverter',
+            array( new Reference( $serviceId ) )
+        );
     }
 }
