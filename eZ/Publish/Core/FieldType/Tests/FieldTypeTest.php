@@ -22,7 +22,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     private $fieldTypeUnderTest;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\TransformationProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getTransformationProcessorMock()
     {
@@ -32,7 +32,8 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
             '',
             false,
             true,
-            true
+            true,
+            array( 'transform', 'transformByGroup' )
         );
     }
 
