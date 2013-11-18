@@ -30,20 +30,23 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         $doctrineParams = $this->convertDoctrineParams( $dsn );
 
-        $this->connection = DriverManager::getConnection($doctrineParams);
-        $this->handler = new ConnectionHandler($this->connection);
+        $this->connection = DriverManager::getConnection( $doctrineParams );
+        $this->handler = new ConnectionHandler( $this->connection );
     }
 
     protected function createQueryTestTable()
     {
-        $table = new \Doctrine\DBAL\Schema\Table('query_test');
+        $table = new \Doctrine\DBAL\Schema\Table( 'query_test' );
         $table->addColumn( 'id', 'integer' );
         $table->addColumn( 'val1', 'string' );
         $table->addColumn( 'val2', 'integer' );
 
-        try {
+        try
+        {
             $this->connection->getSchemaManager()->createTable( $table );
-        } catch ( DBALException $e) {
+        }
+        catch ( DBALException $e)
+        {
         }
     }
 
@@ -53,11 +56,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         $doctrineParams = array();
 
-        switch ($params['phptype']) {
+        switch ( $params['phptype'] ) {
             case 'sqlite':
                 $doctrineParams = array( 'driver' => 'pdo_sqlite' );
 
-                if ($params['port'] === 'memory')
+                if ( $params['port'] === 'memory' )
                 {
                     $doctrineParams['memory'] = true;
                 }
@@ -77,6 +80,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
                 );
 
                 break;
+            default:
+                throw new \RuntimeException(
+                    'Doctrine DSN Parameters not converted as "' . $params['phptype'] . '" not supported yet.'
+                );
         }
 
         return $doctrineParams;
@@ -174,7 +181,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         // Get (if found): username and password
         // $dsn => username:password@protocol+hostspec/database
-        if ( ( $at = strrpos( (string) $dsn, '@' ) ) !== false )
+        if ( ( $at = strrpos( (string)$dsn, '@' ) ) !== false )
         {
             $str = substr( $dsn, 0, $at );
             $dsn = substr( $dsn, $at + 1 );
@@ -230,7 +237,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
                 $parsed['hostspec'] = $proto_opts;
             }
         }
-        elseif ( $parsed['protocol'] == 'unix' )
+        else if ( $parsed['protocol'] == 'unix' )
         {
             $parsed['socket'] = $proto_opts;
         }
@@ -249,14 +256,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
                 // /database?param1=value1&param2=value2
                 $parsed['database'] = rawurldecode( substr( $dsn, 0, $pos ) );
                 $dsn = substr( $dsn, $pos + 1 );
-                if ( strpos( $dsn, '&') !== false )
+                if ( strpos( $dsn, '&' ) !== false )
                 {
                     $opts = explode( '&', $dsn );
                 }
                 else
-                { // database?param1=value1
+                {
                     $opts = array( $dsn );
                 }
+
                 foreach ( $opts as $opt )
                 {
                     list( $key, $value ) = explode( '=', $opt );

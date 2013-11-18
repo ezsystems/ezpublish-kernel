@@ -76,7 +76,7 @@ abstract class AbstractDoctrineQuery
      */
     public function prepare()
     {
-        $stmt = $this->connection->prepare($this->getQuery());
+        $stmt = $this->connection->prepare( $this->getQuery() );
 
         $this->doBind( $stmt );
 
@@ -203,14 +203,14 @@ abstract class AbstractDoctrineQuery
      */
     protected function parseArguments( array $args )
     {
-        if ( count ( $args ) === 1 && is_array( $args[0] ) )
+        if ( count( $args ) === 1 && is_array( $args[0] ) )
         {
             $args = $args[0];
         }
 
         if ( count( $args ) === 0 )
         {
-            throw new QueryException('No arguments given');
+            throw new QueryException( 'No arguments given' );
         }
 
         return $args;

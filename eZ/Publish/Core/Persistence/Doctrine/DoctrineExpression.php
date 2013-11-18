@@ -45,9 +45,16 @@ class DoctrineExpression implements Expression
     {
         $args = func_get_args();
 
-        return $this->combine($args, ' OR ');
+        return $this->combine( $args, ' OR ' );
     }
 
+    /**
+     * Combine an array of expression by OR/AND.
+     *
+     * @param array $args
+     * @param string $by
+     * @return string
+     */
     private function combine($args, $by)
     {
         if ( count( $args ) === 1 && is_array( $args[0] ) )
@@ -92,7 +99,7 @@ class DoctrineExpression implements Expression
     {
         $args = func_get_args();
 
-        return $this->combine($args, ' AND ');
+        return $this->combine( $args, ' AND ' );
     }
 
     /**
@@ -590,7 +597,7 @@ class DoctrineExpression implements Expression
     {
         $args = func_get_args();
 
-        return call_user_func_array(array($this->platform, 'getConcatExpression'), $args);
+        return call_user_func_array( array( $this->platform, 'getConcatExpression' ), $args );
     }
 
     /**

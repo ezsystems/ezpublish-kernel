@@ -318,7 +318,7 @@ class Handler implements HandlerInterface
         array $config = array()
     )
     {
-        $this->dbHandler = $this->getDoctrineHandler($dbHandler);
+        $this->dbHandler = $this->getDoctrineHandler( $dbHandler );
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->converterRegistry = $converterRegistry;
         $this->storageRegistry = $storageRegistry;
@@ -334,7 +334,7 @@ class Handler implements HandlerInterface
      */
     protected function getDoctrineHandler($dbHandler)
     {
-        if ($this->connection === null)
+        if ( $this->connection === null )
         {
             $connection = DriverManager::getConnection(
                 array(
@@ -342,13 +342,13 @@ class Handler implements HandlerInterface
                 )
             );
 
-            if ($connection->getDatabasePlatform()->getName() === 'sqlite')
+            if ( $connection->getDatabasePlatform()->getName() === 'sqlite' )
             {
-                $this->connection = new SqliteConnectionHandler($connection);
+                $this->connection = new SqliteConnectionHandler( $connection );
             }
             else
             {
-                $this->connection = new ConnectionHandler($connection);
+                $this->connection = new ConnectionHandler( $connection );
             }
         }
 

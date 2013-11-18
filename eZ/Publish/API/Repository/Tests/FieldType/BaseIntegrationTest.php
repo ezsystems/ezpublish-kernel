@@ -857,7 +857,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
             $this->assertInstanceOf(
                 $expectedException,
                 $e,
-                get_class($e) . ": " . $e->getMessage()
+                get_class( $e ) . ": " . $e->getMessage()
             );
         }
     }
