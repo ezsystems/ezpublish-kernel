@@ -287,4 +287,23 @@ class CheckboxTest extends FieldTypeTest
         self::assertSame( '1', (string)$valueTrue );
         self::assertSame( '0', (string)$valueFalse );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezboolean';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new CheckboxValue( true ),
+                '1'
+            ),
+            array(
+                new CheckboxValue( false ),
+                '0'
+            )
+        );
+    }
 }
