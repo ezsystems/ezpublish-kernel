@@ -552,4 +552,23 @@ class MediaTest extends BinaryBaseTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezmedia';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new MediaValue(),
+                ''
+            ),
+            array(
+                new MediaValue( array( 'fileName' => 'sindelfingen.jpg' ) ),
+                'sindelfingen.jpg'
+            )
+        );
+    }
 }

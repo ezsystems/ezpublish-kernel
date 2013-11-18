@@ -321,4 +321,23 @@ class BinaryFileTest extends BinaryBaseTest
             // @todo: Provide upload struct (via REST)!
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezbinaryfile';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new BinaryFileValue(),
+                ''
+            ),
+            array(
+                new BinaryFileValue( array( 'fileName' => 'sindelfingen.jpg' ) ),
+                'sindelfingen.jpg'
+            )
+        );
+    }
 }
