@@ -54,4 +54,11 @@ class ConnectionHandlerTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    public function testSqliteConnectionSubtype()
+    {
+        $handler = ConnectionHandler::createFromDSN( 'sqlite://:memory:' );
+
+        $this->assertInstanceOf( 'eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler\SqliteConnectionHandler', $handler );
+    }
 }

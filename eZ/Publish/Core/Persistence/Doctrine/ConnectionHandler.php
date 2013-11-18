@@ -34,7 +34,14 @@ class ConnectionHandler implements DatabaseHandler
             $parsed = $dsn;
         }
 
-        return new self( DriverManager::getConnection( $parsed ) );
+        $connection = DriverManager::getConnection( $parsed );
+
+        if ( $parsed['driver'] === 'pdo_sqlite' )
+        {
+            return new ConnectionHandler\SqliteConnectionHandler( $connection );
+        }
+
+        return new self( $connection );
     }
 
     /**

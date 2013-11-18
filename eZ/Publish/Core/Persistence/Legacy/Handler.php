@@ -40,12 +40,9 @@ use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
-use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler\SqliteConnectionHandler;
-use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use ezcDbTransactionException;
 use RuntimeException;
-
-use Doctrine\DBAL\DriverManager;
 
 /**
  * The repository handler for the legacy storage engine
@@ -242,7 +239,7 @@ class Handler implements HandlerInterface
     protected $urlWildcardMapper;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
@@ -289,7 +286,7 @@ class Handler implements HandlerInterface
     /**
      * Creates a new repository handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler The database handler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler The database handler
      * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry Should contain field types
      * @param Content\FieldValue\ConverterRegistry $converterRegistry Should contain Field Type converters
      * @param Content\StorageRegistry $storageRegistry Should contain Field Type external storage handlers
@@ -302,7 +299,7 @@ class Handler implements HandlerInterface
      *                      is then executed by the old eZ Publish core.
      */
     public function __construct(
-        EzcDbHandler $dbHandler,
+        DatabaseHandler $dbHandler,
         FieldTypeRegistry $fieldTypeRegistry,
         ConverterRegistry $converterRegistry,
         StorageRegistry $storageRegistry,
@@ -310,41 +307,13 @@ class Handler implements HandlerInterface
         array $config = array()
     )
     {
-        $this->dbHandler = $this->getDoctrineHandler( $dbHandler );
+        $this->dbHandler = $dbHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         $this->converterRegistry = $converterRegistry;
         $this->storageRegistry = $storageRegistry;
         $this->transformationProcessor = $transformationProcessor;
         $this->config = $config;
 
-    }
-
-    /**
-     * Get Doctrine database connection.
-     *
-     * @return \Doctrine\DBAL\Connection
-     */
-    protected function getDoctrineHandler($dbHandler)
-    {
-        if ( $this->connection === null )
-        {
-            $connection = DriverManager::getConnection(
-                array(
-                    'pdo' => $dbHandler->getDbHandler()
-                )
-            );
-
-            if ( $connection->getDatabasePlatform()->getName() === 'sqlite' )
-            {
-                $this->connection = new SqliteConnectionHandler( $connection );
-            }
-            else
-            {
-                $this->connection = new ConnectionHandler( $connection );
-            }
-        }
-
-        return $this->connection;
     }
 
     /**
