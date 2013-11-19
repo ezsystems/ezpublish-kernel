@@ -90,7 +90,7 @@ class ViewControllerListener implements EventSubscriberInterface
         }
         catch ( UnauthorizedException $e)
         {
-            throw new AccessDeniedException( 'Access Denied', $e );
+            throw new AccessDeniedException();
         }
 
         if ( !isset( $valueObject ) )
