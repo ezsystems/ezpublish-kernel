@@ -156,6 +156,7 @@ class Filesystem implements IOHandlerInterface
 
         if ( !isset( $updateFileStruct->id ) || $updateFileStruct->id == $spiBinaryFileId )
         {
+            $returnSpiBinaryFileId = $spiBinaryFileId;
             $destinationStoragePath = $this->getStoragePath( $spiBinaryFileId );
         }
         else
@@ -168,7 +169,8 @@ class Filesystem implements IOHandlerInterface
                 );
             }
 
-            $destinationStoragePath = $this->getStoragePath( $updateFileStruct->id );
+            $returnSpiBinaryFileId = $updateFileStruct->id;
+            $destinationStoragePath = $this->getStoragePath( $returnSpiBinaryFileId );
         }
 
         // path
@@ -189,7 +191,10 @@ class Filesystem implements IOHandlerInterface
             fclose( $outputStream );
         }
 
-        return $this->load( $sourceStoragePath );
+        clearstatcache( true, $sourceStoragePath );
+        clearstatcache( true, $destinationStoragePath );
+
+        return $this->load( $returnSpiBinaryFileId );
     }
 
     /**
