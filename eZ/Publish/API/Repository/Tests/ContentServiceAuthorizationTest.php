@@ -1463,6 +1463,8 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     public function testLoadRelationsWithUnauthorizedRelations()
     {
         $repository = $this->getRepository();
+
+        /* BEGIN: Use case */
         $mainLanguage = "eng-GB";
 
         $contentService = $repository->getContentService();
@@ -1503,7 +1505,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $availableFolder = $contentService->publishVersion(
             $contentService->createContent(
                 $availableFolderCreate,
-                array( $locationService->newLocationCreateStruct( $mainFolder->id ) )
+                array( $locationService->newLocationCreateStruct( $mainFolder->contentInfo->mainLocationId ) )
             )->versionInfo
         );
 
@@ -1530,7 +1532,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $unavailableFolder = $contentService->publishVersion(
             $contentService->createContent(
                 $unavailableFolderCreate,
-                array( $locationService->newLocationCreateStruct( $restrictedFolder->id ) )
+                array( $locationService->newLocationCreateStruct( $restrictedFolder->contentInfo->mainLocationId ) )
             )->versionInfo
         );
 
@@ -1546,17 +1548,74 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         )->versionInfo;
 
         // add relations
-        $contentService->addRelation( $testFolderDraft, $mainFolder->getVersionInfo()->getContentInfo() );
-        $contentService->addRelation( $testFolderDraft, $availableFolder->getVersionInfo()->getContentInfo() );
-        $contentService->addRelation( $testFolderDraft, $restrictedFolder->getVersionInfo()->getContentInfo() );
-        $contentService->addRelation( $testFolderDraft, $unavailableFolder->getVersionInfo()->getContentInfo() );
+        $mainRelation = $contentService->addRelation(
+            $testFolderDraft,
+            $mainFolder->getVersionInfo()->getContentInfo()
+        );
+        $availableRelation = $contentService->addRelation(
+            $testFolderDraft,
+            $availableFolder->getVersionInfo()->getContentInfo()
+        );
+        $contentService->addRelation(
+            $testFolderDraft,
+            $restrictedFolder->getVersionInfo()->getContentInfo()
+        );
+        $contentService->addRelation(
+            $testFolderDraft,
+            $unavailableFolder->getVersionInfo()->getContentInfo()
+        );
 
         $testFolder = $contentService->publishVersion( $testFolderDraft );
 
         // login with user
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
-        // finaly load relations and verify no exception is thrown
-        $contentService->loadRelations( $testFolder->getVersionInfo() );
+        // finaly load relations ( verify no exception is thrown )
+        $actualRelations = $contentService->loadRelations( $testFolder->getVersionInfo() );
+
+        /* END: Use case */
+
+        // assert results
+        $expectedRelations = array(
+            $mainRelation->destinationContentInfo->id => $mainRelation,
+            $availableRelation->destinationContentInfo->id => $availableRelation,
+        );
+
+        // assert there are as many expected relations as actual ones
+        $this->assertEquals(
+            count( $expectedRelations ),
+            count( $actualRelations ),
+            "Expected '" . count( $expectedRelations )
+            . "' relations found '" . count( $actualRelations ) . "'"
+        );
+
+        // assert each relation
+        foreach ( $actualRelations as $relation )
+        {
+            $destination = $relation->destinationContentInfo;
+            $expected = $expectedRelations[$destination->id]->destinationContentInfo;
+            $this->assertNotEmpty( $expected, "Non expected relation with '{$destination->id}' id found" );
+            $this->assertEquals(
+                $expected->id,
+                $destination->id,
+                "Expected relation with '{$expected->id}' id found '{$destination->id}' id"
+            );
+            $this->assertEquals(
+                $expected->name,
+                $destination->name,
+                "Expected relation with '{$expected->name}' name found '{$destination->name}' name"
+            );
+
+            // remove from list
+            unset( $expectedRelations[$destination->id] );
+        }
+
+        // verify all expected relations were found
+        $this->assertEquals(
+            0,
+            count( $expectedRelations ),
+            "Expected to find '" . ( count( $expectedRelations ) + count( $actualRelations ) )
+            . "' relations found '" . count( $actualRelations ) . "'"
+        );
     }
 }
