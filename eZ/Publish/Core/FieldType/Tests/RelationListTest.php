@@ -376,4 +376,24 @@ class RelationListTest extends FieldTypeTest
             $ft->getRelations( $ft->acceptValue( array( 70, 72 ) ) )
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezobjectrelationlist';
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetName()
+    {
+        $this->getFieldTypeUnderTest()->getName(
+            $this->getEmptyValueExpectation()
+        );
+    }
+
+    public function provideDataForGetName()
+    {
+        return array();
+    }
 }

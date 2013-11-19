@@ -268,4 +268,17 @@ class UrlTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezurl';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( new UrlValue( '', 'Url text' ), 'Url text' )
+        );
+    }
 }

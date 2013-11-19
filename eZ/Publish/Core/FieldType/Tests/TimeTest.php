@@ -363,4 +363,17 @@ class TimeTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'eztime';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( new TimeValue( 200 ), '12:03:20 am' )
+        );
+    }
 }

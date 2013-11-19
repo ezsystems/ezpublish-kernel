@@ -341,4 +341,17 @@ class TextBlockTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'eztext';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( new TextBlockValue( 'This is a piece of text' ), 'This is a piece of text' )
+        );
+    }
 }

@@ -345,4 +345,24 @@ class SelectionTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezselection';
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetName()
+    {
+        $this->getFieldTypeUnderTest()->getName(
+            $this->getEmptyValueExpectation()
+        );
+    }
+
+    public function provideDataForGetName()
+    {
+        return array();
+    }
 }
