@@ -2,18 +2,15 @@ siteaccess:
     default_siteaccess: ezdemo_site
     list:
         - ezdemo_site
-        - eng
         - fre
         - ezdemo_site_admin
     groups:
         ezdemo_group:
             - ezdemo_site
-            - eng
             - fre
             - ezdemo_site_admin
         ezdemo_frontend_group:
             - ezdemo_site
-            - eng
             - fre
     match:
         URIElement: 1
