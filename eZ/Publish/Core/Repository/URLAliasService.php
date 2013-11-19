@@ -629,6 +629,11 @@ class URLAliasService implements URLAliasServiceInterface
             }
         }
 
+        if ( !empty( $urlAliases ) && $this->settings["showAllTranslations"] )
+        {
+            return reset( $urlAliases );
+        }
+
         throw new NotFoundException( "URLAlias", $location->id );
     }
 
