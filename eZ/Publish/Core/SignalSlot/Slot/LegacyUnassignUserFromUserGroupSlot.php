@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\SignalSlot\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZCache;
+use eZContentCacheManager;
+use eZRole;
 
 /**
  * A legacy slot handling UnAssignUserFromUserGroupSignal.
@@ -35,7 +36,8 @@ class LegacyUnassignUserFromUserGroupSlot extends AbstractLegacySlot
         $kernel->runCallback(
             function ()
             {
-                eZCache::clearByID( "user_info_cache" );
+                eZContentCacheManager::clearAllContentCache();
+                eZRole::expireCache();
             },
             false
         );
