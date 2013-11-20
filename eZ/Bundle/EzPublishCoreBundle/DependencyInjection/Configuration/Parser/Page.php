@@ -104,6 +104,7 @@ class Page extends AbstractParser
                     $ezpageSettings[$type],
                     array_flip( $ezpageSettings[$enabledKey] )
                 );
+                $ezpageSettings[$enabledKey] = array_unique( $ezpageSettings[$enabledKey] );
             }
             $container->setParameter( "ezsettings.$sa.ezpage", $ezpageSettings );
         }
