@@ -66,16 +66,7 @@ class Type extends FieldType
      */
     public function getName( SPIValue $value )
     {
-        return implode(
-            ", ",
-            array_map(
-                function ( $countryInfo )
-                {
-                    return $countryInfo["Name"];
-                },
-                $this->countriesInfo
-            )
-        );
+        return (string)$value;
     }
 
     /**

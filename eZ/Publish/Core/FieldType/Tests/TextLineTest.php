@@ -434,4 +434,17 @@ class TextLineTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezstring';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( new TextLineValue( 'This is a line of text' ), 'This is a line of text' )
+        );
+    }
 }

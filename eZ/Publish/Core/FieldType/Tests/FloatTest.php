@@ -71,7 +71,7 @@ class FloatTest extends FieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return FloatValue
      */
     protected function getEmptyValueExpectation()
     {
@@ -412,6 +412,19 @@ class FloatTest extends FieldTypeTest
                     ),
                 )
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezfloat';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new FloatValue( 23.42 ), "23.42" )
         );
     }
 }

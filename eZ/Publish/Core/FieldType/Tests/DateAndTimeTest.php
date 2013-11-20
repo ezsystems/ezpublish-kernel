@@ -383,4 +383,23 @@ class DateAndTimeTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezdatetime';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                $this->getEmptyValueExpectation(),
+                ''
+            ),
+            array(
+                DateAndTimeValue::fromTimestamp( 438512400 ),
+                'Thu 1983-24-11 09:00:00'
+            )
+        );
+    }
 }

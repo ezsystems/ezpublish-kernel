@@ -252,4 +252,17 @@ class KeywordTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezkeyword';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new KeywordValue( array( 'foo', 'bar' ) ), "foo, bar" )
+        );
+    }
 }

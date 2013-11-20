@@ -355,4 +355,14 @@ EOT;
             $ft->getRelations( $ft->acceptValue( $xml ) )
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezxmltext';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array();
+    }
 }

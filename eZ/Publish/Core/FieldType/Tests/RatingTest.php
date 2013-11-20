@@ -354,4 +354,24 @@ class RatingTest extends FieldTypeTest
         $value = new Value;
         self::assertSame( false, $value->isDisabled );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezsrrating';
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetName()
+    {
+        $this->getFieldTypeUnderTest()->getName(
+            $this->getEmptyValueExpectation()
+        );
+    }
+
+    public function provideDataForGetName()
+    {
+        return array();
+    }
 }

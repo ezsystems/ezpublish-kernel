@@ -296,4 +296,17 @@ class UserTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezuser';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( new UserValue( array( 'login' => 'johndoe' ) ), 'johndoe' )
+        );
+    }
 }

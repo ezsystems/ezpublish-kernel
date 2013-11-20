@@ -453,4 +453,17 @@ class PageTest extends FieldTypeTest
             ),
         );
     }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezpage';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new PageValue( $this->getPageReference() ), "" )
+        );
+    }
 }

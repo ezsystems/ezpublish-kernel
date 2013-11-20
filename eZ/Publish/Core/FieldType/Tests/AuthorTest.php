@@ -422,16 +422,6 @@ class AuthorTest extends FieldTypeTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Author\Type::getName
-     */
-    public function testFieldValueTitle()
-    {
-        $ft = $this->createFieldTypeUnderTest();
-        $value = new AuthorValue( $this->authors );
-        self::assertSame( $this->authors[0]->name, $ft->getName( $value ) );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\FieldType\Author\AuthorCollection::offsetSet
      */
     public function testAddAuthor()
@@ -470,5 +460,35 @@ class AuthorTest extends FieldTypeTest
         $value->authors->removeAuthorsById( array( $this->authors[1]->id, $this->authors[2]->id ) );
         self::assertSame( count( $this->authors ) - 2, count( $value->authors ) );
         self::assertSame( array( $this->authors[0] ), $value->authors->getArrayCopy() );
+    }
+
+    /**
+     * Returns the identifier of the field type under test.
+     *
+     * @return string
+     */
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezauthor';
+    }
+
+    /**
+     * Provides data for the getName() test.
+     *
+     * @return array
+     */
+    public function provideDataForGetName()
+    {
+        $authorList = new AuthorValue(
+            array(
+                new Author( array( 'id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com' ) ),
+                new Author( array( 'id' => 2, 'name' => 'Luke Skywalker', 'email' => 'luke.skywalker@example.com' ) ),
+            )
+        );
+
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( $authorList, 'Boba Fett' )
+        );
     }
 }

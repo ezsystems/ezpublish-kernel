@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use PHPUnit_Framework_TestCase;
 use Exception;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 {
@@ -22,7 +23,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     private $fieldTypeUnderTest;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\TransformationProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getTransformationProcessorMock()
     {
@@ -32,9 +33,17 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
             '',
             false,
             true,
-            true
+            true,
+            array( 'transform', 'transformByGroup' )
         );
     }
+
+    /**
+     * Returns the identifier of the field type under test.
+     *
+     * @return string
+     */
+    abstract protected function provideFieldTypeIdentifier();
 
     /**
      * Returns the field type under test.
@@ -199,6 +208,13 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      * @return array
      */
     abstract public function provideInputForFromHash();
+
+    /**
+     * Provides data for the getName() test.
+     *
+     * @return array
+     */
+    abstract public function provideDataForGetName();
 
     /**
      * Provide data sets with field settings which are considered valid by the
@@ -380,6 +396,28 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
             $this->fieldTypeUnderTest = $this->createFieldTypeUnderTest();
         }
         return $this->fieldTypeUnderTest;
+    }
+
+    public function testGetFieldTypeIdentifier()
+    {
+        self::assertSame(
+            $this->provideFieldTypeIdentifier(),
+            $this->getFieldTypeUnderTest()->getFieldTypeIdentifier()
+        );
+    }
+
+    /**
+     * @dataProvider provideDataForGetName
+     *
+     * @param SPIValue $spiValue
+     * @param string $expected
+     */
+    public function testGetName( SPIValue $value, $expected )
+    {
+        self::assertSame(
+            $expected,
+            $this->getFieldTypeUnderTest()->getName( $value )
+        );
     }
 
     public function testValidatorConfigurationSchema()

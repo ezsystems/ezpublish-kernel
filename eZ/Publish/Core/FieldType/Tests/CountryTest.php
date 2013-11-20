@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Country\Type as Country;
 use eZ\Publish\Core\FieldType\Country\Value as CountryValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 /**
  * @group fieldType
@@ -18,6 +19,11 @@ use eZ\Publish\Core\FieldType\Country\Value as CountryValue;
  */
 class CountryTest extends FieldTypeTest
 {
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezcountry';
+    }
+
     /**
      * Returns the field type under test.
      *
@@ -391,6 +397,24 @@ class CountryTest extends FieldTypeTest
                         )
                     )
                 ),
+            ),
+        );
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new CountryValue(),
+                ''
+            ),
+            array(
+                new CountryValue( array( 'FR' => array( 'Name' => 'France' ) ) ),
+                'France'
+            ),
+            array(
+                new CountryValue( array( 'FR' => array( 'Name' => 'France' ), 'DE' => array( 'Name' => 'Deutschland' ) ) ),
+                'France, Deutschland'
             ),
         );
     }
