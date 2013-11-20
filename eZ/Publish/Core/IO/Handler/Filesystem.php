@@ -173,6 +173,14 @@ class Filesystem implements IOHandlerInterface
             $destinationStoragePath = $this->getStoragePath( $returnSpiBinaryFileId );
         }
 
+        // contents
+        if ( $updateFileStruct->getInputStream() !== null )
+        {
+            $outputStream = fopen( $sourceStoragePath, 'wb' );
+            stream_copy_to_stream( $updateFileStruct->getInputStream(), $outputStream );
+            fclose( $outputStream );
+        }
+
         // path
         if ( $destinationStoragePath != $sourceStoragePath )
         {
@@ -182,13 +190,6 @@ class Filesystem implements IOHandlerInterface
                 $this->createFolderStructure( $destinationStorageDirectory );
             }
             rename( $sourceStoragePath, $destinationStoragePath );
-        }
-
-        if ( $updateFileStruct->getInputStream() !== null )
-        {
-            $outputStream = fopen( $sourceStoragePath, 'wb' );
-            stream_copy_to_stream( $updateFileStruct->getInputStream(), $outputStream );
-            fclose( $outputStream );
         }
 
         clearstatcache( true, $sourceStoragePath );
