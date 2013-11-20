@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
-
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
 
@@ -1439,6 +1439,37 @@ class LocationServiceTest extends BaseTest
             ),
             $copiedLocation
         );
+
+        $this->assertDefaultContentStates( $copiedLocation->contentInfo );
+    }
+
+    /**
+     * Asserts that given Content has default ContentStates.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return void
+     */
+    private function assertDefaultContentStates( ContentInfo $contentInfo )
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroups = $objectStateService->loadObjectStateGroups();
+
+        foreach ( $objectStateGroups as $objectStateGroup )
+        {
+            $contentState = $objectStateService->getContentState( $contentInfo, $objectStateGroup );
+            foreach ( $objectStateService->loadObjectStates( $objectStateGroup ) as $objectState )
+            {
+                // Only check the first object state which is the default one.
+                $this->assertEquals(
+                    $objectState,
+                    $contentState
+                );
+                break;
+            }
+        }
     }
 
     /**
