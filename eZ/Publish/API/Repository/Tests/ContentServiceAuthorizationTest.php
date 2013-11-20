@@ -1453,8 +1453,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
-     * Test loadRelations() with non authorized (readable) relations should not
-     * throw any exception
+     * Test that for an user that doesn't have access (read permissions) to an
+     * related object, executing loadRelations() would not throw any exception,
+     * only that the non-readable related object(s) won't be loaded
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::loadRelations()
@@ -1473,17 +1474,27 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $sectionService = $repository->getSectionService();
         $userService = $repository->getUserService();
 
-        // login as admin user
+        // set the current user as admin to create the environment to test
         $repository->setCurrentUser( $userService->loadUserByLogin( 'admin' ) );
 
         // create section
+        // since anonymous users have their read permissions to specific sections
+        // the created section will be non-readable to them
         $sectionCreate = $sectionService->newSectionCreateStruct();
         $sectionCreate->identifier = "private";
         $sectionCreate->name = "Private Section";
         $section = $sectionService->createSection( $sectionCreate );
 
-        // create objects
-        // create main folder
+        // create objects for testing
+        // here we will create 4 objects which 2 will be readable by an anonymous
+        // user, and the other 2 wont these last 2 will go to a private section
+        // where anonymous can't read, just like:
+        // readable object 1 -> /Main Folder
+        // readable object 2 -> /Main Folder/Available Folder
+        // non-readable object 1 -> /Restricted Folder
+        // non-readable object 2 -> /Restricted Folder/Unavailable Folder
+        //
+        // here is created - readable object 1 -> /Main Folder
         $mainFolderCreate = $contentService->newContentCreateStruct(
             $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
             $mainLanguage
@@ -1496,7 +1507,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             )->versionInfo
         );
 
-        // create available folder inside main one
+        // here is created readable object 2 -> /Main Folder/Available Folder
         $availableFolderCreate = $contentService->newContentCreateStruct(
             $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
             $mainLanguage
@@ -1509,7 +1520,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             )->versionInfo
         );
 
-        // create restricted folder
+        // here is created the non-readable object 1 -> /Restricted Folder
         $restrictedFolderCreate = $contentService->newContentCreateStruct(
             $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
             $mainLanguage
@@ -1523,7 +1534,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             )->versionInfo
         );
 
-        // create unavailable folder inside restricted one
+        // here is created non-readable object 2 -> /Restricted Folder/Unavailable Folder
         $unavailableFolderCreate = $contentService->newContentCreateStruct(
             $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
             $mainLanguage
@@ -1536,7 +1547,8 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             )->versionInfo
         );
 
-        // create test (folder) object
+        // this will be our test object, which will have all the relations (as source)
+        // and it is readable by the anonymous user
         $testFolderCreate = $contentService->newContentCreateStruct(
             $contenTypeService->loadContentTypeByIdentifier( 'folder' ),
             $mainLanguage
@@ -1547,27 +1559,37 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             array( $locationService->newLocationCreateStruct( 2 ) )
         )->versionInfo;
 
-        // add relations
+        // add relations to test folder (as source)
+        // the first 2 will be read by the user
+        // and the other 2 wont
+        //
+        // create relation from Test Folder to Main Folder
         $mainRelation = $contentService->addRelation(
             $testFolderDraft,
             $mainFolder->getVersionInfo()->getContentInfo()
         );
+        // create relation from Test Folder to Available Folder
         $availableRelation = $contentService->addRelation(
             $testFolderDraft,
             $availableFolder->getVersionInfo()->getContentInfo()
         );
+        // create relation from Test Folder to Restricted Folder
         $contentService->addRelation(
             $testFolderDraft,
             $restrictedFolder->getVersionInfo()->getContentInfo()
         );
+        //create relation from Test Folder to Unavailable Folder
         $contentService->addRelation(
             $testFolderDraft,
             $unavailableFolder->getVersionInfo()->getContentInfo()
         );
 
+        // publish Test Folder
         $testFolder = $contentService->publishVersion( $testFolderDraft );
 
-        // login with user
+        // set the current user to be an anonymous user since we want to test that
+        // if the user doesn't have access to an related object that object wont
+        // be loaded and no exception will be thrown
         $repository->setCurrentUser( $userService->loadAnonymousUser() );
 
         // finaly load relations ( verify no exception is thrown )
@@ -1576,6 +1598,8 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         /* END: Use case */
 
         // assert results
+        // verify that the only expected relations are from the 2 readable objects
+        // Main Folder and Available Folder
         $expectedRelations = array(
             $mainRelation->destinationContentInfo->id => $mainRelation,
             $availableRelation->destinationContentInfo->id => $availableRelation,
