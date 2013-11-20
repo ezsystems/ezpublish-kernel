@@ -110,7 +110,7 @@ class ViewController extends Controller
         }
         catch ( UnauthorizedException $e )
         {
-            throw new AccessDeniedException( 'Access Denied', $e );
+            throw new AccessDeniedException();
         }
         catch ( Exception $e )
         {
@@ -185,7 +185,7 @@ class ViewController extends Controller
         }
         catch ( UnauthorizedException $e )
         {
-            throw new AccessDeniedException( 'Access Denied', $e );
+            throw new AccessDeniedException();
         }
         catch ( Exception $e )
         {
