@@ -36,7 +36,7 @@ class Backend
     protected $data = array();
 
     /**
-     * For use to revert back to inital state
+     * For use to revert back to initial state
      * @var array
      */
     protected $initialData = array();

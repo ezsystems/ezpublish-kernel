@@ -58,7 +58,7 @@ EOT
                                 ->example(
                                     array(
                                         "foo"        => "%some.parameter.reference%",
-                                        "osTypes"    => array( "osx", "linux", "losedows" ),
+                                        "osTypes"    => array( "osx", "linux", "windows" ),
                                     )
                                 )
                                 ->useAttributeAsKey( "key" )

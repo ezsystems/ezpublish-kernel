@@ -57,7 +57,7 @@ class AddFieldTypePass implements CompilerPassInterface
             foreach ( $attributes as $attribute )
             {
                 if ( !isset( $attribute['alias'] ) )
-                    throw new \LogicException( 'ezpublish.fieldType.parameterProvier service tag needs an "alias" attribute to identify the field type. None given.' );
+                    throw new \LogicException( 'ezpublish.fieldType.parameterProvider service tag needs an "alias" attribute to identify the field type. None given.' );
 
                 $parameterProviderRegistryDef->addMethodCall(
                     'setParameterProvider',
