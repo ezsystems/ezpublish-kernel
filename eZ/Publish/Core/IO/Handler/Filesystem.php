@@ -189,7 +189,7 @@ class Filesystem implements IOHandlerInterface
             fclose( $outputStream );
         }
 
-        return $this->load( $sourceStoragePath );
+        return $this->load( $destinationStoragePath );
     }
 
     /**

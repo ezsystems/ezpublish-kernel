@@ -12,10 +12,11 @@ namespace eZ\Publish\Core\FieldType\Image;
 abstract class PathGenerator
 {
     /**
-     * Generates the storage path for the field identified by parameters
+     * Generates the path for the field identified by parameters
      *
      * Returns a relative storage path.
      *
+     * @param int $status a status from VersionInfo
      * @param mixed $fieldId
      * @param int $versionNo
      * @param string $languageCode
@@ -23,5 +24,14 @@ abstract class PathGenerator
      *
      * @return string
      */
-    abstract public function getStoragePathForField( $fieldId, $versionNo, $languageCode, $nodePathString );
+    abstract public function getStoragePathForField( $status, $fieldId, $versionNo, $languageCode, $nodePathString = '' );
+
+    /**
+     * Tells if $path is the path to an image draft
+     *
+     * @param $path
+     *
+     * @return bool
+     */
+    abstract public function isPathForDraft( $path );
 }

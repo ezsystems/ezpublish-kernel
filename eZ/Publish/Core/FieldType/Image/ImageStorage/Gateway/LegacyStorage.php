@@ -243,5 +243,76 @@ class LegacyStorage extends Gateway
 
         return (int)$statement->fetchColumn();
     }
+
+    public function getImageFiles( VersionInfo $versionInfo, array $fieldIds )
+    {
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
+            $connection->quoteColumn( 'data_text', 'ezcontentobject_attribute' )
+        )->from(
+            $connection->quoteTable( 'ezcontentobject_attribute' )
+        )->where(
+            $selectQuery->expr->lAnd(
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+                    $selectQuery->bindValue( $versionInfo->versionNo, null, \PDO::PARAM_INT )
+                ),
+                $selectQuery->expr->in(
+                    $connection->quoteColumn( 'id', 'ezcontentobject_attribute' ),
+                    $fieldIds
+                )
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        $map = array();
+        foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+        {
+            if ( ( $doc = simplexml_load_string( $row["data_text"] ) ) === false )
+            {
+                continue;
+            }
+
+            foreach ( $doc->xpath( "//*/@url" ) as $url )
+            {
+                $url = (string)$url;
+                if ( $url != "" )
+                {
+                    if ( !isset( $map[$row['id']] ) )
+                    {
+                        $map[$row['id']] = array();
+                    }
+                    $map[$row['id']][] = $url;
+                }
+            }
+        }
+
+        foreach ( array_keys( $map ) as $fieldId )
+        {
+            sort( $map[$fieldId] );
+        }
+
+        return $map;
+    }
+
+    /**
+     * Checks $imagePath in all ezontentobject_attribute records XML for this $versionInfo's content.
+     *
+     * Will only return true if the only references are to this $fieldId
+     */
+    public function imageFileCanBeDeleted( $fieldId, VersionInfo $versionInfo, $imagePath )
+    {
+        // get all ezcontentobject_attribute for $versionInfo->contentInfo->id
+        // except id = $fieldId && version = $versionInfo->versionNo
+
+        // foreach ezcontentobject_attribute, parse XML for url = "/$imagePath"
+        // return false if found
+        // return true after loop
+    }
 }
 

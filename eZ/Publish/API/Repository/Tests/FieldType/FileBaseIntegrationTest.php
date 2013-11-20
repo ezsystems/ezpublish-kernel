@@ -100,9 +100,9 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      *
      * @return void
      */
-    public static function tearDownAfterClass()
+    public function tearDown()
     {
-        parent::tearDownAfterClass();
+        parent::tearDown();
         self::cleanupStorageDir();
     }
 
