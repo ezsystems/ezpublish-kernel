@@ -20,7 +20,15 @@ use RecursiveIteratorIterator;
  */
 class FilesystemTest extends BaseHandlerTest
 {
-    private $storageDir = 'var/filesystem';
+    private static $storageDir = 'var/filesystem';
+
+    public static function setupBeforeClass()
+    {
+        if ( !file_exists( self::$storageDir ) )
+        {
+            mkdir( self::$storageDir );
+        }
+    }
 
     public function setUp()
     {
@@ -39,7 +47,7 @@ class FilesystemTest extends BaseHandlerTest
      */
     protected function getIOHandler( $path = null )
     {
-        return new FilesystemHandler( $path ?: $this->storageDir );
+        return new FilesystemHandler( $path ?: self::$storageDir );
     }
 
     /**
@@ -52,15 +60,28 @@ class FilesystemTest extends BaseHandlerTest
 
     public function testConstructDirectoryNotWritable()
     {
-        $dir = $this->storageDir . DIRECTORY_SEPARATOR . 'dir';
+        $dir = self::$storageDir . DIRECTORY_SEPARATOR . 'dir';
         mkdir( $dir );
+        chmod( $dir, 0000 );
+        try
+        {
+            $this->getIOHandler( $dir );
+        }
+        catch ( \RuntimeException $e )
+        {
+            $gotException = true;
+        }
+        chmod( $dir, 0775 );
+        rmdir( $dir );
+
+        self::assertTrue( isset( $gotException ), "No exception was thrown" );
     }
 
     private function cleanupStorageDir()
     {
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                $this->storageDir,
+                self::$storageDir,
                 FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FilesystemIterator::CURRENT_AS_FILEINFO
             ),
             RecursiveIteratorIterator::CHILD_FIRST
