@@ -67,7 +67,7 @@ class RelationTest extends FieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return Value
      */
     protected function getEmptyValueExpectation()
     {
@@ -364,17 +364,18 @@ class RelationTest extends FieldTypeTest
     }
 
     /**
+     * @dataProvider provideDataForGetName
      * @expectedException \RuntimeException
      */
-    public function testGetName()
+    public function testGetName( Value $value, $expected )
     {
-        $this->getFieldTypeUnderTest()->getName(
-            $this->getEmptyValueExpectation()
-        );
+        $this->getFieldTypeUnderTest()->getName( $value );
     }
 
     public function provideDataForGetName()
     {
-        return array();
+        return array(
+            array( $this->getEmptyValueExpectation(), '' )
+        );
     }
 }

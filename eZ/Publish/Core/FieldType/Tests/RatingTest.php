@@ -361,17 +361,20 @@ class RatingTest extends FieldTypeTest
     }
 
     /**
+     * @dataProvider provideDataForGetName
      * @expectedException \RuntimeException
      */
-    public function testGetName()
+    public function testGetName( Value $value, $expected )
     {
         $this->getFieldTypeUnderTest()->getName(
-            $this->getEmptyValueExpectation()
+            $value
         );
     }
 
     public function provideDataForGetName()
     {
-        return array();
+        return array(
+            array( $this->getEmptyValueExpectation(), '' )
+        );
     }
 }
