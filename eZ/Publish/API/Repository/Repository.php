@@ -205,7 +205,9 @@ interface Repository
     /**
      * Enqueue an event to be triggered at commit or directly if no transaction has started
      *
-     * @param Callable $event
+     * Note that the usage of plain callbacks with this method is deprecated.
+     *
+     * @param \eZ\Publish\API\Repository\CommitEvent $event
      */
     public function commitEvent( $event );
 }
