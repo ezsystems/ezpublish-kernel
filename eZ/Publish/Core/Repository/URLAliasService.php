@@ -273,6 +273,7 @@ class URLAliasService implements URLAliasServiceInterface
         if ( $spiUrlAlias->alwaysAvailable || $this->settings["showAllTranslations"] )
         {
             $lastLevelData = end( $spiUrlAlias->pathData );
+            reset( $lastLevelData["translations"] );
             return key( $lastLevelData["translations"] );
         }
 
@@ -337,6 +338,7 @@ class URLAliasService implements URLAliasServiceInterface
 
         if ( $entries["always-available"] || $this->settings["showAllTranslations"] )
         {
+            reset( $entries["translations"] );
             return key( $entries["translations"] );
         }
 
@@ -625,6 +627,11 @@ class URLAliasService implements URLAliasServiceInterface
             {
                 return $urlAlias;
             }
+        }
+
+        if ( !empty( $urlAliases ) && $this->settings["showAllTranslations"] )
+        {
+            return reset( $urlAliases );
         }
 
         throw new NotFoundException( "URLAlias", $location->id );
