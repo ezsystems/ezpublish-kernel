@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler;
 use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
@@ -183,6 +184,11 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSection( $sectionId )
     {
+        if ( !is_int( $sectionId ) && !is_string( $sectionId ) )
+        {
+            throw new InvalidArgumentType( "\$sectionId", "int|string", $sectionId );
+        }
+
         if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
             throw new UnauthorizedException( 'section', 'view' );
 
@@ -225,8 +231,15 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
-        if ( !is_string( $sectionIdentifier ) || empty( $sectionIdentifier ) )
+        if ( !is_string( $sectionIdentifier ) )
+        {
+            throw new InvalidArgumentType( "\$sectionIdentifier", "string", $sectionIdentifier );
+        }
+
+        if ( empty( $sectionIdentifier ) )
+        {
             throw new InvalidArgumentValue( "sectionIdentifier", $sectionIdentifier );
+        }
 
         if ( $this->repository->hasAccess( 'section', 'view' ) !== true )
             throw new UnauthorizedException( 'section', 'view' );

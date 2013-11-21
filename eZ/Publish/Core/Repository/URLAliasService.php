@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -83,6 +85,31 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function createUrlAlias( Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
+        if ( !is_string( $path ) )
+        {
+            throw new InvalidArgumentType( "\$path", "string", $path );
+        }
+
+        if ( !is_string( $languageCode ) )
+        {
+            throw new InvalidArgumentType( "\$languageCode", "string", $languageCode );
+        }
+
+        if ( !is_bool( $forwarding ) )
+        {
+            throw new InvalidArgumentType( "\$forwarding", "boolean", $forwarding );
+        }
+
+        if ( !is_bool( $alwaysAvailable ) )
+        {
+            throw new InvalidArgumentType( "\$alwaysAvailable", "boolean", $alwaysAvailable );
+        }
+
+        if ( empty( $path ) )
+        {
+            throw new InvalidArgumentValue( "\$path", $path );
+        }
+
         $path = $this->cleanUrl( $path );
 
         $this->repository->beginTransaction();
@@ -138,6 +165,31 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function createGlobalUrlAlias( $resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false )
     {
+        if ( !is_string( $path ) )
+        {
+            throw new InvalidArgumentType( "\$path", "string", $path );
+        }
+
+        if ( !is_string( $languageCode ) )
+        {
+            throw new InvalidArgumentType( "\$languageCode", "string", $languageCode );
+        }
+
+        if ( !is_bool( $forwarding ) )
+        {
+            throw new InvalidArgumentType( "\$forwarding", "boolean", $forwarding );
+        }
+
+        if ( !is_bool( $alwaysAvailable ) )
+        {
+            throw new InvalidArgumentType( "\$alwaysAvailable", "boolean", $alwaysAvailable );
+        }
+
+        if ( empty( $path ) )
+        {
+            throw new InvalidArgumentValue( "\$path", $path );
+        }
+
         if ( !preg_match( "#^([a-zA-Z0-9_]+):(.+)$#", $resource, $matches ) )
         {
             throw new InvalidArgumentException( "\$resource", "argument is not valid" );
@@ -203,6 +255,16 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function listLocationAliases( Location $location, $custom = true, $languageCode = null )
     {
+        if ( !is_bool( $custom ) )
+        {
+            throw new InvalidArgumentType( "\$custom", "boolean", $custom );
+        }
+
+        if ( $languageCode !== null && !is_string( $languageCode ) )
+        {
+            throw new InvalidArgumentType( "\$languageCode", "string|null", $languageCode );
+        }
+
         $urlAliasList = array();
         $spiUrlAliasList = $this->urlAliasHandler->listURLAliasesForLocation(
             $location->id,
@@ -491,6 +553,21 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function listGlobalAliases( $languageCode = null, $offset = 0, $limit = -1 )
     {
+        if ( $languageCode !== null && !is_string( $languageCode ) )
+        {
+            throw new InvalidArgumentType( "\$languageCode", "string|null", $languageCode );
+        }
+
+        if ( !is_int( $offset ) )
+        {
+            throw new InvalidArgumentType( "\$offset", "int", $offset );
+        }
+
+        if ( !is_int( $limit ) )
+        {
+            throw new InvalidArgumentType( "\$limit", "int", $limit );
+        }
+
         $urlAliasList = array();
         $spiUrlAliasList = $this->urlAliasHandler->listGlobalURLAliases(
             $languageCode,
@@ -581,6 +658,16 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function lookup( $url, $languageCode = null )
     {
+        if ( !is_string( $url ) )
+        {
+            throw new InvalidArgumentType( "\$url", "string", $url );
+        }
+
+        if ( $languageCode !== null && !is_string( $languageCode ) )
+        {
+            throw new InvalidArgumentType( "\$languageCode", "string|null", $languageCode );
+        }
+
         $url = $this->cleanUrl( $url );
 
         $spiUrlAlias = $this->urlAliasHandler->lookup( $url );
@@ -608,6 +695,11 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function reverseLookup( Location $location, $languageCode = null )
     {
+        if ( $languageCode !== null && !is_string( $languageCode ) )
+        {
+            throw new InvalidArgumentType( "\$languageCode", "string|null", $languageCode );
+        }
+
         $urlAliases = $this->listLocationAliases( $location, false, $languageCode );
 
         foreach ( $this->settings["prioritizedLanguageList"] as $prioritizedLanguageCode )
@@ -648,6 +740,11 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function load( $id )
     {
+        if ( !is_int( $id ) && !is_string( $id ) )
+        {
+            throw new InvalidArgumentType( "\$id", "int|string", $id );
+        }
+
         $spiUrlAlias = $this->urlAliasHandler->loadUrlAlias( $id );
         $path = $this->extractPath( $spiUrlAlias, null );
 

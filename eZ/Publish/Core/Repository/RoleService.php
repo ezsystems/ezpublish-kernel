@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\LimitationValidationException;
 use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
@@ -390,6 +391,11 @@ class RoleService implements RoleServiceInterface
      */
     public function loadRole( $id )
     {
+        if ( !is_int( $id ) && !is_string( $id ) )
+        {
+            throw new InvalidArgumentType( "\$id", "int|string", $id );
+        }
+
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
@@ -410,7 +416,9 @@ class RoleService implements RoleServiceInterface
     public function loadRoleByIdentifier( $identifier )
     {
         if ( !is_string( $identifier ) )
-            throw new InvalidArgumentValue( "identifier", $identifier );
+        {
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
+        }
 
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
@@ -480,6 +488,11 @@ class RoleService implements RoleServiceInterface
      */
     public function loadPoliciesByUserId( $userId )
     {
+        if ( !is_int( $userId ) && !is_string( $userId ) )
+        {
+            throw new InvalidArgumentType( "\$userId", "int|string", $userId );
+        }
+
         $spiPolicies = $this->userHandler->loadPoliciesByUserId( $userId );
 
         $policies = array();
@@ -790,6 +803,11 @@ class RoleService implements RoleServiceInterface
      */
     public function newRoleCreateStruct( $name )
     {
+        if ( !is_string( $name ) )
+        {
+            throw new InvalidArgumentType( "\$name", "string", $name );
+        }
+
         return new RoleCreateStruct(
             array(
                 'identifier' => $name,
@@ -808,6 +826,16 @@ class RoleService implements RoleServiceInterface
      */
     public function newPolicyCreateStruct( $module, $function )
     {
+        if ( !is_string( $module ) )
+        {
+            throw new InvalidArgumentType( "\$module", "string", $module );
+        }
+
+        if ( !is_string( $function ) )
+        {
+            throw new InvalidArgumentType( "\$function", "string", $function );
+        }
+
         return new PolicyCreateStruct(
             array(
                 'module' => $module,
@@ -972,6 +1000,11 @@ class RoleService implements RoleServiceInterface
      */
     public function getLimitationType( $identifier )
     {
+        if ( !is_string( $identifier ) )
+        {
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
+        }
+
         if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
             throw new NotFoundException( 'Limitation', $identifier );
 
@@ -995,6 +1028,16 @@ class RoleService implements RoleServiceInterface
      */
     public function getLimitationTypesByModuleFunction( $module, $function )
     {
+        if ( !is_string( $module ) )
+        {
+            throw new InvalidArgumentType( "\$module", "string", $module );
+        }
+
+        if ( !is_string( $function ) )
+        {
+            throw new InvalidArgumentType( "\$function", "string", $function );
+        }
+
         if ( empty( $this->settings['limitationMap'][$module][$function] ) )
             return array();
 

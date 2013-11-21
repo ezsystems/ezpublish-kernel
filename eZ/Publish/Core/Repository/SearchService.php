@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler;
 
 /**
@@ -93,6 +94,11 @@ class SearchService implements SearchServiceInterface
      */
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
+        if ( !is_bool( $filterOnUserPermissions ) )
+        {
+            throw new InvalidArgumentType( "\$filterOnUserPermissions", "boolean", $filterOnUserPermissions );
+        }
+
         $query = clone $query;
 
         $this->validateSortClauses( $query );
@@ -182,6 +188,11 @@ class SearchService implements SearchServiceInterface
      */
     public function findSingle( Criterion $criterion, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
+        if ( !is_bool( $filterOnUserPermissions ) )
+        {
+            throw new InvalidArgumentType( "\$filterOnUserPermissions", "boolean", $filterOnUserPermissions );
+        }
+
         if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $criterion ) )
         {
             throw new NotFoundException( 'Content', '*' );

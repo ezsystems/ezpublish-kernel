@@ -29,6 +29,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
@@ -198,6 +199,11 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocation( $locationId )
     {
+        if ( !is_int( $locationId ) && !is_string( $locationId ) )
+        {
+            throw new InvalidArgumentType( "\$locationId", "int|string", $locationId );
+        }
+
         $spiLocation = $this->persistenceHandler->locationHandler()->load( $locationId );
         $location = $this->buildDomainLocationObject( $spiLocation );
         if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
@@ -220,7 +226,9 @@ class LocationService implements LocationServiceInterface
     public function loadLocationByRemoteId( $remoteId )
     {
         if ( !is_string( $remoteId ) )
-            throw new InvalidArgumentValue( "remoteId", $remoteId );
+        {
+            throw new InvalidArgumentType( "\$remoteId", "string", $remoteId );
+        }
 
         $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId( $remoteId );
         $location = $this->buildDomainLocationObject( $spiLocation );
@@ -285,10 +293,14 @@ class LocationService implements LocationServiceInterface
             throw new InvalidArgumentValue( "sortOrder", $location->sortOrder, "Location" );
 
         if ( !is_int( $offset ) )
-            throw new InvalidArgumentValue( "offset", $offset );
+        {
+            throw new InvalidArgumentValue( "\$offset", "int", $offset );
+        }
 
         if ( !is_int( $limit ) )
-            throw new InvalidArgumentValue( "limit", $limit );
+        {
+            throw new InvalidArgumentValue( "\$limit", "int", $limit );
+        }
 
         $searchResult = $this->searchChildrenLocations(
             $location->id,
@@ -777,6 +789,11 @@ class LocationService implements LocationServiceInterface
      */
     public function newLocationCreateStruct( $parentLocationId )
     {
+        if ( !is_int( $parentLocationId ) && !is_string( $parentLocationId ) )
+        {
+            throw new InvalidArgumentType( "\$parentLocationId", "int|string", $parentLocationId );
+        }
+
         return new LocationCreateStruct(
             array(
                 'parentLocationId' => $parentLocationId

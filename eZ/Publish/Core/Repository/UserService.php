@@ -10,6 +10,7 @@
 
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -154,6 +155,11 @@ class UserService implements UserServiceInterface
      */
     public function loadUserGroup( $id )
     {
+        if ( !is_int( $id ) && !is_string( $id ) )
+        {
+            throw new InvalidArgumentType( "\$id", "int|string", $id );
+        }
+
         $content = $this->repository->getContentService()->loadContent( $id );
 
         return $this->buildDomainUserGroupObject( $content );
@@ -525,6 +531,11 @@ class UserService implements UserServiceInterface
      */
     public function loadUser( $userId )
     {
+        if ( !is_int( $userId ) && !is_string( $userId ) )
+        {
+            throw new InvalidArgumentType( "\$userId", "int|string", $userId );
+        }
+
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
         $content = $this->repository->getContentService()->internalLoadContent( $userId );
         // Get spiUser value from Field Value
@@ -579,11 +590,25 @@ class UserService implements UserServiceInterface
      */
     public function loadUserByCredentials( $login, $password )
     {
-        if ( !is_string( $login ) || empty( $login ) )
-            throw new InvalidArgumentValue( "login", $login );
+        if ( !is_string( $login ) )
+        {
+            throw new InvalidArgumentType( "\$login", "string", $login );
+        }
 
-        if ( !is_string( $password ) || empty( $password ) )
-            throw new InvalidArgumentValue( "password", $password );
+        if ( !is_string( $password ) )
+        {
+            throw new InvalidArgumentType( "\$password", "string", $password );
+        }
+
+        if ( empty( $login ) )
+        {
+            throw new InvalidArgumentValue( "\$login", $login );
+        }
+
+        if ( empty( $password ) )
+        {
+            throw new InvalidArgumentValue( "\$password", $password );
+        }
 
         // Randomize login time to protect against timing attacks
         usleep( mt_rand( 0, 30000 ) );
@@ -613,8 +638,15 @@ class UserService implements UserServiceInterface
      */
     public function loadUserByLogin( $login )
     {
-        if ( !is_string( $login ) || empty( $login ) )
-            throw new InvalidArgumentValue( "login", $login );
+        if ( !is_string( $login ) )
+        {
+            throw new InvalidArgumentType( "\$login", "string", $login );
+        }
+
+        if ( empty( $login ) )
+        {
+            throw new InvalidArgumentValue( "\$login", $login );
+        }
 
         $spiUser = $this->userHandler->loadByLogin( $login );
         return $this->buildDomainUserObject( $spiUser );
@@ -632,8 +664,15 @@ class UserService implements UserServiceInterface
      */
     public function loadUsersByEmail( $email )
     {
-        if ( !is_string( $email ) || empty( $email ) )
-            throw new InvalidArgumentValue( "email", $email );
+        if ( !is_string( $email ) )
+        {
+            throw new InvalidArgumentType( "\$email", "string", $email );
+        }
+
+        if ( empty( $email ) )
+        {
+            throw new InvalidArgumentValue( "\$email", $email );
+        }
 
         $users = array();
         foreach ( $this->userHandler->loadByEmail( $email ) as $spiUser )
@@ -949,6 +988,16 @@ class UserService implements UserServiceInterface
      */
     public function loadUsersOfUserGroup( APIUserGroup $userGroup, $offset = 0, $limit = -1 )
     {
+        if ( !is_int( $offset ) )
+        {
+            throw new InvalidArgumentType( "\$offset", "int", $offset );
+        }
+
+        if ( !is_int( $limit ) )
+        {
+            throw new InvalidArgumentType( "\$limit", "int", $limit );
+        }
+
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
         if ( $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
@@ -1000,6 +1049,26 @@ class UserService implements UserServiceInterface
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
+        if ( !is_string( $login ) )
+        {
+            throw new InvalidArgumentType( "\$login", "string", $login );
+        }
+
+        if ( !is_string( $email ) )
+        {
+            throw new InvalidArgumentType( "\$email", "string", $email );
+        }
+
+        if ( !is_string( $password ) )
+        {
+            throw new InvalidArgumentType( "\$password", "string", $password );
+        }
+
+        if ( !is_string( $mainLanguageCode ) )
+        {
+            throw new InvalidArgumentType( "\$mainLanguageCode", "string", $mainLanguageCode );
+        }
+
         if ( $contentType === null )
         {
             $contentType = $this->repository->getContentTypeService()->loadContentType(
@@ -1030,6 +1099,11 @@ class UserService implements UserServiceInterface
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
+        if ( !is_string( $mainLanguageCode ) )
+        {
+            throw new InvalidArgumentType( "\$mainLanguageCode", "string", $mainLanguageCode );
+        }
+
         if ( $contentType === null )
         {
             $contentType = $this->repository->getContentTypeService()->loadContentType(

@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -91,6 +92,11 @@ class TrashService implements TrashServiceInterface
      */
     public function loadTrashItem( $trashItemId )
     {
+        if ( !is_int( $trashItemId ) && !is_string( $trashItemId ) )
+        {
+            throw new InvalidArgumentType( "\$trashItemId", "int|string", $trashItemId );
+        }
+
         if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
             throw new UnauthorizedException( 'content', 'restore' );
 

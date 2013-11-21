@@ -188,6 +188,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeGroup( $contentTypeGroupId )
     {
+        if ( !is_int( $contentTypeGroupId ) && !is_string( $contentTypeGroupId ) )
+        {
+            throw new InvalidArgumentType( "\$contentTypeGroupId", "int|string", $contentTypeGroupId );
+        }
+
         $spiGroup = $this->contentTypeHandler->loadGroup(
             $contentTypeGroupId
         );
@@ -206,6 +211,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier )
     {
+        if ( !is_string( $contentTypeGroupIdentifier ) )
+        {
+            throw new InvalidArgumentType( "\$contentTypeGroupIdentifier", "string", $contentTypeGroupIdentifier );
+        }
+
         $groups = $this->loadContentTypeGroups();
 
         foreach ( $groups as $group )
@@ -1247,6 +1257,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentType( $contentTypeId )
     {
+        if ( !is_int( $contentTypeId ) && !is_string( $contentTypeId ) )
+        {
+            throw new InvalidArgumentType( "\$contentTypeId", "int|string", $contentTypeId );
+        }
+
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
             SPIContentType::STATUS_DEFINED
@@ -1270,7 +1285,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         if ( !is_string( $identifier ) )
         {
-            throw new InvalidArgumentValue( '$identifier', $identifier );
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
         }
 
         $spiContentType = $this->contentTypeHandler->loadByIdentifier(
@@ -1293,6 +1308,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeByRemoteId( $remoteId )
     {
+        if ( !is_string( $remoteId ) )
+        {
+            throw new InvalidArgumentType( "\$remoteId", "string", $remoteId );
+        }
+
         $spiContentType = $this->contentTypeHandler->loadByRemoteId( $remoteId );
 
         return $this->buildContentTypeDomainObject(
@@ -1313,6 +1333,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function loadContentTypeDraft( $contentTypeId )
     {
+        if ( !is_int( $contentTypeId ) && !is_string( $contentTypeId ) )
+        {
+            throw new InvalidArgumentType( "\$contentTypeId", "int|string", $contentTypeId );
+        }
+
         $spiContentType = $this->contentTypeHandler->load(
             $contentTypeId,
             SPIContentType::STATUS_DRAFT
@@ -2003,7 +2028,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         if ( !is_string( $identifier ) )
         {
-            throw new InvalidArgumentValue( '$identifier', $identifier );
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
         }
 
         return new ContentTypeGroupCreateStruct(
@@ -2024,7 +2049,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         if ( !is_string( $identifier ) )
         {
-            throw new InvalidArgumentValue( '$identifier', $identifier );
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
         }
 
         return new ContentTypeCreateStruct(
@@ -2066,12 +2091,12 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         if ( !is_string( $identifier ) )
         {
-            throw new InvalidArgumentValue( '$identifier', $identifier );
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
         }
 
         if ( !is_string( $fieldTypeIdentifier ) )
         {
-            throw new InvalidArgumentValue( '$fieldTypeIdentifier', $fieldTypeIdentifier );
+            throw new InvalidArgumentType( "\$fieldTypeIdentifier", "string", $fieldTypeIdentifier );
         }
 
         return new FieldDefinitionCreateStruct(

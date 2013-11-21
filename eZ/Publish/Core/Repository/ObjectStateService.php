@@ -28,6 +28,7 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Exception;
@@ -134,6 +135,11 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function loadObjectStateGroup( $objectStateGroupId )
     {
+        if ( !is_int( $objectStateGroupId ) && !is_string( $objectStateGroupId ) )
+        {
+            throw new InvalidArgumentType( "\$objectStateGroupId", "int|string", $objectStateGroupId );
+        }
+
         $spiObjectStateGroup = $this->objectStateHandler->loadGroup( $objectStateGroupId );
 
         return $this->buildDomainObjectStateGroupObject( $spiObjectStateGroup );
@@ -348,6 +354,11 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function loadObjectState( $stateId )
     {
+        if ( !is_int( $stateId ) && !is_string( $stateId ) )
+        {
+            throw new InvalidArgumentType( "\$stateId", "int|string", $stateId );
+        }
+
         $spiObjectState = $this->objectStateHandler->load( $stateId );
 
         return $this->buildDomainObjectStateObject( $spiObjectState );
@@ -431,7 +442,9 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function setPriorityOfObjectState( APIObjectState $objectState, $priority )
     {
         if ( !is_int( $priority ) )
-            throw new InvalidArgumentValue( "priority", $priority );
+        {
+            throw new InvalidArgumentType( "priority", "int", $priority );
+        }
 
         if ( $this->repository->hasAccess( 'state', 'administrate' ) !== true )
             throw new UnauthorizedException( 'state', 'administrate' );
@@ -562,6 +575,11 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function newObjectStateGroupCreateStruct( $identifier )
     {
+        if ( !is_string( $identifier ) )
+        {
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
+        }
+
         $objectStateGroupCreateStruct = new ObjectStateGroupCreateStruct();
         $objectStateGroupCreateStruct->identifier = $identifier;
 
@@ -587,6 +605,11 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function newObjectStateCreateStruct( $identifier )
     {
+        if ( !is_string( $identifier ) )
+        {
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
+        }
+
         $objectStateCreateStruct = new ObjectStateCreateStruct();
         $objectStateCreateStruct->identifier = $identifier;
 

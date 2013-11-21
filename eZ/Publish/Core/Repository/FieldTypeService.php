@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
 
 /**
@@ -91,6 +92,11 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function getFieldType( $identifier )
     {
+        if ( !is_string( $identifier ) )
+        {
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
+        }
+
         if ( isset( $this->fieldTypes[$identifier] ) )
         {
             return $this->fieldTypes[$identifier];
@@ -108,6 +114,11 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function hasFieldType( $identifier )
     {
+        if ( !is_string( $identifier ) )
+        {
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
+        }
+
         return isset( $this->settings[$identifier] );
     }
 
@@ -126,6 +137,11 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function buildFieldType( $identifier )
     {
+        if ( !is_string( $identifier ) )
+        {
+            throw new InvalidArgumentType( "\$identifier", "string", $identifier );
+        }
+
         if ( !isset( $this->settings[$identifier] ) )
         {
             throw new NotFoundException(

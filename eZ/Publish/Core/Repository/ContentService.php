@@ -30,6 +30,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundExcepti
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
@@ -129,6 +130,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfo( $contentId )
     {
+        if ( !is_int( $contentId ) && !is_string( $contentId ) )
+        {
+            throw new InvalidArgumentType( "\$contentId", "int|string", $contentId );
+        }
+
         $contentInfo = $this->internalLoadContentInfo( $contentId );
         if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
             throw new UnauthorizedException( 'content', 'read' );
@@ -182,6 +188,11 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
+        if ( !is_string( $remoteId ) )
+        {
+            throw new InvalidArgumentType( "\$remoteId", "string", $remoteId );
+        }
+
         $contentInfo = $this->internalLoadContentInfo( $remoteId, true );
 
         if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
@@ -223,9 +234,18 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfoById( $contentId, $versionNo = null )
     {
+        if ( !is_int( $contentId ) && !is_string( $contentId ) )
+        {
+            throw new InvalidArgumentType( "\$contentId", "int|string", $contentId );
+        }
+
         if ( $versionNo === null )
         {
             $versionNo = $this->loadContentInfo( $contentId )->currentVersionNo;
+        }
+        else if ( !is_int( $versionNo ) )
+        {
+            throw new InvalidArgumentType( "\$versionNo", "int|null", $versionNo );
         }
 
         try
@@ -324,6 +344,16 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContent( $contentId, array $languages = null, $versionNo = null )
     {
+        if ( !is_int( $contentId ) && !is_string( $contentId ) )
+        {
+            throw new InvalidArgumentType( "\$contentId", "int|string", $contentId );
+        }
+
+        if ( $versionNo !== null && !is_int( $versionNo ) )
+        {
+            throw new InvalidArgumentType( "\$versionNo", "int|null", $versionNo );
+        }
+
         $content = $this->internalLoadContent( $contentId, $languages, $versionNo );
 
         if ( !$this->repository->canUser( 'content', 'read', $content ) )
@@ -435,6 +465,16 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
+        if ( !is_string( $remoteId ) )
+        {
+            throw new InvalidArgumentType( "\$remoteId", "string", $remoteId );
+        }
+
+        if ( $versionNo !== null && !is_int( $versionNo ) )
+        {
+            throw new InvalidArgumentType( "\$versionNo", "int|null", $versionNo );
+        }
+
         $content = $this->internalLoadContent( $remoteId, $languages, $versionNo, true );
 
         if ( !$this->repository->canUser( 'content', 'read', $content ) )

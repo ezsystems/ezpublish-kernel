@@ -20,6 +20,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Exception;
 
 /**
@@ -79,6 +80,21 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function create( $sourceUrl, $destinationUrl, $forward = false )
     {
+        if ( !is_string( $sourceUrl ) )
+        {
+            throw new InvalidArgumentType( "\$sourceUrl", "string", $sourceUrl );
+        }
+
+        if ( !is_string( $destinationUrl ) )
+        {
+            throw new InvalidArgumentType( "\$destinationUrl", "string", $destinationUrl );
+        }
+
+        if ( !is_bool( $forward ) )
+        {
+            throw new InvalidArgumentType( "\$forward", "boolean", $forward );
+        }
+
         if ( $this->repository->hasAccess( 'content', 'urltranslator' ) !== true )
         {
             throw new UnauthorizedException( 'content', 'urltranslator' );
@@ -181,6 +197,11 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function load( $id )
     {
+        if ( !is_int( $id ) && !is_string( $id ) )
+        {
+            throw new InvalidArgumentType( "\$id", "int|string", $id );
+        }
+
         return $this->buildUrlWildcardDomainObject(
             $this->urlWildcardHandler->load( $id )
         );
@@ -196,6 +217,16 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function loadAll( $offset = 0, $limit = -1 )
     {
+        if ( !is_int( $offset ) )
+        {
+            throw new InvalidArgumentType( "\$offset", "int", $offset );
+        }
+
+        if ( !is_int( $limit ) )
+        {
+            throw new InvalidArgumentType( "\$limit", "int", $limit );
+        }
+
         $spiUrlWildcards = $this->urlWildcardHandler->loadAll(
             $offset,
             $limit
@@ -222,6 +253,11 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function translate( $url )
     {
+        if ( !is_string( $url ) )
+        {
+            throw new InvalidArgumentType( "\$url", "string", $url );
+        }
+
         $spiUrlWildcards = $this->urlWildcardHandler->loadAll();
 
         // sorts wildcards by length of source URL string

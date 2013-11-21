@@ -19,6 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use LogicException;
@@ -134,8 +135,15 @@ class LanguageService implements LanguageServiceInterface
      */
     public function updateLanguageName( Language $language, $newName )
     {
-        if ( !is_string( $newName ) || empty( $newName ) )
-            throw new InvalidArgumentValue( "newName", $newName );
+        if ( !is_string( $newName ) )
+        {
+            throw new InvalidArgumentType( "\$newName", "string", $newName );
+        }
+
+        if ( empty( $newName ) )
+        {
+            throw new InvalidArgumentValue( "\$newName", $newName );
+        }
 
         if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
             throw new UnauthorizedException( 'content', 'translations' );
@@ -249,8 +257,6 @@ class LanguageService implements LanguageServiceInterface
     /**
      * Loads a Language from its language code ($languageCode)
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
-     *         is not string
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
      *
      * @param string $languageCode
@@ -259,8 +265,10 @@ class LanguageService implements LanguageServiceInterface
      */
     public function loadLanguage( $languageCode )
     {
-        if ( !is_string( $languageCode ) || empty( $languageCode ) )
-            throw new InvalidArgumentException( "languageCode", "language code has an invalid value" );
+        if ( !is_string( $languageCode ) )
+        {
+            throw new InvalidArgumentType( "\$languageCode", "string", $languageCode );
+        }
 
         $language = $this->languageHandler->loadByLanguageCode( $languageCode );
         return $this->buildDomainObject( $language );
@@ -295,6 +303,11 @@ class LanguageService implements LanguageServiceInterface
      */
     public function loadLanguageById( $languageId )
     {
+        if ( !is_int( $languageId ) && !is_string( $languageId ) )
+        {
+            throw new InvalidArgumentType( "\$languageId", "int|string", $languageId );
+        }
+
         $language = $this->languageHandler->load( $languageId );
 
         return $this->buildDomainObject( $language );
