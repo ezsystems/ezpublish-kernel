@@ -39,7 +39,7 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct );
+    public function createContentTypeGroup( ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct );
 
     /**
      * Get a Content Type Group object by id

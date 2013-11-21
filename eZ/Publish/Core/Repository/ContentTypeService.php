@@ -113,7 +113,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
+    public function createContentTypeGroup( ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct )
     {
         if ( $this->repository->hasAccess( 'class', 'create' ) !== true )
             throw new UnauthorizedException( 'ContentType', 'create' );
