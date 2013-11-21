@@ -2192,13 +2192,13 @@ class UrlAliasTest extends BaseServiceMockTest
             "listGlobalURLAliases"
         )->with(
             $this->equalTo( "languageCode" ),
-            $this->equalTo( "offset" ),
-            $this->equalTo( "limit" )
+            $this->equalTo( 0 ),
+            $this->equalTo( -1 )
         )->will(
             $this->returnValue( array() )
         );
 
-        $urlAliases = $urlAliasService->listGlobalAliases( "languageCode", "offset", "limit" );
+        $urlAliases = $urlAliasService->listGlobalAliases( "languageCode", 0, -1 );
 
         self::assertEmpty( $urlAliases );
     }
@@ -2536,9 +2536,9 @@ class UrlAliasTest extends BaseServiceMockTest
         )->with(
             $this->equalTo( $location->id ),
             $this->equalTo( "path" ),
-            $this->equalTo( "forwarding" ),
+            $this->equalTo( false ),
             $this->equalTo( "languageCode" ),
-            $this->equalTo( "alwaysAvailable" )
+            $this->equalTo( true )
         )->will(
             $this->returnValue( new SPIUrlAlias )
         );
@@ -2547,8 +2547,8 @@ class UrlAliasTest extends BaseServiceMockTest
             $location,
             "path",
             "languageCode",
-            "forwarding",
-            "alwaysAvailable"
+            false,
+            true
         );
 
         self::assertInstanceOf(
@@ -2585,9 +2585,9 @@ class UrlAliasTest extends BaseServiceMockTest
         )->with(
             $this->equalTo( $location->id ),
             $this->equalTo( "path" ),
-            $this->equalTo( "forwarding" ),
+            $this->equalTo( false ),
             $this->equalTo( "languageCode" ),
-            $this->equalTo( "alwaysAvailable" )
+            $this->equalTo( true )
         )->will(
             $this->throwException( new Exception( "Handler threw an exception" ) )
         );
@@ -2596,8 +2596,8 @@ class UrlAliasTest extends BaseServiceMockTest
             $location,
             "path",
             "languageCode",
-            "forwarding",
-            "alwaysAvailable"
+            false,
+            true
         );
     }
 
@@ -2619,9 +2619,9 @@ class UrlAliasTest extends BaseServiceMockTest
         )->with(
             $this->equalTo( $location->id ),
             $this->equalTo( "path" ),
-            $this->equalTo( "forwarding" ),
+            $this->equalTo( false ),
             $this->equalTo( "languageCode" ),
-            $this->equalTo( "alwaysAvailable" )
+            $this->equalTo( true )
         )->will(
             $this->throwException( new ForbiddenException )
         );
@@ -2630,8 +2630,8 @@ class UrlAliasTest extends BaseServiceMockTest
             $location,
             "path",
             "languageCode",
-            "forwarding",
-            "alwaysAvailable"
+            false,
+            true
         );
     }
 
@@ -2660,9 +2660,9 @@ class UrlAliasTest extends BaseServiceMockTest
         )->with(
             $this->equalTo( $resource ),
             $this->equalTo( "path" ),
-            $this->equalTo( "forwarding" ),
+            $this->equalTo( false ),
             $this->equalTo( "languageCode" ),
-            $this->equalTo( "alwaysAvailable" )
+            $this->equalTo( true )
         )->will(
             $this->returnValue( new SPIUrlAlias )
         );
@@ -2671,8 +2671,8 @@ class UrlAliasTest extends BaseServiceMockTest
             $resource,
             "path",
             "languageCode",
-            "forwarding",
-            "alwaysAvailable"
+            false,
+            true
         );
 
         self::assertInstanceOf(
@@ -2709,9 +2709,9 @@ class UrlAliasTest extends BaseServiceMockTest
         )->with(
             $this->equalTo( $resource ),
             $this->equalTo( "path" ),
-            $this->equalTo( "forwarding" ),
+            $this->equalTo( false ),
             $this->equalTo( "languageCode" ),
-            $this->equalTo( "alwaysAvailable" )
+            $this->equalTo( true )
         )->will(
             $this->throwException( new Exception( "Handler threw an exception" ) )
         );
@@ -2720,8 +2720,8 @@ class UrlAliasTest extends BaseServiceMockTest
             $resource,
             "path",
             "languageCode",
-            "forwarding",
-            "alwaysAvailable"
+            false,
+            true
         );
     }
 
@@ -2760,9 +2760,9 @@ class UrlAliasTest extends BaseServiceMockTest
         )->with(
             $this->equalTo( $resource ),
             $this->equalTo( "path" ),
-            $this->equalTo( "forwarding" ),
+            $this->equalTo( false ),
             $this->equalTo( "languageCode" ),
-            $this->equalTo( "alwaysAvailable" )
+            $this->equalTo( true )
         )->will(
             $this->throwException( new ForbiddenException )
         );
@@ -2771,8 +2771,8 @@ class UrlAliasTest extends BaseServiceMockTest
             $resource,
             "path",
             "languageCode",
-            "forwarding",
-            "alwaysAvailable"
+            false,
+            true
         );
     }
 
@@ -2819,23 +2819,23 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->equalTo( $location ),
             $this->equalTo( "path" ),
             $this->equalTo( "languageCode" ),
-            $this->equalTo( "forwarding" ),
-            $this->equalTo( "alwaysAvailable" )
+            $this->equalTo( false ),
+            $this->equalTo( true )
         );
 
         $mockedService->createGlobalUrlAlias(
             "eznode:42",
             "path",
             "languageCode",
-            "forwarding",
-            "alwaysAvailable"
+            false,
+            true
         );
         $mockedService->createGlobalUrlAlias(
             "module:content/view/full/42",
             "path",
             "languageCode",
-            "forwarding",
-            "alwaysAvailable"
+            false,
+            true
         );
     }
 
