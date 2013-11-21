@@ -10,9 +10,11 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
 {
@@ -72,6 +74,14 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             ->expects( $this->any() )
             ->method( 'getRequest' )
             ->will( $this->returnValue( $this->request ) );
+    }
+
+    public function testGetSubscribedEvents()
+    {
+        $this->assertSame(
+            array( KernelEvents::CONTROLLER => 'getController' ),
+            $this->controllerListener->getSubscribedEvents()
+        );
     }
 
     public function testGetControllerNonViewController()
@@ -200,6 +210,35 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull( $this->controllerListener->getController( $this->event ) );
         $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     */
+    public function testGetControllerLocationUnauthorizedException()
+    {
+        $id = 123;
+        $viewType = 'full';
+        $this->request->attributes->add(
+            array(
+                '_controller' => 'ez_content:viewLocation',
+                'locationId' => $id,
+                'viewType' => $viewType
+            )
+        );
+
+        $locationServiceMock = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
+        $locationServiceMock
+            ->expects( $this->once() )
+            ->method( 'loadLocation' )
+            ->with( $id )
+            ->will( $this->throwException( new UnauthorizedException( 'foo', 'bar' ) ) );
+        $this->repository
+            ->expects( $this->once() )
+            ->method( 'getLocationService' )
+            ->will( $this->returnValue( $locationServiceMock ) );
+
+        $this->controllerListener->getController( $this->event );
     }
 
     public function testGetControllerContentInfo()
