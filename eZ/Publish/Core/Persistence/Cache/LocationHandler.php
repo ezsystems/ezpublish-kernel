@@ -59,8 +59,14 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
     {
-        $rootKey = $rootLocationId ? '/root/' . $rootLocationId : '';
-        $cache = $this->cache->getItem( 'content', 'locations', $contentId . $rootKey );
+        if ( $rootLocationId )
+        {
+            $cache = $this->cache->getItem( 'content', 'locations', $contentId, 'root', $rootLocationId );
+        }
+        else
+        {
+            $cache = $this->cache->getItem( 'content', 'locations', $contentId );
+        }
         $locationIds = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -88,7 +94,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadParentLocationsForDraftContent( $contentId )
     {
-        $cache = $this->cache->getItem( 'content', 'locations', "{$contentId}/parentLocationsForDraftContent" );
+        $cache = $this->cache->getItem( 'content', 'locations', $contentId, 'parentLocationsForDraftContent' );
         $locationIds = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -218,7 +224,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', 'locations', $location->contentId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', $location->contentId );
-        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited/' . $location->contentId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited', $location->contentId );
 
         return $location;
     }

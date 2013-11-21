@@ -209,7 +209,7 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'content', 'locations', "44/parentLocationsForDraftContent" )
+            ->with( 'content', 'locations', '44', 'parentLocationsForDraftContent' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -258,7 +258,7 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
-            ->with( 'content', 'locations', "44/parentLocationsForDraftContent" )
+            ->with( 'content', 'locations', '44', 'parentLocationsForDraftContent' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -311,7 +311,7 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'content', 'locations', '44/root/2' )
+            ->with( 'content', 'locations', '44', 'root', '2' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -360,7 +360,7 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
-            ->with( 'content', 'locations', '44/root/2' )
+            ->with( 'content', 'locations', '44', 'root', '2' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -714,7 +714,7 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 4 ) )
             ->method( 'clear' )
-            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited/' . 2 )
+            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited', 2 )
             ->will( $this->returnValue( true ) );
 
         $handler = $this->persistenceHandler->locationHandler();

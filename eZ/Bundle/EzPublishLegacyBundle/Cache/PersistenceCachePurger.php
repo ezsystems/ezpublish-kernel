@@ -158,6 +158,7 @@ class PersistenceCachePurger implements CacheClearerInterface
                 $location = $this->locationHandler->load( $id );
                 $this->cache->clear( 'content', $location->contentId );
                 $this->cache->clear( 'content', 'info', $location->contentId );
+                $this->cache->clear( 'content', 'locations', $location->contentId );
             }
             catch ( NotFoundException $e )
             {

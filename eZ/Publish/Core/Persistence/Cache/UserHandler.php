@@ -153,8 +153,14 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false )
     {
-        $cacheKey = ( $inherit ? 'inherited/' : '' ) . $groupId;
-        $cache = $this->cache->getItem( 'user', 'role', 'assignments', 'byGroup', $cacheKey );
+        if ( $inherit )
+        {
+            $cache = $this->cache->getItem( 'user', 'role', 'assignments', 'byGroup', 'inherited', $groupId );
+        }
+        else
+        {
+            $cache = $this->cache->getItem( 'user', 'role', 'assignments', 'byGroup', $groupId );
+        }
         $assignments = $cache->get();
         if ( $cache->isMiss() )
         {

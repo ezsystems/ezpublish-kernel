@@ -562,6 +562,8 @@ class URLAliasService implements URLAliasServiceInterface
         return new SPIURLAlias(
             array(
                 "id" => $urlAlias->id,
+                "type" => $urlAlias->type,
+                "destination" => $urlAlias->destination,
                 "isCustom" => $urlAlias->isCustom
             )
         );
