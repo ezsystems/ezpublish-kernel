@@ -72,9 +72,6 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener::onKernelRequestUserHash
-     */
     public function testOnKernelRequestUserHashNotAuthenticate()
     {
         $this->assertNull( $this->requestEventListener->onKernelRequestUserHash( $this->event ) );
@@ -82,9 +79,6 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse( $this->event->isPropagationStopped() );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener::onKernelRequestUserHash
-     */
     public function testOnKernelRequestUserHashAuthenticateNoSession()
     {
         $this->request->headers->add(
@@ -100,9 +94,6 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( 400, $this->event->getResponse()->getStatusCode() );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener::onKernelRequestUserHash
-     */
     public function testOnKernelRequestUserHash()
     {
         $hashGenerator = $this->getMock( 'eZ\\Publish\\SPI\\HashGenerator' );

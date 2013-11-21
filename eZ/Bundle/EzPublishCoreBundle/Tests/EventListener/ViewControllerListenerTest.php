@@ -74,10 +74,6 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $this->request ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::__construct
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::getController
-     */
     public function testGetControllerNonViewController()
     {
         $initialController = 'Foo::bar';
@@ -100,10 +96,6 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         $this->assertNull( $this->controllerListener->getController( $this->event ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::__construct
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::getController
-     */
     public function testGetControllerInvalidParams()
     {
         // Don't add locationId / contentId to request attributes to enforce failure
@@ -130,10 +122,6 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         $this->assertNull( $this->controllerListener->getController( $this->event ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::__construct
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::getController
-     */
     public function testGetControllerNoMatchedController()
     {
         $id = 123;
@@ -169,10 +157,6 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         $this->assertNull( $this->controllerListener->getController( $this->event ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::__construct
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::getController
-     */
     public function testGetControllerLocation()
     {
         $id = 123;
@@ -218,10 +202,6 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::__construct
-     * @covers eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener::getController
-     */
     public function testGetControllerContentInfo()
     {
         $id = 123;
