@@ -38,7 +38,7 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given id does not exist
      *
-     * @param int $contentId
+     * @param mixed $contentId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
