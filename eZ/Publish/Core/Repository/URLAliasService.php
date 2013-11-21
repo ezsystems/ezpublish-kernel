@@ -75,8 +75,8 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $path
-     * @param boolean $forwarding if true a redirect is performed
      * @param string $languageCode the languageCode for which this alias is valid
+     * @param boolean $forwarding if true a redirect is performed
      * @param boolean $alwaysAvailable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path already exists for the given language
