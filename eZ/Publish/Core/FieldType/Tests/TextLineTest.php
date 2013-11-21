@@ -168,6 +168,11 @@ class TextLineTest extends FieldTypeTest
                 new TextLineValue( ' sindelfingen ' ),
             ),
             array(
+                // 11+ numbers - EZP-21771
+                '12345678901',
+                new TextLineValue( '12345678901' ),
+            ),
+            array(
                 new TextLineValue( '' ),
                 new TextLineValue,
             ),
