@@ -10,13 +10,18 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Bundle\EzPublishCoreBundle\Kernel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\RouterInterface;
 
 class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,6 +74,21 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
             $this->httpKernel,
             $this->request,
             HttpKernelInterface::MASTER_REQUEST
+        );
+    }
+
+    public function testSubscribedEvents()
+    {
+        $this->assertSame(
+            array(
+                KernelEvents::REQUEST => array(
+                    array( 'onKernelRequestSetup', 190 ),
+                    array( 'onKernelRequestForward', 10 ),
+                    array( 'onKernelRequestRedirect', 0 ),
+                    array( 'onKernelRequestUserHash', 7 ),
+                )
+            ),
+            $this->requestEventListener->getSubscribedEvents()
         );
     }
 
@@ -168,6 +188,175 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $event = new GetResponseEvent( $this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST );
         $this->requestEventListener->onKernelRequestForward( $event );
         $this->assertSame( $response, $event->getResponse() );
+        $this->assertTrue( $event->isPropagationStopped() );
+    }
+
+    public function testOnKernelRequestSetupSubrequest()
+    {
+        $this->container
+            ->expects( $this->never() )
+            ->method( 'hasParameter' );
+        $this->container
+            ->expects( $this->never() )
+            ->method( 'get' );
+
+        $event = new GetResponseEvent( $this->httpKernel, new Request, HttpKernelInterface::SUB_REQUEST );
+        $this->requestEventListener->onKernelRequestSetup( $event );
+        $this->assertFalse( $event->hasResponse() );
+    }
+
+    public function testOnKernelRequestSetupAlreadyHasSiteaccess()
+    {
+        $this->container
+            ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'ezpublish.siteaccess.default' )
+            ->will( $this->returnValue( true ) );
+        $this->container
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'ezpublish.siteaccess.default' )
+            ->will( $this->returnValue( 'foo' ) );
+        $event = new GetResponseEvent( $this->httpKernel, new Request, HttpKernelInterface::MASTER_REQUEST );
+        $this->requestEventListener->onKernelRequestSetup( $event );
+        $this->assertFalse( $event->hasResponse() );
+    }
+
+    public function testOnKernelRequestSetupAlreadySetupUri()
+    {
+        $router = $this->getMock( 'Symfony\Component\Routing\RouterInterface' );
+        $this->container
+            ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'ezpublish.siteaccess.default' )
+            ->will( $this->returnValue( true ) );
+        $this->container
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'ezpublish.siteaccess.default' )
+            ->will( $this->returnValue( 'setup' ) );
+        $this->container
+            ->expects( $this->any() )
+            ->method( 'get' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'router', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $router ),
+                        array( 'router.request_context', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, new RequestContext ),
+                    )
+                )
+            );
+
+        $router
+            ->expects( $this->once() )
+            ->method( 'generate' )
+            ->with( 'ezpublishSetup' )
+            ->will( $this->returnValue( '/setup' ) );
+
+        $requestEventListener = new RequestEventListener( $this->container, $this->logger );
+        $event = new GetResponseEvent( $this->httpKernel, Request::create( '/setup' ), HttpKernelInterface::MASTER_REQUEST );
+        $requestEventListener->onKernelRequestSetup( $event );
+        $this->assertFalse( $event->hasResponse() );
+    }
+
+    public function testOnKernelRequestSetup()
+    {
+        $router = $this->getMock( 'Symfony\Component\Routing\RouterInterface' );
+        $this->container
+            ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'ezpublish.siteaccess.default' )
+            ->will( $this->returnValue( true ) );
+        $this->container
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'ezpublish.siteaccess.default' )
+            ->will( $this->returnValue( 'setup' ) );
+        $this->container
+            ->expects( $this->any() )
+            ->method( 'get' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'router', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $router ),
+                        array( 'router.request_context', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, new RequestContext ),
+                    )
+                )
+            );
+
+        $router
+            ->expects( $this->once() )
+            ->method( 'generate' )
+            ->with( 'ezpublishSetup' )
+            ->will( $this->returnValue( '/setup' ) );
+
+        $requestEventListener = new RequestEventListener( $this->container, $this->logger );
+        $event = new GetResponseEvent( $this->httpKernel, Request::create( '/foo/bar' ), HttpKernelInterface::MASTER_REQUEST );
+        $requestEventListener->onKernelRequestSetup( $event );
+        $this->assertTrue( $event->hasResponse() );
+        /** @var RedirectResponse $response */
+        $response = $event->getResponse();
+        $this->assertInstanceOf( 'Symfony\Component\HttpFoundation\RedirectResponse', $response );
+        $this->assertSame( '/setup', $response->getTargetUrl() );
+    }
+
+    public function testOnKernelRequestRedirectSubRequest()
+    {
+        $event = new GetResponseEvent( $this->httpKernel, new Request, HttpKernelInterface::SUB_REQUEST );
+        $this->requestEventListener->onKernelRequestRedirect( $event );
+        $this->assertFalse( $event->hasResponse() );
+    }
+
+    public function testOnKernelRequestRedirect()
+    {
+        $queryParameters = array( 'some' => 'thing' );
+        $cookieParameters = array( 'cookie' => 'value' );
+        $request = Request::create( '/test_sa/foo/bar', 'GET', $queryParameters, $cookieParameters );
+        $semanticPathinfo = '/foo/something';
+        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+        $request->attributes->set( 'needsRedirect', true );
+        $request->attributes->set( 'siteaccess', new SiteAccess() );
+
+        $event = new GetResponseEvent( $this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST );
+        $this->requestEventListener->onKernelRequestRedirect( $event );
+        $this->assertTrue( $event->hasResponse() );
+        /** @var RedirectResponse $response */
+        $response = $event->getResponse();
+        $this->assertInstanceOf( 'Symfony\Component\HttpFoundation\RedirectResponse', $response );
+        $this->assertSame( "$semanticPathinfo?some=thing", $response->getTargetUrl() );
+        $this->assertSame( 301, $response->getStatusCode() );
+        $this->assertTrue( $event->isPropagationStopped() );
+    }
+
+    public function testOnKernelRequestRedirectPrependSiteaccess()
+    {
+        $queryParameters = array( 'some' => 'thing' );
+        $cookieParameters = array( 'cookie' => 'value' );
+        $siteaccessMatcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer' );
+        $siteaccess = new SiteAccess( 'test', 'foo', $siteaccessMatcher );
+        $semanticPathinfo = '/foo/something';
+
+        $request = Request::create( '/test_sa/foo/bar', 'GET', $queryParameters, $cookieParameters );
+        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+        $request->attributes->set( 'needsRedirect', true );
+        $request->attributes->set( 'siteaccess', $siteaccess );
+        $request->attributes->set( 'prependSiteaccessOnRedirect', true );
+
+        $expectedURI = "/test$semanticPathinfo";
+        $siteaccessMatcher
+            ->expects( $this->once() )
+            ->method( 'analyseLink' )
+            ->with( $semanticPathinfo )
+            ->will( $this->returnValue( $expectedURI ) );
+
+        $event = new GetResponseEvent( $this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST );
+        $this->requestEventListener->onKernelRequestRedirect( $event );
+        $this->assertTrue( $event->hasResponse() );
+        /** @var RedirectResponse $response */
+        $response = $event->getResponse();
+        $this->assertInstanceOf( 'Symfony\Component\HttpFoundation\RedirectResponse', $response );
+        $this->assertSame( "$expectedURI?some=thing", $response->getTargetUrl() );
+        $this->assertSame( 301, $response->getStatusCode() );
         $this->assertTrue( $event->isPropagationStopped() );
     }
 }
