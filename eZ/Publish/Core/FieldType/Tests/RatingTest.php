@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Rating\Type as Rating;
 use eZ\Publish\Core\FieldType\Rating\Value;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use ReflectionObject;
 
 /**
@@ -364,7 +365,7 @@ class RatingTest extends FieldTypeTest
      * @dataProvider provideDataForGetName
      * @expectedException \RuntimeException
      */
-    public function testGetName( Value $value, $expected )
+    public function testGetName( SPIValue $value, $expected )
     {
         $this->getFieldTypeUnderTest()->getName(
             $value

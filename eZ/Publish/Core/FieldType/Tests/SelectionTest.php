@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Selection\Type as Selection;
 use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 /**
  * @group fieldType
@@ -355,7 +356,7 @@ class SelectionTest extends FieldTypeTest
      * @dataProvider provideDataForGetName
      * @expectedException \RuntimeException
      */
-    public function testGetName( SelectionValue $value, $expected )
+    public function testGetName( SPIValue $value, $expected )
     {
         $this->getFieldTypeUnderTest()->getName( $value );
     }

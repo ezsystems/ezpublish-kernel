@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 use eZ\Publish\Core\FieldType\RelationList\Type as RelationList;
 use eZ\Publish\Core\FieldType\RelationList\Value;
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
@@ -386,7 +387,7 @@ class RelationListTest extends FieldTypeTest
      * @dataProvider provideDataForGetName
      * @expectedException \RuntimeException
      */
-    public function testGetName( Value $value, $expected )
+    public function testGetName( SPIValue $value, $expected )
     {
         $this->getFieldTypeUnderTest()->getName( $value );
     }
