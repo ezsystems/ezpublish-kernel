@@ -192,7 +192,7 @@ interface Handler
      *
      * @return void
      */
-    public function removePolicy( $roleId, $policyId );
+    public function deletePolicy( $roleId, $policyId );
 
     /**
      * Returns the user policies associated with the user (including inherited policies from user groups)

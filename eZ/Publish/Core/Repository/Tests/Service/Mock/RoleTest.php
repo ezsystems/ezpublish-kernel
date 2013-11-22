@@ -904,7 +904,7 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock = $this->getPersistenceMockHandler( "User\\Handler" );
 
         $userHandlerMock->expects( $this->once() )
-            ->method( "removePolicy" )
+            ->method( "deletePolicy" )
             ->with(
                 $this->equalTo( 24 ),
                 $this->equalTo( 42 )
@@ -950,7 +950,7 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock = $this->getPersistenceMockHandler( "User\\Handler" );
 
         $userHandlerMock->expects( $this->once() )
-            ->method( "removePolicy" )
+            ->method( "deletePolicy" )
             ->with(
                 $this->equalTo( 24 ),
                 $this->equalTo( 42 )
@@ -1070,7 +1070,7 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock = $this->getPersistenceMockHandler( "User\\Handler" );
 
         $userHandlerMock->expects( $this->once() )
-            ->method( "removePolicy" )
+            ->method( "deletePolicy" )
             ->with(
                 $this->equalTo( 24 ),
                 $this->equalTo( 42 )
@@ -1123,7 +1123,7 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock = $this->getPersistenceMockHandler( "User\\Handler" );
 
         $userHandlerMock->expects( $this->once() )
-            ->method( "removePolicy" )
+            ->method( "deletePolicy" )
             ->with(
                 $this->equalTo( 24 ),
                 $this->equalTo( 42 )

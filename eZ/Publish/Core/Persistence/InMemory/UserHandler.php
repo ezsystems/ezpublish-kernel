@@ -446,7 +446,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @return void
      */
-    public function removePolicy( $roleId, $policyId )
+    public function deletePolicy( $roleId, $policyId )
     {
         $this->backend->deleteByMatch( 'User\\Policy', array( 'id' => $policyId, 'roleId' => $roleId ) );
     }

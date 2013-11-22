@@ -593,12 +593,12 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testRemovePolicy()
+    public function testDeletePolicy()
     {
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
-        $handler->removePolicy( $role->id, $role->policies[0]->id );
+        $handler->deletePolicy( $role->id, $role->policies[0]->id );
 
         $this->assertQueryResult(
             array(
@@ -609,12 +609,12 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testRemovePolicyLimitations()
+    public function testDeletePolicyLimitations()
     {
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
-        $handler->removePolicy( $role->id, $role->policies[0]->id );
+        $handler->deletePolicy( $role->id, $role->policies[0]->id );
 
         $this->assertQueryResult(
             array( array( 3, 'Foo', 2 ) ),
@@ -622,12 +622,12 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testRemovePolicyLimitationValues()
+    public function testDeletePolicyLimitationValues()
     {
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
-        $handler->removePolicy( $role->id, $role->policies[0]->id );
+        $handler->deletePolicy( $role->id, $role->policies[0]->id );
 
         $this->assertQueryResult(
             array( array( 4, 3, 'Blubb' ) ),
