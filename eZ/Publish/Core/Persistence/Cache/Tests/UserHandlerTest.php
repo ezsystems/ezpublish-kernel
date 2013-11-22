@@ -381,7 +381,7 @@ class UserHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited/42' )
+            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited', '42' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -432,7 +432,7 @@ class UserHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited/42' )
+            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited', '42' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
