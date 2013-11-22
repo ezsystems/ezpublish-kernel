@@ -657,7 +657,7 @@ class UserHandlerTest extends HandlerTest
 
         $innerHandlerMock
             ->expects( $this->once() )
-            ->method(  'removePolicy' )
+            ->method( 'removePolicy' )
             ->with( 33, 55 )
             ->will(
                 $this->returnValue( true )
