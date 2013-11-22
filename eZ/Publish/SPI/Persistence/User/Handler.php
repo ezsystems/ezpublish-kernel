@@ -185,14 +185,13 @@ interface Handler
     /**
      * Removes a policy from a role
      *
-     * @param mixed $roleId
      * @param mixed $policyId
      *
      * @todo Throw exception on missing role / policy?
      *
      * @return void
      */
-    public function deletePolicy( $roleId, $policyId );
+    public function deletePolicy( $policyId );
 
     /**
      * Returns the user policies associated with the user (including inherited policies from user groups)

@@ -313,7 +313,7 @@ class RoleService implements RoleServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->userHandler->deletePolicy( $role->id, $policy->id );
+            $this->userHandler->deletePolicy( $policy->id );
             $this->repository->commit();
         }
         catch ( Exception $e )
@@ -340,7 +340,7 @@ class RoleService implements RoleServiceInterface
         $this->repository->beginTransaction();
         try
         {
-            $this->userHandler->deletePolicy( $policy->roleId, $policy->id );
+            $this->userHandler->deletePolicy( $policy->id );
             $this->repository->commit();
         }
         catch ( Exception $e )

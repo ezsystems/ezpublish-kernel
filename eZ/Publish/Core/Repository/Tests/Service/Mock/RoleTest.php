@@ -887,7 +887,6 @@ class RoleTest extends BaseServiceMockTest
                 $this->returnValueMap(
                     array(
                         array( "id", 42 ),
-                        array( "roleId", 24 )
                     )
                 )
             );
@@ -906,7 +905,6 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects( $this->once() )
             ->method( "deletePolicy" )
             ->with(
-                $this->equalTo( 24 ),
                 $this->equalTo( 42 )
             )->will( $this->throwException( new \Exception( "Handler threw an exception" ) ) );
 
@@ -933,7 +931,6 @@ class RoleTest extends BaseServiceMockTest
                 $this->returnValueMap(
                     array(
                         array( "id", 42 ),
-                        array( "roleId", 24 )
                     )
                 )
             );
@@ -952,7 +949,6 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects( $this->once() )
             ->method( "deletePolicy" )
             ->with(
-                $this->equalTo( 24 ),
                 $this->equalTo( 42 )
             );
 
@@ -1072,7 +1068,6 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects( $this->once() )
             ->method( "deletePolicy" )
             ->with(
-                $this->equalTo( 24 ),
                 $this->equalTo( 42 )
             )->will( $this->throwException( new \Exception( "Handler threw an exception" ) ) );
 
@@ -1125,7 +1120,6 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects( $this->once() )
             ->method( "deletePolicy" )
             ->with(
-                $this->equalTo( 24 ),
                 $this->equalTo( 42 )
             );
 

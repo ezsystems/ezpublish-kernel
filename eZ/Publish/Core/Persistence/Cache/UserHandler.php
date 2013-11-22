@@ -223,12 +223,12 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::deletePolicy
      */
-    public function deletePolicy( $roleId, $policyId )
+    public function deletePolicy( $policyId )
     {
-        $this->logger->logCall( __METHOD__, array( 'role' => $roleId, 'policy' => $policyId ) );
-        $this->persistenceFactory->getUserHandler()->deletePolicy( $roleId, $policyId );
+        $this->logger->logCall( __METHOD__, array( 'policy' => $policyId ) );
+        $this->persistenceFactory->getUserHandler()->deletePolicy( $policyId );
 
-        $this->cache->clear( 'user', 'role', $roleId );
+        $this->cache->clear( 'user', 'role' );
     }
 
     /**

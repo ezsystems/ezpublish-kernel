@@ -620,7 +620,7 @@ class UserHandlerTest extends HandlerTest
         $this->assertEquals( 3, count( $obj->policies ) );
         $id = $obj->id;
 
-        $handler->deletePolicy( $id, $obj->policies[2]->id );
+        $handler->deletePolicy( $obj->policies[2]->id );
         $obj = $handler->loadRole( $id );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 2, count( $obj->policies ) );

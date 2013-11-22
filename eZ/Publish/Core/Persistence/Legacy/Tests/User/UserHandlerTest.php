@@ -598,7 +598,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
-        $handler->deletePolicy( $role->id, $role->policies[0]->id );
+        $handler->deletePolicy( $role->policies[0]->id );
 
         $this->assertQueryResult(
             array(
@@ -614,7 +614,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
-        $handler->deletePolicy( $role->id, $role->policies[0]->id );
+        $handler->deletePolicy( $role->policies[0]->id );
 
         $this->assertQueryResult(
             array( array( 3, 'Foo', 2 ) ),
@@ -627,7 +627,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
-        $handler->deletePolicy( $role->id, $role->policies[0]->id );
+        $handler->deletePolicy( $role->policies[0]->id );
 
         $this->assertQueryResult(
             array( array( 4, 3, 'Blubb' ) ),
