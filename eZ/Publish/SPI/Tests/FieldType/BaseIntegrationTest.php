@@ -64,7 +64,7 @@ abstract class BaseIntegrationTest extends TestCase
         static $installDir = null;
         if ( $installDir === null )
         {
-            $config = require 'config.php';
+            $config = require __DIR__ . '/../../../../../config.php';
             $installDir = $config['service']['parameters']['install_dir'];
         }
         return $installDir;
