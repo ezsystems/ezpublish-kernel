@@ -45,6 +45,14 @@ class ContentInfo extends ValueObject
     protected $contentTypeId;
 
     /**
+     * the domain type distinguishes different domain objects which inherit from content
+     * (user, usergroup, content, ...)
+     *
+     * @var string
+     */
+    protected $domainType;
+
+    /**
      * The computed name (via name schema) in the main language of the Content object
      *
      * For names in other languages then main see {@see \eZ\Publish\API\Repository\Values\Content\VersionInfo}
