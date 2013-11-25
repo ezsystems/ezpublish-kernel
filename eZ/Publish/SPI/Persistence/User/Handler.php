@@ -183,11 +183,9 @@ interface Handler
     public function updatePolicy( Policy $policy );
 
     /**
-     * Removes a policy from a role
+     * Deletes a policy
      *
      * @param mixed $policyId
-     *
-     * @todo Throw exception on missing role / policy?
      *
      * @return void
      */
