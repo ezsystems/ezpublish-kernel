@@ -47,9 +47,7 @@ class Mapper
 
         list( $type, $destination ) = $this->matchTypeAndDestination( $data["action"] );
         $urlAlias->id = $data["parent"] . "-" . $data["text_md5"];
-        $urlAlias->pathData = isset( $data["raw_path_data"] )
-            ? $this->normalizePathData( $data["raw_path_data"] )
-            : null;
+        $urlAlias->pathData = $this->normalizePathData( $data["raw_path_data"] );
         $urlAlias->languageCodes = $this->languageMaskGenerator->extractLanguageCodesFromMask( $data["lang_mask"] );
         $urlAlias->alwaysAvailable = $this->languageMaskGenerator->isAlwaysAvailable( $data["lang_mask"] );
         $urlAlias->isHistory = isset( $data["is_path_history"] ) ? $data["is_path_history"] : !$data["is_original"];
@@ -129,7 +127,7 @@ class Mapper
      *
      * @return array
      */
-    protected function normalizePathData( $pathData )
+    protected function normalizePathData( array $pathData )
     {
         $normalizedPathData = array();
         foreach ( $pathData as $level => $rows )
