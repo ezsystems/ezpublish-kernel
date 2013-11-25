@@ -110,6 +110,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
+        $urlAlias = new UrlAlias( array( 'id' => 55, 'destination' => 44 ) );
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
         $this->persistenceFactoryMock
             ->expects( $this->once() )
@@ -120,27 +121,41 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'createCustomUrlAlias' )
             ->with( 44, '/path', true, 'eng-GB', true )
-            ->will( $this->returnValue( new UrlAlias( array( 'id' => 55, 'destination' => 44 ) ) ) );
+            ->will( $this->returnValue( $urlAlias ) );
 
         $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
-
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
-            ->with( 'urlAlias', 'location', 44, 'custom' )
+            ->with( 'urlAlias', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
+            ->expects( $this->never() )
+            ->method( 'get' );
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'set' )
+            ->with( $urlAlias );
+
+        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'getItem' )
+            ->with( 'urlAlias', 'location', 44, 'custom' )
+            ->will( $this->returnValue( $cacheItemMock2 ) );
+
+        $cacheItemMock2
             ->expects( $this->once() )
             ->method( 'get' )
             ->will( $this->returnValue( array( 42 ) ) );
 
-        $cacheItemMock
+        $cacheItemMock2
             ->expects( $this->once() )
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $cacheItemMock
+        $cacheItemMock2
             ->expects( $this->once() )
             ->method( 'set' )
             ->with( array( 42, 55 ) );
@@ -156,6 +171,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
+        $urlAlias = new UrlAlias( array( 'id' => 55, 'destination' => 44 ) );
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
         $this->persistenceFactoryMock
             ->expects( $this->once() )
@@ -166,27 +182,41 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'createCustomUrlAlias' )
             ->with( 44, '/path', true, 'eng-GB', true )
-            ->will( $this->returnValue( new UrlAlias( array( 'id' => 55, 'destination' => 44 ) ) ) );
+            ->will( $this->returnValue( $urlAlias ) );
 
         $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
-
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
-            ->with( 'urlAlias', 'location', 44, 'custom' )
+            ->with( 'urlAlias', 55 )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
+            ->expects( $this->never() )
+            ->method( 'get' );
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'set' )
+            ->with( $urlAlias );
+
+        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'getItem' )
+            ->with( 'urlAlias', 'location', 44, 'custom' )
+            ->will( $this->returnValue( $cacheItemMock2 ) );
+
+        $cacheItemMock2
             ->expects( $this->once() )
             ->method( 'get' )
             ->will( $this->returnValue( null ) );
 
-        $cacheItemMock
+        $cacheItemMock2
             ->expects( $this->once() )
             ->method( 'isMiss' )
             ->will( $this->returnValue( true ) );
 
-        $cacheItemMock
+        $cacheItemMock2
             ->expects( $this->once() )
             ->method( 'set' )
             ->with( array( 55 ) );
