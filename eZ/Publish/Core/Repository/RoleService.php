@@ -310,17 +310,7 @@ class RoleService implements RoleServiceInterface
             throw new InvalidArgumentException( "\$policy", "Policy does not belong to the given role" );
         }
 
-        $this->repository->beginTransaction();
-        try
-        {
-            $this->userHandler->deletePolicy( $policy->id );
-            $this->repository->commit();
-        }
-        catch ( Exception $e )
-        {
-            $this->repository->rollback();
-            throw $e;
-        }
+        $this->internalDeletePolicy( $policy );
 
         return $this->loadRole( $role->id );
     }
@@ -337,6 +327,22 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
 
+        $this->internalDeletePolicy( $policy );
+    }
+
+    /**
+     * Deletes a policy
+     *
+     * Used by {@link removePolicy()} and {@link deletePolicy()}
+     *
+     * @param APIPolicy $policy
+     *
+     * @throws \Exception
+     *
+     * @return void
+     */
+    protected function internalDeletePolicy( APIPolicy $policy )
+    {
         $this->repository->beginTransaction();
         try
         {
