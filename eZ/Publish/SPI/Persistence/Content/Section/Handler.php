@@ -92,5 +92,5 @@ interface Handler
      *
      * @return int
      */
-    public function assignmentsCount( $sectionId );
+    public function getAssignmentCount( $sectionId );
 }
