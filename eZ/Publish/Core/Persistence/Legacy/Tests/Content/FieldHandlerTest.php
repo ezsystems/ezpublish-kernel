@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
+use eZ\Publish\SPI\FieldType\FieldStorage\Events\PostPublishFieldStorageEvent;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
@@ -820,6 +821,68 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $fieldHandler->deleteFields( 42, new VersionInfo( array( 'versionNo' => 2 ) ) );
     }
 
+    public function testSendFieldStorageEvents()
+    {
+        // content with several fields
+        $content = $this->getContentFixture();
+        $event = new PostPublishFieldStorageEvent();
+
+        // The first field of our content has an event that modifies data, the others don't
+        $storageHandlerMock = $this->getStorageHandlerMock();
+        $i = 0;
+        foreach ( $content->fields as $field )
+        {
+            $storageHandlerMock->expects( $this->at( $i++ ) )
+                ->method( 'sendEvent' )
+                ->with( $this->isInstanceOf( get_class( $event ) ) )
+                ->will( $this->returnValue( $i == 1 ) );
+
+            if ( $i == 1 )
+            {
+                // We mock the call to updateField that occurs on the first field
+                $mapperMock = $this->getMapperMock();
+                $mapperMock->expects( $this->exactly( 2 ) )
+                    ->method( 'convertToStorageValue' )
+                    ->with( $field )
+                    ->will( $this->returnValue( new StorageFieldValue() ) );
+
+                $contentGatewayMock = $this->getContentGatewayMock();
+                $contentGatewayMock->expects( $this->once() )
+                    ->method( 'updateField' )
+                    ->with( $field, $mapperMock->convertToStorageValue( $field ) );
+
+                $storageHandlerMock->expects( $this->at( $i++ ) )
+                    ->method( 'storeFieldData' )
+                    ->with( $content->versionInfo, $field );
+            }
+        }
+
+        self::assertTrue(
+            $this->getFieldHandler()->sendFieldStorageEvents( $content, $event )
+        );
+    }
+
+    /**
+     * Tests behaviour when events don't touch data
+     */
+    public function testSendFieldStorageEventNoChanges()
+    {
+        // content with several fields
+        $content = $this->getContentFixture();
+        $event = new PostPublishFieldStorageEvent();
+
+        // The first field of our content has an event that modifies data, the others don't
+        $storageHandlerMock = $this->getStorageHandlerMock();
+        $storageHandlerMock->expects( $this->exactly( count( $content->fields ) ) )
+            ->method( 'sendEvent' )
+            ->with( $this->isInstanceOf( get_class( $event ) ) )
+            ->will( $this->returnValue( false ) );
+
+        self::assertFalse(
+            $this->getFieldHandler()->sendFieldStorageEvents( $content, $event )
+        );
+    }
+
     /**
      * Returns a Content fixture
      *
@@ -1131,16 +1194,13 @@ class FieldHandlerTest extends LanguageAwareTestCase
                 false
             );
 
-            $this->fieldTypeRegistryMock->expects(
-                $this->any()
-            )->method(
-                "getFieldType"
-            )->with(
-                $this->isType( "string" )
-            )->will(
-                $this->returnValue( $this->getFieldTypeMock() )
-            );
+            $this->fieldTypeRegistryMock
+                ->expects( $this->any() )
+                ->method( "getFieldType" )
+                ->with( $this->isType( "string" ) )
+                ->will( $this->returnValue( $this->getFieldTypeMock() ) );
         }
+
         return $this->fieldTypeRegistryMock;
     }
 

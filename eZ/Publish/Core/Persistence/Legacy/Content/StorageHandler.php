@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
+use eZ\Publish\SPI\FieldType\FieldStorage\Event as FieldStorageEvent;
+use eZ\Publish\SPI\FieldType\FieldStorage\EventAware as EventAwareFieldStorage;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
@@ -109,5 +111,24 @@ class StorageHandler
     {
         $this->storageRegistry->getStorage( $fieldType )
             ->deleteFieldData( $versionInfo, $ids, $this->context );
+    }
+
+    /**
+     * Sends the storage event $event
+     *
+     * The event object must reference the VersionInfo and Field it affects.
+     *
+     * @param FieldStorageEvent $fieldStorageEvent
+     *
+     * @return bool true if data was modified by the event
+     */
+    public function sendEvent( FieldStorageEvent $event )
+    {
+        $fieldStorage = $this->storageRegistry->getStorage( $event->getField()->type );
+
+        if ( !$fieldStorage instanceof EventAwareFieldStorage )
+            return false;
+
+        return $fieldStorage->handleEvent( $event, $this->context );
     }
 }

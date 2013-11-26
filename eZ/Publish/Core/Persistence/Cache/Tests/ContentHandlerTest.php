@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
+use eZ\Publish\SPI\FieldType\FieldStorage\Events as FieldStorageEvents;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -595,4 +596,64 @@ class ContentHandlerTest extends HandlerTest
         $handler = $this->persistenceHandler->contentHandler();
         $handler->publish( 2, 1, new MetadataUpdateStruct() );
     }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::sendFieldStorageEvent
+     */
+    public function testSendFieldStorageEvent()
+    {
+        $this->loggerMock->expects( $this->once() )->method( 'logCall' );
+
+        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Handler' );
+        $this->persistenceFactoryMock
+            ->expects( $this->once() )
+            ->method( 'getContentHandler' )
+            ->will( $this->returnValue( $innerHandlerMock ) );
+
+        $innerHandlerMock
+            ->expects( $this->once() )
+            ->method(  'sendFieldStorageEvent' )
+            ->with( 2, 1, $this->isInstanceOf( 'eZ\\Publish\\SPI\\FieldType\\FieldStorage\\Event' ) )
+            ->will(
+                $this->returnValue(
+                    new Content(
+                        array(
+                            'fields' => array(),
+                            'versionInfo' => new VersionInfo(
+                                array(
+                                    'versionNo' => 1,
+                                    'contentInfo' => new ContentInfo( array( 'id' => 2 ) )
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+
+        $this->cacheMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'clear' )
+            ->with( 'content', 2 )
+            ->will( $this->returnValue( true ) );
+
+        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'getItem' )
+            ->with( 'content', 2, 1 )
+            ->will( $this->returnValue( $cacheItemMock ) );
+
+        $cacheItemMock
+            ->expects( $this->once() )
+            ->method( 'set' )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
+
+        $cacheItemMock
+            ->expects( $this->never() )
+            ->method( 'get' );
+
+        $handler = $this->persistenceHandler->contentHandler();
+        $handler->sendFieldStorageEvent( 2, 1, new FieldStorageEvents\PostPublishFieldStorageEvent() );
+    }
+
 }

@@ -123,6 +123,7 @@ class ContentHandlerTest extends TestCase
     /**
      * @return void
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::create
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::internalCreate
      * @todo Current method way to complex to test, refactor!
      */
     public function testCreate()
@@ -233,7 +234,7 @@ class ContentHandlerTest extends TestCase
                 )
             );
 
-        $gatewayMock->expects( $this->once() )
+        $gatewayMock->expects( $this->any() )
             ->method( 'load' )
             ->with(
                 $this->equalTo( 23 ),
@@ -243,12 +244,12 @@ class ContentHandlerTest extends TestCase
                 $this->returnValue( array( 42 ) )
             );
 
-        $mapperMock->expects( $this->once() )
+        $mapperMock->expects( $this->any() )
             ->method( 'extractContentFromRows' )
             ->with( $this->equalTo( array( 42 ) ) )
             ->will( $this->returnValue( array( $this->getContentFixtureForDraft() ) ) );
 
-        $fieldHandlerMock->expects( $this->once() )
+        $fieldHandlerMock->expects( $this->any() )
             ->method( 'loadExternalFieldData' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
 
@@ -304,7 +305,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'setStatus' )
             ->with( 23, VersionInfo::STATUS_ARCHIVED, 1 );
 
-        $gatewayMock->expects( $this->once() )
+        $gatewayMock->expects( $this->any() )
             ->method( 'load' )
             ->with(
                 $this->equalTo( 23 ),
@@ -313,12 +314,12 @@ class ContentHandlerTest extends TestCase
             )
             ->will( $this->returnValue( array( 42 ) ) );
 
-        $mapperMock->expects( $this->once() )
+        $mapperMock->expects( $this->any() )
             ->method( 'extractContentFromRows' )
             ->with( $this->equalTo( array( 42 ) ) )
             ->will( $this->returnValue( array( $this->getContentFixtureForDraft() ) ) );
 
-        $fieldHandlerMock->expects( $this->once() )
+        $fieldHandlerMock->expects( $this->any() )
             ->method( 'loadExternalFieldData' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
 
@@ -1364,6 +1365,48 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    public function testSendFieldStorageEvent()
+    {
+        $contentId = 1;
+        $versionNumber = 1;
+        $spiContent = new Content();
+        $spiContentReloaded = new Content();
+
+        $contentHandler = $this->getPartlyMockedHandler( array( "load", "internalCreate" ) );
+        $fieldHandlerMock = $this->getFieldHandlerMock();
+
+        /** @var \eZ\Publish\SPI\FieldType\FieldStorageEvent $eventMock */
+        $eventMock = $this->getMock( 'eZ\Publish\SPI\FieldType\FieldStorage\Event' );
+
+        // initially loaded content
+        $contentHandler
+            ->expects( $this->at( 0 ) )
+            ->method( 'load' )
+            ->with( $contentId, $versionNumber )
+            ->will( $this->returnValue( $spiContent ) );
+
+        // content returned after reloading
+        $contentHandler
+            ->expects( $this->at( 1 ) )
+            ->method( 'load' )
+            ->with( $contentId, $versionNumber )
+            ->will( $this->returnValue( $spiContentReloaded ) );
+
+        $fieldHandlerMock
+            ->expects( $this->once() )
+            ->method( 'sendFieldStorageEvents' )
+            ->with( $spiContent, $eventMock )
+            ->will( $this->returnValue( true ) );
+
+        self::assertSame(
+            $spiContentReloaded,
+            $contentHandler->sendFieldStorageEvent(
+                $contentId, $versionNumber, $eventMock
+            ),
+            "The method didn't return the reloaded content"
+        );
+    }
+
     /**
      * Returns the handler to test
      *
@@ -1391,7 +1434,7 @@ class ContentHandlerTest extends TestCase
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Handler|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedHandler( array $methods )
     {
@@ -1434,7 +1477,7 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a FieldHandler mock.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFieldHandlerMock()
     {

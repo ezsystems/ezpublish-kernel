@@ -17,6 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\FieldType\FieldStorage\Event as FieldStorageEvent;
 
 /**
  * Field Handler.
@@ -475,5 +476,34 @@ class FieldHandler
             $this->storageHandler->deleteFieldData( $fieldType, $versionInfo, $ids );
         }
         $this->contentGateway->deleteFields( $contentId, $versionInfo->versionNo );
+    }
+
+    /**
+     * Triggers $event on fields from $content
+     *
+     * @param Content $content
+     * @param FieldStorageEvent $event
+     *
+     * @return bool true if data was modified by an event
+     */
+    public function sendFieldStorageEvents( Content $content, FieldStorageEvent $event )
+    {
+        $dataUpdated = false;
+
+        $event->setVersionInfo( $content->versionInfo );
+
+        foreach ( $content->fields as $field )
+        {
+            $event->setField( $field );
+
+            // if the event returns true, field data needs to be updated
+            if ( $this->storageHandler->sendEvent( $event ) === true )
+            {
+                $this->updateField( $event->getField(), $content );
+                $dataUpdated = true;
+            }
+        }
+
+        return $dataUpdated;
     }
 }

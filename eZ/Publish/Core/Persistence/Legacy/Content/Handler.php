@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\SPI\FieldType\FieldStorage\Event as FieldStorageEvent;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
@@ -192,8 +193,9 @@ class Handler implements BaseContentHandler
      */
     public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct )
     {
-        // Archive currently published version
         $versionInfo = $this->loadVersionInfo( $contentId, $versionNo );
+
+        // Archive currently published version
         if ( $versionInfo->contentInfo->currentVersionNo != $versionNo )
         {
             $this->setStatus(
@@ -215,6 +217,7 @@ class Handler implements BaseContentHandler
         $this->locationGateway->updateLocationsContentVersionNo( $contentId, $versionNo );
         $this->setStatus( $contentId, VersionInfo::STATUS_PUBLISHED, $versionNo );
 
+        // @todo Why should publish return something at all ? Not doing so would make cache handling easier.
         return $this->load( $contentId, $versionNo );
     }
 
@@ -705,5 +708,15 @@ class Handler implements BaseContentHandler
         return $this->mapper->extractRelationsFromRows(
             $this->contentGateway->loadReverseRelations( $destinationContentId, $type )
         );
+    }
+
+    public function sendFieldStorageEvent( $contentId, $versionNo, FieldStorageEvent $event )
+    {
+        $content = $this->load( $contentId, $versionNo );
+        if ( $this->fieldHandler->sendFieldStorageEvents( $content, $event ) === true )
+        {
+            $content = $this->load( $contentId, $versionNo );
+        }
+        return $content;
     }
 }
