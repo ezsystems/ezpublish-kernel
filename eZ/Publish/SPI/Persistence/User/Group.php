@@ -21,6 +21,13 @@ class Group extends ValueObject
     public $id;
 
     /**
+     * the associated content
+     *
+     * @var mixed
+     */
+    public $contentId;
+
+    /**
      * ID of the parent group
      *
      * @var mixed

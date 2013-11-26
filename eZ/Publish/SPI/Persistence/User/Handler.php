@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\SPI\Persistence\User;
 
-use eZ\Publish\SPI\Persistence\User;
-
 /**
  * Storage Engine handler for user module
  */
@@ -20,14 +18,11 @@ interface Handler
     /**
      * Create a user
      *
-     * The User struct used to create the user will contain an ID which is used
-     * to reference the user.
-     *
-     * @param \eZ\Publish\SPI\Persistence\User $user
+     * @param \eZ\Publish\SPI\Persistence\User\CreateStruct $userCreateStruct
      *
      * @return \eZ\Publish\SPI\Persistence\User
      */
-    public function create( User $user );
+    public function create( CreateStruct $userCreateStruct );
 
     /**
      * Loads user with user ID.
@@ -59,6 +54,8 @@ interface Handler
      * As earlier eZ Publish versions supported several users having same email (ini config),
      * this function may return several users.
      *
+     * @todo deprecate the feature supporting multiple users with the same email
+     *
      * Note: This method loads user by $email case in-sensitive on certain storage engines!
      *
      * @param string $email
@@ -70,169 +67,86 @@ interface Handler
     /**
      * Update the user information specified by the user struct
      *
-     * @param \eZ\Publish\SPI\Persistence\User $user
+     * @param mixed $userId
+     * @param \eZ\Publish\SPI\Persistence\User\UpdateStruct $userUpdateStruct
      */
-    public function update( User $user );
+    public function update( $userId, UpdateStruct $userUpdateStruct );
 
     /**
      * Delete user with the given ID.
      *
-     * @param mixed $userId
+     * @invariant the user exists
      *
-     * @todo Throw on missing user?
+     * @param mixed $userId
      */
     public function delete( $userId );
 
     /**
-     * Create new role
+     * Creates a user group as child of $parentGroupId and returns it
      *
-     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     * @invariant the parent group exists
      *
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     * @param mixed $parentGroupId
+     *
+     * @return \eZ\Publish\SPI\Persistence\User\Group
      */
-    public function createRole( Role $role );
+    public function createGroup( $parentGroupId );
 
     /**
-     * Loads a specified role by $roleId
+     * Loads the group with the given $groupId
      *
-     * @param mixed $roleId
+     * @param mixed $groupId
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
      *
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     * @return \eZ\Publish\SPI\Persistence\User\Group
      */
-    public function loadRole( $roleId );
+    public function loadGroup( $groupId );
 
     /**
-     * Loads a specified role by $identifier
+     * Loads all direct children of $parentGroupId
      *
-     * @param string $identifier
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If role is not found
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     * @param mixed $parentGroupId
+     * @return \eZ\Publish\SPI\Persistence\User\Group[]
      */
-    public function loadRoleByIdentifier( $identifier );
+    public function loadSubGroups( $parentGroupId );
 
     /**
-     * Loads all roles
+     * Moves $groupId below $newParentId
      *
-     * @return \eZ\Publish\SPI\Persistence\User\Role[]
+     * @param mixed $groupId
+     * @param mixed $newParentId
      */
-    public function loadRoles();
+    public function moveGroup( $groupId, $newParentId );
 
     /**
-     * Loads roles assignments Role
-     *
-     * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
-     *
-     * @param mixed $roleId
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
-     */
-    public function loadRoleAssignmentsByRoleId( $roleId );
-
-    /**
-     * Loads roles assignments to a user/group
-     *
-     * Role Assignments with same roleId and limitationIdentifier will be merged together into one.
-     *
-     * @param mixed $groupId In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
-     *                      By the nature of legacy this can currently also be used to get by $userId.
-     * @param boolean $inherit If true also return inherited role assignments from user groups.
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\RoleAssignment[]
-     */
-    public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false );
-
-    /**
-     * Update role
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
-     */
-    public function updateRole( RoleUpdateStruct $role );
-
-    /**
-     * Delete the specified role
-     *
-     * @param mixed $roleId
-     */
-    public function deleteRole( $roleId );
-
-    /**
-     * Adds a policy to a role
-     *
-     * @param mixed $roleId
-     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\Policy
-     * @todo Throw on invalid Role Id?
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $policy->limitation is empty (null, empty string/array..)
-     */
-    public function addPolicy( $roleId, Policy $policy );
-
-    /**
-     * Update a policy
-     *
-     * Replaces limitations values with new values.
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $policy->limitation is empty (null, empty string/array..)
-     */
-    public function updatePolicy( Policy $policy );
-
-    /**
-     * Deletes a policy
-     *
-     * @param mixed $policyId
-     *
-     * @return void
-     */
-    public function deletePolicy( $policyId );
-
-    /**
-     * Returns the user policies associated with the user (including inherited policies from user groups)
+     * Assigns $userId to $groupId
      *
      * @param mixed $userId
-     *              In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
-     * @return \eZ\Publish\SPI\Persistence\User\Policy[]
+     * @param mixed $groupId
      */
-    public function loadPoliciesByUserId( $userId );
+    public function assignUserToGroup( $userId, $groupId );
 
     /**
-     * Assigns role to a user with given limitations
+     * Remove $userId from $groupId
      *
-     * The limitation array looks like:
-     * <code>
-     *  array(
-     *      'Subtree' => array(
-     *          '/1/2/',
-     *          '/1/4/',
-     *      ),
-     *      'Foo' => array( 'Bar' ),
-     *      …
-     *  )
-     * </code>
-     *
-     * Where the keys are the limitation identifiers, and the respective values
-     * are an array of limitation values. The limitation parameter is optional.
-     *
-     * @param mixed $userId The userId to assign the role to.
-     * @param mixed $roleId
-     * @param array $limitation
-     *
-     * @todo: Adjust usage in API to only use this for users, not for groups anymore.
+     * @param mixed $userId
+     * @param mixed $groupId
      */
-    public function assignRole( $userId, $roleId, array $limitation = null );
+    public function unAssignUserFromGroup( $userId, $groupId );
 
     /**
-     * Un-assign a role
+     * Loads groups for $userId
      *
-     * @param mixed $userId The user Id to un-assign the role from.
-     * @param mixed $roleId
-     *
-     * @todo: Adjust usage in API to only use this for users, not for groups anymore.
+     * @param mixed $userId
+     * @return \eZ\Publish\SPI\Persistence\User\Group[]
      */
-    public function unAssignRole( $userId, $roleId );
+    public function loadGroupsOfUser( $userId );
+
+    /**
+     * Loads all users that are assigned to $groupId
+     *
+     * @param mixed $groupId
+     * @return \eZ\Publish\SPI\Persistence\User[]
+     */
+    public function loadUsersOfGroup( $groupId );
 }
