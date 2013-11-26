@@ -7,9 +7,7 @@
  * @version //autogentag//
  */
 
-
 namespace eZ\Publish\SPI\Persistence\User\Role;
-
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
