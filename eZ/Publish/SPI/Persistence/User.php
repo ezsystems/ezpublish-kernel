@@ -21,6 +21,13 @@ class User extends ValueObject
     public $id;
 
     /**
+     * the associated content id
+     *
+     * @var mixed
+     */
+    public $contentId;
+
+    /**
      * User login
      *
      * @var string
