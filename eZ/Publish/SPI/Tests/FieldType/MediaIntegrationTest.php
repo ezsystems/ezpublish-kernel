@@ -196,13 +196,18 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->externalData );
 
-        $this->assertTrue(
+        /**
+         * Disabled.
+         * See explanation in eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest::assertFileDataLoadedCorrect()
+         */
+        /*$this->assertTrue(
             file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ),
             "Stored file $path exists"
         );
+        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
+        */
 
         $this->assertEquals( 'Ice-Flower-Media.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
         $this->assertEquals( 'image/jpeg', $field->value->externalData['mimeType'] );
         $this->assertEquals( true, $field->value->externalData['hasController'] );
         $this->assertEquals( true, $field->value->externalData['autoplay'] );
@@ -258,6 +263,11 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->externalData );
 
+        /**
+         * Disabled.
+         * See explanation in eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest::assertFileDataLoadedCorrect()
+         */
+        /*
         $this->assertTrue(
             file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ),
             "Stored file $path exists"
@@ -268,9 +278,10 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             1,
             count( glob( dirname( $path ) . '/*' ) )
         );
+        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
+        */
 
         $this->assertEquals( 'Blueish-Blue-Media.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
         $this->assertEquals( 'image/png', $field->value->externalData['mimeType'] );
         $this->assertEquals( false, $field->value->externalData['hasController'] );
         $this->assertEquals( false, $field->value->externalData['autoplay'] );

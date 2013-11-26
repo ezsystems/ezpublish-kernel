@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 
+use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\IO\IOService;
@@ -16,15 +17,30 @@ use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Psr\Log\LoggerInterface;
+use eZ\Publish\SPI\FieldType\FieldStorage\EventAware;
+use eZ\Publish\SPI\FieldType\FieldStorage\Events;
+use eZ\Publish\SPI\FieldType\FieldStorage\Event as FieldStorageEvent;
 
 /**
- * Converter for Image field type external storage
+ * External storage handler for images.
  *
- * The keyword storage ships a list (array) of keywords in
- * $field->value->externalData. $field->value->data is simply empty, because no
- * internal data is store.
+ * IO handling:
+ *
+ * This handler uses two IOService instances, one for published images, the other one for drafts.
+ * They can be identical, in which case both are stored using the same service, but if they're different,
+ * images can be stored differently depending on their status.
+ *
+ * Path generation:
+ *
+ * Each storage engine provides its own path generation class, an instance of PathGenerator.
+ * It offers the opportunity to generate different path based on the content's status, published or draft.
+ *
+ * Event handling:
+ *
+ * When a content with images is published, the storage handler offers the opportunity to move files from the
+ * $draftIOService to the $publishedIOService, depending on data provided by $pathGenerator.
  */
-class ImageStorage extends GatewayBasedStorage
+class ImageStorage extends GatewayBasedStorage implements EventAware
 {
     /**
      * @var LoggerInterface
@@ -32,20 +48,18 @@ class ImageStorage extends GatewayBasedStorage
     protected $logger;
 
     /**
-     * The IO Service used to manipulate data
-     *
+     * Service used to manipulate images
      * @var IOService
      */
     protected $IOService;
 
     /**
      * Path generator
-     *
      * @var PathGenerator
      */
     protected $pathGenerator;
 
-    /** @var  */
+    /** @var MetadataHandler\ImageSize $imageSizeMetadataHandler */
     protected $imageSizeMetadataHandler;
 
     /**
@@ -57,7 +71,13 @@ class ImageStorage extends GatewayBasedStorage
      * @param \eZ\Publish\Core\IO\MetadataHandler         $imageSizeMetadataHandler
      * @param \Psr\Log\LoggerInterface                    $logger
      */
-    public function __construct( array $gateways, IOService $IOService, PathGenerator $pathGenerator, MetadataHandler $imageSizeMetadataHandler, LoggerInterface $logger = null )
+    public function __construct(
+        array $gateways,
+        IOService $IOService,
+        PathGenerator $pathGenerator,
+        MetadataHandler $imageSizeMetadataHandler,
+        LoggerInterface $logger = null
+    )
     {
         parent::__construct( $gateways );
         $this->IOService = $IOService;
@@ -66,49 +86,8 @@ class ImageStorage extends GatewayBasedStorage
         $this->logger = $logger;
     }
 
-    /**
-     * @see \eZ\Publish\SPI\FieldType\FieldStorage
-     */
-    /*public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
-    {
-        if ( $originalField->value->data === null )
-        {
-            return false;
-        }
-
-        // Field copies don't store their own image, but store their own reference to it
-        $this->getGateway( $context )->storeImageReference( $originalField->value->data['path'], $field->id );
-
-        $contentMetaData = array(
-            'fieldId' => $field->id,
-            'versionNo' => $versionInfo->versionNo,
-            'languageCode' => $field->languageCode,
-        );
-
-        $storedValue = array_merge(
-            // Basic value data
-            $field->value->data,
-            // Content meta data
-            $contentMetaData
-        );
-
-        $field->value->data = $storedValue;
-        $field->value->externalData = null;
-
-        return true;
-    }*/
-
-    /**
-     * @see \eZ\Publish\SPI\FieldType\FieldStorage
-     */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        /*$storedValue = isset( $field->value->externalData )
-            // New image
-            ? $field->value->externalData
-            // Copied / updated image
-            : $field->value->data;*/
-
         $contentMetaData = array(
             'fieldId' => $field->id,
             'versionNo' => $versionInfo->versionNo,
@@ -118,11 +97,11 @@ class ImageStorage extends GatewayBasedStorage
         // new image
         if ( isset( $field->value->externalData ) )
         {
-            $targetPath = $this->getFieldPath(
+            $targetPath = $this->pathGenerator->getStoragePathForField(
+                $versionInfo->status,
                 $field->id,
                 $versionInfo->versionNo,
-                $field->languageCode,
-                $this->getGateway( $context )->getNodePathString( $versionInfo, $field->id )
+                $field->languageCode
             ) . '/' . $field->value->externalData['fileName'];
 
             if ( $this->IOService->exists( $targetPath ) )
@@ -137,6 +116,7 @@ class ImageStorage extends GatewayBasedStorage
                 $binaryFileCreateStruct->id = $targetPath;
                 $binaryFile = $this->IOService->createBinaryFile( $binaryFileCreateStruct );
             }
+
             $field->value->externalData['mimeType'] = $binaryFile->mimeType;
             $field->value->externalData['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
             $field->value->externalData['uri'] = $binaryFile->uri;
@@ -162,7 +142,9 @@ class ImageStorage extends GatewayBasedStorage
 
             try
             {
-                $binaryFile = $this->IOService->loadBinaryFile( $this->IOService->getExternalPath( $field->value->data['id'] ) );
+                $binaryFile = $this->IOService->loadBinaryFile(
+                    $this->IOService->getExternalPath( $field->value->data['id'] )
+                );
                 $metadata = $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile );
             }
             catch ( NotFoundException $e )
@@ -182,46 +164,15 @@ class ImageStorage extends GatewayBasedStorage
             $field->value->externalData = null;
         }
 
-        $this->getGateway( $context )->storeImageReference( $field->value->data['uri'], $field->id );
+        // only store if there are no earlier references to this file for this field
+        // isn't that a responsibility from the gateway ?
+        // Shouldn't the gateway decide how it handles those references, given the Field object ?
+        $this->getGateway( $context )->storeImageReference( $field->value->data['id'], $field->id );
 
-        // Data has been updated and needs to be stored!
+        // Data has been updated and needs to be stored
         return true;
     }
 
-    /**
-     * Returns the path where images for the defined $fieldId are stored
-     *
-     * @param mixed $fieldId
-     * @param int $versionNo
-     * @param string $languageCode
-     * @param string $nodePathString
-     *
-     * @return string
-     */
-    protected function getFieldPath( $fieldId, $versionNo, $languageCode, $nodePathString )
-    {
-        return $this->pathGenerator->getStoragePathForField(
-            $fieldId,
-            $versionNo,
-            $languageCode,
-            $nodePathString
-        );
-    }
-
-    /**
-     * Populates $field value property based on the external data.
-     * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
-     * This value holds the data as a {@link eZ\Publish\Core\FieldType\Value} based object,
-     * according to the field type (e.g. for TextLine, it will be a {@link eZ\Publish\Core\FieldType\TextLine\Value} object).
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
-     *
-     * @throws NotFoundException If the stored image path couldn't be retrieved by the IOService
-     *
-     * @return void
-     */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
         if ( $field->value->data !== null )
@@ -333,23 +284,74 @@ class ImageStorage extends GatewayBasedStorage
         return null;
     }
 
-    /**
-     * Checks if field type has external data to deal with
-     *
-     * @return boolean
-     */
     public function hasFieldData()
     {
         return true;
     }
 
-    /**
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param array $context
-     */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
         // @todo: Correct?
         return null;
+    }
+
+    public function handleEvent( FieldStorageEvent $event, array $context )
+    {
+        if ( !$event instanceof Events\PostPublishFieldStorageEvent )
+            return false;
+
+        $field = $event->getField();
+
+        // If the path we currently have isn't the path to a draft, we have nothing to do
+        // Wrong, we do. We may be dealing with data from another content, which we need to publish...
+        // How do we distinguish that from data coming from another field & content ?
+        // Path reverse engineering ?
+        if ( !$this->pathGenerator->isPathForDraft( $field->value->data['id'] ) )
+            return false;
+
+        $nodePathString = $this->getGateway( $context )->getNodePathString( $event->getVersionInfo() );
+        $versionInfo = $event->getVersionInfo();
+        $publishedPath = $this->pathGenerator->getStoragePathForField(
+            $versionInfo->status,
+            $field->id,
+            $versionInfo->versionNo,
+            $field->languageCode,
+            $nodePathString
+        ) . '/' . $field->value->data['fileName'];
+
+        $binaryFileId = $this->IOService->getExternalPath( $field->value->data['id'] );
+        $draftBinaryFile = $this->IOService->loadBinaryFile(
+            $binaryFileId
+        );
+
+        $publishedFileCreateStruct = new BinaryFileCreateStruct(
+            array(
+                'id' => $publishedPath,
+                'size' => $draftBinaryFile->size,
+                'mimeType' => $draftBinaryFile->mimeType,
+                'inputStream' => $this->IOService->getFileInputStream( $draftBinaryFile )
+            )
+        );
+
+        $publishedBinaryFile = $this->IOService->createBinaryFile( $publishedFileCreateStruct );
+        $this->IOService->deleteBinaryFile( $draftBinaryFile );
+        $this->getGateway( $context )->removeImageReferences(
+            ltrim( $draftBinaryFile->uri, '/' ),
+            $versionInfo->versionNo,
+            $field->id
+        );
+
+        $field->value->data['uri'] = $publishedBinaryFile->uri;
+        $field->value->data['id'] = ltrim( $publishedBinaryFile->uri, '/' );
+
+        return true;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway
+     */
+    protected function getGateway( array $context )
+    {
+        return parent::getGateway( $context );
     }
 }

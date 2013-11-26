@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\SPI\FieldType\FieldStorage\Event as FieldStorageEvent;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -353,6 +354,24 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
                 $field->value->externalData = $dom;
             }
         }
+        return $content;
+    }
+
+    public function sendFieldStorageEvent( $contentId, $versionNo, FieldStorageEvent $event )
+    {
+        // @todo No cache should be touched if we are dealing with a PrePublish event. Advise.
+        $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $versionNo, 'event' => $event ) );
+        $content = $this->persistenceFactory->getContentHandler()->sendFieldStorageEvent( $contentId, $versionNo, $event );
+
+        // @todo don't clear if $content hasn't been modified. Q: how do we know ?
+        $this->cache->clear( 'content', $contentId );
+
+        // warm up cache
+        $contentInfo = $content->versionInfo->contentInfo;
+        $this->cache
+            ->getItem( 'content', $contentInfo->id, $content->versionInfo->versionNo )
+            ->set( $this->cloneAndSerializeXMLFields( $content ) );
+
         return $content;
     }
 }

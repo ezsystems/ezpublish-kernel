@@ -7,10 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Tests;
+namespace eZ\Publish\Core\FieldType\Tests\Image;
 
 use eZ\Publish\Core\FieldType\Image\Type as ImageType;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
 
 /**
  * @group fieldType
@@ -20,7 +21,7 @@ class ImageTest extends FieldTypeTest
 {
     public function getImageInputPath()
     {
-        return __DIR__ . '/squirrel-developers.jpg';
+        return __DIR__ . '/_fixtures/squirrel-developers.jpg';
     }
 
     /**

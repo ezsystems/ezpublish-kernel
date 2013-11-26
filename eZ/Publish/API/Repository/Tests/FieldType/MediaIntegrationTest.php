@@ -200,10 +200,14 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             $field->value
         );
 
-        $this->assertTrue(
+        /**
+         * Disabled.
+         * See explanation in eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest::assertFileDataLoadedCorrect()
+         */
+        /*$this->assertTrue(
             file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
             "File $path exists."
-        );
+        );*/
 
         self::$loadedMediaPath = $field->value->id;
     }
@@ -284,10 +288,14 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             $field->value
         );
 
-        $this->assertTrue(
+        /**
+         * Disabled.
+         * See explanation in eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest::assertFileDataLoadedCorrect()
+         */
+        /*$this->assertTrue(
             file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
             "File $path exists."
-        );
+        );*/
     }
 
     /**

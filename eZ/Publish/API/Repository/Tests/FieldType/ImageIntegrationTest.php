@@ -21,6 +21,30 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class ImageIntegrationTest extends FileBaseIntegrationTest
 {
     /**
+     * PCRE that verifies an imageId
+     * @var string
+     */
+    private $imageIdPCRE = '#[0-9]+-[0-9]+#';
+
+    /**
+     * PCRE that verifies a versioned image path, relative to the doc root, without leading /
+     *
+     * Example: var/ezdemo_site/storage/images-versioned/222/1-eng-US/Icy-Night-Flower.jpg
+     *
+     * @var string
+     */
+    private $versionedImagePCRE = '#var/ezdemo_site/storage/images-versioned/[0-9]+/[0-9]+-[a-z]{3}-[A-Z]{2}/[a-zA-Z\-]+\.[a-z]{3,4}#';
+
+    /**
+     * PCRE that verifies a published image path, relative to the doc root, without leading /
+     *
+     * Example: var/ezdemo_site/storage/images/my_icy_flower/222-1-eng-US/Icy-Night-Flower.jpg
+     *
+     * @var string
+     */
+    private $publishedImagePCRE = '#var/ezdemo_site/storage/images/([a-zA-Z0-9_]+/)*[0-9]+-[0-9]+-[a-z]{3}-[A-Z]{2}/[a-zA-Z\-]+\.[a-z]{3,4}#';
+
+    /**
      * Stores the loaded image path for copy test.
      */
     protected static $loadedImagePath;
@@ -186,10 +210,78 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             $field->value
         );
 
-        $this->assertTrue(
+        self::assertTrue(
+            (bool)preg_match(
+                $this->versionedImagePCRE,
+                $field->value->id
+            ),
+            "Failed asserting that {$field->value->id} matches expected versioned image path format {$this->versionedImagePCRE}"
+        );
+
+        self::assertTrue(
+            (bool)preg_match(
+                $this->imageIdPCRE,
+                $field->value->imageId
+            ),
+            "Failed asserting that {$field->value->imageId} matches expected imageId format {$this->imageIdPCRE}"
+        );
+
+        /**
+         * Disabled.
+         * See explanation in eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest::assertFileDataLoadedCorrect()
+         */
+        /*$this->assertTrue(
             $exists = file_exists( $path = $this->getInstallDir() . '/' . $field->value->id ),
             "Asserting that $path exists."
+        );*/
+
+        self::$loadedImagePath = $field->value->id;
+    }
+
+    public function assertPublishedFieldDataLoadedCorrect( Field $field )
+    {
+        $this->assertInstanceOf(
+            'eZ\\Publish\\Core\\FieldType\\Image\\Value',
+            $field->value
         );
+
+        $fixtureData = $this->getFixtureData();
+        $expectedData = $fixtureData['create'];
+
+        // Will change during storage
+        unset( $expectedData['id'], $expectedData['imageId'] );
+
+        $this->assertPropertiesCorrect(
+            $expectedData,
+            $field->value
+        );
+
+        // @todo Since API integration tests create content without a node, this path is actually incomplete, since
+        // it may not contain a node_path_string
+        self::assertTrue(
+            (bool)preg_match(
+                $this->publishedImagePCRE,
+                $field->value->id
+            ),
+            "Failed asserting that {$field->value->id} matches expected published image path format {$this->publishedImagePCRE}"
+        );
+
+        self::assertTrue(
+            (bool)preg_match(
+                $this->imageIdPCRE,
+                $field->value->imageId
+            ),
+            "Failed asserting that {$field->value->imageId} matches expected imageId format {$this->imageIdPCRE}"
+        );
+
+        /**
+         * Disabled.
+         * See explanation in eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest::assertFileDataLoadedCorrect()
+         */
+        /*$this->assertTrue(
+            $exists = file_exists( $path = $this->getInstallDir() . '/' . $field->value->id ),
+            "Asserting that $path exists."
+        );*/
 
         self::$loadedImagePath = $field->value->id;
     }
@@ -275,10 +367,14 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             $field->value
         );
 
-        $this->assertTrue(
+        /**
+         * Disabled.
+         * See explanation in eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest::assertFileDataLoadedCorrect()
+         */
+        /*$this->assertTrue(
             file_exists( $path = $this->getInstallDir() . '/' . $field->value->id ),
             "Asserting that file $path exists"
-        );
+        );*/
     }
 
     /**
@@ -317,7 +413,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function assertCopiedFieldDataLoadedCorrectly( Field $field )
     {
-        $this->assertFieldDataLoadedCorrect( $field );
+        $this->assertPublishedFieldDataLoadedCorrect( $field );
 
         $this->assertEquals(
             self::$loadedImagePath,
@@ -382,6 +478,10 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
     }
 
+    /**
+     * Tests that copying a Content with an image field will re-use the
+     * image from the copied field as a reference instead of copying it.
+     */
     public function testInherentCopyForNewLanguage()
     {
         $repository = $this->getRepository();
@@ -425,6 +525,76 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $contentService->deleteContent( $updatedDraft->contentInfo );
+    }
+
+    /**
+     * Creates an image content, publishes it, and creates a second version without changing the image
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function createContentWithNewVersion()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $type = $this->createContentType(
+            $this->getValidFieldSettings(),
+            $this->getValidValidatorConfiguration(),
+            array(),
+            // Causes a copy of the image value for each language in legacy
+            // storage
+            array( 'isTranslatable' => false )
+        );
+
+        // Create content with image in version 1
+        $version1Draft = $this->createContent( $this->getValidCreationFieldData(), $type );
+        $content = $contentService->publishVersion( $version1Draft->versionInfo );
+
+        // Update content to version 2  without changing the image
+        $version2Draft = $contentService->createContentDraft( $content->contentInfo );
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField( 'name', __METHOD__ );
+        $updatedDraft = $contentService->updateContent( $version2Draft->versionInfo, $updateStruct );
+        $content = $contentService->publishVersion( $updatedDraft->versionInfo );
+
+        // Since the image wasn't changed, the URI in V2 must be the same as V1
+        self::assertEquals(
+            $this->testCreatedFieldType(
+                $contentService->loadContent( $content->id, null, 1 )
+            )->value->uri,
+            $this->testCreatedFieldType(
+                $contentService->loadContent( $content->id, null, 1 )
+            )->value->uri,
+            " image uri in version 2 is identical to version 1"
+        );
+
+        return $content;
+    }
+
+    /**
+     * Tests behaviour when an image content is edited without the image being changed
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content The content copy
+     */
+    public function testInherentCopyForNewVersion()
+    {
+        $contentService = $this->getRepository()->getContentService();
+
+        $content = $this->createContentWithNewVersion();
+
+        // copy this content to a new one
+        $contentCopy = $contentService->copyContent(
+            $content->contentInfo,
+            $this->getRepository()->getLocationService()->newLocationCreateStruct( 43 )
+        );
+
+        /*self::assertNotEquals(
+            $this->testCreatedFieldType( $content )->value->uri,
+            $this->testCreatedFieldType( $contentCopy )->value->uri,
+            " published image uri in content copy is different from the source object's"
+        );*/
+
+        return $contentCopy;
     }
 
     public function providerForTestIsEmptyValue()

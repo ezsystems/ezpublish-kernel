@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\InMemory;
 
+use eZ\Publish\SPI\FieldType\FieldStorage\Event as FieldStorageEvent;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
@@ -959,6 +960,11 @@ class ContentHandler implements ContentHandlerInterface
             )
         );
 
+        return $this->load( $contentId, $versionNo );
+    }
+
+    public function sendFieldStorageEvent( $contentId, $versionNo, FieldStorageEvent $event )
+    {
         return $this->load( $contentId, $versionNo );
     }
 

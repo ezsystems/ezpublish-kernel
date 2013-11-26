@@ -48,6 +48,7 @@
         "ezsystems/ezpublish-legacy": "@dev",
         "mikey179/vfsStream": "1.1.0",
         "phpunit/phpunit": "3.7.*",
+        "mockery/mockery": "dev-fix_multiple_interfaces_mock",
         "matthiasnoback/symfony-dependency-injection-test": "0.2.*"
     },
     "replace": {
@@ -66,5 +67,11 @@
             "dev-master": "5.3.x-dev"
         },
         "ezpublish-legacy-dir": "vendor/ezsystems/ezpublish-legacy"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/bdunogier/mockery"
+        }
+    ]
 }

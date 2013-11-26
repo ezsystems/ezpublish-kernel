@@ -184,14 +184,18 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->externalData );
 
-        $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'];
+        /**
+         * Disabled.
+         * See explanation in eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest::assertFileDataLoadedCorrect()
+         */
+        /*$path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'];
         $this->assertTrue(
             file_exists( $path ),
             "Stored file $path exists"
         );
+        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );*/
 
         $this->assertEquals( 'Ice-Flower-Binary.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
         $this->assertEquals( 'image/jpeg', $field->value->externalData['mimeType'] );
         $this->assertEquals( 0, $field->value->externalData['downloadCount'] );
 
@@ -239,7 +243,11 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->externalData );
 
-        $this->assertTrue(
+        /**
+         * Disabled.
+         * See explanation in eZ\Publish\API\Repository\Tests\FieldType\BinaryFileIntegrationTest::assertFileDataLoadedCorrect()
+         */
+        /*$this->assertTrue(
             file_exists( ( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ) ),
             "Stored file $path exists"
         );
@@ -249,9 +257,10 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             1,
             count( glob( dirname( $path ) . '/*' ) )
         );
+        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
+        */
 
         $this->assertEquals( 'Blueish-Blue-Binary.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
         $this->assertEquals( 'image/png', $field->value->externalData['mimeType'] );
         $this->assertEquals( 23, $field->value->externalData['downloadCount'] );
 

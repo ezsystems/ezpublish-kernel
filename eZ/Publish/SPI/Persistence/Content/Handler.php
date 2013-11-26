@@ -11,6 +11,7 @@ namespace eZ\Publish\SPI\Persistence\Content;
 
 // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use eZ\Publish\SPI\FieldType\FieldStorage\Event as FieldStorageEvent;
 
 /**
  * The Content Handler interface defines content operations on the storage engine.
@@ -255,4 +256,15 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
     public function publish( $contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct );
+
+    /**
+     * Sends $event to all fields of a ContentVersion
+     *
+     * @param mixed  $contentId
+     * @param int $versionNo
+     * @param FieldStorageEvent $event
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content The modified content
+     */
+    public function sendFieldStorageEvent( $contentId, $versionNo, FieldStorageEvent $event );
 }

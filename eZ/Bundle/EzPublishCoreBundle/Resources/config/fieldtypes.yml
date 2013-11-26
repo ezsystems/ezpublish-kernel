@@ -405,11 +405,12 @@ services:
         factory_method: getService
         arguments:
             - @ezpublish.core.io.handler.legacy
-            - 'image.published_images_dir'
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
         arguments:
+            # @todo Either pick from ConfigResolver, or use non siteaccess aware settings
+            - %ezsettings.default.image.versioned_images_dir%
             - %ezsettings.default.image.published_images_dir%
 
     ezpublish.fieldType.ezimage.externalStorage:
