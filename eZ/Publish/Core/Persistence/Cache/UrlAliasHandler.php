@@ -74,6 +74,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             $locationId, $path, $forwarding, $languageCode, $alwaysAvailable
         );
 
+        $this->cache->getItem( 'urlAlias', $urlAlias->id )->set( $urlAlias );
         $cache = $this->cache->getItem( 'urlAlias', 'location', $urlAlias->destination, 'custom' );
         $urlAliasIds = $cache->get();
         if ( $cache->isMiss() )

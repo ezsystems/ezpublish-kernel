@@ -355,7 +355,7 @@ class Handler implements UrlAliasHandlerInterface
         if ( $isPathNew || empty( $row ) )
         {
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
-            $this->gateway->insertRow( $data );
+            $id = $this->gateway->insertRow( $data );
         }
         // Row exists, check if it is reusable. There are 2 cases when this is possible:
         // 1. NOP entry
@@ -364,7 +364,7 @@ class Handler implements UrlAliasHandlerInterface
         {
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
             // If history is reused move link to id
-            $data["link"] = $row["id"];
+            $data["link"] = $id = $row["id"];
             $this->gateway->updateRow(
                 $parentId,
                 $topElementMD5,
@@ -376,6 +376,7 @@ class Handler implements UrlAliasHandlerInterface
             throw new ForbiddenException( "Path '$path' already exists for the given language" );
         }
 
+        $data["raw_path_data"] = $this->gateway->loadPathData( $id );
         return $this->mapper->extractUrlAliasFromData( $data );
     }
 

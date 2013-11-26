@@ -1779,6 +1779,14 @@ class UrlAliasHandlerTest extends TestCase
                     "id" => "0-" . md5( $path ),
                     "type" => UrlAlias::LOCATION,
                     "destination" => 314,
+                    "pathData" => array(
+                        array(
+                            "always-available" => false,
+                            "translations" => array(
+                                "cro-HR" => "custom-location-alias"
+                            )
+                        )
+                    ),
                     "languageCodes" => array( "cro-HR" ),
                     "alwaysAvailable" => false,
                     "isHistory" => false,
@@ -1810,7 +1818,6 @@ class UrlAliasHandlerTest extends TestCase
             "cro-HR",
             false
         );
-        $customUrlAliasLoaded = $handler->lookup( "there-is-a/noname2/custom-location-alias/noname4/here" );
 
         self::assertEquals( 6, $this->countRows() );
 
@@ -1820,6 +1827,38 @@ class UrlAliasHandlerTest extends TestCase
                     "id" => "5-" . md5( "here" ),
                     "type" => UrlAlias::LOCATION,
                     "destination" => 314,
+                    "pathData" => array(
+                        array(
+                            "always-available" => true,
+                            "translations" => array(
+                                "always-available" => "there-is-a"
+                            )
+                        ),
+                        array(
+                            "always-available" => true,
+                            "translations" => array(
+                                "always-available" => "noname2"
+                            )
+                        ),
+                        array(
+                            "always-available" => true,
+                            "translations" => array(
+                                "always-available" => "custom-location-alias"
+                            )
+                        ),
+                        array(
+                            "always-available" => true,
+                            "translations" => array(
+                                "always-available" => "noname4"
+                            )
+                        ),
+                        array(
+                            "always-available" => false,
+                            "translations" => array(
+                                "cro-HR" => "here"
+                            )
+                        )
+                    ),
                     "languageCodes" => array( "cro-HR" ),
                     "alwaysAvailable" => false,
                     "isHistory" => false,
@@ -1828,32 +1867,6 @@ class UrlAliasHandlerTest extends TestCase
                 )
             ),
             $customUrlAlias
-        );
-
-        self::assertEquals(
-            $pathData = array(
-                array(
-                    "always-available" => true,
-                    "translations" => array( "always-available" => "there-is-a" )
-                ),
-                array(
-                    "always-available" => true,
-                    "translations" => array( "always-available" => "noname2" )
-                ),
-                array(
-                    "always-available" => true,
-                    "translations" => array( "always-available" => "custom-location-alias" )
-                ),
-                array(
-                    "always-available" => true,
-                    "translations" => array( "always-available" => "noname4" )
-                ),
-                array(
-                    "always-available" => false,
-                    "translations" => array( "cro-HR" => "here" )
-                )
-            ),
-            $customUrlAliasLoaded->pathData
         );
     }
 
@@ -1934,6 +1947,20 @@ class UrlAliasHandlerTest extends TestCase
                     "id" => "2-" . md5( "palunko" ),
                     "type" => UrlAlias::LOCATION,
                     "destination" => 314,
+                    "pathData" => array(
+                        array(
+                            "always-available" => true,
+                            "translations" => array(
+                                "always-available" => "ribar"
+                            )
+                        ),
+                        array(
+                            "always-available" => true,
+                            "translations" => array(
+                                "cro-HR" => "palunko"
+                            )
+                        ),
+                    ),
                     "languageCodes" => array( "cro-HR" ),
                     "alwaysAvailable" => true,
                     "isHistory" => false,
