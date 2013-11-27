@@ -203,8 +203,11 @@ class BinaryBaseStorage extends GatewayBasedStorage
             try
             {
                 $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] );
-                $field->value->externalData['fileSize'] = $binaryFile->size;
-                $field->value->externalData['uri'] = $binaryFile->uri;
+                if ( $binaryFile ) 
+                {
+                    $field->value->externalData['fileSize'] = $binaryFile->size;
+                    $field->value->externalData['uri'] = $binaryFile->uri;
+                }
             }
             catch ( NotFoundException $e )
             {
