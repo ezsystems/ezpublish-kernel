@@ -26,6 +26,7 @@ use eZ\Publish\API\Repository\Values\MultiLanguageValueBase;
  * @property-read boolean $isSearchable indicates if the field is searchable
  * @property-read boolean $isInfoCollector indicates if this field is used for information collection
  * @property-read $defaultValue the default value of the field
+ * @property-read array $defaultValues the multi language default values of the field
  */
 abstract class FieldDefinition extends MultiLanguageValueBase
 {
@@ -102,11 +103,22 @@ abstract class FieldDefinition extends MultiLanguageValueBase
     abstract public function getFieldSettings();
 
     /**
+     * @deprecated
+     *
      * Default value of the field
      *
      * @var mixed
      */
     protected $defaultValue;
+
+    /**
+     * Multilingual default values of the field with language Code keys
+     *
+     * for non translatable fields the only key must be null
+     *
+     * @var array
+     */
+    protected $defaultValues;
 
     /**
      * Indicates if th the content is searchable by this attribute
