@@ -20,6 +20,13 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 abstract class RoleAssignment extends ValueObject
 {
     /**
+     * the unique id of the role assignment
+     *
+     * @var mixed
+     */
+    protected $id;
+
+    /**
      * Returns the limitation of the role assignment
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation|null

@@ -11,6 +11,7 @@ namespace  eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\RoleAssignment;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\Role;
@@ -171,10 +172,14 @@ interface RoleService
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
      */
     public function assignRoleToUserGroup( Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null );
 
     /**
+     * @deprecated use removeRoleAssignment instead
+     *
      * removes a role from the given user group.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
@@ -194,10 +199,14 @@ interface RoleService
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
      */
     public function assignRoleToUser( Role $role, User $user, RoleLimitation $roleLimitation = null );
 
     /**
+     * @deprecated use removeRoleAssignment instead
+     *
      * removes a role from the given user.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
@@ -240,6 +249,15 @@ interface RoleService
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup );
+
+    /**
+     * removes a role assignment
+     *
+     * i.e. unassigns a user or a user group from a role with the given limitations
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\RoleAssignment $roleAssignment
+     */
+    public function removeRoleAssignment( RoleAssignment $roleAssignment );
 
     /**
      * Instantiates a role create class
