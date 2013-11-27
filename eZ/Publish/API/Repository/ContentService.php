@@ -336,32 +336,38 @@ interface ContentService
     public function loadReverseRelations( ContentInfo $contentInfo );
 
     /**
-     * Adds a relation of type common.
+     * Adds a relation of type $relationType.
      *
      * The source of the relation is the content and version
      * referenced by $versionInfo.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if $relationType is one of "EMBED", "LINK" or "FIELD"
+     *         or the relation already contains the $relationType.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent the destination of the relation
+     * @param string|null $relationType if null then a relation of type "COMMON" is created
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation the newly created relation
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation the newly created relation. If the relation for
+     *         $sourceVersion and $destinationContent exists then the existing relation is returned with added $relationType
+     *         in the types list.
      */
-    public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent );
+    public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent, $relationType = null );
 
     /**
-     * Removes a relation of type COMMON from a draft.
+     * Removes a relation of type $relationType from a draft.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed edit this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is no relation of type COMMON for the given destination
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is no relation of type $relationType
+     *         for the given destination, or $relationType is one of "EMBED", "LINK" or "FIELD"
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
      */
-    public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent );
+    public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent, $relationType = null );
 
     /**
      * Adds translation information to the content object
