@@ -309,7 +309,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null);
+    public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct = null, VersionInfo $versionInfo = null);
 
     /**
      * Loads all outgoing relations for the given version
