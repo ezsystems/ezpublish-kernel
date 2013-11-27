@@ -73,12 +73,25 @@ abstract class Location extends ValueObject
     const SORT_ORDER_DESC = 0;
     const SORT_ORDER_ASC = 1;
 
+    const STATUS_DRAFT = 0;
+    const STATUS_PUBLISHED = 1;
+
     /**
      * Location ID.
      *
      * @var mixed Location ID.
      */
     protected $id;
+
+    /**
+     * the status of the location
+     *
+     * a location gets the status DRAFT on newly created content which is not published. When content is published the
+     * location gets the status STATUS_PUBLISHED
+     *
+     * @var int
+     */
+    public $status;
 
     /**
      * Location priority
@@ -159,4 +172,6 @@ abstract class Location extends ValueObject
      * @var mixed
      */
     protected $sortOrder;
+
+
 }
