@@ -36,8 +36,7 @@ class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
             $pathGenerator->getStoragePathForField(
                 $data['fieldId'],
                 $data['versionNo'],
-                $data['languageCode'],
-                $data['nodePathString']
+                $data['languageCode']
             )
         );
     }
@@ -47,30 +46,27 @@ class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array(
-                    'fieldId' => 23,
+                    'fieldId' => 42,
                     'versionNo' => 1,
-                    'languageCode' => 'eng-US',
-                    'nodePathString' => 'sindelfingen/bielefeld/',
+                    'languageCode' => 'eng-US'
                 ),
-                'sindelfingen/bielefeld/23-1-eng-US',
+                '0/0/4/2/42-1-eng-US',
             ),
             array(
                 array(
                     'fieldId' => 23,
                     'versionNo' => 42,
-                    'languageCode' => 'ger-DE',
-                    'nodePathString' => 'sindelfingen/',
+                    'languageCode' => 'ger-DE'
                 ),
-                'sindelfingen/23-42-ger-DE',
+                '0/0/2/3/23-42-ger-DE',
             ),
             array(
                 array(
-                    'fieldId' => 23,
+                    'fieldId' => 123456,
                     'versionNo' => 2,
-                    'languageCode' => 'eng-GB',
-                    'nodePathString' => null,
+                    'languageCode' => 'eng-GB'
                 ),
-                '23-2-eng-GB',
+                '1/2/3/4/123456-2-eng-GB',
             ),
         );
     }
