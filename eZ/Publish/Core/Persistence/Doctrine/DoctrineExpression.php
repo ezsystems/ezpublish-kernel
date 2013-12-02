@@ -730,7 +730,9 @@ class DoctrineExpression implements Expression
         $elements = $this->getIdentifiers( $elements );
         if ( count( $elements ) < 1 )
         {
-            throw new ezcQueryVariableParameterException( $type, count( $args ), 1 );
+            throw new InvalidArgumentException(
+                "The operation '{$type}' expected at least 1 argument but none provided."
+            );
         }
         if ( count( $elements ) == 1 )
         {
