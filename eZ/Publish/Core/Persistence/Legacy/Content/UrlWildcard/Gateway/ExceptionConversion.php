@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
-use ezcDbException;
+use Doctrine\DBAL\DBALException;
 use PDOException;
 
 /**
