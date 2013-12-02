@@ -126,6 +126,11 @@ class EzcDbHandler implements DatabaseHandler
         return call_user_func_array( array( $this->ezcDbHandler, $method ), $parameters );
     }
 
+    public function getName()
+    {
+        return $this->ezcDbHandler->getName();
+    }
+
     public function beginTransaction()
     {
         return $this->ezcDbHandler->beginTransaction();
