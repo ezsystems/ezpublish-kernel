@@ -52,15 +52,15 @@ class ConnectionHandler implements DatabaseHandler
      *
      * The format of the supplied DSN is in its fullest form:
      * <code>
-     *  driver://username:password@protocol+host/database?option=8&another=true
+     *  driver://user:password@protocol+host/database?option=8&another=true
      * </code>
      *
      * Most variations are allowed:
      * <code>
-     *  driver://username:password@protocol+host:110//usr/db_file.db?mode=0644
-     *  driver://username:password@host/dbname
-     *  driver://username:password@host
-     *  driver://username@host
+     *  driver://user:password@protocol+host:110//usr/db_file.db?mode=0644
+     *  driver://user:password@host/dbname
+     *  driver://user:password@host
+     *  driver://user@host
      *  driver://host/dbname
      *  driver://host
      *  driver
@@ -82,7 +82,7 @@ class ConnectionHandler implements DatabaseHandler
     {
         $parsed = array(
             'driver'      => false,
-            'username'    => false,
+            'user'        => false,
             'password'    => false,
             'host'        => false,
             'port'        => false,
@@ -128,12 +128,12 @@ class ConnectionHandler implements DatabaseHandler
             $dsn = substr( $dsn, $at + 1 );
             if ( ( $pos = strpos( $str, ':' ) ) !== false )
             {
-                $parsed['username'] = rawurldecode( substr( $str, 0, $pos ) );
+                $parsed['user'] = rawurldecode( substr( $str, 0, $pos ) );
                 $parsed['password'] = rawurldecode( substr( $str, $pos + 1 ) );
             }
             else
             {
-                $parsed['username'] = rawurldecode( $str );
+                $parsed['user'] = rawurldecode( $str );
             }
         }
 
