@@ -19,8 +19,9 @@ abstract class PathGenerator
      * @param mixed $fieldId
      * @param int $versionNo
      * @param string $languageCode
+     * @param string $nodePathString
      *
      * @return string
      */
-    abstract public function getStoragePathForField( $fieldId, $versionNo, $languageCode );
+    abstract public function getStoragePathForField( $fieldId, $versionNo, $languageCode, $nodePathString );
 }
