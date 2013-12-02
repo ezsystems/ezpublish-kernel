@@ -427,7 +427,7 @@ class HandlerTest extends TestCase
         );
 
         $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
-        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
+        $serviceSettings['doctrine_db_handler']['arguments']['dsn'] = $this->getDsn();
         $sc = new ServiceContainer(
             $serviceSettings,
             array()
