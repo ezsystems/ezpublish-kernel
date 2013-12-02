@@ -55,7 +55,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->find( $criterion, $offset, $limit, $sort, $translations );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
