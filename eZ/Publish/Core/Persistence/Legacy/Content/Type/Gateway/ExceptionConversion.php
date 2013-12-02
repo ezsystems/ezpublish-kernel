@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use ezcDbException;
+use Doctrine\DBAL\DBALException;
 use PDOException;
 use RuntimeException;
 

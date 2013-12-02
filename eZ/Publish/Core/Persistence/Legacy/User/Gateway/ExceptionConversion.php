@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 use eZ\Publish\SPI\Persistence\User;
-use ezcDbException;
+use Doctrine\DBAL\DBALException;
 use PDOException;
 use RuntimeException;
 
