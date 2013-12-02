@@ -15,6 +15,13 @@ namespace eZ\Publish\Core\Persistence\Database;
 interface DatabaseHandler
 {
     /**
+     * Name of the database technology
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
      * Begin a transaction.
      *
      * @return void
