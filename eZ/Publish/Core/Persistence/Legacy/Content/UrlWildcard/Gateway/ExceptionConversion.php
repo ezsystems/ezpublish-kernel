@@ -49,7 +49,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->insertUrlWildcard( $urlWildcard );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new \RuntimeException( 'Database error', 0, $e );
         }
@@ -72,7 +72,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->deleteUrlWildcard( $id );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new \RuntimeException( 'Database error', 0, $e );
         }
@@ -93,7 +93,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadUrlWildcardData( $parentId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new \RuntimeException( 'Database error', 0, $e );
         }
@@ -117,7 +117,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadUrlWildcardsData( $offset, $limit );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new \RuntimeException( 'Database error', 0, $e );
         }

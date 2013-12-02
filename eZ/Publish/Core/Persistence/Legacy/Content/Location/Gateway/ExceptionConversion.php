@@ -417,7 +417,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->createNodeAssignment( $createStruct, $parentNodeId, $type );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -441,7 +441,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->deleteNodeAssignment( $contentId, $versionNo );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -467,7 +467,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->update( $location, $locationId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -492,7 +492,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->updatePathIdentificationString( $locationId, $parentLocationId, $text );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -513,7 +513,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->removeLocation( $locationId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -541,7 +541,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->getFallbackMainNodeData( $contentId, $locationId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -566,7 +566,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->trashLocation( $locationId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -595,7 +595,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->untrashLocation( $locationId, $newParentId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -618,7 +618,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadTrashByLocation( $locationId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -642,7 +642,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->cleanupTrash();
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -668,7 +668,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->listTrashed( $offset, $limit, $sort );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -692,7 +692,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->removeElementFromTrash( $id );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -716,7 +716,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->setSectionForSubtree( $pathString, $sectionId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -739,7 +739,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->countLocationsByContentId( $contentId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -769,7 +769,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->changeMainLocation( $contentId, $locationId, $versionNo, $parentLocationId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }

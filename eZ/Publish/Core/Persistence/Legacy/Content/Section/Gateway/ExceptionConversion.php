@@ -188,7 +188,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->deleteSection( $id );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -212,7 +212,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->assignSectionToContent( $sectionId, $contentId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
