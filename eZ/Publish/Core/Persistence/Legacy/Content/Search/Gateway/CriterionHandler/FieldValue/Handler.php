@@ -24,7 +24,7 @@ abstract class Handler
     /**
      * DB handler to fetch additional field information
      *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\ezcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 

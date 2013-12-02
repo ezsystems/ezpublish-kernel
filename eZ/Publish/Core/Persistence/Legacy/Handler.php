@@ -41,7 +41,7 @@ use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHa
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use ezcDbTransactionException;
+use Exception;
 use RuntimeException;
 
 /**
@@ -961,7 +961,7 @@ class Handler implements HandlerInterface
         {
             $this->dbHandler->commit();
         }
-        catch ( ezcDbTransactionException $e )
+        catch ( Exception $e )
         {
             throw new RuntimeException( $e->getMessage() );
         }
