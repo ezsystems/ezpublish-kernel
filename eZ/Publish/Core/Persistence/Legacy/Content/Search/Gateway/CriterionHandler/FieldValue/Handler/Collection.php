@@ -52,7 +52,7 @@ class Collection extends Handler
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $column
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
     public function handle( SelectQuery $query, Criterion $criterion, $column )
     {

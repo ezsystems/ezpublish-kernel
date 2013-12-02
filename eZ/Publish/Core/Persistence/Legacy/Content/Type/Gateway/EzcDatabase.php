@@ -359,7 +359,7 @@ class EzcDatabase extends Gateway
     /**
      * Set common columns for insert/update of a Type.
      *
-     * @param \ezcQuery $q
+     * @param \eZ\Publish\Core\Persistence\Database\Query $q
      * @param \eZ\Publish\SPI\Persistence\ValueObject|\eZ\Publish\SPI\Persistence\Content\Type|\eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $type
      *
      * @return void

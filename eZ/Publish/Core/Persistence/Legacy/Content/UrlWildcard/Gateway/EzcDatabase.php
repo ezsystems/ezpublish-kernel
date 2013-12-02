@@ -50,7 +50,7 @@ class EzcDatabase extends Gateway
      */
     public function insertUrlWildcard( UrlWildcard $urlWildcard )
     {
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
@@ -96,7 +96,7 @@ class EzcDatabase extends Gateway
      */
     public function deleteUrlWildcard( $id )
     {
-        /** @var $query \ezcQueryDelete */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( "ezurlwildcard" )

@@ -55,7 +55,7 @@ class Converter
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $column
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
     public function convertCriteria( $fieldTypeIdentifier, SelectQuery $query, Criterion $criterion, $column )
     {

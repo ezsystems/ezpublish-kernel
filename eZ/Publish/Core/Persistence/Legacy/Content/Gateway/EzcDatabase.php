@@ -209,7 +209,7 @@ class EzcDatabase extends Gateway
      */
     public function insertVersion( VersionInfo $versionInfo, array $fields )
     {
-        /** @var $q \ezcQueryInsert */
+        /** @var $q \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject_version' )
@@ -424,7 +424,7 @@ class EzcDatabase extends Gateway
             return;
         }
 
-        /** @var $q \ezcQueryUpdate */
+        /** @var $q \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $q = $this->dbHandler->createUpdateQuery();
         $q
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
@@ -443,7 +443,7 @@ class EzcDatabase extends Gateway
         $q->prepare()->execute();
 
         // Now we need to update ezcontentobject_name
-        /** @var $qName \ezcQueryUpdate */
+        /** @var $qName \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $qName = $this->dbHandler->createUpdateQuery();
         $qName
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
@@ -472,7 +472,7 @@ class EzcDatabase extends Gateway
         $qName->prepare()->execute();
 
         // Now update ezcontentobject_attribute for current version
-        /** @var $qAttr \ezcQueryUpdate */
+        /** @var $qAttr \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $qAttr = $this->dbHandler->createUpdateQuery();
         $qAttr
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ) )
@@ -714,7 +714,7 @@ class EzcDatabase extends Gateway
     /**
      * Sets update fields for $value on $q
      *
-     * @param \ezcQueryUpdate $q
+     * @param \eZ\Publish\Core\Persistence\Database\UpdateQuery $q
      * @param StorageFieldValue $value
      *
      * @return void
@@ -1627,7 +1627,7 @@ class EzcDatabase extends Gateway
         // If relation type matches then delete
         if ( $loadedRelationType == $type )
         {
-            /** @var $query \ezcQueryDelete */
+            /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
             $query = $this->dbHandler->createDeleteQuery();
             $query->deleteFrom(
                 "ezcontentobject_link"
@@ -1643,7 +1643,7 @@ class EzcDatabase extends Gateway
         // If relation type is composite update bitmask
         else if ( $loadedRelationType & $type )
         {
-            /** @var $query \ezcQueryUpdate */
+            /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
             $query = $this->dbHandler->createUpdateQuery();
             $query->update(
                 $this->dbHandler->quoteTable( "ezcontentobject_link" )

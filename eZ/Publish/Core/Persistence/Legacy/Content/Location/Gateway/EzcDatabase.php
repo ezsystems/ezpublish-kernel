@@ -343,7 +343,7 @@ class EzcDatabase extends Gateway
     /**
      * Limits the given $query to the subtree starting at $rootLocationId
      *
-     * @param \ezcQuery $query
+     * @param \eZ\Publish\Core\Persistence\Database\Query $query
      * @param string $rootLocationId
      *
      * @return void
@@ -442,7 +442,7 @@ class EzcDatabase extends Gateway
                 $newParentId = (int)implode( '', array_slice( explode( '/', $newPathString ), -3, 1 ) );
             }
 
-            /** @var $query \ezcQueryUpdate */
+            /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
             $query = $this->handler->createUpdateQuery();
             $query
                 ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -742,7 +742,7 @@ class EzcDatabase extends Gateway
     public function create( CreateStruct $createStruct, array $parentNode )
     {
         $location = new Location();
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->handler->createInsertQuery();
         $query
             ->insertInto( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -798,7 +798,7 @@ class EzcDatabase extends Gateway
 
         $mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
         $location->pathString = $parentNode['path_string'] . $location->id . '/';
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
         $query
             ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -1156,7 +1156,7 @@ class EzcDatabase extends Gateway
             $text :
             $parentData["path_identification_string"] . "/" . $text;
 
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
         $query->update(
             "ezcontentobject_tree"
@@ -1243,7 +1243,7 @@ class EzcDatabase extends Gateway
     {
         $locationRow = $this->getBasicNodeData( $locationId );
 
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->handler->createInsertQuery();
         $query->insertInto( $this->handler->quoteTable( "ezcontentobject_trash" ) );
 
@@ -1305,7 +1305,7 @@ class EzcDatabase extends Gateway
      */
     protected function setContentStatus( $contentId, $status )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
         $query->update(
             "ezcontentobject"

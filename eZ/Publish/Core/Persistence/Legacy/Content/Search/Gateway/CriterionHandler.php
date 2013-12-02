@@ -71,7 +71,7 @@ abstract class CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param Criterion $criterion
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
     abstract public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion );
 
