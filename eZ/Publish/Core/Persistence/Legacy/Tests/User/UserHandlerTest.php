@@ -64,7 +64,7 @@ class UserHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException \Doctrine\DBAL\DBALException
      */
     public function testCreateDuplicateUser()
     {
@@ -75,7 +75,7 @@ class UserHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \PDOException
+     * @expectedException \Doctrine\DBAL\DBALException
      */
     public function testInsertIncompleteUser()
     {
