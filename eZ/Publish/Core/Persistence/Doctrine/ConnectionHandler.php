@@ -279,7 +279,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public function getName()
     {
-        return $this->connection->getDatabasePlatform->getName();
+        return $this->connection->getDatabasePlatform()->getName();
     }
 
     /**
