@@ -49,7 +49,7 @@ class LegacyStorage extends BaseLegacyStorage
      * add additional columns to be fetched from the database. Please do not
      * forget to call the parent when overwriting this method.
      *
-     * @param \\eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery
+     * @param eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery
      * @param int $fieldId
      * @param int $versionNo
      *

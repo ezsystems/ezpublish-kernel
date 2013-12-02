@@ -15,7 +15,7 @@ use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use RuntimeException;
 use DateTime;
-use \eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 class LegacyStorage extends Gateway
 {
