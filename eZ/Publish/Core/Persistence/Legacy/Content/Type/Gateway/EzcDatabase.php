@@ -358,7 +358,7 @@ class EzcDatabase extends Gateway
     /**
      * Set common columns for insert/update of a Type.
      *
-     * @param \ezcQuery $q
+     * @param \eZ\Publish\Core\Persistence\Database\Query $q
      * @param mixed $type
      *
      * @return void

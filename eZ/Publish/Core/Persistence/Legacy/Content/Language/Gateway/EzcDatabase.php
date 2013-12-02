@@ -83,7 +83,7 @@ class EzcDatabase extends Gateway
     /**
      * Sets columns in $query from $language
      *
-     * @param \ezcQuery $query
+     * @param \eZ\Publish\Core\Persistence\Database\Query $query
      * @param \eZ\Publish\SPI\Persistence\Content\Language $language
      *
      * @return void

@@ -341,7 +341,7 @@ class EzcDatabase extends Gateway
      */
     protected function historize( $parentId, $textMD5, $newId )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -386,7 +386,7 @@ class EzcDatabase extends Gateway
      */
     protected function removeTranslation( $parentId, $textMD5, $languageId )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -425,7 +425,7 @@ class EzcDatabase extends Gateway
      */
     public function historizeId( $id, $link )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -467,7 +467,7 @@ class EzcDatabase extends Gateway
      */
     public function reparent( $oldParentId, $newParentId )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -503,7 +503,7 @@ class EzcDatabase extends Gateway
      */
     public function updateRow( $parentId, $textMD5, array $values )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update( $this->dbHandler->quoteTable( "ezurlalias_ml" ) );
         $this->setQueryValues( $query, $values );
@@ -554,7 +554,7 @@ class EzcDatabase extends Gateway
         if ( $values["is_alias"] ) $values["is_original"] = 1;
         if ( $values["action"] === "nop:" ) $values["is_original"] = 0;
 
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto( $this->dbHandler->quoteTable( "ezurlalias_ml" ) );
         $this->setQueryValues( $query, $values );
@@ -566,7 +566,7 @@ class EzcDatabase extends Gateway
     /**
      * Sets value for insert or update query.
      *
-     * @param \ezcQuery|\ezcQueryInsert|\ezcQueryUpdate $query
+     * @param \eZ\Publish\Core\Persistence\Database\Query|\eZ\Publish\Core\Persistence\Database\InsertQuery|\eZ\Publish\Core\Persistence\Database\UpdateQuery $query
      * @param array $values
      *
      * @throws \Exception
@@ -610,7 +610,7 @@ class EzcDatabase extends Gateway
         $sequence = $this->dbHandler->getSequenceName(
             'ezurlalias_ml_incr', 'id'
         );
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
             $this->dbHandler->quoteTable( "ezurlalias_ml_incr" )
@@ -942,7 +942,7 @@ class EzcDatabase extends Gateway
      */
     public function removeCustomAlias( $parentId, $textMD5 )
     {
-        /** @var $query \ezcQueryDelete */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezurlalias_ml' )
@@ -980,7 +980,7 @@ class EzcDatabase extends Gateway
      */
     public function remove( $action, $id = null )
     {
-        /** @var $query \ezcQueryDelete */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezurlalias_ml' )
