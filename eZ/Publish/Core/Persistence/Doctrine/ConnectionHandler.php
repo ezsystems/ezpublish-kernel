@@ -48,6 +48,11 @@ class ConnectionHandler implements DatabaseHandler
             return new ConnectionHandler\SqliteConnectionHandler( $connection );
         }
 
+        if ( $parsed['driver'] === 'pdo_pgsql' )
+        {
+            return new ConnectionHandler\PostgresConnectionHandler( $connection );
+        }
+
         return new self( $connection );
     }
 
