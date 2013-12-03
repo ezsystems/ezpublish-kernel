@@ -188,8 +188,9 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createSelectQuery();
 
+        $columnName = $this->handler->quoteColumn( 'id', 'ezcontentobject' );
         $query
-            ->select( 'COUNT( * )' )
+            ->select( "COUNT( DISTINCT $columnName )" )
             ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
             ->innerJoin(
                 'ezcontentobject_version',
