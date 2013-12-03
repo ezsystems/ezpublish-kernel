@@ -43,12 +43,13 @@ class LegacyPathGenerator extends PathGenerator
      */
     private function getDirectoryStructure( $id )
     {
+        // our base string is the last 4 digits, defaulting to 0, reversed
+        $idString = strrev(
+            substr( str_pad( $id, 4, 0, STR_PAD_LEFT ), -4 )
+        );
+
         return trim(
-            chunk_split(
-                substr( str_pad( $id, 4, 0, STR_PAD_LEFT ), 0, 4 ),
-                1,
-                "/"
-            ),
+            chunk_split( $idString, 1, "/" ),
             "/"
         );
     }

@@ -50,7 +50,7 @@ class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
                     'versionNo' => 1,
                     'languageCode' => 'eng-US'
                 ),
-                '0/0/4/2/42-1-eng-US',
+                '2/4/0/0/42-1-eng-US',
             ),
             array(
                 array(
@@ -58,7 +58,7 @@ class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
                     'versionNo' => 42,
                     'languageCode' => 'ger-DE'
                 ),
-                '0/0/2/3/23-42-ger-DE',
+                '3/2/0/0/23-42-ger-DE',
             ),
             array(
                 array(
@@ -66,7 +66,7 @@ class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
                     'versionNo' => 2,
                     'languageCode' => 'eng-GB'
                 ),
-                '1/2/3/4/123456-2-eng-GB',
+                '6/5/4/3/123456-2-eng-GB',
             ),
         );
     }
