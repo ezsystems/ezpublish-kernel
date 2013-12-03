@@ -21,6 +21,7 @@ parameters:
     ezsettings.default.var_dir: "var"                   # The root directory where all log files, cache files and other stored files are created
     ezsettings.default.storage_dir: "storage"           # Where to place new files for storage, it's relative to var directory
     ezsettings.default.binary_dir: "original"
+    ezsettings.default.anonymous_user_id: 10            # The ID of the user to be used for everyone who is not logged in
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)

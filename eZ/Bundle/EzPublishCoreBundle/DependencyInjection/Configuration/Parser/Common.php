@@ -88,6 +88,11 @@ class Common extends AbstractParser
                         ->prototype( 'scalar' )->end()
                     ->end()
                 ->end()
+            ->end()
+            ->scalarNode( 'anonymous_user_id' )
+                ->cannotBeEmpty()
+                ->example( '10' )
+                ->info( 'The ID of the user used for everyone who is not logged in.' )
             ->end();
     }
 
@@ -145,6 +150,8 @@ class Common extends AbstractParser
                 $container->setParameter( "ezsettings.$sa.session_name", $settings['session_name'] );
             if ( isset( $settings['http_cache']['purge_servers'] ) )
                 $container->setParameter( "ezsettings.$sa.http_cache.purge_servers", $settings['http_cache']['purge_servers'] );
+            if ( isset( $settings['anonymous_user_id'] ) )
+                $container->setParameter( "ezsettings.$sa.anonymous_user_id", $settings['anonymous_user_id'] );
         }
     }
 }
