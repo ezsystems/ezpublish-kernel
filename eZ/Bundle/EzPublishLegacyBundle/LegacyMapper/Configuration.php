@@ -148,6 +148,9 @@ class Configuration implements EventSubscriberInterface
         // Multisite settings (PathPrefix and co)
         $settings += $this->getMultiSiteSettings();
 
+        // User settings
+        $settings["site.ini/UserSettings/AnonymousUserId"] = $this->configResolver->getParameter( "anonymous_user_id" );
+
         $event->getParameters()->set(
             "injected-settings",
             $settings + (array)$event->getParameters()->get( "injected-settings" )
