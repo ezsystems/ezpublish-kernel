@@ -79,7 +79,6 @@ class UserService implements UserServiceInterface
         $this->userHandler = $userHandler;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
-            'anonymousUserID' => 10,
             'defaultUserPlacement' => 12,
             'userClassID' => 4,// @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
