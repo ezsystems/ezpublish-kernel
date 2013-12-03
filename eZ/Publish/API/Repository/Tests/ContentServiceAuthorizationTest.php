@@ -40,12 +40,15 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         $contentTypeService = $repository->getContentTypeService();
 
@@ -76,12 +79,15 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         $this->createContentDraftVersion1();
         /* END: Use Case */
@@ -278,14 +284,17 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $contentDraft = $this->createContentDraftVersion1();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadVersionInfoById(
@@ -561,7 +570,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         /** @var $repository \eZ\Publish\API\Repository\Repository */
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $user = $this->createUserVersion1();
 
         // Set new editor as a content owner
@@ -572,7 +584,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // Load anonymous user
         $userService = $repository->getUserService();
-        $user = $userService->loadAnonymousUser();
+        $user = $userService->loadUser( $anonymousUserId );
         $repository->setCurrentUser( $user );
 
         // Try to load the draft with anonymous user to make sure access won't be allowed by throwing an exception
@@ -596,7 +608,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         /** @var $repository \eZ\Publish\API\Repository\Repository */
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         // get necessary services
         $contentTypeService = $repository->getContentTypeService();
         $contentService = $repository->getContentService();
@@ -627,7 +642,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $objectUpdated = $contentService->publishVersion( $draftUpdated->versionInfo );
 
         // set an anonymous as current user
-        $repository->setCurrentUser( $repository->getUserService()->loadAnonymousUser() );
+        $repository->setCurrentUser( $repository->getUserService()->loadUser( $anonymousUserId ) );
 
         // throws an unauthorized exception since anonymous user don't have access to archived versions
         $contentService->loadContent( $objectUpdated->id, null, 1 );
@@ -732,7 +747,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $content = $this->createContentVersion1();
 
         // Get ContentInfo instance.
@@ -742,7 +760,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // Creates a metadata update struct
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
@@ -774,7 +792,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $contentVersion2 = $this->createContentVersion2();
 
         // Get ContentInfo instance
@@ -784,7 +805,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->deleteContent( $contentInfo );
@@ -805,7 +826,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $content = $this->createContentVersion1();
 
         // Get ContentInfo instance
@@ -815,7 +839,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->createContentDraft( $contentInfo );
@@ -836,7 +860,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $content = $this->createContentVersion1();
 
         // Get ContentInfo and VersionInfo instances
@@ -847,7 +874,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->createContentDraft( $contentInfo, $versionInfo );
@@ -867,14 +894,17 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $contentService = $repository->getContentService();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContentDrafts();
@@ -894,7 +924,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository = $this->getRepository();
 
         $administratorUserId = $this->generateId( 'user', 14 );
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         // $administratorUserId is  the ID of the "Administrator" user in a eZ
         // Publish demo installation.
 
@@ -907,7 +940,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $administratorUser = $userService->loadUser( $administratorUserId );
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadContentDrafts( $administratorUser );
@@ -927,7 +960,13 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $draftVersion2 = $this->createContentDraftVersion2();
 
         // Get VersionInfo instance
@@ -937,7 +976,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // Create an update struct and modify some fields
         $contentUpdate = $contentService->newContentUpdateStruct();
@@ -964,14 +1003,17 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $draft = $this->createContentDraftVersion1();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->publishVersion( $draft->getVersionInfo() );
@@ -991,14 +1033,17 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $draft = $this->createContentDraftVersion1();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException", because "content"
         // "versionremove" permission is missing.
@@ -1020,7 +1065,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $contentVersion2 = $this->createContentVersion2();
 
         // Get ContentInfo instance of version 2
@@ -1030,7 +1078,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadVersions( $contentInfo );
@@ -1054,7 +1102,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $contentVersion2 = $this->createMultipleLanguageContentVersion2();
 
         // Get ContentInfo instance of version 2
@@ -1064,7 +1115,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // Configure new target location
         $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
@@ -1100,14 +1151,17 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $contentVersion2 = $this->createContentVersion2();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // Configure new target location
         $targetLocationCreate = $locationService->newLocationCreateStruct( $parentLocationId );
@@ -1175,14 +1229,17 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $draft = $this->createContentDraftVersion1();
 
         // Load the user service
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->loadRelations( $draft->versionInfo );
@@ -1235,7 +1292,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         // Remote id of the "Media" page of a eZ Publish demo installation.
         $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
 
@@ -1251,7 +1311,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->addRelation(
@@ -1275,7 +1335,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         // Remote ids of the "Media" and the "Demo Design" page of a eZ Publish
         // demo installation.
         $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
@@ -1297,7 +1360,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $userService = $repository->getUserService();
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $contentService->deleteRelation( $versionInfo, $media );
@@ -1428,11 +1491,14 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Inline */
+        $anonymousUserId = $this->generateId( 'user', 10 );
+        /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $roleService = $repository->getRoleService();
         $userService = $repository->getUserService();
 
-        $user = $userService->loadAnonymousUser();
+        $user = $userService->loadUser( $anonymousUserId );
         $role = $roleService->loadRoleByIdentifier( 'Editor' );
 
         // Assign "Editor" role with limitation to "Media/Images"
@@ -1465,7 +1531,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use case */
+        $anonymousUserId = $this->generateId( 'user', 10 );
+        /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
+        // demo installation
         $mainLanguage = "eng-GB";
 
         $contentService = $repository->getContentService();
@@ -1590,7 +1659,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // set the current user to be an anonymous user since we want to test that
         // if the user doesn't have access to an related object that object wont
         // be loaded and no exception will be thrown
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // finaly load relations ( verify no exception is thrown )
         $actualRelations = $contentService->loadRelations( $testFolder->getVersionInfo() );

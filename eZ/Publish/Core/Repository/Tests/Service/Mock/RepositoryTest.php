@@ -857,12 +857,18 @@ class RepositoryTest extends BaseServiceMockTest
             array( "getUserService" ),
             array(
                 $this->getPersistenceMock(),
+                array(
+                    'user' => array(
+                        'anonymousUserID' => 10
+                    ),
+                )
             )
         );
 
         $userServiceMock
             ->expects( $this->once() )
-            ->method( "loadAnonymousUser" )
+            ->method( "loadUser" )
+            ->with( 10 )
             ->will( $this->returnValue( "Anonymous User" ) );
 
         $repositoryMock

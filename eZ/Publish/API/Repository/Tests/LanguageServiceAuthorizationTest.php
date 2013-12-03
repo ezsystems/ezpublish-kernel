@@ -31,7 +31,10 @@ class LanguageServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
@@ -41,7 +44,7 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $languageCreate->languageCode = 'eng-NZ';
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $languageService->createLanguage( $languageCreate );
@@ -60,7 +63,10 @@ class LanguageServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
@@ -74,7 +80,7 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $language = $languageService->loadLanguageById( $languageId );
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $languageService->updateLanguageName( $language, 'New language name.' );
@@ -93,7 +99,10 @@ class LanguageServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
@@ -105,7 +114,7 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $language = $languageService->createLanguage( $languageCreate );
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $languageService->enableLanguage( $language );
@@ -124,7 +133,10 @@ class LanguageServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
@@ -136,7 +148,7 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $language = $languageService->createLanguage( $languageCreate );
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $languageService->disableLanguage( $language );
@@ -155,7 +167,10 @@ class LanguageServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $languageService = $repository->getContentLanguageService();
 
@@ -167,7 +182,7 @@ class LanguageServiceAuthorizationTest extends BaseTest
         $language = $languageService->createLanguage( $languageCreateEnglish );
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $languageService->deleteLanguage( $language );
