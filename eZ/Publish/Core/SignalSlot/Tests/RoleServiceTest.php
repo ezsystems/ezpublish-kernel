@@ -49,7 +49,12 @@ class RoleServiceTest extends ServiceTest
                 'identifier' => $roleIdentifier,
             )
         );
-        $policy = new Policy( array( 'id' => $policyId ) );
+        $policy = new Policy(
+            array(
+                'id' => $policyId,
+                'roleId' => $roleId
+            )
+        );
         $roleCreateStruct = new RoleCreateStruct();
         $roleUpdateStruct = new RoleUpdateStruct();
         $policyCreateStruct = new PolicyCreateStruct();
@@ -104,6 +109,17 @@ class RoleServiceTest extends ServiceTest
                 'removePolicy',
                 array( $role, $policy ),
                 $role,
+                1,
+                'eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal',
+                array(
+                    'roleId' => $roleId,
+                    'policyId' => $policyId
+                )
+            ),
+            array(
+                'deletePolicy',
+                array( $policy ),
+                null,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal',
                 array(

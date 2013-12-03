@@ -439,16 +439,15 @@ class UserHandler implements UserHandlerInterface
     /**
      * Removes a policy from a role
      *
-     * @param mixed $roleId
      * @param mixed $policyId
      *
      * @todo Throw exception on missing role / policy?
      *
      * @return void
      */
-    public function removePolicy( $roleId, $policyId )
+    public function deletePolicy( $policyId )
     {
-        $this->backend->deleteByMatch( 'User\\Policy', array( 'id' => $policyId, 'roleId' => $roleId ) );
+        $this->backend->deleteByMatch( 'User\\Policy', array( 'id' => $policyId ) );
     }
 
     /**

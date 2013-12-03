@@ -290,7 +290,10 @@ class RoleService implements RoleServiceInterface
     /**
      * removes a policy from the role
      *
+     * @deprecated since 5.3, use {@link deletePolicy()} instead.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
@@ -302,12 +305,48 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
             throw new UnauthorizedException( 'role', 'update' );
 
-        $loadedRole = $this->loadRole( $role->id );
+        if ( $policy->roleId != $role->id )
+        {
+            throw new InvalidArgumentException( "\$policy", "Policy does not belong to the given role" );
+        }
 
+        $this->internalDeletePolicy( $policy );
+
+        return $this->loadRole( $role->id );
+    }
+
+    /**
+     * Deletes a policy
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
+     */
+    public function deletePolicy( APIPolicy $policy )
+    {
+        if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
+            throw new UnauthorizedException( 'role', 'update' );
+
+        $this->internalDeletePolicy( $policy );
+    }
+
+    /**
+     * Deletes a policy
+     *
+     * Used by {@link removePolicy()} and {@link deletePolicy()}
+     *
+     * @param APIPolicy $policy
+     *
+     * @throws \Exception
+     *
+     * @return void
+     */
+    protected function internalDeletePolicy( APIPolicy $policy )
+    {
         $this->repository->beginTransaction();
         try
         {
-            $this->userHandler->removePolicy( $loadedRole->id, $policy->id );
+            $this->userHandler->deletePolicy( $policy->id );
             $this->repository->commit();
         }
         catch ( Exception $e )
@@ -315,8 +354,6 @@ class RoleService implements RoleServiceInterface
             $this->repository->rollback();
             throw $e;
         }
-
-        return $this->loadRole( $loadedRole->id );
     }
 
     /**

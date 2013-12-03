@@ -72,7 +72,10 @@ interface RoleService
     /**
      * removes a policy from the role
      *
+     * @deprecated since 5.3, use {@link deletePolicy()} instead.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
@@ -80,6 +83,15 @@ interface RoleService
      * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
      */
     public function removePolicy( Role $role, Policy $policy );
+
+    /**
+     * Deletes a policy
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
+     */
+    public function deletePolicy( Policy $policy );
 
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and

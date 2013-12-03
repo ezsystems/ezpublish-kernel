@@ -1021,6 +1021,47 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
+     * Test for the deletePolicy() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::deletePolicy()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::loadRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
+     */
+    public function testDeletePolicy()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        // Instantiate a new role create
+        $roleCreate = $roleService->newRoleCreateStruct( 'newRole' );
+
+        // @todo uncomment when support for multilingual names and descriptions is added
+        // $roleCreate->mainLanguageCode = 'eng-US';
+
+        // Create a new role with two policies
+        $role = $roleService->createRole(
+            $roleCreate,
+            array(
+                $roleService->newPolicyCreateStruct( 'content', 'create' ),
+                $roleService->newPolicyCreateStruct( 'content', 'delete' ),
+            )
+        );
+
+        // Delete all policies from the new role
+        foreach ( $role->getPolicies() as $policy )
+        {
+            $roleService->deletePolicy( $policy );
+        }
+        /* END: Use Case */
+
+        $role = $roleService->loadRole( $role->id );
+        $this->assertSame( array(), $role->getPolicies() );
+    }
+
+    /**
      * Test for the getRoleAssignments() method.
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
