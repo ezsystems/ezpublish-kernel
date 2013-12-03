@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use ezcDbException;
+use Doctrine\DBAL\DBALException;
 use PDOException;
 use RuntimeException;
 
@@ -55,7 +55,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->find( $criterion, $offset, $limit, $sort, $translations );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }

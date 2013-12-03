@@ -11,7 +11,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\Core\Persistence\Database\UpdateQuery;
+use eZ\Publish\Core\Persistence\Database\InsertQuery;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\SPI\Persistence\Content;
@@ -25,7 +27,6 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
-use ezcQueryUpdate;
 use PDO;
 
 /**
@@ -36,7 +37,7 @@ class EzcDatabase extends Gateway
     /**
      * Zeta Components database handler.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
@@ -64,13 +65,13 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new gateway based on $db
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $db
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder $queryBuilder
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(
-        EzcDbHandler $db,
+        DatabaseHandler $db,
         QueryBuilder $queryBuilder,
         LanguageHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )
@@ -207,7 +208,7 @@ class EzcDatabase extends Gateway
      */
     public function insertVersion( VersionInfo $versionInfo, array $fields )
     {
-        /** @var $q \ezcQueryInsert */
+        /** @var $q \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject_version' )
@@ -422,7 +423,7 @@ class EzcDatabase extends Gateway
             return;
         }
 
-        /** @var $q \ezcQueryUpdate */
+        /** @var $q \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $q = $this->dbHandler->createUpdateQuery();
         $q
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
@@ -441,7 +442,7 @@ class EzcDatabase extends Gateway
         $q->prepare()->execute();
 
         // Now we need to update ezcontentobject_name
-        /** @var $qName \ezcQueryUpdate */
+        /** @var $qName \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $qName = $this->dbHandler->createUpdateQuery();
         $qName
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
@@ -470,7 +471,7 @@ class EzcDatabase extends Gateway
         $qName->prepare()->execute();
 
         // Now update ezcontentobject_attribute for current version
-        /** @var $qAttr \ezcQueryUpdate */
+        /** @var $qAttr \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $qAttr = $this->dbHandler->createUpdateQuery();
         $qAttr
             ->update( $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ) )
@@ -633,7 +634,7 @@ class EzcDatabase extends Gateway
      *
      * @return int|null Maybe a new field ID
      */
-    protected function setInsertFieldValues( \ezcQueryInsert $q, Content $content, Field $field, StorageFieldValue $value )
+    protected function setInsertFieldValues( InsertQuery $q, Content $content, Field $field, StorageFieldValue $value )
     {
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
@@ -712,12 +713,12 @@ class EzcDatabase extends Gateway
     /**
      * Sets update fields for $value on $q
      *
-     * @param \ezcQueryUpdate $q
+     * @param \eZ\Publish\Core\Persistence\Database\UpdateQuery $q
      * @param StorageFieldValue $value
      *
      * @return void
      */
-    protected function setFieldUpdateValues( ezcQueryUpdate $q, StorageFieldValue $value  )
+    protected function setFieldUpdateValues( UpdateQuery $q, StorageFieldValue $value  )
     {
         $q->update(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
@@ -848,7 +849,7 @@ class EzcDatabase extends Gateway
      */
     private function internalLoadContentInfo( $column, $id )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "ezcontentobject.*",
@@ -1001,7 +1002,7 @@ class EzcDatabase extends Gateway
      * Helper for {@see listVersions()} and {@see listVersionsForUser()} that filters duplicates
      * that are the result of the cartesian product performed by createVersionInfoFindQuery()
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @return string[][]
      */
     private function listVersionsHelper( $query )
@@ -1600,7 +1601,7 @@ class EzcDatabase extends Gateway
     {
         // Legacy Storage stores COMMON, LINK and EMBED types using bitmask, therefore first load
         // existing relation type by given $relationId for comparison
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "relation_type" )
@@ -1625,7 +1626,7 @@ class EzcDatabase extends Gateway
         // If relation type matches then delete
         if ( $loadedRelationType == $type )
         {
-            /** @var $query \ezcQueryDelete */
+            /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
             $query = $this->dbHandler->createDeleteQuery();
             $query->deleteFrom(
                 "ezcontentobject_link"
@@ -1641,7 +1642,7 @@ class EzcDatabase extends Gateway
         // If relation type is composite update bitmask
         else if ( $loadedRelationType & $type )
         {
-            /** @var $query \ezcQueryUpdate */
+            /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
             $query = $this->dbHandler->createUpdateQuery();
             $query->update(
                 $this->dbHandler->quoteTable( "ezcontentobject_link" )

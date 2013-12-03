@@ -12,9 +12,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHan
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Full text criterion handler
@@ -75,11 +75,11 @@ class FullText extends CriterionHandler
     /**
      * Construct from full text search configuration
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $processor
      * @param array $configuration
      */
-    public function __construct( EzcDbHandler $dbHandler, TransformationProcessor $processor, array $configuration = array() )
+    public function __construct( DatabaseHandler $dbHandler, TransformationProcessor $processor, array $configuration = array() )
     {
         parent::__construct( $dbHandler );
 
@@ -123,12 +123,12 @@ class FullText extends CriterionHandler
      * converter wildcards are either transformed into the respective LIKE
      * queries, or everything is just compared using equal.
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $token
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    protected function getWordExpression( ezcQuerySelect $query, $token )
+    protected function getWordExpression( SelectQuery $query, $token )
     {
         if ( $this->configuration['enableWildcards'] &&
              $token[0] === '*' )
@@ -159,7 +159,7 @@ class FullText extends CriterionHandler
      *
      * @param string $string
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function getWordIdSubquery( $query, $string )
     {
@@ -194,12 +194,12 @@ class FullText extends CriterionHandler
      * accept() must be called before calling this method.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $converter
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
+    public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
         $subSelect = $query->subSelect();
         $subSelect

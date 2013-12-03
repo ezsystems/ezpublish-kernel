@@ -10,14 +10,14 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content locator gateway implementation using the zeta handler component.
@@ -33,7 +33,7 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var EzcDbHandler
+     * @var DatabaseHandler
      */
     protected $handler;
 
@@ -75,12 +75,12 @@ class EzcDatabase extends Gateway
     /**
      * Construct from handler handler
      *
-     * @param \EzcDbHandler $handler
+     * @param \DatabaseHandler $handler
      *
      * @return void
      */
     public function __construct(
-        EzcDbHandler $handler,
+        DatabaseHandler $handler,
         CriteriaConverter $criteriaConverter,
         SortClauseConverter $sortClauseConverter,
         QueryBuilder $queryBuilder,
@@ -131,12 +131,12 @@ class EzcDatabase extends Gateway
      * Get query condition
      *
      * @param Criterion $criterion
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param mixed $translations
      *
      * @return string
      */
-    protected function getQueryCondition( Criterion $criterion, ezcQuerySelect $query, $translations )
+    protected function getQueryCondition( Criterion $criterion, SelectQuery $query, $translations )
     {
         $condition = $query->expr->lAnd(
             $this->criteriaConverter->convertCriteria( $query, $criterion ),

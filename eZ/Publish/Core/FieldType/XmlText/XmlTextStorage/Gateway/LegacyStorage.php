@@ -27,7 +27,7 @@ class LegacyStorage extends Gateway
      *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
+     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
      */
     public function setConnection( $dbHandler )
     {
@@ -35,7 +35,7 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler )
+        if ( !$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler )
         {
             throw new \RuntimeException( "Invalid dbHandler passed" );
         }
@@ -48,7 +48,7 @@ class LegacyStorage extends Gateway
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {
@@ -107,7 +107,7 @@ class LegacyStorage extends Gateway
      */
     protected function getLinksUrl( array $linkIds )
     {
-        /** @var $q \ezcQuerySelect */
+        /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
         $q = $this->getConnection()->createSelectQuery();
         $q
             ->select( "id", "url" )
@@ -237,7 +237,7 @@ class LegacyStorage extends Gateway
 
         if ( !empty( $linksUrls ) )
         {
-            /** @var $q \ezcQuerySelect */
+            /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
             $q = $this->getConnection()->createSelectQuery();
             $q
                 ->select( "id", "url" )
@@ -269,7 +269,7 @@ class LegacyStorage extends Gateway
 
         if ( !empty( $linksRemoteIds ) )
         {
-            /** @var $q \ezcQuerySelect */
+            /** @var $q \\eZ\Publish\Core\Persistence\Database\SelectQuery */
             $q = $this->getConnection()->createSelectQuery();
             $q
                 ->select( "id", "remote_id" )

@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FieldValue;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use RuntimeException;
 
@@ -24,7 +24,7 @@ abstract class Handler
     /**
      * DB handler to fetch additional field information
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
@@ -53,10 +53,10 @@ abstract class Handler
     /**
      * Creates a new criterion handler
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      */
-    public function __construct( EzcDbHandler $dbHandler, TransformationProcessor $transformationProcessor )
+    public function __construct( DatabaseHandler $dbHandler, TransformationProcessor $transformationProcessor )
     {
         $this->dbHandler = $dbHandler;
         $this->transformationProcessor = $transformationProcessor;
@@ -67,13 +67,13 @@ abstract class Handler
      *
      * @throws \RuntimeException If operator is not handled.
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $column
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( ezcQuerySelect $query, Criterion $criterion, $column )
+    public function handle( SelectQuery $query, Criterion $criterion, $column )
     {
         $column = $this->dbHandler->quoteColumn( $column );
 

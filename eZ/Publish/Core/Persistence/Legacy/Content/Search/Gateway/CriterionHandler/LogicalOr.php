@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHan
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Logical or criterion handler
@@ -37,12 +37,12 @@ class LogicalOr extends CriterionHandler
      * accept() must be called before calling this method.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $converter
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
+    public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
         $subexpressions = array();
         foreach ( $criterion->criteria as $subCriterion )

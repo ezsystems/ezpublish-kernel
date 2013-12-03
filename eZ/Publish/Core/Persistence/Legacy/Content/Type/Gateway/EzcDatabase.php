@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
@@ -18,8 +18,8 @@ use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use ezcQuery;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\Query;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Zeta Component Database based content type gateway.
@@ -99,10 +99,10 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new gateway based on $db
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $db
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
-    public function __construct( EzcDbHandler $db, MaskGenerator $languageMaskGenerator )
+    public function __construct( DatabaseHandler $db, MaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler = $db;
         $this->languageMaskGenerator = $languageMaskGenerator;
@@ -358,12 +358,12 @@ class EzcDatabase extends Gateway
     /**
      * Set common columns for insert/update of a Type.
      *
-     * @param \ezcQuery $q
+     * @param \eZ\Publish\Core\Persistence\Database\Query $q
      * @param mixed $type
      *
      * @return void
      */
-    protected function setCommonTypeColumns( ezcQuery $q, $type )
+    protected function setCommonTypeColumns( Query $q, $type )
     {
         $q->set(
             $this->dbHandler->quoteColumn( 'serialized_name_list' ),
@@ -543,7 +543,7 @@ class EzcDatabase extends Gateway
     /**
      * Creates the basic query to load Group data.
      *
-     * @return ezcQuerySelect
+     * @return eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function createGroupLoadQuery()
     {
@@ -645,14 +645,14 @@ class EzcDatabase extends Gateway
     /**
      * Set common columns for insert/update of FieldDefinition.
      *
-     * @param \ezcQuery $q
+     * @param \eZ\Publish\Core\Persistence\Database\Query $q
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      *
      * @return void
      */
     protected function setCommonFieldColumns(
-        ezcQuery $q, FieldDefinition $fieldDefinition,
+        Query $q, FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
     )
     {
@@ -992,7 +992,7 @@ class EzcDatabase extends Gateway
     /**
      * Returns a basic query to retrieve Type data.
      *
-     * @return ezcQuerySelect
+     * @return eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     protected function getLoadTypeQuery()
     {
@@ -1304,10 +1304,10 @@ class EzcDatabase extends Gateway
     /**
      * Creates an array of select columns for $tableName.
      *
-     * @param \ezcQuerySelect $q
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $q
      * @param string $tableName
      */
-    protected function selectColumns( ezcQuerySelect $q, $tableName )
+    protected function selectColumns( SelectQuery $q, $tableName )
     {
         foreach ( $this->columns[$tableName] as $col )
         {

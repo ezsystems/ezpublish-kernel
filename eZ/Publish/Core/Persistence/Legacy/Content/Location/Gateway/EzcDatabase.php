@@ -10,7 +10,9 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Database\Query as DatabaseQuery;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -29,18 +31,18 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \EzcDbHandler
+     * @var \DatabaseHandler
      */
     protected $handler;
 
     /**
      * Construct from database handler
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      *
      * @return void
      */
-    public function __construct( EzcDbHandler $handler )
+    public function __construct( DatabaseHandler $handler )
     {
         $this->handler = $handler;
     }
@@ -148,7 +150,7 @@ class EzcDatabase extends Gateway
      */
     public function loadParentLocationsDataForDraftContent( $contentId, $drafts = null )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $query->selectDistinct(
             "ezcontentobject_tree.*"
@@ -224,12 +226,12 @@ class EzcDatabase extends Gateway
     /**
      * Limits the given $query to the subtree starting at $rootLocationId
      *
-     * @param \ezcQuery $query
+     * @param \eZ\Publish\Core\Persistence\Database\Query $query
      * @param string $rootLocationId
      *
      * @return void
      */
-    protected function applySubtreeLimitation( \ezcQuery $query, $rootLocationId )
+    protected function applySubtreeLimitation( DatabaseQuery $query, $rootLocationId )
     {
         $query->where(
             $query->expr->like(
@@ -279,7 +281,7 @@ class EzcDatabase extends Gateway
     {
         $fromPathString = $sourceNodeData["path_string"];
 
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $query
             ->select(
@@ -323,7 +325,7 @@ class EzcDatabase extends Gateway
                 $newParentId = (int)implode( '', array_slice( explode( '/', $newPathString ), -3, 1 ) );
             }
 
-            /** @var $query \ezcQueryUpdate */
+            /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
             $query = $this->handler->createUpdateQuery();
             $query
                 ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -623,7 +625,7 @@ class EzcDatabase extends Gateway
     public function create( CreateStruct $createStruct, array $parentNode )
     {
         $location = new Location();
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->handler->createInsertQuery();
         $query
             ->insertInto( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -679,7 +681,7 @@ class EzcDatabase extends Gateway
 
         $mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
         $location->pathString = $parentNode['path_string'] . $location->id . '/';
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
         $query
             ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
@@ -1037,7 +1039,7 @@ class EzcDatabase extends Gateway
             $text :
             $parentData["path_identification_string"] . "/" . $text;
 
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
         $query->update(
             "ezcontentobject_tree"
@@ -1104,7 +1106,7 @@ class EzcDatabase extends Gateway
                     $query->bindValue( $locationId, null, \PDO::PARAM_INT )
                 )
             )
-        )->orderBy( "node_id", Query::SORT_ASC )->limit( 1 );
+        )->orderBy( "node_id", SelectQuery::ASC )->limit( 1 );
         $statement = $query->prepare();
         $statement->execute();
 
@@ -1124,7 +1126,7 @@ class EzcDatabase extends Gateway
     {
         $locationRow = $this->getBasicNodeData( $locationId );
 
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->handler->createInsertQuery();
         $query->insertInto( $this->handler->quoteTable( "ezcontentobject_trash" ) );
 
@@ -1186,7 +1188,7 @@ class EzcDatabase extends Gateway
      */
     protected function setContentStatus( $contentId, $status )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->handler->createUpdateQuery();
         $query->update(
             "ezcontentobject"
@@ -1251,7 +1253,7 @@ class EzcDatabase extends Gateway
         $sort = $sort ?: array();
         foreach ( $sort as $condition )
         {
-            $sortDirection = $condition->direction === Query::SORT_ASC ? \ezcQuerySelect::ASC : \ezcQuerySelect::DESC;
+            $sortDirection = $condition->direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC;
             switch ( true )
             {
                 case $condition instanceof SortClause\LocationDepth:

@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
@@ -27,16 +27,16 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new EzcDatabase Section Gateway
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      */
-    public function __construct ( EzcDbHandler $dbHandler )
+    public function __construct ( DatabaseHandler $dbHandler )
     {
         $this->dbHandler = $dbHandler;
     }
@@ -50,7 +50,7 @@ class EzcDatabase extends Gateway
      */
     public function insertUrlWildcard( UrlWildcard $urlWildcard )
     {
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
@@ -96,7 +96,7 @@ class EzcDatabase extends Gateway
      */
     public function deleteUrlWildcard( $id )
     {
-        /** @var $query \ezcQueryDelete */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( "ezurlwildcard" )
@@ -118,7 +118,7 @@ class EzcDatabase extends Gateway
      */
     public function loadUrlWildcardData( $id )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "*"
@@ -148,7 +148,7 @@ class EzcDatabase extends Gateway
     {
         $limit = $limit === -1 ? self::MAX_LIMIT : $limit;
 
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "*"

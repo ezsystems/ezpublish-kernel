@@ -9,23 +9,23 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
 class QueryBuilder
 {
     /**
      * Database handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new query builder.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      */
-    public function __construct( EzcDbHandler $dbHandler )
+    public function __construct( DatabaseHandler $dbHandler )
     {
         $this->dbHandler = $dbHandler;
     }
@@ -38,11 +38,11 @@ class QueryBuilder
      *
      * @param string[] $translations
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function createFindQuery( array $translations = null )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             // Content object
@@ -155,11 +155,11 @@ class QueryBuilder
     /**
      * Creates a select query for content relations
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function createRelationFindQuery()
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_link' ),
@@ -181,11 +181,11 @@ class QueryBuilder
      * Creates a select query with all necessary joins to fetch a complete
      * content object. Does not apply any WHERE conditions.
      *
-     * @return \ezcQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function createVersionInfoFindQuery()
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             // Content object version

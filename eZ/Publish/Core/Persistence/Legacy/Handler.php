@@ -40,7 +40,8 @@ use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
-use ezcDbTransactionException;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use Exception;
 use RuntimeException;
 
 /**
@@ -238,7 +239,7 @@ class Handler implements HandlerInterface
     protected $urlWildcardMapper;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
@@ -278,9 +279,14 @@ class Handler implements HandlerInterface
     protected $config;
 
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
      * Creates a new repository handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler The database handler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler The database handler
      * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry Should contain field types
      * @param Content\FieldValue\ConverterRegistry $converterRegistry Should contain Field Type converters
      * @param Content\StorageRegistry $storageRegistry Should contain Field Type external storage handlers
@@ -293,7 +299,7 @@ class Handler implements HandlerInterface
      *                      is then executed by the old eZ Publish core.
      */
     public function __construct(
-        EzcDbHandler $dbHandler,
+        DatabaseHandler $dbHandler,
         FieldTypeRegistry $fieldTypeRegistry,
         ConverterRegistry $converterRegistry,
         StorageRegistry $storageRegistry,
@@ -307,6 +313,7 @@ class Handler implements HandlerInterface
         $this->storageRegistry = $storageRegistry;
         $this->transformationProcessor = $transformationProcessor;
         $this->config = $config;
+
     }
 
     /**
@@ -955,7 +962,7 @@ class Handler implements HandlerInterface
         {
             $this->dbHandler->commit();
         }
-        catch ( ezcDbTransactionException $e )
+        catch ( Exception $e )
         {
             throw new RuntimeException( $e->getMessage() );
         }

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHan
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FieldValue\Handler;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
@@ -51,13 +51,13 @@ class Converter
      * @throws \RuntimeException if Criterion is not applicable to its target
      *
      * @param string $fieldTypeIdentifier
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $column
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function convertCriteria( $fieldTypeIdentifier, ezcQuerySelect $query, Criterion $criterion, $column )
+    public function convertCriteria( $fieldTypeIdentifier, SelectQuery $query, Criterion $criterion, $column )
     {
         if ( $this->registry->has( $fieldTypeIdentifier ) )
         {

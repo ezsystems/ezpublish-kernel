@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\User\Role;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\User\Policy;
 
 /**
@@ -22,16 +22,16 @@ abstract class LimitationHandler
     /**
      * Database handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new criterion handler
      *
-     * @param \EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      */
-    public function __construct( EzcDbHandler $dbHandler )
+    public function __construct( DatabaseHandler $dbHandler )
     {
         $this->dbHandler = $dbHandler;
     }

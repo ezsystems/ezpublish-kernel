@@ -10,10 +10,11 @@
 namespace eZ\Publish\Core\Persistence\Legacy;
 
 use ezcDbHandler as ezcDbHandlerWrapped;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite;
 use ezcDbFactory;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
 /**
  * Wrapper class for the zeta components database handler, providing some
@@ -21,7 +22,7 @@ use ezcDbFactory;
  *
  * Functions as a full proxy to the zeta components database class.
  */
-class EzcDbHandler
+class EzcDbHandler implements DatabaseHandler
 {
     /**
      * Aggregated zeta components database handler, which is target of the
@@ -125,16 +126,76 @@ class EzcDbHandler
         return call_user_func_array( array( $this->ezcDbHandler, $method ), $parameters );
     }
 
+    public function getName()
+    {
+        return $this->ezcDbHandler->getName();
+    }
+
+    public function beginTransaction()
+    {
+        return $this->ezcDbHandler->beginTransaction();
+    }
+
+    public function commit()
+    {
+        return $this->ezcDbHandler->commit();
+    }
+
+    public function rollBack()
+    {
+        return $this->ezcDbHandler->rollBack();
+    }
+
+    public function createInsertQuery()
+    {
+        return $this->ezcDbHandler->createInsertQuery();
+    }
+
+    public function createSelectQuery()
+    {
+        return $this->ezcDbHandler->createSelectQuery();
+    }
+
+    public function createUpdateQuery()
+    {
+        return $this->ezcDbHandler->createUpdateQuery();
+    }
+
+    public function createDeleteQuery()
+    {
+        return $this->ezcDbHandler->createDeleteQuery();
+    }
+
+    public function exec( $query )
+    {
+        return $this->ezcDbHandler->exec( $query );
+    }
+
+    public function lastInsertId( $sequenceName = null )
+    {
+        return $this->ezcDbHandler->lastInsertId( $sequenceName );
+    }
+
+    public function prepare( $query )
+    {
+        return $this->ezcDbHandler->prepare( $query );
+    }
+
+    public function useSequences()
+    {
+        return $this->getName() === 'pgsql';
+    }
+
     /**
      * Creates an alias for $tableName, $columnName in $query.
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $columnName
      * @param string|null $tableName
      *
      * @return string
      */
-    public function aliasedColumn( ezcQuerySelect $query, $columnName, $tableName = null )
+    public function aliasedColumn( $query, $columnName, $tableName = null )
     {
         return $this->alias(
             $this->quoteColumn( $columnName, $tableName ),

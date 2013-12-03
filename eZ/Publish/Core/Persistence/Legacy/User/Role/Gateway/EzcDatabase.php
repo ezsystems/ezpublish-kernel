@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Role;
@@ -24,7 +24,7 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \EzcDbHandler
+     * @var \DatabaseHandler
      */
     protected $handler;
 
@@ -36,11 +36,11 @@ class EzcDatabase extends Gateway
     /**
      * Construct from database handler
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      *
      * @return void
      */
-    public function __construct( EzcDbHandler $handler )
+    public function __construct( DatabaseHandler $handler )
     {
         $this->handler = $handler;
     }
@@ -424,7 +424,7 @@ class EzcDatabase extends Gateway
             $this->handler->quoteColumn( 'id', 'ezcontentobject' )
         )->from(
             $this->handler->quoteTable( 'ezcontentobject_tree' )
-        )->rightJoin(
+        )->innerJoin(
             $this->handler->quoteTable( 'ezcontentobject' ),
             $query->expr->eq(
                 $this->handler->quoteColumn( 'id', 'ezcontentobject' ),

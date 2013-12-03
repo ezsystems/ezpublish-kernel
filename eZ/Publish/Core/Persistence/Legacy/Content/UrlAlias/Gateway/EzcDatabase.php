@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
-use ezcQuery;
+use eZ\Publish\Core\Persistence\Database\Query;
 
 /**
  * UrlAlias Gateway
@@ -64,11 +64,11 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new EzcDatabase UrlAlias Gateway
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct (
-        EzcDbHandler $dbHandler,
+        DatabaseHandler $dbHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler = $dbHandler;
@@ -86,7 +86,7 @@ class EzcDatabase extends Gateway
      */
     public function loadLocationEntries( $locationId, $custom = false, $languageId = false )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "id" ),
@@ -153,7 +153,7 @@ class EzcDatabase extends Gateway
     {
         $limit = $limit === -1 ? self::MAX_LIMIT : $limit;
 
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "action" ),
@@ -220,7 +220,7 @@ class EzcDatabase extends Gateway
      */
     public function isRootEntry( $id )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "text" ),
@@ -257,7 +257,7 @@ class EzcDatabase extends Gateway
      */
     public function cleanupAfterPublish( $action, $languageId, $newId, $parentId, $textMD5 )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $this->dbHandler->quoteColumn( "parent" ),
@@ -341,7 +341,7 @@ class EzcDatabase extends Gateway
      */
     protected function historize( $parentId, $textMD5, $newId )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -386,7 +386,7 @@ class EzcDatabase extends Gateway
      */
     protected function removeTranslation( $parentId, $textMD5, $languageId )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -425,7 +425,7 @@ class EzcDatabase extends Gateway
      */
     public function historizeId( $id, $link )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -467,7 +467,7 @@ class EzcDatabase extends Gateway
      */
     public function reparent( $oldParentId, $newParentId )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -503,7 +503,7 @@ class EzcDatabase extends Gateway
      */
     public function updateRow( $parentId, $textMD5, array $values )
     {
-        /** @var $query \ezcQueryUpdate */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */
         $query = $this->dbHandler->createUpdateQuery();
         $query->update( $this->dbHandler->quoteTable( "ezurlalias_ml" ) );
         $this->setQueryValues( $query, $values );
@@ -554,7 +554,7 @@ class EzcDatabase extends Gateway
         if ( $values["is_alias"] ) $values["is_original"] = 1;
         if ( $values["action"] === "nop:" ) $values["is_original"] = 0;
 
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto( $this->dbHandler->quoteTable( "ezurlalias_ml" ) );
         $this->setQueryValues( $query, $values );
@@ -566,14 +566,14 @@ class EzcDatabase extends Gateway
     /**
      * Sets value for insert or update query.
      *
-     * @param \ezcQuery|\ezcQueryInsert|\ezcQueryUpdate $query
+     * @param \eZ\Publish\Core\Persistence\Database\Query|\eZ\Publish\Core\Persistence\Database\InsertQuery|\eZ\Publish\Core\Persistence\Database\UpdateQuery $query
      * @param array $values
      *
      * @throws \Exception
      *
      * @return void
      */
-    protected function setQueryValues( ezcQuery $query, $values )
+    protected function setQueryValues( Query $query, $values )
     {
         foreach ( $values as $column => $value )
         {
@@ -610,7 +610,7 @@ class EzcDatabase extends Gateway
         $sequence = $this->dbHandler->getSequenceName(
             'ezurlalias_ml_incr', 'id'
         );
-        /** @var $query \ezcQueryInsert */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\InsertQuery */
         $query = $this->dbHandler->createInsertQuery();
         $query->insertInto(
             $this->dbHandler->quoteTable( "ezurlalias_ml_incr" )
@@ -621,7 +621,7 @@ class EzcDatabase extends Gateway
         // as a result we are forced to check which database is currently used
         // to generate the correct SQL query
         // see https://jira.ez.no/browse/EZP-20652
-        if ( $this->dbHandler->getName() === 'pgsql' )
+        if ( $this->dbHandler->useSequences() )
         {
             $query->set(
                 $this->dbHandler->quoteColumn( "id" ),
@@ -650,7 +650,7 @@ class EzcDatabase extends Gateway
      */
     public function loadRow( $parentId, $textMD5 )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select( "*" )->from(
             $this->dbHandler->quoteTable( "ezurlalias_ml" )
@@ -682,7 +682,7 @@ class EzcDatabase extends Gateway
      */
     public function loadUrlAliasData( array $urlHashes )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
 
         $count = count( $urlHashes );
@@ -763,7 +763,7 @@ class EzcDatabase extends Gateway
      */
     public function loadAutogeneratedEntry( $action, $parentId = null )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "*"
@@ -817,7 +817,7 @@ class EzcDatabase extends Gateway
 
         while ( $id != 0 )
         {
-            /** @var $query \ezcQuerySelect */
+            /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
             $query = $this->dbHandler->createSelectQuery();
             $query->select(
                 $this->dbHandler->quoteColumn( "parent" ),
@@ -865,7 +865,7 @@ class EzcDatabase extends Gateway
      */
     public function loadPathDataByHierarchy( array $hierarchyData )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
 
         $hierarchyConditions = array();
@@ -942,7 +942,7 @@ class EzcDatabase extends Gateway
      */
     public function removeCustomAlias( $parentId, $textMD5 )
     {
-        /** @var $query \ezcQueryDelete */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezurlalias_ml' )
@@ -980,7 +980,7 @@ class EzcDatabase extends Gateway
      */
     public function remove( $action, $id = null )
     {
-        /** @var $query \ezcQueryDelete */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\DeleteQuery */
         $query = $this->dbHandler->createDeleteQuery();
         $query->deleteFrom(
             $this->dbHandler->quoteTable( 'ezurlalias_ml' )
@@ -1020,7 +1020,7 @@ class EzcDatabase extends Gateway
      */
     public function loadAutogeneratedEntries( $parentId, $includeHistory = false )
     {
-        /** @var $query \ezcQuerySelect */
+        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "*"

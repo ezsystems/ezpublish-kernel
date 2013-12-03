@@ -25,11 +25,11 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new LegacyDbHandlerFactory( $configResolver );
         $handler = $factory->buildLegacyDbHandler();
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\EzcDbHandler',
+            'eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler',
             $handler
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\EzcDbHandler\\Sqlite',
+            'eZ\\Publish\\Core\\Persistence\\Doctrine\\ConnectionHandler\\SqliteConnectionHandler',
             $handler
         );
     }
