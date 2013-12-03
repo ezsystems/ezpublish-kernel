@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use eZ\Publish\Core\Persistence\Solr;
 use eZ\Publish\Core\Persistence\Solr\Content\Search;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\Handler as SolrSearchHandler;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
@@ -149,11 +150,18 @@ class LegacySolr extends Legacy
             )
         );
 
+        $fieldMap = new FieldMap(
+            $fieldRegistry,
+            $persistenceHandler->contentTypeHandler(),
+            $nameGenerator
+        );
+
         return new Search\Handler(
             new Search\Gateway\Native(
                 new Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
                 new CriterionVisitor\Aggregate(
                     array(
+                        new CriterionVisitor\MatchAll(),
                         new CriterionVisitor\ContentIdIn(),
                         new CriterionVisitor\LogicalAnd(),
                         new CriterionVisitor\LogicalOr(),
@@ -172,7 +180,7 @@ class LegacySolr extends Legacy
                         new CriterionVisitor\DateMetadata\PublishedIn(),
                         new CriterionVisitor\DateMetadata\ModifiedBetween(),
                         new CriterionVisitor\DateMetadata\PublishedBetween(),
-                        new CriterionVisitor\FullText(),
+                        new CriterionVisitor\FullText( $fieldMap ),
                         new CriterionVisitor\UserMetadataIn(),
                         new CriterionVisitor\Field\FieldIn(
                             $fieldRegistry,

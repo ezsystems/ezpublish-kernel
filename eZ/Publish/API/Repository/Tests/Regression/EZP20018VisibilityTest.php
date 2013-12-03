@@ -27,7 +27,7 @@ class EZP20018VisibilityTest extends BaseTest
     public function testSearchForHiddenContent()
     {
         $query = new Query();
-        $query->criterion = new Visibility( Visibility::HIDDEN );
+        $query->filter = new Visibility( Visibility::HIDDEN );
         $results1 = $this->getRepository()->getSearchService()->findContent( $query );
 
         $this->assertEquals( 0, $results1->totalCount );
@@ -50,7 +50,7 @@ class EZP20018VisibilityTest extends BaseTest
     public function testSearchForVisibleContent()
     {
         $query = new Query();
-        $query->criterion = new Visibility( Visibility::VISIBLE );
+        $query->filter = new Visibility( Visibility::VISIBLE );
         $results1 = $this->getRepository()->getSearchService()->findContent( $query );
 
         $this->assertEquals( 18, $results1->totalCount );

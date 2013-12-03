@@ -135,7 +135,7 @@ class LocationService implements LocationServiceInterface
             $query = new Query(
                 array(
                     'limit' => 0,
-                    'criterion' => new CriterionLogicalAnd(
+                    'filter' => new CriterionLogicalAnd(
                         new CriterionSubtree( $loadedSubtree->pathString ),
                         new CriterionLogicalNot( $contentReadCriterion )
                     )
@@ -359,7 +359,7 @@ class LocationService implements LocationServiceInterface
     {
         $query = new Query(
             array(
-                'criterion' => new CriterionParentLocationId( $parentLocationId ),
+                'filter' => new CriterionParentLocationId( $parentLocationId ),
                 'offset' => ( $offset >= 0 ? (int)$offset : 0 ),
                 'limit' => ( $limit >= 0 ? (int)$limit  : null )
             )
@@ -368,7 +368,7 @@ class LocationService implements LocationServiceInterface
         if ( $sortField !== null )
             $query->sortClauses = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
 
-        if ( !$this->repository->getSearchService()->addPermissionsCriterion( $query->criterion ) )
+        if ( !$this->repository->getSearchService()->addPermissionsCriterion( $query->filter ) )
         {
             return array();
         }
@@ -655,7 +655,7 @@ class LocationService implements LocationServiceInterface
             $query = new Query(
                 array(
                     'limit' => 0,
-                    'criterion' => new CriterionLogicalAnd(
+                    'filter' => new CriterionLogicalAnd(
                         new CriterionSubtree( $location->pathString ),
                         new CriterionLogicalNot( $contentReadCriterion )
                     )
@@ -739,7 +739,7 @@ class LocationService implements LocationServiceInterface
             $query = new Query(
                 array(
                     'limit' => 0,
-                    'criterion' => new CriterionLogicalAnd(
+                    'filter' => new CriterionLogicalAnd(
                         array(
                             new CriterionSubtree( $location->pathString ),
                             new CriterionLogicalNot( $contentReadCriterion )

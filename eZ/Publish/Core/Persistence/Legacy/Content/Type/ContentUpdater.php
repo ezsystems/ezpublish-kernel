@@ -161,7 +161,7 @@ class ContentUpdater
         $result = $this->searchHandler->findContent(
             new Query(
                 array(
-                    'criterion' => new Criterion\ContentTypeId( $contentTypeId )
+                    'filter' => new Criterion\ContentTypeId( $contentTypeId )
                 )
             )
         );

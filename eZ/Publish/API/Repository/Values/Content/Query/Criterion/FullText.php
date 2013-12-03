@@ -36,13 +36,64 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 class FullText extends Criterion implements CriterionInterface
 {
     /**
-     * Creates a FullText criterion on $text, using the IN Operator
+     * Fuzzyness of the fulltext search.
      *
-     * @param string $value The text to match on
+     * May be a value between 0. (fuzzy) and 1. (sharp).
+     *
+     * @var float
      */
-    public function __construct( $value )
+    public $fuzzyness = 1.;
+
+    /**
+     * Boost for certain fields
+     *
+     * Array of boosts to apply for cetrain fields – the array should look like
+     * this:
+     *
+     * <code>
+     *  array(
+     *      'title' => 2,
+     *      …
+     *  )
+     * </code>
+     *
+     * @var array
+     */
+    public $boost = array();
+
+    /**
+     * Analyzer configuration
+     *
+     * @TODO: Define how this could look like
+     *
+     * @var mixed
+     */
+    public $analyzers;
+
+    /**
+     * Analyzer wildcard handling configuration
+     *
+     * @TODO: Define how this could look like
+     *
+     * @var mixed
+     */
+    public $wildcards;
+
+    public function __construct( $value, array $properties = array() )
     {
         parent::__construct( null, Operator::LIKE, $value );
+
+        // Assign additional properties, ugly but with the existing constructor
+        // API the only sensible way, I guess.
+        foreach ( $properties as $name => $value )
+        {
+            if ( !isset( $this->$name ) )
+            {
+                throw new \InvalidArgumentException( "Unknown property $name." );
+            }
+
+            $this->$name = $value;
+        }
     }
 
     public function getSpecifications()

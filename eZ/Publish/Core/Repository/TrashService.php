@@ -268,8 +268,8 @@ class TrashService implements TrashServiceInterface
      */
     public function findTrashItems( Query $query )
     {
-        if ( $query->criterion !== null && !$query->criterion instanceof Criterion )
-            throw new InvalidArgumentValue( "query->criterion", $query->criterion, "Query" );
+        if ( $query->filter !== null && !$query->filter instanceof Criterion )
+            throw new InvalidArgumentValue( "query->filter", $query->filter, "Query" );
 
         if ( $query->sortClauses !== null )
         {
@@ -290,7 +290,7 @@ class TrashService implements TrashServiceInterface
             throw new InvalidArgumentValue( "query->limit", $query->limit, "Query" );
 
         $spiTrashItems = $this->persistenceHandler->trashHandler()->findTrashItems(
-            $query->criterion !== null ? $query->criterion : null,
+            $query->filter !== null ? $query->filter : null,
             $query->offset !== null && $query->offset > 0 ? (int)$query->offset : 0,
             $query->limit !== null && $query->limit >= 1 ? (int)$query->limit : null,
             $query->sortClauses !== null ? $query->sortClauses : null

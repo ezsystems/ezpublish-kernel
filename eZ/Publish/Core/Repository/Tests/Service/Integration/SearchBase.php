@@ -31,7 +31,7 @@ abstract class SearchBase extends BaseServiceTest
         $searchService = $this->repository->getSearchService();
         $query = new Query(
             array(
-                "criterion" => new Criterion\ContentId( array( 4 ) ),
+                "filter" => new Criterion\ContentId( array( 4 ) ),
                 "offset" => 0
             )
         );
@@ -67,7 +67,7 @@ abstract class SearchBase extends BaseServiceTest
         $searchService = $this->repository->getSearchService();
         $query = new Query(
             array(
-                "criterion" => new Criterion\ContentId( array( 4 ) ),
+                "filter" => new Criterion\ContentId( array( 4 ) ),
                 "offset" => 0
             )
         );
