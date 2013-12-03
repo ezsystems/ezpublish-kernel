@@ -98,7 +98,7 @@ class SearchService implements SearchServiceInterface
 
         $this->validateSortClauses( $query );
 
-        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
+        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->filter ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
         }
