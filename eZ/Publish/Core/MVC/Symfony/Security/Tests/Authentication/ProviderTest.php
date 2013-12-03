@@ -49,6 +49,11 @@ class ProviderTest extends PHPUnit_Framework_TestCase
      */
     private $logger;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configResolver;
+
     protected function setUp()
     {
         parent::setUp();
@@ -62,6 +67,7 @@ class ProviderTest extends PHPUnit_Framework_TestCase
         $this->userProvider = $this->getMock( 'Symfony\\Component\\Security\\Core\\User\\UserProviderInterface' );
         $this->userChecker = new UserChecker();
         $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
+        $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
 
         $this->authenticationProvider = new Provider(
             $this->userProvider,
@@ -74,6 +80,7 @@ class ProviderTest extends PHPUnit_Framework_TestCase
                 return $repository;
             }
         );
+        $this->authenticationProvider->setConfigResolver( $this->configResolver );
         $this->authenticationProvider->setLogger( $this->logger );
     }
 
@@ -175,10 +182,17 @@ class ProviderTest extends PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'warning' );
 
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( "getParameter" )
+            ->with( "anonymous_user_id" )
+            ->will( $this->returnValue( 10 ) );
+
         $anonymousUser = $this->getMockForAbstractClass( 'eZ\\Publish\\API\\Repository\\Values\\User\\User' );
         $this->userService
             ->expects( $this->once() )
-            ->method( 'loadAnonymousUser' )
+            ->method( 'loadUser' )
+            ->with( 10 )
             ->will( $this->returnValue( $anonymousUser ) );
         $this->repository
             ->expects( $this->once() )

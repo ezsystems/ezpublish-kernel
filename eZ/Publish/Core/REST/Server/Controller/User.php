@@ -973,7 +973,9 @@ class User extends RestController
                 );
             }
 
-            $anonymousUser = $this->userService->loadAnonymousUser();
+            $anonymousUser = $this->userService->loadUser(
+                $this->container->getParameter( "ezpublish.config.resolver" )->getParameter( "anonymous_user_id" )
+            );
             if ( $currentUser->id != $anonymousUser->id )
             {
                 // Already logged in with another user, this will be converted to HTTP status 409

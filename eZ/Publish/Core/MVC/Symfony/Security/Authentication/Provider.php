@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 class Provider extends PreAuthenticatedAuthenticationProvider
 {
@@ -29,9 +30,19 @@ class Provider extends PreAuthenticatedAuthenticationProvider
      */
     protected $logger;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
     public function setLazyRepository( \Closure $lazyRepository )
     {
         $this->lazyRepository = $lazyRepository;
+    }
+
+    public function setConfigResolver( ConfigResolverInterface $configResolver )
+    {
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -81,7 +92,9 @@ class Provider extends PreAuthenticatedAuthenticationProvider
                 $this->logger->warning( $e->getMessage(), array( 'userId' => $token->getUsername() ) );
 
             $user = new User(
-                $this->getRepository()->getUserService()->loadAnonymousUser(),
+                $this->getRepository()->getUserService()->loadUser(
+                    $this->configResolver->getParameter( "anonymous_user_id" )
+                ),
                 $e->getUser()->getRoles()
             );
             $authenticatedToken = new PreAuthenticatedToken( $user, '', $token->getProviderKey(), $user->getRoles() );
