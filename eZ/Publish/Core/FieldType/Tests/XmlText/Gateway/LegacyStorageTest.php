@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Gateway;
 
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;

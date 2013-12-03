@@ -57,7 +57,7 @@
           <xsd:element name="Modifier" type="ref">
             <xsd:annotation>
               <xsd:documentation>
-                The userwhich last modified the content
+                The user which last modified the content
                 type
               </xsd:documentation>
             </xsd:annotation>

@@ -43,11 +43,14 @@ class AuthorTest extends FieldTypeTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     protected function createFieldTypeUnderTest()
     {
-        return new AuthorType();
+        $fieldType = new AuthorType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -327,7 +330,7 @@ class AuthorTest extends FieldTypeTest
      */
     public function testValidatorConfigurationSchema()
     {
-        $ft = new AuthorType();
+        $ft = $this->createFieldTypeUnderTest();
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
             "The validator configuration schema does not match what is expected."
@@ -339,7 +342,7 @@ class AuthorTest extends FieldTypeTest
      */
     public function testSettingsSchema()
     {
-        $ft = new AuthorType();
+        $ft = $this->createFieldTypeUnderTest();
         self::assertEmpty(
             $ft->getSettingsSchema(),
             "The settings schema does not match what is expected."
@@ -352,7 +355,7 @@ class AuthorTest extends FieldTypeTest
      */
     public function testAcceptValueInvalidType()
     {
-        $ft = new AuthorType();
+        $ft = $this->createFieldTypeUnderTest();
         $ft->acceptValue( $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Value' ) );
     }
 
@@ -362,7 +365,7 @@ class AuthorTest extends FieldTypeTest
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new AuthorType();
+        $ft = $this->createFieldTypeUnderTest();
         $value = new AuthorValue;
         $value->authors = 'This is not a valid author collection';
         $ft->acceptValue( $value );
@@ -373,7 +376,7 @@ class AuthorTest extends FieldTypeTest
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new AuthorType();
+        $ft = $this->createFieldTypeUnderTest();
         $author = new Author;
         $author->name = 'Boba Fett';
         $author->email = 'boba.fett@bountyhunters.com';
@@ -419,16 +422,6 @@ class AuthorTest extends FieldTypeTest
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Author\Type::getName
-     */
-    public function testFieldValueTitle()
-    {
-        $ft = new AuthorType();
-        $value = new AuthorValue( $this->authors );
-        self::assertSame( $this->authors[0]->name, $ft->getName( $value ) );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\FieldType\Author\AuthorCollection::offsetSet
      */
     public function testAddAuthor()
@@ -467,5 +460,35 @@ class AuthorTest extends FieldTypeTest
         $value->authors->removeAuthorsById( array( $this->authors[1]->id, $this->authors[2]->id ) );
         self::assertSame( count( $this->authors ) - 2, count( $value->authors ) );
         self::assertSame( array( $this->authors[0] ), $value->authors->getArrayCopy() );
+    }
+
+    /**
+     * Returns the identifier of the field type under test.
+     *
+     * @return string
+     */
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezauthor';
+    }
+
+    /**
+     * Provides data for the getName() test.
+     *
+     * @return array
+     */
+    public function provideDataForGetName()
+    {
+        $authorList = new AuthorValue(
+            array(
+                new Author( array( 'id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com' ) ),
+                new Author( array( 'id' => 2, 'name' => 'Luke Skywalker', 'email' => 'luke.skywalker@example.com' ) ),
+            )
+        );
+
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( $authorList, 'Boba Fett' )
+        );
     }
 }

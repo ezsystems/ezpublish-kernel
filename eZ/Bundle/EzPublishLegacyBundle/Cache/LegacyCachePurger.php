@@ -36,7 +36,7 @@ class LegacyCachePurger implements CacheClearerInterface
         // Hence we deactivate configuration mapper to avoid potential issues (e.g. ezxFormToken which cannot be loaded).
         if ( !$fs->exists( "$legacyRootDir/var/autoload/ezp_extension.php" ) )
         {
-            $configurationMapper->setIsEnabled( false );
+            $configurationMapper->setEnabled( false );
         }
     }
 

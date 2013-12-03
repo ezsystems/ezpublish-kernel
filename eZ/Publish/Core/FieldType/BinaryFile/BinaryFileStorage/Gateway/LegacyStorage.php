@@ -28,7 +28,7 @@ class LegacyStorage extends BaseLegacyStorage
     /**
      * Returns a column to property mapping for the storage table.
      *
-     * @return void
+     * @return array
      */
     protected function getPropertyMapping()
     {

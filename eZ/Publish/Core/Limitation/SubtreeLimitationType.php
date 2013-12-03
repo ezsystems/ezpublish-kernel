@@ -77,11 +77,15 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         {
             try
             {
-                $pathArray = explode( '/', trim( '/', $path ) );
+                $pathArray = explode( '/', trim( $path, '/' ) );
                 $subtreeRootLocationId = end( $pathArray );
-                $this->persistence->locationHandler()->load( $subtreeRootLocationId );
+                $spiLocation = $this->persistence->locationHandler()->load( $subtreeRootLocationId );
             }
             catch ( APINotFoundException $e )
+            {
+            }
+
+            if ( !isset( $spiLocation ) || strpos( $spiLocation->pathString, $path ) !== 0 )
             {
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",

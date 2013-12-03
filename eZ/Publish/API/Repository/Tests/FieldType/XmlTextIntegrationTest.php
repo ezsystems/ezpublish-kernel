@@ -488,4 +488,118 @@ EOT
             array( new XmlTextValue( $doc2 ) ),
         );
     }
+
+    /**
+     * Get data to test remote id conversion
+     *
+     * This is a PHP Unit data provider
+     *
+     * @see testConvertReomoteObjectIdToObjectId()
+     */
+    public function providerForTestConvertRemoteObjectIdToObjectId()
+    {
+        $remote_id = "[RemoteId]";
+        $object_id = "[ObjectId]";
+
+        return array(
+            array(
+                // test link
+                '<?xml version="1.0" encoding="utf-8"?>
+<section>
+    <paragraph><link anchor_name="test" object_remote_id="'.$remote_id.'">link</link></paragraph>
+</section>
+',
+                '<?xml version="1.0" encoding="utf-8"?>
+<section>
+    <paragraph><link anchor_name="test" object_id="'.$object_id.'">link</link></paragraph>
+</section>
+',
+            ),
+            array(
+                // test embed
+                '<?xml version="1.0" encoding="utf-8"?>
+<section>
+    <paragraph><embed view="embed" size="medium" object_remote_id="'.$remote_id.'"/></paragraph>
+</section>
+',
+                '<?xml version="1.0" encoding="utf-8"?>
+<section>
+    <paragraph><embed view="embed" size="medium" object_id="'.$object_id.'"/></paragraph>
+</section>
+',
+            ),
+            array(
+                // test embed-inline
+                '<?xml version="1.0" encoding="utf-8"?>
+<section>
+    <paragraph><embed-inline size="medium" object_remote_id="'.$remote_id.'"/></paragraph>
+</section>
+',
+                '<?xml version="1.0" encoding="utf-8"?>
+<section>
+    <paragraph><embed-inline size="medium" object_id="'.$object_id.'"/></paragraph>
+</section>
+',
+            ),
+        );
+    }
+
+    /**
+     * This tests the conversion from remote_object_id to object_id
+     *
+     * @return void
+     * @dataProvider providerForTestConvertRemoteObjectIdToObjectId
+     */
+    public function testConvertRemoteObjectIdToObjectId( $test , $expected )
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        // Create a folder for tests
+        $createStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            'eng-GB'
+        );
+
+        $createStruct->setField( 'name', "Folder Link" );
+        $draft = $contentService->createContent(
+            $createStruct,
+            array( $locationService->newLocationCreateStruct( 2 ) )
+        );
+
+        $folder = $contentService->publishVersion(
+            $draft->versionInfo
+        );
+
+        $object_id = $folder->versionInfo->contentInfo->id;
+        $node_id = $folder->versionInfo->contentInfo->mainLocationId;
+        $remote_id = $folder->versionInfo->contentInfo->remoteId;
+
+        // create value to be tested
+        $testStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( 'article' ),
+            'eng-GB'
+        );
+        $testStruct->setField( 'title', "Article - test" );
+        $testStruct->setField(
+            'intro',
+            str_replace(
+                "[RemoteId]",
+                $remote_id,
+                $test
+            )
+        );
+        $test = $contentService->createContent(
+            $testStruct,
+            array( $locationService->newLocationCreateStruct( $node_id ) )
+        );
+
+        $this->assertEquals(
+            $test->getField( 'intro' )->value->xml->saveXML(),
+            str_replace( "[ObjectId]", $object_id, $expected )
+        );
+    }
 }

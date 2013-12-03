@@ -157,7 +157,7 @@ XML;
 
     /**
      * @depends testCreateDraftFromVersion
-     * @covers GET /content/objects/<contentId>/versions/<versionNumer>
+     * @covers GET /content/objects/<contentId>/versions/<versionNumber>
      * @param string $restContentVersionHref
      */
     public function testLoadContentVersion( $restContentVersionHref )

@@ -1200,7 +1200,21 @@ class UserServiceTest extends BaseTest
         $userReloaded = $userService->loadUserByLogin( 'user' );
         /* END: Use Case */
 
-        $this->assertEquals( $user, $userReloaded );
+        $this->assertPropertiesCorrect(
+            array(
+                "login" => $user->login,
+                "email" => $user->email,
+                "passwordHash" => $user->passwordHash,
+                "hashAlgorithm" => $user->hashAlgorithm,
+                "enabled" => $user->enabled,
+                "maxLogin" => $user->maxLogin,
+                "id" => $user->id,
+                "contentInfo" => $user->contentInfo,
+                "versionInfo" => $user->versionInfo,
+                "fields" => $user->fields
+            ),
+            $userReloaded
+        );
     }
 
     /**

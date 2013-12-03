@@ -14,7 +14,6 @@ use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
@@ -425,6 +424,21 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler
+     */
+    public function loadContentInfoByRemoteId( $remoteId )
+    {
+        $res = $this->backend->find(
+            'Content\\ContentInfo',
+            array( 'remoteId' => $remoteId )
+        );
+        if ( !isset( $res[0] ) )
+            throw new NotFoundException( "Content", "remoteId:{$remoteId}" );
+
+        return $res[0];
+    }
+
+    /**
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId
@@ -514,7 +528,6 @@ class ContentHandler implements ContentHandlerInterface
     public function updateMetadata( $contentId, MetadataUpdateStruct $content )
     {
         $updateData = (array)$content;
-        $updateData["alwaysAvailable"] = $updateData["alwaysAvailable"];
         $updateData["mainLanguageCode"] = $this->handler->contentLanguageHandler()
             ->load( $content->mainLanguageId )->languageCode;
 

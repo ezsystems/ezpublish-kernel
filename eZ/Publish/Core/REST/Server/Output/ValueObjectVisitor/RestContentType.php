@@ -107,13 +107,19 @@ class RestContentType extends RestContentTypeBase
         $generator->startValueElement( 'nameSchema', $contentType->nameSchema );
         $generator->endValueElement( 'nameSchema' );
 
-        $generator->startValueElement( 'isContainer', ( $contentType->isContainer ? 'true' : 'false' ) );
+        $generator->startValueElement(
+            'isContainer',
+            $this->serializeBool( $generator, $contentType->isContainer )
+        );
         $generator->endValueElement( 'isContainer' );
 
         $generator->startValueElement( 'mainLanguageCode', $contentType->mainLanguageCode );
         $generator->endValueElement( 'mainLanguageCode' );
 
-        $generator->startValueElement( 'defaultAlwaysAvailable', ( $contentType->defaultAlwaysAvailable ? 'true' : 'false' ) );
+        $generator->startValueElement(
+            'defaultAlwaysAvailable',
+            $this->serializeBool( $generator, $contentType->defaultAlwaysAvailable )
+        );
         $generator->endValueElement( 'defaultAlwaysAvailable' );
 
         $generator->startValueElement( 'defaultSortField', $this->serializeSortField( $contentType->defaultSortField ) );

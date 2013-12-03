@@ -54,10 +54,9 @@ class DateIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezdate',
-            new FieldType\Date\Type()
-        );
+        $fieldType = new FieldType\Date\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezdate', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezdate',
             new FieldType\NullStorage()

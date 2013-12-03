@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\TextLine\Type as TextLineType;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -32,7 +31,10 @@ class TextLineTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new TextLineType();
+        $fieldType = new TextLineType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -164,6 +166,11 @@ class TextLineTest extends FieldTypeTest
             array(
                 new TextLineValue( ' sindelfingen ' ),
                 new TextLineValue( ' sindelfingen ' ),
+            ),
+            array(
+                // 11+ numbers - EZP-21771
+                '12345678901',
+                new TextLineValue( '12345678901' ),
             ),
             array(
                 new TextLineValue( '' ),
@@ -430,6 +437,19 @@ class TextLineTest extends FieldTypeTest
                     ),
                 )
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezstring';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( new TextLineValue( 'This is a line of text' ), 'This is a line of text' )
         );
     }
 }

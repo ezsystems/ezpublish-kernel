@@ -12,7 +12,6 @@ use eZ\Publish\Core\FieldType\TextLine\Type;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\FieldTypeService;
-use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class FieldTypeServiceTest extends ServiceTest
 {
@@ -28,9 +27,21 @@ class FieldTypeServiceTest extends ServiceTest
         return new FieldTypeService( $coreService, $dispatcher );
     }
 
+    protected function getTransformationProcessorMock()
+    {
+        return $this->getMockForAbstractClass(
+            "eZ\\Publish\\Core\\Persistence\\TransformationProcessor",
+            array(),
+            '',
+            false,
+            true,
+            true
+        );
+    }
+
     public function serviceProvider()
     {
-        $fieldType = new Type();
+        $fieldType = new Type( $this->getTransformationProcessorMock() );
 
         return array(
             array(

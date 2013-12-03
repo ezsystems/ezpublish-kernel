@@ -33,7 +33,10 @@ class DateTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Date();
+        $fieldType = new Date();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -359,6 +362,25 @@ class DateTest extends FieldTypeTest
                     'defaultType' => 42,
                 )
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezdate';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                $this->getEmptyValueExpectation(),
+                ''
+            ),
+            array(
+                new DateValue( new DateTime( '11/24/1983' ) ),
+                'Thursday 24 November 1983'
+            )
         );
     }
 }

@@ -173,7 +173,7 @@ class RestContent extends ValueObjectVisitor
 
         $generator->startValueElement(
             'alwaysAvailable',
-            ( $contentInfo->alwaysAvailable ? 'true' : 'false' )
+            $this->serializeBool( $generator, $contentInfo->alwaysAvailable )
         );
         $generator->endValueElement( 'alwaysAvailable' );
 

@@ -56,8 +56,7 @@ class Mapper
 
         $group->name = $struct->name;
 
-        // Intentionally left out, since DB structure does not support it, yet
-        // $group->description = $struct->description;
+        // $group->description is intentionally left out, since DB structure does not support it, yet
 
         $group->identifier = $struct->identifier;
         $group->created = $struct->created;

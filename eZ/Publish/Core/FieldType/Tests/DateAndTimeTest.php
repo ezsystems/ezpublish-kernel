@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\DateAndTime\Type as DateAndTime;
 use eZ\Publish\Core\FieldType\DateAndTime\Value as DateAndTimeValue;
-use ReflectionObject;
 use DateTime;
 use DateInterval;
 use stdClass;
@@ -35,7 +34,10 @@ class DateAndTimeTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new DateAndTime();
+        $fieldType = new DateAndTime();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -379,6 +381,25 @@ class DateAndTimeTest extends FieldTypeTest
                     'dateInterval' => new stdClass(),
                 )
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezdatetime';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                $this->getEmptyValueExpectation(),
+                ''
+            ),
+            array(
+                DateAndTimeValue::fromTimestamp( 438512400 ),
+                'Thu 1983-24-11 09:00:00'
+            )
         );
     }
 }

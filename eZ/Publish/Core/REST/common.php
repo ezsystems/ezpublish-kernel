@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\REST;
 
 use eZ\Publish\Core\FieldType;
-use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Values\Content\Content;
 
 if ( !defined( 'HTTP_BASE_URL' ) )
 {

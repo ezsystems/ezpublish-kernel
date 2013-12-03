@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http;
 
+use PHPUnit_Framework_Assert;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient;
+use Buzz\Browser;
 
 class PurgeClientTest extends HttpBasedPurgeClientTest
 {
@@ -50,7 +52,7 @@ class PurgeClientTest extends HttpBasedPurgeClientTest
 
     /**
      * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient::purge
+     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient::purgeAll
      */
     public function testPurgeAll()
     {
@@ -68,5 +70,37 @@ class PurgeClientTest extends HttpBasedPurgeClientTest
 
         $purgeClient = new PurgeClient( $this->configResolver, $this->httpBrowser );
         $purgeClient->purgeAll();
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\PurgeClient::purge
+     */
+    public function testPurgeWithAuthentication()
+    {
+        $username = 'user';
+        $password = 'pass';
+        $purgeServer = "http://$username:$password@localhost/";
+
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'http_cache.purge_servers' )
+            ->will( $this->returnValue( array( $purgeServer ) ) );
+
+        $this->httpClient
+            ->expects( $this->once() )
+            ->method( 'send' )
+            ->will(
+                $this->returnCallback(
+                    function( $request ) use ( $username, $password ) {
+                        $authHeader = 'Authorization: Basic ' . base64_encode( $username . ':' . $password );
+                        PHPUnit_Framework_Assert::AssertContains( $authHeader, $request->getHeaders() );
+                    }
+                )
+            );
+
+        $httpBrowser = new Browser( $this->httpClient );
+        $purgeClient = new PurgeClient( $this->configResolver, $httpBrowser );
+        $purgeClient->purge( array( 123 ) );
     }
 }

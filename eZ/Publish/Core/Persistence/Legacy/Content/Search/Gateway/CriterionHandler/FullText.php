@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHan
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use ezcQuerySelect;
@@ -68,16 +68,16 @@ class FullText extends CriterionHandler
     /**
      * Transformation processor to normalize search strings
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     protected $processor;
 
     /**
      * Construct from full text search configuration
      *
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $processor
      * @param array $configuration
-     *
-     * @return void
      */
     public function __construct( EzcDbHandler $dbHandler, TransformationProcessor $processor, array $configuration = array() )
     {

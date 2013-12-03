@@ -62,4 +62,24 @@ class Controller extends BaseController
     {
         return $this->container->get( 'security.context' )->isGranted( $attribute );
     }
+
+    /**
+     * Returns the general helper service, exposed in Twig templates as "ezpublish" global variable.
+     *
+     * @return \eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper
+     */
+    public function getGlobalHelper()
+    {
+        return $this->container->get( 'ezpublish.templating.global_helper' );
+    }
+
+    /**
+     * Returns the root location object for current siteaccess configuration.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function getRootLocation()
+    {
+        return $this->getGlobalHelper()->getRootLocation();
+    }
 }

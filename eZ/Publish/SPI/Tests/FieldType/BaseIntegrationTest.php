@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\SPI\Tests\FieldType;
 
+use eZ\Publish\Core\Persistence;
+use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\SPI\Persistence\Content;
@@ -53,6 +55,48 @@ abstract class BaseIntegrationTest extends TestCase
      * @var string
      */
     protected static $contentVersion;
+
+    /**
+     * @return string
+     */
+    static protected function getInstallationDir()
+    {
+        static $installDir = null;
+        if ( $installDir === null )
+        {
+            $config = require __DIR__ . '/../../../../../config.php';
+            $installDir = $config['service']['parameters']['install_dir'];
+        }
+        return $installDir;
+    }
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
+     */
+    protected $transformationProcessor;
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\TransformationProcessor
+     */
+    public function getTransformationProcessor()
+    {
+        if ( !isset( $this->transformationProcessor ) )
+        {
+            $rules = array();
+            foreach ( glob( __DIR__ . '/../../../Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
+            {
+                $rules[] = str_replace( self::getInstallationDir(), '', $file );
+            }
+
+            $this->transformationProcessor = new DefinitionBased(
+                new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
+                new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() ),
+                $rules
+            );
+        }
+
+        return $this->transformationProcessor;
+    }
 
     /**
      * Returns the identifier of the FieldType under test
@@ -533,11 +577,13 @@ abstract class BaseIntegrationTest extends TestCase
      */
     protected function getHandler()
     {
+        $textLineFieldType = new \eZ\Publish\Core\FieldType\TextLine\Type();
+        $textLineFieldType->setTransformationProcessor( $this->getTransformationProcessor() );
         return new Legacy\Handler(
             self::$setUp,
             new FieldTypeRegistry(
                 array(
-                    'ezstring' => new \eZ\Publish\Core\FieldType\TextLine\Type(),
+                    'ezstring' => $textLineFieldType,
                 )
             ),
             new ConverterRegistry(
@@ -548,13 +594,7 @@ abstract class BaseIntegrationTest extends TestCase
             new StorageRegistry(
                 array()
             ),
-            $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor\\DefinitionBased',
-                array(),
-                array(),
-                '',
-                false
-            )
+            $this->getTransformationProcessor()
         );
     }
 }

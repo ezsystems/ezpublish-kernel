@@ -15,9 +15,8 @@ use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
-use eZClusterFileHandler;
 use DateTime;
+use RuntimeException;
 use eZ\Publish\Core\IO\MetadataHandler;
 
 /**
@@ -48,11 +47,11 @@ class Filesystem implements IOHandlerInterface
     {
         if ( !file_exists( $storageDirectory ) || !is_dir( $storageDirectory ) )
         {
-            throw new \RuntimeException( "Storage directory $storageDirectory doesn't exist" );
+            throw new RuntimeException( "Storage directory $storageDirectory doesn't exist" );
         }
         if ( !is_writeable( $storageDirectory ) )
         {
-            throw new \RuntimeException( "Storage directory $storageDirectory can not be written to" );
+            throw new RuntimeException( "Storage directory $storageDirectory can not be written to" );
         }
         $this->storageDirectory = realpath( $storageDirectory );
         if ( $storageDirectory[0] !== DIRECTORY_SEPARATOR )
@@ -331,6 +330,6 @@ class Filesystem implements IOHandlerInterface
 
     public function getUri( $spiBinaryFileId )
     {
-        return ( $this->prefix ? $this->prefix . '/' : '') . $spiBinaryFileId;
+        return '/' . ( $this->prefix ? $this->prefix . '/' : '') . $spiBinaryFileId;
     }
 }

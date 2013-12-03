@@ -240,7 +240,7 @@ class SlugConverterTest extends TestCase
         if ( !isset( $this->transformationProcessorMock ) )
         {
             $this->transformationProcessorMock = $this->getMockForAbstractClass(
-                "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\TransformationProcessor",
+                "eZ\\Publish\\Core\\Persistence\\TransformationProcessor",
                 array(),
                 '',
                 false,

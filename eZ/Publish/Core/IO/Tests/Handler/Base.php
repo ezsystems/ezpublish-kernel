@@ -266,7 +266,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\IO\Handler::getFileResource
-     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetFileResourceNonExistingFile()
     {
@@ -287,7 +287,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\IO\Handler::getFileContents
-     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetFileContentsNonExistingFile()
     {

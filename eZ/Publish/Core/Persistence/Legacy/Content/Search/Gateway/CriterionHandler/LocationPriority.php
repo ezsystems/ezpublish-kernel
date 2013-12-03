@@ -46,7 +46,6 @@ class LocationPriority extends CriterionHandler
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
         $subSelect = $query->subSelect();
-        $column = $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' );
 
         switch ( $criterion->operator )
         {

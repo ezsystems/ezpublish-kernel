@@ -17,7 +17,6 @@ use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\MimeTypeDetector;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\MetadataHandler;
 
 /**
@@ -183,16 +182,9 @@ class IOService
         if ( $binaryFileId[0] === '/' )
             return false;
 
-        try
-        {
-            $spiBinaryFile = $this->ioHandler->load( $this->getPrefixedUri( $binaryFileId ) );
-        }
-        catch ( NotFoundException $e )
-        {
-            return false;
-        }
-
-        return $this->buildDomainBinaryFileObject( $spiBinaryFile );
+        return $this->buildDomainBinaryFileObject(
+            $this->ioHandler->load( $this->getPrefixedUri( $binaryFileId ) )
+        );
     }
 
     /**
@@ -278,6 +270,11 @@ class IOService
             $metadataHandler,
             $this->getPrefixedUri( $binaryFile->id )
         );
+    }
+
+    public function exists( $binaryFileId )
+    {
+        return $this->ioHandler->exists( $this->getPrefixedUri( $binaryFileId ) );
     }
 
     /**

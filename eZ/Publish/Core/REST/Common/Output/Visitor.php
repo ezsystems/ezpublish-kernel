@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\REST\Common\Output;
 
 use eZ\Publish\Core\REST\Common\Message;
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher;
 
 /**
  * Visitor for view models

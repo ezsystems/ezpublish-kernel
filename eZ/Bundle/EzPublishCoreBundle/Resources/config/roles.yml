@@ -13,6 +13,7 @@ parameters:
     ezpublish.api.role.limitation_type.state.class: eZ\Publish\Core\Limitation\ObjectStateLimitationType
     ezpublish.api.role.limitation_type.subtree.class: eZ\Publish\Core\Limitation\SubtreeLimitationType
     ezpublish.api.role.limitation_type.user_group.class: eZ\Publish\Core\Limitation\UserGroupLimitationType
+    ezpublish.api.role.limitation_type.status.class: eZ\Publish\Core\Limitation\StatusLimitationType
 
 services:
     ezpublish.api.role.limitation_type.content_type:
@@ -97,3 +98,8 @@ services:
         arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: UserGroup}
+
+    ezpublish.api.role.limitation_type.status:
+        class: %ezpublish.api.role.limitation_type.status.class%
+        tags:
+            - {name: ezpublish.limitationType, alias: Status}

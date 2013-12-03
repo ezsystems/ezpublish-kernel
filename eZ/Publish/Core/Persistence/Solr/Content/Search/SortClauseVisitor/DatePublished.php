@@ -34,7 +34,7 @@ class DatePublished extends SortClauseVisitor
      *
      * @param SortClause $sortClause
      *
-     * @return void
+     * @return string
      */
     public function visit( SortClause $sortClause )
     {

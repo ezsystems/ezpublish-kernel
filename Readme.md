@@ -1,6 +1,8 @@
 # eZ Publish 5.x Kernel
 [![Build Status](https://travis-ci.org/ezsystems/ezpublish-kernel.png?branch=master)](https://travis-ci.org/ezsystems/ezpublish-kernel)
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0/big.png)](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0)
+
 Welcome to the new eZ Publish 5.x Kernel, this code repository contains several layers of API's and implementation of them.
 However it does not contain all parts that make up the eZ Publish 5 install, for the full eZ Publish 5 package including
 bundles, Legacy Stack, install doc and more; please see our [ezpublish-community](https://github.com/ezsystems/ezpublish-community) repository.

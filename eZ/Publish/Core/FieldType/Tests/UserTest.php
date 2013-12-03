@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\User\Type as UserType;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -32,7 +31,10 @@ class UserTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new UserType();
+        $fieldType = new UserType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -292,6 +294,19 @@ class UserTest extends FieldTypeTest
                 ),
                 new UserValue( $userData ),
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezuser';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( new UserValue( array( 'login' => 'johndoe' ) ), 'johndoe' )
         );
     }
 }

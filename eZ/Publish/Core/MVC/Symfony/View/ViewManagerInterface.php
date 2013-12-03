@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\MVC\Symfony\View;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
 
 interface ViewManagerInterface
 {

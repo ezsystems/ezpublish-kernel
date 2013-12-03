@@ -46,10 +46,16 @@ class RestLocation extends ValueObjectVisitor
         $generator->startValueElement( 'priority', $data->location->priority );
         $generator->endValueElement( 'priority' );
 
-        $generator->startValueElement( 'hidden', $data->location->hidden ? 'true' : 'false' );
+        $generator->startValueElement(
+            'hidden',
+            $this->serializeBool( $generator, $data->location->hidden )
+        );
         $generator->endValueElement( 'hidden' );
 
-        $generator->startValueElement( 'invisible', $data->location->invisible ? 'true' : 'false' );
+        $generator->startValueElement(
+            'invisible',
+            $this->serializeBool( $generator, $data->location->invisible )
+        );
         $generator->endValueElement( 'invisible' );
 
         $generator->startObjectElement( 'ParentLocation', 'Location' );

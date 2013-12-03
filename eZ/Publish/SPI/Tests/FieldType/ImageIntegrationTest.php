@@ -79,10 +79,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezimage',
-            new FieldType\Image\Type( $this->getIOService() )
-        );
+        $fieldType = new FieldType\Image\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezimage', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezimage',
             new FieldType\Image\ImageStorage(
@@ -186,11 +185,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             file_exists( $this->getStorageDir() . '/' . $field->value->data['uri'] ),
             "Stored file " . $field->value->data['uri'] . " doesn't exist"
         );
-
         $this->assertEquals( 'Ice-Flower.jpg', $field->value->data['fileName'] );
-
         $this->assertEquals( 'An icy flower.', $field->value->data['alternativeText'] );
-
         $this->assertNull( $field->value->externalData );
     }
 
@@ -239,17 +235,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             "Stored file ".$field->value->data['uri']." exists"
         );
 
-        // Check old files not removed before update
-        // need to stay there for reference integrity
-        $this->assertEquals(
-            2,
-            count( glob( dirname( $storagePath ) . '/*' ) )
-        );
-
         $this->assertEquals( 'Blueish-Blue.jpg', $field->value->data['fileName'] );
-
         $this->assertEquals( 'This blue is so blueish.', $field->value->data['alternativeText'] );
-
         $this->assertNull( $field->value->externalData );
     }
 

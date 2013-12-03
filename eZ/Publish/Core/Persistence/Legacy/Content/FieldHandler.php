@@ -15,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
@@ -173,33 +172,9 @@ class FieldHandler
      */
     public function createExistingFieldsInNewVersion( Content $content )
     {
-        $languageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
-        $contentFieldMap = $this->getFieldMap( $content->fields );
-        $content->fields = array();
-        $contentType = $this->typeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
-        $mainLanguageCode = $content->versionInfo->contentInfo->mainLanguageCode;
-
-        foreach ( $contentType->fieldDefinitions as $fieldDefinition )
+        foreach ( $content->fields as $field )
         {
-            foreach ( array_keys( $languageCodes ) as $languageCode )
-            {
-                if ( !$fieldDefinition->isTranslatable && $languageCode != $mainLanguageCode )
-                {
-                    $createInNewLanguageCode = $languageCode;
-                    $field = $contentFieldMap[$fieldDefinition->id][$mainLanguageCode];
-                }
-                else
-                {
-                    $createInNewLanguageCode = null;
-                    $field = $contentFieldMap[$fieldDefinition->id][$languageCode];
-                }
-
-                $content->fields[] = $this->createExistingFieldInNewVersion(
-                    $field,
-                    $content,
-                    $createInNewLanguageCode
-                );
-            }
+            $this->createExistingFieldInNewVersion( $field, $content );
         }
     }
 
@@ -323,26 +298,21 @@ class FieldHandler
     /**
      * Creates an existing field in a new version, no new ID is generated.
      *
-     * If $newLanguageCode is set field will be created in it. This is used for creating non-translatable
-     * fields from field in main language.
+     * Used to insert a field with an existing ID but a new version number.
+     * $content is used for new version data, needed by Content gateway and external storage.
      *
      * External data is being copied here as some FieldTypes require original field external data.
      * By default copying falls back to storing, it is upon external storage implementation to override
      * the behaviour as needed.
      *
-     * @param Field $originalField
+     * @param Field $field
      * @param Content $content
-     * @param string|null $newLanguageCode
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Field
+     * @return void
      */
-    protected function createExistingFieldInNewVersion( Field $originalField, Content $content, $newLanguageCode = null )
+    protected function createExistingFieldInNewVersion( Field $field, Content $content )
     {
-        $field = clone $originalField;
-        if ( $newLanguageCode !== null )
-        {
-            $field->languageCode = $newLanguageCode;
-        }
+        $originalField = clone $field;
         $field->versionNo = $content->versionInfo->versionNo;
 
         $this->contentGateway->insertExistingField(
@@ -361,8 +331,6 @@ class FieldHandler
                 $this->mapper->convertToStorageValue( $field )
             );
         }
-
-        return $field;
     }
 
     /**

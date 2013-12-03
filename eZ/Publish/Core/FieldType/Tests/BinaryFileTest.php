@@ -31,10 +31,10 @@ class BinaryFileTest extends BinaryBaseTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new BinaryFileType(
-            $this->getIOServiceMock(),
-            $this->getMimeTypeDetectorMock()
-        );
+        $fieldType = new BinaryFileType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     protected function getEmptyValueExpectation()
@@ -319,6 +319,25 @@ class BinaryFileTest extends BinaryBaseTest
                 )
             )
             // @todo: Provide upload struct (via REST)!
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezbinaryfile';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new BinaryFileValue(),
+                ''
+            ),
+            array(
+                new BinaryFileValue( array( 'fileName' => 'sindelfingen.jpg' ) ),
+                'sindelfingen.jpg'
+            )
         );
     }
 }

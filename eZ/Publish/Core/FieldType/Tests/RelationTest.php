@@ -11,10 +11,9 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Relation\Type as RelationType;
 use eZ\Publish\Core\FieldType\Relation\Value;
-use eZ\Publish\Core\FieldType\Tests\FieldTypeTest;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 class RelationTest extends FieldTypeTest
 {
@@ -31,7 +30,10 @@ class RelationTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new RelationType();
+        $fieldType = new RelationType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -66,7 +68,7 @@ class RelationTest extends FieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return Value
      */
     protected function getEmptyValueExpectation()
     {
@@ -354,6 +356,27 @@ class RelationTest extends FieldTypeTest
                 Relation::FIELD => array( 70 ),
             ),
             $ft->getRelations( $ft->acceptValue( 70 ) )
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezobjectrelation';
+    }
+
+    /**
+     * @dataProvider provideDataForGetName
+     * @expectedException \RuntimeException
+     */
+    public function testGetName( SPIValue $value, $expected )
+    {
+        $this->getFieldTypeUnderTest()->getName( $value );
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' )
         );
     }
 }

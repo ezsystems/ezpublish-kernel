@@ -19,7 +19,6 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
@@ -30,6 +29,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreat
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 use DateTime;
 
@@ -145,7 +145,7 @@ class DomainMapper
                 "modificationDate" => $this->getDateTime( $spiVersionInfo->modificationDate ),
                 "creatorId" => $spiVersionInfo->creatorId,
                 "creationDate" => $this->getDateTime( $spiVersionInfo->creationDate ),
-                "status" => $this->convertVersionStatus( $spiVersionInfo->status ),
+                "status" => $spiVersionInfo->status,
                 "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
                 "names" => $spiVersionInfo->names,
@@ -221,28 +221,6 @@ class DomainMapper
                 "destinationContentInfo" => $destinationContentInfo
             )
         );
-    }
-
-    /**
-     * Converts SPI VersionInfo::STATUS_* constant to the API VersionInfo::STATUS_* constant.
-     *
-     * @param mixed $spiStatus
-     *
-     * @return mixed
-     */
-    public function convertVersionStatus( $spiStatus )
-    {
-        switch ( $spiStatus )
-        {
-            case SPIVersionInfo::STATUS_DRAFT:
-                return VersionInfo::STATUS_DRAFT;
-            case SPIVersionInfo::STATUS_PUBLISHED:
-                return VersionInfo::STATUS_PUBLISHED;
-            case SPIVersionInfo::STATUS_ARCHIVED:
-                return VersionInfo::STATUS_ARCHIVED;
-        }
-
-        return null;
     }
 
     /**
@@ -377,6 +355,34 @@ class DomainMapper
         }
 
         return false;
+    }
+
+    /**
+     * Validates given translated list $list, which should be an array of strings with language codes as keys.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param mixed $list
+     * @param string $argumentName
+     *
+     * @return void
+     */
+    public function validateTranslatedList( $list, $argumentName )
+    {
+        if ( !is_array( $list ) )
+        {
+            throw new InvalidArgumentType( $argumentName, "array", $list );
+        }
+
+        foreach ( $list as $languageCode => $translation )
+        {
+            $this->contentLanguageHandler->loadByLanguageCode( $languageCode );
+
+            if ( !is_string( $translation ) )
+            {
+                throw new InvalidArgumentType( $argumentName . "['$languageCode']", "string", $translation );
+            }
+        }
     }
 
     /**

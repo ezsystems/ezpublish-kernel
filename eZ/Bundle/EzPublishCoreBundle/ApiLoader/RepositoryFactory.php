@@ -10,7 +10,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
-use eZ\Publish\SPI\IO\Handler as IoHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -56,7 +55,6 @@ class RepositoryFactory
      * directly to make sure you get an instance wrapped inside Signal / Cache / * functionality.
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \eZ\Publish\SPI\IO\Handler $ioHandler
      *
      * @return \eZ\Publish\API\Repository\Repository
      */

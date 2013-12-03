@@ -780,11 +780,19 @@ class Repository implements RepositoryInterface
 
             if ( $this->transactionDepth === 0 )
             {
+                $queueCountDown = count( $this->commitEventsQueue );
                 foreach ( $this->commitEventsQueue as $eventsQueue )
                 {
+                    --$queueCountDown;
+                    if ( empty( $eventsQueue ) )
+                        continue;
+
+                    $eventCountDown = count( $eventsQueue );
                     foreach ( $eventsQueue as $event )
                     {
-                        $event();
+                        --$eventCountDown;
+                        // event expects a boolean param, if true it means it is last event (for commit use)
+                        $event( $queueCountDown === 0 && $eventCountDown === 0 );
                     }
                 }
 
@@ -832,7 +840,8 @@ class Repository implements RepositoryInterface
         }
         else
         {
-            $event();
+            // event expects a boolean param, if true it means it is last event (for commit use)
+            $event( true );
         }
     }
 

@@ -379,7 +379,9 @@ CREATE TABLE eznode_assignment (
     parent_remote_id character varying(100) DEFAULT ''::character varying NOT NULL,
     remote_id character varying(100) DEFAULT '0'::character varying NOT NULL,
     sort_field integer DEFAULT 1,
-    sort_order integer DEFAULT 1
+    sort_order integer DEFAULT 1,
+    priority integer DEFAULT 0 NOT NULL,
+    is_hidden integer DEFAULT 0 NOT NULL
 );
 
 DROP TABLE IF EXISTS ezpolicy;
@@ -611,6 +613,8 @@ CREATE INDEX ezcontentobject_attribute_co_id_ver_lang_code ON ezcontentobject_at
 
 CREATE INDEX ezcontentobject_attribute_language_code ON ezcontentobject_attribute USING btree (language_code);
 
+CREATE INDEX ezcontentobject_classattr_id ON ezcontentobject_attribute USING btree (contentclassattribute_id); 
+
 CREATE INDEX sort_key_int ON ezcontentobject_attribute USING btree (sort_key_int);
 
 CREATE INDEX sort_key_string ON ezcontentobject_attribute USING btree (sort_key_string);
@@ -743,8 +747,6 @@ CREATE INDEX ezkeyword_attr_link_oaid ON ezkeyword_attribute_link USING btree (o
 
 CREATE INDEX ezuser_accountkey_hash_key ON ezuser_accountkey USING btree (hash_key);
 
-CREATE INDEX ezuservisit_co_visit_count ON ezuservisit USING btree (current_visit_timestamp,login_count);
-
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -861,9 +863,6 @@ ALTER TABLE ONLY ezuser_role
 
 ALTER TABLE ONLY ezuser_setting
     ADD CONSTRAINT ezuser_setting_pkey PRIMARY KEY (user_id);
-
-ALTER TABLE ONLY ezuser_accountkey
-    ADD CONSTRAINT ezuser_accountkey_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezuservisit
     ADD CONSTRAINT ezuservisit_pkey PRIMARY KEY (user_id);

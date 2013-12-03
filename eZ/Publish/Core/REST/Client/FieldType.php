@@ -104,12 +104,12 @@ class FieldType implements APIFieldType
      */
     public function getValidatorConfigurationSchema()
     {
-        return $third->innerFieldType->getValidatorConfigurationSchema();
+        return $this->innerFieldType->getValidatorConfigurationSchema();
     }
 
     public function getName( $value )
     {
-        return $third->innerFieldType->getName( $value );
+        return $this->innerFieldType->getName( $value );
     }
 
     /**

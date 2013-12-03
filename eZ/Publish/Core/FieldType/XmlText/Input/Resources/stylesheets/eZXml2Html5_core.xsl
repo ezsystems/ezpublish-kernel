@@ -20,6 +20,8 @@
 
         <a name="eztoc{translate($name, '.', '_')}" id="eztoc{translate($name, '.', '_')}"/>
         <xsl:element name="h{$level}">
+            <xsl:copy-of select="@class"/>
+            <xsl:copy-of select="@align"/>
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
@@ -32,6 +34,8 @@
             </xsl:when>
             <xsl:otherwise>
                 <p>
+                    <xsl:copy-of select="@class"/>
+                    <xsl:copy-of select="@align"/>
                     <xsl:apply-templates/>
                 </p>
             </xsl:otherwise>
@@ -121,6 +125,8 @@
                     <xsl:value-of select="@xhtml:width"/>
                 </xsl:attribute>
             </xsl:if>
+            <xsl:copy-of select="@class"/>
+            <xsl:copy-of select="@align"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
@@ -141,6 +147,7 @@
 
     <xsl:template match="ol | ul | li">
         <xsl:copy>
+            <xsl:copy-of select="@class"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
@@ -158,11 +165,12 @@
                     <xsl:otherwise>_self</xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
-            <xsl:if test="@title">
+            <xsl:if test="@xhtml:title">
                 <xsl:attribute name="title">
-                    <xsl:value-of select="@title"/>
+                    <xsl:value-of select="@xhtml:title"/>
                 </xsl:attribute>
             </xsl:if>
+            <xsl:copy-of select="@class"/>
             <xsl:apply-templates/>
         </a>
     </xsl:template>
@@ -177,6 +185,10 @@
             </xsl:if>
             <xsl:value-of select="text()" disable-output-escaping="yes"/>
         </div>
+    </xsl:template>
+
+    <xsl:template match="embed-inline">
+        <xsl:value-of select="text()" disable-output-escaping="yes"/>
     </xsl:template>
 
     <xsl:template match="literal">

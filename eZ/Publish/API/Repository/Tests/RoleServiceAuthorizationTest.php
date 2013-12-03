@@ -294,6 +294,37 @@ class RoleServiceAuthorizationTest extends BaseTest
     }
 
     /**
+     * Test for the deletePolicy() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::deletePolicy()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testDeletePolicy
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
+     */
+    public function testDeletePolicyThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $role = $this->createRole();
+
+        // Get first role policy
+        $policies = $role->getPolicies();
+        $policy = reset( $policies );
+
+        // Set "Editor" user as current user.
+        $repository->setCurrentUser( $user );
+
+        // This call will fail with an "UnauthorizedException"
+        $roleService->deletePolicy( $policy );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the assignRoleToUserGroup() method.
      *
      * @return void

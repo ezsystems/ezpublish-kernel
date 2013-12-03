@@ -1,4 +1,3 @@
-
 ==========================
 eZ Publish REST API V2 RFC
 ==========================
@@ -51,7 +50,7 @@ transforms to:
 
 Different schemas which induce different media types one on resource can be used to allow to make specific
 representations optimized for purposes of clients.
-It is possible to make a new schema for mobile devices for retieving e.g. an article.
+It is possible to make a new schema for mobile devices for retrieving e.g. an article.
 
 .. code:: xml
 
@@ -102,12 +101,12 @@ URIs
 The REST api is designed that the client has not to construct any uri's to resources by itself.
 Starting from the root resources (ListRoot_) every response includes further links to related resources.
 The uris should be used directly as identifiers on the client side and the client should not
-contruct an uri by using an id.
+construct an uri by using an id.
 
 URIs prefix
 -----------
 
-In  this document, we condider, for the sake of readability, that no prefix is used in the URIs. In a real life
+In  this document, we consider, for the sake of readability, that no prefix is used in the URIs. In a real life
 situation, the prefix /api/ezp/v2 is used in all REST hrefs.
 
 Remember in any case that URIs to REST resources should never be generated manually, but obtained from earlier REST
@@ -146,6 +145,11 @@ If activated the user has to login to use this and the client has to send the se
 
 Example request header:
     Cookie: <SessionName> : <sessionID>
+
+is_logged_in cookie
+~~~~~~~~~~~~~~~~~~~
+Session auth currently requires the `is_logged_in` cookie to be provided with every authenticated request.
+This cookie will be sent in reply to a successful session authentication.
 
 CSRF
 ~~~~
@@ -559,14 +563,14 @@ JSON Example
             "_href": "/content/locations/1/4/89"
           },
           "priority": "0",
-          "hidden": "false",
+          "hidden": false,
           "sortField": "PATH",
           "sortOrder": "ASC"
-        }
+        },
         "Section": {
           "_href": "/content/sections/4"
         },
-        "alwaysAvailable": "true",
+        "alwaysAvailable": true,
         "remoteId": "remoteId12345678",
         "fields": {
           "field": [
@@ -584,15 +588,15 @@ JSON Example
               "fieldDefinitionIdentifier": "authors",
               "languageCode": "eng-US",
               "fieldValue": [
-                    {
-                      "name": "John Doe",
-                      "email": "john.doe@example.net"
-                    },
-                    {
-                      "name": "Bruce Willis",
-                      "email": "bruce.willis@example.net"
-                    }
-                  ]
+                 {
+                   "name": "John Doe",
+                   "email": "john.doe@example.net"
+                 },
+                 {
+                   "name": "Bruce Willis",
+                   "email": "bruce.willis@example.net"
+                 }
+              ]
             }
           ]
         }
@@ -698,7 +702,7 @@ JSON Example
         },
         "lastModificationDate": "2012-02-12T12:30:00",
         "mainLanguageCode": "eng-US",
-        "alwaysAvailable": "true"
+        "alwaysAvailable": true
       }
     }
 
@@ -835,7 +839,7 @@ In this example
     - the main language is changed
     - a new section is assigned
     - the main location is changed
-    - the always avalable flag is changed
+    - the always available flag is changed
     - the remoteId is changed
     - the owner of the content object is changed
 
@@ -1646,7 +1650,7 @@ XML Example
     POST /content/objects/23/locations HTTP/1.1
     Accept: application/vnd.ez.api.Location+xml
     Content-Type: application/vnd.ez.api.LocationCreate+xml
-    Contnt-Length: xxx
+    Content-Length: xxx
 
 .. code:: xml
 
@@ -1666,7 +1670,7 @@ XML Example
     ETag: "2345563422"
     Accept-Patch: application/vnd.ez.api.LocationUpdate+xml
     Content-Type: application/vnd.ez.api.Location+xml
-    Contnt-Length: xxx
+    Content-Length: xxx
 
 .. code:: xml
 
@@ -1797,7 +1801,7 @@ XML Example
     ETag: "2345563422"
     Accept-Patch: application/vnd.ez.api.LocationUpdate+xml
     Content-Type: application/vnd.ez.api.Location+xml
-    Contnt-Length: xxx
+    Content-Length: xxx
 
 .. code:: xml
 
@@ -2039,10 +2043,10 @@ Create View
 :Headers:
     :Accept:
         :application/vnd.ez.api.View+xml: the view in xml format (see View_)
-        :application/vnd.ez.api.View+json: the view in xml format (see View_)
+        :application/vnd.ez.api.View+json: the view in json format (see View_)
     :Content-Type:
         :application/vnd.ez.api.ViewInput+xml: the view input in xml format (see View_)
-        :application/vnd.ez.api.ViewInput+json: the view input in xml format (see View_)
+        :application/vnd.ez.api.ViewInput+json: the view input in json format (see View_)
 :Response:
 
 .. code:: http
@@ -2060,7 +2064,7 @@ Create View
 XML Example
 '''''''''''
 
-Perform a query on articles with a specific title.
+Perform a query on images withing the media section, sorted by name, limiting results to 10.
 
 .. code:: http
 
@@ -2076,7 +2080,8 @@ Perform a query on articles with a specific title.
       <identifier>TitleView</identifier>
       <Query>
         <Criteria>
-          <FullTextCritierion>Title</FieldCritierion>
+          <ContentTypeIdentifierCriterion>image</ContentTypeIdentifierCriterion>
+          <SectionIdentifierCriterion>media</SectionIdentifierCriterion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
@@ -2107,7 +2112,7 @@ Perform a query on articles with a specific title.
       <public>false</public>
       <Query>
         <Criteria>
-          <FullTextCritierion>Title</FieldCritierion>
+          <FullTextCritierion>Title</FullTextCritierion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
@@ -2355,7 +2360,7 @@ XML Example
     <Section href="/content/sections/5" media-type="application/vnd.ez.api.Section+xml">
       <sectionId>5</sectionId>
       <identifier>restricted</identifier>
-      <name>Restriced</name>
+      <name>Restricted</name>
     </Section>
 
 
@@ -2591,7 +2596,7 @@ Untrash Item
 :Method: MOVE or POST with header X-HTTP-Method-Override: MOVE
 :Description: Restores a trashItem
 :Headers:
-        :Destination: if given the trash item is restored under this location otherwise under its orifinal parent location
+        :Destination: if given the trash item is restored under this location otherwise under its original parent location
 :Response:
 
 .. code:: http
@@ -2989,7 +2994,7 @@ List UrlAliases for location
 :Method: GET
 :Description: Returns the list of url aliases for a location
 :Parameters:
-    :custom: (default true) this flag indicates wether autogenerated (false) or manual url aliases (true) should be returned.
+    :custom: (default true) this flag indicates whether autogenerated (false) or manual url aliases (true) should be returned.
 :Headers:
     :Accept:
          :application/vnd.ez.api.UrlAliasRefList+xml:  if set the url alias list contains only references and is returned in xml format (see UrlAlias_)
@@ -3209,7 +3214,7 @@ Create Content Type Group
 .. code:: http
 
           HTTP/1.1 201 Created
-          Loction: /content/typegroups/<newId>
+          Location: /content/typegroups/<newId>
           Accept-Patch:  application/vnd.ez.api.ContentTypeGroupInput+(json|xml)
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
@@ -3353,8 +3358,8 @@ Get Content Type Group
     :404: If the content type group does not exist
 
 
-Get Content Type Group by id
-````````````````````````````
+Get Content Type Group by identifier
+````````````````````````````````````
 :Resource: /content/typegroups
 :Method: GET
 :Description: loads the content type group for a given identifier
@@ -3707,7 +3712,7 @@ List Content Types
 :Description: Returns a list of content types
 :Parameters:
     :identifier: retrieves the content type for the given identifer
-    :remoteId: retieves the content type for the given remoteId
+    :remoteId: retrieves the content type for the given remoteId
     :limit:    only <limit> items will be returned started by offset
     :offset:   offset of the result set
     :orderby:   one of (name | lastmodified)
@@ -3762,7 +3767,7 @@ Create Draft
 ````````````
 :Resource: /content/types/<ID>
 :Method: POST
-:Description: Cretes a draft and updates it with the given data
+:Description: Creates a draft and updates it with the given data
 :Headers:
     :Accept:
          :application/vnd.ez.api.ContentTypeInfo+xml:  if set the new content type draft is returned in xml format (see ContentType_)
@@ -4061,7 +4066,7 @@ XML Example
 
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.ContentTypeGroupRefList+xml
-    Gontent-Length: xxx
+    Content-Length: xxx
 
 .. code:: xml
 
@@ -4107,7 +4112,7 @@ XML Example
 
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.ContentTypeGroupRefList+xml
-    Gontent-Length: xxx
+    Content-Length: xxx
 
 .. code:: xml
 
@@ -4157,7 +4162,7 @@ XML Example
 
     HTTP/1.1 200 OK
     Content-Type: application/vnd.ez.api.ContentTypeGroupRefList+xml
-    Gontent-Length: xxx
+    Content-Length: xxx
 
 .. code:: xml
 
@@ -4250,8 +4255,8 @@ Load User Groups
 :Description: Load user groups for either an id or remoteId or role.
 :Parameters:
     :roleId: lists user groups assigned to the given role
-    :id: retieves the user group for the given Id
-    :remoteId: retieves the user group for the given remoteId
+    :id: retrieves the user group for the given Id
+    :remoteId: retrieves the user group for the given remoteId
 :Headers:
     :Accept:
          :application/vnd.ez.api.UserGroupList+xml:  if set the user group list returned in xml format (see UserGroup_)
@@ -4621,7 +4626,7 @@ Move user Group
 
 :Error Codes:
     :401: If the user is not authorized to update the user group
-    :403: If the new parenbt does not exist
+    :403: If the new parent does not exist
     :404: If the user group does not exist
 
 Load Subgroups
@@ -4779,7 +4784,7 @@ List Users
 :Description: Load users either for a given remoteId or role
 :Parameters:
     :roleId: lists users assigned to the given role
-    :remoteId: retieves the user for the given remoteId
+    :remoteId: retrieves the user for the given remoteId
 :Headers:
     :Accept:
          :application/vnd.ez.api.UserList+xml:  if set the user list returned in xml format (see User_)
@@ -5401,6 +5406,7 @@ Assign Role to User or User Group
           Role_
 
 :Error Codes:
+    :400: If validation of limitation in RoleAssignInput_ fails
     :401: If the user is not authorized to assign this role
 
 XML Example
@@ -5681,9 +5687,9 @@ XML Example
 
 Create Policy
 `````````````
-:Resource: /user/roles/<ID>/policies/<ID>
-:Method: PATCH or POST with header X-HTTP-Method-Override: PATCH
-:Description: updates a policy
+:Resource: /user/roles/<ID>/policies
+:Method: POST
+:Description: creates a policy
 :Headers:
     :Accept:
          :application/vnd.ez.api.Policy+xml:  if set the updated policy is returned in xml format (see Policy_)
@@ -5706,7 +5712,8 @@ Create Policy
           Policy_
 
 :Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :400: - If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+          - If validation of limitation in PolicyCreate fails (see Policy_)
     :401: If the user is not authorized to create the policy
     :404: If the role does not exist
 
@@ -5796,7 +5803,8 @@ Update Policy
           Policy_
 
 :Error Codes:
-    :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+    :400: - If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
+          - If validation of limitation in PolicyUpdate fails (see Policy_)
     :401: If the user is not authorized to update the policy
     :404: If the role does not exist
     :412: If the current ETag does not match with the provided one in the If-Match header
@@ -5962,7 +5970,7 @@ XML Example
 
     HTTP/1.1 201 Created
     Location: /user/sessions/go327ij2cirpo59pb6rrv2a4el2
-    Set-Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2; Domain=.example.net; Path=/; Expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
+    Set-Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2; domain=.example.net; path=/; expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
     Content-Type: application/vnd.ez.api.Session+xml
     Content-Length: xxx
 
@@ -5985,7 +5993,7 @@ JSON Example
     POST /user/sessions HTTP/1.1
     Host: www.example.net
     Accept: application/vnd.ez.api.Session+json
-    Content-Type: application/vnd.ez.api.SessionInput+xml
+    Content-Type: application/vnd.ez.api.SessionInput+json
     Content-Length: xxx
 
 .. code:: json
@@ -6001,7 +6009,7 @@ JSON Example
 
     HTTP/1.1 201 Created
     Location: /user/sessions/go327ij2cirpo59pb6rrv2a4el2
-    Set-Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2; Domain=.example.net; Path=/; Expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
+    Set-Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2; domain=.example.net; path=/; expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
     Content-Type: application/vnd.ez.api.Session+json
     Content-Length: xxx
 
@@ -6028,7 +6036,7 @@ Delete session (logout a User):
 :Description: The user session is removed i.e. the user is logged out.
 :Headers:
     :Cookie:
-        <sessionName> : <sessionID>
+        <sessionName>=<sessionID>
     :X-CSRF-Token:
         <csrfToken> The <csrfToken> needed on all unsafe http methods with session.
 :Response: 204
@@ -6043,7 +6051,7 @@ Example
 
     DELETE /user/sessions/go327ij2cirpo59pb6rrv2a4el2 HTTP/1.1
     Host: www.example.net
-    Cookie: eZSSID : go327ij2cirpo59pb6rrv2a4el2
+    Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2
     X-CSRF-Token: 23lkneri34ijajedfw39orj3j93
 
 .. code:: http
@@ -6660,7 +6668,6 @@ View XML Schema
 
       <xsd:simpleType name="userMetaDataType">
         <xsd:restriction base="xsd:string">
-          <xsd:enumeration value="CREATOR" />
           <xsd:enumeration value="MODIFIER" />
           <xsd:enumeration value="OWNER" />
           <xsd:enumeration value="GROUP" />
@@ -6864,7 +6871,6 @@ View XML Schema
       <xsd:simpleType name="userFacetSelector">
         <xsd:restriction base="xsd:string">
           <xsd:enumeration value="OWNER" />
-          <xsd:enumeration value="CREATTOR" />
           <xsd:enumeration value="MODIFIER" />
           <xsd:enumeration value="GROUP" />
         </xsd:restriction>
@@ -7304,7 +7310,7 @@ Location XML Schema
               <xsd:element name="childCount" type="xsd:int">
                 <xsd:annotation>
                   <xsd:documentation>
-                    the number of chidren visible to the
+                    the number of children visible to the
                     authenticated user which has
                     loaded this instance.
                   </xsd:documentation>
@@ -7413,7 +7419,7 @@ Trash XML Schema
               <xsd:element name="childCount" type="xsd:int">
                 <xsd:annotation>
                   <xsd:documentation>
-                    the number of chidren visible to the
+                    the number of children visible to the
                     authenticated user which has
                     loaded this instance.
                   </xsd:documentation>
@@ -8052,7 +8058,7 @@ ContentType XML Schema
               <xsd:element name="Modifier" type="ref">
                 <xsd:annotation>
                   <xsd:documentation>
-                    The userwhich last modified the content
+                    The user which last modified the content
                     type
                   </xsd:documentation>
                 </xsd:annotation>
@@ -8114,7 +8120,7 @@ ContentType XML Schema
                 default="true">
                 <xsd:annotation>
                   <xsd:documentation>
-                    if an instance of acontent type is
+                    if an instance of a content type is
                     created the always available
                     flag is set by default this
                     this value.
@@ -8194,8 +8200,7 @@ ContentTypeCreate XML Schema
 
       <xsd:complexType name="vnd.ez.api.ContentTypeCreate">
         <xsd:all>
-          <xsd:element name="identifier" type="xsd:string"
-            minOccurs="0" maxOccurs="1">
+          <xsd:element name="identifier" type="xsd:string">
             <xsd:annotation>
               <xsd:documentation>
                 String identifier of a content type
@@ -8217,7 +8222,7 @@ ContentTypeCreate XML Schema
               <xsd:documentation>
                 The user under which this creation should
                 be done
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="remoteId" type="xsd:string"
@@ -8236,7 +8241,7 @@ ContentTypeCreate XML Schema
                 If nothing is provided,
                 nameSchema will be used
                 instead.
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="nameSchema" type="xsd:string">
@@ -8258,7 +8263,7 @@ ContentTypeCreate XML Schema
                 field_def will be used if available. If not,
                 other_field_def
                 will be used for content name generation
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="isContainer" type="xsd:boolean">
@@ -8272,14 +8277,14 @@ ContentTypeCreate XML Schema
             <xsd:annotation>
               <xsd:documentation>
                 Main language
-                  </xsd:documentation>
+              </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
           <xsd:element name="defaultAlwaysAvailable" type="xsd:boolean"
             default="true">
             <xsd:annotation>
               <xsd:documentation>
-                if an instance of acontent type is
+                if an instance of a content type is
                 created
                 the always available
                 flag is set by default this
@@ -8423,7 +8428,7 @@ ContentTypeUpdate XML Schema
             minOccurs="0">
             <xsd:annotation>
               <xsd:documentation>
-                if an instance of acontent type is
+                if an instance of a content type is
                 created
                 the always available
                 flag is set by default this
@@ -8499,7 +8504,7 @@ FieldDefinition XML Schema
                 <xsd:annotation>
                   <xsd:documentation>
                     the position of the field definition in
-                    the content typr
+                    the content type
                     </xsd:documentation>
                 </xsd:annotation>
               </xsd:element>
@@ -8622,7 +8627,7 @@ FieldDefinitionCreate XML Schema
             <xsd:annotation>
               <xsd:documentation>
                 the position of the field definition in
-                the content typr
+                the content type
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
@@ -8717,7 +8722,7 @@ FieldDefinitionUpdate XML Schema
             <xsd:annotation>
               <xsd:documentation>
                 If set the the position of the field definition in
-                the content typr is changed
+                the content type is changed
               </xsd:documentation>
             </xsd:annotation>
           </xsd:element>
@@ -8868,7 +8873,7 @@ UserGroup XML Schema
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
-              <xsd:eleemnt name="User" type="vnd.ez.api.UserGroup"
+              <xsd:element name="User" type="vnd.ez.api.UserGroup"
                 maxOccurs="unbounded" />
             </xsd:all>
           </xsd:extension>
@@ -8878,13 +8883,13 @@ UserGroup XML Schema
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
-              <xsd:eleemnt name="UserGroup" minOccurs="1" maxOccurs="unbounded">
+              <xsd:element name="UserGroup" minOccurs="1" maxOccurs="unbounded">
                 <xsd:complexType>
                   <xsd:all>
                     <xsd:element name="unassign" type="controllerRef" minOccurs="0"/>
                   </xsd:all>
                 </xsd:complexType>
-              </xsd:eleemnt>
+              </xsd:element>
             </xsd:all>
           </xsd:extension>
         </xsd:complexContent>
@@ -8996,7 +9001,7 @@ User XML Schema
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
-              <xsd:eleemnt name="User" type="vnd.ez.api.User"
+              <xsd:element name="User" type="vnd.ez.api.User"
                 maxOccurs="unbounded" />
             </xsd:all>
           </xsd:extension>
@@ -9006,7 +9011,7 @@ User XML Schema
         <xsd:complexContent>
           <xsd:extension base="ref">
             <xsd:all>
-              <xsd:eleemnt name="User" type="ref"
+              <xsd:element name="User" type="ref"
                 maxOccurs="unbounded" />
             </xsd:all>
           </xsd:extension>
@@ -9110,7 +9115,7 @@ Policy XML Schema
         </xsd:complexContent>
       </xsd:complexType>
 
-      <xsd:complexType name="vnd.ez.api.PolityCreate">
+      <xsd:complexType name="vnd.ez.api.PolicyCreate">
         <xsd:all>
           <xsd:element name="module" type="xsd:string" />
           <xsd:element name="function" type="xsd:string" />
@@ -9118,7 +9123,7 @@ Policy XML Schema
         </xsd:all>
       </xsd:complexType>
 
-      <xsd:complexType name="vnd.ez.api.PolityUpdate">
+      <xsd:complexType name="vnd.ez.api.PolicyUpdate">
         <xsd:all>
           <xsd:element name="limitations" type="limitationListType"></xsd:element>
         </xsd:all>
@@ -9136,8 +9141,8 @@ Policy XML Schema
       </xsd:complexType>
       <xsd:element name="Policy" type="vnd.ez.api.Policy"/>
       <xsd:element name="PolicyList" type="vnd.ez.api.PolicyList"/>
-      <xsd:element name="PolicyCreate" type="vnd.ez.api.PolityCreate"/>
-      <xsd:element name="PolicyUpdate" type="vnd.ez.api.PolityUpdate"/>
+      <xsd:element name="PolicyCreate" type="vnd.ez.api.PolicyCreate"/>
+      <xsd:element name="PolicyUpdate" type="vnd.ez.api.PolicyUpdate"/>
     </xsd:schema>
 
 

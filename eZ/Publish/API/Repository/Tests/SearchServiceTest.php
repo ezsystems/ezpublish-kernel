@@ -15,7 +15,9 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
 
 /**
  * Test case for operations in the SearchService using in memory storage.
@@ -267,8 +269,9 @@ class SearchServiceTest extends BaseTest
             array(
                 new Query(
                     array(
-                        'filter'    => new Criterion\Status(
-                            array( Criterion\Status::STATUS_PUBLISHED )
+                        // There is no Status Criterion anymore, this should match all published as well
+                        'filter' => new Criterion\Subtree(
+                            '/1/'
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
                     )
@@ -406,6 +409,98 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FullTextWildcard.php',
             ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LanguageCode( "eng-GB" ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'LanguageCode.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LanguageCode( array( "eng-US", "eng-GB" ) ),
+                        'offset' => 10,
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'LanguageCodeIn.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LanguageCode( "eng-GB", true ),
+                        'offset' => 10,
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'LanguageCodeAlwaysAvailable.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::EQ, 1 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'Depth.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::IN, array( 1, 3 ) ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthIn.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::GT, 2 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthGt.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::GTE, 2 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthGte.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::LT, 2 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'Depth.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::LTE, 2 ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthLte.php',
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Depth( Criterion\Operator::BETWEEN, array( 1, 2 ) ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'DepthLte.php',
+            ),
         );
     }
 
@@ -527,6 +622,121 @@ class SearchServiceTest extends BaseTest
             4,
             $content->id
         );
+    }
+
+    /**
+     * Create test Content with ezcountry field having multiple countries selected.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createMultipleCountriesContent()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct( "countries-multiple" );
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->remoteId = "countries-multiple-123";
+        $createStruct->names = array( "eng-GB" => "Multiple countries" );
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new \DateTime();
+
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "countries", "ezcountry" );
+        $fieldCreate->names = array( "eng-GB" => "Countries" );
+        $fieldCreate->fieldGroup = "main";
+        $fieldCreate->position = 1;
+        $fieldCreate->isTranslatable = false;
+        $fieldCreate->isSearchable = true;
+        $fieldCreate->fieldSettings = array( "isMultiple" => true );
+
+        $createStruct->addFieldDefinition( $fieldCreate );
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier( "Content" );
+        $contentTypeDraft = $contentTypeService->createContentType( $createStruct, array( $contentGroup ) );
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $contentType = $contentTypeService->loadContentType( $contentTypeDraft->id );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->remoteId = "countries-multiple-456";
+        $createStruct->alwaysAvailable = false;
+        $createStruct->setField(
+            "countries",
+            array( "BE", "DE", "FR", "HR", "NO", "PT", "RU" )
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        return $content;
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFieldCollectionContains()
+    {
+        $testContent = $this->createMultipleCountriesContent();
+
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof \eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr )
+        {
+            $country = "BE";
+        }
+        else
+        {
+            $country = "Belgium";
+        }
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\Field(
+                    "countries",
+                    Criterion\Operator::CONTAINS,
+                    $country
+                )
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertEquals(
+            $testContent->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldCollectionContains
+     */
+    public function testFieldCollectionContainsNoMatch()
+    {
+        $this->createMultipleCountriesContent();
+        $query = new Query(
+            array(
+                'criterion'   => new Criterion\Field(
+                    "countries",
+                    Criterion\Operator::CONTAINS,
+                    "Netherlands Antilles"
+                )
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 0, $result->totalCount );
     }
 
     /**
@@ -804,7 +1014,7 @@ class SearchServiceTest extends BaseTest
                         'offset'      => 0,
                         'limit'       => null,
                         'sortClauses' => array(
-                            new SortClause\Field( "folder", "name" ),
+                            new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-US" ),
                             new SortClause\ContentId(),
                         )
                     )
@@ -818,13 +1028,648 @@ class SearchServiceTest extends BaseTest
                         'offset'      => 0,
                         'limit'       => null,
                         'sortClauses' => array(
-                            new SortClause\Field( "template_look", "title" ),
+                            new SortClause\Field( "template_look", "title", Query::SORT_ASC ),
                             new SortClause\ContentId(),
                         )
                     )
                 ),
                 $fixtureDir . 'SortTemplateTitle.php',
             ),
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    protected function createTestContentType()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct( "test-type" );
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->names = array( "eng-GB" => "Test type" );
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new \DateTime();
+
+        $translatableFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "integer", "ezinteger" );
+        $translatableFieldCreate->names = array( "eng-GB" => "Simple translatable integer field" );
+        $translatableFieldCreate->fieldGroup = "main";
+        $translatableFieldCreate->position = 1;
+        $translatableFieldCreate->isTranslatable = true;
+        $translatableFieldCreate->isSearchable = true;
+
+        $createStruct->addFieldDefinition( $translatableFieldCreate );
+
+        $nonTranslatableFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "integer2", "ezinteger" );
+        $nonTranslatableFieldCreate->names = array( "eng-GB" => "Simple non-translatable integer field" );
+        $nonTranslatableFieldCreate->fieldGroup = "main";
+        $nonTranslatableFieldCreate->position = 2;
+        $nonTranslatableFieldCreate->isTranslatable = false;
+        $nonTranslatableFieldCreate->isSearchable = true;
+
+        $createStruct->addFieldDefinition( $nonTranslatableFieldCreate );
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier( "Content" );
+        $contentTypeDraft = $contentTypeService->createContentType( $createStruct, array( $contentGroup ) );
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $contentType = $contentTypeService->loadContentType( $contentTypeDraft->id );
+
+        return $contentType;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param int $fieldValue11 Value for translatable field in first language
+     * @param int $fieldValue12 Value for translatable field in second language
+     * @param int $fieldValue2 Value for non translatable field
+     * @param string $mainLanguageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    protected function createMultilingualContent(
+        $contentType,
+        $fieldValue11,
+        $fieldValue12,
+        $fieldValue2 = null,
+        $mainLanguageCode = "eng-GB"
+    )
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = $mainLanguageCode;
+        $createStruct->setField( "integer", $fieldValue11, "eng-GB" );
+        $createStruct->setField( "integer", $fieldValue12, "ger-DE" );
+        $createStruct->setField( "integer2", $fieldValue2, $mainLanguageCode );
+
+        $draft = $contentService->createContent( $createStruct );
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        return $content;
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testMultilingualFieldSort()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1 )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "ger-DE" ),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value ger-DE
+         *
+         * Content 3, 2, 3
+         * Content 2, 2, 4
+         * Content 4, 1, 1
+         * Content 1, 1, 2
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[3],
+                $contentIdList[2],
+                $contentIdList[4],
+                $contentIdList[1],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testMultilingualFieldSortVariant2()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1 )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "ger-DE" ),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value ger-DE
+         *
+         * Content 1, 1, 2
+         * Content 4, 1, 1
+         * Content 2, 2, 4
+         * Content 3, 2, 3
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[1],
+                $contentIdList[4],
+                $contentIdList[2],
+                $contentIdList[3],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depe_nds eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @group asdf
+     */
+    public function testMultilingualFieldSortVariant3()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1 )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "ger-DE" ),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value ger-DE
+         *
+         * Content 2, 2, 4
+         * Content 3, 2, 3
+         * Content 1, 1, 2
+         * Content 4, 1, 1
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[2],
+                $contentIdList[3],
+                $contentIdList[1],
+                $contentIdList[4],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testSearchWithFieldSortThrowsInvalidArgumentExceptionTranslatableField()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+        $this->createMultilingualContent( $contentType, 1, 2 );
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC ),
+                )
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $searchService->findContent( $query );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testSearchWithFieldSortThrowsInvalidArgumentExceptionNonTranslatableField()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+        $this->createMultilingualContent( $contentType, 1, 2, 3, "eng-GB" );
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    // The main language can change, so no language code allowed on non-translatable field whatsoever
+                    new SortClause\Field( "test-type", "integer2", Query::SORT_ASC, "eng-GB" ),
+                )
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $searchService->findContent( $query );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testMultilingualFieldSortWithNonTranslatableField()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2, 1, "ger-DE" )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4, 3, "ger-DE" )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3, 4, "ger-DE" )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1, 2, "ger-DE" )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\Field( "test-type", "integer2", Query::SORT_ASC ),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value non-translatable
+         *
+         * Content 2, 2, 3
+         * Content 3, 2, 4
+         * Content 1, 1, 1
+         * Content 4, 1, 2
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[2],
+                $contentIdList[3],
+                $contentIdList[1],
+                $contentIdList[4],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testMultilingualFieldSortWithDefaultLanguage()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2, 1, "ger-DE" )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4, 3, "ger-DE" )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3, 4, "ger-DE" )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1, 2, "ger-DE" )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field( "test-type", "integer2", Query::SORT_DESC ),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value non-translatable
+         *
+         * Content 4, 1, 2
+         * Content 1, 1, 1
+         * Content 3, 2, 4
+         * Content 2, 2, 3
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[4],
+                $contentIdList[1],
+                $contentIdList[3],
+                $contentIdList[2],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testMultilingualFieldSortWithDefaultLanguageVariant2()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2, 1, "eng-GB" )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4, 3, "eng-GB" )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3, 4, "ger-DE" )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1, 2, "ger-DE" )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    new SortClause\Field( "test-type", "integer2", Query::SORT_DESC ),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "ger-DE" ),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+
+        /**
+         * Expected order, Value non-translatable, Value ger-DE
+         *
+         * Content 3, 4, 3
+         * Content 2, 3, 4
+         * Content 4, 2, 1
+         * Content 1, 1, 2
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[3],
+                $contentIdList[2],
+                $contentIdList[4],
+                $contentIdList[1],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1 )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    // "test-type" Content instance do not exist in "eng-US"
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-US" ),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet
+     */
+    public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 2, 1, "eng-GB" )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4, 3, "eng-GB" )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 2, 3, 4, "ger-DE" )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 1, 2, "ger-DE" )->id;
+
+        $query = new Query(
+            array(
+                'criterion' => new Criterion\ContentTypeId( $contentType->id ),
+                'sortClauses' => array(
+                    // "test-type" Content instance do not exist in "eng-US"
+                    new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "eng-US" ),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field( "test-type", "integer2", Query::SORT_ASC ),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 4, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value non-translatable
+         *
+         * Content 1, 1, 1
+         * Content 4, 1, 2
+         * Content 2, 2, 3
+         * Content 3, 2, 4
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[1],
+                $contentIdList[4],
+                $contentIdList[2],
+                $contentIdList[3],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result
+     *
+     * @return array
+     */
+    protected function mapResultContentIds( SearchResult $result )
+    {
+        return array_map(
+            function ( SearchHit $searchHit )
+            {
+                return $searchHit->valueObject->id;
+            },
+            $result->searchHits
         );
     }
 
@@ -1080,6 +1925,7 @@ class SearchServiceTest extends BaseTest
      *
      * @param Query $query
      * @param string $fixture
+     * @param null|callable $closure
      *
      * @return void
      */

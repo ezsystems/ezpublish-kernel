@@ -57,7 +57,7 @@ class Type extends FieldType
      */
     public function getName( SPIValue $value )
     {
-        return !empty( $value->alternativeText ) ? $value->alternativeText : $value->fileName;
+        return !empty( $value->alternativeText ) ? $value->alternativeText : (string)$value->fileName;
     }
 
     /**

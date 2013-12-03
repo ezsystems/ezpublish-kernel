@@ -33,11 +33,6 @@ class UserFacetBuilder extends FacetBuilder
     const GROUP = 'group';
 
     /**
-     * Creator
-     */
-    const CREATOR = 'creator';
-
-    /**
      * Modifier
      */
     const MODIFIER = 'modifier';

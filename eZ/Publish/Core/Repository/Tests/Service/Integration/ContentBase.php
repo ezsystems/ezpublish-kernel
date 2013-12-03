@@ -2601,7 +2601,7 @@ abstract class ContentBase extends BaseServiceTest
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             "test-type"
         );
-        $typeCreateStruct->names = array( "eng-US" => "Test type name" );
+        $typeCreateStruct->names = array( "eng-GB" => "Test type name" );
         $typeCreateStruct->descriptions = array( "eng-GB" => "Test type description" );
         $typeCreateStruct->remoteId = "test-type-remoteid";
         $typeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;

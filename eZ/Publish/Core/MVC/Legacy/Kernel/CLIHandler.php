@@ -94,6 +94,25 @@ class CLIHandler implements ezpKernelHandler
         $this->sessionInit();
         // Exposing $argv to embedded script
         $argv = $_SERVER['argv'];
+
+        // start output buffering before including legacy script to filter unwanted output.
+        ob_start(
+            function( $buffer )
+            {
+                static $startFlag = false;
+                // remove shebang line from start of script, if any
+                if ( !$startFlag )
+                {
+                    $buffer = preg_replace( '/^\#\![\w\/]*[ ]?php[\r?\n?]/', '', $buffer );
+                    $startFlag = true;
+                }
+                return $buffer;
+            },
+            128
+        );
+
+        ob_implicit_flush( true );
+
         include $this->embeddedScriptPath;
     }
 

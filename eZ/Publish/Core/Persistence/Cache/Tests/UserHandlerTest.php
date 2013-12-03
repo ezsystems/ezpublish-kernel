@@ -44,7 +44,7 @@ class UserHandlerTest extends HandlerTest
             //array( 'deleteRole', array( 22 ) ),
             //array( 'addPolicy', array( 22, new Policy ) ),
             //array( 'updatePolicy', array( new Policy ) ),
-            //array( 'removePolicy', array( 22, 66 ) ),
+            //array( 'deletePolicy', array( 22, 66 ) ),
             array( 'loadPoliciesByUserId', array( 14 ) ),
             //array( 'assignRole', array( 44, 22, array( 42 ) ) ),
             //array( 'unAssignRole', array( 44, 22 ) ),
@@ -381,7 +381,7 @@ class UserHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited/42' )
+            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited', '42' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -432,7 +432,7 @@ class UserHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited/42' )
+            ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited', '42' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -643,9 +643,9 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::removePolicy
+     * @covers eZ\Publish\Core\Persistence\Cache\UserHandler::deletePolicy
      */
-    public function testRemovePolicy()
+    public function testDeletePolicy()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
@@ -657,8 +657,8 @@ class UserHandlerTest extends HandlerTest
 
         $innerHandlerMock
             ->expects( $this->once() )
-            ->method(  'removePolicy' )
-            ->with( 33, 55 )
+            ->method( 'deletePolicy' )
+            ->with( 55 )
             ->will(
                 $this->returnValue( true )
             );
@@ -666,11 +666,11 @@ class UserHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'clear' )
-            ->with( 'user', 'role', 33 )
+            ->with( 'user', 'role' )
             ->will( $this->returnValue( true ) );
 
         $handler = $this->persistenceHandler->userHandler();
-        $handler->removePolicy( 33, 55 );
+        $handler->deletePolicy( 55 );
     }
 
     /**

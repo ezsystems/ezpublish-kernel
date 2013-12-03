@@ -63,4 +63,3 @@ interface SearchService
      */
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null );
 }
-

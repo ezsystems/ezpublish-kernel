@@ -148,6 +148,24 @@ class BaseNonRedundantFieldSetTest extends BaseTest
         return $content;
     }
 
+    protected function createMultilingualTestContent()
+    {
+        $fieldValues = array(
+            "field1" => array( "eng-US" => "value 1" ),
+            "field2" => array( "eng-US" => "value 2" ),
+            "field3" => array(
+                "eng-US" => "value 3",
+                "eng-GB" => "value 3 eng-GB"
+            ),
+            "field4" => array(
+                "eng-US" => "value 4",
+                "eng-GB" => "value 4 eng-GB"
+            )
+        );
+
+        return $this->createTestContent( "eng-US", $fieldValues );
+    }
+
     protected function createTestContentForUpdate()
     {
         $fieldValues = array(
@@ -157,9 +175,7 @@ class BaseNonRedundantFieldSetTest extends BaseTest
             "field4" => array( "eng-US" => "value 4" )
         );
 
-        $content = $this->createTestContent( "eng-US", $fieldValues );
-
-        return $content;
+        return $this->createTestContent( "eng-US", $fieldValues );
     }
 
     protected function updateTestContent( $initialLanguageCode, array $fieldValues )
@@ -180,8 +196,7 @@ class BaseNonRedundantFieldSetTest extends BaseTest
         }
 
         $content = $contentService->updateContent( $content->getVersionInfo(), $contentUpdateStruct );
-        $content = $contentService->loadContent( $content->id, null, $content->versionInfo->versionNo );
 
-        return $content;
+        return $contentService->loadContent( $content->id, null, $content->versionInfo->versionNo );
     }
 }

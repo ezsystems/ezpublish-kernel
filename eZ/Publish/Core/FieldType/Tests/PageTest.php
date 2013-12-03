@@ -65,10 +65,13 @@ class PageTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new PageType(
+        $fieldType = new PageType(
             $this->getPageServiceMock(),
             new HashConverter
         );
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     protected function getPageReference()
@@ -448,6 +451,19 @@ class PageTest extends FieldTypeTest
                 // non-available layout
                 array( "defaultLayout" => "2ZonesLayout3" )
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezpage';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new PageValue( $this->getPageReference() ), "" )
         );
     }
 }

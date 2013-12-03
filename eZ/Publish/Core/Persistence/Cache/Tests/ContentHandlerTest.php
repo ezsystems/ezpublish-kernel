@@ -496,6 +496,12 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 2 ) )
             ->method( 'clear' )
+            ->with( 'content', 'info', 'remoteId' )
+            ->will( $this->returnValue( null ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 3 ) )
+            ->method( 'clear' )
             ->with( 'location', 'subtree' )
             ->will( $this->returnValue( null ) );
 
@@ -545,12 +551,18 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'clear' )
+            ->with( 'content', 'info', 'remoteId' )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'clear' )
             ->with( 'location', 'subtree' )
             ->will( $this->returnValue( true ) );
 
         $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
-            ->expects( $this->at( 2 ) )
+            ->expects( $this->at( 3 ) )
             ->method( 'getItem' )
             ->with( 'content', 2, 1 )
             ->will( $this->returnValue( $cacheItemMock ) );
@@ -566,7 +578,7 @@ class ContentHandlerTest extends HandlerTest
 
         $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
         $this->cacheMock
-            ->expects( $this->at( 3 ) )
+            ->expects( $this->at( 4 ) )
             ->method( 'getItem' )
             ->with( 'content', 'info', 2 )
             ->will( $this->returnValue( $cacheItemMock2 ) );

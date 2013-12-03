@@ -228,6 +228,7 @@ CREATE TABLE ezcontentobject_attribute (
   PRIMARY KEY (id,version),
   KEY ezcontentobject_attribute_co_id_ver_lang_code (contentobject_id,version,language_code),
   KEY ezcontentobject_attribute_language_code (language_code),
+  KEY ezcontentobject_classattr_id (contentclassattribute_id),
   KEY sort_key_int (sort_key_int),
   KEY sort_key_string (sort_key_string)
 ) ENGINE=InnoDB;
@@ -346,6 +347,8 @@ CREATE TABLE eznode_assignment (
   remote_id varchar(100) NOT NULL DEFAULT 0,
   sort_field int(11) DEFAULT 1,
   sort_order int(11) DEFAULT 1,
+  priority int(11) NOT NULL DEFAULT 0,
+  is_hidden int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   KEY eznode_assignment_co_version (contentobject_version),
   KEY eznode_assignment_coid_cov (contentobject_id,contentobject_version),

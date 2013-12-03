@@ -32,7 +32,10 @@ class TimeTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Time();
+        $fieldType = new Time();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -358,6 +361,19 @@ class TimeTest extends FieldTypeTest
                     'defaultType' => 42,
                 )
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'eztime';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( new TimeValue( 200 ), '12:03:20 am' )
         );
     }
 }

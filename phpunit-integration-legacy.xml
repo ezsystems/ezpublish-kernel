@@ -51,7 +51,7 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">eZ/Publish/API/Repository/</directory>
+            <directory suffix=".php">eZ/Publish/API/Repository</directory>
             <exclude>
                 <directory>eZ/Publish/API/Repository/Tests</directory>
                 <directory>eZ/Publish/API/Repository/Tutorials</directory>

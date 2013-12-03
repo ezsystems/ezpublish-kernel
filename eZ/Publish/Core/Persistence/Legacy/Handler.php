@@ -24,7 +24,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper as ObjectState
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper;
@@ -36,6 +36,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcard
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 use eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use ezcDbTransactionException;
@@ -264,7 +266,7 @@ class Handler implements HandlerInterface
     /**
      * Transform Processor
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     protected $transformationProcessor;
 
@@ -282,7 +284,7 @@ class Handler implements HandlerInterface
      * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry Should contain field types
      * @param Content\FieldValue\ConverterRegistry $converterRegistry Should contain Field Type converters
      * @param Content\StorageRegistry $storageRegistry Should contain Field Type external storage handlers
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor Search Text Transformation processor
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor Search Text Transformation processor
      * @param array $config List of optional configuration flags:
      *                      The flag 'defer_type_update' defines if content types should be
      *                      published immediately (false), when the
@@ -461,6 +463,18 @@ class Handler implements HandlerInterface
         if ( !isset( $this->searchHandler ) )
         {
             $db = $this->dbHandler;
+            $commaSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
+                $db, $this->transformationProcessor, ","
+            );
+            $hyphenSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
+                $db, $this->transformationProcessor, "-"
+            );
+            $compositeValueHandler = new CriterionHandler\FieldValue\Handler\Composite(
+                $db, $this->transformationProcessor
+            );
+            $simpleValueHandler = new CriterionHandler\FieldValue\Handler\Simple(
+                $db, $this->transformationProcessor
+            );
             $this->searchHandler = new Content\Search\Handler(
                 new Content\Search\Gateway\ExceptionConversion(
                     new Content\Search\Gateway\EzcDatabase(
@@ -483,7 +497,6 @@ class Handler implements HandlerInterface
                                 new CriterionHandler\RemoteId( $db ),
                                 new CriterionHandler\LocationRemoteId( $db ),
                                 new CriterionHandler\SectionId( $db ),
-                                new CriterionHandler\Status( $db ),
                                 new CriterionHandler\FullText(
                                     $db,
                                     $this->transformationProcessor
@@ -491,6 +504,23 @@ class Handler implements HandlerInterface
                                 new CriterionHandler\Field(
                                     $db,
                                     $this->converterRegistry,
+                                    new CriterionHandler\FieldValue\Converter(
+                                        new CriterionHandler\FieldValue\HandlerRegistry(
+                                            array(
+                                                "ezboolean" => $simpleValueHandler,
+                                                "ezcountry" => $commaSeparatedCollectionValueHandler,
+                                                "ezdate" => $simpleValueHandler,
+                                                "ezdatetime" => $simpleValueHandler,
+                                                "ezemail" => $simpleValueHandler,
+                                                "ezinteger" => $simpleValueHandler,
+                                                "ezobjectrelation" => $simpleValueHandler,
+                                                "ezobjectrelationlist" => $commaSeparatedCollectionValueHandler,
+                                                "ezselection" => $hyphenSeparatedCollectionValueHandler,
+                                                "eztime" => $simpleValueHandler,
+                                            )
+                                        ),
+                                        $compositeValueHandler
+                                    ),
                                     $this->transformationProcessor
                                 ),
                                 new CriterionHandler\ObjectStateId( $db ),
@@ -499,6 +529,9 @@ class Handler implements HandlerInterface
                                     $this->getLanguageMaskGenerator()
                                 ),
                                 new CriterionHandler\Visibility( $db ),
+                                new CriterionHandler\UserMetadata( $db ),
+                                new CriterionHandler\RelationList( $db ),
+                                new CriterionHandler\Depth( $db ),
                             )
                         ),
                         new Content\Search\Gateway\SortClauseConverter(
@@ -512,7 +545,7 @@ class Handler implements HandlerInterface
                                 new SortClauseHandler\SectionName( $db ),
                                 new SortClauseHandler\ContentName( $db ),
                                 new SortClauseHandler\ContentId( $db ),
-                                new SortClauseHandler\Field( $db ),
+                                new SortClauseHandler\Field( $db, $this->contentLanguageHandler() ),
                             )
                         ),
                         new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
@@ -645,7 +678,8 @@ class Handler implements HandlerInterface
                 $this->getLocationGateway(),
                 $this->getLocationMapper(),
                 $this->contentHandler(),
-                $this->getContentMapper()
+                $this->getContentMapper(),
+                $this->objectStateHandler()
             );
         }
         return $this->locationHandler;
@@ -743,7 +777,8 @@ class Handler implements HandlerInterface
                     new User\Gateway\EzcDatabase( $this->dbHandler )
                 ),
                 new User\Role\Gateway\EzcDatabase( $this->dbHandler ),
-                new UserMapper()
+                new UserMapper(),
+                new LimitationConverter( array( new ObjectStateLimitationHandler( $this->dbHandler ) ) )
             );
         }
         return $this->userHandler;

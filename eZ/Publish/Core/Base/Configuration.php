@@ -15,6 +15,7 @@ use eZ\Publish\Core\Base\Configuration\Parser;
 use eZ\Publish\Core\Base\Exceptions\BadConfiguration;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use ezcPhpGenerator;
+use Exception;
 
 /**
  * Configuration instance class

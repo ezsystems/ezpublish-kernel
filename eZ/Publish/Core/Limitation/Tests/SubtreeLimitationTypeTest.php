@@ -20,6 +20,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Limitation\SubtreeLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
  * Test Case for LimitationType
@@ -147,11 +148,16 @@ class SubtreeLimitationTypeTest extends Base
 
             foreach ( $limitation->limitationValues as $key => $value )
             {
-                $pathArray = explode( '/', trim( '/', $value ) );
+                $pathArray = explode( '/', trim( $value, '/' ) );
                 $this->locationHandlerMock
                     ->expects( $this->at( $key ) )
                     ->method( "load" )
-                    ->with( end( $pathArray ) );
+                    ->with( end( $pathArray ) )
+                    ->will(
+                        $this->returnValue(
+                            new SPILocation( array( "pathString" => $value ) )
+                        )
+                    );
             }
         }
 
@@ -192,7 +198,7 @@ class SubtreeLimitationTypeTest extends Base
 
             foreach ( $limitation->limitationValues as $key => $value )
             {
-                $pathArray = explode( '/', trim( '/', $value ) );
+                $pathArray = explode( '/', trim( $value, '/' ) );
                 $this->locationHandlerMock
                     ->expects( $this->at( $key ) )
                     ->method( "load" )
@@ -212,6 +218,39 @@ class SubtreeLimitationTypeTest extends Base
 
         $validationErrors = $limitationType->validate( $limitation );
         self::assertCount( $errorCount, $validationErrors );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::validate
+     */
+    public function testValidateErrorWrongPath()
+    {
+        $limitation = new SubtreeLimitation( array( 'limitationValues' => array( '/1/2/42/' ) ) );
+
+        $this->getPersistenceMock()
+            ->expects( $this->any() )
+            ->method( "locationHandler" )
+            ->will( $this->returnValue( $this->locationHandlerMock ) );
+
+        foreach ( $limitation->limitationValues as $key => $value )
+        {
+            $pathArray = explode( '/', trim( $value, '/' ) );
+            $this->locationHandlerMock
+                ->expects( $this->at( $key ) )
+                ->method( "load" )
+                ->with( end( $pathArray ) )
+                ->will(
+                    $this->returnValue(
+                        new SPILocation( array( "pathString" => "/1/5/42" ) )
+                    )
+                );
+        }
+
+        // Need to create inline instead of depending on testConstruct() to get correct mock instance
+        $limitationType = $this->testConstruct();
+
+        $validationErrors = $limitationType->validate( $limitation );
+        self::assertCount( 1, $validationErrors );
     }
 
     /**

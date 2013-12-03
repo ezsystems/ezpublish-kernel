@@ -129,7 +129,10 @@ class URIElement implements Matcher, URILexer
      */
     public function analyseLink( $linkUri )
     {
+        // Joining slash between uriElements and actual linkUri must be present, except if $linkUri is empty.
+        $joiningSlash = empty( $linkUri ) ? '' : '/';
+        $linkUri = ltrim( $linkUri, '/' );
         $uriElements = implode( '/', $this->getURIElements() );
-        return "/{$uriElements}{$linkUri}";
+        return "/{$uriElements}{$joiningSlash}{$linkUri}";
     }
 }

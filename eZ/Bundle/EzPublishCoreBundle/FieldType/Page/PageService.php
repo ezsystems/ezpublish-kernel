@@ -13,8 +13,6 @@ use eZ\Publish\Core\FieldType\Page\PageService as BasePageService;
 use eZ\Publish\Core\MVC\RepositoryAwareInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId;
 
 class PageService extends BasePageService implements RepositoryAwareInterface
 {
@@ -43,6 +41,7 @@ class PageService extends BasePageService implements RepositoryAwareInterface
     public function getValidBlockItemsAsContentInfo( Block $block )
     {
         $contentService = $this->repository->getContentService();
+        $contentInfoObjects = array();
         foreach ( $this->getValidBlockItems( $block ) as $item )
         {
             $contentInfoObjects[] = $contentService->loadContentInfo( $item->contentId );

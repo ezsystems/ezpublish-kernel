@@ -608,11 +608,11 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test removePolicy function
+     * Test deletePolicy function
      *
-     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::removePolicy
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::deletePolicy
      */
-    public function testRemovePolicy()
+    public function testDeletePolicy()
     {
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
@@ -620,7 +620,7 @@ class UserHandlerTest extends HandlerTest
         $this->assertEquals( 3, count( $obj->policies ) );
         $id = $obj->id;
 
-        $handler->removePolicy( $id, $obj->policies[2]->id );
+        $handler->deletePolicy( $obj->policies[2]->id );
         $obj = $handler->loadRole( $id );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 2, count( $obj->policies ) );

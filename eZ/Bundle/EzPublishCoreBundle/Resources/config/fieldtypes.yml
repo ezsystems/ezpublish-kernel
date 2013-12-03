@@ -315,6 +315,8 @@ services:
 
     ezpublish.fieldType:
         class: %ezpublish.fieldType.class%
+        calls:
+            - [setTransformationProcessor, [@ezpublish.api.storage_engine.transformation_processor]]
         abstract: true
 
     ezpublish.fieldType.ezauthor:
@@ -350,6 +352,7 @@ services:
             - @ezpublish.fieldType.ezbinaryfile.IOService
             - @ezpublish.fieldType.ezbinaryfile.pathGenerator
             - @ezpublish.core.io.mimeTypeDetector
+            - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
 
@@ -416,6 +419,7 @@ services:
             - @ezpublish.fieldType.ezimage.IOService
             - @ezpublish.fieldType.ezimage.pathGenerator
             - @ezpublish.fieldType.metadataHandler.imagesize
+            - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}
 
@@ -449,6 +453,7 @@ services:
             - @ezpublish.fieldType.ezbinaryfile.IOService
             - @ezpublish.fieldType.ezbinaryfile.pathGenerator
             - @ezpublish.core.io.mimeTypeDetector
+            - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
 
@@ -562,12 +567,6 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezgmaplocation}
-
-    ezpublish.fieldType.ezemail:
-        class: %ezpublish.fieldType.ezemail.class%
-        parent: ezpublish.fieldType
-        tags:
-            - {name: ezpublish.fieldType, alias: ezemail}
 
     ezpublish.fieldType.ezgmaplocation.externalStorage:
         class: %ezpublish.fieldType.ezgmaplocation.externalStorage.class%

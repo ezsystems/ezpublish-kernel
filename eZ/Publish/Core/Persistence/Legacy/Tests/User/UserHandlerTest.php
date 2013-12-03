@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\User;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
 use eZ\Publish\SPI\Persistence;
 
 /**
@@ -24,7 +26,8 @@ class UserHandlerTest extends TestCase
         return new User\Handler(
             new User\Gateway\EzcDatabase( $dbHandler ),
             new User\Role\Gateway\EzcDatabase( $dbHandler ),
-            new User\Mapper()
+            new User\Mapper(),
+            new LimitationConverter( array( new ObjectStateLimitationHandler( $dbHandler ) ) )
         );
     }
 
@@ -590,12 +593,12 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testRemovePolicy()
+    public function testDeletePolicy()
     {
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
-        $handler->removePolicy( $role->id, $role->policies[0]->id );
+        $handler->deletePolicy( $role->policies[0]->id );
 
         $this->assertQueryResult(
             array(
@@ -606,12 +609,12 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testRemovePolicyLimitations()
+    public function testDeletePolicyLimitations()
     {
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
-        $handler->removePolicy( $role->id, $role->policies[0]->id );
+        $handler->deletePolicy( $role->policies[0]->id );
 
         $this->assertQueryResult(
             array( array( 3, 'Foo', 2 ) ),
@@ -619,12 +622,12 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testRemovePolicyLimitationValues()
+    public function testDeletePolicyLimitationValues()
     {
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
-        $handler->removePolicy( $role->id, $role->policies[0]->id );
+        $handler->deletePolicy( $role->policies[0]->id );
 
         $this->assertQueryResult(
             array( array( 4, 3, 'Blubb' ) ),

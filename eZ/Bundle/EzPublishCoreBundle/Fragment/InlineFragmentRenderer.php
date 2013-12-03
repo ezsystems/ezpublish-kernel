@@ -20,14 +20,20 @@ class InlineFragmentRenderer extends BaseRenderer
      */
     private $fragmentUriGenerator;
 
-    protected function generateFragmentUri( ControllerReference $reference, Request $request )
+    protected function generateFragmentUri( ControllerReference $reference, Request $request, $absolute = false )
     {
         if ( !isset( $this->fragmentUriGenerator ) )
         {
             $this->fragmentUriGenerator = new FragmentUriGenerator;
         }
 
-        $this->fragmentUriGenerator->generateFragmentUri( $reference, $request );
-        return parent::generateFragmentUri( $reference, $request );
+        // Generate base fragment URI and add other needed attributes
+        $this->fragmentUriGenerator->generateFragmentUri( $reference, $request, $absolute );
+        if ( $request->attributes->has( 'semanticPathinfo' ) )
+            $reference->attributes['semanticPathinfo'] = $request->attributes->get( 'semanticPathinfo' );
+        if ( $request->attributes->has( 'viewParametersString' ) )
+            $reference->attributes['viewParametersString'] = $request->attributes->get( 'viewParametersString' );
+
+        return parent::generateFragmentUri( $reference, $request, $absolute );
     }
 }

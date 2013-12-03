@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  *
  * Normalization and querying capabilities might depend on the system
  * configuration or the used search engine and might differ. The following
- * basic query seamtics are supported:
+ * basic query semantics are supported:
  *
  * - If multiple words are specified an AND query is performed. OR queries are
  *   not yet supported.

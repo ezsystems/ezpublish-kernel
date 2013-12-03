@@ -1071,6 +1071,8 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $contentTypeService = $repository->getContentTypeService();
 
         $typeCreate = $contentTypeService->newContentTypeCreateStruct( 'blog-post' );
+        $typeCreate->mainLanguageCode = "eng-GB";
+        $typeCreate->names = array( "eng-GB" => "Blog post" );
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
             'temperature', 'ezfloat'
@@ -1498,7 +1500,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         try
         {
-            // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
+            // Throws an exception because 'ezfloat' field type can't be created as searchable
             $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
         }
         catch ( ContentTypeFieldDefinitionValidationException $e )
@@ -1571,6 +1573,59 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         // Throws an exception because $userContentTypeDraft already contains non-repeatable field type definition 'ezuser'
         $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the ContentTypeService::createContentType() method
+     *
+     * Testing that field definition of non-repeatable field type can not be added multiple
+     * times to the same ContentTypeCreateStruct.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\ContentTypeValidationException
+     * @expectedExceptionMessage FieldType 'ezuser' is singular and can't be repeated in a ContentType
+     */
+    public function testCreateContentThrowsContentTypeValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct( 'this_is_new' );
+        $contentTypeCreateStruct->names = array( 'eng-GB' => 'This is new' );
+        $contentTypeCreateStruct->mainLanguageCode = 'eng-GB';
+
+        // create first field definition
+        $firstFieldDefinition = $contentTypeService->newFieldDefinitionCreateStruct(
+            'first_user',
+            'ezuser'
+        );
+        $firstFieldDefinition->names = array(
+            'eng-GB' => 'First user account',
+        );
+        $firstFieldDefinition->position = 1;
+
+        $contentTypeCreateStruct->addFieldDefinition( $firstFieldDefinition );
+
+        // create second field definition
+        $secondFieldDefinition = $contentTypeService->newFieldDefinitionCreateStruct(
+            'second_user',
+            'ezuser'
+        );
+        $secondFieldDefinition->names = array(
+            'eng-GB' => 'Second user account',
+        );
+        $secondFieldDefinition->position = 2;
+
+        $contentTypeCreateStruct->addFieldDefinition( $secondFieldDefinition );
+
+        // Throws an exception because the ContentTypeCreateStruct has a singular field repeated
+        $contentTypeService->createContentType(
+            $contentTypeCreateStruct,
+            array( $contentTypeService->loadContentTypeGroupByIdentifier( 'Content' ) )
+        );
         /* END: Use Case */
     }
 

@@ -121,6 +121,7 @@ class SPIPersistenceDataCollector extends DataCollector
         foreach ( $this->data['handlers'] as $handler => $count )
         {
             list( $class, $method ) = explode( '::', $handler );
+            unset( $class );
             $handlers[$method] = $method . '(' . $count . ')';
         }
         return $handlers;

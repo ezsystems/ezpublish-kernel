@@ -208,6 +208,7 @@ CREATE TABLE ezcontentobject_attribute (
 );
 CREATE INDEX ezcontentobject_attribute_co_id_ver_lang_code ON ezcontentobject_attribute (contentobject_id,version,language_code);
 CREATE INDEX ezcontentobject_attribute_language_code ON ezcontentobject_attribute (language_code);
+CREATE INDEX ezcontentobject_classattr_id ON ezcontentobject_attribute (contentclassattribute_id); 
 CREATE INDEX sort_key_int ON ezcontentobject_attribute (sort_key_int);
 CREATE INDEX sort_key_string ON ezcontentobject_attribute (sort_key_string);
 
@@ -315,7 +316,9 @@ CREATE TABLE eznode_assignment (
   parent_remote_id text(100) NOT NULL,
   remote_id text(100) NOT NULL DEFAULT 0,
   sort_field integer DEFAULT 1,
-  sort_order integer DEFAULT 1
+  sort_order integer DEFAULT 1,
+  priority integer NOT NULL DEFAULT 0,
+  is_hidden integer NOT NULL DEFAULT 0
 );
 CREATE INDEX eznode_assignment_co_version ON eznode_assignment (contentobject_version);
 CREATE INDEX eznode_assignment_coid_cov ON eznode_assignment (contentobject_id,contentobject_version);

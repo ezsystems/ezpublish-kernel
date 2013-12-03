@@ -250,14 +250,6 @@ class Handler implements BaseContentHandler
         );
 
         // Clone fields from previous version and append them to the new one
-        $fields = $content->fields;
-        $content->fields = array();
-        foreach ( $fields as $field )
-        {
-            $newField = clone $field;
-            $newField->versionNo = $content->versionInfo->versionNo;
-            $content->fields[] = $newField;
-        }
         $this->fieldHandler->createExistingFieldsInNewVersion( $content );
 
         // Create relations for new version
@@ -336,6 +328,20 @@ class Handler implements BaseContentHandler
     {
         return $this->mapper->extractContentInfoFromRow(
             $this->contentGateway->loadContentInfo( $contentId )
+        );
+    }
+
+    /**
+     * Returns the metadata object for a content identified by $remoteId.
+     *
+     * @param mixed $remoteId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    public function loadContentInfoByRemoteId( $remoteId )
+    {
+        return $this->mapper->extractContentInfoFromRow(
+            $this->contentGateway->loadContentInfoByRemoteId( $remoteId )
         );
     }
 

@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Float\Type as Float;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -32,7 +31,10 @@ class FloatTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Float();
+        $fieldType = new Float();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -69,7 +71,7 @@ class FloatTest extends FieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return FloatValue
      */
     protected function getEmptyValueExpectation()
     {
@@ -410,6 +412,19 @@ class FloatTest extends FieldTypeTest
                     ),
                 )
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezfloat';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new FloatValue( 23.42 ), "23.42" )
         );
     }
 }

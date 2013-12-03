@@ -11,13 +11,14 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHan
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FieldValue\Converter as FieldValueConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use ezcQuerySelect;
 use RuntimeException;
 
@@ -29,7 +30,7 @@ class Field extends CriterionHandler
     /**
      * DB handler to fetch additional field information
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
      */
     protected $dbHandler;
 
@@ -41,9 +42,16 @@ class Field extends CriterionHandler
     protected $fieldConverterRegistry;
 
     /**
+     * Field value converter
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field\ValueConverter
+     */
+    protected $fieldValueConverter;
+
+    /**
      * Transformation processor
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     protected $transformationProcessor;
 
@@ -52,11 +60,19 @@ class Field extends CriterionHandler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FieldValue\Converter $fieldValueConverter
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      */
-    public function __construct( EzcDbHandler $dbHandler, Registry $fieldConverterRegistry, TransformationProcessor $transformationProcessor )
+    public function __construct(
+        EzcDbHandler $dbHandler,
+        Registry $fieldConverterRegistry,
+        FieldValueConverter $fieldValueConverter,
+        TransformationProcessor $transformationProcessor
+    )
     {
         $this->dbHandler = $dbHandler;
         $this->fieldConverterRegistry = $fieldConverterRegistry;
+        $this->fieldValueConverter = $fieldValueConverter;
         $this->transformationProcessor = $transformationProcessor;
     }
 
@@ -180,40 +196,12 @@ class Field extends CriterionHandler
                 );
             }
 
-            $column = $this->dbHandler->quoteColumn( $fieldsInfo['column'] );
-            switch ( $criterion->operator )
-            {
-                case Criterion\Operator::IN:
-                    $filter = $subSelect->expr->in(
-                        $column,
-                        array_map( array( $this, 'lowercase' ), $criterion->value )
-                    );
-                    break;
-
-                case Criterion\Operator::BETWEEN:
-                    $filter = $subSelect->expr->between(
-                        $column,
-                        $subSelect->bindValue( $this->lowercase( $criterion->value[0] ) ),
-                        $subSelect->bindValue( $this->lowercase( $criterion->value[1] ) )
-                    );
-                    break;
-
-                case Criterion\Operator::EQ:
-                case Criterion\Operator::GT:
-                case Criterion\Operator::GTE:
-                case Criterion\Operator::LT:
-                case Criterion\Operator::LTE:
-                case Criterion\Operator::LIKE:
-                    $operatorFunction = $this->comparatorMap[$criterion->operator];
-                    $filter = $subSelect->expr->$operatorFunction(
-                        $column,
-                        $subSelect->bindValue( $this->lowercase( $criterion->value ) )
-                    );
-                    break;
-
-                default:
-                    throw new RuntimeException( 'Unknown operator.' );
-            }
+            $filter = $this->fieldValueConverter->convertCriteria(
+                $fieldTypeIdentifier,
+                $subSelect,
+                $criterion,
+                $fieldsInfo['column']
+            );
 
             $whereExpressions[] = $subSelect->expr->lAnd(
                 $subSelect->expr->in(
@@ -240,10 +228,4 @@ class Field extends CriterionHandler
             $subSelect
         );
     }
-
-    protected function lowerCase( $string )
-    {
-        return $this->transformationProcessor->transformByGroup( $string, "lowercase" );
-    }
 }
-

@@ -59,8 +59,14 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadLocationsByContent( $contentId, $rootLocationId = null )
     {
-        $rootKey = $rootLocationId ? '/root/' . $rootLocationId : '';
-        $cache = $this->cache->getItem( 'content', 'locations', $contentId . $rootKey );
+        if ( $rootLocationId )
+        {
+            $cache = $this->cache->getItem( 'content', 'locations', $contentId, 'root', $rootLocationId );
+        }
+        else
+        {
+            $cache = $this->cache->getItem( 'content', 'locations', $contentId );
+        }
         $locationIds = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -88,7 +94,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadParentLocationsForDraftContent( $contentId )
     {
-        $cache = $this->cache->getItem( 'content', 'locations', "{$contentId}/parentLocationsForDraftContent" );
+        $cache = $this->cache->getItem( 'content', 'locations', $contentId, 'parentLocationsForDraftContent' );
         $locationIds = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -138,6 +144,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $return = $this->persistenceFactory->getLocationHandler()->move( $sourceId, $destinationParentId );
 
         $this->cache->clear( 'location' );//TIMBER! (path[Identification]String)
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
 
         return $return;
     }
@@ -189,6 +196,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->cache->clear( 'location', $locationId2 );
         $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', 'locations' );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
 
         return $return;
     }
@@ -215,6 +223,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->cache->getItem( 'location', $location->id )->set( $location );
         $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', 'locations', $location->contentId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', $location->contentId );
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited', $location->contentId );
 
         return $location;
     }
@@ -229,6 +239,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         $this->cache->clear( 'location' );//TIMBER!
         $this->cache->clear( 'content' );//TIMBER!
+        $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
 
         return $return;
     }
@@ -252,5 +263,6 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->persistenceFactory->getLocationHandler()->changeMainLocation( $contentId, $locationId );
         $this->cache->clear( 'content', $contentId );
         $this->cache->clear( 'content', 'info', $contentId );
+        $this->cache->clear( 'content', 'info', 'remoteId' );
     }
 }

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -27,10 +28,14 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
 
     public function getExtensions()
     {
+        $configResolver = $this->getConfigResolverMock();
+
         return array(
             new ContentExtension(
                 $this->getContainerMock(),
-                $this->getConfigResolverMock()
+                $configResolver,
+                new TranslationHelper( $configResolver, $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ) ),
+                $this->getMockBuilder( 'eZ\\Publish\\Core\\Helper\\FieldHelper' )->disableOriginalConstructor()->getMock()
             )
         );
     }

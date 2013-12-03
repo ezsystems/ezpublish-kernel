@@ -82,6 +82,9 @@ interface Type
     /**
      * Returns Criterion for use in find() query
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If the limitation does not support
+     *         being used as a Criterion.
+     *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      *

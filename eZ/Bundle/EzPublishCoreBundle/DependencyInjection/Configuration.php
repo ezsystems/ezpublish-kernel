@@ -94,19 +94,32 @@ class Configuration implements ConfigurationInterface
                             ->useAttributeAsKey( 'key' )
                             ->normalizeKeys( false )
                             ->prototype( 'array' )
+                                ->useAttributeAsKey( 'key' )
                                 ->beforeNormalization()
-                                    // Value passed to the matcher should always be an array.
-                                    // If value is not an array, we transform it to a hash, with 'value' as key.
-                                    ->ifTrue(
+                                    ->always(
                                         function ( $v )
                                         {
-                                            return !is_array( $v );
-                                        }
-                                    )
-                                    ->then(
-                                        function ( $v )
-                                        {
-                                            return array( 'value' => $v );
+                                            // Value passed to the matcher should always be an array.
+                                            // If value is not an array, we transform it to a hash, with 'value' as key.
+                                            if ( !is_array( $v ) )
+                                            {
+                                                return array( 'value' => $v );
+                                            }
+
+                                            // If passed value is a numerically indexed array, we must convert it into a hash.
+                                            // See https://jira.ez.no/browse/EZP-21876
+                                            if ( array_keys( $v ) === range( 0, count( $v ) - 1 ) )
+                                            {
+                                                $final = array();
+                                                foreach ( $v as $i => $val )
+                                                {
+                                                    $final["i$i"] = $val;
+                                                }
+
+                                                return $final;
+                                            }
+
+                                            return $v;
                                         }
                                     )
                                 ->end()
@@ -314,6 +327,10 @@ EOT;
                                     ->prototype( 'scalar' )->end()
                                     ->info( $nonSAAwareInfo )
                                     ->example( array( 'my_route_name', 'some_prefix_' ) )
+                                ->end()
+                                ->arrayNode( 'legacy_aware_routes' )
+                                    ->prototype( 'scalar' )->end()
+                                    ->info( 'Routes that are allowed when legacy_mode is true. Must be routes identifiers (e.g. "my_route_name"). Can be a prefix, so that all routes beginning with given prefix will be taken into account.' )
                                 ->end()
                             ->end()
                         ->end()

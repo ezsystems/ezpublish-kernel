@@ -1,0 +1,14 @@
+parameters:
+    # Helpers
+    ezpublish.translation_helper.class: eZ\Publish\Core\Helper\TranslationHelper
+    ezpublish.field_helper.class: eZ\Publish\Core\Helper\FieldHelper
+
+services:
+    # Helpers
+    ezpublish.translation_helper:
+        class: %ezpublish.translation_helper.class%
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.service.content]
+
+    ezpublish.field_helper:
+        class: %ezpublish.field_helper.class%
+        arguments: [@ezpublish.translation_helper, @ezpublish.api.service.content_type, @ezpublish.api.service.field_type]

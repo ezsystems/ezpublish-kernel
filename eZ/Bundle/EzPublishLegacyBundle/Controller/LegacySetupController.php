@@ -83,10 +83,10 @@ class LegacySetupController
     {
         // Ensure that persistence cache purger is disabled as legacy cache will be cleared by legacy setup wizard while
         // everything is not ready yet to clear SPI cache (no connection to repository yet).
-        $this->persistenceCachePurger->setIsEnabled( false );
+        $this->persistenceCachePurger->setEnabled( false );
 
         // we disable injection of settings to Legacy Kernel during setup
-        $this->legacyMapper->setIsEnabled( false );
+        $this->legacyMapper->setEnabled( false );
 
         /** @var $request \Symfony\Component\HttpFoundation\ParameterBag */
         $request = $this->container->get( 'request' )->request;

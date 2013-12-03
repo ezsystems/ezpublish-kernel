@@ -60,7 +60,7 @@ EOT
         $filesystem = $this->getContainer()->get( 'filesystem' );
         $legacyRootDir = rtrim( $this->getContainer()->getParameter( 'ezpublish_legacy.root_dir' ), '/' );
 
-        $output->writeln( sprintf( "Installing eZ Publish legacy assets form $legacyRootDir using the <comment>%s</comment> option", $input->getOption( 'symlink' ) ? 'symlink' : 'hard copy' ) );
+        $output->writeln( sprintf( "Installing eZ Publish legacy assets from $legacyRootDir using the <comment>%s</comment> option", $input->getOption( 'symlink' ) ? 'symlink' : 'hard copy' ) );
 
         foreach ( array( 'design', 'extension', 'share', 'var' ) as $folder )
         {

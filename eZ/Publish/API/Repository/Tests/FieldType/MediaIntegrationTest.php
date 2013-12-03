@@ -40,7 +40,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     /**
      * Sets up fixture data.
      *
-     * @return void
+     * @return array
      */
     protected function getFixtureData()
     {
@@ -68,7 +68,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Get name of tested field tyoe
+     * Get name of tested field type
      *
      * @return string
      */

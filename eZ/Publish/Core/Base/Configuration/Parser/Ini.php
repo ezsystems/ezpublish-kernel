@@ -16,6 +16,7 @@ use eZ\Publish\Core\Base\Configuration\Parser;
 use ezcConfiguration;
 use ezcConfigurationIniReader;
 use LogicException;
+use Exception;
 
 /**
  * Configuration Ini Parser / writer

@@ -12,9 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\FieldType\Page;
 use eZ\Publish\Core\FieldType\Tests\Page\PageServiceTest as BaseTest;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 
 class PageServiceTest extends BaseTest
 {

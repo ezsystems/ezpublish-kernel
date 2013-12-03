@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * This compiler pass will register eZ Publish field types.
+ * This compiler pass will register eZ Publish storage engines
  */
 class RegisterStorageEnginePass implements CompilerPassInterface
 {
@@ -26,6 +26,8 @@ class RegisterStorageEnginePass implements CompilerPassInterface
      *   as used by ezpublish.spi.persistence.lazy_factory
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @throws \LogicException
      */
     public function process( ContainerBuilder $container )
     {

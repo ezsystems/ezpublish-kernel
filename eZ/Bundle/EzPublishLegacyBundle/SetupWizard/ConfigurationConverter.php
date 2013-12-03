@@ -10,7 +10,6 @@ namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZINI;
 use eZSiteAccess;
 use Stash\Driver\Apc as APCDriver;
