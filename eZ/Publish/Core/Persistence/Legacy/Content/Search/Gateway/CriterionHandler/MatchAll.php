@@ -44,7 +44,7 @@ class MatchAll extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        return '1';
+        return $query->bindValue( '1' );
     }
 }
 
