@@ -558,6 +558,8 @@ class UserService implements UserServiceInterface
     /**
      * Loads anonymous user
      *
+     * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
+     *
      * @uses loadUser()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
