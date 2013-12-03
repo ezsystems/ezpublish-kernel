@@ -165,9 +165,9 @@
                     <xsl:otherwise>_self</xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
-            <xsl:if test="@title">
+            <xsl:if test="@xhtml:title">
                 <xsl:attribute name="title">
-                    <xsl:value-of select="@title"/>
+                    <xsl:value-of select="@xhtml:title"/>
                 </xsl:attribute>
             </xsl:if>
             <xsl:copy-of select="@class"/>
