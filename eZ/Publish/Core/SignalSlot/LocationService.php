@@ -254,6 +254,8 @@ class LocationService implements LocationServiceInterface
             new HideLocationSignal(
                 array(
                     'locationId' => $location->id,
+                    'contentId' => $location->contentId,
+                    'currentVersionNo' => $returnValue->getContentInfo()->currentVersionNo,
                 )
             )
         );
@@ -279,6 +281,8 @@ class LocationService implements LocationServiceInterface
             new UnhideLocationSignal(
                 array(
                     'locationId' => $location->id,
+                    'contentId' => $location->contentId,
+                    'currentVersionNo' => $returnValue->getContentInfo()->currentVersionNo,
                 )
             )
         );

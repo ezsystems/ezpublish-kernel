@@ -34,6 +34,7 @@ class FieldNameGenerator
         "ez_text"     => "t",
         "ez_html"     => "h",
         "ez_boolean"  => "b",
+        "ez_mboolean" => "mb",
         "ez_float"    => "f",
         "ez_double"   => "d",
         "ez_date"     => "dt",

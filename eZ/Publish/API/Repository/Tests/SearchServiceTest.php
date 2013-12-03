@@ -476,6 +476,17 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'DepthLte.php',
             ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\Visibility(
+                            Criterion\Visibility::VISIBLE
+                        ),
+                        'sortClauses' => array( new SortClause\ContentId() )
+                    )
+                ),
+                $fixtureDir . 'Visibility.php',
+            ),
         );
     }
 
