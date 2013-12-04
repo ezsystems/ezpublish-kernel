@@ -205,7 +205,7 @@ class Native extends Gateway
             '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
-                    'Content-Type: text/xml',
+                    'Content-Type' => 'text/xml',
                 ),
                 $updates
             )
@@ -232,7 +232,7 @@ class Native extends Gateway
             '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
-                    'Content-Type: text/xml',
+                    'Content-Type' => 'text/xml',
                 ),
                 "<delete><query>id:" . (int)$contentId . ( $versionId !== null ? " AND version_id:" . (int)$versionId : "" ) . "</query></delete>"
             )
@@ -283,7 +283,7 @@ class Native extends Gateway
                 "/solr/update?" . ( $this->commit ? "commit=true&" : "" ) . "wt=json",
                 new Message(
                     array(
-                        "Content-Type: text/xml",
+                        "Content-Type' => 'text/xml",
                     ),
                     "<delete><query>id:(" . implode( " ", $contentToDelete ) . ")</query></delete>"
                 )
@@ -355,7 +355,7 @@ class Native extends Gateway
             '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
-                    'Content-Type: text/xml',
+                    'Content-Type' => 'text/xml',
                 ),
                 '<delete><query>*:*</query></delete>'
             )
