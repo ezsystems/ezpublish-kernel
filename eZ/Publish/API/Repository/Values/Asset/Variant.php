@@ -43,14 +43,6 @@ abstract class Variant extends ValueObject
     protected $webUri;
 
     /**
-     * If the variant is already generated or if it will need generation before
-     * it can be used.
-     *
-     * @var bool
-     */
-    protected $isGenerated;
-
-    /**
      * Meta data map, contained values depending on the asset type.
      *
      * @var array

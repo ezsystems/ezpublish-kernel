@@ -26,12 +26,26 @@ abstract class Asset extends Content
     protected $variants;
 
     /**
+     * Returns a list of available (already generated) variants.
+     *
      * @return \eZ\Publish\API\Repository\Values\Asset\Variant[]
      */
     abstract public function getVariants();
 
     /**
+     * Returns the variant with $identifier.
+     *
      * @return \eZ\Publish\API\Repository\Values\Asset\Variant
+     * @throws NotFoundException if the variant does not exist.
+     * @throws BadStateException if the variant is supported but not generate
+     *         yet.
      */
     abstract public function getVariant( $identifier );
+
+    /**
+     * Returns all supported variant identifiers.
+     *
+     * @return string[]
+     */
+    abstract public function getSupportedVariants();
 }
