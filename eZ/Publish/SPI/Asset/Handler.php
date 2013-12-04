@@ -8,7 +8,7 @@ interface Handler
      * Applies $variantDefinition to $inputFile
      *
      * @param string $inputFile
-     * @return string The generated variant file
+     * @return Variant The generated variant file
      */
     public function createVariant($inputFile, VariantDefinition $variantDefinition);
 }
