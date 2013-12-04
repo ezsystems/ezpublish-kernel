@@ -115,6 +115,11 @@ should not remove or drastically change the existing definitions.
     <copyField source="*_t" dest="text" />
     <copyField source="*_s" dest="text" />
     <copyField source="*_h" dest="text" />
+
+    <!--
+      This field is required since Solr 4
+    -->
+    <field name="_version_" type="long" indexed="true" stored="true" multiValued="false" />
   </fields>
 
   <uniqueKey>id</uniqueKey>
