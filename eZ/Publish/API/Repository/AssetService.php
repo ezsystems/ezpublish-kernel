@@ -48,13 +48,13 @@ interface AssetService
     public function updateAsset( Asset $asset, AssetUpdateStruct $assetUpdateStruct );
 
     /**
-     * Triggers generation of the variant with $variantIdentifier, which is then returned
+     * Returns the given $asset in the variant with $variantIdentifier
      *
      * @param \eZ\Publish\API\Repository\Values\Asset\Asset $asset
      * @param string $variantIdentifier
      * @return \eZ\Publish\API\Repository\Values\Asset\Variant
      */
-    public function generateVariant( Asset $asset, $variantIdentifier );
+    public function getVariant( Asset $asset, $variantIdentifier );
 
     /**
      * @return \eZ\Publish\API\Repository\Asset\AssetCreateStruct
