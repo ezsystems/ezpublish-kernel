@@ -5,11 +5,18 @@ namespace eZ\Publish\SPI\Asset;
 class Variant
 {
     /**
-     * The local file generated as the variant.
+     * The URI where the variant is stored
      *
      * @var string
      */
-    public $outputFile;
+    public $storageUri;
+
+    /**
+     * The web accessible URI of the variant
+     *
+     * @var string
+     */
+    public $webUri;
 
     /**
      * Map of meta data for this variant
