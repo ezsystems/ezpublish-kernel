@@ -19,11 +19,18 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 abstract class Asset extends Content
 {
     /**
-     * Variants of this asset
+     * Variant names supported by this asset
      *
-     * @var \eZ\Publish\API\Repository\Values\Asset\Variant[]
+     * @var string[]
      */
-    protected $variants;
+    protected $supportedVariants;
+
+    /**
+     * Asset type (see SPI configuration)
+     *
+     * @var string
+     */
+    protected $type;
 
     /**
      * Returns a list of available (already generated) variants.
@@ -43,9 +50,25 @@ abstract class Asset extends Content
     abstract public function getVariant( $identifier );
 
     /**
+     * Returns if the variant with $identifier is generated.
+     *
+     * @param string $identifier
+     * @return bool
+     */
+    abstract public function hasVariant( $identifier );
+
+    /**
      * Returns all supported variant identifiers.
      *
      * @return string[]
      */
     abstract public function getSupportedVariants();
+
+    /**
+     * Returns if variant $identifier is supported by the asset.
+     *
+     * @param string $identifier
+     * @return bool
+     */
+    abstract public function isVariantSupported( $identifier );
 }

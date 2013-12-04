@@ -19,4 +19,11 @@ abstract class AssetUpdateStruct extends ContentCreateStruct
      * @var string
      */
     public $sourceUri;
+
+    /**
+     * Optional hint on the type of file
+     *
+     * @var string
+     */
+    public $typeHint;
 }
