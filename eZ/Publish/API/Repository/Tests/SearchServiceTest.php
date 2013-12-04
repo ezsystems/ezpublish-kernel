@@ -1941,11 +1941,10 @@ class SearchServiceTest extends BaseTest
     {
         $query = new Query(
             array(
-                'filter'      => new Criterion\SectionId( array( 1 ) ),
                 'query'       => new Criterion\CustomField(
                     'custom_field',
                     Criterion\Operator::EQ,
-                    'user'
+                    'AdMiNiStRaToR'
                 ),
                 'offset'      => 0,
                 'limit'       => 10,
@@ -1968,18 +1967,17 @@ class SearchServiceTest extends BaseTest
     {
         $query = new Query(
             array(
-                'filter'      => new Criterion\SectionId( array( 1 ) ),
                 'query'       => new Criterion\Field(
-                    'name',
+                    'first_name',
                     Criterion\Operator::EQ,
-                    'Administrator User'
+                    'AdMiNiStRaToR'
                 ),
                 'offset'      => 0,
                 'limit'       => 10,
                 'sortClauses' => array( new SortClause\ContentId() )
             )
         );
-        $query->query->setCustomField( 'user', 'name', 'custom_field' );
+        $query->query->setCustomField( 'user', 'first_name', 'custom_field' );
 
         $this->assertQueryFixture(
             $query,
