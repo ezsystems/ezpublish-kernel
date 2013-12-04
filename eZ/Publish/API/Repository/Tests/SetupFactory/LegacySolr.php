@@ -183,12 +183,12 @@ class LegacySolr extends Legacy
                         new CriterionVisitor\FullText( $fieldMap ),
                         new CriterionVisitor\UserMetadataIn(),
                         new CriterionVisitor\Field\FieldIn(
-                            $fieldRegistry,
+                            $fieldMap,
                             $persistenceHandler->contentTypeHandler(),
                             $nameGenerator
                         ),
                         new CriterionVisitor\Field\FieldRange(
-                            $fieldRegistry,
+                            $fieldMap,
                             $persistenceHandler->contentTypeHandler(),
                             $nameGenerator
                         ),
