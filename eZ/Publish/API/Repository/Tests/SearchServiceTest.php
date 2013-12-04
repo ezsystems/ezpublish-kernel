@@ -1960,6 +1960,10 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
+     * This tests explicitely queries the first_name while user is contained in
+     * the last_name of admin and anonymous. This is done to show the custom
+     * copy field working.
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
@@ -1970,7 +1974,7 @@ class SearchServiceTest extends BaseTest
                 'query'       => new Criterion\Field(
                     'first_name',
                     Criterion\Operator::EQ,
-                    'AdMiNiStRaToR'
+                    'User'
                 ),
                 'offset'      => 0,
                 'limit'       => 10,

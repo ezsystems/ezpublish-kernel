@@ -12,13 +12,14 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
  * The Field Criterion class.
  *
  * Provides content filtering based on Fields contents & values.
  */
-class Field extends Criterion implements CriterionInterface
+class Field extends Criterion implements CriterionInterface, CustomFieldInterface
 {
     /**
      * Custom field definitions to query instead of default field
@@ -55,5 +56,25 @@ class Field extends Criterion implements CriterionInterface
     public function setCustomField( $type, $field, $customField )
     {
         $this->customFields[$type][$field] = $customField;
+    }
+
+    /**
+     * Retun custom field
+     *
+     * If no custom field is set, return null
+     *
+     * @param string $type
+     * @param string $field
+     * @return mixed
+     */
+    public function getCustomField( $type, $field )
+    {
+        if ( !isset( $this->customFields[$type] ) ||
+             !isset( $this->customFields[$type][$field] ) )
+        {
+            return null;
+        }
+
+        return $this->customFields[$type][$field];
     }
 }
