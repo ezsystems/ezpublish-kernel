@@ -55,4 +55,14 @@ interface AssetService
      * @return \eZ\Publish\API\Repository\Values\Asset\Variant
      */
     public function generateVariant( Asset $asset, $variantIdentifier );
+
+    /**
+     * @return \eZ\Publish\API\Repository\Asset\AssetCreateStruct
+     */
+    public function newAssetCreateStruct();
+
+    /**
+     * @return \eZ\Publish\API\Repository\Asset\AssetCreateStruct
+     */
+    public function newAssetUpdateStruct();
 }
