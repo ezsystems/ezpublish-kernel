@@ -99,16 +99,15 @@ class FieldMap
                         continue;
                     }
 
-                    $fieldType = $this->fieldRegistry->getType( $fieldDefinition->fieldType );
+                    if ( $customField = $criterion->getCustomField( $contentType->identifier, $fieldDefinition->identifier ) )
+                    {
+                        $this->fieldTypes[$fieldDefinition->identifier][] = $customField;
+                        continue;
+                    }
 
+                    $fieldType = $this->fieldRegistry->getType( $fieldDefinition->fieldType );
                     foreach ( $fieldType->getIndexDefinition() as $name => $type )
                     {
-                        if ( $customField = $criterion->getCustomField( $contentType->identifier, $fieldDefinition->identifier ) )
-                        {
-                            $this->fieldTypes[$fieldDefinition->identifier][] = $customField;
-                            continue;
-                        }
-
                         $this->fieldTypes[$fieldDefinition->identifier][] =
                             $this->nameGenerator->getTypedName(
                                 $this->nameGenerator->getName( $name, $fieldDefinition->identifier, $contentType->identifier ),
