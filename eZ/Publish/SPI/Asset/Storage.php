@@ -13,12 +13,44 @@ interface Storage
     public function store( $blob );
 
     /**
+     * Store a file from $localPath and return the assigned, private URI
+     *
+     * @param string $localPath
+     * @return string Storage URI
+     */
+    public function storeFromLocal( $localPath );
+
+    /**
+     * Updates the given $storageUri using $blob
+     *
+     * @param string $storageUri
+     * @param string $blob
+     */
+    public function update( $storageUri, $blob );
+
+    /**
+     * Updates the given $storageUri from the $localPath
+     *
+     * @param string $storageUri
+     * @param string $localPath
+     */
+    public function updateFromLocal( $storageUri, $localPath );
+
+    /**
      * Load the blob stored at $uri
      *
      * @param string $storageUri
      * @return string The loaded blob
      */
     public function load( $storageUri );
+
+    /**
+     * Stores the blob found in $storageUri in $localPath
+     *
+     * @param string $storageUri
+     * @param string $localPath
+     */
+    public function loadToLocal( $storageUri, $localPath );
 
     /**
      * Returns the unique scheme associated to this storage.
