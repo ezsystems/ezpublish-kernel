@@ -28,6 +28,13 @@ class VariantDefinition
     public $alwaysAvailable;
 
     /**
+     * Storage to be used to store this variant.
+     *
+     * @var string
+     */
+    public $storageIdentifier;
+
+    /**
      * Array of filters to apply in a sequence on $source to generate this variant.
      *
      * @var \eZ\Publish\SPI\Asset\FilterDefinition[]
