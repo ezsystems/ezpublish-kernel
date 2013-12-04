@@ -283,7 +283,7 @@ class Native extends Gateway
                 "/solr/update?" . ( $this->commit ? "commit=true&" : "" ) . "wt=json",
                 new Message(
                     array(
-                        "Content-Type' => 'text/xml",
+                        "Content-Type" => "text/xml",
                     ),
                     "<delete><query>id:(" . implode( " ", $contentToDelete ) . ")</query></delete>"
                 )
