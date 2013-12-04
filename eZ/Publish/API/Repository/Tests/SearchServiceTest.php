@@ -1932,6 +1932,62 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testQueryCustomField()
+    {
+        $query = new Query(
+            array(
+                'filter'      => new Criterion\SectionId( array( 1 ) ),
+                'query'       => new Criterion\CustomField(
+                    'custom_field',
+                    Criterion\Operator::EQ,
+                    'user'
+                ),
+                'offset'      => 0,
+                'limit'       => 10,
+                'sortClauses' => array( new SortClause\ContentId() )
+            )
+        );
+        $this->assertQueryFixture(
+            $query,
+            $this->getFixtureDir() . '/QueryCustomField.php'
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testQueryModifiedField()
+    {
+        $query = new Query(
+            array(
+                'filter'      => new Criterion\SectionId( array( 1 ) ),
+                'query'       => new Criterion\Field(
+                    'name',
+                    Criterion\Operator::EQ,
+                    'Administrator User'
+                ),
+                'offset'      => 0,
+                'limit'       => 10,
+                'sortClauses' => array( new SortClause\ContentId() )
+            )
+        );
+        $query->query->setCustomField( 'user', 'name', 'custom_field' );
+
+        $this->assertQueryFixture(
+            $query,
+            $this->getFixtureDir() . '/QueryModifiedField.php'
+        );
+    }
+
+    /**
      * Assert that query result matches the given fixture.
      *
      * @param Query $query
