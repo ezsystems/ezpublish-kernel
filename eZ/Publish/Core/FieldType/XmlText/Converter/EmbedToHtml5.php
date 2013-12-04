@@ -13,6 +13,8 @@ use eZ\Publish\Core\FieldType\XmlText\Converter;
 use eZ\Publish\Core\MVC\Symfony\View\Manager;
 use eZ\Publish\API\Repository\Repository;
 use DOMDocument;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 
 /**
  * Converts embedded elements from internal XmlText representation to HTML5
@@ -49,6 +51,7 @@ class EmbedToHtml5 implements Converter
      */
     protected function processTag( DOMDocument $xmlDoc, $tagName )
     {
+        /** @var $embed \DOMElement */
         foreach ( $xmlDoc->getElementsByTagName( $tagName ) as $embed )
         {
             if ( !$view = $embed->getAttribute( "view" ) )
@@ -73,19 +76,52 @@ class EmbedToHtml5 implements Converter
 
             if ( $contentId = $embed->getAttribute( "object_id" ) )
             {
-                $embedContent = $this->viewManager->renderContent(
-                    $this->repository->getContentService()->loadContent( $contentId ),
-                    $view,
-                    $parameters
+                /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+                $content = $this->repository->sudo(
+                    function ( Repository $repository ) use ( $contentId )
+                    {
+                        return $repository->getContentService()->loadContent( $contentId );
+                    }
                 );
+
+                if (
+                    !$this->repository->canUser( 'content', 'read', $content )
+                    && !$this->repository->canUser( 'content', 'view_embed', $content )
+                )
+                {
+                    throw new UnauthorizedException( 'content', 'read' );
+                }
+
+                // Check published status of the Content
+                if (
+                    $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+                    && !$this->repository->canUser( 'content', 'versionread', $content )
+                )
+                {
+                    throw new UnauthorizedException( 'content', 'versionread' );
+                }
+
+                $embedContent = $this->viewManager->renderContent( $content, $view, $parameters );
             }
             else if ( $locationId = $embed->getAttribute( "node_id" ) )
             {
-                $embedContent = $this->viewManager->renderLocation(
-                    $this->repository->getLocationService()->loadLocation( $locationId ),
-                    $view,
-                    $parameters
+                /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
+                $location = $this->repository->sudo(
+                    function ( Repository $repository ) use ( $locationId )
+                    {
+                        return $repository->getLocationService()->loadLocation( $locationId );
+                    }
                 );
+
+                if (
+                    !$this->repository->canUser( 'content', 'read', $location )
+                    && !$this->repository->canUser( 'content', 'view_embed', $location )
+                )
+                {
+                    throw new UnauthorizedException( 'content', 'read' );
+                }
+
+                $embedContent = $this->viewManager->renderLocation( $location, $view, $parameters );
             }
 
             if ( $embedContent !== null )
