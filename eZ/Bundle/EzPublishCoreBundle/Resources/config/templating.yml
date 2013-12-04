@@ -16,6 +16,7 @@ parameters:
 
     ezpublish.templating.global_helper.core.class: eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
     ezpublish.twig.extension.core.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\CoreExtension
+    ezpublish.twig.extension.filesize.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FileSizeExtension
 
 services:
     twig.loader.string:
@@ -80,3 +81,10 @@ services:
         arguments: [@ezpublish.templating.global_helper]
         tags:
             - {name: twig.extension}
+
+    ezpublish.twig.extension.filesize:
+        class: %ezpublish.twig.extension.filesize.class%
+        arguments: [@translator]
+        tags:
+            - {name: twig.extension}
+
