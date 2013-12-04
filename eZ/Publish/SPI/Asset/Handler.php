@@ -5,10 +5,19 @@ namespace eZ\Publish\SPI\Asset;
 interface Handler
 {
     /**
-     * Applies $variantDefinition to $inputFile
+     * Generates the (default) variants for $inputFile
      *
      * @param string $inputFile
-     * @return Variant The generated variant file
+     * @return Variant[] The generated variants
      */
-    public function createVariant($inputFile, VariantDefinition $variantDefinition);
+    public function generateVariants($inputFile);
+
+    /**
+     * Generates the variant with $variantIdentifier for $inputFile
+     *
+     * @param string $inputFile
+     * @param string $variantIdentifier
+     * @return Variant The generated variant data
+     */
+    public function generateVariant($inputFile, $variantIdentifier);
 }
