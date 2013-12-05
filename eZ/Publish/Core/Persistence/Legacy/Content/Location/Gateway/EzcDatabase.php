@@ -162,8 +162,6 @@ class EzcDatabase extends Gateway
      * Search for nodes based on $criterion and returns an array with basic node data
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int $limit
      *
      * @return array
      */
