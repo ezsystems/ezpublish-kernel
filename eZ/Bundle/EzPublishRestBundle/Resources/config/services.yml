@@ -17,8 +17,11 @@ parameters:
     ezpublish_rest.request_parser.class: eZ\Bundle\EzPublishRestBundle\RequestParser\Router
     ezpublish_rest.parser_tools.class: eZ\Publish\Core\REST\Common\Input\ParserTools
     ezpublish_rest.field_type_parser.class: eZ\Publish\Core\REST\Common\Input\FieldTypeParser
-    ezpublish_rest.listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RestListener
     ezpublish_rest.field_type_serializer.class: eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
+
+    ezpublish_rest.request_listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\RequestListener
+    ezpublish_rest.csrf_listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\CsrfListener
+    ezpublish_rest.response_listener.class: eZ\Bundle\EzPublishRestBundle\EventListener\ResponseListener
 
     ezpublish_rest.field_type_processor_registry.class: eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
     ezpublish_rest.field_type_processor.ezimage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\ImageProcessor
@@ -174,11 +177,27 @@ services:
             - @ezpublish.api.service.url_alias
             - @ezpublish.api.service.location
 
-    ezpublish_rest.listener:
-        class: %ezpublish_rest.listener.class%
+    ezpublish_rest.request_listener:
+        class: %ezpublish_rest.request_listener.class%
         arguments:
-            - @service_container
-            - @?form.csrf_provider
+            - %ezpublish_rest.path_prefix%
+        tags:
+            - { name: kernel.event_subscriber, priority: 10 }
+
+    ezpublish_rest.response_listener:
+        class: %ezpublish_rest.response_listener.class%
+        arguments:
+            - @ezpublish_rest.output.visitor.dispatcher
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_rest.csrf_listener:
+        class: %ezpublish_rest.csrf_listener.class%
+        arguments:
+            - @form.csrf_provider
+            - @event_dispatcher
+            - %form.type_extension.csrf.enabled%
+            - %ezpublish_rest.csrf_token_intention%
         tags:
             - { name: kernel.event_subscriber }
 
