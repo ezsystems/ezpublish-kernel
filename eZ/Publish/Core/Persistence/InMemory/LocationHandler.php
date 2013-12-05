@@ -45,21 +45,6 @@ class LocationHandler implements LocationHandlerInterface
     {
         $this->handler = $handler;
         $this->backend = $backend;
-        $this->criterionHandlers = array(
-            new CriterionHandler\LocationId( $this, $backend ),
-            new CriterionHandler\ParentLocationId( $this, $backend ),
-            new CriterionHandler\LocationRemoteId( $this, $backend ),
-            new CriterionHandler\ContentId( $this, $backend ),
-            new CriterionHandler\SectionId( $this, $backend ),
-            new CriterionHandler\RemoteId( $this, $backend ),
-            new CriterionHandler\ContentTypeId( $this, $backend ),
-            new CriterionHandler\ContentTypeIdentifier( $this, $backend ),
-            new CriterionHandler\ContentTypeGroupId( $this, $backend ),
-            new CriterionHandler\Subtree( $this, $backend ),
-            new CriterionHandler\LogicalAnd( $this, $backend ),
-            new CriterionHandler\LogicalOr( $this, $backend ),
-            new CriterionHandler\LogicalNot( $this, $backend ),
-        );
     }
 
     /**
