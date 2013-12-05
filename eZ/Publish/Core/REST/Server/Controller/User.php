@@ -25,11 +25,12 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException AS RestNotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Security\User as CoreUser;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -141,6 +142,13 @@ class User extends RestController
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $groupPath )
         );
+
+        if ( trim( $userGroupLocation->pathString, '/' ) != $groupPath )
+        {
+            throw new NotFoundException(
+                "Could not find location with path string $groupPath"
+            );
+        }
 
         $userGroup = $this->userService->loadUserGroup(
             $userGroupLocation->contentId
@@ -657,7 +665,7 @@ class User extends RestController
                 $this->extractLocationIdFromPath( $locationPath )
             );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             throw new Exceptions\ForbiddenException( $e->getMessage() );
         }
@@ -666,7 +674,7 @@ class User extends RestController
         {
             $destinationGroup = $this->userService->loadUserGroup( $destinationGroupLocation->contentId );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             throw new Exceptions\ForbiddenException( $e->getMessage() );
         }
@@ -898,7 +906,7 @@ class User extends RestController
                 $this->extractLocationIdFromPath( $this->request->query->get( 'group' ) )
             );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             throw new Exceptions\ForbiddenException( $e->getMessage() );
         }
@@ -909,7 +917,7 @@ class User extends RestController
                 $userGroupLocation->contentId
             );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             throw new Exceptions\ForbiddenException( $e->getMessage() );
         }
@@ -973,7 +981,7 @@ class User extends RestController
                 $sessionInput->password
             );
         }
-        catch ( NotFoundException $e )
+        catch ( APINotFoundException $e )
         {
             throw new UnauthorizedException( "Invalid login or password", 0, null, $e );
         }
