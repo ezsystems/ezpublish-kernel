@@ -124,11 +124,86 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                         'criterion' => new Criterion\LogicalAnd(
                             array(
                                 new Criterion\Subtree( '/1/2' ),
+                                new Criterion\ContentTypeIdentifier( 'feedback_form' ),
+                                new Criterion\Visibility( Criterion\Visibility::VISIBLE )
+                            )
+                        ),
+                        'sortClauses' => array( new SortClause\ContentName( Query::SORT_DESC ) )
+                    )
+                ),
+                1
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\ContentTypeIdentifier( 'feedback_form' ),
+                                new Criterion\Visibility( Criterion\Visibility::VISIBLE )
+                            )
+                        ),
+                        'sortClauses' => array( new SortClause\ContentName( Query::SORT_DESC ), new SortClause\LocationPriority(), new SortClause\DatePublished() )
+                    )
+                ),
+                1
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\Subtree( '/1/2' ),
                                 new Criterion\ContentTypeIdentifier( 'folder' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
                         ),
                         'sortClauses' => array( new SortClause\ContentName() )
+                    )
+                ),
+                2
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\ContentTypeIdentifier( 'folder' ),
+                                new Criterion\Visibility( Criterion\Visibility::VISIBLE )
+                            )
+                        ),
+                        'sortClauses' => array( new SortClause\ContentName( Query::SORT_DESC ) )
+                    )
+                ),
+                2
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\ContentTypeIdentifier( 'folder' ),
+                                new Criterion\Visibility( Criterion\Visibility::VISIBLE )
+                            )
+                        ),
+                        'sortClauses' => array( new SortClause\ContentName( Query::SORT_DESC ), new SortClause\LocationPriority(), new SortClause\DatePublished() )
+                    )
+                ),
+                2
+            ),
+            array(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\ContentTypeIdentifier( 'folder' ),
+                                new Criterion\Visibility( Criterion\Visibility::VISIBLE )
+                            )
+                        ),
+                        'sortClauses' => array( new SortClause\ContentName( Query::SORT_DESC ), new SortClause\LocationPriority(), new SortClause\DatePublished(), new SortClause\ContentId() )
                     )
                 ),
                 2
