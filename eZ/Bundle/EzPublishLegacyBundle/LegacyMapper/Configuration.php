@@ -149,7 +149,7 @@ class Configuration implements EventSubscriberInterface
         $settings += $this->getMultiSiteSettings();
 
         // User settings
-        $settings["site.ini/UserSettings/AnonymousUserId"] = $this->configResolver->getParameter( "anonymous_user_id" );
+        $settings["site.ini/UserSettings/AnonymousUserID"] = $this->configResolver->getParameter( "anonymous_user_id" );
 
         $event->getParameters()->set(
             "injected-settings",
