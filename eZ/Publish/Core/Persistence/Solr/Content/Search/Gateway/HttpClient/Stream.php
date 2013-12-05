@@ -160,6 +160,11 @@ class Stream implements HttpClient
 
         foreach ( $headers as $name => $value )
         {
+            if ( is_numeric( $name ) )
+            {
+                throw new \RuntimeException( "Invalid HTTP header name $name" );
+            }
+
             $requestHeaders .= "$name: $value\r\n";
         }
 

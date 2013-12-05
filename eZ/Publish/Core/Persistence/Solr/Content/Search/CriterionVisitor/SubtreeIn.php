@@ -49,7 +49,7 @@ class SubtreeIn extends CriterionVisitor
                 array_map(
                     function ( $value )
                     {
-                        return 'path_mid:' . $value . '*';
+                        return 'path_mid:' . str_replace( '/', '\\/', $value ) . '*';
                     },
                     $criterion->value
                 )
