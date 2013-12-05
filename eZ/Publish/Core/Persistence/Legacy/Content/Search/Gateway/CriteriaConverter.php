@@ -41,6 +41,7 @@ class CriteriaConverter
      * Generic converter of criteria into query fragments
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException if criterion is not suppoerted
      *
      * @param \ezcQuerySelect $query
      * @param Criterion $criterion
