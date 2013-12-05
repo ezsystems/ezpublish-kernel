@@ -44,7 +44,7 @@ class LogicalOr extends CriterionHandler
         foreach ( $criterion->criteria as $subCriterion )
         {
             $innerMatch = $innerExcludeMatch = array();
-            $this->locationHandler->convertCriteria( $subCriterion, $innerMatch, $innerExcludeMatch );
+            $this->locationSearchHandler->convertCriteria( $subCriterion, $innerMatch, $innerExcludeMatch );
             $results = $this->backend->find(
                 "Content\\Location",
                 $innerMatch,

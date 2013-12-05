@@ -14,9 +14,9 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 abstract class CriterionHandler
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\InMemory\LocationHandler
+     * @var \eZ\Publish\Core\Persistence\InMemory\LocationSearchHandler
      */
-    protected $locationHandler;
+    protected $locationSearchHandler;
 
     /**
      * @var \eZ\Publish\Core\Persistence\InMemory\Backend
@@ -26,12 +26,12 @@ abstract class CriterionHandler
     /**
      * Creates a new criterion handler
      *
-     * @param \eZ\Publish\Core\Persistence\InMemory\LocationHandler $locationHandler
+     * @param \eZ\Publish\Core\Persistence\InMemory\LocationSearchHandler $locationSearchHandler
      * @param \eZ\Publish\Core\Persistence\InMemory\Backend $backend
      */
-    public function __construct( LocationHandler $locationHandler, Backend $backend )
+    public function __construct( LocationSearchHandler $locationSearchHandler, Backend $backend )
     {
-        $this->locationHandler = $locationHandler;
+        $this->locationSearchHandler = $locationSearchHandler;
         $this->backend = $backend;
     }
 

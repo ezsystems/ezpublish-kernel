@@ -44,7 +44,7 @@ class LogicalNot extends CriterionHandler
         foreach ( $criterion->criteria as $subCriterion )
         {
             $innerMatch = $innerExcludeMatch = array();
-            $this->locationHandler->convertCriteria( $subCriterion, $innerMatch, $innerExcludeMatch );
+            $this->locationSearchHandler->convertCriteria( $subCriterion, $innerMatch, $innerExcludeMatch );
             $results[] = $result = $this->backend->find(
                 "Content\\Location",
                 $innerMatch,
