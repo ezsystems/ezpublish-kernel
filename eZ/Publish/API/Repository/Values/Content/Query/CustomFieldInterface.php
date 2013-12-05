@@ -9,6 +9,14 @@
 
 namespace eZ\Publish\API\Repository\Values\Content\Query;
 
+/**
+ * Interface for criteria, which define a custom field mapping
+ *
+ * Allows to map the field in a certain type to a custom colum / field / index
+ * in the search backend and retrieve it back from the criterion. The SPI
+ * implementation may or may not handle this information for criteria
+ * implementing this interface.
+ */
 interface CustomFieldInterface
 {
     /**
