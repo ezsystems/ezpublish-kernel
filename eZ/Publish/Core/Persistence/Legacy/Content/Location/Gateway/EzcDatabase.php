@@ -57,7 +57,6 @@ class EzcDatabase extends Gateway
                 new CriterionHandler\LocationId( $handler ),
                 new CriterionHandler\ParentLocationId( $handler ),
                 new CriterionHandler\LogicalAnd( $handler ),
-                new CriterionHandler\Status( $handler ),
             )
         );
     }
