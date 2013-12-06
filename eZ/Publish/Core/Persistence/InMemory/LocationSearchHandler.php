@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\InMemory;
 
 use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as LocationSearchHandlerInterface;
+use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -55,16 +56,16 @@ class LocationSearchHandler implements LocationSearchHandlerInterface
     }
 
     /**
-     * Finds all locations given some $criterion.
+     * Finds locations for the given $query.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     *
+     * @return array
      */
-    public function findLocations( Criterion $criterion, $offset = 0, $limit = 10 )
+    public function findLocations( Query $query )
     {
         $match = $excludeMatch = array();
-        $this->convertCriteria( $criterion, $match, $excludeMatch );
+        $this->convertCriteria( $query->filter, $match, $excludeMatch );
 
         if ( $match === false )
         {
@@ -77,8 +78,8 @@ class LocationSearchHandler implements LocationSearchHandlerInterface
                 $match,
                 $excludeMatch
             ),
-            $offset,
-            $limit
+            $query->offset,
+            $query->limit
         );
     }
 
