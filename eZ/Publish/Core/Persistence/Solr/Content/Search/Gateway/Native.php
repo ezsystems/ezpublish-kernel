@@ -170,6 +170,8 @@ class Native extends Gateway
             $searchHit = new SearchHit(
                 array(
                     'score'       => $doc->score,
+                    // @TODO: Once object stripping is implemented we would
+                    // need to re-construct the full content object here.
                     'valueObject' => unserialize( base64_decode( $doc->ez_content_binary ) ),
                 )
             );

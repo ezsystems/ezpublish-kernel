@@ -264,6 +264,9 @@ class Handler implements SearchHandlerInterface
             ),
             new Field(
                 'ez_content',
+                // @TODO: I would prefer to use the content object stripping,
+                // which is implemented for the fields in the SqlNG branch, but
+                // since is not merged I do not want to dublicate the effort.
                 base64_encode( serialize( $content ) ),
                 new FieldType\BinaryField()
             ),
