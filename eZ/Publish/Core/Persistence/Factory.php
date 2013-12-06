@@ -81,7 +81,7 @@ class Factory extends ContainerAware
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler
      */
     public function getLocationSearchHandler()
     {
