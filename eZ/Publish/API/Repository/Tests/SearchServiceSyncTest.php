@@ -62,23 +62,29 @@ class SearchServiceSyncTest extends SearchBaseTest
 
         // Force index content
         $persistenceHandler = $this->getPersistenceHandler();
-        try {
+        try
+        {
             $persistenceHandler->searchHandler()->indexContent(
                 $persistenceHandler->contentHandler()->load(
                     $content->versionInfo->contentInfo->id,
                     $content->versionInfo->contentInfo->currentVersionNo
                 )
             );
-        } catch ( \Exception $e ) {
+        }
+        catch ( \Exception $e )
+        {
             // This ignores not implemented exceptions from legacy handler, but
             // might hide valid exceptions.
         }
 
         // Query content
+        $query = new Query(
+            array(
+                'filter'    => new Criterion\ContentId( $content->versionInfo->contentInfo->id ),
+            )
+        );
         $searchService = $repository->getSearchService();
-        $result = $searchService->findContent( new Query( array(
-            'filter'    => new Criterion\ContentId( $content->versionInfo->contentInfo->id ),
-        ) ) );
+        $result = $searchService->findContent( $query );
 
         $this->assertEquals(
             $content->versionInfo,
@@ -108,9 +114,7 @@ class SearchServiceSyncTest extends SearchBaseTest
         //
         // Mind: The updated content has not been indexed yet
         $searchService = $repository->getSearchService();
-        $result = $searchService->findContent( new Query( array(
-            'filter'    => new Criterion\ContentId( $newContent->versionInfo->contentInfo->id ),
-        ) ) );
+        $result = $searchService->findContent( $query );
 
         // The versions may actually mismatch
         $this->assertEquals(
