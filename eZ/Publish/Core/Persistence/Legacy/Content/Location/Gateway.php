@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
 
+use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
@@ -56,13 +57,11 @@ abstract class Gateway
     abstract public function getBasicNodeDataByRemoteId( $remoteId );
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
      * @return mixed
      */
-    abstract public function find( Criterion $criterion, $offset, $limit );
+    abstract public function find( Query $query );
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion

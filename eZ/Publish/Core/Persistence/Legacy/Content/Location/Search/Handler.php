@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Search;
 
+use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as BaseLocationSearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
@@ -50,10 +51,10 @@ class Handler implements BaseLocationSearchHandler
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler::findLocations
      */
-    public function findLocations( Criterion $criterion, $offset = 0, $limit = 10 )
+    public function findLocations( Query $query )
     {
         return $this->locationMapper->createLocationsFromRows(
-            $this->locationGateway->find( $criterion, $offset, $limit )
+            $this->locationGateway->find( $query )
         );
     }
 

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
+use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -91,17 +92,15 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
      * @return mixed
      */
-    public function find( Criterion $criterion, $offset, $limit )
+    public function find( Query $query )
     {
         try
         {
-            return $this->innerGateway->find( $criterion, $offset, $limit );
+            return $this->innerGateway->find( $query );
         }
         catch ( ezcDbException $e )
         {

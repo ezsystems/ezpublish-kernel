@@ -362,18 +362,27 @@ class LocationService implements LocationServiceInterface
         $limit = -1
     )
     {
-        $criterion = new CriterionParentLocationId( $parentLocationId );
+        $filter = new CriterionParentLocationId( $parentLocationId );
 
-        if ( !$this->permissionsCriterionHandler->addPermissionsCriterion( $criterion ) )
+        if ( !$this->permissionsCriterionHandler->addPermissionsCriterion( $filter ) )
         {
             return array();
         }
 
-        return $this->persistenceHandler->locationSearchHandler()->findLocations(
-            $criterion,
-            $offset >= 0 ? (int)$offset : 0,
-            $limit >= 0 ? (int)$limit : null
+        $query = new Query(
+            array(
+                "filter" => $filter,
+                "offset" => $offset >= 0 ? (int)$offset : 0,
+                "limit" => $limit >= 0 ? (int)$limit : null
+            )
         );
+
+        if ( $sortField !== null )
+        {
+            $query->sortClauses = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
+        }
+
+        return $this->persistenceHandler->locationSearchHandler()->findLocations( $query );
     }
 
     /**

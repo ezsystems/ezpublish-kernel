@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as LocationSearchHandlerInterface;
 
@@ -18,16 +19,14 @@ use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as LocationSearch
 class LocationSearchHandler extends AbstractHandler implements LocationSearchHandlerInterface
 {
     /**
-     * Finds all locations given some $criterion.
+     * Finds locations for given $query.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      */
-    public function findLocations( Criterion $criterion, $offset = 0, $limit = 10 )
+    public function findLocations( Query $query )
     {
-        $this->logger->logCall( __METHOD__, array( 'criterion' => $criterion, 'offset' => $offset, 'limit' => $limit ) );
-        return $this->persistenceFactory->getLocationSearchHandler()->findLocations( $criterion, $offset, $limit );
+        $this->logger->logCall( __METHOD__, array( 'query' => $query ) );
+        return $this->persistenceFactory->getLocationSearchHandler()->findLocations( $query );
     }
 
     /**
