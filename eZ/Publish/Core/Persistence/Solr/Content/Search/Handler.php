@@ -263,6 +263,11 @@ class Handler implements SearchHandlerInterface
                 new FieldType\IdentifierField()
             ),
             new Field(
+                'ez_content',
+                base64_encode( serialize( $content ) ),
+                new FieldType\BinaryField()
+            ),
+            new Field(
                 'type',
                 $content->versionInfo->contentInfo->contentTypeId,
                 new FieldType\IdentifierField()

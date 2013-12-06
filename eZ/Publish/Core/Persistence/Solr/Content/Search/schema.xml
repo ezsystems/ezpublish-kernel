@@ -78,6 +78,12 @@ should not remove or drastically change the existing definitions.
     <field name="id" type="string" indexed="true" stored="true" required="true"/>
 
     <!--
+      Field to store serialized content object, so that we do not need to
+      reconstruct it from the database.
+    -->
+    <field name="ez_content_binary" type="binary" indexed="false" stored="true" required="false"/>
+
+    <!--
       Always contains the date a document was added to the index. Might be
       useful.
     -->

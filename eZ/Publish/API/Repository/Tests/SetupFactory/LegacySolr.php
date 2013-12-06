@@ -227,9 +227,9 @@ class LegacySolr extends Legacy
                         new FieldValueMapper\DateMapper(),
                         new FieldValueMapper\PriceMapper(),
                         new FieldValueMapper\MultipleBooleanMapper(),
+                        new FieldValueMapper\BinaryMapper(),
                     )
                 ),
-                $persistenceHandler->contentHandler(),
                 $nameGenerator
             ),
             $fieldRegistry,
