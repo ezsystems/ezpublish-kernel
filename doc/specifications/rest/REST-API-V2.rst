@@ -112,6 +112,27 @@ situation, the prefix /api/ezp/v2 is used in all REST hrefs.
 Remember in any case that URIs to REST resources should never be generated manually, but obtained from earlier REST
  calls.
 
+OPTIONS requests
+----------------
+
+Any resource URI the REST API responds to will respond to an OPTIONS request.
+
+The Response will contain an Allow header, that as specified in chapter 14.7 of RFC 2616 will list the methods
+accepted by the resource.
+
+Example
+~~~~~~~
+
+.. code:: http
+
+    OPTIONS /content/objects/1 HTTP/1.1
+    Host: api.example.net
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    Allow: PATCH,GET,DELETE,COPY
+
 Authentication
 ==============
 

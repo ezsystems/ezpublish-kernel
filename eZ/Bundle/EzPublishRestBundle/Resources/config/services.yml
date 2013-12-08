@@ -1,4 +1,8 @@
 parameters:
+    ezpublish_rest.routing.options_loader.class: eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader
+    ezpublish_rest.routing.options_loader.route_collection_mapper.class: eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper
+    ezpublish_rest.routing.options_loader.mapper.class: eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\Mapper
+
     ezpublish_rest.controller.base.class: eZ\Publish\Core\REST\Server\Controller
     ezpublish_rest.controller.binary_content.class: eZ\Publish\Core\REST\Server\Controller\BinaryContent
     ezpublish_rest.controller.content.class: eZ\Publish\Core\REST\Server\Controller\Content
@@ -12,6 +16,7 @@ parameters:
     ezpublish_rest.controller.user.class: eZ\Publish\Core\REST\Server\Controller\User
     ezpublish_rest.controller.url_wildcard.class: eZ\Publish\Core\REST\Server\Controller\URLWildcard
     ezpublish_rest.controller.url_alias.class: eZ\Publish\Core\REST\Server\Controller\URLAlias
+    ezpublish_rest.controller.options.class: eZ\Publish\Core\REST\Server\Controller\Options
 
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
     ezpublish_rest.request_parser.class: eZ\Bundle\EzPublishRestBundle\RequestParser\Router
@@ -59,6 +64,21 @@ parameters:
     ezpublish_rest.input.handler.xml.class: eZ\Publish\Core\REST\Common\Input\Handler\Xml
 
 services:
+    ezpublish_rest.routing.options_loader:
+        class: %ezpublish_rest.routing.options_loader.class%
+        arguments:
+            - @ezpublish_rest.routing.options_loader.route_collection_mapper
+        tags:
+            - { name: routing.loader }
+
+    ezpublish_rest.routing.options_loader.route_collection_mapper:
+        class: %ezpublish_rest.routing.options_loader.route_collection_mapper.class%
+        arguments:
+            - @ezpublish_rest.routing.options_loader.mapper
+
+    ezpublish_rest.routing.options_loader.mapper:
+        class: %ezpublish_rest.routing.options_loader.mapper.class%
+
     ezpublish_rest.field_type_serializer:
         class: %ezpublish_rest.field_type_serializer.class%
         arguments:
@@ -200,6 +220,10 @@ services:
             - %ezpublish_rest.csrf_token_intention%
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish_rest.controller.options:
+        class: %ezpublish_rest.controller.options.class%
+        parent: ezpublish_rest.controller.base
 
     ezpublish_rest.field_type_processor_registry:
         class: %ezpublish_rest.field_type_processor_registry.class%
