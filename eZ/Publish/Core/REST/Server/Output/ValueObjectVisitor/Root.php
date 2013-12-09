@@ -56,17 +56,17 @@ class Root extends ValueObjectVisitor
 
         // @todo Load the locations of the following three items from settings
         $generator->startObjectElement( 'rootLocation', 'Location' );
-        $generator->startAttribute( 'href', $this->router->generate( 'ezpublish_rest_loadLocation', array( 'locationPath' => '/1/2' ) ) );
+        $generator->startAttribute( 'href', $this->router->generate( 'ezpublish_rest_loadLocation', array( 'locationPath' => '1/2' ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'rootLocation' );
 
         $generator->startObjectElement( 'rootUserGroup', 'UserGroup' );
-        $generator->startAttribute( 'href', $this->router->generate( 'ezpublish_rest_loadUserGroup', array( 'groupPath' => '/1/5' ) ) );
+        $generator->startAttribute( 'href', $this->router->generate( 'ezpublish_rest_loadUserGroup', array( 'groupPath' => '1/5' ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'rootUserGroup' );
 
         $generator->startObjectElement( 'rootMediaFolder', 'Location' );
-        $generator->startAttribute( 'href', $this->router->generate( 'ezpublish_rest_loadLocation', array( 'locationPath' => '/1/43' ) ) );
+        $generator->startAttribute( 'href', $this->router->generate( 'ezpublish_rest_loadLocation', array( 'locationPath' => '1/43' ) ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'rootMediaFolder' );
 
