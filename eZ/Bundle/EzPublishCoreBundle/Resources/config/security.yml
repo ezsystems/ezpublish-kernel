@@ -1,8 +1,12 @@
 parameters:
     ezpublish.security.authentication_provider.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\Provider
+    security.authentication.provider.dao.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider
+    security.authentication.provider.anonymous.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider
     ezpublish.security.user_provider.class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
     ezpublish.security.voter.core.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
+    ezpublish.security.voter.value_object.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\ValueObjectVoter
     ezpublish.security.authentication_provider.basic.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\BasicAuthProvider
+    ezpublish.security.controller.class: eZ\Publish\Core\MVC\Symfony\Controller\SecurityController
     ezpublish.user.identity.class: eZ\Publish\Core\MVC\Symfony\Security\User\Identity
     ezpublish.user.hash_generator.class: eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
     ezpublish.user.identity_definer.role_id.class: eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\Role
@@ -35,6 +39,19 @@ services:
         public: false
         tags:
             - { name: security.voter }
+
+    ezpublish.security.voter.value_object:
+        class: %ezpublish.security.voter.value_object.class%
+        arguments: [@ezpublish.api.repository.lazy]
+        public: false
+        tags:
+            - { name: security.voter }
+
+    ezpublish.security.controller:
+        class: %ezpublish.security.controller.class%
+        arguments: [@templating, @?form.csrf_provider]
+        calls:
+            - [setRequest, [@?request=]]
 
     ezpublish.user.identity:
         class: %ezpublish.user.identity.class%
