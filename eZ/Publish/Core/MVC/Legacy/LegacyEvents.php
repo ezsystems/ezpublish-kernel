@@ -32,4 +32,6 @@ final class LegacyEvents
      * \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent
      */
     const PRE_BUILD_LEGACY_KERNEL = 'ezpublish_legacy.build_kernel';
+
+    const POST_BUILD_LEGACY_KERNEL = 'ezpublish_legacy.post_build_kernel';
 }

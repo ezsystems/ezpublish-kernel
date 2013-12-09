@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 
+use eZ\Publish\Core\MVC\Legacy\Event\PostBuildKernelEvent;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
@@ -16,6 +17,7 @@ use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use ezpKernelHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
@@ -34,6 +36,11 @@ class Loader
     protected $webrootDir;
 
     /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * @var URIHelper
      */
     protected $uriHelper;
@@ -43,10 +50,11 @@ class Loader
      */
     protected $logger;
 
-    public function __construct( $legacyRootDir, $webrootDir, URIHelper $uriHelper, LoggerInterface $logger = null )
+    public function __construct( $legacyRootDir, $webrootDir, EventDispatcherInterface $eventDispatcher, URIHelper $uriHelper, LoggerInterface $logger = null )
     {
         $this->legacyRootDir = $legacyRootDir;
         $this->webrootDir = $webrootDir;
+        $this->eventDispatcher = $eventDispatcher;
         $this->uriHelper = $uriHelper;
         $this->logger = $logger;
     }
@@ -62,7 +70,8 @@ class Loader
     {
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
-        return function () use ( $legacyKernelHandler, $legacyRootDir, $webrootDir )
+        $eventDispatcher = $this->eventDispatcher;
+        return function () use ( $legacyKernelHandler, $legacyRootDir, $webrootDir, $eventDispatcher )
         {
             static $legacyKernel;
             if ( !$legacyKernel instanceof LegacyKernel )
@@ -70,6 +79,11 @@ class Loader
                 if ( $legacyKernelHandler instanceof \Closure )
                     $legacyKernelHandler = $legacyKernelHandler();
                 $legacyKernel = new LegacyKernel( $legacyKernelHandler, $legacyRootDir, $webrootDir );
+
+                $eventDispatcher->dispatch(
+                    LegacyEvents::POST_BUILD_LEGACY_KERNEL,
+                    new PostBuildKernelEvent( $legacyKernel, $legacyKernelHandler )
+                );
             }
 
             return $legacyKernel;
@@ -92,8 +106,9 @@ class Loader
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
         $uriHelper = $this->uriHelper;
+        $eventDispatcher = $this->eventDispatcher;
 
-        return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass, $uriHelper )
+        return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass, $uriHelper, $eventDispatcher )
         {
             static $webHandler;
             if ( !$webHandler instanceof ezpKernelHandler )
@@ -103,7 +118,6 @@ class Loader
                 $legacyParameters = new ParameterBag( $defaultLegacyOptions );
                 $legacyParameters->set( 'service-container', $container );
                 $request = $container->get( 'request' );
-                $eventDispatcher = $container->get( 'event_dispatcher' );
 
                 // PRE_BUILD_LEGACY_KERNEL for non request related stuff
                 $eventDispatcher->dispatch( LegacyEvents::PRE_BUILD_LEGACY_KERNEL, new PreBuildKernelEvent( $legacyParameters ) );
@@ -141,8 +155,9 @@ class Loader
     {
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
+        $eventDispatcher = $this->eventDispatcher;
 
-        return function () use ( $legacyRootDir, $webrootDir, $container )
+        return function () use ( $legacyRootDir, $webrootDir, $container, $eventDispatcher )
         {
             static $cliHandler;
             if ( !$cliHandler instanceof ezpKernelHandler )
@@ -150,7 +165,6 @@ class Loader
                 chdir( $legacyRootDir );
 
                 $legacyParameters = new ParameterBag( $container->getParameter( 'ezpublish_legacy.kernel_handler.cli.options' ) );
-                $eventDispatcher = $container->get( 'event_dispatcher' );
                 $eventDispatcher->dispatch( LegacyEvents::PRE_BUILD_LEGACY_KERNEL, new PreBuildKernelEvent( $legacyParameters ) );
 
                 $cliHandler = new CLIHandler( $legacyParameters->all(), $container->get( 'ezpublish.siteaccess' ), $container );
