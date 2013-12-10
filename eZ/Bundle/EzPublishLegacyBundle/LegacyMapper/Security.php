@@ -10,7 +10,9 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Legacy\Event\PostBuildKernelEvent;
+use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use ezpWebBasedKernelHandler;
 use eZUser;
@@ -26,15 +28,22 @@ class Security implements EventSubscriberInterface
      */
     private $repository;
 
-    public function __construct( Repository $repository )
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    private $configResolver;
+
+    public function __construct( Repository $repository, ConfigResolverInterface $configResolver )
     {
         $this->repository = $repository;
+        $this->configResolver = $configResolver;
     }
 
     public static function getSubscribedEvents()
     {
         return array(
-            LegacyEvents::POST_BUILD_LEGACY_KERNEL => 'onKernelBuilt'
+            LegacyEvents::POST_BUILD_LEGACY_KERNEL => 'onKernelBuilt',
+            LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB => 'onLegacyKernelWebBuild',
         );
     }
 
@@ -63,5 +72,32 @@ class Security implements EventSubscriberInterface
             },
             false
         );
+    }
+
+    /**
+     * Performs actions related to security before kernel build (mainly settings injection).
+     *
+     * @param PreBuildKernelWebHandlerEvent $event
+     */
+    public function onLegacyKernelWebBuild( PreBuildKernelWebHandlerEvent $event )
+    {
+        if ( $this->configResolver->getParameter( 'legacy_mode' ) === true )
+        {
+            return;
+        }
+
+        $injectedSettings = $event->getParameters()->get( 'injected-settings', array() );
+        $accessRules = array(
+            'access;disable',
+            'module;user/login',
+            'module;user/logout',
+        );
+        // Merge existing settings with the new ones if needed.
+        if ( isset( $injectedSettings['site.ini/SiteAccessRules/Rules'] ) )
+        {
+            $accessRules = array_merge( $injectedSettings['site.ini/SiteAccessRules/Rules'], $accessRules );
+        }
+        $injectedSettings['site.ini/SiteAccessRules/Rules'] = $accessRules;
+        $event->getParameters()->set( 'injected-settings', $injectedSettings );
     }
 }
