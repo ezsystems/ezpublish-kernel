@@ -51,7 +51,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new SecurityPass );
 
         $securityExtension = $container->getExtension( 'security' );
-        $securityExtension->addSecurityListenerFactory( new EzPublishSecurityFactory );
         $securityExtension->addSecurityListenerFactory( new HttpBasicFactory );
     }
 

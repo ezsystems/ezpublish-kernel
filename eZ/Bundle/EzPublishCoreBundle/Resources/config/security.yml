@@ -1,5 +1,4 @@
 parameters:
-    ezpublish.security.authentication_provider.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\Provider
     security.authentication.provider.dao.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\RepositoryAuthenticationProvider
     security.authentication.provider.anonymous.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\AnonymousAuthenticationProvider
     ezpublish.security.user_provider.class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
@@ -15,14 +14,6 @@ services:
     ezpublish.security.user_provider:
         class: %ezpublish.security.user_provider.class%
         arguments: [@ezpublish.api.repository.lazy]
-
-    ezpublish.security.authentication_provider:
-        class: %ezpublish.security.authentication_provider.class%
-        abstract: true
-        parent: security.authentication.provider.pre_authenticated
-        calls:
-            - [setLazyRepository, [@ezpublish.api.repository.lazy]]
-            - [setLogger, [@?logger]]
 
     ezpublish.security.authentication_provider.basic:
         class: %ezpublish.security.authentication_provider.basic.class%
