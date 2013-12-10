@@ -323,6 +323,19 @@ interface ContentService
     public function loadRelations( VersionInfo $versionInfo );
 
     /**
+     * Loads related content of a version.
+     *
+     * This method keeps track of permissions allowing the user to access embedded/related content
+     * even if the user is not allowed to access the content directly
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string|null $relationType if null then this method returns all related content
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
+     */
+    public function loadRelatedContent( VersionInfo $versionInfo, $relationType = null );
+
+    /**
      * Loads all incoming relations for a content object.
      *
      * The relations come only from published versions of the source content objects
