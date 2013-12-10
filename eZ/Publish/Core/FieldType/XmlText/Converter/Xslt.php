@@ -14,6 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use DOMDocument;
 use XSLTProcessor;
 use LibXMLError;
+use RuntimeException;
 
 /**
  *
@@ -98,6 +99,11 @@ class Xslt implements Converter
         $insertBeforeEl = $xslDoc->documentElement->firstChild;
         foreach ( $this->getSortedCustomStylesheets() as $stylesheet )
         {
+            if ( !file_exists( $stylesheet ) )
+            {
+                throw new RuntimeException( "Cannot find XSL stylesheet for XMLText rendering: $stylesheet" );
+            }
+
             $newEl = $xslDoc->createElement( 'xsl:import' );
             $hrefAttr = $xslDoc->createAttribute( 'href' );
             $hrefAttr->value = $stylesheet;
