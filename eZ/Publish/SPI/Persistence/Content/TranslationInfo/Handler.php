@@ -19,9 +19,9 @@ interface Handler {
     /**
      * creates a translation info
      *
-     * @param CreateStruct $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\TranslationInfo\CreateStruct $createStruct
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Content\TranslationInfo
      */
     public function createTranslationInfo( CreateStruct $createStruct );
 
@@ -30,9 +30,18 @@ interface Handler {
      *
      * @param $id
      *
-     * @return mixed
+     * @return \eZ\Publish\SPI\Persistence\Content\TranslationInfo
      */
     public function loadTranslationInfo( $id );
+
+    /**
+     * load translation infos for a content object
+     *
+     * @param $contentId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\TranslationInfo[]
+     */
+    public function loadTranslationInfos( $contentId );
 
     /**
      * removes the translation info for the given id
@@ -45,21 +54,4 @@ interface Handler {
      */
     public function removeTranslationInfo( $id );
 
-    /**
-     * finds translation infos
-     *
-     * the filters may contain the following keys:
-     * destination: returns all translation infos containing the given language code in the destinationLanguageCode
-     * source: returns all translation infos containing the given language code in the sourceLanguageCode
-     * destinationVersion: returns all translation infos containing the version number in destinationVersion
-     * sourceVersion: returns all translation infos containing the version number in sourceVersion
-     * if more than one key is given the results are intersected. Unions have to be built manually by calling this
-     * method multiple times.
-     *
-     * @param $contentId
-     * @param array $filters
-     *
-     * @return mixed
-     */
-    public function findTranslationInfos( $contentId, array $filters = array() );
 }
