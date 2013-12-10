@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\SearchService;
-use eZ\Publish\Core\Repository\PermissionsCriterionHandler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
@@ -19,8 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 use eZ\Publish\API\Repository\Values\User\Limitation;
-use eZ\Publish\Core\Repository\Values\User\Policy;
-use RuntimeException;
+use Exception;
 
 /**
  * Mock test case for Search service
@@ -92,9 +90,10 @@ class SearchTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::getPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
-     * @expectedException \RuntimeException
+     * @expectedException \Exception
+     * @expectedExceptionMessage Handler threw an exception
      */
-    public function testFindContentThrowsRuntimeException()
+    public function testFindContentThrowsHandlerException()
     {
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
@@ -119,7 +118,7 @@ class SearchTest extends BaseServiceMockTest
         $permissionsCriterionHandlerMock->expects( $this->once() )
             ->method( "addPermissionsCriterion" )
             ->with( $criterionMock )
-            ->will( $this->throwException( new RuntimeException() ) );
+            ->will( $this->throwException( new Exception( "Handler threw an exception" ) ) );
 
         $service->findContent( $query, array(), true );
     }
@@ -299,27 +298,6 @@ class SearchTest extends BaseServiceMockTest
         );
     }
 
-    public function criterionProvider()
-    {
-        $criterionMock = $this
-            ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return array(
-            array(
-                $criterionMock,
-                new Criterion\LogicalAnd( array() ),
-                new Criterion\LogicalAnd( array( $criterionMock ) )
-            ),
-            array(
-                $criterionMock,
-                $criterionMock,
-                new Criterion\LogicalAnd( array( $criterionMock, $criterionMock ) )
-            )
-        );
-    }
-
     /**
      * Test for the findSingle() method.
      *
@@ -356,9 +334,10 @@ class SearchTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\PermissionsCriterionHandler::getPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
-     * @expectedException \RuntimeException
+     * @expectedException \Exception
+     * @expectedExceptionMessage Handler threw an exception
      */
-    public function testFindSingleThrowsRuntimeException()
+    public function testFindSingleThrowsHandlerException()
     {
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
@@ -381,7 +360,7 @@ class SearchTest extends BaseServiceMockTest
         $permissionsCriterionHandlerMock->expects( $this->once() )
             ->method( "addPermissionsCriterion" )
             ->with( $criterionMock )
-            ->will( $this->throwException( new RuntimeException() ) );
+            ->will( $this->throwException( new Exception( "Handler threw an exception" ) ) );
 
         $service->findSingle( $criterionMock, array(), true );
     }
@@ -439,220 +418,6 @@ class SearchTest extends BaseServiceMockTest
         $this->assertEquals( $contentMock, $result );
     }
 
-    public function providerForTestFindSingleWithPermissionsCriterion()
-    {
-        $criterionMock = $this
-            ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $limitationMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\User\\Limitation" );
-        $limitationMock->expects( $this->any() )
-            ->method( "getIdentifier" )
-            ->will( $this->returnValue( "limitationIdentifier" ) );
-
-        $policy1 = new Policy( array( 'limitations' => array( $limitationMock ) ) );
-        $policy2 = new Policy( array( 'limitations' => array( $limitationMock, $limitationMock ) ) );
-
-        return array(
-            array(
-                $criterionMock, 1, $criterionMock,
-                array(
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy1 )
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 2, new Criterion\LogicalOr( array( $criterionMock, $criterionMock ) ),
-                array(
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy1, $policy1 ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 1, $criterionMock,
-                array(
-                    array(
-                        'limitation' => null,
-                        'policies' => array( new Policy( array( 'limitations' => "*" ) ), $policy1 ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 1, $criterionMock,
-                array(
-                    array(
-                        'limitation' => null,
-                        'policies' => array( new Policy( array( 'limitations' => array() ) ), $policy1 ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 2, new Criterion\LogicalAnd( array( $criterionMock, $criterionMock ) ),
-                array(
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy2 ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 3,
-                new Criterion\LogicalOr(
-                    array(
-                        $criterionMock,
-                        new Criterion\LogicalAnd( array( $criterionMock, $criterionMock ) )
-                    )
-                ),
-                array(
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy1, $policy2 ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 2, new Criterion\LogicalOr( array( $criterionMock, $criterionMock ) ),
-                array(
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy1 ),
-                    ),
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy1 )
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 3, new Criterion\LogicalOr( array( $criterionMock, $criterionMock, $criterionMock ) ),
-                array(
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy1 )
-                    ),
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy1, $policy1 ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 3,
-                new Criterion\LogicalOr(
-                    array(
-                        new Criterion\LogicalAnd( array( $criterionMock, $criterionMock ) ),
-                        $criterionMock
-                    )
-                ),
-                array(
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy2 ),
-                    ),
-                    array(
-                        'limitation' => null,
-                        'policies' => array( $policy1 ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 2,
-                new Criterion\LogicalAnd( array( $criterionMock, $criterionMock ) ),
-                array(
-                    array(
-                        'limitation' => $limitationMock,
-                        'policies' => array( $policy1 ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 4,
-                new Criterion\LogicalOr(
-                    array(
-                        new Criterion\LogicalAnd( array( $criterionMock, $criterionMock ) ),
-                        new Criterion\LogicalAnd( array( $criterionMock, $criterionMock ) ),
-                    )
-                ),
-                array(
-                    array(
-                        'limitation' => $limitationMock,
-                        'policies' => array( $policy1 ),
-                    ),
-                    array(
-                        'limitation' => $limitationMock,
-                        'policies' => array( $policy1 ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 1,
-                $criterionMock,
-                array(
-                    array(
-                        'limitation' => $limitationMock,
-                        'policies' => array( new Policy( array( 'limitations' => "*" ) ) ),
-                    ),
-                )
-            ),
-            array(
-                $criterionMock, 2,
-                new Criterion\LogicalOr( array( $criterionMock, $criterionMock ) ),
-                array(
-                    array(
-                        'limitation' => $limitationMock,
-                        'policies' => array( new Policy( array( 'limitations' => "*" ) ) ),
-                    ),
-                    array(
-                        'limitation' => $limitationMock,
-                        'policies' => array( new Policy( array( 'limitations' => "*" ) ) ),
-                    ),
-                )
-            ),
-        );
-    }
-
-    protected function setBaseExpectations( $criterionMock, $limitationCount, $permissionSets )
-    {
-        $repositoryMock = $this->getRepositoryMock();
-        //$roleServiceMock = $this->getMock( "eZ\\Publish\\API\\Repository\\RoleService" );
-        $userMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\User\\User" );
-        $limitationTypeMock = $this->getMock( "eZ\\Publish\\SPI\\Limitation\\Type" );
-
-        $limitationTypeMock->expects( $this->any() )
-            ->method( "getCriterion" )
-            ->with(
-                $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\Limitation" ),
-                $this->equalTo( $userMock )
-            )
-            ->will( $this->returnValue( $criterionMock ) );
-
-        /*$roleServiceMock->expects( $this->exactly( $limitationCount ) )
-            ->method( "getLimitationType" )
-            ->with( $this->equalTo( "limitationIdentifier" ) )
-            ->will( $this->returnValue( $limitationTypeMock ) );*/
-
-        /*$repositoryMock->expects( $this->once() )
-            ->method( "hasAccess" )
-            ->with( $this->equalTo( "content" ), $this->equalTo( "read" ) )
-            ->will( $this->returnValue( $permissionSets ) );*/
-
-        /*$repositoryMock->expects( $this->once() )
-            ->method( "getRoleService" )
-            ->will( $this->returnValue( $roleServiceMock ) );
-
-        $repositoryMock->expects( $this->once() )
-            ->method( "getCurrentUser" )
-            ->will( $this->returnValue( $userMock ) );*/
-
-        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
-
-        return array( $repositoryMock, $searchHandlerMock );
-    }
-
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\DomainMapper
      */
@@ -707,23 +472,5 @@ class SearchTest extends BaseServiceMockTest
                 array()
             )
         );
-    }
-
-    /**
-     *
-     *
-     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getRepositoryMock()
-    {
-        if ( !isset( $this->repositoryMock ) )
-        {
-            $this->repositoryMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\Repository" )
-                ->disableOriginalConstructor()
-                ->getMock();
-        }
-
-        return $this->repositoryMock;
     }
 }
