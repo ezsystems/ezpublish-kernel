@@ -889,8 +889,8 @@ class LocationService implements LocationServiceInterface
             //@todo: enable
             // case APILocation::SORT_FIELD_NODE_ID:
 
-            //@todo: enable
-            // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
+            case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
+                return new SortClause\ContentId( $sortOrder );
 
             default:
                 return new SortClause\LocationPathString( $sortOrder );
