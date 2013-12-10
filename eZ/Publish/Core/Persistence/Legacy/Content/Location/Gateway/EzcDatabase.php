@@ -161,6 +161,11 @@ class EzcDatabase extends Gateway
      */
     public function find( Query $query )
     {
+        if ( $query->limit === 0 )
+        {
+            return array();
+        }
+
         $selectQuery = $this->handler->createSelectQuery();
         $selectQuery->select( '*' );
 
