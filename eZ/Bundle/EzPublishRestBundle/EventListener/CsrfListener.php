@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishRestBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
@@ -98,24 +99,17 @@ class CsrfListener implements EventSubscriberInterface
             return;
         }
 
-        if ( in_array( $event->getRequest()->getMethod(), array( 'GET', 'HEAD', 'OPTIONS' ) ) )
+        if ( $this->isMethodSafe( $event->getRequest()->getMethod() ) )
         {
             return;
         }
 
-        // TODO: add CSRF token to protect against force-login attacks
-        if ( $event->getRequest()->get( "_route" ) == "ezpublish_rest_createSession" )
+        if ( $this->isLoginRequest( $event->getRequest()->get( "_route" ) ) )
         {
             return;
         }
 
-        if (
-            !$event->getRequest()->headers->has( self::CSRF_TOKEN_HEADER )
-            || !$this->csrfProvider->isCsrfTokenValid(
-                $this->csrfTokenIntention,
-                $event->getRequest()->headers->get( self::CSRF_TOKEN_HEADER )
-            )
-        )
+        if ( !$this->checkCsrfToken( $event->getRequest() ) )
         {
             throw new UnauthorizedException(
                 "Missing or invalid CSRF token",
@@ -125,5 +119,42 @@ class CsrfListener implements EventSubscriberInterface
 
         // Dispatching event so that CSRF token intention can be injected into Legacy Stack
         $this->eventDispatcher->dispatch( RestEvents::REST_CSRF_TOKEN_VALIDATED );
+    }
+
+    /**
+     * @param string $method
+     * @return bool
+     */
+    protected function isMethodSafe( $method )
+    {
+        return in_array( $method, array( 'GET', 'HEAD', 'OPTIONS' ) );
+    }
+
+    /**
+     * @param string $route
+     * @return bool
+     */
+    protected function isLoginRequest( $route )
+    {
+        // TODO: add CSRF token to protect against force-login attacks
+        return $route == "ezpublish_rest_createSession";
+    }
+
+    /**
+     * @param GetResponseEvent $event
+     *
+     * @return bool
+     */
+    protected function checkCsrfToken( Request $request )
+    {
+        if ( !$request->headers->has( self::CSRF_TOKEN_HEADER ) )
+        {
+            return false;
+        }
+
+        return $this->csrfProvider->isCsrfTokenValid(
+            $this->csrfTokenIntention,
+            $request->headers->get( self::CSRF_TOKEN_HEADER )
+        );
     }
 }
