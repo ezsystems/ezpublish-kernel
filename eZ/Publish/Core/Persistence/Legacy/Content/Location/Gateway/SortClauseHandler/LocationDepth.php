@@ -49,7 +49,7 @@ class LocationDepth extends SortClauseHandler
                 $query->alias(
                     $this->dbHandler->quoteColumn(
                         'depth',
-                        $this->getSortTableName( $number )
+                        'ezcontentobject_tree'
                     ),
                     $column = $this->getSortColumnName( $number )
                 )

@@ -49,7 +49,7 @@ class LocationPriority extends SortClauseHandler
                 $query->alias(
                     $this->dbHandler->quoteColumn(
                         'priority',
-                        $this->getSortTableName( $number )
+                        'ezcontentobject_tree'
                     ),
                     $column = $this->getSortColumnName( $number )
                 )

@@ -48,8 +48,8 @@ class ContentId extends SortClauseHandler
             ->select(
                 $query->alias(
                     $this->dbHandler->quoteColumn(
-                        'modified_subnode',
-                        $this->getSortTableName( $number )
+                        'contentobject_id',
+                        'ezcontentobject_tree'
                     ),
                     $column = $this->getSortColumnName( $number )
                 )
