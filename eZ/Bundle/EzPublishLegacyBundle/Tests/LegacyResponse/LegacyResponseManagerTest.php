@@ -37,6 +37,33 @@ class LegacyResponseManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider generateResponseAccessDeniedProvider
+     */
+    public function testGenerateResponseAccessDenied( $errorCode, $errorMessage )
+    {
+        $this->setExpectedException( 'Symfony\Component\Security\Core\Exception\AccessDeniedException', $errorMessage );
+        $manager = new LegacyResponseManager( $this->templateEngine, $this->configResolver );
+        $content = 'foobar';
+        $moduleResult = array(
+            'content' => $content,
+            'errorCode' => $errorCode,
+            'errorMessage' => $errorMessage
+        );
+        $kernelResult = new ezpKernelResult( $content, array( 'module_result' => $moduleResult ) );
+        $manager->generateResponseFromModuleResult( $kernelResult );
+    }
+
+    public function generateResponseAccessDeniedProvider()
+    {
+        return array(
+            array( '401', 'Unauthorized access' ),
+            array( '403', 'Forbidden' ),
+            array( '403', null ),
+            array( '401', null ),
+        );
+    }
+
+    /**
      * Tests response generation when no custom layout can be applied:
      *  - Custom layout provided, but in legacy mode
      *  - Custom layout provided, module_result presents a "pagelayout" entry
