@@ -13,11 +13,13 @@ use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use Exception;
 
 /**
@@ -294,6 +296,179 @@ class SearchTest extends BaseServiceMockTest
 
         $this->assertEquals(
             new SearchResult( array( "time" => 0, "totalCount" => 0 ) ),
+            $result
+        );
+    }
+
+    public function providerForTestFindContentValidatesFieldSortClauses()
+    {
+        $fieldSortClause1 = new SortClause\Field(
+            "testContentTypeIdentifier",
+            "testFieldDefinitionIdentifier",
+            Query::SORT_ASC
+        );
+        $fieldSortClause2 = new SortClause\Field(
+            "testContentTypeIdentifier",
+            "testFieldDefinitionIdentifier",
+            Query::SORT_ASC,
+            "eng-GB"
+        );
+
+        return array(
+            array(
+                array( new SortClause\ContentId(), $fieldSortClause1 ),
+                true,
+                false,
+                "Argument '\$query->sortClauses[1]' is invalid: No language is specified for translatable field"
+            ),
+            array(
+                array( $fieldSortClause2 ),
+                false,
+                false,
+                "Argument '\$query->sortClauses[0]' is invalid: Language is specified for non-translatable field," .
+                " null should be used instead"
+            ),
+            array(
+                array( $fieldSortClause1 ),
+                false,
+                true
+            ),
+            array(
+                array( $fieldSortClause2 ),
+                true,
+                true
+            ),
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @dataProvider providerForTestFindContentValidatesFieldSortClauses
+     */
+    public function testFindContentValidatesFieldSortClauses( $sortClauses, $isTranslatable, $isValid, $message = null )
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        $contentTypeServiceMock = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentTypeService" );
+        $contentTypeMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" );
+        $fieldDefinitionMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition" );
+        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $this->getDomainMapperMock(),
+            $permissionsCriterionHandlerMock,
+            array()
+        );
+
+        $permissionsCriterionHandlerMock
+            ->expects( $this->any() )
+            ->method( "addPermissionsCriterion" )
+            ->will( $this->returnValue( false ) );
+
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "getContentTypeService" )
+            ->will( $this->returnValue( $contentTypeServiceMock ) );
+
+        $contentTypeServiceMock
+            ->expects( $this->once() )
+            ->method( "loadContentTypeByIdentifier" )
+            ->with( "testContentTypeIdentifier" )
+            ->will( $this->returnValue( $contentTypeMock ) );
+
+        $contentTypeMock
+            ->expects( $this->once() )
+            ->method( "getFieldDefinition" )
+            ->with( "testFieldDefinitionIdentifier" )
+            ->will( $this->returnValue( $fieldDefinitionMock ) );
+
+        $fieldDefinitionMock
+            ->expects( $this->once() )
+            ->method( "__get" )
+            ->with( "isTranslatable" )
+            ->will( $this->returnValue( $isTranslatable ) );
+
+        try
+        {
+            $result = $service->findContent(
+                new Query( array( "sortClauses" => $sortClauses ) ),
+                array(),
+                true
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            $this->assertFalse( $isValid, "Invalid sort clause expected" );
+            $this->assertEquals( $message, $e->getMessage() );
+        }
+
+        if ( $isValid )
+        {
+            $this->assertTrue( isset( $result ) );
+        }
+    }
+
+    /**
+     * Test for the findContent() method.
+     */
+    public function testFindContentWithDefaultQueryValues()
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        $domainMapperMock = $this->getDomainMapperMock();
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $domainMapperMock,
+            $this->getPermissionsCriterionHandlerMock(),
+            array()
+        );
+
+        $fieldFilters = array();
+        $spiContent = new SPIContent;
+        $contentMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content" );
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildContentDomainObject" )
+            ->with( $this->equalTo( $spiContent ) )
+            ->will( $this->returnValue( $contentMock ) );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
+        $searchHandlerMock
+            ->expects( $this->once() )
+            ->method( "findContent" )
+            ->with(
+                new Query(
+                    array(
+                        "filter" => new Criterion\MatchAll(),
+                        "limit" => 1073741824
+                    )
+                ),
+                array()
+            )
+            ->will(
+                $this->returnValue(
+                    new SearchResult(
+                        array(
+                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiContent ) ) ),
+                            "totalCount" => 1
+                        )
+                    )
+                )
+            );
+
+        $result = $service->findContent( new Query(), $fieldFilters, false );
+
+        $this->assertEquals(
+            new SearchResult(
+                array(
+                    "searchHits" => array( new SearchHit( array( "valueObject" => $contentMock ) ) ),
+                    "totalCount" => 1
+                )
+            ),
             $result
         );
     }
