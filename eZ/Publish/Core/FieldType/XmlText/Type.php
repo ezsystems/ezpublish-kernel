@@ -238,11 +238,11 @@ class Type extends FieldType
      */
     protected function checkValueStructure( BaseValue $value )
     {
-        if ( !$value->xml instanceof DomDocument )
+        if ( !$value->xml instanceof DOMDocument )
         {
             throw new InvalidArgumentType(
                 '$value->xml',
-                'DomDocument',
+                'DOMDocument',
                 $value
             );
         }
