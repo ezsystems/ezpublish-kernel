@@ -38,9 +38,18 @@ class Security implements EventSubscriberInterface
         );
     }
 
+    /**
+     * Performs actions related to security once the legacy kernel has been built.
+     *
+     * @param PostBuildKernelEvent $event
+     */
     public function onKernelBuilt( PostBuildKernelEvent $event )
     {
-        if ( !$event->getKernelHandler() instanceof ezpWebBasedKernelHandler )
+        // Ignore if not in web context or if legacy_mode is active.
+        if (
+            !$event->getKernelHandler() instanceof ezpWebBasedKernelHandler
+            || $this->configResolver->getParameter( 'legacy_mode' ) === true
+        )
         {
             return;
         }
