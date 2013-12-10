@@ -181,7 +181,7 @@ class CsrfListenerTest extends EventListenerTest
     /**
      * @return PHPUnit_Framework_MockObject_MockObject|GetResponseEvent
      */
-    protected function getEventMock()
+    protected function getEventMock( $class = null )
     {
         if ( !isset( $this->eventMock ) )
         {
