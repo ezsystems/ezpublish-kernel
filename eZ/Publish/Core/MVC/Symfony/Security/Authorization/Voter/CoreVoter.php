@@ -77,7 +77,6 @@ class CoreVoter implements VoterInterface
         {
             if ( $this->supportsAttribute( $attribute ) )
             {
-                // @todo: add limitation when available in the repository
                 if ( $this->getRepository()->hasAccess( $attribute->module, $attribute->function ) === false )
                     return VoterInterface::ACCESS_DENIED;
 
