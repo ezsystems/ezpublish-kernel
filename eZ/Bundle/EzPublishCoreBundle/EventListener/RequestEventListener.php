@@ -55,6 +55,7 @@ class RequestEventListener implements EventSubscriberInterface
                 array( 'onKernelRequestRedirect', 0 ),
                 // onKernelRequestUserHash needs to be just after Firewall (prio 8), so that user is already logged in the repository.
                 array( 'onKernelRequestUserHash', 7 ),
+                // onKernelRequestIndex needs to be before the router (prio 32)
                 array( 'onKernelRequestIndex', 40 ),
             )
         );
@@ -67,22 +68,18 @@ class RequestEventListener implements EventSubscriberInterface
      */
     public function onKernelRequestIndex( GetResponseEvent $event )
     {
-        /** @var $this->configresolver \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver.php */
-        $this->configresolver = $this->container->get( 'ezpublish.config.resolver' );
+        /** @var $configResolver \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ContainerInterface.php */
+        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $request = $event->getRequest();
         if (
             $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST
             && $request->attributes->get( 'semanticPathinfo' ) === '/'
         )
         {
-            //Parameter from EzPublishCoreBundle/Resources/config/default_settings.yml
-            $indexPage = $this->configresolver->getParameter( 'index_page', 'ezsettings' );
+            $indexPage = $configResolver->getParameter( 'index_page' );
             if ( $indexPage !== null )
             {
-                if ( substr( $indexPage, 0, 1 ) !== '/' )
-                {
-                    $indexPage = '/' . $indexPage;
-                }
+                $indexPage = '/' . ltrim( $indexPage, '/' );
                 $request->attributes->set( 'semanticPathinfo', $indexPage );
                 $request->attributes->set( 'needsForward', true );
             }
