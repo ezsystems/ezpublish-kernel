@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Security\HttpUtils;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +52,7 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
             ->getMockBuilder( 'eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator' )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->listener = new SiteAccessListener( $this->container, $this->router, $this->generator );
+        $this->listener = new SiteAccessListener( $this->container, $this->router, $this->generator, new HttpUtils() );
     }
 
     public function testGetSubscribedEvents()
