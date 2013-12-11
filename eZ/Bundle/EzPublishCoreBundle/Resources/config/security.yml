@@ -41,7 +41,7 @@ services:
 
     ezpublish.security.controller:
         class: %ezpublish.security.controller.class%
-        arguments: [@templating, @?form.csrf_provider]
+        arguments: [@templating, @ezpublish.config.resolver, @?form.csrf_provider]
         calls:
             - [setRequest, [@?request=]]
 

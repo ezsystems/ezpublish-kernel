@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +24,11 @@ class SecurityController
     protected $templateEngine;
 
     /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    /**
      * @var \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface|null
      */
     protected $csrfProvider;
@@ -32,9 +38,10 @@ class SecurityController
      */
     protected $request;
 
-    public function __construct( EngineInterface $templateEngine, CsrfProviderInterface $csrfProvider = null )
+    public function __construct( EngineInterface $templateEngine, ConfigResolverInterface $configResolver, CsrfProviderInterface $csrfProvider = null )
     {
         $this->templateEngine = $templateEngine;
+        $this->configResolver = $configResolver;
         $this->csrfProvider = $csrfProvider;
     }
 
@@ -63,11 +70,12 @@ class SecurityController
         $csrfToken = isset( $this->csrfProvider ) ? $this->csrfProvider->generateCsrfToken( 'authenticate' ) : null;
         return new Response(
             $this->templateEngine->render(
-                'EzPublishCoreBundle:Security:login.html.twig',
+                $this->configResolver->getParameter( 'security.login_template' ),
                 array(
                     'last_username' => $session->get( SecurityContextInterface::LAST_USERNAME ),
                     'error' => $error,
                     'csrf_token' => $csrfToken,
+                    'layout' => $this->configResolver->getParameter( 'security.base_layout' ),
                 )
             )
         );
