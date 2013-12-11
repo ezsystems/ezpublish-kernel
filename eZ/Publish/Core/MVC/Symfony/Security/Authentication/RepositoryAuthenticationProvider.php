@@ -71,5 +71,4 @@ class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
         // Finally inject current user in the Repository
         $this->getRepository()->setCurrentUser( $apiUser );
     }
-
 }
