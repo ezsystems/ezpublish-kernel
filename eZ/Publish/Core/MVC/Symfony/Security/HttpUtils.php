@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Security;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils as BaseHttpUtils;
 
 class HttpUtils extends BaseHttpUtils implements SiteAccessAware
@@ -30,7 +31,7 @@ class HttpUtils extends BaseHttpUtils implements SiteAccessAware
 
     private function analyzeLink( $path )
     {
-        if ( $this->siteAccess->matcher instanceof SiteAccess\URILexer )
+        if ( $path[0] === '/' && $this->siteAccess->matcher instanceof SiteAccess\URILexer )
         {
             $path = $this->siteAccess->matcher->analyseLink( $path );
         }
@@ -40,11 +41,11 @@ class HttpUtils extends BaseHttpUtils implements SiteAccessAware
 
     public function generateUri( $request, $path )
     {
-        if ( $path[0] === '/' )
-        {
-            $path = $this->analyzeLink( $path );
-        }
+        return parent::generateUri( $request, $this->analyzeLink( $path ) );
+    }
 
-        return parent::generateUri( $request, $path );
+    public function checkRequestPath( Request $request, $path )
+    {
+        return parent::checkRequestPath( $request, $this->analyzeLink( $path ) );
     }
 }

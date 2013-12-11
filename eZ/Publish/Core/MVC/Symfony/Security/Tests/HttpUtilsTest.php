@@ -69,4 +69,47 @@ class HttpUtilsTest extends PHPUnit_Framework_TestCase
             array( '/foo/bar', '/blabla', 'http://ezpublish.dev/blabla/foo/bar' ),
         );
     }
+
+    public function testCheckRequestPathStandard()
+    {
+        $httpUtils = new HttpUtils();
+        $httpUtils->setSiteAccess( new SiteAccess );
+        $request = Request::create( "http://ezpublish.dev/foo/bar" );
+        $this->assertTrue( $httpUtils->checkRequestPath( $request, '/foo/bar' ) );
+    }
+
+    /**
+     * @dataProvider checkRequestPathProvider
+     */
+    public function testCheckRequestPath( $path, $siteAccessUri, $requestUri, $expected )
+    {
+        $siteAccess = new SiteAccess( 'test', 'test' );
+        if ( $siteAccessUri !== null )
+        {
+            $matcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer' );
+            $matcher
+                ->expects( $this->once() )
+                ->method( 'analyseLink' )
+                ->with( $path )
+                ->will( $this->returnValue( $siteAccessUri . $path ) );
+            $siteAccess->matcher = $matcher;
+        }
+
+        $httpUtils = new HttpUtils();
+        $httpUtils->setSiteAccess( $siteAccess );
+        $request = Request::create( $requestUri );
+        $this->assertSame( $expected, $httpUtils->checkRequestPath( $request, $path ) );
+    }
+
+    public function checkRequestPathProvider()
+    {
+        return array(
+            array( '/foo/bar', null, 'http://localhost/foo/bar', true ),
+            array( '/foo', null, 'http://localhost/foo/bar', false ),
+            array( '/foo/bar', null, 'http://localhost/foo/bar?some=thing&toto=tata', true ),
+            array( '/foo/bar', '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata', true ),
+            array( '/foo', '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata', false ),
+            array( '/foo/bar', '/blabla', 'http://ezpublish.dev/blabla/foo/bar', true ),
+        );
+    }
 }
