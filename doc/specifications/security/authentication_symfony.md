@@ -115,6 +115,15 @@ If you want to use this feature, you must at least extend the login template in 
 {% endblock %}
 ```
 
+### Login Handlers / SSO
+Symfony provides native support for [multiple user providers](https://github.com/ezsystems/ezpublish-kernel/pull/symfony.com/doc/2.3/book/security.html#using-multiple-user-providers).
+This makes it easy to integrate any kind of login handlers, including SSO and existing 3rd party bundles
+(e.g. [FR3DLdapBundle](https://github.com/Maks3w/FR3DLdapBundle), [HWIOauthBundle](https://github.com/hwi/HWIOAuthBundle),
+[FOSUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle), [BeSimpleSsoAuthBundle](http://github.com/BeSimple/BeSimpleSsoAuthBundle)...).
+
+The only requirement, whatever user provider is used, is to inject a valid eZ user in the repository.
+This can be done by listening to `SecurityEvents::INTERACTIVE_LOGIN` event which is triggered once authentication has been made.
+
 ### Integration with legacy
 
 * When **not** in legacy mode, legacy `user/login` and `user/logout` views are deactivated.
