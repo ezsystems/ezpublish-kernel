@@ -7,6 +7,7 @@
         {% endif %}
 
         <form action="{{ path( 'login_check' ) }}" method="post">
+        {% block login_fields %}
             <label for="username">{{ 'Username:'|trans }}</label>
             <input type="text" id="username" name="_username" value="{{ last_username }}" />
 
@@ -22,6 +23,7 @@
             #}
 
             <button type="submit">{{ 'Login'|trans }}</button>
+        {% endblock %}
         </form>
     {% endblock %}
 {% endblock %}
