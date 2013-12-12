@@ -4,7 +4,6 @@ parameters:
     ezpublish.security.user_provider.class: eZ\Publish\Core\MVC\Symfony\Security\User\Provider
     ezpublish.security.voter.core.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
     ezpublish.security.voter.value_object.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\ValueObjectVoter
-    ezpublish.security.authentication_provider.basic.class: eZ\Publish\Core\MVC\Symfony\Security\Authentication\BasicAuthProvider
     ezpublish.security.controller.class: eZ\Publish\Core\MVC\Symfony\Controller\SecurityController
     security.http_utils.class: eZ\Publish\Core\MVC\Symfony\Security\HttpUtils
     ezpublish.user.identity.class: eZ\Publish\Core\MVC\Symfony\Security\User\Identity
@@ -15,15 +14,6 @@ services:
     ezpublish.security.user_provider:
         class: %ezpublish.security.user_provider.class%
         arguments: [@ezpublish.api.repository.lazy]
-
-    ezpublish.security.authentication_provider.basic:
-        class: %ezpublish.security.authentication_provider.basic.class%
-        abstract: true
-        arguments:
-            - @ezpublish.api.repository.lazy
-            - @security.user_checker
-            - ~     # Provider-shared Key
-            - %security.authentication.hide_user_not_found%
 
     ezpublish.security.voter.core:
         class: %ezpublish.security.voter.core.class%
