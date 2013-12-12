@@ -12,7 +12,7 @@ Changes affecting version compatibility with former or future versions.
 
 * User login is no longer done via legacy. It now uses native form_login.
   Legacy `user/login` and `user/logout` module views are deactivated when not in legacy mode.
-  Authentication is forced in Symfony.
+  Authentication is forced in Symfony. **As such, legacy login/sso handlers won't work any more**.
   In `legacy_mode: true` (e.g. for admin interface), legacy user is still injected in the repository.
 
 ## Deprecations
