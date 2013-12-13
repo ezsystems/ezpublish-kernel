@@ -15,6 +15,11 @@ Changes affecting version compatibility with former or future versions.
   Authentication is forced in Symfony. **As such, legacy login/sso handlers won't work any more**.
   In `legacy_mode: true` (e.g. for admin interface), legacy user is still injected in the repository.
 
+* Session name is now always prefixed by `eZSESSID`.
+
+* `is_logged_in` cookie is not sent or used any more by Symfony stack (it is still used by legacy though).
+  Anonymous state is now checked by the presence of a session cookie (prefixed by `eZSESSID`).
+
 ## Deprecations
 
 * Method `eZ\Publish\API\Repository\RoleService::removePolicy` is deprecated in

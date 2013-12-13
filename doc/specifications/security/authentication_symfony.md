@@ -76,7 +76,8 @@ security:
         ezpublish_front:
             pattern: ^/
             anonymous: ~
-            form_login: ~
+            form_login:
+                require_previous_session: false
             logout: ~
 ```
 
@@ -151,4 +152,25 @@ This can be done by listening to `SecurityEvents::INTERACTIVE_LOGIN` event which
 <form action="{{ path( 'login_check' ) }}" method="post">
 
 <a href="{{ path( 'logout' ) }}">Logout</a>
+```
+
+* Anonymous state is not checked through presence of `is_logged_in` cookie any more.
+  Therefore, when using Varnish, you must change the following in your VCL file:
+
+*Before*
+```
+# ez_user_hash sub-routine
+if (req.http.Cookie !~ "is_logged_in=" ) {
+    # User don't have "is_logged_in" cookie => Set a hardcoded anonymous hash
+    set req.http.X-User-Hash = "38015b703d82206ebc01d17a39c727e5";
+}
+```
+
+*After*
+```
+# ez_user_hash sub-routine
+if (req.http.Cookie !~ "eZSESSID" ) {
+    # User don't have session cookie => Set a hardcoded anonymous hash
+    set req.http.X-User-Hash = "38015b703d82206ebc01d17a39c727e5";
+}
 ```

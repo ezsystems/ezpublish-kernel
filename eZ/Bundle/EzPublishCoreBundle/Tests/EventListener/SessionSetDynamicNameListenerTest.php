@@ -118,9 +118,11 @@ class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
     public function onSiteAccessMatchProvider()
     {
         return array(
-            array( new SiteAccess( 'foo' ), 'this_is_a_session_name', 'this_is_a_session_name' ),
-            array( new SiteAccess( 'foo' ), 'something{siteaccess_hash}', 'something' . md5( 'foo' ) ),
-            array( new SiteAccess( 'bar_baz' ), '{siteaccess_hash}something', md5( 'bar_baz' ) . 'something' ),
+            array( new SiteAccess( 'foo' ), 'eZSESSID', 'eZSESSID' ),
+            array( new SiteAccess( 'foo' ), 'eZSESSID{siteaccess_hash}', 'eZSESSID' . md5( 'foo' ) ),
+            array( new SiteAccess( 'foo' ), 'this_is_a_session_name', 'eZSESSID_this_is_a_session_name' ),
+            array( new SiteAccess( 'foo' ), 'something{siteaccess_hash}', 'eZSESSID_something' . md5( 'foo' ) ),
+            array( new SiteAccess( 'bar_baz' ), '{siteaccess_hash}something', 'eZSESSID_' . md5( 'bar_baz' ) . 'something' ),
         );
     }
 }
