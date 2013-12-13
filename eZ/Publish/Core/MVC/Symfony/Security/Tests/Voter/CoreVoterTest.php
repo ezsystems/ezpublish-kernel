@@ -16,7 +16,7 @@ use PHPUnit_Framework_TestCase;
 
 class CoreVoterTest extends PHPUnit_Framework_TestCase
 {
-        /**
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\Repository
      */
     private $repository;
