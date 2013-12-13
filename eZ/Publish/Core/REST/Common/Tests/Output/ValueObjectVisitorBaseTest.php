@@ -54,7 +54,7 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
     /**
      * Gets the visitor mock
      *
-     * @return \eZ\Publish\Core\REST\Common\Output\Visitor
+     * @return \eZ\Publish\Core\REST\Common\Output\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getVisitorMock()
     {
@@ -67,8 +67,25 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
                 '',
                 false
             );
+
+            $this->visitorMock
+                ->expects( $this->any() )
+                ->method( 'getResponse' )
+                ->will( $this->returnValue( $this->getResponseMock() ) );
         }
         return $this->visitorMock;
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getResponseMock()
+    {
+        if ( !isset( $this->responseMock ) )
+        {
+            $this->responseMock = $this->getMock( 'Symfony\Component\HttpFoundation\Response' );
+        }
+        return $this->responseMock;
     }
 
     /**

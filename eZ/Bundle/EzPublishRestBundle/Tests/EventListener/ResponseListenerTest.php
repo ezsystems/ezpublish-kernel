@@ -40,18 +40,7 @@ class ResponseListenerTest extends EventListenerTest
     public function setUp()
     {
         $this->eventValue = new stdClass();
-
-        $this->dispatcherMessage = new stdClass();
-
-        $this->dispatcherMessage->body = 'BODY';
-        $this->dispatcherMessage->headers = 'HEADERS';
-        $this->dispatcherMessage->statusCode = 406;
-
-        $this->response = new Response(
-            $this->dispatcherMessage->body,
-            $this->dispatcherMessage->statusCode,
-            $this->dispatcherMessage->headers = array( 'foo' => 'bar' )
-        );
+        $this->response = new Response( 'BODY', 406, array( 'foo' => 'bar' ) );
     }
 
     public function provideExpectedSubscribedEventTypes()
@@ -110,7 +99,7 @@ class ResponseListenerTest extends EventListenerTest
                 $this->eventValue
             )->will(
                 $this->returnValue(
-                    $this->dispatcherMessage
+                    $this->response
                 )
             );
 

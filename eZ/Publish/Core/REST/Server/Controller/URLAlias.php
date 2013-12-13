@@ -91,9 +91,12 @@ class URLAlias extends RestController
 
         $custom = $this->request->query->has( 'custom' ) && $this->request->query->get( 'custom' ) === 'false' ? false : true;
 
-        return new Values\URLAliasRefList(
-            $this->urlAliasService->listLocationAliases( $location, $custom ),
-            $this->request->getPathInfo()
+        return new Values\CachedValue(
+            new Values\URLAliasRefList(
+                $this->urlAliasService->listLocationAliases( $location, $custom ),
+                $this->request->getPathInfo()
+            ),
+            array( 'locationId' => $location->id )
         );
     }
 
