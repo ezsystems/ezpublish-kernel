@@ -131,7 +131,8 @@ This can be done by listening to `SecurityEvents::INTERACTIVE_LOGIN` event which
 
 ## Upgrade notes
 * In `ezpublish/config/security.yml`, you must remove `ezpublish: true` from `ezpublish_front` firewall.
-* In `ezpublish/config/routing.yml`, you must add `login`, `login_check` and `logout` routes.
+* In `ezpublish/config/routing.yml`, you must add `login`, `login_check` and `logout` routes
+  (see above in [Configuration][])
 * In your templates, change your links pointing to `/user/login` and `/user/logout` to appropriate login/login_check/logout routes:
 
 *Before*
