@@ -294,6 +294,32 @@ class RoleServiceAuthorizationTest extends BaseTest
     }
 
     /**
+     * Test for the removePolicy() method with a different role of the loaded policies
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::removePolicy()
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testRemovePolicy
+     */
+    public function testRemovePolicyWithDifferentRoleThrowsInvalidArgumentExceptionException()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        /* BEGIN: Use Case */
+        $role1 = $this->createRole();
+        $role2 = $this->createRole();
+
+        // Get first role policy
+        $policies = $role1->getPolicies();
+        $policy = reset( $policies );
+
+        // This call will fail with an "InvalidArgumentException"
+        $roleService->removePolicy( $role2, $policy );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the deletePolicy() method.
      *
      * @return void
