@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Common\Tests\Output;
 use eZ\Publish\Core\REST\Common;
 use stdClass;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Visitor test
@@ -46,7 +47,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            new Common\Message( array(), 'Hello world!' ),
+            new Response( 'Hello world!', 200, array() ),
             $visitor->visit( $data )
         );
     }
@@ -77,7 +78,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals(
-            new Common\Message( array() ),
+            new Response( null, 200, array() ),
             $visitor->visit( $data )
         );
     }
@@ -112,11 +113,12 @@ class VisitorTest extends PHPUnit_Framework_TestCase
 
         $visitor->setHeader( 'Content-Type', 'text/xml' );
         $this->assertEquals(
-            new Common\Message(
+            new Response(
+                null,
+                200,
                 array(
                     'Content-Type' => 'text/xml',
-                ),
-                null
+                )
             ),
             $visitor->visit( $data )
         );
@@ -140,11 +142,12 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor->setHeader( 'Content-Type', 'text/xml' );
         $visitor->setHeader( 'Accept-Patch', false );
         $this->assertEquals(
-            new Common\Message(
+            new Response(
+                null,
+                200,
                 array(
                     'Content-Type' => 'text/xml',
-                ),
-                null
+                )
             ),
             $visitor->visit( $data )
         );
@@ -164,11 +167,12 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor->setHeader( 'Content-Type', 'text/xml' );
         $visitor->setHeader( 'Content-Type', 'text/html' );
         $this->assertEquals(
-            new Common\Message(
+            new Response(
+                null,
+                200,
                 array(
                     'Content-Type' => 'text/xml',
-                ),
-                null
+                )
             ),
             $visitor->visit( $data )
         );
@@ -191,9 +195,10 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $result = $visitor->visit( $data );
 
         $this->assertEquals(
-            new Common\Message(
-                array(),
-                null
+            new Response(
+                null,
+                200,
+                array()
             ),
             $result
         );
@@ -212,36 +217,9 @@ class VisitorTest extends PHPUnit_Framework_TestCase
 
         $visitor->setStatus( 201 );
         $this->assertEquals(
-            new Common\Message(
-                array(
-                    'Status' => '201 Created',
-                ),
+            new Response(
                 null,
                 201
-            ),
-            $visitor->visit( $data )
-        );
-    }
-
-    public function testSetUnknownStatusCode()
-    {
-        $data = new stdClass();
-
-        $generator = $this->getMock( '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator' );
-        $visitor = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array( 'visitValueObject' ),
-            array( $generator, $this->getValueObjectDispatcherMock() )
-        );
-
-        $visitor->setStatus( 2342 );
-        $this->assertEquals(
-            new Common\Message(
-                array(
-                    'Status' => '2342 Unknown',
-                ),
-                null,
-                2342
             ),
             $visitor->visit( $data )
         );
@@ -262,10 +240,7 @@ class VisitorTest extends PHPUnit_Framework_TestCase
         $visitor->setStatus( 404 );
 
         $this->assertEquals(
-            new Common\Message(
-                array(
-                    'Status' => '201 Created',
-                ),
+            new Response(
                 null,
                 201
             ),

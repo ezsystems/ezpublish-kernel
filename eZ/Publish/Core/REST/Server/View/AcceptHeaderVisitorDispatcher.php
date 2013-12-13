@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Server\View;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\REST\Common\Output\Visitor as OutputVisitor;
 use Qafoo\RMF\View\NowViewFoundException;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Dispatcher for various visitors depending on the mime-type accept header
@@ -43,7 +44,9 @@ class AcceptHeaderVisitorDispatcher
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed $result
      *
-     * @return \eZ\Publish\Core\REST\Common\Message
+     * @throws NowViewFoundException
+     *
+     * @return Response
      */
     public function dispatch( Request $request, $result )
     {

@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Common\Output;
 
-use eZ\Publish\Core\REST\Common\Message;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Visitor for view models
+ * Visits a value object into an HTTP Response
  */
 class Visitor
 {
@@ -29,74 +29,17 @@ class Visitor
     protected $generator;
 
     /**
-     * HTTP Response Headers
+     * HTTP Response Object
      *
-     * @var array
+     * @var Response
      */
-    protected $headers = array();
+    protected $response;
 
     /**
-     * Mapping of status codes.
-     *
-     * @var array(int=>string)
+     * Used to ensure that the status code can't be overwritten
+     * @var int
      */
-    public static $statusMap = array(
-        100 => 'Continue',
-        101 => 'Switching Protocols',
-        102 => 'Processing',
-        118 => 'Connection timed out',
-        200 => 'OK',
-        201 => 'Created',
-        202 => 'Accepted',
-        203 => 'Non-Authoritative Information',
-        204 => 'No Content',
-        205 => 'Reset Content',
-        206 => 'Partial Content',
-        207 => 'Multi-Status',
-        300 => 'Multiple Choices',
-        301 => 'Moved Permanently',
-        302 => 'Found',
-        303 => 'See Other',
-        304 => 'Not Modified',
-        305 => 'Use Proxy',
-        306 => '(reserviert)',
-        307 => 'Temporary Redirect',
-        400 => 'Bad Request',
-        401 => 'Unauthorized',
-        402 => 'Payment Required',
-        403 => 'Forbidden',
-        404 => 'Not Found',
-        405 => 'Method Not Allowed',
-        406 => 'Not Acceptable',
-        407 => 'Proxy Authentication Required',
-        408 => 'Request Time-out',
-        409 => 'Conflict',
-        410 => 'Gone',
-        411 => 'Length Required',
-        412 => 'Precondition Failed',
-        413 => 'Request Entity Too Large',
-        414 => 'Request-URL Too Long',
-        415 => 'Unsupported Media Type',
-        416 => 'Requested range not satisfiable',
-        417 => 'Expectation Failed',
-        418 => 'I\'m a teapot',
-        421 => 'There are too many connections from your internet address',
-        422 => 'Unprocessable Entity',
-        423 => 'Locked',
-        424 => 'Failed Dependency',
-        425 => 'Unordered Collection',
-        426 => 'Upgrade Required',
-        500 => 'Internal Server Error',
-        501 => 'Not Implemented',
-        502 => 'Bad Gateway',
-        503 => 'Service Unavailable',
-        504 => 'Gateway Time-out',
-        505 => 'HTTP Version not supported',
-        506 => 'Variant Also Negotiates',
-        507 => 'Insufficient Storage',
-        509 => 'Bandwidth Limit Exceeded',
-        510 => 'Not Extended',
-    );
+    private $statusCode;
 
     /**
      * Construct from Generator and an array of concrete view model visitors
@@ -110,6 +53,7 @@ class Visitor
     {
         $this->generator = $generator;
         $this->valueObjectVisitorDispatcher = $valueObjectVisitorDispatcher;
+        $this->response = new Response( '', 200 );
     }
 
     /**
@@ -123,9 +67,9 @@ class Visitor
      */
     public function setHeader( $name, $value )
     {
-        if ( !isset( $this->headers[$name] ) )
+        if ( !$this->response->headers->has( $name ) )
         {
-            $this->headers[$name] = $value;
+            $this->response->headers->set( $name, $value );
         }
     }
 
@@ -138,15 +82,11 @@ class Visitor
      */
     public function setStatus( $statusCode )
     {
-        $status = sprintf(
-            '%s %s',
-            $statusCode,
-            ( isset( self::$statusMap[$statusCode] )
-                ? self::$statusMap[$statusCode]
-                : 'Unknown' )
-        );
-
-        $this->setHeader( 'Status', $status );
+        if ( $this->statusCode === null )
+        {
+            $this->statusCode = $statusCode;
+            $this->response->setStatusCode( $statusCode );
+        }
     }
 
     /**
@@ -168,33 +108,23 @@ class Visitor
         // of certain headers in inner visitors, for example Accept-Patch header
         // which is valid in GET/POST/PATCH for a resource, but must not appear
         // in the list of resources
-        $filteredHeaders = array();
-        foreach ( $this->headers as $headerName => $headerValue )
+        foreach ( $this->response->headers->all() as $headerName => $headerValue )
         {
-            if ( $headerValue !== false )
+            if ( $headerValue[0] === false )
             {
-                $filteredHeaders[$headerName] = $headerValue;
+                $this->response->headers->remove( $headerName );
             }
         }
 
-        $statusCode = 200;
-        if ( isset( $this->headers['Status'] ) )
-        {
-            $statusCode = sscanf( $this->headers['Status'], '%s %s' );
-            $statusCode = (int)$statusCode[0];
-        }
+        $response = clone $this->response;
 
-        $result = new Message(
-            $filteredHeaders,
-            ( $this->generator->isEmpty()
-                ? null
-                : $this->generator->endDocument( $data ) ),
-            $statusCode
-        );
+        $response->setContent( $this->generator->isEmpty() ? null : $this->generator->endDocument( $data ) );
 
-        $this->headers = array();
+        // reset the inner response
+        $this->response = new Response( null, 200 );
+        $this->statusCode = null;
 
-        return $result;
+        return $response;
     }
 
     /**
@@ -224,5 +154,13 @@ class Visitor
     public function getMediaType( $type )
     {
         return $this->generator->getMediaType( $type );
+    }
+
+    /**
+     * @return Response
+     */
+    public function getResponse()
+    {
+        return $this->response;
     }
 }
