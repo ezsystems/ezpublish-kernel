@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 class CustomField extends CriterionVisitor
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion
      *
      * @param Criterion $criterion
      *

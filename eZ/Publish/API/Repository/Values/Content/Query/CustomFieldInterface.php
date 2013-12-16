@@ -32,13 +32,11 @@ interface CustomFieldInterface
     public function setCustomField( $type, $field, $customField );
 
     /**
-     * Retun custom field
-     *
-     * If no custom field is set, return null
+     * Return the custom field to query if set
      *
      * @param string $type
      * @param string $field
-     * @return mixed
+     * @return mixed If no custom field is set, return null
      */
     public function getCustomField( $type, $field );
 }
