@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Checkbox\Type as Checkbox;
 use eZ\Publish\Core\FieldType\Checkbox\Value as CheckboxValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -29,11 +28,14 @@ class CheckboxTest extends FieldTypeTest
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Checkbox();
+        $fieldType = new Checkbox();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -249,7 +251,7 @@ class CheckboxTest extends FieldTypeTest
      */
     public function testToPersistenceValue()
     {
-        $ft = new Checkbox();
+        $ft = $this->createFieldTypeUnderTest();
         $fieldValue = $ft->toPersistenceValue( new CheckboxValue( true ) );
 
         self::assertSame( true, $fieldValue->data );
@@ -284,5 +286,24 @@ class CheckboxTest extends FieldTypeTest
         $valueFalse = new CheckboxValue( false );
         self::assertSame( '1', (string)$valueTrue );
         self::assertSame( '0', (string)$valueFalse );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezboolean';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new CheckboxValue( true ),
+                '1'
+            ),
+            array(
+                new CheckboxValue( false ),
+                '0'
+            )
+        );
     }
 }

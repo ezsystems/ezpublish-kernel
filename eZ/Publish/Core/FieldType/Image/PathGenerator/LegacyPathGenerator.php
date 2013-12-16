@@ -22,18 +22,35 @@ class LegacyPathGenerator extends PathGenerator
      * @param mixed $fieldId
      * @param int $versionNo
      * @param string $languageCode
-     * @param string $nodePathString
      *
      * @return string
      */
-    public function getStoragePathForField( $fieldId, $versionNo, $languageCode, $nodePathString )
+    public function getStoragePathForField( $fieldId, $versionNo, $languageCode )
     {
         return sprintf(
-            '%s%s-%s-%s',
-            $nodePathString, // note that $nodePathString ends with a "/"
+            '%s/%s-%s-%s',
+            $this->getDirectoryStructure( $fieldId ),
             $fieldId,
             $versionNo,
             $languageCode
+        );
+    }
+
+    /**
+     * Computes a 4 levels directory structure from $id
+     * @param string $id
+     * @return string
+     */
+    private function getDirectoryStructure( $id )
+    {
+        // our base string is the last 4 digits, defaulting to 0, reversed
+        $idString = strrev(
+            substr( str_pad( $id, 4, 0, STR_PAD_LEFT ), -4 )
+        );
+
+        return trim(
+            chunk_split( $idString, 1, "/" ),
+            "/"
         );
     }
 }

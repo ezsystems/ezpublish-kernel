@@ -27,7 +27,7 @@ abstract class DateRangeFacetBuilder extends FacetBuilder
     const CREATED = 1;
     const MODIFIED = 2;
 
-    public $type = DateRangeFacetBuider::PUBLISHED;
+    public $type = self::PUBLISHED;
 
     /**
      * Adds a range entry with explicit to and unbounded from.

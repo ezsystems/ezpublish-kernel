@@ -104,12 +104,12 @@ class FieldType implements APIFieldType
      */
     public function getValidatorConfigurationSchema()
     {
-        return $third->innerFieldType->getValidatorConfigurationSchema();
+        return $this->innerFieldType->getValidatorConfigurationSchema();
     }
 
     public function getName( $value )
     {
-        return $third->innerFieldType->getName( $value );
+        return $this->innerFieldType->getName( $value );
     }
 
     /**
@@ -130,6 +130,16 @@ class FieldType implements APIFieldType
     public function isSingular()
     {
         return $this->innerFieldType->isSingular();
+    }
+
+    /**
+     * Indicates if the field definition of this type can be added to a ContentType with Content instances.
+     *
+     * @return boolean
+     */
+    public function onlyEmptyInstance()
+    {
+        return $this->innerFieldType->onlyEmptyInstance();
     }
 
     /**

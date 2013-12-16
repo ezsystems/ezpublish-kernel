@@ -11,7 +11,6 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Tests\Cache;
 
 use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use PHPUnit_Framework_TestCase;
 
@@ -41,7 +40,7 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->cacheService = $this
-            ->getMockBuilder( 'Tedivm\\StashBundle\\Service\\CacheService' )
+            ->getMockBuilder( 'eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator' )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -58,7 +57,7 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
      */
     public function testNotFoundLocation()
     {
-        $id = 'locationIdThatDoesNotExist';;
+        $id = 'locationIdThatDoesNotExist';
         $this->locationHandler
             ->expects( $this->once() )
             ->method( 'load' )
@@ -73,12 +72,12 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::isEnabled
-     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::setIsEnabled
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::setEnabled
      */
     public function testIsEnabled()
     {
         $this->assertTrue( $this->cachePurger->isEnabled() );
-        $this->cachePurger->setIsEnabled( false );
+        $this->cachePurger->setEnabled( false );
         $this->assertFalse( $this->cachePurger->isEnabled() );
     }
 
@@ -90,7 +89,8 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
     {
         $this->cacheService
             ->expects( $this->once() )
-            ->method( 'clear' );
+            ->method( 'clear' )
+            ->with();
 
         $this->cachePurger->all();
         $this->assertTrue( $this->cachePurger->isAllCleared() );
@@ -124,12 +124,12 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::setIsEnabled
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::setEnabled
      * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::content
      */
     public function testClearContentDisabled()
     {
-        $this->cachePurger->setIsEnabled( false );
+        $this->cachePurger->setEnabled( false );
         $this->cacheService
             ->expects( $this->never() )
             ->method( 'clear' );
@@ -137,12 +137,12 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::setIsEnabled
+     * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::setEnabled
      * @covers eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger::all
      */
     public function testClearAllDisabled()
     {
-        $this->cachePurger->setIsEnabled( false );
+        $this->cachePurger->setEnabled( false );
         $this->cacheService
             ->expects( $this->never() )
             ->method( 'clear' );

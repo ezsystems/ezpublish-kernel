@@ -13,9 +13,6 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
-use eZ\Publish\Core\Repository\DomainMapper;
-use eZ\Publish\Core\Repository\RelationProcessor;
-use eZ\Publish\Core\Repository\NameSchemaService;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
@@ -29,7 +26,6 @@ use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\RemoteId as CriterionRemoteId;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -37,7 +33,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
@@ -149,26 +144,28 @@ class ContentService implements ContentServiceInterface
      * @access private This is only available to services that needs access to Content w/o permissions checks
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given id does not exist
      *
-     * @param int $contentId
+     * @param mixed $id
+     * @param bool $isRemoteId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function internalLoadContentInfo( $contentId )
+    public function internalLoadContentInfo( $id, $isRemoteId = false )
     {
         try
         {
-            $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $contentId );
+            $method = $isRemoteId ? "loadContentInfoByRemoteId" : "loadContentInfo";
+            return $this->domainMapper->buildContentInfoDomainObject(
+                $this->persistenceHandler->contentHandler()->$method( $id )
+            );
         }
         catch ( APINotFoundException $e )
         {
             throw new NotFoundException(
                 "Content",
-                $contentId,
+                $id,
                 $e
             );
         }
-
-        return $this->domainMapper->buildContentInfoDomainObject( $spiContentInfo );
     }
 
     /**
@@ -185,12 +182,12 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
-        $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ), array(), false );
+        $contentInfo = $this->internalLoadContentInfo( $remoteId, true );
 
-        if ( !$this->repository->canUser( 'content', 'read', $content ) )
+        if ( !$this->repository->canUser( 'content', 'read', $contentInfo ) )
             throw new UnauthorizedException( 'content', 'read' );
 
-        return $content->contentInfo;
+        return $contentInfo;
     }
 
     /**
@@ -251,8 +248,20 @@ class ContentService implements ContentServiceInterface
         }
 
         $versionInfo = $this->domainMapper->buildVersionInfoDomainObject( $spiVersionInfo );
-        if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
-            throw new UnauthorizedException( 'content', 'versionread' );
+
+        if ( $versionInfo->status === APIVersionInfo::STATUS_PUBLISHED )
+        {
+            $function = "read";
+        }
+        else
+        {
+            $function = "versionread";
+        }
+
+        if ( !$this->repository->canUser( 'content', $function, $versionInfo ) )
+        {
+            throw new UnauthorizedException( 'content', $function );
+        }
 
         return $versionInfo;
     }
@@ -305,7 +314,7 @@ class ContentService implements ContentServiceInterface
      * If no version number is given, the method returns the current version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the user has no access to read content and in case of un-published content: read versions
      *
      * @param int $contentId
      * @param array|null $languages A language filter for fields. If not given all languages are returned
@@ -321,7 +330,7 @@ class ContentService implements ContentServiceInterface
             throw new UnauthorizedException( 'content', 'read' );
 
         if (
-            $versionNo !== null
+            $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
             && !$this->repository->canUser( 'content', 'versionread', $content )
         )
             throw new UnauthorizedException( 'content', 'versionread' );
@@ -337,25 +346,36 @@ class ContentService implements ContentServiceInterface
      * @access private This is only available to services that needs access to Content w/o permissions checks
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
      *
-     * @param int $contentId
+     * @param mixed $contentId
      * @param array|null $languages A language filter for fields. If not given all languages are returned
      * @param int|null $versionNo the version number. If not given the current version is returned.
+     * @param bool $isRemoteId
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function internalLoadContent( $contentId, array $languages = null, $versionNo = null )
+    public function internalLoadContent( $id, array $languages = null, $versionNo = null, $isRemoteId = false )
     {
         try
         {
-            if ( $versionNo === null )
+            if ( $isRemoteId )
+            {
+                $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId( $id );
+                $id = $spiContentInfo->id;
+
+                if ( $versionNo === null )
+                {
+                    $versionNo = $spiContentInfo->currentVersionNo;
+                }
+            }
+            else if ( $versionNo === null )
             {
                 $versionNo = $this->persistenceHandler->contentHandler()->loadContentInfo(
-                    $contentId
+                    $id
                 )->currentVersionNo;
             }
 
             $spiContent = $this->persistenceHandler->contentHandler()->load(
-                $contentId,
+                $id,
                 $versionNo,
                 $languages
             );
@@ -365,7 +385,7 @@ class ContentService implements ContentServiceInterface
             throw new NotFoundException(
                 "Content",
                 array(
-                    "id" => $contentId,
+                    $isRemoteId ? "remoteId" : "id" => $id,
                     "languages" => $languages,
                     "versionNo" => $versionNo
                 ),
@@ -387,7 +407,7 @@ class ContentService implements ContentServiceInterface
                     throw new NotFoundException(
                         "Content",
                         array(
-                            "id" => $contentId,
+                            $isRemoteId ? "remoteId" : "id" => $id,
                             "languages" => $languages,
                             "versionNo" => $versionNo
                         )
@@ -405,7 +425,7 @@ class ContentService implements ContentServiceInterface
      * If no version is given, the method returns the current version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content or version with the given remote id does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the user has no access to read content and in case of un-published content: read versions
      *
      * @param string $remoteId
      * @param array $languages A language filter for fields. If not given all languages are returned
@@ -415,17 +435,13 @@ class ContentService implements ContentServiceInterface
      */
     public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
     {
-        $content = $this->repository->getSearchService()->findSingle( new CriterionRemoteId( $remoteId ), array(), false );
-        if ( !empty( $languages ) || $versionNo !== null )
-        {
-            $content = $this->internalLoadContent( $content->id, $languages, $versionNo );
-        }
+        $content = $this->internalLoadContent( $remoteId, $languages, $versionNo, true );
 
         if ( !$this->repository->canUser( 'content', 'read', $content ) )
             throw new UnauthorizedException( 'content', 'read' );
 
         if (
-            $versionNo !== null
+            $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
             && !$this->repository->canUser( 'content', 'versionread', $content )
         )
             throw new UnauthorizedException( 'content', 'versionread' );
@@ -1476,27 +1492,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Returns true if user has a right to publish given previously unpublished $content, false otherwise.
-     *
-     * @param APIContent $content
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     *
-     * @return boolean
-     */
-    protected function canUserPublishContent( APIContent $content )
-    {
-        $spiLocations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent(
-            $content->getVersionInfo()->getContentInfo()->id
-        );
-        if ( $this->repository->canUser( "content", "create", $content, $spiLocations ) )
-        {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Publishes a content version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
@@ -1516,7 +1511,7 @@ class ContentService implements ContentServiceInterface
 
         if ( !$content->getVersionInfo()->getContentInfo()->published )
         {
-            if ( !$this->canUserPublishContent( $content ) )
+            if ( !$this->repository->canUser( "content", "create", $content ) )
             {
                 throw new UnauthorizedException( 'content', 'create' );
             }
@@ -1666,6 +1661,8 @@ class ContentService implements ContentServiceInterface
         if ( !$this->repository->canUser( 'content', 'create', $contentInfo, $destinationLocationCreateStruct ) )
             throw new UnauthorizedException( 'content', 'create' );
 
+        $defaultObjectStates = $this->getDefaultObjectStates();
+
         $this->repository->beginTransaction();
         try
         {
@@ -1673,6 +1670,15 @@ class ContentService implements ContentServiceInterface
                 $contentInfo->id,
                 $versionInfo ? $versionInfo->versionNo : null
             );
+
+            foreach ( $defaultObjectStates as $objectStateGroupId => $objectState )
+            {
+                $this->persistenceHandler->objectStateHandler()->setContentState(
+                    $spiContent->versionInfo->contentInfo->id,
+                    $objectStateGroupId,
+                    $objectState->id
+                );
+            }
 
             $content = $this->internalPublishVersion(
                 $this->domainMapper->buildVersionInfoDomainObject( $spiContent->versionInfo ),
@@ -1705,8 +1711,19 @@ class ContentService implements ContentServiceInterface
      */
     public function loadRelations( APIVersionInfo $versionInfo )
     {
-        if ( !$this->repository->canUser( 'content', 'versionread', $versionInfo ) )
-            throw new UnauthorizedException( 'content', 'versionread' );
+        if ( $versionInfo->status === APIVersionInfo::STATUS_PUBLISHED )
+        {
+            $function = "read";
+        }
+        else
+        {
+            $function = "versionread";
+        }
+
+        if ( !$this->repository->canUser( 'content', $function, $versionInfo ) )
+        {
+            throw new UnauthorizedException( 'content', $function );
+        }
 
         $contentInfo = $versionInfo->getContentInfo();
         $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
@@ -1718,17 +1735,15 @@ class ContentService implements ContentServiceInterface
         $relations = array();
         foreach ( $spiRelations as $spiRelation )
         {
-            // @todo Should relations really be loaded w/o checking permissions just because User needs to be accessible??
+            $destinationContentInfo = $this->internalLoadContentInfo( $spiRelation->destinationContentId );
+            if ( !$this->repository->canUser( 'content', 'read', $destinationContentInfo ) )
+                continue;
+
             $relations[] = $this->domainMapper->buildRelationDomainObject(
                 $spiRelation,
                 $contentInfo,
-                $this->internalLoadContentInfo( $spiRelation->destinationContentId )
+                $destinationContentInfo
             );
-        }
-        foreach ( $relations as $relation )
-        {
-            if ( !$this->repository->canUser( 'content', 'read', $relation->getDestinationContentInfo() ) )
-                throw new UnauthorizedException( 'content', 'read' );
         }
 
         return $relations;
@@ -1757,16 +1772,15 @@ class ContentService implements ContentServiceInterface
         $returnArray = array();
         foreach ( $spiRelations as $spiRelation )
         {
-            // @todo Should relations really be loaded w/o checking permissions just because User needs to be accessible??
-            $relation = $this->domainMapper->buildRelationDomainObject(
+            $sourceContentInfo = $this->internalLoadContentInfo( $spiRelation->sourceContentId );
+            if ( !$this->repository->canUser( 'content', 'read', $sourceContentInfo ) )
+                continue;
+
+            $returnArray[] = $this->domainMapper->buildRelationDomainObject(
                 $spiRelation,
-                $this->internalLoadContentInfo( $spiRelation->sourceContentId ),
+                $sourceContentInfo,
                 $contentInfo
             );
-            if ( !$this->repository->canUser( 'content', 'read', $relation->getSourceContentInfo() ) )
-                throw new UnauthorizedException( 'content', 'read' );
-
-            $returnArray[] = $relation;
         }
 
         return $returnArray;

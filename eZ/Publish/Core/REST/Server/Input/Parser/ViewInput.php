@@ -63,11 +63,11 @@ class ViewInput extends CriterionParser
 
             if ( count( $criteria ) === 1 )
             {
-                $query->criterion = $criteria[0];
+                $query->filter = $criteria[0];
             }
             else
             {
-                $query->criterion = new LogicalAndCriterion( $criteria );
+                $query->filter = new LogicalAndCriterion( $criteria );
             }
         }
 

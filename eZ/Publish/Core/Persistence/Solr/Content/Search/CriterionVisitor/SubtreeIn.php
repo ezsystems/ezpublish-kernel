@@ -39,7 +39,7 @@ class SubtreeIn extends CriterionVisitor
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
-     * @return void
+     * @return string
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
@@ -49,7 +49,7 @@ class SubtreeIn extends CriterionVisitor
                 array_map(
                     function ( $value )
                     {
-                        return 'path_mid:' . $value . '*';
+                        return 'path_mid:' . str_replace( '/', '\\/', $value ) . '*';
                     },
                     $criterion->value
                 )

@@ -37,7 +37,7 @@ abstract class FieldType extends ValueObject
     public $highlight = false;
 
     /**
-     * The importance of that field ( boost factor) )
+     * The importance of that field (boost factor)
      *
      * @var int
      */

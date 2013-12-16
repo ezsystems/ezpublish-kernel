@@ -1,6 +1,8 @@
 --TEST--
 "ez_render_field" function
 --TEMPLATE--
+{% extends 'templates/base.html.twig' %}
+{% block content %}
 {{ ez_render_field( nooverride, 'testfield' ) }}
 {{ ez_render_field( overrides, 'testfield' ) }}
 {{ ez_render_field( notdefault, 'testfield' ) }}
@@ -9,6 +11,8 @@
 {{ ez_render_field( data, 'testfield', {'parameters': { 'key1' : 1, 'key2': 2, 'key3': 3 }} ) }}
 {{ ez_render_field( data, 'testfield', {'parameters': [ 3, 2, 1]} ) }}
 {{ ez_render_field( data, 'testfield', {'parameters': [ 3, 2, 1], 'template': "templates/fields_localoverride.html.twig"} ) }}
+{{ ez_render_field( data, 'testfield', {'parameters': [ 3, 2, 1], 'template': _self} ) }}{% endblock %}
+{% block ezdata_field %}SELF OVERRIDE field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: ezdata-field parameters:3, 2, 1{% endblock %}
 --DATA--
 return array(
     'nooverride' => $this->getContent(
@@ -66,3 +70,4 @@ field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: added ezdat
 field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: ezdata-field parameters:1, 2, 3
 field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: ezdata-field parameters:3, 2, 1
 LOCAL OVERRIDE field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: ezdata-field parameters:3, 2, 1
+SELF OVERRIDE field id: 5 contentInfo id: 42 versionInfo versionNo: 64 attr class: ezdata-field parameters:3, 2, 1

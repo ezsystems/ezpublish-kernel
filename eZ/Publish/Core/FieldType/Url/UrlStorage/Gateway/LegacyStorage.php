@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the abstract Gateway class
+ * File containing the Url LegacyStorage Gateway
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,16 +9,18 @@
 
 namespace eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
- *
+ * Url field type external storage gateway implementation using Zeta Database Component.
  */
 class LegacyStorage extends Gateway
 {
     const URL_TABLE = "ezurl";
+    const URL_LINK_TABLE = "ezurl_object_link";
 
     /**
      * Connection
@@ -42,7 +44,7 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( ! ( $dbHandler instanceof \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler ) )
+        if ( ! ( $dbHandler instanceof EzcDbHandler ) )
         {
             throw new \RuntimeException( "Invalid dbHandler passed" );
         }
@@ -55,7 +57,7 @@ class LegacyStorage extends Gateway
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
      */
     protected function getConnection()
     {
@@ -71,12 +73,16 @@ class LegacyStorage extends Gateway
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field )
     {
-        $dbHandler = $this->getConnection();
-
         if ( ( $row = $this->fetchByLink( $field->value->externalData ) ) !== false )
+        {
             $urlId = $row["id"];
+        }
         else
-            $urlId = $this->insert( $versionInfo, $field );
+        {
+            $urlId = $this->insert( $field );
+        }
+
+        $this->linkUrl( $urlId, $field->id, $versionInfo->versionNo );
 
         $field->value->data["urlId"] = $urlId;
 
@@ -90,7 +96,8 @@ class LegacyStorage extends Gateway
     public function getFieldData( Field $field )
     {
         $url = $this->fetchById( $field->value->data["urlId"] );
-        $field->value->externalData = $url["url"];
+        // @TODO: maybe log an error if URL entry was not found?
+        $field->value->externalData = isset( $url["url"] ) ? $url["url"] : "";
     }
 
     /**
@@ -159,11 +166,10 @@ class LegacyStorage extends Gateway
      * Inserts a new entry in ezurl table with $field value data
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      *
      * @return mixed
      */
-    private function insert( VersionInfo $versionInfo, Field $field )
+    private function insert( Field $field )
     {
         $dbHandler = $this->getConnection();
 
@@ -191,5 +197,126 @@ class LegacyStorage extends Gateway
         return $dbHandler->lastInsertId(
             $dbHandler->getSequenceName( self::URL_TABLE, "id" )
         );
+    }
+
+    /**
+     * Creates link to URL with $urlId for field with $fieldId in $versionNo.
+     *
+     * @param mixed $urlId
+     * @param mixed $fieldId
+     * @param mixed $versionNo
+     *
+     * @return void
+     */
+    protected function linkUrl( $urlId, $fieldId, $versionNo )
+    {
+        $dbHandler = $this->getConnection();
+
+        $q = $dbHandler->createInsertQuery();
+        $q->insertInto(
+            $dbHandler->quoteTable( self::URL_LINK_TABLE )
+        )->set(
+            $dbHandler->quoteColumn( "contentobject_attribute_id" ),
+            $q->bindValue( $fieldId, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "contentobject_attribute_version" ),
+            $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "url_id" ),
+            $q->bindValue( $urlId, null, \PDO::PARAM_INT )
+        );
+
+        $q->prepare()->execute();
+    }
+
+    /**
+     * Deletes external URL data for field with $fieldId in $versionNo.
+     *
+     * If URL unlinked is found to be orphaned, it will be deleted.
+     *
+     * @param mixed $fieldId
+     * @param mixed $versionNo
+     *
+     * @return void
+     */
+    public function deleteFieldData( $fieldId, $versionNo )
+    {
+        $this->unlinkUrl( $fieldId, $versionNo );
+        $this->deleteOrphanedUrls();
+    }
+
+    /**
+     * Removes link to URL for $fieldId in $versionNo.
+     *
+     * @param mixed $fieldId
+     * @param mixed $versionNo
+     *
+     * @return void
+     */
+    protected function unlinkUrl( $fieldId, $versionNo )
+    {
+        $dbHandler = $this->getConnection();
+
+        $deleteQuery = $dbHandler->createDeleteQuery();
+        $deleteQuery->deleteFrom(
+            $dbHandler->quoteTable( self::URL_LINK_TABLE )
+        )->where(
+            $deleteQuery->expr->lAnd(
+                $deleteQuery->expr->in( $dbHandler->quoteColumn( "contentobject_attribute_id" ), $fieldId ),
+                $deleteQuery->expr->in( $dbHandler->quoteColumn( "contentobject_attribute_version" ), $versionNo )
+            )
+        );
+
+        $deleteQuery->prepare()->execute();
+    }
+
+    /**
+     * Deletes all orphaned URLs.
+     *
+     * @todo using two queries because zeta Database does not support joins in delete query.
+     * That could be avoided if the feature is implemented there.
+     *
+     * URL is orphaned if it is not linked to a content attribute through ezurl_object_link table.
+     *
+     * @return void
+     */
+    protected function deleteOrphanedUrls()
+    {
+        $dbHandler = $this->getConnection();
+
+        $query = $dbHandler->createSelectQuery();
+        $query->select(
+            $dbHandler->quoteColumn( "id", self::URL_TABLE )
+        )->from(
+            $dbHandler->quoteTable( self::URL_TABLE )
+        )->leftJoin(
+            $dbHandler->quoteTable( self::URL_LINK_TABLE ),
+            $query->expr->eq(
+                $dbHandler->quoteColumn( "url_id", self::URL_LINK_TABLE ),
+                $dbHandler->quoteColumn( "id", self::URL_TABLE )
+            )
+        )->where(
+            $query->expr->isNull(
+                $dbHandler->quoteColumn( "url_id", self::URL_LINK_TABLE )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+        $ids = $statement->fetchAll( \PDO::FETCH_COLUMN );
+
+        if ( empty( $ids ) )
+        {
+            return;
+        }
+
+        $deleteQuery = $dbHandler->createDeleteQuery();
+        $deleteQuery->deleteFrom(
+            $dbHandler->quoteTable( self::URL_TABLE )
+        )->where(
+            $deleteQuery->expr->in( $dbHandler->quoteColumn( "id" ), $ids )
+        );
+
+        $deleteQuery->prepare()->execute();
     }
 }

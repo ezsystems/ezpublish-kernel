@@ -39,7 +39,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     /**
      * Sets up fixture data.
      *
-     * @return void
+     * @return array
      */
     protected function getFixtureData()
     {
@@ -268,7 +268,6 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         // Will change during storage
         unset( $expectedData['id'] );
 
-        self::assertEquals( $field->value->uri, $field->value->id );
         $expectedData['uri'] = $field->value->uri;
 
         $this->assertPropertiesCorrect(

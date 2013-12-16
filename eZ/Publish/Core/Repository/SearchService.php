@@ -9,14 +9,15 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\Core\Repository\DomainMapper;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler;
 
 /**
@@ -93,8 +94,11 @@ class SearchService implements SearchServiceInterface
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
         $query = clone $query;
+        $query->filter = $query->filter ?: new Criterion\MatchAll();
 
-        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->criterion ) )
+        $this->validateSortClauses( $query );
+
+        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $query->filter ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
         }
@@ -117,6 +121,52 @@ class SearchService implements SearchServiceInterface
     }
 
     /**
+     * Validates sort clauses of a given $query.
+     *
+     * For the moment this validates only Field sort clauses.
+     * Valid Field sort clause provides $languageCode if targeted field is translatable,
+     * and the same in reverse - it does not provide $languageCode for non-translatable field.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If sort clauses are not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     *
+     * @return void
+     */
+    protected function validateSortClauses( Query $query )
+    {
+        foreach ( $query->sortClauses as $key => $sortClause )
+        {
+            if ( !$sortClause instanceof SortClause\Field )
+            {
+                continue;
+            }
+
+            /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
+            $fieldTarget = $sortClause->targetData;
+            $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier(
+                $fieldTarget->typeIdentifier
+            );
+
+            if ( $contentType->getFieldDefinition( $fieldTarget->fieldIdentifier )->isTranslatable )
+            {
+                if ( $fieldTarget->languageCode === null )
+                {
+                    throw new InvalidArgumentException(
+                        "\$query->sortClauses[{$key}]", "No language is specified for translatable field"
+                    );
+                }
+            }
+            else if ( $fieldTarget->languageCode !== null )
+            {
+                throw new InvalidArgumentException(
+                    "\$query->sortClauses[{$key}]", "Language is specified for non-translatable field, null should be used instead"
+                );
+            }
+        }
+    }
+
+    /**
      * Performs a query for a single content object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the object was not found by the query or due to permissions
@@ -124,22 +174,22 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than one result matching the criterions
      *
      * @todo define structs for the field filters
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle( Criterion $criterion, array $fieldFilters = array(), $filterOnUserPermissions = true )
+    public function findSingle( Criterion $filter, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
-        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $criterion ) )
+        if ( $filterOnUserPermissions && !$this->addPermissionsCriterion( $filter ) )
         {
             throw new NotFoundException( 'Content', '*' );
         }
 
         return $this->domainMapper->buildContentDomainObject(
-            $this->searchHandler->findSingle( $criterion, $fieldFilters )
+            $this->searchHandler->findSingle( $filter, $fieldFilters )
         );
     }
 

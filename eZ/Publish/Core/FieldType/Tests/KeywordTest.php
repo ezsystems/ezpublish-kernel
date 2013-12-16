@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Keyword\Type as KeywordType;
 use eZ\Publish\Core\FieldType\Keyword\Value as KeywordValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -32,7 +31,10 @@ class KeywordTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new KeywordType();
+        $fieldType = new KeywordType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -248,6 +250,19 @@ class KeywordTest extends FieldTypeTest
                 array( 'foo', 'bar' ),
                 new KeywordValue( array( 'foo', 'bar' ) ),
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezkeyword';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new KeywordValue( array( 'foo', 'bar' ) ), "foo, bar" )
         );
     }
 }

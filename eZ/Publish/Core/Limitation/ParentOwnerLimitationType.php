@@ -9,10 +9,8 @@
 
 namespace eZ\Publish\Core\Limitation;
 
-use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
@@ -20,7 +18,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentOwnerLimitation as APIParentOwnerLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
@@ -116,13 +113,13 @@ class ParentOwnerLimitationType extends AbstractPersistenceLimitationType implem
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
      * @return boolean
      *
      * @todo Add support for $limitationValues[0] == 2 when session values can be injected somehow
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
     {
         if ( !$value instanceof APIParentOwnerLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentOwnerLimitation' );
@@ -135,6 +132,7 @@ class ParentOwnerLimitationType extends AbstractPersistenceLimitationType implem
             );
         }
 
+        // Parent Limitations are usually used by content/create where target is specified, so we return false if not provided.
         if ( empty( $targets ) )
         {
             return false;

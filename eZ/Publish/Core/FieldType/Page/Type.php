@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\FieldType\Page\PageService;
-use eZ\Publish\Core\FieldType\Page\HashConverter;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;

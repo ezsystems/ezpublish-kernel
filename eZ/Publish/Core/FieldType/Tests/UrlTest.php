@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Url\Type as UrlType;
 use eZ\Publish\Core\FieldType\Url\Value as UrlValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -32,7 +31,10 @@ class UrlTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new UrlType();
+        $fieldType = new UrlType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -264,6 +266,19 @@ class UrlTest extends FieldTypeTest
                 ),
                 new UrlValue( 'http://example.com/sindelfingen', 'Sindelfingen!' ),
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezurl';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' ),
+            array( new UrlValue( '', 'Url text' ), 'Url text' )
         );
     }
 }

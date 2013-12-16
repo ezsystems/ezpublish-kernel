@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 /**
  * This class is used for creating content types.
  *
- * @property $fieldDefinitions the collection of field definitions
+ * @property \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct[] $fieldDefinitions the collection of field definitions
  */
 abstract class ContentTypeCreateStruct extends ValueObject
 {
@@ -92,7 +92,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $defaultAlwaysAvailable = true;
 
     /**
-     * AN array of names with languageCode keys
+     * An array of names with languageCode keys
      *
      * @required - at least one name in the main language is required
      *

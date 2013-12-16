@@ -54,10 +54,9 @@ class TimeIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'eztime',
-            new FieldType\Time\Type()
-        );
+        $fieldType = new FieldType\Time\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'eztime', $fieldType );
         $handler->getStorageRegistry()->register(
             'eztime',
             new FieldType\NullStorage()

@@ -13,7 +13,6 @@ use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 
 /**
  * Integration test for legacy storage field types
@@ -56,10 +55,9 @@ class RelationIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezobjectrelation',
-            new FieldType\Relation\Type()
-        );
+        $fieldType = new FieldType\Relation\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezobjectrelation', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezobjectrelation',
             new FieldType\NullStorage()

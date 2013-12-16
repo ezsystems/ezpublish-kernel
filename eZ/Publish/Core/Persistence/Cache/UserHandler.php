@@ -14,9 +14,6 @@ use eZ\Publish\SPI\Persistence\User;
 use eZ\Publish\SPI\Persistence\User\Role;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
-use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
-use Tedivm\StashBundle\Service\CacheService;
-use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * Cache handler for user module
@@ -49,10 +46,19 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::loadByLogin
      */
-    public function loadByLogin( $login, $alsoMatchEmail = false )
+    public function loadByLogin( $login )
     {
-        $this->logger->logCall( __METHOD__, array( 'user' => $login, 'email?' => $alsoMatchEmail ) );
-        return $this->persistenceFactory->getUserHandler()->loadByLogin( $login, $alsoMatchEmail );
+        $this->logger->logCall( __METHOD__, array( 'user' => $login ) );
+        return $this->persistenceFactory->getUserHandler()->loadByLogin( $login );
+    }
+
+    /**
+     * @see eZ\Publish\SPI\Persistence\User\Handler::loadByEmail
+     */
+    public function loadByEmail( $email )
+    {
+        $this->logger->logCall( __METHOD__, array( 'email' => $email ) );
+        return $this->persistenceFactory->getUserHandler()->loadByEmail( $email );
     }
 
     /**
@@ -147,8 +153,14 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadRoleAssignmentsByGroupId( $groupId, $inherit = false )
     {
-        $cacheKey = ( $inherit ? 'inherited/' : '' ) . $groupId;
-        $cache = $this->cache->getItem( 'user', 'role', 'assignments', 'byGroup', $cacheKey );
+        if ( $inherit )
+        {
+            $cache = $this->cache->getItem( 'user', 'role', 'assignments', 'byGroup', 'inherited', $groupId );
+        }
+        else
+        {
+            $cache = $this->cache->getItem( 'user', 'role', 'assignments', 'byGroup', $groupId );
+        }
         $assignments = $cache->get();
         if ( $cache->isMiss() )
         {
@@ -215,14 +227,14 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\User\Handler::removePolicy
+     * @see eZ\Publish\SPI\Persistence\User\Handler::deletePolicy
      */
-    public function removePolicy( $roleId, $policyId )
+    public function deletePolicy( $policyId )
     {
-        $this->logger->logCall( __METHOD__, array( 'role' => $roleId, 'policy' => $policyId ) );
-        $this->persistenceFactory->getUserHandler()->removePolicy( $roleId, $policyId );
+        $this->logger->logCall( __METHOD__, array( 'policy' => $policyId ) );
+        $this->persistenceFactory->getUserHandler()->deletePolicy( $policyId );
 
-        $this->cache->clear( 'user', 'role', $roleId );
+        $this->cache->clear( 'user', 'role' );
     }
 
     /**

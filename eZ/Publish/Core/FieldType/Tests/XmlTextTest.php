@@ -40,7 +40,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      */
     protected function getFieldType()
     {
-        return new XmlTextType(
+        $fieldType = new XmlTextType(
             new ConverterDispatcher( array( "http://docbook.org/ns/docbook" => null ) ),
             new ValidatorDispatcher(
                 array(
@@ -49,6 +49,24 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
                     )
                 )
             )
+        );
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getTransformationProcessorMock()
+    {
+        return $this->getMockForAbstractClass(
+            "eZ\\Publish\\Core\\Persistence\\TransformationProcessor",
+            array(),
+            '',
+            false,
+            true,
+            true
         );
     }
 
@@ -363,5 +381,15 @@ EOT;
             $installDir = $config['service']['parameters']['install_dir'];
         }
         return $installDir;
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezxmltext';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array();
     }
 }

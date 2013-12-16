@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -22,7 +22,7 @@ class MultipleStringMapper extends StringMapper
      *
      * @param Field $field
      *
-     * @return void
+     * @return bool
      */
     public function canMap( Field $field )
     {
@@ -34,7 +34,7 @@ class MultipleStringMapper extends StringMapper
      *
      * @param Field $field
      *
-     * @return void
+     * @return array
      */
     public function map( Field $field )
     {

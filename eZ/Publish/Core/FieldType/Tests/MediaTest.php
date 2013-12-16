@@ -31,7 +31,10 @@ class MediaTest extends BinaryBaseTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new MediaType();
+        $fieldType = new MediaType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     protected function getEmptyValueExpectation()
@@ -547,6 +550,25 @@ class MediaTest extends BinaryBaseTest
                     'mediaType' => 23,
                 )
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezmedia';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array(
+                new MediaValue(),
+                ''
+            ),
+            array(
+                new MediaValue( array( 'fileName' => 'sindelfingen.jpg' ) ),
+                'sindelfingen.jpg'
+            )
         );
     }
 }

@@ -177,7 +177,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
                 $this->equalTo(
                     new Query(
                         array(
-                            'criterion' => new CriterionContentTypeId( 23 )
+                            'filter' => new CriterionContentTypeId( 23 )
                         )
                     )
                 )

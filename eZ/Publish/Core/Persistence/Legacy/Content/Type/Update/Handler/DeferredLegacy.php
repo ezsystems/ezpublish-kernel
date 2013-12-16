@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\SPI\Persistence\Content\Type;
 
 /**
  * DeferredLegacy based type update handler
@@ -71,11 +72,11 @@ class DeferredLegacy extends Handler
             Type::STATUS_MODIFIED
         );
 
-        $script = eZScheduledScript::create(
+        $script = \eZScheduledScript::create(
             'syncobjectattributes.php',
-            eZINI::instance( 'ezscriptmonitor.ini' )->variable( 'GeneralSettings', 'PhpCliCommand' ) .
-            ' extension/ezscriptmonitor/bin/' . eZScheduledScript::SCRIPT_NAME_STRING .
-            ' -s ' . eZScheduledScript::SITE_ACCESS_STRING . ' --classid=' . $toType->id
+            \eZINI::instance( 'ezscriptmonitor.ini' )->variable( 'GeneralSettings', 'PhpCliCommand' ) .
+            ' extension/ezscriptmonitor/bin/' . \eZScheduledScript::SCRIPT_NAME_STRING .
+            ' -s ' . \eZScheduledScript::SITE_ACCESS_STRING . ' --classid=' . $toType->id
         );
         $script->store();
     }

@@ -31,10 +31,10 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::findSingle
      */
-    public function findSingle( Criterion $criterion, array $fieldFilters = array() )
+    public function findSingle( Criterion $filter, array $fieldFilters = array() )
     {
-        $this->logger->logCall( __METHOD__, array( 'criterion' => get_class( $criterion ), 'fieldFilters' => $fieldFilters ) );
-        return $this->persistenceFactory->getSearchHandler()->findSingle( $criterion, $fieldFilters );
+        $this->logger->logCall( __METHOD__, array( 'filter' => get_class( $filter ), 'fieldFilters' => $fieldFilters ) );
+        return $this->persistenceFactory->getSearchHandler()->findSingle( $filter, $fieldFilters );
     }
 
     /**
@@ -80,5 +80,33 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
         $this->persistenceFactory->getSearchHandler()->deleteLocation( $locationId );
+    }
+
+    /**
+     * Indexes several content objects at once
+     *
+     * @todo: This function and setCommit() is needed for Persistence\Solr for test speed but not part
+     *       of interface for the reason described in Solr\Content\Search\Gateway\Native::bulkIndexContent
+     *       Short: Bulk handling should be properly designed before added to the interface.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content[] $contentObjects
+     *
+     * @return void
+     */
+    public function bulkIndexContent( array $contentObjects )
+    {
+        $this->persistenceFactory->getSearchHandler()->bulkIndexContent( $contentObjects );
+    }
+
+    /**
+     * Set if index/delete actions should commit or if several actions is to be expected
+     *
+     * This should be set to false before group of actions and true before the last one
+     * (also, see note on bulkIndexContent())
+     * @param bool $commit
+     */
+    public function setCommit( $commit )
+    {
+       $this->persistenceFactory->getSearchHandler()->setCommit( $commit );
     }
 }

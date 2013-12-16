@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
-
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
 
@@ -1345,6 +1345,52 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the deleteLocation() method
+     *
+     * Related issue: EZP-21904
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteContentObjectLastLocation()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use case */
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $contentTypeService = $repository->getContentTypeService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        // prepare Content object
+        $createStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            'eng-GB'
+        );
+        $createStruct->setField( 'name', 'Test folder' );
+
+        // creata Content object
+        $content = $contentService->publishVersion(
+            $contentService->createContent(
+                $createStruct,
+                array( $locationService->newLocationCreateStruct( 2 ) )
+            )->versionInfo
+        );
+
+        // delete location
+        $locationService->deleteLocation(
+            $locationService->loadLocation(
+                $urlAliasService->lookup( "/Test-folder" )->destination
+            )
+        );
+
+        // this should throw a not found exception
+        $contentService->loadContent( $content->versionInfo->contentInfo->id );
+        /* END: Use case*/
+    }
+
+    /**
      * Test for the copySubtree() method.
      *
      * @return void
@@ -1393,6 +1439,37 @@ class LocationServiceTest extends BaseTest
             ),
             $copiedLocation
         );
+
+        $this->assertDefaultContentStates( $copiedLocation->contentInfo );
+    }
+
+    /**
+     * Asserts that given Content has default ContentStates.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return void
+     */
+    private function assertDefaultContentStates( ContentInfo $contentInfo )
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroups = $objectStateService->loadObjectStateGroups();
+
+        foreach ( $objectStateGroups as $objectStateGroup )
+        {
+            $contentState = $objectStateService->getContentState( $contentInfo, $objectStateGroup );
+            foreach ( $objectStateService->loadObjectStates( $objectStateGroup ) as $objectState )
+            {
+                // Only check the first object state which is the default one.
+                $this->assertEquals(
+                    $objectState,
+                    $contentState
+                );
+                break;
+            }
+        }
     }
 
     /**
@@ -1851,5 +1928,4 @@ class LocationServiceTest extends BaseTest
             $overwrite
         );
     }
-
 }

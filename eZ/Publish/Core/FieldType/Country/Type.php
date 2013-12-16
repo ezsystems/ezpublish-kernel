@@ -66,16 +66,7 @@ class Type extends FieldType
      */
     public function getName( SPIValue $value )
     {
-        return implode(
-            ", ",
-            array_map(
-                function ( $countryInfo )
-                {
-                    return $countryInfo["Name"];
-                },
-                $this->countriesInfo
-            )
-        );
+        return (string)$value;
     }
 
     /**
@@ -189,7 +180,7 @@ class Type extends FieldType
         $countries = array();
         foreach ( $value->countries as $countryInfo )
         {
-            $countries[] = strtolower( $countryInfo["Name"] );
+            $countries[] = $this->transformationProcessor->transformByGroup( $countryInfo["Name"], "lowercase" );
         }
 
         sort( $countries );

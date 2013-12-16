@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used to perform a query
+ *
+ * @property $criterion Deprecated alias for $query
  */
 class Query extends ValueObject
 {
@@ -21,12 +23,24 @@ class Query extends ValueObject
     const SORT_DESC = 'descending';
 
     /**
-     * The Query criterion
-     * Can contain multiple criterion, as items of a logical one (by default AND)
+     * The Query filter
+     *
+     * Can contain multiple criterion, as items of a logical one (by default
+     * AND)
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    public $criterion;
+    public $filter;
+
+    /**
+     * The Query query
+     *
+     * Can contain multiple criterion, as items of a logical one (by default
+     * AND). Defaults to MatchAll.
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion
+     */
+    public $query;
 
     /**
      * Query sorting clauses
@@ -62,4 +76,54 @@ class Query extends ValueObject
      * @var boolean
      */
     public $spellcheck;
+
+    /**
+     * Wrapper for deprecated $criterion property
+     *
+     * @param string $property
+     * @return mixed
+     */
+    public function __get( $property)
+    {
+        if ( $property === 'criterion' )
+        {
+            return $this->query;
+        }
+
+        return parent::__get( $property );
+    }
+
+    /**
+     * Wrapper for deprecated $criterion property
+     *
+     * @param string $property
+     * @param mixed $value
+     * @return void
+     */
+    public function __set( $property, $value )
+    {
+        if ( $property === 'criterion' )
+        {
+            $this->query = $value;
+            return;
+        }
+
+        return parent::__set( $property, $value );
+    }
+
+    /**
+     * Wrapper for deprecated $criterion property
+     *
+     * @param string $property
+     * @return bool
+     */
+    public function __isset( $property )
+    {
+        if ( $property === 'criterion' )
+        {
+            return true;
+        }
+
+        return parent::__isset( $property );
+    }
 }

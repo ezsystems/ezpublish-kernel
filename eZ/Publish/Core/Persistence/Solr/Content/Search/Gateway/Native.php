@@ -77,6 +77,11 @@ class Native extends Gateway
     protected $nameGenerator;
 
     /**
+     * @var bool
+     */
+    protected $commit = true;
+
+    /**
      * Construct from HTTP client
      *
      * @param HttpClient $client
@@ -113,7 +118,8 @@ class Native extends Gateway
     public function findContent( Query $query, array $fieldFilters = array() )
     {
         $parameters = array(
-            "q" => $this->criterionVisitor->visit( $query->criterion ),
+            "q" => $this->criterionVisitor->visit( $query->query ),
+            "fq" => $this->criterionVisitor->visit( $query->filter ),
             "sort" => implode(
                 ", ",
                 array_map(
@@ -186,21 +192,22 @@ class Native extends Gateway
     /**
      * Indexes a content object
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field[] $document
+     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field[][] $documents
+     * @todo $documents should be generated more on demand then this and sent to Solr in chunks before final commit
      *
      * @return void
      */
-    public function indexContent( array $document )
+    public function bulkIndexContent( array $documents )
     {
-        $update   = $this->createUpdate( $document );
+        $updates   = $this->createUpdates( $documents );
         $result   = $this->client->request(
             'POST',
-            '/solr/update?commit=true&wt=json',
+            '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
-                    'Content-Type: text/xml',
+                    'Content-Type' => 'text/xml',
                 ),
-                $update
+                $updates
             )
         );
 
@@ -222,10 +229,10 @@ class Native extends Gateway
     {
         $this->client->request(
             'POST',
-            '/solr/update?commit=true&wt=json',
+            '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
-                    'Content-Type: text/xml',
+                    'Content-Type' => 'text/xml',
                 ),
                 "<delete><query>id:" . (int)$contentId . ( $versionId !== null ? " AND version_id:" . (int)$versionId : "" ) . "</query></delete>"
             )
@@ -273,10 +280,10 @@ class Native extends Gateway
         {
             $this->client->request(
                 "POST",
-                "/solr/update?commit=true&wt=json",
+                "/solr/update?" . ( $this->commit ? "commit=true&" : "" ) . "wt=json",
                 new Message(
                     array(
-                        "Content-Type: text/xml",
+                        "Content-Type" => "text/xml",
                     ),
                     "<delete><query>id:(" . implode( " ", $contentToDelete ) . ")</query></delete>"
                 )
@@ -325,7 +332,7 @@ class Native extends Gateway
 
             $this->client->request(
                 "POST",
-                "/solr/update/json?commit=true&wt=json",
+                "/solr/update/json?" . ( $this->commit ? "commit=true&" : "" ) . "wt=json",
                 new Message(
                     array(
                         "Content-Type: application/json",
@@ -345,10 +352,10 @@ class Native extends Gateway
     {
         $this->client->request(
             'POST',
-            '/solr/update?commit=true&wt=json',
+            '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
-                    'Content-Type: text/xml',
+                    'Content-Type' => 'text/xml',
                 ),
                 '<delete><query>*:*</query></delete>'
             )
@@ -356,36 +363,45 @@ class Native extends Gateway
     }
 
     /**
-     * Create document update XML
+     * @param bool $commit
+     */
+    public function setCommit( $commit )
+    {
+        $this->commit = !!$commit;
+    }
+
+    /**
+     * Create document(s) update XML
      *
-     * @param array $document
+     * @param array $documents
      *
      * @return string
      */
-    protected function createUpdate( array $document )
+    protected function createUpdates( array $documents )
     {
         $xml = new \XmlWriter();
         $xml->openMemory();
         $xml->startElement( 'add' );
-        $xml->startElement( 'doc' );
 
-        foreach ( $document as $field )
+        foreach ( $documents as $document )
         {
-            foreach ( (array)$this->fieldValueMapper->map( $field ) as $value )
+            $xml->startElement( 'doc' );
+            foreach ( $document as $field )
             {
-                $xml->startElement( 'field' );
-                $xml->writeAttribute(
-                    'name',
-                    $this->nameGenerator->getTypedName( $field->name, $field->type )
-                );
-                $xml->text( $value );
-                $xml->endElement();
+                foreach ( (array)$this->fieldValueMapper->map( $field ) as $value )
+                {
+                    $xml->startElement( 'field' );
+                    $xml->writeAttribute(
+                        'name',
+                        $this->nameGenerator->getTypedName( $field->name, $field->type )
+                    );
+                    $xml->text( $value );
+                    $xml->endElement();
+                }
             }
+            $xml->endElement();
         }
-
         $xml->endElement();
-        $xml->endElement();
-
         return $xml->outputMemory( true );
     }
 }

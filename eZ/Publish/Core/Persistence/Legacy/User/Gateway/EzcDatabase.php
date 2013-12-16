@@ -140,14 +140,13 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Loads user with user ID.
+     * Loads user with user login.
      *
      * @param string $login
-     * @param string|null $email
      *
      * @return array
      */
-    public function loadByLoginOrMail( $login, $email = null )
+    public function loadByLogin( $login )
     {
         $query = $this->handler->createSelectQuery();
         $query->select(
@@ -167,21 +166,10 @@ class EzcDatabase extends Gateway
                 $this->handler->quoteColumn( 'contentobject_id', 'ezuser' )
             )
         )->where(
-            empty( $email ) ?
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'login', 'ezuser' ),
-                    $query->bindValue( $login )
-                ) :
-                $query->expr->lOr(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn( 'login', 'ezuser' ),
-                        $query->bindValue( $login )
-                    ),
-                    $query->expr->eq(
-                        $this->handler->quoteColumn( 'email', 'ezuser' ),
-                        $query->bindValue( $email )
-                    )
-                )
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'login', 'ezuser' ),
+                $query->bindValue( $login, null, \PDO::PARAM_STR )
+            )
         );
 
         $statement = $query->prepare();
@@ -189,6 +177,45 @@ class EzcDatabase extends Gateway
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
+
+    /**
+     * Loads user with user email.
+     *
+     * @param string $email
+     *
+     * @return array
+     */
+     public function loadByEmail( $email )
+     {
+         $query = $this->handler->createSelectQuery();
+         $query->select(
+             $this->handler->quoteColumn( 'contentobject_id', 'ezuser' ),
+             $this->handler->quoteColumn( 'login', 'ezuser' ),
+             $this->handler->quoteColumn( 'email', 'ezuser' ),
+             $this->handler->quoteColumn( 'password_hash', 'ezuser' ),
+             $this->handler->quoteColumn( 'password_hash_type', 'ezuser' ),
+             $this->handler->quoteColumn( 'is_enabled', 'ezuser_setting' ),
+             $this->handler->quoteColumn( 'max_login', 'ezuser_setting' )
+         )->from(
+             $this->handler->quoteTable( 'ezuser' )
+         )->leftJoin(
+             $this->handler->quoteTable( 'ezuser_setting' ),
+             $query->expr->eq(
+                 $this->handler->quoteColumn( 'user_id', 'ezuser_setting' ),
+                 $this->handler->quoteColumn( 'contentobject_id', 'ezuser' )
+             )
+         )->where(
+             $query->expr->eq(
+                 $this->handler->quoteColumn( 'email', 'ezuser' ),
+                 $query->bindValue( $email, null, \PDO::PARAM_STR )
+             )
+         );
+
+         $statement = $query->prepare();
+         $statement->execute();
+
+         return $statement->fetchAll( \PDO::FETCH_ASSOC );
+     }
 
     /**
      * Update the user information specified by the user struct

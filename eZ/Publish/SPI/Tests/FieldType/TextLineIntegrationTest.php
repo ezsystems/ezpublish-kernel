@@ -54,10 +54,9 @@ class TextLineIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezstring',
-            new FieldType\TextLine\Type()
-        );
+        $fieldType = new FieldType\TextLine\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezstring', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezstring',
             new FieldType\NullStorage()

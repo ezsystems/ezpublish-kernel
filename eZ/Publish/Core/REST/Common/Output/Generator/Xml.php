@@ -252,4 +252,15 @@ class Xml extends Generator
     {
         $this->hashGenerator->generateHashValue( $this->xmlWriter, $hashElementName, $hashValue );
     }
+
+    /**
+     * Serializes a boolean value
+     *
+     * @param boolean $boolValue
+     * @return string
+     */
+    public function serializeBool( $boolValue )
+    {
+        return ( $boolValue ? 'true' : 'false' );
+    }
 }

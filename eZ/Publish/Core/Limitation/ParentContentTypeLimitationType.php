@@ -12,13 +12,16 @@ namespace eZ\Publish\Core\Limitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation as APIParentContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
@@ -113,15 +116,51 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = array() )
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
     {
         if ( !$value instanceof APIParentContentTypeLimitation )
             throw new InvalidArgumentException( '$value', 'Must be of type: APIParentContentTypeLimitation' );
 
+        if ( $object instanceof ContentCreateStruct )
+        {
+            return $this->evaluateForContentCreateStruct( $value, $targets );
+        }
+        else if ( $object instanceof Content )
+        {
+            $object = $object->getVersionInfo()->getContentInfo();
+        }
+        else if ( $object instanceof VersionInfo )
+        {
+            $object = $object->getContentInfo();
+        }
+        else if ( !$object instanceof ContentInfo )
+        {
+            throw new InvalidArgumentException(
+                "\$object",
+                "Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo"
+            );
+        }
+
+        // Try to load locations if no targets were provided
+        if ( empty( $targets ) )
+        {
+            if ( $object->published )
+            {
+                $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
+            }
+            else
+            {
+                // @todo Need support for draft locations to to work correctly
+                $targets = $this->persistence->locationHandler()->loadParentLocationsForDraftContent( $object->id );
+            }
+        }
+
+        // If targets is empty/null return false as user does not have access
+        // to content w/o location with this limitation
         if ( empty( $targets ) )
         {
             return false;
@@ -150,6 +189,48 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
                     'Must contain objects of type: Location or LocationCreateStruct'
                 );
             }
+
+            if ( !in_array( $contentTypeId, $value->limitationValues ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Evaluate permissions for ContentCreateStruct against LocationCreateStruct placements.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $targets does not contain
+     *         objects of type LocationCreateStruct
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
+     * @param array $targets
+     *
+     * @return bool
+     */
+    protected function evaluateForContentCreateStruct( APILimitationValue $value, array $targets )
+    {
+        // If targets is empty/null return false as user does not have access
+        // to content w/o location with this limitation
+        if ( empty( $targets ) )
+        {
+            return false;
+        }
+
+        foreach ( $targets as $target )
+        {
+            if ( !$target instanceof LocationCreateStruct )
+            {
+                throw new InvalidArgumentException(
+                    '$targets',
+                    'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+                );
+            }
+
+            $location = $this->persistence->locationHandler()->load( $target->parentLocationId );
+            $contentTypeId = $this->persistence->contentHandler()->loadContentInfo( $location->contentId )->contentTypeId;
 
             if ( !in_array( $contentTypeId, $value->limitationValues ) )
             {

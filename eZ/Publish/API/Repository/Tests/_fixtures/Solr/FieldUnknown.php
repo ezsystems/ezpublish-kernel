@@ -10,7 +10,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 0,
+   'maxScore' => 1.0,
    'totalCount' => 0,
 ));
 

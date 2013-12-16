@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Message;
-use eZ\Publish\Core\REST\Common\Input;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
@@ -156,16 +154,14 @@ class Content extends RestController
      */
     public function redirectCurrentVersion( $contentId )
     {
-        $versionInfo = $this->repository->getContentService()->loadVersionInfo(
-            $this->repository->getContentService()->loadContentInfo( $contentId )
-        );
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
 
         return new Values\TemporaryRedirect(
             $this->router->generate(
                 'ezpublish_rest_loadContentInVersion',
                 array(
                     'contentId' => $contentId,
-                    'versionNumber' => $versionInfo->versionNo
+                    'versionNumber' => $contentInfo->currentVersionNo
                 )
             )
         );
@@ -180,9 +176,6 @@ class Content extends RestController
      */
     public function loadContentInVersion( $contentId, $versionNumber )
     {
-        $questionMark = strpos( $this->request->getPathInfo(), '?' );
-        $requestPath = $questionMark !== false ? substr( $this->request->getPathInfo(), 0, $questionMark ) : $this->request->getPathInfo();
-
         $languages = null;
         if ( $this->request->query->has( 'languages' ) )
         {

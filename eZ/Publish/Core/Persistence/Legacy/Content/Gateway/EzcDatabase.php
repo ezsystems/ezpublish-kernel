@@ -26,6 +26,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use ezcQueryUpdate;
+use PDO;
 
 /**
  * ezcDatabase based content gateway
@@ -35,7 +36,7 @@ class EzcDatabase extends Gateway
     /**
      * Zeta Components database handler.
      *
-     * @var \EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
 
@@ -267,10 +268,11 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $prePublishVersionInfo Provided on publish
      *
      * @return void
      */
-    public function updateContent( $contentId, MetadataUpdateStruct $struct )
+    public function updateContent( $contentId, MetadataUpdateStruct $struct, VersionInfo $prePublishVersionInfo = null )
     {
         $q = $this->dbHandler->createUpdateQuery();
         $q->update( $this->dbHandler->quoteTable( 'ezcontentobject' ) );
@@ -317,7 +319,25 @@ class EzcDatabase extends Gateway
                 $q->bindValue( $struct->remoteId, null, \PDO::PARAM_STR )
             );
         }
+        if ( $prePublishVersionInfo !== null )
+        {
+            $mask = 0;
 
+            if ( isset( $struct->alwaysAvailable ) )
+                $mask |= $struct->alwaysAvailable ? 1 : 0;
+            else
+                $mask |= $prePublishVersionInfo->contentInfo->alwaysAvailable ? 1 : 0;
+
+            foreach ( $prePublishVersionInfo->languageIds as $languageId )
+            {
+                $mask |= $languageId;
+            }
+
+            $q->set(
+                $this->dbHandler->quoteColumn( 'language_mask' ),
+                $q->bindValue( $mask, null, \PDO::PARAM_INT )
+            );
+        }
         $q->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
@@ -818,18 +838,15 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Loads info for content identified by $contentId.
-     * Will basically return a hash containing all field values for ezcontentobject table plus some additional keys:
-     *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
-     *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB"
-     *
-     * @param int $contentId
+     * @see loadContentInfo(), loadContentInfoByRemoteId()
+     * @param string $column
+     * @param mixed $id
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      *
      * @return array
      */
-    public function loadContentInfo( $contentId )
+    private function internalLoadContentInfo( $column, $id )
     {
         /** @var $query \ezcQuerySelect */
         $query = $this->dbHandler->createSelectQuery();
@@ -852,20 +869,52 @@ class EzcDatabase extends Gateway
             )
         )->where(
             $query->expr->eq(
-                $this->dbHandler->quoteColumn( "id" ),
-                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                $this->dbHandler->quoteColumn( $column, "ezcontentobject" ),
+                $query->bindValue( $id, null, $column === "id" ? PDO::PARAM_INT : PDO::PARAM_STR )
             )
         );
         $statement = $query->prepare();
         $statement->execute();
-        $row = $statement->fetch( \PDO::FETCH_ASSOC );
+        $row = $statement->fetch( PDO::FETCH_ASSOC );
 
         if ( empty( $row ) )
         {
-            throw new NotFound( "content", $contentId );
+            throw new NotFound( "content", "$column: $id" );
         }
 
         return $row;
+    }
+    /**
+     * Loads info for content identified by $contentId.
+     * Will basically return a hash containing all field values for ezcontentobject table plus some additional keys:
+     *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
+     *  - main_language_code => Language code for main (initial) language. E.g. "eng-GB"
+     *
+     * @param int $contentId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
+     */
+    public function loadContentInfo( $contentId )
+    {
+        return $this->internalLoadContentInfo( "id", $contentId );
+    }
+
+    /**
+     * Loads info for a content object identified by its remote ID
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param mixed $remoteId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
+     */
+    public function loadContentInfoByRemoteId( $remoteId )
+    {
+        return $this->internalLoadContentInfo( "remote_id", $remoteId );
     }
 
     /**

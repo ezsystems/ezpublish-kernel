@@ -13,7 +13,6 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;

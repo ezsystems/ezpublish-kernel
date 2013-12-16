@@ -10,8 +10,6 @@
 namespace eZ\Publish\SPI\Persistence\Content\Location;
 
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
-use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.

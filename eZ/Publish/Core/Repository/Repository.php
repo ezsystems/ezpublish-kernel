@@ -386,15 +386,11 @@ class Repository implements RepositoryInterface
             return $permissionSets;
         }
 
-        if ( $targets === null )
-        {
-            $targets = array();
-        }
-        else if ( $targets instanceof ValueObject )
+        if ( $targets instanceof ValueObject )
         {
             $targets = array( $targets );
         }
-        else if ( !is_array( $targets ) )
+        else if ( $targets !== null && !is_array( $targets ) )
         {
             throw new InvalidArgumentType(
                 "\$targets",
@@ -414,7 +410,7 @@ class Repository implements RepositoryInterface
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
                 if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets ) )
-                    continue;
+                    continue;// Continue to next policy set, all limitations must pass
             }
 
             /**
@@ -784,11 +780,19 @@ class Repository implements RepositoryInterface
 
             if ( $this->transactionDepth === 0 )
             {
+                $queueCountDown = count( $this->commitEventsQueue );
                 foreach ( $this->commitEventsQueue as $eventsQueue )
                 {
+                    --$queueCountDown;
+                    if ( empty( $eventsQueue ) )
+                        continue;
+
+                    $eventCountDown = count( $eventsQueue );
                     foreach ( $eventsQueue as $event )
                     {
-                        $event();
+                        --$eventCountDown;
+                        // event expects a boolean param, if true it means it is last event (for commit use)
+                        $event( $queueCountDown === 0 && $eventCountDown === 0 );
                     }
                 }
 
@@ -836,7 +840,8 @@ class Repository implements RepositoryInterface
         }
         else
         {
-            $event();
+            // event expects a boolean param, if true it means it is last event (for commit use)
+            $event( true );
         }
     }
 

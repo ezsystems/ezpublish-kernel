@@ -10,15 +10,15 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Rating\Type as Rating;
-use eZ\Publish\Core\FieldType\Rating\Value as RatingValue;
+use eZ\Publish\Core\FieldType\Rating\Value;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use ReflectionObject;
-use PHPUnit_Framework_TestCase;
 
 /**
  * @group fieldType
  * @group ezsrrating
  */
-class RatingTest extends PHPUnit_Framework_TestCase
+class RatingTest extends FieldTypeTest
 {
     /**
      * Returns the field type under test.
@@ -29,11 +29,14 @@ class RatingTest extends PHPUnit_Framework_TestCase
      * NOT take care for test case wide caching of the field type, just return
      * a new instance from this method!
      *
-     * @return FieldType
+     * @return \eZ\Publish\SPI\FieldType\FieldType
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Rating();
+        $fieldType = new Rating();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -59,11 +62,11 @@ class RatingTest extends PHPUnit_Framework_TestCase
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return mixed
      */
     protected function getEmptyValueExpectation()
     {
-        return new RatingValue();
+        return new Value();
     }
 
     /**
@@ -246,14 +249,19 @@ class RatingTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                new Value( true ),
                 true,
+                new Value( true ),
             ),
             array(
-                new Value( false ),
                 false,
+                new Value( false ),
             ),
         );
+    }
+
+    public function testEmptyValueIsEmpty()
+    {
+        $this->markTestSkipped( "Rating value is never empty" );
     }
 
     /**
@@ -261,7 +269,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testValidatorConfigurationSchema()
     {
-        $ft = new Rating();
+        $ft = $this->createFieldTypeUnderTest();
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
             "The validator configuration schema does not match what is expected."
@@ -273,7 +281,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testSettingsSchema()
     {
-        $ft = new Rating();
+        $ft = $this->createFieldTypeUnderTest();
         self::assertEmpty(
             $ft->getSettingsSchema(),
             "The settings schema does not match what is expected."
@@ -286,11 +294,11 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueInvalidFormat()
     {
-        $ft = new Rating();
+        $ft = $this->createFieldTypeUnderTest();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
-        $ratingValue = new RatingValue();
+        $ratingValue = new Value();
         $ratingValue->isDisabled = "Strings should not work.";
         $refMethod->invoke( $ft, $ratingValue );
     }
@@ -300,12 +308,12 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueValidFormat()
     {
-        $ft = new Rating();
+        $ft = $this->createFieldTypeUnderTest();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "acceptValue" );
         $refMethod->setAccessible( true );
 
-        $value = new RatingValue( false );
+        $value = new Value( false );
         self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
     }
 
@@ -315,8 +323,8 @@ class RatingTest extends PHPUnit_Framework_TestCase
     public function testToPersistenceValue()
     {
         $rating = false;
-        $ft = new Rating();
-        $fieldValue = $ft->toPersistenceValue( $fv = new RatingValue( $rating ) );
+        $ft = $this->createFieldTypeUnderTest();
+        $fieldValue = $ft->toPersistenceValue( $fv = new Value( $rating ) );
 
         self::assertSame( $rating, $fieldValue->data );
     }
@@ -326,7 +334,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testBuildFieldValueWithParamFalse()
     {
-        $value = new RatingValue( false );
+        $value = new Value( false );
         self::assertSame( false, $value->isDisabled );
     }
 
@@ -335,7 +343,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testBuildFieldValueWithParamTrue()
     {
-        $value = new RatingValue( true );
+        $value = new Value( true );
         self::assertSame( true, $value->isDisabled );
     }
 
@@ -344,41 +352,30 @@ class RatingTest extends PHPUnit_Framework_TestCase
      */
     public function testBuildFieldValueWithoutParam()
     {
-        $value = new RatingValue;
+        $value = new Value;
         self::assertSame( false, $value->isDisabled );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\FieldType\Rating\Value::__toString
-     */
-    public function testFieldValueToStringFalse()
+    protected function provideFieldTypeIdentifier()
     {
-        $rating = "0";
-        $value = new RatingValue( $rating );
-        self::assertSame( $rating, (string)$value );
-
-        $value2 = new RatingValue( (string)$value );
-        self::assertSame(
-            (bool)$rating,
-            $value2->isDisabled,
-            "fromString() and __toString() must be compatible"
-        );
+        return 'ezsrrating';
     }
 
     /**
-     * @covers \eZ\Publish\Core\FieldType\Rating\Value::__toString
+     * @dataProvider provideDataForGetName
+     * @expectedException \RuntimeException
      */
-    public function testFieldValueToStringTrue()
+    public function testGetName( SPIValue $value, $expected )
     {
-        $rating = "1";
-        $value = new RatingValue( $rating );
-        self::assertSame( $rating, (string)$value );
+        $this->getFieldTypeUnderTest()->getName(
+            $value
+        );
+    }
 
-        $value2 = new RatingValue( (string)$value );
-        self::assertSame(
-            (bool)$rating,
-            $value2->isDisabled,
-            "fromString() and __toString() must be compatible"
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), '' )
         );
     }
 }

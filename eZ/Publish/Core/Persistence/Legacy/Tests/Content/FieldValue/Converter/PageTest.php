@@ -14,7 +14,6 @@ use eZ\Publish\Core\FieldType\Page\Parts;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use SimpleXMLElement;
-use DOMDocument;
 use PHPUnit_Framework_TestCase;
 
 class PageTest extends PHPUnit_Framework_TestCase

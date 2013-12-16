@@ -13,6 +13,7 @@ use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
+use Symfony\Component\HttpFoundation\Request;
 
 class RouterTest extends PHPUnit_Framework_TestCase
 {
@@ -58,8 +59,24 @@ class RouterTest extends PHPUnit_Framework_TestCase
                     83 => "first_sa",
                     85 => "first_sa",
                 ),
+                'Compound\\LogicalAnd' => array(
+                    array(
+                        'matchers'  => array(
+                            'Map\\URI' => array( 'eng' => true ),
+                            'Map\\Host' => array( 'fr.ezpublish.dev' => true )
+                        ),
+                        'match'     => 'fr_eng'
+                    ),
+                    array(
+                        'matchers'  => array(
+                            'Map\\URI' => array( 'fre' => true ),
+                            'Map\\Host' => array( 'us.ezpublish.dev' => true )
+                        ),
+                        'match'     => 'fr_us'
+                    ),
+                ),
             ),
-            array( 'first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'headerbased_sa' )
+            array( 'first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'headerbased_sa', 'fr_eng', 'fr_us' )
         );
     }
 
@@ -78,6 +95,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
         $this->assertSame( $siteAccess, $sa->name );
+        // SiteAccess must be serializable as a whole
+        // See https://jira.ez.no/browse/EZP-21613
+        $this->assertInternalType( 'string', serialize( $sa ) );
         $router->setSiteAccess();
     }
 
@@ -117,10 +137,12 @@ class RouterTest extends PHPUnit_Framework_TestCase
     public function testMatchWithRequestHeader( $router )
     {
         $saName = 'headerbased_sa';
+        $request = Request::create( '/foo/bar' );
+        $request->headers->set( 'X-Siteaccess', $saName );
         $sa = $router->match(
             new SimplifiedRequest(
                 array(
-                    'headers' => array( 'X-Siteaccess' => $saName )
+                    'headers' => $request->headers->all()
                 )
             )
         );
@@ -188,6 +210,9 @@ class RouterTest extends PHPUnit_Framework_TestCase
             array( SimplifiedRequest::fromUrl( "http://example.com:82/" ), "fourth_sa" ),
             array( SimplifiedRequest::fromUrl( "https://example.com:82/" ), "fourth_sa" ),
             array( SimplifiedRequest::fromUrl( "https://example.com:82/foo" ), "fourth_sa" ),
+
+            array( SimplifiedRequest::fromUrl( 'http://fr.ezpublish.dev/eng' ), 'fr_eng' ),
+            array( SimplifiedRequest::fromUrl( 'http://us.ezpublish.dev/fre' ), 'fr_us' ),
         );
     }
 }

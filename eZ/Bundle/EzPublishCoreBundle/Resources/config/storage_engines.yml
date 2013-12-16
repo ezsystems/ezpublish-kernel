@@ -9,6 +9,7 @@ parameters:
     ezpublish.spi.persistence.cache.contentTypeHandler.class: eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
     ezpublish.spi.persistence.cache.userHandler.class: eZ\Publish\Core\Persistence\Cache\UserHandler
     ezpublish.spi.persistence.cache.searchHandler.class: eZ\Publish\Core\Persistence\Cache\SearchHandler
+    ezpublish.spi.persistence.cache.trashHandler.class: eZ\Publish\Core\Persistence\Cache\TrashHandler
     ezpublish.spi.persistence.cache.urlAliasHandler.class: eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     # Make sure logging is only enabled for debug by default
@@ -27,35 +28,35 @@ parameters:
     # Legacy storage engine configuration
     # Transformation parser/compiler for search purpose
 
-    ezpublish.api.storage_engine.legacy.pcre_compiler.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PcreCompiler
-    ezpublish.api.storage_engine.legacy.transformation_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter
+    ezpublish.api.storage_engine.pcre_compiler.class: eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler
+    ezpublish.api.storage_engine.transformation_converter.class: eZ\Publish\Core\Persistence\Utf8Converter
 
     # Using definition files:
     #
-    # ezpublish.api.storage_engine.legacy.transformation_processor.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased
-    ezpublish.api.storage_engine.legacy.transformation_parser.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\DefinitionBased\Parser
-    # # Transormation rules resources.
+    # ezpublish.api.storage_engine.transformation_processor.class: eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased
+    ezpublish.api.storage_engine.transformation_parser.class: eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser
+    # # Transformation rules resources.
     # # @todo: Should they be somewhat configurable for the developer?
-    ezpublish.api.storage_engine.legacy.transformation_rules.resources:
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/ascii.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/basic.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/cyrillic.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/greek.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/hebrew.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/latin.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/search.tr
+    ezpublish.api.storage_engine.transformation_rules.resources:
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/basic.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/cyrillic.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/greek.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/hebrew.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/latin.tr
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr
 
     # Using preprocessed files:
     #
-    ezpublish.api.storage_engine.legacy.transformation_processor.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor\PreprocessedBased
-    ezpublish.api.storage_engine.legacy.preprocessed_transformation_rules.resources:
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/ascii.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/basic.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/cyrillic.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/greek.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/hebrew.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/latin.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Tests/Content/SearchHandler/_fixtures/transformations/search.tr.result
+    ezpublish.api.storage_engine.transformation_processor.class: eZ\Publish\Core\Persistence\TransformationProcessor\PreprocessedBased
+    ezpublish.api.storage_engine.preprocessed_transformation_rules.resources:
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/basic.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/cyrillic.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/greek.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/hebrew.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/latin.tr.result
+        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr.result
 
     # XmlText XSLT converters
     ezpublish.fieldType.ezxmltext.converter.xslt_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText\XsltConverter
@@ -117,8 +118,10 @@ services:
             - @ezpublish.spi.persistence.cache.contentTypeHandler
             - @ezpublish.spi.persistence.cache.userHandler
             - @ezpublish.spi.persistence.cache.searchHandler
+            - @ezpublish.spi.persistence.cache.trashHandler
             - @ezpublish.spi.persistence.cache.urlAliasHandler
             - @ezpublish.spi.persistence.cache.persistenceLogger
+            - @ezpublish.cache_pool.spi.cache.decorator
 
     ezpublish.spi.persistence.lazy_factory:
         class: %ezpublish.spi.persistence.lazy_factory.class%
@@ -135,7 +138,7 @@ services:
         class: %ezpublish.spi.persistence.cache.abstractHandler.class%
         abstract:  true
         arguments:
-            - @cache
+            - @ezpublish.cache_pool.spi.cache.decorator
             - @ezpublish.spi.persistence.lazy_factory
             - @ezpublish.spi.persistence.cache.persistenceLogger
 
@@ -165,6 +168,10 @@ services:
 
     ezpublish.spi.persistence.cache.searchHandler:
         class: %ezpublish.spi.persistence.cache.searchHandler.class%
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
+    ezpublish.spi.persistence.cache.trashHandler:
+        class: %ezpublish.spi.persistence.cache.trashHandler.class%
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.urlAliasHandler:
@@ -206,30 +213,30 @@ services:
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
 
-    ezpublish.api.storage_engine.legacy.transformation_parser:
-        class: %ezpublish.api.storage_engine.legacy.transformation_parser.class%
+    ezpublish.api.storage_engine.transformation_parser:
+        class: %ezpublish.api.storage_engine.transformation_parser.class%
         arguments: [%kernel.root_dir%]
 
-    ezpublish.api.storage_engine.legacy.pcre_compiler:
-        class: %ezpublish.api.storage_engine.legacy.pcre_compiler.class%
-        arguments: [@ezpublish.api.storage_engine.legacy.transformation_converter]
+    ezpublish.api.storage_engine.pcre_compiler:
+        class: %ezpublish.api.storage_engine.pcre_compiler.class%
+        arguments: [@ezpublish.api.storage_engine.transformation_converter]
 
-    ezpublish.api.storage_engine.legacy.transformation_converter:
-        class: %ezpublish.api.storage_engine.legacy.transformation_converter.class%
+    ezpublish.api.storage_engine.transformation_converter:
+        class: %ezpublish.api.storage_engine.transformation_converter.class%
 
-    ezpublish.api.storage_engine.legacy.transformation_processor:
-        class: %ezpublish.api.storage_engine.legacy.transformation_processor.class%
+    ezpublish.api.storage_engine.transformation_processor:
+        class: %ezpublish.api.storage_engine.transformation_processor.class%
         arguments:
             # Using definition files:
             #
-            # - @ezpublish.api.storage_engine.legacy.transformation_parser
-            # - @ezpublish.api.storage_engine.legacy.pcre_compiler
-            # - %ezpublish.api.storage_engine.legacy.transformation_rules.resources%
+            # - @ezpublish.api.storage_engine.transformation_parser
+            # - @ezpublish.api.storage_engine.pcre_compiler
+            # - %ezpublish.api.storage_engine.transformation_rules.resources%
 
             # Using preprocessed files:
-            - @ezpublish.api.storage_engine.legacy.pcre_compiler
+            - @ezpublish.api.storage_engine.pcre_compiler
             - %kernel.root_dir%
-            - %ezpublish.api.storage_engine.legacy.preprocessed_transformation_rules.resources%
+            - %ezpublish.api.storage_engine.preprocessed_transformation_rules.resources%
 
     # Field type converters for legacy
     ezpublish.fieldType.ezauthor.converter:

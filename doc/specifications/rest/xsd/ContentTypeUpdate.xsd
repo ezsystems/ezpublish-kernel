@@ -96,7 +96,7 @@
         minOccurs="0">
         <xsd:annotation>
           <xsd:documentation>
-            if an instance of acontent type is
+            if an instance of a content type is
             created
             the always available
             flag is set by default this

@@ -16,7 +16,6 @@ use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\UserService;
-use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class UserServiceTest extends ServiceTest
 {
@@ -154,6 +153,18 @@ class UserServiceTest extends ServiceTest
                 'loadUserByCredentials',
                 array( "admin", "with great power comes great responsibility" ),
                 $user,
+                0
+            ),
+            array(
+                'loadUserByLogin',
+                array( "admin" ),
+                $user,
+                0
+            ),
+            array(
+                'loadUsersByEmail',
+                array( "admin@ez.no" ),
+                array( $user ),
                 0
             ),
             array(

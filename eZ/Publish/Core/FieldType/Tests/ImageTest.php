@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Image\Type as ImageType;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -55,7 +54,10 @@ class ImageTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new ImageType();
+        $fieldType = new ImageType();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -88,7 +90,7 @@ class ImageTest extends FieldTypeTest
     /**
      * Returns the empty value expected from the field type.
      *
-     * @return void
+     * @return ImageValue
      */
     protected function getEmptyValueExpectation()
     {
@@ -411,6 +413,41 @@ class ImageTest extends FieldTypeTest
                 ),
             )
             // @todo: Provide REST upload tests
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezimage';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array(
+                new ImageValue( array( 'fileName' => 'Sindelfingen-Squirrels.jpg' ) ),
+                'Sindelfingen-Squirrels.jpg',
+            ),
+            // Alternative text has priority
+            array(
+                new ImageValue(
+                    array(
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'alternativeText' => 'This is so Sindelfingen!'
+                    )
+                ),
+                'This is so Sindelfingen!'
+            ),
+            array(
+                new ImageValue(
+                    array(
+                        'fileName' => 'Sindelfingen-Squirrels.jpg',
+                        'alternativeText' => 'This is so Sindelfingen!'
+                    )
+                ),
+                'This is so Sindelfingen!'
+            )
         );
     }
 }

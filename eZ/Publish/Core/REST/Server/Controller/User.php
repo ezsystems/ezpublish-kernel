@@ -28,7 +28,6 @@ use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
-use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException AS RestInvalidArgumentException;
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException AS RestNotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;

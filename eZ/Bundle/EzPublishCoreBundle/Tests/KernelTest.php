@@ -62,7 +62,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             ->setMethods( array( 'handle', 'getCachePool' ) )
             ->getMockForAbstractClass();
 
-        // Set expectactions for cache.
+        // Set expectations for cache.
         // Note that we will call generateUserHash() twice.
         // The first time, cache is being generated, the second time hash is stored in memory.
         $cacheItem = $this
@@ -225,6 +225,43 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             )
         );
         $request->server->set( 'REMOTE_ADDR', '127.0.0.1' );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Kernel $kernel */
+        $kernel = $this
+            ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\Kernel' )
+            ->disableOriginalConstructor()
+            ->setMethods( array( 'generateUserHash' ) )
+            ->getMockForAbstractClass();
+        $kernel
+            ->expects( $this->once() )
+            ->method( 'generateUserHash' )
+            ->with( $request )
+            ->will( $this->returnValue( $hash ) );
+
+        $response = $kernel->handle( $request );
+        $this->assertInstanceOf( 'Symfony\\Component\\HttpFoundation\\Response', $response );
+        $this->assertSame( 200, $response->getStatusCode() );
+        $this->assertSame( $hash, $response->headers->get( 'X-User-Hash' ) );
+    }
+
+    /**
+     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::handle
+     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::isUserHashRequest
+     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::canGenerateUserHash
+     */
+    public function testHandleAuthenticateWithTrustedProxy()
+    {
+        Request::setTrustedProxies( array( '10.11.12.13' ) );
+
+        $hash = '123abc';
+        $request = new Request();
+        $request->headers->add(
+            array(
+                'X-HTTP-Override' => 'AUTHENTICATE',
+                'Accept' => Kernel::USER_HASH_ACCEPT_HEADER
+            )
+        );
+        $request->server->set( 'REMOTE_ADDR', '10.11.12.13' );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|Kernel $kernel */
         $kernel = $this

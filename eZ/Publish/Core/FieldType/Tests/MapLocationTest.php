@@ -27,7 +27,10 @@ class MapLocationTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new MapLocation\Type();
+        $fieldType = new MapLocation\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -314,6 +317,19 @@ class MapLocationTest extends FieldTypeTest
                     )
                 ),
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezgmaplocation';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new MapLocation\Value( array( 'address' => 'Bag End, The Shire' ) ), "Bag End, The Shire" )
         );
     }
 }

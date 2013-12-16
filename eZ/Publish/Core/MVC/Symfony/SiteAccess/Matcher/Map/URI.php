@@ -43,7 +43,7 @@ class URI extends Map implements Matcher, URILexer
      */
     public function analyseURI( $uri )
     {
-        return str_replace( "/$this->key", '', $uri );
+        return substr( $uri, strlen( "/$this->key" ) );
     }
 
     /**
@@ -55,6 +55,9 @@ class URI extends Map implements Matcher, URILexer
      */
     public function analyseLink( $linkUri )
     {
+        // Joining slash between uriElements and actual linkUri must be present, except if $linkUri is empty.
+        $joiningSlash = empty( $linkUri ) ? '' : '/';
+        $linkUri = ltrim( $linkUri, '/' );
         // Removing query string to analyse as SiteAccess might be in it.
         $qsPos = strpos( $linkUri, '?' );
         $queryString = '';
@@ -64,12 +67,7 @@ class URI extends Map implements Matcher, URILexer
             $linkUri = substr( $linkUri, 0, $qsPos );
         }
 
-        if ( strpos( $linkUri, $this->key ) === false )
-        {
-            $linkUri = '/' . $this->key . $linkUri;
-        }
-
-        return $linkUri . $queryString;
+        return "/{$this->key}{$joiningSlash}{$linkUri}{$queryString}";
     }
 
 }

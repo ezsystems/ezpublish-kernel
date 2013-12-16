@@ -661,17 +661,6 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * Returns parent path string for $pathString
-     * @param string $pathString
-     *
-     * @return string
-     */
-    private function getParentPathString( $pathString )
-    {
-        return substr( $pathString, 0, -2 );
-    }
-
-    /**
      * Returns pathIdentificationString for provided location value object
      * @param \eZ\Publish\SPI\Persistence\Content\Location $vo
      *

@@ -13,7 +13,6 @@ use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractF
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 class Factory extends AbstractFactory
 {

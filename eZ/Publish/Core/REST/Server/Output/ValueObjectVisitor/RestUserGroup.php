@@ -117,7 +117,10 @@ class RestUserGroup extends ValueObjectVisitor
         $generator->startValueElement( 'mainLanguageCode', $contentInfo->mainLanguageCode );
         $generator->endValueElement( 'mainLanguageCode' );
 
-        $generator->startValueElement( 'alwaysAvailable', $contentInfo->alwaysAvailable ? 'true' : 'false' );
+        $generator->startValueElement(
+            'alwaysAvailable',
+            $this->serializeBool( $generator, $contentInfo->alwaysAvailable )
+        );
         $generator->endValueElement( 'alwaysAvailable' );
 
         $visitor->visitValueObject(

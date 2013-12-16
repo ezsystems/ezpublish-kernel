@@ -54,10 +54,9 @@ class IntegerIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezint',
-            new FieldType\Integer\Type()
-        );
+        $fieldType = new FieldType\Integer\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezint', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezint',
             new FieldType\NullStorage()

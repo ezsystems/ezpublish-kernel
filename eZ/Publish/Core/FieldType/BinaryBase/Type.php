@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\FieldType\BinaryBase;
 
 use eZ\Publish\Core\FieldType\FieldType;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -56,7 +55,7 @@ abstract class Type extends FieldType
      */
     public function getName( SPIValue $value )
     {
-        return $value->fileName;
+        return (string)$value->fileName;
     }
 
     /**

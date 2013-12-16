@@ -33,7 +33,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as Crite
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status as CriterionStatus;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
@@ -219,11 +218,10 @@ class UserService implements UserServiceInterface
         $searchQuery->offset = $offset >= 0 ? (int)$offset : 0;
         $searchQuery->limit = $limit >= 0 ? (int)$limit  : null;
 
-        $searchQuery->criterion = new CriterionLogicalAnd(
+        $searchQuery->filter = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
-                new CriterionParentLocationId( $locationId ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+                new CriterionParentLocationId( $locationId )
             )
         );
 
@@ -578,7 +576,6 @@ class UserService implements UserServiceInterface
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if multiple users with same login were found
      */
     public function loadUserByCredentials( $login, $password )
     {
@@ -591,29 +588,59 @@ class UserService implements UserServiceInterface
         // Randomize login time to protect against timing attacks
         usleep( mt_rand( 0, 30000 ) );
 
-        $spiUsers = $this->userHandler->loadByLogin( $login );
-
-        if ( empty( $spiUsers ) )
-            throw new NotFoundException( "user", $login );
-
-        if ( count( $spiUsers ) > 1 )
-        {
-            // something went wrong, we should not have more than one
-            // user with the same login
-            throw new BadStateException( "login", 'found several users with same login' );
-        }
-
+        $spiUser = $this->userHandler->loadByLogin( $login );
         $passwordHash = $this->createPasswordHash(
             $login,
             $password,
             $this->settings['siteName'],
-            $spiUsers[0]->hashAlgorithm
+            $spiUser->hashAlgorithm
         );
 
-        if ( $spiUsers[0]->passwordHash !== $passwordHash )
+        if ( $spiUser->passwordHash !== $passwordHash )
             throw new NotFoundException( "user", $login );
 
-        return $this->buildDomainUserObject( $spiUsers[0] );
+        return $this->buildDomainUserObject( $spiUser );
+    }
+
+    /**
+     * Loads a user for the given login
+     *
+     * @param string $login
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
+     */
+    public function loadUserByLogin( $login )
+    {
+        if ( !is_string( $login ) || empty( $login ) )
+            throw new InvalidArgumentValue( "login", $login );
+
+        $spiUser = $this->userHandler->loadByLogin( $login );
+        return $this->buildDomainUserObject( $spiUser );
+    }
+
+    /**
+     * Loads a user for the given email
+     *
+     * Returns an array of Users since eZ Publish has under certain circumstances allowed
+     * several users having same email in the past (by means of a configuration option).
+     *
+     * @param string $email
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User[]
+     */
+    public function loadUsersByEmail( $email )
+    {
+        if ( !is_string( $email ) || empty( $email ) )
+            throw new InvalidArgumentValue( "email", $email );
+
+        $users = array();
+        foreach ( $this->userHandler->loadByEmail( $email ) as $spiUser )
+        {
+            $users[] = $this->buildDomainUserObject( $spiUser );
+        }
+        return $users;
     }
 
     /**
@@ -891,11 +918,10 @@ class UserService implements UserServiceInterface
         $searchQuery->offset = 0;
         $searchQuery->limit = null;
 
-        $searchQuery->criterion = new CriterionLogicalAnd(
+        $searchQuery->filter = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
-                new CriterionLocationId( $parentLocationIds ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+                new CriterionLocationId( $parentLocationIds )
             )
         );
 
@@ -934,11 +960,10 @@ class UserService implements UserServiceInterface
 
         $searchQuery = new Query();
 
-        $searchQuery->criterion = new CriterionLogicalAnd(
+        $searchQuery->filter = new CriterionLogicalAnd(
             array(
                 new CriterionContentTypeId( $this->settings['userClassID'] ),
-                new CriterionParentLocationId( $mainGroupLocation->id ),
-                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+                new CriterionParentLocationId( $mainGroupLocation->id )
             )
         );
 

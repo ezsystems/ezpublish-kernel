@@ -54,10 +54,9 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezemail',
-            new FieldType\EmailAddress\Type()
-        );
+        $fieldType = new FieldType\EmailAddress\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezemail', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezemail',
             new FieldType\NullStorage()

@@ -111,6 +111,7 @@ parameters:
     ezpublish_rest.output.value_object_visitor.ResourceCreated.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ResourceCreated
     ezpublish_rest.output.value_object_visitor.PermanentRedirect.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\PermanentRedirect
     ezpublish_rest.output.value_object_visitor.TemporaryRedirect.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\TemporaryRedirect
+    ezpublish_rest.output.value_object_visitor.Options.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Options
 
 services:
     ezpublish_rest.output.value_object_visitor.base:
@@ -609,3 +610,10 @@ services:
         arguments: [ true  ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\Conflict }
+
+    ezpublish_rest.output.value_object_visitor.Options:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.Options.class%
+        arguments: [ true  ]
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\Options }

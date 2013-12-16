@@ -198,7 +198,7 @@ class Pattern implements RequestParser
 
         if ( !isset( $parsingResult[$attribute] ) )
         {
-            throw new InvalidArgumentException( "No such attribute '$attribute' in route matched from $href\n" . print_r( $parsingResult, true ) );
+            throw new Exceptions\InvalidArgumentException( "No such attribute '$attribute' in route matched from $href\n" . print_r( $parsingResult, true ) );
         }
 
         return $parsingResult[$attribute];

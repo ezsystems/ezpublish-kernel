@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 
 /**
  * URL slug converter.
@@ -141,14 +141,14 @@ class SlugConverter
     /**
      * Transformation processor to normalize URL strings
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
      */
     protected $transformationProcessor;
 
     /**
      * Creates a new URL slug converter
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $transformationProcessor
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
      * @param array $configuration
      */
     public function __construct( TransformationProcessor $transformationProcessor, array $configuration = array() )

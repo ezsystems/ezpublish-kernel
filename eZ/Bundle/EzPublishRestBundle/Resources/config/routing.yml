@@ -1069,10 +1069,3 @@ ezpublish_rest_deleteURLAlias:
     defaults:
         _controller: ezpublish_rest.controller.url_alias:deleteURLAlias
     methods: [DELETE]
-
-ezpublis_rest_catchAll:
-    path: /{requestUri}
-    defaults:
-        _controller: ezpublish_rest.controller.root:catchAll
-    requirements:
-        requestUri: ".*"

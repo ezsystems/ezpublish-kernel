@@ -55,7 +55,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      * @param string $languageCode
      * @param boolean $alwaysAvailable
      *
-     * @return void Does not return the UrlAlias created / updated with type URLAlias::LOCATION
+     * @return void Does not return the UrlAlias created / updated with type UrlAlias::LOCATION
      */
     public function publishUrlAliasForLocation( $locationId, $parentLocationId, $name, $languageCode, $alwaysAvailable = false )
     {
@@ -69,7 +69,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
         $pathData = $parentLocationAlias->pathData;
         $data = array(
             'parent' => $parentLocationAlias->id["link"],
-            'type' => URLAlias::LOCATION,
+            'type' => UrlAlias::LOCATION,
             'destination' => $locationId,
             'pathData' => $pathData,
             'languageCodes' => array( $languageCode ),
@@ -104,8 +104,8 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             }
 
             // Possibly reusable alias exists, check if it is reusable
-            if ( $reusableAlias->type == URLAlias::VIRTUAL
-                || ( $reusableAlias->type == URLAlias::LOCATION && $reusableAlias->destination == $locationId )
+            if ( $reusableAlias->type == UrlAlias::VIRTUAL
+                || ( $reusableAlias->type == UrlAlias::LOCATION && $reusableAlias->destination == $locationId )
                 || $reusableAlias->isHistory )
             {
                 // Check for existing active location entry on this level and reuse it
@@ -327,7 +327,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
      * @param string|null $languageCode
      * @param boolean $alwaysAvailable
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias With $type = URLAlias::RESOURCE
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlAlias With $type = UrlAlias::RESOURCE
      */
     protected function createUrlAlias( $resource, $path, $forwarding = false, $languageCode = null, $alwaysAvailable = false )
     {
@@ -354,7 +354,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
                         array(
                             'parent' => $parentId,
                             'link' => $this->getNextLinkId(),
-                            'type' => URLAlias::VIRTUAL,
+                            'type' => UrlAlias::VIRTUAL,
                             'destination' => null,
                             'pathData' => $pathData,
                             'languageCodes' => array(),
@@ -385,7 +385,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
         $data = array(
             'parent' => $parentId,
             'link' => $this->getNextLinkId(),
-            'type' => $matches[1] === "eznode" ? URLAlias::LOCATION : URLAlias::RESOURCE,
+            'type' => $matches[1] === "eznode" ? UrlAlias::LOCATION : UrlAlias::RESOURCE,
             'destination' => isset( $matches[2] ) ? $matches[2] : false,
             'pathData' => $pathData,
             'languageCodes' => array( $languageCode ),
@@ -400,7 +400,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
         {
             $alias = $this->backend->create( 'Content\\UrlAlias', $data );
         }
-        else if ( $reusableAlias->type == URLAlias::VIRTUAL || $reusableAlias->isHistory )
+        else if ( $reusableAlias->type == UrlAlias::VIRTUAL || $reusableAlias->isHistory )
         {
             $this->downgrade( $reusableAlias, $languageCode );
             $alias = $this->backend->create( 'Content\\UrlAlias', $data );
@@ -463,7 +463,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     public function listGlobalURLAliases( $languageCode = null, $offset = 0, $limit = -1 )
     {
         $filter = array(
-            'type' => URLAlias::RESOURCE,
+            'type' => UrlAlias::RESOURCE,
             'isHistory' => false,
             'isCustom' => true
         );
@@ -504,7 +504,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             'Content\\UrlAlias',
             array(
                 'destination' => $locationId,
-                'type' => URLAlias::LOCATION,
+                'type' => UrlAlias::LOCATION,
                 'isCustom' => $custom,
                 'isHistory' => false
             )
@@ -683,7 +683,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             array(
                 'parent' => $newParentLocationAlias->id["link"],
                 'link' => $this->getNextLinkId(),
-                'type' => URLAlias::LOCATION,
+                'type' => UrlAlias::LOCATION,
                 'destination' => $locationId,
                 'pathData' => $pathData,
                 'languageCodes' => array_keys( $pathData[$pathIndex]['translations'] ),
@@ -699,7 +699,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             'Content\\UrlAlias',
             array(
                 'parent' => $oldParentLocationAlias->id["link"],
-                'type' => URLAlias::LOCATION,
+                'type' => UrlAlias::LOCATION,
                 'isHistory' => false,
                 'isCustom' => false
             )
@@ -733,7 +733,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
     {
         $match = array(
             'destination' => $locationId,
-            'type' => URLAlias::LOCATION,
+            'type' => UrlAlias::LOCATION,
             'isHistory' => false,
             'isCustom' => false
         );
@@ -771,7 +771,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             'Content\\UrlAlias',
             array(
                 'destination' => $locationId,
-                'type' => URLAlias::LOCATION,
+                'type' => UrlAlias::LOCATION,
                 'isHistory' => false,
                 'isCustom' => false
             )
@@ -791,7 +791,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             'Content\\UrlAlias',
             array(
                 'destination' => $newParentId,
-                'type' => URLAlias::LOCATION,
+                'type' => UrlAlias::LOCATION,
                 'isHistory' => false,
                 'isCustom' => false
             )
@@ -813,7 +813,7 @@ class UrlAliasHandler implements UrlAliasHandlerInterface
             array(
                 'parent' => $list[0]->id["link"],
                 'link' => $this->getNextLinkId(),
-                'type' => URLAlias::LOCATION,
+                'type' => UrlAlias::LOCATION,
                 'destination' => $locationId,
                 'pathData' => $pathData,
                 'languageCodes' => array_keys( $pathData[$pathIndex]['translations'] ),

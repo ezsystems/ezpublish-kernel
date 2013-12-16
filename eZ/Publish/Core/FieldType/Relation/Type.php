@@ -196,8 +196,6 @@ class Type extends FieldType
      * Returns information for FieldValue->$sortKey relevant to the field type.
      * For this FieldType, the related object's name is returned.
      *
-     * @todo Repository needs to be provided to be able to get Content Relation name(s), and it is in ctor
-     *
      * @param \eZ\Publish\Core\FieldType\Relation\Value $value
      *
      * @return mixed

@@ -14,7 +14,16 @@ should not remove or drastically change the existing definitions.
     <!--
       Default types by Solr. Will be reused for dynamic fields.
     -->
-    <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+    <fieldType name="string" class="solr.TextField" sortMissingLast="true">
+      <analyzer type="index">
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.KeywordTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
     <fieldType name="identifier" class="solr.StrField" sortMissingLast="true" />
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
     <fieldtype name="binary" class="solr.BinaryField"/>
@@ -91,6 +100,7 @@ should not remove or drastically change the existing definitions.
     <dynamicField name="*_t" type="text" indexed="true" stored="true"/>
     <dynamicField name="*_h" type="html" indexed="true" stored="false"/>
     <dynamicField name="*_b" type="boolean" indexed="true" stored="true"/>
+    <dynamicField name="*_mb" type="boolean" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="*_f" type="float" indexed="true" stored="true"/>
     <dynamicField name="*_d" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_dt" type="date" indexed="true" stored="true"/>
@@ -105,6 +115,11 @@ should not remove or drastically change the existing definitions.
     <copyField source="*_t" dest="text" />
     <copyField source="*_s" dest="text" />
     <copyField source="*_h" dest="text" />
+
+    <!--
+      This field is required since Solr 4
+    -->
+    <field name="_version_" type="long" indexed="true" stored="true" multiValued="false" />
   </fields>
 
   <uniqueKey>id</uniqueKey>

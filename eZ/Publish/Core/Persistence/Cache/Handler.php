@@ -18,8 +18,8 @@ use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLang
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
+use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
-use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
  * Persistence Cache Handler class
@@ -67,6 +67,11 @@ class Handler implements PersistenceHandlerInterface
     protected $searchHandler;
 
     /**
+     * @var TrashHandler
+     */
+    protected $trashHandler;
+
+    /**
      * @var UrlAliasHandler
      */
     protected $urlAliasHandler;
@@ -75,6 +80,11 @@ class Handler implements PersistenceHandlerInterface
      * @var PersistenceLogger
      */
     protected $logger;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
+     */
+    protected $cache;
 
     /**
      * Construct the class
@@ -87,8 +97,10 @@ class Handler implements PersistenceHandlerInterface
      * @param ContentTypeHandler $contentTypeHandler
      * @param UserHandler $userHandler
      * @param SearchHandler $searchHandler
+     * @param TrashHandler $trashHandler
      * @param UrlAliasHandler $urlAliasHandler
      * @param PersistenceLogger $logger
+     * @param CacheServiceDecorator $cache
      */
     public function __construct(
         PersistenceFactory $persistenceFactory,
@@ -99,8 +111,10 @@ class Handler implements PersistenceHandlerInterface
         CacheContentTypeHandler $contentTypeHandler,
         CacheUserHandler $userHandler,
         CacheSearchHandler $searchHandler,
+        CacheTrashHandler $trashHandler,
         CacheUrlAliasHandler $urlAliasHandler,
-        PersistenceLogger $logger
+        PersistenceLogger $logger,
+        CacheServiceDecorator $cache
     )
     {
         $this->persistenceFactory = $persistenceFactory;
@@ -111,8 +125,10 @@ class Handler implements PersistenceHandlerInterface
         $this->contentTypeHandler = $contentTypeHandler;
         $this->userHandler = $userHandler;
         $this->searchHandler = $searchHandler;
+        $this->trashHandler = $trashHandler;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->logger = $logger;
+        $this->cache = $cache;
     }
 
     /**
@@ -185,8 +201,7 @@ class Handler implements PersistenceHandlerInterface
      */
     public function trashHandler()
     {
-        $this->logger->logUnCachedHandler( __METHOD__ );
-        return $this->persistenceFactory->getTrashHandler();
+        return $this->trashHandler;
     }
 
     /**
@@ -209,6 +224,7 @@ class Handler implements PersistenceHandlerInterface
     /**
      * Begin transaction
      *
+     * @todo Either disable cache or layer it with in-memory cache per transaction (last layer would be the normal layer)
      * Begins an transaction, make sure you'll call commit or rollback when done,
      * otherwise work will be lost.
      */
@@ -241,6 +257,7 @@ class Handler implements PersistenceHandlerInterface
     public function rollback()
     {
         $this->logger->logCall( __METHOD__ );
+        $this->cache->clear();
         $this->persistenceFactory->getPersistenceHandler()->rollback();
     }
 }

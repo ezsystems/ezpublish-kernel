@@ -122,7 +122,7 @@ interface ContentService
      * If no version number is given, the method returns the current version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the user has no access to read content and in case of un-published content: read versions
      *
      * @param mixed $contentId
      * @param array $languages A language filter for fields. If not given all languages are returned
@@ -138,7 +138,7 @@ interface ContentService
      * If no version is given, the method returns the current version
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content or version with the given remote id does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the user has no access to read content and in case of un-published content: read versions
      *
      * @param string $remoteId
      * @param array $languages A language filter for fields. If not given all languages are returned

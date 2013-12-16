@@ -59,7 +59,7 @@ class Configuration implements EventSubscriberInterface
      * Disables the feature when set using setIsEnabled()
      * @var bool
      */
-    private $isEnabled = true;
+    private $enabled = true;
 
     public function __construct(
         ConfigResolverInterface $configResolver,
@@ -82,9 +82,9 @@ class Configuration implements EventSubscriberInterface
      * Toggles the feature
      * @param bool $isEnabled
      */
-    public function setIsEnabled( $isEnabled )
+    public function setEnabled( $isEnabled )
     {
-        $this->isEnabled = (bool)$isEnabled;
+        $this->enabled = (bool)$isEnabled;
     }
 
     public static function getSubscribedEvents()
@@ -103,7 +103,7 @@ class Configuration implements EventSubscriberInterface
      */
     public function onBuildKernel( PreBuildKernelEvent $event )
     {
-        if ( !$this->isEnabled )
+        if ( !$this->enabled )
         {
             return;
         }

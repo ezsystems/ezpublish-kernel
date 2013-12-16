@@ -107,7 +107,7 @@ class LegacyStorage extends Gateway
     /**
      * Stores the keyword list from $field->value->externalData
      *
-     * @param mixed $field
+     * @param mixed $fieldId
      */
     public function deleteFieldData( $fieldId )
     {

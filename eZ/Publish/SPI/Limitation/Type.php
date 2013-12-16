@@ -72,14 +72,18 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets An array of location, parent or "assignment"
+     *                                                                 objects, if null: none where provided by caller
      *
      * @return boolean
      */
-    public function evaluate( APILimitationValue $value, APIUser $currentUser, APIValueObject $object, array $targets = array() );
+    public function evaluate( APILimitationValue $value, APIUser $currentUser, APIValueObject $object, array $targets = null );
 
     /**
      * Returns Criterion for use in find() query
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If the limitation does not support
+     *         being used as a Criterion.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser

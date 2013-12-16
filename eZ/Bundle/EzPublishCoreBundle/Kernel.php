@@ -78,7 +78,7 @@ abstract class Kernel extends BaseKernel
 
     /**
      * Checks if current request is allowed to generate the user hash.
-     * Default behavior is to only accept local IP addresses:
+     * Default behavior is to accept values set in TRUSTED_PROXIES env variable and local IP addresses:
      *  - 127.0.0.1
      *  - ::1
      *  - fe80::1
@@ -89,9 +89,19 @@ abstract class Kernel extends BaseKernel
      */
     protected function canGenerateUserHash( Request $request )
     {
+        $trustedProxies = array_unique(
+            array_merge(
+                Request::getTrustedProxies(),
+                array(
+                    '127.0.0.1',
+                    '::1',
+                    'fe80::1'
+                )
+            )
+        );
         return
             $request->attributes->get( 'internalRequest' )
-            || in_array( $request->getClientIp(), array( '127.0.0.1', '::1', 'fe80::1' ) );
+            || in_array( $request->getClientIp(), $trustedProxies );
     }
 
     /**

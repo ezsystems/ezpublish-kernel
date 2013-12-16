@@ -447,10 +447,12 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the identifier in already exists in the content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
+     *         if a field definition in the $contentTypeCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If field definition of the same non-repeatable type is being
      *                                                                 added to the ContentType that already contains one
-     *                                                                 or 'ezuser' type field definition is being added to the
-     *                                                                 ContentType that has Content instances
+     *                                                                 or field definition that can't be added to a ContentType that
+     *                                                                 has Content instances is being added to such ContentType
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct

@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -304,7 +303,7 @@ class Handler implements UrlAliasHandlerInterface
         $isPathNew = false;
         foreach ( $pathElements as $level => $pathElement )
         {
-            $pathElement = $this->slugConverter->convert( $pathElement, "noname" . $level + 1 );
+            $pathElement = $this->slugConverter->convert( $pathElement, "noname" . ( $level + 1 ) );
             $pathElementMD5 = $this->getHash( $pathElement );
             if ( !$isPathNew )
             {
@@ -326,7 +325,7 @@ class Handler implements UrlAliasHandlerInterface
         }
 
         // Handle topmost path element
-        $topElement = $this->slugConverter->convert( $topElement, "noname" . count( $pathElements ) + 1 );
+        $topElement = $this->slugConverter->convert( $topElement, "noname" . ( count( $pathElements ) + 1 ) );
 
         // If last (next to topmost) entry parent is special root entry we handle topmost entry as first level entry
         // That is why we need to reset $parentId to 0 and empty $createdPath
@@ -356,7 +355,7 @@ class Handler implements UrlAliasHandlerInterface
         if ( $isPathNew || empty( $row ) )
         {
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
-            $this->gateway->insertRow( $data );
+            $id = $this->gateway->insertRow( $data );
         }
         // Row exists, check if it is reusable. There are 2 cases when this is possible:
         // 1. NOP entry
@@ -365,7 +364,7 @@ class Handler implements UrlAliasHandlerInterface
         {
             $data["lang_mask"] = $languageId | (int)$alwaysAvailable;
             // If history is reused move link to id
-            $data["link"] = $row["id"];
+            $data["link"] = $id = $row["id"];
             $this->gateway->updateRow(
                 $parentId,
                 $topElementMD5,
@@ -377,6 +376,7 @@ class Handler implements UrlAliasHandlerInterface
             throw new ForbiddenException( "Path '$path' already exists for the given language" );
         }
 
+        $data["raw_path_data"] = $this->gateway->loadPathData( $id );
         return $this->mapper->extractUrlAliasFromData( $data );
     }
 

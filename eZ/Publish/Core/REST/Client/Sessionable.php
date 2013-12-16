@@ -22,7 +22,7 @@ interface Sessionable
      *
      * Only for testing
      *
-     * @param mixed tringid
+     * @param mixed $id
      *
      * @private
      *

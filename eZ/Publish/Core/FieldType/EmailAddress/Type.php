@@ -113,7 +113,7 @@ class Type extends FieldType
      */
     public function getName( SPIValue $value )
     {
-        return (string)$value->email;
+        return $this->transformationProcessor->transformByGroup( (string)$value, "lowercase" );
     }
 
     /**

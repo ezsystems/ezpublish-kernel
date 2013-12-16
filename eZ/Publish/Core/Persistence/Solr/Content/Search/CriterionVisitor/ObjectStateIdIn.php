@@ -39,7 +39,7 @@ class ObjectStateIdIn extends CriterionVisitor
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
-     * @return void
+     * @return string
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
@@ -49,7 +49,7 @@ class ObjectStateIdIn extends CriterionVisitor
                 array_map(
                     function ( $value )
                     {
-                        return 'object_state_id:"' . $value . '"';
+                        return 'object_state_mid:"' . $value . '"';
                     },
                     $criterion->value
                 )

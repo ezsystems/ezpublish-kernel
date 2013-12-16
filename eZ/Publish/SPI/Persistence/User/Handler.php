@@ -10,9 +10,6 @@
 namespace eZ\Publish\SPI\Persistence\User;
 
 use eZ\Publish\SPI\Persistence\User;
-use eZ\Publish\SPI\Persistence\User\Role;
-use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
-use eZ\Publish\SPI\Persistence\User\Policy;
 
 /**
  * Storage Engine handler for user module
@@ -44,16 +41,31 @@ interface Handler
     public function load( $userId );
 
     /**
-     * Loads user(s) with user login / email.
+     * Loads user with user login.
      *
-     * Optimized for login use (hence the possibility to match email and return several users).
+     * Note: This method loads user by $login case in-sensitive on certain storage engines!
      *
      * @param string $login
-     * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
+     */
+    public function loadByLogin( $login );
+
+    /**
+     * Loads user(s) with user email.
+     *
+     * As earlier eZ Publish versions supported several users having same email (ini config),
+     * this function may return several users.
+     *
+     * Note: This method loads user by $email case in-sensitive on certain storage engines!
+     *
+     * @param string $email
      *
      * @return \eZ\Publish\SPI\Persistence\User[]
      */
-    public function loadByLogin( $login, $alsoMatchEmail = false );
+    public function loadByEmail( $email );
 
     /**
      * Update the user information specified by the user struct
@@ -173,14 +185,13 @@ interface Handler
     /**
      * Removes a policy from a role
      *
-     * @param mixed $roleId
      * @param mixed $policyId
      *
      * @todo Throw exception on missing role / policy?
      *
      * @return void
      */
-    public function removePolicy( $roleId, $policyId );
+    public function deletePolicy( $policyId );
 
     /**
      * Returns the user policies associated with the user (including inherited policies from user groups)

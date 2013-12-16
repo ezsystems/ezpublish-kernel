@@ -325,7 +325,7 @@ class ContentHandlerTest extends TestCase
         $gatewayMock
             ->expects( $this->once() )
             ->method( 'updateContent' )
-            ->with( 23, $metadataUpdateStruct );
+            ->with( 23, $metadataUpdateStruct, $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' ) );
 
         $locationMock
             ->expects( $this->once() )
@@ -475,6 +475,33 @@ class ContentHandlerTest extends TestCase
         $this->assertEquals(
             $result,
             $this->getContentFixtureForDraft()
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::loadContentInfoByRemoteId
+     *
+     * @return void
+     */
+    public function testLoadContentInfoByRemoteId()
+    {
+        $contentInfoData = array( new ContentInfo );
+        $this->getGatewayMock()->expects( $this->once() )
+            ->method( 'loadContentInfoByRemoteId' )
+            ->with(
+                $this->equalTo( "15b256dbea2ae72418ff5facc999e8f9" )
+            )->will(
+                $this->returnValue( array( 42 ) )
+            );
+
+        $this->getMapperMock()->expects( $this->once() )
+            ->method( 'extractContentInfoFromRow' )
+            ->with( $this->equalTo( array( 42 ) ) )
+            ->will( $this->returnValue( $contentInfoData ) );
+
+        $this->assertSame(
+            $contentInfoData,
+            $this->getContentHandler()->loadContentInfoByRemoteId( "15b256dbea2ae72418ff5facc999e8f9" )
         );
     }
 

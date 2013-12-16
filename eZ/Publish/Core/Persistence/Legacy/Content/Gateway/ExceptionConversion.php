@@ -118,14 +118,15 @@ class ExceptionConversion extends Gateway
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $prePublishVersionInfo Provided on publish
      *
      * @return void
      */
-    public function updateContent( $contentId, MetadataUpdateStruct $struct )
+    public function updateContent( $contentId, MetadataUpdateStruct $struct, VersionInfo $prePublishVersionInfo = null )
     {
         try
         {
-            return $this->innerGateway->updateContent( $contentId, $struct );
+            return $this->innerGateway->updateContent( $contentId, $struct, $prePublishVersionInfo );
         }
         catch ( ezcDbException $e )
         {
@@ -345,6 +346,31 @@ class ExceptionConversion extends Gateway
         catch ( PDOException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
+     * Loads data for a content object identified by its remote ID
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param mixed $remoteId
+     *
+     * @return array
+     */
+    public function loadContentInfoByRemoteId( $remoteId )
+    {
+        try
+        {
+            return $this->innerGateway->loadContentInfoByRemoteId( $remoteId );
+        }
+        catch ( \ezcDbException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( \PDOException $e )
+        {
+            throw new \RuntimeException( 'Database error', 0, $e );
         }
     }
 

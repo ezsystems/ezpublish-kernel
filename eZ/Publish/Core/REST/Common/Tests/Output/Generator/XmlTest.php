@@ -221,6 +221,15 @@ class XmlTest extends GeneratorTest
         );
     }
 
+    public function testSerializeBool()
+    {
+        $generator = $this->getGenerator();
+
+        $this->assertTrue( $generator->serializeBool( true ) === 'true' );
+        $this->assertTrue( $generator->serializeBool( false ) === 'false' );
+        $this->assertTrue( $generator->serializeBool( 'notbooleanbuttrue' ) === 'true' );
+    }
+
     protected function getGenerator()
     {
         if ( !isset( $this->generator ) )

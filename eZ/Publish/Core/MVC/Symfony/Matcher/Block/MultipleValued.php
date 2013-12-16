@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Block;
 
 use eZ\Publish\Core\MVC\RepositoryAware;
-use eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface;
 
 /**
  * Abstract class for basic matchers, accepting multiple values to match against.

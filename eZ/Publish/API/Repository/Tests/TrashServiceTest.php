@@ -488,7 +488,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // Create a search query for all trashed items
         $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
+        $query->filter = new Criterion\LogicalAnd(
             array(
                 new Criterion\Field( 'title', Criterion\Operator::LIKE, '*' )
             )
@@ -527,7 +527,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // Create a search query for all trashed items
         $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
+        $query->filter = new Criterion\LogicalAnd(
             array(
                 new Criterion\Field( 'title', Criterion\Operator::LIKE, '*' )
             )
@@ -570,7 +570,7 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // Create a search query for all trashed items
         $query = new Query();
-        $query->criterion = new Criterion\LogicalAnd(
+        $query->filter = new Criterion\LogicalAnd(
             array(
                 new Criterion\Field( 'title', Criterion\Operator::LIKE, '*' )
             )

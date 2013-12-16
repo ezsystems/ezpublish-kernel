@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\FieldType;
 
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -56,6 +57,21 @@ abstract class FieldType implements FieldTypeInterface
      * @var mixed
      */
     protected $validatorConfigurationSchema = array();
+
+    /**
+     * String transformation processor, used to normalize sort string as needed.
+     *
+     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
+     */
+    protected $transformationProcessor;
+
+    /**
+     * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
+     */
+    public function setTransformationProcessor( TransformationProcessor $transformationProcessor )
+    {
+        $this->transformationProcessor = $transformationProcessor;
+    }
 
     /**
      * Returns a schema for the settings expected by the FieldType
@@ -315,7 +331,17 @@ abstract class FieldType implements FieldTypeInterface
      */
     public function isSingular()
     {
-        return true;
+        return false;
+    }
+
+    /**
+     * Indicates if the field definition of this type can be added to a ContentType with Content instances.
+     *
+     * @return boolean
+     */
+    public function onlyEmptyInstance()
+    {
+        return false;
     }
 
     /**

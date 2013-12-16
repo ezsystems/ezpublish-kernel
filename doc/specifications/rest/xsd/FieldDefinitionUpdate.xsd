@@ -22,8 +22,8 @@
       <xsd:element name="position" type="xsd:int">
         <xsd:annotation>
           <xsd:documentation>
-            If set the the position of the field definition in
-            the content typr is changed
+            If set the position of the field definition in
+            the content type is changed
           </xsd:documentation>
         </xsd:annotation>
       </xsd:element>

@@ -54,10 +54,11 @@ abstract class Gateway
      *
      * @param int $contentId
      * @param \eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $prePublishVersionInfo Provided on publish
      *
      * @return void
      */
-    abstract public function updateContent( $contentId, MetadataUpdateStruct $struct );
+    abstract public function updateContent( $contentId, MetadataUpdateStruct $struct, VersionInfo $prePublishVersionInfo = null );
 
     /**
      * Updates version $versionNo for content identified by $contentId, in respect to $struct
@@ -155,6 +156,17 @@ abstract class Gateway
      * @return array
      */
     abstract public function load( $contentId, $version, $translations = null );
+
+    /**
+     * Loads info for a content object identified by its remote ID
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param mixed $remoteId
+     *
+     * @return array
+     */
+    abstract public function loadContentInfoByRemoteId( $remoteId );
 
     /**
      * Loads info for content identified by $contentId.

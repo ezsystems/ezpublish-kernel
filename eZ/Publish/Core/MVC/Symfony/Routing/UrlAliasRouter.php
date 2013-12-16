@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
-use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -110,7 +108,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
             );
             switch ( $urlAlias->type )
             {
-                case UrlAlias::LOCATION:
+                case URLAlias::LOCATION:
                     $params += array(
                         '_controller' => static::LOCATION_VIEW_CONTROLLER,
                         'locationId' => $urlAlias->destination,
@@ -138,8 +136,8 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                     break;
 
-                case UrlAlias::RESOURCE:
-                case UrlAlias::VIRTUAL:
+                case URLAlias::RESOURCE:
+                case URLAlias::VIRTUAL:
                     $request->attributes->set( 'semanticPathinfo', '/' . trim( $urlAlias->destination, '/' ) );
                     // In URLAlias terms, "forward" means "redirect".
                     if ( $urlAlias->forward )

@@ -21,7 +21,6 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ContentTypeService;
-use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class ContentTypeServiceTest extends ServiceTest
 {

@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -126,7 +125,7 @@ class ContentCreate extends Base
                 throw new Exceptions\Parser( "Missing '_href' attribute for Section element in ContentCreate." );
             }
 
-            $contentCreateStruct->sectionId = $this->requestParser->parseHref( $data['Section']['_href'], 'sectionId' );;
+            $contentCreateStruct->sectionId = $this->requestParser->parseHref( $data['Section']['_href'], 'sectionId' );
         }
 
         if ( array_key_exists( 'alwaysAvailable', $data ) )

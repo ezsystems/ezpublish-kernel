@@ -58,19 +58,18 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $handler->getFieldTypeRegistry()->register(
-            'ezxmltext',
-            new FieldType\XmlText\Type(
-                new FieldType\XmlText\ConverterDispatcher( array() ),
-                new FieldType\XmlText\ValidatorDispatcher(
-                    array(
-                        "http://docbook.org/ns/docbook" => new FieldType\XmlText\Validator(
+        $fieldType = new FieldType\XmlText\Type(
+            new FieldType\XmlText\ConverterDispatcher( array() ),
+            new FieldType\XmlText\ValidatorDispatcher(
+                array(
+                    "http://docbook.org/ns/docbook" => new FieldType\XmlText\Validator(
                             $this->getAbsolutePath( "eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/ezpublish.rng" )
                         )
-                    )
                 )
             )
         );
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $handler->getFieldTypeRegistry()->register( 'ezxmltext', $fieldType );
         $handler->getStorageRegistry()->register(
             'ezxmltext',
             new FieldType\XmlText\XmlTextStorage(

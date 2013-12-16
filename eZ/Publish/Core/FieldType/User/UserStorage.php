@@ -126,13 +126,13 @@ class UserStorage extends GatewayBasedStorage
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
      */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        // @todo: How to call this function? Yet undefined.
-        echo __METHOD__, PHP_EOL;
-        var_dump( func_get_args() );
     }
 }

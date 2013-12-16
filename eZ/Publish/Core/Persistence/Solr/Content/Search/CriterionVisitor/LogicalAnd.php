@@ -35,7 +35,7 @@ class LogicalAnd extends CriterionVisitor
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
      *
-     * @return void
+     * @return string
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {

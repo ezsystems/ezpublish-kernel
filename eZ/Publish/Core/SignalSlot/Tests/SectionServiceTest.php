@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SectionService;
-use eZ\Publish\Core\SignalSlot\Tests\ServiceTest;
 
 class SectionServiceTest extends ServiceTest
 {

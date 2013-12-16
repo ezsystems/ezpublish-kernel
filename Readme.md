@@ -1,6 +1,8 @@
 # eZ Publish 5.x Kernel
 [![Build Status](https://travis-ci.org/ezsystems/ezpublish-kernel.png?branch=master)](https://travis-ci.org/ezsystems/ezpublish-kernel)
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0/big.png)](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0)
+
 Welcome to the new eZ Publish 5.x Kernel, this code repository contains several layers of API's and implementation of them.
 However it does not contain all parts that make up the eZ Publish 5 install, for the full eZ Publish 5 package including
 bundles, Legacy Stack, install doc and more; please see our [ezpublish-community](https://github.com/ezsystems/ezpublish-community) repository.
@@ -77,20 +79,26 @@ Currently SPI consists of:
 * [eZ/Publish/Core/Persistence/InMemory](eZ/Publish/Core/Persistence/InMemory/)  *InMemory Storage-Engine (for unit testing)*
 * [eZ/Publish/Core/IO](eZ/Publish/Core/IO/)  *IO (file) Handlers; Legacy, Dispatcher and InMemory (for unit testing)*
 
-
-## Dependencies
-* **Composer**: Just run `curl -s http://getcomposer.org/installer | php` to get **composer.phar**
-* **PHPUnit 3.6+**
-* **PHP 5 Modules**: php5\_sqlite php5\_intl php5\_xsl
-* **Database**: sqlite3 if not installed by above stage
-
 ## How to run tests
-* Clone this repo
-* Install dependencies with **Composer**: `php composer.phar install --prefer-dist --dev`
-* Copy config.php-DEVELOPMENT to config.php
+
+### Dependencies
+* **PHP 5 Modules**: php5\_intl php5\_xsl php5\_gd php5\_sqlite
+* **Database**: sqlite3
+
+You can also run tests (slower) on mysql or postgres, see [.travis.yml](.travis.yml) for how.
+
+### Installation
+* Clone this repo `git clone https://github.com/ezsystems/ezpublish-kernel.git`
+* Enter directory `cd ezpublish-kernel`
+* Get [Composer](http://getcomposer.org/download/) using curl `curl -s http://getcomposer.org/installer | php`
+* Install dev dependencies: `php composer.phar install --prefer-dist --dev`
+* Copy config.php-DEVELOPMENT  `cp config.php-DEVELOPMENT config.php`
 * Execute `phpunit -vc phpunit*.xml` with one of:
   * phpunit.xml  *unit test xml configuration*
   * phpunit-integration-legacy.xml  *integration test xml configuration for running integration tests with Legacy Storage engine*
+
+This should produce similar result as [travis](https://travis-ci.org/ezsystems/ezpublish-kernel).
+If you don't double check [.travis.yml](.travis.yml) for up-to-date info on how travis is setup.
 
 ## Issue tracker
 Submitting bugs, improvements and stories is possible on https://jira.ez.no/browse/EZP

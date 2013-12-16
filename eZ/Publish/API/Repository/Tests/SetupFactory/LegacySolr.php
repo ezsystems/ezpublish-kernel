@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use eZ\Publish\Core\Persistence\Solr;
 use eZ\Publish\Core\Persistence\Solr\Content\Search;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap;
+use eZ\Publish\Core\Persistence\Solr\Content\Search\Handler as SolrSearchHandler;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
@@ -22,6 +24,8 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\Core\SignalSlot\Repository as SignalSlotRepository;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SlotFactory\GeneralSlotFactory;
+use eZ\Publish\Core\Persistence\Legacy\Handler as LegacyPersistenceHandler;
+use eZ\Publish\Core\Persistence\Cache\Handler as CachePersistenceHandler;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -32,28 +36,28 @@ class LegacySolr extends Legacy
     /**
      * Returns a configured repository for testing.
      *
+     * @param bool $initializeFromScratch
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository( $initializeFromScratch = true )
     {
+        // Load repository fists so all initialize steps are done
         $repository = parent::getRepository( $initializeFromScratch );
 
-        // @HACK: This is a hack to inject a different search handler -- is
+        // @TODO @HACK: This is a hack to inject a different search handler -- is
         // there a well supported way to do this? I don't think so.
-        $persistenceProperty = new \ReflectionProperty( $repository, 'persistenceHandler' );
-        $persistenceProperty->setAccessible( true );
-        $persistenceHandler = $persistenceProperty->getValue( $repository );
-
-        $searchProperty = new \ReflectionProperty( $persistenceHandler, 'searchHandler' );
+        $persistenceHandler = $this->getServiceContainer()->get( 'persistence_handler' );
+        $legacyPersistenceHandler = $this->getServiceContainer()->get( 'persistence_handler_legacy' );
+        $searchProperty = new \ReflectionProperty( $legacyPersistenceHandler, 'searchHandler' );
         $searchProperty->setAccessible( true );
         $searchProperty->setValue(
-            $persistenceHandler,
+            $legacyPersistenceHandler,
             $searchHandler = $this->getSearchHandler( $persistenceHandler )
         );
 
         if ( $initializeFromScratch )
         {
-            $this->indexAll( $persistenceHandler, $searchHandler );
+            $this->indexAll( $legacyPersistenceHandler, $persistenceHandler, $searchHandler );
         }
 
         $repository = new SignalSlotRepository(
@@ -75,6 +79,9 @@ class LegacySolr extends Legacy
                         "solr-move-subtree" => new Slot\MoveSubtree( $repository, $persistenceHandler ),
                         "solr-trash" => new Slot\Trash( $repository, $persistenceHandler ),
                         "solr-trash-recover" => new Slot\Recover( $repository, $persistenceHandler ),
+                        "solr-hide-location" => new Slot\HideLocation( $repository, $persistenceHandler ),
+                        "solr-unhide-location" => new Slot\UnhideLocation( $repository, $persistenceHandler ),
+                        "solr-set-content-state" => new Slot\SetContentState( $repository, $persistenceHandler ),
                     )
                 ),
                 array(
@@ -85,11 +92,14 @@ class LegacySolr extends Legacy
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\DeleteLocationSignal" => array( "solr-delete-location" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\CopySubtreeSignal" => array( "solr-copy-subtree" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\MoveSubtreeSignal" => array( "solr-move-subtree" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\HideLocationSignal" => array( "solr-hide-location" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\UnhideLocationSignal" => array( "solr-unhide-location" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\TrashSignal" => array( "solr-trash" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\RecoverSignal" => array( "solr-trash-recover" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( "solr-create-user" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserGroupSignal" => array( "solr-create-user-group" ),
                     "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\MoveUserGroupSignal" => array( "solr-move-user-group" ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ObjectStateService\\SetContentStateSignal" => array( "solr-set-content-state" ),
                 )
             )
         );
@@ -97,7 +107,11 @@ class LegacySolr extends Legacy
         return $repository;
     }
 
-    protected function getSearchHandler( $persistenceHandler )
+    /**
+     * @param CachePersistenceHandler $persistenceHandler
+     * @return Search\Handler
+     */
+    protected function getSearchHandler( CachePersistenceHandler $persistenceHandler )
     {
         $nameGenerator = new FieldNameGenerator();
         $fieldRegistry = new FieldRegistry(
@@ -108,7 +122,7 @@ class LegacySolr extends Legacy
                 'eztext'                => new FieldType\TextLine\SearchField(),
                 'ezxmltext'             => new FieldType\TextLine\SearchField(),
                 // @todo: Define proper types for these:
-                'ezcountry'             => new FieldType\Unindexed(),
+                'ezcountry'             => new FieldType\Country\SearchField(),
                 'ezfloat'               => new FieldType\Unindexed(),
                 'ezinteger'             => new FieldType\Unindexed(),
                 'ezuser'                => new FieldType\Unindexed(),
@@ -138,11 +152,18 @@ class LegacySolr extends Legacy
             )
         );
 
+        $fieldMap = new FieldMap(
+            $fieldRegistry,
+            $persistenceHandler->contentTypeHandler(),
+            $nameGenerator
+        );
+
         return new Search\Handler(
             new Search\Gateway\Native(
                 new Search\Gateway\HttpClient\Stream( getenv( "solrServer" ) ),
                 new CriterionVisitor\Aggregate(
                     array(
+                        new CriterionVisitor\MatchAll(),
                         new CriterionVisitor\ContentIdIn(),
                         new CriterionVisitor\LogicalAnd(),
                         new CriterionVisitor\LogicalOr(),
@@ -161,18 +182,19 @@ class LegacySolr extends Legacy
                         new CriterionVisitor\DateMetadata\PublishedIn(),
                         new CriterionVisitor\DateMetadata\ModifiedBetween(),
                         new CriterionVisitor\DateMetadata\PublishedBetween(),
-                        new CriterionVisitor\StatusIn(),
-                        new CriterionVisitor\FullText(),
+                        new CriterionVisitor\FullText( $fieldMap ),
+                        new CriterionVisitor\UserMetadataIn(),
                         new CriterionVisitor\Field\FieldIn(
-                            $fieldRegistry,
+                            $fieldMap,
                             $persistenceHandler->contentTypeHandler(),
                             $nameGenerator
                         ),
                         new CriterionVisitor\Field\FieldRange(
-                            $fieldRegistry,
+                            $fieldMap,
                             $persistenceHandler->contentTypeHandler(),
                             $nameGenerator
                         ),
+                        new CriterionVisitor\Visibility(),
                     )
                 ),
                 new SortClauseVisitor\Aggregate(
@@ -203,6 +225,7 @@ class LegacySolr extends Legacy
                         new FieldValueMapper\IntegerMapper(),
                         new FieldValueMapper\DateMapper(),
                         new FieldValueMapper\PriceMapper(),
+                        new FieldValueMapper\MultipleBooleanMapper(),
                     )
                 ),
                 $persistenceHandler->contentHandler(),
@@ -216,13 +239,18 @@ class LegacySolr extends Legacy
         );
     }
 
-    protected function indexAll( $persistenceHandler, $searchHandler )
+    /**
+     * @param LegacyPersistenceHandler $legacyPersistenceHandler
+     * @param CachePersistenceHandler $cachePersistenceHandler
+     * @param SolrSearchHandler $searchHandler
+     */
+    protected function indexAll( LegacyPersistenceHandler $legacyPersistenceHandler, CachePersistenceHandler $cachePersistenceHandler, SolrSearchHandler $searchHandler )
     {
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
-        $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
+        $dbHandlerProperty = new \ReflectionProperty( $legacyPersistenceHandler, 'dbHandler' );
         $dbHandlerProperty->setAccessible( true );
-        $db = $dbHandlerProperty->getValue( $persistenceHandler );
+        $db = $dbHandlerProperty->getValue( $legacyPersistenceHandler );
 
         $query = $db->createSelectQuery()
             ->select( 'id', 'current_version' )
@@ -231,12 +259,15 @@ class LegacySolr extends Legacy
         $stmt = $query->prepare();
         $stmt->execute();
 
-        $searchHandler->purgeIndex();
+        $contentHandler = $cachePersistenceHandler->contentHandler();
         while ( $row = $stmt->fetch( \PDO::FETCH_ASSOC ) )
         {
-            $searchHandler->indexContent(
-                $persistenceHandler->contentHandler()->load( $row['id'], $row['current_version'] )
-            );
+            $contentObjects[] = $contentHandler->load( $row['id'], $row['current_version'] );
         }
+
+        $searchHandler->setCommit( false );
+        $searchHandler->purgeIndex();
+        $searchHandler->setCommit( true );
+        $searchHandler->bulkIndexContent( $contentObjects );
     }
 }

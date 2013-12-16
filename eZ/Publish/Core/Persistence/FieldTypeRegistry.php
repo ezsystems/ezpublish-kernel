@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence;
 
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
-use eZ\Publish\Core\Persistence\FieldType;
 use RuntimeException;
 
 /**

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -931,18 +932,31 @@ class ContentServiceTest extends BaseContentServiceTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionCreatesLocationsDefinedOnCreate
-     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
-     * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
-    public function testCreateContentWithLocationCreateParameterSetsMainLocationId( array $testData )
+    public function testCreateContentWithLocationCreateParameterCreatesExpectedLocation( array $testData )
     {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
         list( $content, $location ) = $testData;
 
-        $this->assertEquals(
-            $content->getVersionInfo()->getContentInfo()->mainLocationId,
-            $location->id
+        $parentLocationId = $this->generateId( 'location', 56 );
+        $parentLocation = $this->getRepository()->getLocationService()->loadLocation( $parentLocationId );
+        $mainLocationId = $content->getVersionInfo()->getContentInfo()->mainLocationId;
+
+        $this->assertPropertiesCorrect(
+            array(
+                'id' => $mainLocationId,
+                'priority' => 23,
+                'hidden' => true,
+                'invisible' => true,
+                'remoteId' => '0123456789abcdef0123456789abcdef',
+                'parentLocationId' => $parentLocationId,
+                'pathString' => $parentLocation->pathString . $mainLocationId . '/',
+                'depth' => $parentLocation->depth + 1,
+                'sortField' => Location::SORT_FIELD_NODE_ID,
+                'sortOrder' => Location::SORT_ORDER_DESC,
+            ),
+            $location
         );
     }
 
@@ -999,6 +1013,38 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         return $draftedContent;
+    }
+
+    /**
+     * Test for the createContentDraft() method.
+     *
+     * Test that editor has access to edit own draft.
+     * Note: Editors have access to version_read, which is needed to load content drafts.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     * @group user
+     */
+    public function testCreateContentDraftAndLoadAccess()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        // Set new editor as user
+        $repository->setCurrentUser( $user );
+
+        // Create draft
+        $draft = $this->createContentDraftVersion1( 2, 'folder' );
+
+        // Try to load the draft
+        $contentService = $repository->getContentService();
+        $loadedDraft = $contentService->loadContent( $draft->id );
+
+        /* END: Use Case */
+
+        $this->assertEquals( $draft->id, $loadedDraft->id );
     }
 
     /**
@@ -2572,6 +2618,8 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals( 2, $contentCopied->getVersionInfo()->versionNo );
 
         $this->assertAllFieldsEquals( $contentCopied->getFields() );
+
+        $this->assertDefaultContentStates( $contentCopied->contentInfo );
     }
 
     /**
@@ -2730,7 +2778,7 @@ class ContentServiceTest extends BaseContentServiceTest
      * @see \eZ\Publish\API\Repository\ContentService::createContentDraft()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelationSetsExpectedRelations
      */
-    public function testCreateContentDraftFromContentWithRelations()
+    public function testCreateContentDraftWithRelations()
     {
         $repository = $this->getRepository();
 
@@ -4431,6 +4479,35 @@ class ContentServiceTest extends BaseContentServiceTest
             }
         }
         return $fields;
+    }
+
+    /**
+     * Asserts that given Content has default ContentStates.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return void
+     */
+    private function assertDefaultContentStates( ContentInfo $contentInfo )
+    {
+        $repository = $this->getRepository();
+        $objectStateService = $repository->getObjectStateService();
+
+        $objectStateGroups = $objectStateService->loadObjectStateGroups();
+
+        foreach ( $objectStateGroups as $objectStateGroup )
+        {
+            $contentState = $objectStateService->getContentState( $contentInfo, $objectStateGroup );
+            foreach ( $objectStateService->loadObjectStates( $objectStateGroup ) as $objectState )
+            {
+                // Only check the first object state which is the default one.
+                $this->assertEquals(
+                    $objectState,
+                    $contentState
+                );
+                break;
+            }
+        }
     }
 
     /**

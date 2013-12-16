@@ -119,6 +119,9 @@ class LegacyStorage extends Gateway
      */
     public function storeImageReference( $path, $fieldId )
     {
+        // legacy stores the path to the image without a leading /
+        $path = ltrim( $path, '/ ' );
+
         $connection = $this->getConnection();
 
         $insertQuery = $connection->createInsertQuery();

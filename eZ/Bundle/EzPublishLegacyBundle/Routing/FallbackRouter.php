@@ -9,7 +9,6 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 
-use eZModule;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;

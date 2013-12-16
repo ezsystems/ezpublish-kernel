@@ -53,6 +53,10 @@ class Common extends AbstractParser
                     ->scalarNode( 'dsn' )->info( 'Full database DSN. Will replace settings above.' )->example( 'mysql://root:root@localhost:3306/ezdemo' )->end()
                 ->end()
             ->end()
+            ->scalarNode( 'cache_pool_name' )
+                ->example( 'ez_site_x' )
+                ->info( 'The cache pool name to use for a siteaccess / siteaccess-group, *must* be present under stash.caches: yml config. Default value is "default". NB! Setting is Deprecated, will be made redundant in future version.' )
+            ->end()
             ->scalarNode( 'var_dir' )
                 ->cannotBeEmpty()
                 ->example( 'var/ezdemo_site' )
@@ -129,6 +133,8 @@ class Common extends AbstractParser
                 $container->setParameter( "ezsettings.$sa.legacy_mode", $settings['legacy_mode'] );
                 $container->setParameter( "ezsettings.$sa.url_alias_router", !$settings['legacy_mode'] );
             }
+            if ( isset( $settings['cache_pool_name'] ) )
+                $container->setParameter( "ezsettings.$sa.cache_pool_name", $settings['cache_pool_name'] );
             if ( isset( $settings['var_dir'] ) )
                 $container->setParameter( "ezsettings.$sa.var_dir", $settings['var_dir'] );
             if ( isset( $settings['storage_dir'] ) )

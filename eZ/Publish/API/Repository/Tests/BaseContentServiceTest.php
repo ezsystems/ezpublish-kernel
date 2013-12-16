@@ -68,11 +68,11 @@ abstract class BaseContentServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function createContentDraftVersion1()
+    protected function createContentDraftVersion1( $locationId = 56, $contentTypeIdentifier = 'forum', $contentFieldNameIdentifier = 'name' )
     {
         $repository = $this->getRepository();
 
-        $parentLocationId = $this->generateId( 'location', 56 );
+        $parentLocationId = $this->generateId( 'location', $locationId );
         $sectionId = $this->generateId( 'section', 1 );
         /* BEGIN: Inline */
         // $parentLocationId is the id of the /Design/eZ-publish node
@@ -91,12 +91,12 @@ abstract class BaseContentServiceTest extends BaseTest
         $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
 
         // Load content type
-        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'forum' );
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( $contentTypeIdentifier );
 
         // Configure new content object
         $contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
-        $contentCreate->setField( 'name', 'An awesome forum' );
+        $contentCreate->setField( $contentFieldNameIdentifier, "An awesome {$contentTypeIdentifier}" );
         $contentCreate->remoteId = 'abcdef0123456789abcdef0123456789';
         // $sectionId is the ID of section 1
         $contentCreate->sectionId = $sectionId;

@@ -30,7 +30,7 @@ abstract class SortClauseVisitor
      *
      * @param SortClause $sortClause
      *
-     * @return void
+     * @return string
      */
     abstract public function visit( SortClause $sortClause );
 

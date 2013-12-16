@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Base\ConfigurationManager;
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Persistence\Legacy\Handler;

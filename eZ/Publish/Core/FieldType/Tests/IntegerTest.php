@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Integer\Type as Integer;
 use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue;
-use ReflectionObject;
 
 /**
  * @group fieldType
@@ -32,7 +31,10 @@ class IntegerTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        return new Integer();
+        $fieldType = new Integer();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
+
+        return $fieldType;
     }
 
     /**
@@ -410,6 +412,19 @@ class IntegerTest extends FieldTypeTest
                     ),
                 )
             ),
+        );
+    }
+
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezinteger';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new IntegerValue( 42 ), "42" )
         );
     }
 }

@@ -54,7 +54,6 @@ class SortClauseConverter
      */
     public function applySelect( ezcQuerySelect $query, array $sortClauses )
     {
-        $sortColumn = array();
         foreach ( $sortClauses as $nr => $sortClause )
         {
             foreach ( $this->handlers as $handler )

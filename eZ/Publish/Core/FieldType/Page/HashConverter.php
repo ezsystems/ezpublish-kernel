@@ -13,7 +13,6 @@ use eZ\Publish\Core\FieldType\Page\Parts\Page;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
-use eZ\Publish\Core\FieldType\Page\Value;
 
 /**
  * Class HashConverter converts between a Page field type Value object and a representation

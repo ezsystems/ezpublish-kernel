@@ -30,7 +30,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Status;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -96,11 +95,15 @@ class SearchHandler implements SearchHandlerInterface
     {
         // Only some criteria are supported as getting full support for all in InMemory engine is not a priority
         $match = array();
-        $this->generateMatchByCriteria( array( $query->criterion ), $match );
+        $this->generateMatchByCriteria( array( $query->filter ), $match );
 
         if ( empty( $match ) )
         {
             throw new Exception( "Logical error: \$match is empty" );
+        }
+        else
+        {
+            $match['versionInfo']['contentInfo']['isPublished'] = true;
         }
 
         $list = $this->backend->find(
@@ -188,18 +191,18 @@ class SearchHandler implements SearchHandlerInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is more than than one result matching the criterions
      *
      * @todo define structs for the field filters
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle( Criterion $criterion, array $fieldFilters = array() )
+    public function findSingle( Criterion $filter, array $fieldFilters = array() )
     {
-        $list = $this->findContent( new Query( array( 'criterion' => $criterion ) ) );
+        $list = $this->findContent( new Query( array( 'filter' => $filter ) ) );
 
         if ( !$list->totalCount )
-            throw new NotFound( 'Content', var_export( $criterion, true ) );
+            throw new NotFound( 'Content', var_export( $filter, true ) );
         else if ( $list->totalCount > 1 )
             throw new InvalidArgumentException( "totalCount", "findSingle() found more then one item for query" );
 
@@ -316,23 +319,6 @@ class SearchHandler implements SearchHandlerInterface
             {
                 $match['versionInfo']['contentInfo']['sectionId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
             }
-            else if ( $criterion instanceof Status && !isset( $match['versionInfo']['status'] ) )
-            {
-                switch ( $criterion->value[0] )
-                {
-                    case Status::STATUS_ARCHIVED:
-                        $match['versionInfo']['status'] = VersionInfo::STATUS_ARCHIVED;
-                        break;
-                    case Status::STATUS_DRAFT:
-                        $match['versionInfo']['status'] = VersionInfo::STATUS_DRAFT;
-                        break;
-                    case Status::STATUS_PUBLISHED:
-                        $match['versionInfo']['status'] = VersionInfo::STATUS_PUBLISHED;
-                        break;
-                    default:
-                        throw new Exception( "Unsupported StatusCriterion->value[0]: " . $criterion->value[0] );
-                }
-            }
             else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )
             {
                 $match['locations']['parentId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
@@ -347,10 +333,9 @@ class SearchHandler implements SearchHandlerInterface
                 {
                     if ( $criterion->target === $criterion::OWNER && !isset( $match['versionInfo']['contentInfo']['ownerId'] ) )
                         $match['versionInfo']['contentInfo']['ownerId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
-                    else if ( $criterion->target === $criterion::CREATOR && !isset( $match['versionInfo']['creatorId'] ) )
+                    else if ( $criterion->target === $criterion::MODIFIER && !isset( $match['versionInfo']['creatorId'] ) )
                         $match['versionInfo']['creatorId'] = $criterion->operator === Operator::IN ? $criterion->value : $criterion->value[0];
-                    //else if ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )
-                        //$match['version']['creatorId'] = $criterion->value[0];
+
                     continue;
                 }
                 throw new Exception( "Support for provided criterion not supported or used more then once: " . get_class( $criterion ) );

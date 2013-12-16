@@ -236,8 +236,9 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
      * @param URLAlias $urlAlias
      * @param $isOutsideAndNotExcluded
      * @param $expected
+     * @param $pathPrefix
      */
-    public function testDoGenerateRootLocation( URLAlias $urlAlias, $isOutsideAndNotExcluded, $expected )
+    public function testDoGenerateRootLocation( URLAlias $urlAlias, $isOutsideAndNotExcluded, $expected, $pathPrefix )
     {
         $excludedPrefixes = array( '/products', '/shared' );
         $rootLocationId = 456;
@@ -246,7 +247,6 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         $location = new Location( array( 'id' => 123 ) );
 
         $rootLocation = new Location( array( 'id' => $rootLocationId ) );
-        $pathPrefix = '/my/root-folder';
         $rootUrlAlias = new URLAlias( array( 'path' => $pathPrefix ) );
         $this->locationService
             ->expects( $this->once() )
@@ -281,32 +281,56 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             array(
                 new UrlAlias( array( 'path' => '/my/root-folder/foo/bar' ) ),
                 false,
-                '/foo/bar'
+                '/foo/bar',
+                '/my/root-folder'
             ),
             array(
                 new UrlAlias( array( 'path' => '/my/root-folder/something' ) ),
                 false,
-                '/something'
+                '/something',
+                '/my/root-folder'
             ),
             array(
                 new UrlAlias( array( 'path' => '/my/root-folder' ) ),
                 false,
+                '/',
+                '/my/root-folder'
+            ),
+            array(
+                new UrlAlias( array( 'path' => '/foo/bar' ) ),
+                false,
+                '/foo/bar',
+                '/'
+            ),
+            array(
+                new UrlAlias( array( 'path' => '/something' ) ),
+                false,
+                '/something',
+                '/'
+            ),
+            array(
+                new UrlAlias( array( 'path' => '/' ) ),
+                false,
+                '/',
                 '/'
             ),
             array(
                 new UrlAlias( array( 'path' => '/outside/tree/foo/bar' ) ),
                 true,
-                '/outside/tree/foo/bar'
+                '/outside/tree/foo/bar',
+                '/my/root-folder'
             ),
             array(
                 new UrlAlias( array( 'path' => '/products/ez-publish' ) ),
                 false,
-                '/products/ez-publish'
+                '/products/ez-publish',
+                '/my/root-folder'
             ),
             array(
                 new UrlAlias( array( 'path' => '/shared/some-content' ) ),
                 false,
-                '/shared/some-content'
+                '/shared/some-content',
+                '/my/root-folder'
             ),
         );
     }

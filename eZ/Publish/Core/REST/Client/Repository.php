@@ -23,16 +23,6 @@ use eZ\Publish\Core\REST\Common;
 class Repository implements APIRepository
 {
     /**
-     * @var int
-     */
-    private $version;
-
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
-    private $currentUser;
-
-    /**
      * @var \eZ\Publish\Core\REST\Client\SectionService
      */
     private $sectionService;
