@@ -14,7 +14,6 @@ use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 class Provider implements APIUserProviderInterface
 {
@@ -29,18 +28,11 @@ class Provider implements APIUserProviderInterface
     private $lazyRepository;
 
     /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    protected $configResolver;
-
-    /**
      * @param callable $lazyRepository
-     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      */
-    public function __construct( \Closure $lazyRepository, ConfigResolverInterface $configResolver )
+    public function __construct( \Closure $lazyRepository )
     {
         $this->lazyRepository = $lazyRepository;
-        $this->configResolver = $configResolver;
     }
 
     /**
@@ -84,7 +76,7 @@ class Provider implements APIUserProviderInterface
             $isLoggedIn = $user != -1;
             $apiUser = $isLoggedIn ?
                 $this->getUserService()->loadUser( $user ) :
-                $this->getUserService()->loadUser( $this->configResolver->getParameter( "anonymous_user_id" ) );
+                $this->getRepository()->getCurrentUser();
             $roles = $isLoggedIn ? array( 'ROLE_USER' ) : array();
             return new User( $apiUser, $roles );
         }

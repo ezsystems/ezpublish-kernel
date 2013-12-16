@@ -10,7 +10,7 @@ parameters:
 services:
     ezpublish.security.user_provider:
         class: %ezpublish.security.user_provider.class%
-        arguments: [@ezpublish.api.repository.lazy, @ezpublish.config.resolver]
+        arguments: [@ezpublish.api.repository.lazy]
 
     ezpublish.security.authentication_provider:
         class: %ezpublish.security.authentication_provider.class%
@@ -18,7 +18,6 @@ services:
         parent: security.authentication.provider.pre_authenticated
         calls:
             - [setLazyRepository, [@ezpublish.api.repository.lazy]]
-            - [setConfigResolver, [@ezpublish.config.resolver]]
             - [setLogger, [@?logger]]
 
     ezpublish.security.authentication_provider.basic:

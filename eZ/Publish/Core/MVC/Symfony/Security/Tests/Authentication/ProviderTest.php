@@ -49,25 +49,14 @@ class ProviderTest extends PHPUnit_Framework_TestCase
      */
     private $logger;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $configResolver;
-
     protected function setUp()
     {
         parent::setUp();
         $repository = $this->repository = $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' );
-        $this->userService = $this->getMock( 'eZ\\Publish\\API\\Repository\\UserService' );
-        $this->repository
-            ->expects( $this->any() )
-            ->method( 'getUserService' )
-            ->will( $this->returnValue( $this->userService ) );
 
         $this->userProvider = $this->getMock( 'Symfony\\Component\\Security\\Core\\User\\UserProviderInterface' );
         $this->userChecker = new UserChecker();
         $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
-        $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
 
         $this->authenticationProvider = new Provider(
             $this->userProvider,
@@ -80,7 +69,6 @@ class ProviderTest extends PHPUnit_Framework_TestCase
                 return $repository;
             }
         );
-        $this->authenticationProvider->setConfigResolver( $this->configResolver );
         $this->authenticationProvider->setLogger( $this->logger );
     }
 
@@ -182,22 +170,11 @@ class ProviderTest extends PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'warning' );
 
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( "getParameter" )
-            ->with( "anonymous_user_id" )
-            ->will( $this->returnValue( 10 ) );
-
         $anonymousUser = $this->getMockForAbstractClass( 'eZ\\Publish\\API\\Repository\\Values\\User\\User' );
-        $this->userService
-            ->expects( $this->once() )
-            ->method( 'loadUser' )
-            ->with( 10 )
-            ->will( $this->returnValue( $anonymousUser ) );
         $this->repository
             ->expects( $this->once() )
-            ->method( 'setCurrentUser' )
-            ->with( $anonymousUser );
+            ->method( 'getCurrentUser' )
+            ->will( $this->returnValue( $anonymousUser ) );
 
         $authenticatedToken = $this->authenticationProvider->authenticate( $token );
         $this->assertInstanceOf( 'Symfony\\Component\\Security\\Core\\Authentication\\Token\\PreAuthenticatedToken', $authenticatedToken );
