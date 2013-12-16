@@ -33,6 +33,11 @@
           <xsl:value-of select="@ezxhtml:class"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@ezxhtml:textalign">
+        <xsl:attribute name="align">
+          <xsl:value-of select="@ezxhtml:textalign"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </paragraph>
   </xsl:template>
@@ -196,6 +201,11 @@
           <xsl:value-of select="@ezxhtml:class"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@ezxhtml:textalign">
+        <xsl:attribute name="align">
+          <xsl:value-of select="@ezxhtml:textalign"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </header>
   </xsl:template>
@@ -228,6 +238,11 @@
 
   <xsl:template match="docbook:itemizedlist/docbook:listitem/docbook:para | docbook:orderedlist/docbook:listitem/docbook:para">
     <li>
+      <xsl:if test="../@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="../@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
       <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
         <xsl:apply-templates/>
       </paragraph>

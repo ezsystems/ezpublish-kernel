@@ -32,6 +32,19 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="contains( @style, 'text-align:' )">
+        <xsl:variable name="textAlign">
+          <xsl:call-template name="extractStyleValue">
+            <xsl:with-param name="style" select="@style"/>
+            <xsl:with-param name="property" select="'text-align'"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$textAlign != ''">
+          <xsl:attribute name="ezxhtml:textalign">
+            <xsl:value-of select="$textAlign"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:if>
       <xsl:choose>
         <xsl:when test="child::ezxhtml5:br">
           <literallayout class="normal">
@@ -48,11 +61,6 @@
           </literallayout>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:if test="@class">
-            <xsl:attribute name="ezxhtml:class">
-              <xsl:value-of select="@class"/>
-            </xsl:attribute>
-          </xsl:if>
           <xsl:apply-templates/>
         </xsl:otherwise>
       </xsl:choose>
@@ -166,6 +174,19 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="contains( @style, 'text-align:' )">
+        <xsl:variable name="textAlign">
+          <xsl:call-template name="extractStyleValue">
+            <xsl:with-param name="style" select="@style"/>
+            <xsl:with-param name="property" select="'text-align'"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$textAlign != ''">
+          <xsl:attribute name="ezxhtml:textalign">
+            <xsl:value-of select="$textAlign"/>
+          </xsl:attribute>
+        </xsl:if>
+      </xsl:if>
       <xsl:apply-templates/>
     </title>
   </xsl:template>
@@ -194,6 +215,11 @@
 
   <xsl:template match="ezxhtml5:ol/ezxhtml5:li | ezxhtml5:ul/ezxhtml5:li">
     <listitem>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <para>
         <xsl:apply-templates/>
       </para>

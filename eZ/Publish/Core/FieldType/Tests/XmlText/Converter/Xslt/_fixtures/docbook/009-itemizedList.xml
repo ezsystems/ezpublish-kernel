@@ -5,6 +5,6 @@
          xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
          version="5.0-variant ezpublish-1.0">
   <itemizedlist ezxhtml:class="itemizedListClass">
-    <listitem><para>This is a list item.</para></listitem>
+    <listitem ezxhtml:class="listItemClass"><para>This is a list item.</para></listitem>
   </itemizedlist>
 </section>

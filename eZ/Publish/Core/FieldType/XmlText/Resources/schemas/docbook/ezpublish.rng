@@ -439,6 +439,7 @@
     <!--define name="db.html.td.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define-->
     <define name="db.itemizedlist.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
     <define name="db.orderedlist.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
+    <define name="db.listitem.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
     <define name="db.emphasis.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
     <!--define name="db.html.table.attributes" combine="interleave"><ref name="ez.xhtml.class"/></define-->
     <define name="db.link.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
@@ -453,7 +454,7 @@
 
   <div>
     <a:documentation>
-      Adding ezxhtml5:width attribute to the selected elements.
+      Adding ezxhtml:width attribute to the selected elements.
     </a:documentation>
     <define name="db.html.tablecell.attributes" combine="interleave">
       <ref name="ez.xhtml.tablerow_or_tablecell.width"/>
@@ -470,6 +471,28 @@
           <choice>
             <data type="string"><param name="pattern">[0-9]+</param></data>
             <data type="string"><param name="pattern">[0-9]+%</param></data>
+          </choice>
+        </attribute>
+      </optional>
+    </define>
+  </div>
+
+  <div>
+    <a:documentation>
+      Adding ezxhtml:textalign attribute to the selected elements.
+    </a:documentation>
+    <define name="db.para.attlist" combine="interleave"><ref name="ez.xhtml.textalign"/></define>
+    <define name="db.title.attlist" combine="interleave"><ref name="ez.xhtml.textalign"/></define>
+    <define name="db.html.th.attlist" combine="interleave"><ref name="ez.xhtml.textalign"/></define>
+    <define name="db.html.td.attlist" combine="interleave"><ref name="ez.xhtml.textalign"/></define>
+    <define name="ez.xhtml.textalign">
+      <optional>
+        <attribute name="ezxhtml:textalign">
+          <choice>
+            <value>left</value>
+            <value>center</value>
+            <value>right</value>
+            <value>justify</value>
           </choice>
         </attribute>
       </optional>

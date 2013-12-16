@@ -6,4 +6,8 @@
          version="5.0-variant ezpublish-1.0">
   <title>This is a heading.</title>
   <para ezxhtml:class="paraClass">This is a paragraph.</para>
+  <para ezxhtml:class="paraClass2" ezxhtml:textalign="left">This is a left aligned paragraph.</para>
+  <para ezxhtml:textalign="center">This is a centered paragraph.</para>
+  <para ezxhtml:textalign="right">This is a right aligned paragraph.</para>
+  <para ezxhtml:textalign="justify">This is a justified paragraph.</para>
 </section>

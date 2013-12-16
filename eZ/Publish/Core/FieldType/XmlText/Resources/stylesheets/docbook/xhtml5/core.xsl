@@ -31,6 +31,11 @@
           <xsl:value-of select="@ezxhtml:class"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@ezxhtml:textalign">
+        <xsl:attribute name="style">
+          <xsl:value-of select="concat( 'text-align:', @ezxhtml:textalign, ';' )"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
@@ -178,6 +183,11 @@
           <xsl:value-of select="@ezxhtml:class"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@ezxhtml:textalign">
+        <xsl:attribute name="style">
+          <xsl:value-of select="concat( 'text-align:', @ezxhtml:textalign, ';' )"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
@@ -206,6 +216,11 @@
 
   <xsl:template match="docbook:orderedlist/docbook:listitem/docbook:para | docbook:itemizedlist/docbook:listitem/docbook:para">
     <xsl:element name="li" namespace="{$outputNamespace}">
+      <xsl:if test="../@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="../@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>

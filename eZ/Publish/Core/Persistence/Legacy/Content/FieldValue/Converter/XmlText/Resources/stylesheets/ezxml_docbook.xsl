@@ -45,6 +45,11 @@
               <xsl:value-of select="@class"/>
             </xsl:attribute>
           </xsl:if>
+          <xsl:if test="@align">
+            <xsl:attribute name="ezxhtml:textalign">
+              <xsl:value-of select="@align"/>
+            </xsl:attribute>
+          </xsl:if>
           <xsl:variable name="lines" select="line"/>
           <xsl:choose>
             <xsl:when test="count( $lines ) &gt; 0">
@@ -191,6 +196,11 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@align">
+        <xsl:attribute name="ezxhtml:textalign">
+          <xsl:value-of select="@align"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
@@ -219,6 +229,11 @@
 
   <xsl:template match="ul/li | ol/li">
     <xsl:element name="listitem" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
         <xsl:apply-templates/>
       </xsl:element>
@@ -298,6 +313,11 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@align">
+        <xsl:attribute name="ezxhtml:textalign">
+          <xsl:value-of select="@align"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:if test="@xhtml:width">
         <xsl:attribute name="ezxhtml:width">
           <xsl:value-of select="@xhtml:width"/>
@@ -337,6 +357,11 @@
       <xsl:if test="@class">
         <xsl:attribute name="class">
           <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@align">
+        <xsl:attribute name="ezxhtml:textalign">
+          <xsl:value-of select="@align"/>
         </xsl:attribute>
       </xsl:if>
       <xsl:if test="@xhtml:width">
