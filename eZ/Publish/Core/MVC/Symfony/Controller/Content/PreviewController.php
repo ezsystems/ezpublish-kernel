@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -17,7 +18,9 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -27,6 +30,11 @@ class PreviewController implements SiteAccessAware
      * @var \eZ\Publish\Core\Repository\Repository
      */
     private $repository;
+
+    /**
+     * @var \Symfony\Component\HttpKernel\HttpKernelInterface
+     */
+    private $kernel;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface
@@ -53,8 +61,14 @@ class PreviewController implements SiteAccessAware
      */
     private $currentSiteAccess;
 
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
     public function __construct(
         Repository $repository,
+        HttpKernelInterface $kernel,
         ViewManagerInterface $viewManager,
         VersatileScopeInterface $configResolver,
         TranslatorInterface $translator,
@@ -62,6 +76,7 @@ class PreviewController implements SiteAccessAware
     )
     {
         $this->repository = $repository;
+        $this->kernel = $kernel;
         $this->viewManager = $viewManager;
         $this->configResolver = $configResolver;
         $this->translator = $translator;
@@ -73,31 +88,37 @@ class PreviewController implements SiteAccessAware
         $this->currentSiteAccess = $siteAccess;
     }
 
+    public function setRequest( Request $request = null )
+    {
+        $this->request = $request;
+    }
+
     public function previewContentAction( $contentId, $versionNo, $language, $siteAccessName )
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
-        /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
-        list( $content, $location ) = $this->repository->sudo(
-            function ( $repository ) use ( $contentId, $versionNo, $language )
-            {
-                /** @var \eZ\Publish\API\Repository\Repository $repository */
-                $contentService = $repository->getContentService();
-                $content = $contentService->loadContent( $contentId, array( $language ), $versionNo );
-                $contentInfo = $contentService->loadContentInfo( $contentId );
-                // mainLocationId already exists, content has been published at least once.
-                if ( $contentInfo->mainLocationId )
-                {
-                    $location = $repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
-                }
-                // Content not yet published, we create a virtual location object.
-                else
-                {
-                    $location = new Location( array( 'contentInfo' => $contentInfo ) );
-                }
+        try
+        {
+            // Change configuration scope and current locale to trigger proper preview.
+            $previousDefaultScope = $this->configResolver->getDefaultScope();
+            $this->configResolver->setDefaultScope( $siteAccessName );
 
-                return array( $content, $location );
+            $contentService = $this->repository->getContentService();
+            $content = $contentService->loadContent( $contentId, array( $language ), $versionNo );
+            $contentInfo = $contentService->loadContentInfo( $contentId );
+            // mainLocationId already exists, content has been published at least once.
+            if ( $contentInfo->mainLocationId )
+            {
+                $location = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
             }
-        );
+            // Content not yet published, we create a virtual location object.
+            else
+            {
+                $location = new Location( array( 'contentInfo' => $contentInfo ) );
+            }
+        }
+        catch ( UnauthorizedException $e )
+        {
+            throw new AccessDeniedException();
+        }
 
         if ( !$this->repository->canUser( 'content', 'versionview', $content ) )
         {
@@ -106,23 +127,30 @@ class PreviewController implements SiteAccessAware
 
         // ViewManager must be SiteAccessAware to allow view configuration change.
         // TODO: ConfigResolver scope change should be sufficient in the long term. Change this when using proxy services.
+        // TODO: Don't use viewManager for this, prefer injecting siteaccess directly in matcher factories
         if ( !$this->viewManager instanceof SiteAccessAware )
         {
             throw new InvalidArgumentType( 'ViewManager', 'SiteAccessAware' );
         }
 
-        // Change configuration scope and current locale to trigger proper preview.
-        $previousDefaultScope = $this->configResolver->getDefaultScope();
-        $previousLocale = $this->translator->getLocale();
-        $this->configResolver->setDefaultScope( $siteAccessName );
         $this->viewManager->setSiteAccess( new SiteAccess( $siteAccessName ) );
-        $this->translator->setLocale( $this->localeConverter->convertToPOSIX( $language ) );
 
-        $response = new Response( $this->viewManager->renderLocation( $location ) );
+        $response = $this->kernel->handle(
+            $this->request->duplicate(
+                null, null,
+                array(
+                    '_controller' => 'ez_content:viewLocation',
+                    // TODO: use whole object instead as ID may not exist (virtual location)
+                    'locationId' => $location->id,
+                    'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
+                    'layout' => true
+                )
+            ),
+            HttpKernelInterface::SUB_REQUEST
+        );
 
         $this->configResolver->setDefaultScope( $previousDefaultScope );
         $this->viewManager->setSiteAccess( $this->currentSiteAccess );
-        $this->translator->setLocale( $previousLocale );
 
         return $response;
     }

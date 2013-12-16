@@ -53,11 +53,13 @@ services:
         class: %ezpublish.controller.content.preview.class%
         arguments:
             - @ezpublish.api.repository
+            - @http_kernel
             - @ezpublish.view_manager
             - @ezpublish.config.resolver.core
             - @translator
             - @ezpublish.locale.converter
         calls:
+            - [setRequest, [@?request=]]
             - [setSiteAccess, [@ezpublish.siteaccess]]
 
     ezpublish.controller.user.authentication:
