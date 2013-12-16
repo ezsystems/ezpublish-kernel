@@ -1971,13 +1971,13 @@ class SearchServiceTest extends BaseTest
     {
         $query = new Query(
             array(
-                'query'       => new Criterion\Field(
+                'query' => new Criterion\Field(
                     'first_name',
                     Criterion\Operator::EQ,
                     'User'
                 ),
-                'offset'      => 0,
-                'limit'       => 10,
+                'offset' => 0,
+                'limit' => 10,
                 'sortClauses' => array( new SortClause\ContentId() )
             )
         );
