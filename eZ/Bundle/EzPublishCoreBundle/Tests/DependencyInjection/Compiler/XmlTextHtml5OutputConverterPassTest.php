@@ -70,7 +70,7 @@ class XmlTextHtml5OutputConverterPassTest extends AbstractCompilerPassTest
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.fieldType.ezxmltext.converter.output.xhtml5',
             'addConverter',
-            array( new Reference( $serviceId ),  10 )
+            array( new Reference( $serviceId ), 10 )
         );
     }
 }

@@ -63,8 +63,8 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
             new FieldType\XmlText\ValidatorDispatcher(
                 array(
                     "http://docbook.org/ns/docbook" => new FieldType\XmlText\Validator(
-                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/ezpublish.rng" )
-                        )
+                        $this->getAbsolutePath( "eZ/Publish/Core/FieldType/XmlText/Resources/schemas/docbook/ezpublish.rng" )
+                    )
                 )
             )
         );
