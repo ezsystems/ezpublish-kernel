@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
 use eZ\Bundle\EzPublishCoreBundle\Matcher\BlockMatcherFactory;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
@@ -122,7 +123,7 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
                 $this->returnValueMap(
                     array(
                         array(
-                            'location_view', null, null,
+                            'block_view', null, null,
                             array(
                                 'full' => array(
                                     'matchRule' => array(

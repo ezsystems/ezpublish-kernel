@@ -123,7 +123,7 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
                 $this->returnValueMap(
                     array(
                         array(
-                            'location_view', null, null,
+                            'content_view', null, null,
                             array(
                                 'full' => array(
                                     'matchRule' => array(
