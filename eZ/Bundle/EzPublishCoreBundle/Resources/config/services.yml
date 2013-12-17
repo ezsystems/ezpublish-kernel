@@ -56,8 +56,6 @@ services:
             - @http_kernel
             - @ezpublish.view_manager
             - @ezpublish.config.resolver.core
-            - @translator
-            - @ezpublish.locale.converter
         calls:
             - [setRequest, [@?request=]]
             - [setSiteAccess, [@ezpublish.siteaccess]]
