@@ -88,6 +88,7 @@ class ViewControllerListener implements EventSubscriberInterface
             else if ( $request->attributes->get( 'location' ) instanceof Location )
             {
                 $valueObject = $request->attributes->get( 'location' );
+                $request->attributes->set( 'locationId', $valueObject->id );
             }
             else if ( $request->attributes->has( 'contentId' ) )
             {
@@ -103,6 +104,7 @@ class ViewControllerListener implements EventSubscriberInterface
             else if ( $request->attributes->get( 'contentInfo' ) instanceof ContentInfo )
             {
                 $valueObject = $request->attributes->get( 'contentInfo' );
+                $request->attributes->set( 'contentId', $valueObject->id );
             }
         }
         catch ( UnauthorizedException $e)

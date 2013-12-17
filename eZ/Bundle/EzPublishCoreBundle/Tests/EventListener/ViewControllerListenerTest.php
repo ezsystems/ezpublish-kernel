@@ -259,6 +259,7 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull( $this->controllerListener->getController( $this->event ) );
         $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
+        $this->assertSame( $id, $this->request->attributes->get( 'locationId' ) );
     }
 
     /**
@@ -375,5 +376,6 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull( $this->controllerListener->getController( $this->event ) );
         $this->assertSame( $controllerIdentifier, $this->request->attributes->get( '_controller' ) );
+        $this->assertSame( $id, $this->request->attributes->get( 'contentId' ) );
     }
 }
