@@ -71,10 +71,10 @@ class RequestEventListener implements EventSubscriberInterface
         /** @var $configResolver \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ContainerInterface.php */
         $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $request = $event->getRequest();
-        $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' );
+        $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' ) ?: '/';
         if (
             $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST
-            && ( $semanticPathinfo === '/' || $semanticPathinfo === '' )
+            && $semanticPathinfo === '/'
         )
         {
             $indexPage = $configResolver->getParameter( 'index_page' );
