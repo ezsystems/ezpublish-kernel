@@ -77,6 +77,10 @@ class Common extends AbstractParser
                 ->info( 'The session name. If you want a session name per siteaccess, use "{siteaccess_hash}" token. Will override default session name from framework.session.name' )
                 ->example( array( 'session_name' => 'eZSESSID{siteaccess_hash}' ) )
             ->end()
+            ->scalarNode( 'index_page' )
+                ->info( "The page that the index page will show. Default value is null." )
+                ->example( '/Getting-Started' )
+                ->end()
             ->arrayNode( 'http_cache' )
                 ->info( 'Settings related to Http cache' )
                 ->cannotBeEmpty()
@@ -168,6 +172,8 @@ class Common extends AbstractParser
                 $container->setParameter( "ezsettings.$sa.security.base_layout", $settings['user']['layout'] );
             if ( isset( $settings['user']['login_template'] ) )
                 $container->setParameter( "ezsettings.$sa.security.login_template", $settings['user']['login_template'] );
+            if ( isset( $settings['index_page'] ) )
+                $container->setParameter( "ezsettings.$sa.index_page", $settings['index_page'] );
         }
     }
 }

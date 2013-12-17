@@ -86,10 +86,53 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
                     array( 'onKernelRequestForward', 10 ),
                     array( 'onKernelRequestRedirect', 0 ),
                     array( 'onKernelRequestUserHash', 7 ),
+                    array( 'onKernelRequestIndex', 40 ),
                 )
             ),
             $this->requestEventListener->getSubscribedEvents()
         );
+    }
+
+    /**
+     * @dataProvider indexPageProvider
+     */
+    public function testOnKernelRequestIndexOnIndexPage( $requestPath, $configuredIndexPath, $expectedIndexPath )
+    {
+        $mockResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $this->container
+            ->expects( $this->once() )
+            ->method( 'get' )
+            ->with( 'ezpublish.config.resolver' )
+            ->will( $this->returnValue( $mockResolver ) );
+        $mockResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'index_page' )
+            ->will( $this->returnValue( $configuredIndexPath ) );
+        $this->request->attributes->set( 'semanticPathinfo', $requestPath );
+        $this->requestEventListener->onKernelRequestIndex( $this->event );
+        $this->assertEquals( $expectedIndexPath, $this->request->attributes->get( 'semanticPathinfo' ) );
+        $this->assertTrue( $this->request->attributes->get( 'needsForward' ) );
+    }
+
+    public function indexPageProvider()
+    {
+        return array(
+            array( '/', '/foo', '/foo' ),
+            array( '/', '/foo/', '/foo/' ),
+            array( '/', '/foo/bar', '/foo/bar' ),
+            array( '/', 'foo/bar', '/foo/bar' ),
+            array( '', 'foo/bar', '/foo/bar' ),
+            array( '', '/foo/bar', '/foo/bar' ),
+            array( '', '/foo/bar/', '/foo/bar/' ),
+        );
+    }
+
+    public function testOnKernelRequestIndexNotOnIndexPage()
+    {
+        $this->request->attributes->set( 'semanticPathinfo', '/anyContent' );
+        $this->requestEventListener->onKernelRequestIndex( $this->event );
+        $this->assertFalse( $this->request->attributes->has( 'needsForward' ) );
     }
 
     public function testOnKernelRequestUserHashNotAuthenticate()

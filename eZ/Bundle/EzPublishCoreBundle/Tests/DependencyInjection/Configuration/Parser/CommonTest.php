@@ -35,6 +35,25 @@ class CommonTest extends AbstractExtensionTestCase
         return $this->minimalConfig = Yaml::parse( __DIR__ . '/../../Fixtures/ezpublish_minimal.yml' );
     }
 
+    public function testIndexPage()
+    {
+        $indexPage1 = '/Getting-Started';
+        $indexPage2 = '/Contact-Us';
+        $config = array(
+            'system' => array(
+                'ezdemo_site' => array( 'index_page' => $indexPage1 ),
+                'ezdemo_site_admin' => array( 'index_page' => $indexPage2 ),
+            )
+        );
+        $this->load( $config );
+
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.index_page' ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.index_page' ) );
+        $this->assertFalse( $this->container->hasParameter( 'ezsettings.global.index_page' ) );
+        $this->assertSame( $indexPage1, $this->container->getParameter( 'ezsettings.ezdemo_site.index_page' ) );
+        $this->assertSame( $indexPage2, $this->container->getParameter( 'ezsettings.ezdemo_site_admin.index_page' ) );
+    }
+
     public function testLanguagesSingleSiteaccess()
     {
         $langDemoSite = array( 'eng-GB' );
@@ -294,6 +313,7 @@ class CommonTest extends AbstractExtensionTestCase
         $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.session_name' ) );
         $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.http_cache.purge_servers' ) );
         $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.anonymous_user_id' ) );
+        $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.index_page' ) );
     }
 
     public function testMiscSettings()
@@ -303,6 +323,7 @@ class CommonTest extends AbstractExtensionTestCase
         $storageDir = 'alternative_storage_folder';
         $binaryDir = 'alternative_binary_folder';
         $sessionName = 'alternative_session_name';
+        $indexPage = '/alternative_index_page';
         $cachePurgeServers = array(
             'http://purge.server1/',
             'http://purge.server2:1234/foo',
@@ -318,6 +339,7 @@ class CommonTest extends AbstractExtensionTestCase
                         'storage_dir' => $storageDir,
                         'binary_dir' => $binaryDir,
                         'session_name' => $sessionName,
+                        'index_page' => $indexPage,
                         'http_cache' => array(
                             'purge_servers' => $cachePurgeServers
                         ),
@@ -332,6 +354,7 @@ class CommonTest extends AbstractExtensionTestCase
         $this->assertSame( $storageDir, $this->container->getParameter( 'ezsettings.ezdemo_site.storage_dir' ) );
         $this->assertSame( $binaryDir, $this->container->getParameter( 'ezsettings.ezdemo_site.binary_dir' ) );
         $this->assertSame( $sessionName, $this->container->getParameter( 'ezsettings.ezdemo_site.session_name' ) );
+        $this->assertSame( $indexPage, $this->container->getParameter( 'ezsettings.ezdemo_site.index_page' ) );
         $this->assertSame( $cachePurgeServers, $this->container->getParameter( 'ezsettings.ezdemo_site.http_cache.purge_servers' ) );
         $this->assertSame( $anonymousUserId, $this->container->getParameter( 'ezsettings.ezdemo_site.anonymous_user_id' ) );
     }

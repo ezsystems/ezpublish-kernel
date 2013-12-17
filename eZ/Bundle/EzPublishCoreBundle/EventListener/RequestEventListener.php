@@ -55,8 +55,36 @@ class RequestEventListener implements EventSubscriberInterface
                 array( 'onKernelRequestRedirect', 0 ),
                 // onKernelRequestUserHash needs to be just after Firewall (prio 8), so that user is already logged in the repository.
                 array( 'onKernelRequestUserHash', 7 ),
+                // onKernelRequestIndex needs to be before the router (prio 32)
+                array( 'onKernelRequestIndex', 40 ),
             )
         );
+    }
+
+    /**
+     * Checks if the IndexPage is configured and which page must be shown
+     *
+     * @param GetResponseEvent $event
+     */
+    public function onKernelRequestIndex( GetResponseEvent $event )
+    {
+        /** @var $configResolver \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ContainerInterface.php */
+        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
+        $request = $event->getRequest();
+        $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' ) ?: '/';
+        if (
+            $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST
+            && $semanticPathinfo === '/'
+        )
+        {
+            $indexPage = $configResolver->getParameter( 'index_page' );
+            if ( $indexPage !== null )
+            {
+                $indexPage = '/' . ltrim( $indexPage, '/' );
+                $request->attributes->set( 'semanticPathinfo', $indexPage );
+                $request->attributes->set( 'needsForward', true );
+            }
+        }
     }
 
     /**
