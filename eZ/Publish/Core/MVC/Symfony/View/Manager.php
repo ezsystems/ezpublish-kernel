@@ -247,15 +247,18 @@ class Manager implements ViewManagerInterface
      */
     public function renderLocation( Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
     {
-        $content = $this->repository->getContentService()->loadContentByContentInfo( $location->getContentInfo() );
         foreach ( $this->getAllLocationViewProviders() as $viewProvider )
         {
             $view = $viewProvider->getView( $location, $viewType );
             if ( $view instanceof ContentViewInterface )
             {
                 $parameters['location'] = $location;
-                $parameters['content'] = $content;
-                return $this->renderContentView( $view, $parameters );
+                return $this->renderContentView(
+                    $view,
+                    $parameters + array(
+                        'content' => $this->repository->getContentService()->loadContentByContentInfo( $location->getContentInfo() )
+                    )
+                );
             }
         }
 
