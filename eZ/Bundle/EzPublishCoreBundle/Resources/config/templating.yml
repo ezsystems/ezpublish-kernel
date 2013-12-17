@@ -35,6 +35,8 @@ services:
             - @ezpublish.config.resolver
             - @ezpublish.fieldtype.parameterproviderregistry
             - @ezpublish.fieldtype.ezxmltext.converter.html5
+            - @ezpublish.fieldType.ezrichtext.converter.output.xhtml5
+            - @ezpublish.fieldType.ezrichtext.converter.edit.xhtml5
             - @ezpublish.fieldtype.ezimage.variation_service
             - @ezpublish.translation_helper
             - @ezpublish.field_helper

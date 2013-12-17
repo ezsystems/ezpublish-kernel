@@ -57,7 +57,6 @@ Commented out elements we might support later:
 * <code>
 * <colgroup>
 * <dd>
-* <del>
 * <details>
 * <dfn>
 * <dir>

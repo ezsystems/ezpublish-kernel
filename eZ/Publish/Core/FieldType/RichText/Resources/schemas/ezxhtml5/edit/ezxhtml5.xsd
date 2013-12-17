@@ -32,12 +32,12 @@
 
 <xs:schema
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://ez.no/namespaces/ezpublish5/xhtml5"
+  xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit"
   xmlns:html="http://www.w3.org/1999/xhtml"
   xmlns:svg="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mml="http://www.w3.org/1998/Math/MathML"
-  targetNamespace="http://ez.no/namespaces/ezpublish5/xhtml5"
+  targetNamespace="http://ez.no/namespaces/ezpublish5/xhtml5/edit"
   elementFormDefault="qualified">
 
   <!-- The root element ================================================== -->
@@ -177,7 +177,7 @@
 
   <xs:element name="pre" type="phrasingContentElement"/>
 
-  <!--xs:element name="blockquote">
+  <xs:element name="blockquote">
     <xs:complexType>
       <xs:complexContent>
         <xs:extension base="flowContentElement">
@@ -185,7 +185,7 @@
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
-  </xs:element-->
+  </xs:element>
 
   <xs:element name="ol">
     <xs:complexType>
@@ -445,17 +445,6 @@
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:simpleType name="date">
-    <xs:union>
-      <xs:simpleType>
-        <xs:restriction base="xs:date"/>
-      </xs:simpleType>
-      <xs:simpleType>
-        <xs:restriction base="xs:dateTime"/>
-      </xs:simpleType>
-    </xs:union>
-  </xs:simpleType>
-
   <xs:complexType name="insPhrasing">
     <xs:complexContent>
       <xs:extension base="phrasingContentElement">
@@ -467,9 +456,18 @@
 
   -->
 
-  <!-- del element -->
+  <xs:simpleType name="date">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:date"/>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction base="xs:dateTime"/>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
 
-  <!-- Ins commented out
+  <!-- del element -->
 
   <xs:complexType name="delFlow">
     <xs:complexContent>
@@ -488,8 +486,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-
-  -->
 
   <!-- Embedded content ================================================== -->
 
@@ -1004,10 +1000,10 @@
       <xs:element ref="h5"/>
       <xs:element ref="h6"/>
       <!--xs:element ref="hgroup"/-->
-      <!--xs:element ref="blockquote"/-->
+      <xs:element ref="blockquote"/>
       <!--xs:element ref="address"/-->
       <!--xs:element name="ins" type="insFlow"/-->
-      <!--xs:element name="del" type="delFlow"/-->
+      <xs:element name="del" type="delFlow"/>
       <!--xs:element name="object" type="objectFlow"/-->
       <xs:element ref="section"/>
       <!--xs:element ref="aside"/-->
@@ -1022,6 +1018,8 @@
     </xs:choice>
   </xs:group>
 
+  <xs:element name="commonPhrasingElement.extension" abstract="true"/>
+
   <xs:group name="commonPhrasingElements">
     <xs:choice>
       <!--xs:element ref="abbr"/-->
@@ -1035,6 +1033,7 @@
       <xs:element ref="em"/>
       <xs:element ref="embed"/>
       <xs:element ref="i"/>
+      <xs:element ref="commonPhrasingElement.extension"/>
       <!--xs:element ref="img"/-->
       <!--xs:element ref="kbd"/-->
       <!--xs:element ref="mark"/-->
@@ -1072,7 +1071,7 @@
 
       <!--xs:element name="audio" type="audioPhrasing"/-->
       <!--xs:element name="canvas" type="canvasPhrasing"/-->
-      <!--xs:element name="del" type="delPhrasing"/-->
+      <xs:element name="del" type="delPhrasing"/>
       <!--xs:element name="ins" type="insPhrasing"/-->
       <!--xs:element name="object" type="objectPhrasing"/-->
       <!--xs:element name="video" type="videoPhrasing"/-->

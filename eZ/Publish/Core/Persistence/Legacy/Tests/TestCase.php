@@ -78,7 +78,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * environment variable "DATABASE" and defaults to an in-memory SQLite
      * database.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
      */
     public function getDatabaseHandler()
     {

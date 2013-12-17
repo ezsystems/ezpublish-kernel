@@ -118,9 +118,10 @@ class LegacySolr extends Legacy
             array(
                 'ezstring'              => new FieldType\TextLine\SearchField(),
                 'ezprice'               => new FieldType\Price\SearchField(),
-                // @todo: These two need proper custom search field definitions
+                // @todo: These three need proper custom search field definitions
                 'eztext'                => new FieldType\TextLine\SearchField(),
                 'ezxmltext'             => new FieldType\TextLine\SearchField(),
+                'ezrichtext'             => new FieldType\TextLine\SearchField(),
                 // @todo: Define proper types for these:
                 'ezcountry'             => new FieldType\Country\SearchField(),
                 'ezfloat'               => new FieldType\Unindexed(),
