@@ -495,49 +495,60 @@ EOT
      */
     public function providerForTestConvertRemoteObjectIdToObjectId()
     {
-        $remote_id = "[RemoteId]";
-        $object_id = "[ObjectId]";
+        $remoteId = "[RemoteId]";
+        $objectId = "[ObjectId]";
 
         return array(
             array(
                 // test link
-                '<?xml version="1.0" encoding="utf-8"?>
-<section>
-    <paragraph><link anchor_name="test" object_remote_id="'.$remote_id.'">link</link></paragraph>
+            '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>
+        <link xlink:href="ezremote://' . $remoteId . '#fragment">link</link>
+    </para>
+</section>'
+            ,
+            '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>
+        <link xlink:href="ezcontent://' . $objectId . '#fragment">link</link>
+    </para>
 </section>
-',
-                '<?xml version="1.0" encoding="utf-8"?>
-<section>
-    <paragraph><link anchor_name="test" object_id="'.$object_id.'">link</link></paragraph>
-</section>
-',
+'
             ),
+/* @TODO adapt and enable when embeds are implemented
             array(
                 // test embed
-                '<?xml version="1.0" encoding="utf-8"?>
-<section>
-    <paragraph><embed view="embed" size="medium" object_remote_id="'.$remote_id.'"/></paragraph>
-</section>
-',
-                '<?xml version="1.0" encoding="utf-8"?>
-<section>
-    <paragraph><embed view="embed" size="medium" object_id="'.$object_id.'"/></paragraph>
-</section>
-',
+            '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>
+        <embed view="embed" size="medium" object_remote_id="' . $remoteId . '"/>
+    </para>
+</section>'
+            ,
+            '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>
+        <embed view="embed" size="medium" object_id="' . $objectId . '"/>
+    </para>
+</section>'
             ),
             array(
                 // test embed-inline
+            '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>
+        <embed-inline size="medium" object_remote_id="' . $remoteId . '"/>
+    </para>
+</section>',
                 '<?xml version="1.0" encoding="utf-8"?>
-<section>
-    <paragraph><embed-inline size="medium" object_remote_id="'.$remote_id.'"/></paragraph>
-</section>
-',
-                '<?xml version="1.0" encoding="utf-8"?>
-<section>
-    <paragraph><embed-inline size="medium" object_id="'.$object_id.'"/></paragraph>
-</section>
-',
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>
+        <embed-inline size="medium" object_id="' . $objectId . '"/>
+    </para>
+</section>'
             ),
+*/
         );
     }
 
@@ -547,7 +558,7 @@ EOT
      * @return void
      * @dataProvider providerForTestConvertRemoteObjectIdToObjectId
      */
-    public function testConvertRemoteObjectIdToObjectId( $test , $expected )
+    public function testConvertRemoteObjectIdToObjectId( $test, $expected )
     {
         $repository = $this->getRepository();
 
@@ -571,9 +582,9 @@ EOT
             $draft->versionInfo
         );
 
-        $object_id = $folder->versionInfo->contentInfo->id;
-        $node_id = $folder->versionInfo->contentInfo->mainLocationId;
-        $remote_id = $folder->versionInfo->contentInfo->remoteId;
+        $objectId = $folder->versionInfo->contentInfo->id;
+        $locationId = $folder->versionInfo->contentInfo->mainLocationId;
+        $remoteId = $folder->versionInfo->contentInfo->remoteId;
 
         // create value to be tested
         $testStruct = $contentService->newContentCreateStruct(
@@ -583,20 +594,16 @@ EOT
         $testStruct->setField( 'title', "Article - test" );
         $testStruct->setField(
             'intro',
-            str_replace(
-                "[RemoteId]",
-                $remote_id,
-                $test
-            )
+            str_replace( "[RemoteId]", $remoteId, $test )
         );
         $test = $contentService->createContent(
             $testStruct,
-            array( $locationService->newLocationCreateStruct( $node_id ) )
+            array( $locationService->newLocationCreateStruct( $locationId ) )
         );
 
         $this->assertEquals(
-            $test->getField( 'intro' )->value->xml->saveXML(),
-            str_replace( "[ObjectId]", $object_id, $expected )
+            str_replace( "[ObjectId]", $objectId, $expected ),
+            $test->getField( 'intro' )->value->xml->saveXML()
         );
     }
 }

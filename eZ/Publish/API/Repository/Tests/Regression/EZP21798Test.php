@@ -21,10 +21,10 @@ class EZP21798Test extends BaseTest
 {
     /**
      * Test for EZP-21798 - Role changes not working correctly on Postgres 9.1
-     * 
+     *
      * This test will verify that anonymous users can access to a new section
      * that it's allowed to
-     * 
+     *
      * @return void
      */
     public function testRoleChanges()
@@ -66,14 +66,15 @@ class EZP21798Test extends BaseTest
 
         $contentCreateStructArticle->setField(
             'intro',
-            '<?xml version="1.0" encoding="utf-8"?>
-            <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
-            xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-            xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
-            <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
-            This is summary of Article Test
-            </paragraph>
-            </section>'
+            '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <title>This is a heading of Article Test</title>
+  <para ezxhtml:class="paraClass">This is summary of Article Test</para>
+</section>'
         );
 
         $newsLocation = $urlAliasService->lookup( '/News' );
