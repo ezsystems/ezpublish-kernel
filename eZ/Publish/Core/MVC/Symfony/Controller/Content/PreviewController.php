@@ -140,8 +140,7 @@ class PreviewController implements SiteAccessAware
                 null, null,
                 array(
                     '_controller' => 'ez_content:viewLocation',
-                    // TODO: use whole object instead as ID may not exist (virtual location)
-                    'locationId' => $location->id,
+                    'location' => $location,
                     'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
                     'layout' => true
                 )
