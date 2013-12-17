@@ -506,8 +506,7 @@ EOT
     <para>
         <link xlink:href="ezremote://' . $remoteId . '#fragment">link</link>
     </para>
-</section>'
-                ,
+</section>',
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <para>
