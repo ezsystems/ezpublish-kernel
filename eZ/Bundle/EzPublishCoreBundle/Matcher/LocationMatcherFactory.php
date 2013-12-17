@@ -56,6 +56,11 @@ class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAwa
      */
     public function setSiteAccess( SiteAccess $siteAccess = null )
     {
+        if ( $siteAccess === null )
+        {
+            return;
+        }
+
         $this->matchConfig = $this->configResolver->getParameter( 'location_view', 'ezsettings', $siteAccess->name );
     }
 }

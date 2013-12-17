@@ -56,6 +56,11 @@ class ContentMatcherFactory extends BaseFactory implements SiteAccessAware
      */
     public function setSiteAccess( SiteAccess $siteAccess = null )
     {
+        if ( $siteAccess === null )
+        {
+            return;
+        }
+
         $this->matchConfig = $this->configResolver->getParameter( 'content_view', 'ezsettings', $siteAccess->name );
     }
 }

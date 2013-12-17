@@ -56,6 +56,11 @@ class BlockMatcherFactory extends BaseFactory implements SiteAccessAware
      */
     public function setSiteAccess( SiteAccess $siteAccess = null )
     {
+        if ( $siteAccess === null )
+        {
+            return;
+        }
+
         $this->matchConfig = $this->configResolver->getParameter( 'block_view', 'ezsettings', $siteAccess->name );
     }
 }
