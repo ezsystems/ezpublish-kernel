@@ -9,18 +9,18 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\FieldType\XmlText\Converter;
 
-use eZ\Publish\Core\FieldType\XmlText\Converter\Html5 as BaseHtml5Converter;
+use eZ\Publish\Core\FieldType\XmlText\Converter\Xslt as XsltConverter;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
- * Adds ConfigResolver awareness to the original Html5 converter.
+ * Adds ConfigResolver awareness to the Xslt converter.
  */
-class Html5 extends BaseHtml5Converter
+class Html5 extends XsltConverter
 {
-    public function __construct( $stylesheet, ConfigResolverInterface $configResolver, array $preConverters = array() )
+    public function __construct( $stylesheet, ConfigResolverInterface $configResolver )
     {
-        $customStylesheets = $configResolver->getParameter( 'fieldtypes.ezxml.custom_xsl' );
+        $customStylesheets = $configResolver->getParameter( 'fieldtypes.ezxml.output_custom_xsl' );
         $customStylesheets = $customStylesheets ?: array();
-        parent::__construct( $stylesheet, $customStylesheets, $preConverters );
+        parent::__construct( $stylesheet, $customStylesheets );
     }
 }

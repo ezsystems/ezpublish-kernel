@@ -32,13 +32,17 @@ parameters:
     # FieldType settings
     # Default XSL stylesheets for XmlText rendering to HTML5.
     # Built-in stylesheets are treated as custom for the sake of extensibility.
-    ezsettings.default.fieldtypes.ezxml.custom_xsl:
+    ezsettings.default.fieldtypes.ezxml.output_custom_xsl:
         -
-            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl
+            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/core.xsl
             priority: 0
+
+    ezsettings.default.fieldtypes.ezxml.edit_custom_xsl:
         -
-            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl
+            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/core.xsl
             priority: 0
+
+    ezsettings.default.fieldtypes.ezxml.input_custom_xsl: []
 
     # Cache settings
     ezsettings.default.http_cache.purge_servers: ["http://localhost/"]   # Server(s) URL(s) that will be used for purging HTTP cache with PURGE requests.

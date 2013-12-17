@@ -10,10 +10,9 @@
 namespace eZ\Publish\Core\FieldType\XmlText;
 
 use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\FieldType\XmlText\Input;
-use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
@@ -53,6 +52,26 @@ class Type extends FieldType
             "default" => self::TAG_PRESET_DEFAULT
         )
     );
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher
+     */
+    protected $inputConverterDispatcher;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher
+     */
+    protected $validatorDispatcher;
+
+    /**
+     * @param \eZ\Publish\Core\FieldType\XmlText\ConverterDispatcher $inputConverterDispatcher
+     * @param \eZ\Publish\Core\FieldType\XmlText\ValidatorDispatcher $validatorDispatcher
+     */
+    public function __construct( ConverterDispatcher $inputConverterDispatcher, ValidatorDispatcher $validatorDispatcher )
+    {
+        $this->inputConverterDispatcher = $inputConverterDispatcher;
+        $this->validatorDispatcher = $validatorDispatcher;
+    }
 
     /**
      * Returns the field type identifier for this field type
@@ -128,7 +147,7 @@ class Type extends FieldType
     /**
      * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
-     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\eZ\Publish\Core\FieldType\XmlText\Input|string $inputValue
+     * @param \eZ\Publish\Core\FieldType\XmlText\Value|\DOMDocument|string $inputValue
      *
      * @return \eZ\Publish\Core\FieldType\XmlText\Value The potentially converted and structurally plausible value.
      */
@@ -137,18 +156,75 @@ class Type extends FieldType
         if ( is_string( $inputValue ) )
         {
             if ( empty( $inputValue ) )
+            {
                 $inputValue = Value::EMPTY_VALUE;
-            $inputValue = new EzXml( $inputValue );
+            }
+
+            $inputValue = $this->loadXMLString( $inputValue );
         }
 
-        if ( $inputValue instanceof Input )
+        if ( $inputValue instanceof DOMDocument )
         {
-            $doc = new DOMDocument;
-            $doc->loadXML( $inputValue->getInternalRepresentation() );
-            $inputValue = new Value( $doc );
+            $errors = $this->validatorDispatcher->dispatch( $inputValue );
+            if ( !empty( $errors ) )
+            {
+                throw new InvalidArgumentException(
+                    "\$inputValue",
+                    "Validation of XML content failed: " . join( "\n", $errors )
+                );
+            }
+
+            $inputValue = $this->inputConverterDispatcher->dispatch( $inputValue );
+
+            $errors = $this->validatorDispatcher->dispatch( $inputValue );
+            if ( !empty( $errors ) )
+            {
+                throw new InvalidArgumentException(
+                    "\$inputValue",
+                    "Validation of XML content failed: " . join( "\n", $errors )
+                );
+            }
+
+            $inputValue = new Value( $inputValue );
         }
 
         return $inputValue;
+    }
+
+    /**
+     * Creates \DOMDocument from given $xmlString.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param $xmlString
+     *
+     * @return \DOMDocument
+     */
+    protected function loadXMLString( $xmlString )
+    {
+        $document = new DOMDocument;
+
+        libxml_use_internal_errors( true );
+        libxml_clear_errors();
+
+        $success = $document->loadXML( $xmlString );
+
+        if ( !$success )
+        {
+            $messages = array();
+
+            foreach ( libxml_get_errors() as $error )
+            {
+                $messages[] = trim( $error->message );
+            }
+
+            throw new InvalidArgumentException(
+                "\$inputValue",
+                "Could not create XML document: " . join( "\n", $messages )
+            );
+        }
+
+        return $document;
     }
 
     /**
@@ -202,9 +278,7 @@ class Type extends FieldType
             throw new RuntimeException( "'xml' index is missing in hash." );
         }
 
-        $doc = new DOMDocument;
-        $doc->loadXML( $hash['xml'] );
-        return new Value( $doc );
+        return $this->acceptValue( $hash['xml'] );
     }
 
     /**
@@ -241,9 +315,9 @@ class Type extends FieldType
     {
         return new FieldValue(
             array(
-                'data'         => $value->xml,
+                'data' => $value->xml,
                 'externalData' => null,
-                'sortKey'      => $this->getSortInfo( $value )
+                'sortKey' => $this->getSortInfo( $value )
             )
         );
     }
@@ -361,6 +435,9 @@ class Type extends FieldType
         return $relations;
     }
 
+    /**
+     * @todo handle embeds when implemented
+     */
     protected function getRelatedObjectIds( Value $fieldValue, $relationType )
     {
         if ( $relationType === Relation::EMBED )
@@ -372,25 +449,31 @@ class Type extends FieldType
             $tagName = "link";
         }
 
-        $locationIds = array();
         $contentIds = array();
-        $linkTags = $fieldValue->xml->getElementsByTagName( $tagName );
-        if ( $linkTags->length > 0 )
+        $locationIds = array();
+        $xpath = new \DOMXPath( $fieldValue->xml );
+        $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
+        $xpathExpression = "//docbook:{$tagName}[starts-with( @xlink:href, 'ezcontent://' ) or starts-with( @xlink:href, 'ezlocation://' )]";
+
+        /** @var \DOMElement $link */
+        foreach ( $xpath->query( $xpathExpression ) as $link )
         {
-            /** @var $link \DOMElement */
-            foreach ( $linkTags as $link )
+            $location = null;
+            preg_match( "~^(.+)://([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "xlink:href" ), $matches );
+            list( , $protocol, $id ) = $matches;
+
+            if ( empty( $id ) )
             {
-                $contentId = $link->getAttribute( 'object_id' );
-                if ( !empty( $contentId ) )
-                {
-                    $contentIds[] = $contentId;
-                    continue;
-                }
-                $locationId = $link->getAttribute( 'node_id' );
-                if ( !empty( $locationId ) )
-                {
-                    $locationIds[] = $locationId;
-                }
+                continue;
+            }
+
+            if ( $protocol === "ezcontent" )
+            {
+                $contentIds[] = $id;
+            }
+            else if ( $protocol === "ezlocation" )
+            {
+                $locationIds[] = $id;
             }
         }
 

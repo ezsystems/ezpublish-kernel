@@ -76,9 +76,16 @@ class ContentExtension extends Twig_Extension
     /**
      * Converter used to transform XmlText content in HTML5
      *
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Html5
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Xslt
      */
     protected $xmlTextConverter;
+
+    /**
+     * Converter used to transform XmlText content in HTML5
+     *
+     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Xslt
+     */
+    protected $xmlTextEditConverter;
 
     /**
      * Hash of field type identifiers (i.e. "ezstring"), indexed by field definition identifier
@@ -191,6 +198,11 @@ class ContentExtension extends Twig_Extension
             new Twig_SimpleFilter(
                 'xmltext_to_html5',
                 array( $this, 'xmlTextToHtml5' ),
+                array( 'is_safe' => array( 'html' ) )
+            ),
+            new Twig_SimpleFilter(
+                'xmltext_to_html5_edit',
+                array( $this, 'xmltextToHtml5Edit' ),
                 array( 'is_safe' => array( 'html' ) )
             )
         );
@@ -336,12 +348,12 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
-     * @return \eZ\Publish\Core\FieldType\XmlText\Converter\Html5
+     * @return \eZ\Publish\Core\FieldType\XmlText\Converter\Xslt
      */
     protected function getXmlTextConverter()
     {
         if ( !isset( $this->xmlTextConverter ) )
-            $this->xmlTextConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.html5" );
+            $this->xmlTextConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.output.xhtml5" );
 
         return $this->xmlTextConverter;
     }
@@ -349,13 +361,36 @@ class ContentExtension extends Twig_Extension
     /**
      * Implements the "xmltext_to_html5" filter
      *
-     * @param string $xmlData
+     * @param \DOMDocument $xmlData
      *
      * @return string
      */
     public function xmltextToHtml5( $xmlData )
     {
-        return $this->getXmlTextConverter()->convert( $xmlData );
+        return $this->getXmlTextConverter()->convert( $xmlData )->saveHTML();
+    }
+
+    /**
+     * @return \eZ\Publish\Core\FieldType\XmlText\Converter\Xslt
+     */
+    protected function getXmlTextEditConverter()
+    {
+        if ( !isset( $this->xmlTextEditConverter ) )
+            $this->xmlTextEditConverter = $this->container->get( "ezpublish.fieldType.ezxmltext.converter.edit.xhtml5" );
+
+        return $this->xmlTextEditConverter;
+    }
+
+    /**
+     * Implements the "xmltext_to_html5_edit" filter
+     *
+     * @param \DOMDocument $xmlData
+     *
+     * @return string
+     */
+    public function xmltextToHtml5Edit( $xmlData )
+    {
+        return $this->getXmlTextEditConverter()->convert( $xmlData )->saveHTML();
     }
 
     /**

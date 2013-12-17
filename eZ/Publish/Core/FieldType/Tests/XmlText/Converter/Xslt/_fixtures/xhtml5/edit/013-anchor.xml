@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
+  <h2>This is a heading.</h2>
+  <p>The anchor element<a id="example.anchor.1"/> is empty and contributes nothing to the flow of the content in which it occurs. It is only useful as a target.</p>
+</section>

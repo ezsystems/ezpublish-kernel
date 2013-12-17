@@ -141,7 +141,7 @@ class ContentTest extends AbstractExtensionTestCase
                     'content' => array(),
                     'fieldtypes' => array(
                         'ezxml' => array(
-                            'custom_tags' => array(
+                            'output_custom_tags' => array(
                                 array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
                                 array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
                                 array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
@@ -153,10 +153,35 @@ class ContentTest extends AbstractExtensionTestCase
                     'ezsettings.ezdemo_site.content.view_cache' => true,
                     'ezsettings.ezdemo_site.content.ttl_cache' => true,
                     'ezsettings.ezdemo_site.content.default_ttl' => 60,
-                    'ezsettings.ezdemo_site.fieldtypes.ezxml.custom_xsl' => array(
+                    'ezsettings.ezdemo_site.fieldtypes.ezxml.output_custom_xsl' => array(
                         // Default settings will be added
-                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl', 'priority' => 0 ),
-                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl', 'priority' => 0 ),
+                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/core.xsl', 'priority' => 0 ),
+                        array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
+                        array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
+                        array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'content' => array(),
+                    'fieldtypes' => array(
+                        'ezxml' => array(
+                            'edit_custom_tags' => array(
+                                array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
+                                array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
+                                array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'ezsettings.ezdemo_site.content.view_cache' => true,
+                    'ezsettings.ezdemo_site.content.ttl_cache' => true,
+                    'ezsettings.ezdemo_site.content.default_ttl' => 60,
+                    'ezsettings.ezdemo_site.fieldtypes.ezxml.edit_custom_xsl' => array(
+                        // Default settings will be added
+                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Resources/stylesheets/docbook/xhtml5/core.xsl', 'priority' => 0 ),
                         array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
                         array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
                         array( 'path' => '/another/custom.xsl', 'priority' => 27 ),

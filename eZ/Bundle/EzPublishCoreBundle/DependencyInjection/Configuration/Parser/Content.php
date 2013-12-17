@@ -54,7 +54,49 @@ class Content extends AbstractParser
                 ->children()
                     ->arrayNode( 'ezxml' )
                         ->children()
-                            ->arrayNode( 'custom_tags' )
+                            ->arrayNode( 'output_custom_tags' )
+                                ->info( 'Custom XSL stylesheets to use for XmlText transformation to HTML5. Useful for "custom tags".' )
+                                ->example(
+                                    array(
+                                        'path' => '%kernel.root_dir%/../src/Acme/TestBundle/Resources/myTag.xsl',
+                                        'priority' => 10
+                                    )
+                                )
+                                ->prototype( 'array' )
+                                    ->children()
+                                        ->scalarNode( 'path' )
+                                            ->info( 'Path of the XSL stylesheet to load.' )
+                                            ->isRequired()
+                                        ->end()
+                                        ->integerNode( 'priority' )
+                                            ->info( 'Priority in the loading order. A high value will have higher precedence in overriding XSL templates.' )
+                                            ->defaultValue( 0 )
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode( 'edit_custom_tags' )
+                                ->info( 'Custom XSL stylesheets to use for XmlText transformation to HTML5. Useful for "custom tags".' )
+                                ->example(
+                                    array(
+                                        'path' => '%kernel.root_dir%/../src/Acme/TestBundle/Resources/myTag.xsl',
+                                        'priority' => 10
+                                    )
+                                )
+                                ->prototype( 'array' )
+                                    ->children()
+                                        ->scalarNode( 'path' )
+                                            ->info( 'Path of the XSL stylesheet to load.' )
+                                            ->isRequired()
+                                        ->end()
+                                        ->integerNode( 'priority' )
+                                            ->info( 'Priority in the loading order. A high value will have higher precedence in overriding XSL templates.' )
+                                            ->defaultValue( 0 )
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode( 'input_custom_tags' )
                                 ->info( 'Custom XSL stylesheets to use for XmlText transformation to HTML5. Useful for "custom tags".' )
                                 ->example(
                                     array(
@@ -112,14 +154,26 @@ class Content extends AbstractParser
             if ( !empty( $settings['fieldtypes'] ) )
             {
                 // Workaround to be able to use registerInternalConfigArray() which only supports first level entries.
-                if ( isset( $settings['fieldtypes']['ezxml']['custom_tags'] ) )
+                if ( isset( $settings['fieldtypes']['ezxml']['output_custom_tags'] ) )
                 {
-                    $settings['fieldtypes.ezxml.custom_xsl'] = $settings['fieldtypes']['ezxml']['custom_tags'];
-                    unset( $settings['fieldtypes']['ezxml']['custom_tags'] );
+                    $settings['fieldtypes.ezxml.output_custom_xsl'] = $settings['fieldtypes']['ezxml']['output_custom_tags'];
+                    unset( $settings['fieldtypes']['ezxml']['output_custom_tags'] );
+                }
+                if ( isset( $settings['fieldtypes']['ezxml']['edit_custom_tags'] ) )
+                {
+                    $settings['fieldtypes.ezxml.edit_custom_xsl'] = $settings['fieldtypes']['ezxml']['edit_custom_tags'];
+                    unset( $settings['fieldtypes']['ezxml']['edit_custom_tags'] );
+                }
+                if ( isset( $settings['fieldtypes']['ezxml']['input_custom_tags'] ) )
+                {
+                    $settings['fieldtypes.ezxml.input_custom_xsl'] = $settings['fieldtypes']['ezxml']['input_custom_tags'];
+                    unset( $settings['fieldtypes']['ezxml']['input_custom_tags'] );
                 }
             }
         }
 
-        $this->registerInternalConfigArray( 'fieldtypes.ezxml.custom_xsl', $config, $container );
+        $this->registerInternalConfigArray( 'fieldtypes.ezxml.output_custom_xsl', $config, $container );
+        $this->registerInternalConfigArray( 'fieldtypes.ezxml.edit_custom_xsl', $config, $container );
+        $this->registerInternalConfigArray( 'fieldtypes.ezxml.input_custom_xsl', $config, $container );
     }
 }

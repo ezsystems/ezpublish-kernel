@@ -102,7 +102,11 @@ class EmbedToHtml5 implements Converter
      */
     public function convert( DOMDocument $xmlDoc )
     {
+        $xmlDoc = clone $xmlDoc;
+
         $this->processTag( $xmlDoc, 'embed' );
         $this->processTag( $xmlDoc, 'embed-inline' );
+
+        return $xmlDoc;
     }
 }
