@@ -124,7 +124,7 @@ class PreviewController implements SiteAccessAware
                     'location' => $location,
                     'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
                     'layout' => true,
-                    'params' => array( 'content' => $content, 'location' => $location )
+                    'params' => array( 'content' => $content, 'location' => $location, 'isPreview' => true )
                 )
             ),
             HttpKernelInterface::SUB_REQUEST
