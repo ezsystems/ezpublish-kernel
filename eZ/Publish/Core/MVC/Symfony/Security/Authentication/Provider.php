@@ -81,7 +81,7 @@ class Provider extends PreAuthenticatedAuthenticationProvider
                 $this->logger->warning( $e->getMessage(), array( 'userId' => $token->getUsername() ) );
 
             $user = new User(
-                $this->getRepository()->getUserService()->loadAnonymousUser(),
+                $this->getRepository()->getCurrentUser(),
                 $e->getUser()->getRoles()
             );
             $authenticatedToken = new PreAuthenticatedToken( $user, '', $token->getProviderKey(), $user->getRoles() );

@@ -53,11 +53,6 @@ class ProviderTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $repository = $this->repository = $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' );
-        $this->userService = $this->getMock( 'eZ\\Publish\\API\\Repository\\UserService' );
-        $this->repository
-            ->expects( $this->any() )
-            ->method( 'getUserService' )
-            ->will( $this->returnValue( $this->userService ) );
 
         $this->userProvider = $this->getMock( 'Symfony\\Component\\Security\\Core\\User\\UserProviderInterface' );
         $this->userChecker = new UserChecker();
@@ -176,14 +171,10 @@ class ProviderTest extends PHPUnit_Framework_TestCase
             ->method( 'warning' );
 
         $anonymousUser = $this->getMockForAbstractClass( 'eZ\\Publish\\API\\Repository\\Values\\User\\User' );
-        $this->userService
-            ->expects( $this->once() )
-            ->method( 'loadAnonymousUser' )
-            ->will( $this->returnValue( $anonymousUser ) );
         $this->repository
             ->expects( $this->once() )
-            ->method( 'setCurrentUser' )
-            ->with( $anonymousUser );
+            ->method( 'getCurrentUser' )
+            ->will( $this->returnValue( $anonymousUser ) );
 
         $authenticatedToken = $this->authenticationProvider->authenticate( $token );
         $this->assertInstanceOf( 'Symfony\\Component\\Security\\Core\\Authentication\\Token\\PreAuthenticatedToken', $authenticatedToken );

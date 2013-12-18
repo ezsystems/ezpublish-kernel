@@ -63,7 +63,7 @@ class RepositoryFactory
         /** @var $configResolver \eZ\Publish\Core\MVC\ConfigResolverInterface */
         $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $repositoryClass = $this->container->getParameter( 'ezpublish.api.inner_repository.class' );
-        return new $repositoryClass(
+        $repository = new $repositoryClass(
             $persistenceHandler,
             array(
                 'fieldType'     => $this->fieldTypes,
@@ -73,6 +73,14 @@ class RepositoryFactory
                 'languages'     => $configResolver->getParameter( 'languages' )
             )
         );
+
+        /** @var \eZ\Publish\API\Repository\Repository $repository */
+        $anonymousUser = $repository->getUserService()->loadUser(
+            $configResolver->getParameter( "anonymous_user_id" )
+        );
+        $repository->setCurrentUser( $anonymousUser );
+
+        return $repository;
     }
 
     /**

@@ -202,7 +202,9 @@ class Repository implements RepositoryInterface
             'location' => array(),
             'section' => array(),
             'role' => array(),
-            'user' => array(),
+            'user' => array(
+                'anonymousUserID' => 10
+            ),
             'language' => array(),
             'trash' => array(),
             'io' => array(),
@@ -233,7 +235,9 @@ class Repository implements RepositoryInterface
     {
         if ( !$this->currentUser instanceof User )
         {
-            $this->currentUser = $this->getUserService()->loadAnonymousUser();
+            $this->currentUser = $this->getUserService()->loadUser(
+                $this->serviceSettings["user"]["anonymousUserID"]
+            );
         }
 
         return $this->currentUser;

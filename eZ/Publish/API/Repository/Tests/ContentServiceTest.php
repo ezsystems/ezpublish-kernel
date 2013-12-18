@@ -116,6 +116,8 @@ class ContentServiceTest extends BaseContentServiceTest
             $this->markTestSkipped( "This test requires eZ Publish 5" );
         }
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
+
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -131,7 +133,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $roleService->addPolicy( $role, $policyCreateStruct );
 
         // Set Anonymous user as current
-        $repository->setCurrentUser( $repository->getUserService()->loadAnonymousUser() );
+        $repository->setCurrentUser( $repository->getUserService()->loadUser( $anonymousUserId ) );
 
         // Create a new content object:
         $contentCreate = $contentService->newContentCreateStruct(

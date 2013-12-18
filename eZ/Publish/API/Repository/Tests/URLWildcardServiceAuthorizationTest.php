@@ -30,12 +30,15 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
 
         $userService = $repository->getUserService();
         $urlWildcardService = $repository->getURLWildcardService();
 
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with an UnauthorizedException
         $urlWildcardService->create( '/articles/*', '/content/{1}' );
@@ -54,14 +57,17 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $urlWildcardService = $repository->getURLWildcardService();
 
         // Create a new url wildcard
         $urlWildcardId = $urlWildcardService->create( '/articles/*', '/content/{1}' )->id;
 
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // Load newly created url wildcard
         $urlWildcard = $urlWildcardService->load( $urlWildcardId );

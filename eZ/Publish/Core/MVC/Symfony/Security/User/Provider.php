@@ -27,6 +27,9 @@ class Provider implements APIUserProviderInterface
      */
     private $lazyRepository;
 
+    /**
+     * @param callable $lazyRepository
+     */
     public function __construct( \Closure $lazyRepository )
     {
         $this->lazyRepository = $lazyRepository;
@@ -71,7 +74,9 @@ class Provider implements APIUserProviderInterface
                 return $user;
 
             $isLoggedIn = $user != -1;
-            $apiUser = $isLoggedIn ? $this->getUserService()->loadUser( $user ) : $this->getUserService()->loadAnonymousUser();
+            $apiUser = $isLoggedIn ?
+                $this->getUserService()->loadUser( $user ) :
+                $this->getRepository()->getCurrentUser();
             $roles = $isLoggedIn ? array( 'ROLE_USER' ) : array();
             return new User( $apiUser, $roles );
         }

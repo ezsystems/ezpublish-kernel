@@ -336,7 +336,11 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
         $this->setNullAsCurrentUser( $repository );
+
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         // No user was previously set to the $repository
         $anonymousUser = $repository->getCurrentUser();
         /* END: Use Case */
@@ -347,7 +351,7 @@ class RepositoryTest extends BaseTest
         );
         $this->assertEquals(
             $anonymousUser->id,
-            $repository->getUserService()->loadAnonymousUser()->id
+            $repository->getUserService()->loadUser( $anonymousUserId )->id
         );
     }
 
@@ -395,11 +399,14 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
 
         // Load anonymous user
-        $anonymousUser = $userService->loadAnonymousUser();
+        $anonymousUser = $userService->loadUser( $anonymousUserId );
 
         // This call will return false because anonymous user does not have access
         // to content removal
@@ -420,11 +427,14 @@ class RepositoryTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
 
         // Load anonymous user
-        $anonymousUser = $userService->loadAnonymousUser();
+        $anonymousUser = $userService->loadUser( $anonymousUserId );
 
         // Set anonymous user as current user
         $repository->setCurrentUser( $anonymousUser );
@@ -540,14 +550,17 @@ class RepositoryTest extends BaseTest
 
         $homeId = $this->generateId( 'object', 57 );
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         // $homeId contains the ID of the "Home" frontpage
 
         $contentService = $repository->getContentService();
         $userService = $repository->getUserService();
 
         // Load anonymous user
-        $anonymousUser = $userService->loadAnonymousUser();
+        $anonymousUser = $userService->loadUser( $anonymousUserId );
 
         // Set anonymous user as current user
         $repository->setCurrentUser( $anonymousUser );
