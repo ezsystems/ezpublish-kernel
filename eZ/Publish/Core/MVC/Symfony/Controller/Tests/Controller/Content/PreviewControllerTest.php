@@ -223,7 +223,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
                 'location' => $location,
                 'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
                 'layout' => true,
-                'params' => array( 'content' => $content, 'location' => $location )
+                'params' => array( 'content' => $content, 'location' => $location, 'isPreview' => true )
             )
         );
         $request

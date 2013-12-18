@@ -129,7 +129,8 @@ class PreviewController implements SiteAccessAware
             ),
             HttpKernelInterface::SUB_REQUEST
         );
-        $response->headers->removeCacheControlDirective( 's-maxage' );
+        $response->headers->remove( 'cache-control' );
+        $response->headers->remove( 'expires' );
 
         $this->configResolver->setDefaultScope( $previousDefaultScope );
         $this->viewManager->setSiteAccess( $this->currentSiteAccess );
