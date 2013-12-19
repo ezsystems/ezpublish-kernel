@@ -11,7 +11,7 @@ interface Handler
      * @param string $typeHint
      * @return Variant[] The generated variants
      */
-    public function generateVariants($inputFile, $typeHint = null);
+    public function generateVariants( $inputFile, $typeHint = null );
 
     /**
      * Generates the variant with $variantIdentifier for $inputFile
@@ -21,5 +21,5 @@ interface Handler
      * @param string $typeHint
      * @return Variant The generated variant data
      */
-    public function generateVariant($inputFile, $variantIdentifier, $typeHint = null);
+    public function generateVariant( $inputFile, $variantIdentifier, $typeHint = null );
 }
