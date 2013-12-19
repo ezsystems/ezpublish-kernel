@@ -60,7 +60,7 @@ class FieldRange extends Field
             $start = null;
         }
 
-        $fieldTypes = $this->getFieldTypes();
+        $fieldTypes = $this->getFieldTypes( $criterion );
         $criterion->value = (array)$criterion->value;
 
         if ( !isset( $fieldTypes[$criterion->target] ) )

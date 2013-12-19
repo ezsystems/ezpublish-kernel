@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
  * Full text search criterion
@@ -33,7 +34,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - Simple stop word removal might be applied to the words provided in the
  *   query.
  */
-class FullText extends Criterion implements CriterionInterface
+class FullText extends Criterion implements CriterionInterface, CustomFieldInterface
 {
     /**
      * Fuzzyness of the fulltext search.
@@ -79,6 +80,13 @@ class FullText extends Criterion implements CriterionInterface
      */
     public $wildcards;
 
+    /**
+     * Custom field definitions to query instead of default field
+     *
+     * @var array
+     */
+    protected $customFields = array();
+
     public function __construct( $value, array $properties = array() )
     {
         parent::__construct( null, Operator::LIKE, $value );
@@ -106,5 +114,40 @@ class FullText extends Criterion implements CriterionInterface
     public static function createFromQueryBuilder( $target, $operator, $value )
     {
         return new self( $value );
+    }
+
+    /**
+     * Set a custom field to query
+     *
+     * Set a custom field to query for a defined field in a defined type.
+     *
+     * @param string $type
+     * @param string $field
+     * @param string $customField
+     * @return void
+     */
+    public function setCustomField( $type, $field, $customField )
+    {
+        $this->customFields[$type][$field] = $customField;
+    }
+
+    /**
+     * Retun custom field
+     *
+     * If no custom field is set, return null
+     *
+     * @param string $type
+     * @param string $field
+     * @return mixed
+     */
+    public function getCustomField( $type, $field )
+    {
+        if ( !isset( $this->customFields[$type] ) ||
+             !isset( $this->customFields[$type][$field] ) )
+        {
+            return null;
+        }
+
+        return $this->customFields[$type][$field];
     }
 }

@@ -1932,6 +1932,64 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testQueryCustomField()
+    {
+        $query = new Query(
+            array(
+                'query'       => new Criterion\CustomField(
+                    'custom_field',
+                    Criterion\Operator::EQ,
+                    'AdMiNiStRaToR'
+                ),
+                'offset'      => 0,
+                'limit'       => 10,
+                'sortClauses' => array( new SortClause\ContentId() )
+            )
+        );
+        $this->assertQueryFixture(
+            $query,
+            $this->getFixtureDir() . '/QueryCustomField.php'
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * This tests explicitely queries the first_name while user is contained in
+     * the last_name of admin and anonymous. This is done to show the custom
+     * copy field working.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testQueryModifiedField()
+    {
+        $query = new Query(
+            array(
+                'query' => new Criterion\Field(
+                    'first_name',
+                    Criterion\Operator::EQ,
+                    'User'
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array( new SortClause\ContentId() )
+            )
+        );
+        $query->query->setCustomField( 'user', 'first_name', 'custom_field' );
+
+        $this->assertQueryFixture(
+            $query,
+            $this->getFixtureDir() . '/QueryModifiedField.php'
+        );
+    }
+
+    /**
      * Assert that query result matches the given fixture.
      *
      * @param Query $query

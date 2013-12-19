@@ -195,6 +195,7 @@ class LegacySolr extends Legacy
                             $nameGenerator
                         ),
                         new CriterionVisitor\Visibility(),
+                        new CriterionVisitor\CustomField(),
                     )
                 ),
                 new SortClauseVisitor\Aggregate(

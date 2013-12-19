@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
+use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
  * Provides field mapping information
@@ -77,9 +78,10 @@ class FieldMap
      *  )
      * </code>
      *
+     * @param Criterion $criterion
      * @return array
      */
-    public function getFieldTypes()
+    public function getFieldTypes( CustomFieldInterface $criterion )
     {
         if ( $this->fieldTypes !== null )
         {
@@ -97,8 +99,13 @@ class FieldMap
                         continue;
                     }
 
-                    $fieldType = $this->fieldRegistry->getType( $fieldDefinition->fieldType );
+                    if ( $customField = $criterion->getCustomField( $contentType->identifier, $fieldDefinition->identifier ) )
+                    {
+                        $this->fieldTypes[$fieldDefinition->identifier][] = $customField;
+                        continue;
+                    }
 
+                    $fieldType = $this->fieldRegistry->getType( $fieldDefinition->fieldType );
                     foreach ( $fieldType->getIndexDefinition() as $name => $type )
                     {
                         $this->fieldTypes[$fieldDefinition->identifier][] =
