@@ -43,18 +43,19 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
         $this->container
             ->expects( $this->once() )
             ->method( 'has' )
-            ->with( 'ezpublish.siteaccess' )
+            ->with( 'request' )
             ->will( $this->returnValue( true ) );
 
+        $request = new Request();
+        $siteAccess = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess' );
+        $request->attributes->set( 'siteaccess', $siteAccess );
         $this->container
             ->expects( $this->once() )
             ->method( 'get' )
-            ->with( 'ezpublish.siteaccess' )
-            ->will(
-                $this->returnValue( $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess' ) )
-            );
+            ->with( 'request' )
+            ->will( $this->returnValue( $request ) );
 
-        $this->helper->getSiteaccess();
+        $this->assertSame( $siteAccess, $this->helper->getSiteaccess() );
     }
 
     /**

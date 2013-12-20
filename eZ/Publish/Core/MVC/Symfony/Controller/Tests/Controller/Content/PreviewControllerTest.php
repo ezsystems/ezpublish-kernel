@@ -43,12 +43,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $viewManager;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $configResolver;
+    private $previewHelper;
 
     protected function setUp()
     {
@@ -64,27 +59,12 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->expects( $this->any() )
             ->method( 'getContentService' )
             ->will( $this->returnValue( $this->contentService ) );
-        $this->repository
-            ->expects( $this->any() )
-            ->method( 'getLocationService' )
-            ->will( $this->returnValue( $this->locationService ) );
 
         $this->httpKernel = $this->getMock( 'Symfony\Component\HttpKernel\HttpKernelInterface' );
-        $this->viewManager = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Controller\Tests\Stubs\ViewManager' );
-        $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface' );
-    }
-
-    /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
-     */
-    public function testBadViewManager()
-    {
-        new PreviewController(
-            $this->repository,
-            $this->httpKernel,
-            $this->getMock( 'eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface' ),
-            $this->configResolver
-        );
+        $this->previewHelper = $this
+            ->getMockBuilder( 'eZ\Publish\Core\Helper\ContentPreviewHelper' )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -95,8 +75,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $controller = new PreviewController(
             $this->repository,
             $this->httpKernel,
-            $this->viewManager,
-            $this->configResolver
+            $this->previewHelper
         );
         $contentId = 123;
         $lang = 'eng-GB';
@@ -117,8 +96,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $controller = new PreviewController(
             $this->repository,
             $this->httpKernel,
-            $this->viewManager,
-            $this->configResolver
+            $this->previewHelper
         );
         $contentId = 123;
         $lang = 'eng-GB';
@@ -128,19 +106,16 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->setConstructorArgs( array( array( 'id' => $contentId ) ) )
             ->getMockForAbstractClass();
 
-        $this->locationService
-            ->expects( $this->never() )
-            ->method( 'loadLocation' );
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'getPreviewLocation' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Location' ) ) );
         $this->contentService
             ->expects( $this->once() )
             ->method( 'loadContent' )
             ->with( $contentId, array( $lang ), $versionNo )
             ->will( $this->returnValue( $content ) );
-        $this->contentService
-            ->expects( $this->once() )
-            ->method( 'loadContentInfo' )
-            ->with( $contentId )
-            ->will( $this->returnValue( $contentInfo ) );
         $this->repository
             ->expects( $this->once() )
             ->method( 'canUser' )
@@ -157,29 +132,21 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $versionNo = 3;
         $locationId = 456;
         $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
-        $contentInfo = $this->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\ContentInfo' )
-            ->setConstructorArgs( array( array( 'id' => $contentId, 'mainLocationId' => $locationId ) ) )
-            ->getMockForAbstractClass();
         $location = $this->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\Location' )
             ->setConstructorArgs( array( array( 'id' => $locationId ) ) )
             ->getMockForAbstractClass();
 
         // Repository expectations
-        $this->locationService
+        $this->previewHelper
             ->expects( $this->once() )
-            ->method( 'loadLocation' )
-            ->with( $locationId )
+            ->method( 'getPreviewLocation' )
+            ->with( $contentId )
             ->will( $this->returnValue( $location ) );
         $this->contentService
             ->expects( $this->once() )
             ->method( 'loadContent' )
             ->with( $contentId, array( $lang ), $versionNo )
             ->will( $this->returnValue( $content ) );
-        $this->contentService
-            ->expects( $this->once() )
-            ->method( 'loadContentInfo' )
-            ->with( $contentId )
-            ->will( $this->returnValue( $contentInfo ) );
         $this->repository
             ->expects( $this->once() )
             ->method( 'canUser' )
@@ -187,33 +154,20 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( true ) );
 
         $previewSiteAccessName = 'test';
+        $previewSiteAccess = new SiteAccess( $previewSiteAccessName, 'preview' );
         $previousSiteAccessName = 'foo';
         $previousSiteAccess = new SiteAccess( $previousSiteAccessName );
         $request = $this->getMock( 'Symfony\Component\HttpFoundation\Request', array( 'duplicate' ) );
 
-        // ConfigResolver expectations
-        $this->configResolver
-            ->expects( $this->at( 0 ) )
-            ->method( 'getDefaultScope' )
-            ->will( $this->returnValue( $previousSiteAccessName ) );
-        $this->configResolver
-            ->expects( $this->at( 1 ) )
-            ->method( 'setDefaultScope' )
-            ->with( $previewSiteAccessName );
-        $this->configResolver
-            ->expects( $this->at( 2 ) )
-            ->method( 'setDefaultScope' )
-            ->with( $previousSiteAccessName );
-
-        // ViewManager expectations
-        $this->viewManager
-            ->expects( $this->at( 0 ) )
-            ->method( 'setSiteAccess' )
-            ->with( $this->equalTo( new SiteAccess( $previewSiteAccessName ) ) );
-        $this->viewManager
-            ->expects( $this->at( 1 ) )
-            ->method( 'setSiteAccess' )
-            ->with( $previousSiteAccess );
+        // PreviewHelper expectations
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'changeConfigScope' )
+            ->with( $previewSiteAccessName )
+            ->will( $this->returnValue( $previewSiteAccess ) );
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'restoreConfigScope' );
 
         // Request expectations
         $duplicatedRequest = new Request();
@@ -223,7 +177,12 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
                 'location' => $location,
                 'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
                 'layout' => true,
-                'params' => array( 'content' => $content, 'location' => $location, 'isPreview' => true )
+                'params' => array(
+                    'content' => $content,
+                    'location' => $location,
+                    'isPreview' => true,
+                    'siteaccess' => $previewSiteAccess
+                )
             )
         );
         $request
@@ -242,11 +201,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $controller = new PreviewController(
             $this->repository,
             $this->httpKernel,
-            $this->viewManager,
-            $this->configResolver
+            $this->previewHelper
         );
         $controller->setRequest( $request );
-        $controller->setSiteAccess( $previousSiteAccess );
         $this->assertSame(
             $expectedResponse,
             $controller->previewContentAction( $contentId, $versionNo, $lang, $previewSiteAccessName )

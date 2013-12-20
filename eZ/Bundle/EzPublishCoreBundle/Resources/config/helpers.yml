@@ -2,6 +2,8 @@ parameters:
     # Helpers
     ezpublish.translation_helper.class: eZ\Publish\Core\Helper\TranslationHelper
     ezpublish.field_helper.class: eZ\Publish\Core\Helper\FieldHelper
+    ezpublish.content_preview_helper.class: eZ\Publish\Core\Helper\ContentPreviewHelper
+    ezpublish.config_scope_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ConfigScopeListener
 
 services:
     # Helpers
@@ -12,3 +14,15 @@ services:
     ezpublish.field_helper:
         class: %ezpublish.field_helper.class%
         arguments: [@ezpublish.translation_helper, @ezpublish.api.service.content_type, @ezpublish.api.service.field_type]
+
+    ezpublish.content_preview_helper:
+        class: %ezpublish.content_preview_helper.class%
+        arguments: [@ezpublish.api.service.content, @ezpublish.api.service.location, @event_dispatcher]
+        calls:
+            - [setSiteAccess, [@ezpublish.siteaccess]]
+
+    ezpublish.config_scope_listener:
+        class: %ezpublish.config_scope_listener.class%
+        arguments: [@ezpublish.config.resolver.core, @ezpublish.view_manager]
+        tags:
+            - { name: kernel.event_subscriber }

@@ -53,6 +53,7 @@ parameters:
     ezpublish_legacy.rest_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\RestListener
     ezpublish_legacy.siteaccess_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\SiteAccessListener
     ezpublish_legacy.request_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\RequestListener
+    ezpublish_legacy.config_scope_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\ConfigScopeListener
 
 services:
     ezpublish_legacy.kernel:
@@ -237,5 +238,11 @@ services:
     ezpublish_legacy.request_listener:
         class: %ezpublish_legacy.request_listener.class%
         arguments: [@service_container, @security.context]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_legacy.config_scope_listener:
+        class: %ezpublish_legacy.config_scope_listener.class%
+        arguments: [@service_container]
         tags:
             - { name: kernel.event_subscriber }
