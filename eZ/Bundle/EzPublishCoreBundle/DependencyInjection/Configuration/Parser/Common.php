@@ -162,6 +162,8 @@ class Common extends AbstractParser
                 $container->setParameter( "ezsettings.$sa.session_name", $settings['session_name'] );
             if ( isset( $settings['http_cache']['purge_servers'] ) )
                 $container->setParameter( "ezsettings.$sa.http_cache.purge_servers", $settings['http_cache']['purge_servers'] );
+            if ( isset( $settings['anonymous_user_id'] ) )
+                $container->setParameter( "ezsettings.$sa.anonymous_user_id", $settings['anonymous_user_id'] );
             if ( isset( $settings['user']['layout'] ) )
                 $container->setParameter( "ezsettings.$sa.security.base_layout", $settings['user']['layout'] );
             if ( isset( $settings['user']['login_template'] ) )
