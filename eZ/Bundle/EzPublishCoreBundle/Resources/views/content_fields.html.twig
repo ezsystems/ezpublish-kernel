@@ -190,7 +190,7 @@
 {# @todo: handle the unit of the fileSize (si operator in legacy template engine) #}
 {% block ezbinaryfile_field %}
 {% spaceless %}
-    {% if field.value %}
+    {% if field.value.fileName %}
         {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
                         ~ '/version/' ~ contentInfo.currentVersionNo ~  "/file/"
                         ~ field.value.fileName|escape( 'url' ) %}
