@@ -101,7 +101,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function loadRole( $roleId );
+    public function loadRole( $roleId, $userId = null );
 
     /**
      * Loads a specified role by $identifier

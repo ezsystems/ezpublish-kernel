@@ -196,9 +196,9 @@ class Handler implements BaseUserHandler
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function loadRole( $roleId )
+    public function loadRole( $roleId, $userId = null )
     {
-        $data = $this->roleGateway->loadRole( $roleId );
+        $data = $this->roleGateway->loadRole( $roleId, $userId );
 
         if ( empty( $data ) )
         {

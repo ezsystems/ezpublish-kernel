@@ -335,7 +335,7 @@ class Repository implements RepositoryInterface
         {
             $permissionSet = array( 'limitation' => null, 'policies' => array() );
 
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $spiRoleAssignment->roleId );
+            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $spiRoleAssignment->roleId, $spiRoleAssignment->contentId );
             foreach ( $spiRole->policies as $spiPolicy )
             {
                 if ( $spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null )

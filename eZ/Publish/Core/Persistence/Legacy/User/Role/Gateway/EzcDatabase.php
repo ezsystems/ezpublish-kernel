@@ -87,7 +87,7 @@ class EzcDatabase extends Gateway
      *
      * @return array
      */
-    public function loadRole( $roleId )
+    public function loadRole( $roleId, $userId = null )
     {
         $query = $this->handler->createSelectQuery();
         $query->select(
@@ -131,6 +131,16 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $roleId, null, \PDO::PARAM_INT )
             )
         );
+
+        if( $userId !== null )
+        {
+            $query->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'contentobject_id', 'ezuser_role' ),
+                    $query->bindValue( $userId, null, \PDO::PARAM_INT )
+                )
+            );
+        }
 
         $statement = $query->prepare();
         $statement->execute();

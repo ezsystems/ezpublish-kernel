@@ -107,14 +107,14 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\User\Handler::loadRole
      */
-    public function loadRole( $roleId )
+    public function loadRole( $roleId, $userId = null )
     {
-        $cache = $this->cache->getItem( 'user', 'role', $roleId );
+        $cache = $this->cache->getItem( 'user', 'role', $roleId, $userId );
         $role = $cache->get();
         if ( $cache->isMiss() )
         {
             $this->logger->logCall( __METHOD__, array( 'role' => $roleId ) );
-            $role = $this->persistenceFactory->getUserHandler()->loadRole( $roleId );
+            $role = $this->persistenceFactory->getUserHandler()->loadRole( $roleId, $userId );
             $cache->set( $role );
         }
 
