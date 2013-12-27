@@ -22,7 +22,7 @@ class Float implements Converter
     const NO_MIN_MAX_VALUE = 0;
     const HAS_MIN_VALUE = 1;
     const HAS_MAX_VALUE = 2;
-
+    const HAS_BOTH_VALUE = 3;
     /**
      * Factory for current class
      *
@@ -84,7 +84,7 @@ class Float implements Converter
 
     /**
      * Converts field definition data in $storageDef into $fieldDef
-     *
+     * The constant (HAS_MIN_VALUE, HAS_MAX_VALUE,HAS_BOTH_VALUE) are set if the field max or min are define
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
@@ -93,22 +93,15 @@ class Float implements Converter
         $fieldDef->fieldTypeConstraints->validators = array(
             self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minFloatValue' => false, 'maxFloatValue' => false )
         );
-
-        if ( $storageDef->dataFloat4 !== self::NO_MIN_MAX_VALUE )
-        {
-            if ( !empty( $storageDef->dataFloat1 ) )
+            if ( ( (int)$storageDef->dataFloat4===self::HAS_MIN_VALUE or (int)$storageDef->dataFloat4===self::HAS_BOTH_VALUE)  )
             {
                 $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minFloatValue'] = $storageDef->dataFloat1;
             }
 
-            if ( !empty( $storageDef->dataFloat2 ) )
+            if ( ((int)$storageDef->dataFloat4===self::HAS_MAX_VALUE or (int)$storageDef->dataFloat4===self::HAS_BOTH_VALUE) )
             {
                 $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxFloatValue'] = $storageDef->dataFloat2;
             }
-        }
-
-        $fieldDef->defaultValue->data = $storageDef->dataFloat3;
-        $fieldDef->defaultValue->sortKey = 0;
     }
 
     /**
@@ -141,7 +134,7 @@ class Float implements Converter
     {
         $state = self::NO_MIN_MAX_VALUE;
 
-        if ( $minValue !== null )
+        if ( $minValue !== null)
             $state += self::HAS_MIN_VALUE;
 
         if ( $maxValue !== null )

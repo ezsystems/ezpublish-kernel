@@ -22,6 +22,7 @@ class Integer implements Converter
     const NO_MIN_MAX_VALUE = 0;
     const HAS_MIN_VALUE = 1;
     const HAS_MAX_VALUE = 2;
+    const HAS_BOTH_VALUE= 3;
 
     /**
      * Factory for current class
@@ -84,7 +85,7 @@ class Integer implements Converter
 
     /**
      * Converts field definition data in $storageDef into $fieldDef
-     *
+     * The constant (HAS_MIN_VALUE, HAS_MAX_VALUE,HAS_BOTH_VALUE) are set if the field max or min are define
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
@@ -93,26 +94,15 @@ class Integer implements Converter
         $fieldDef->fieldTypeConstraints->validators = array(
             self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
         );
-
-        if ( $storageDef->dataInt4 !== self::NO_MIN_MAX_VALUE )
+        if ( ( $storageDef->dataInt4 === self::HAS_MIN_VALUE or $storageDef->dataInt4 === self::HAS_BOTH_VALUE)  )
         {
-            if ( !empty( $storageDef->dataInt1 ) )
-            {
-                $fieldDef
-                    ->fieldTypeConstraints
-                    ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] = $storageDef->dataInt1;
-            }
-
-            if ( !empty( $storageDef->dataInt2 ) )
-            {
-                $fieldDef
-                    ->fieldTypeConstraints
-                    ->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] = $storageDef->dataInt2;
-            }
+            $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] = $storageDef->dataInt1;
         }
 
-        $fieldDef->defaultValue->data = $storageDef->dataInt3;
-        $fieldDef->defaultValue->sortKey = ( $storageDef->dataInt3 === null ? 0 : $storageDef->dataInt3 );
+        if ( ( $storageDef->dataInt4 === self::HAS_MAX_VALUE or $storageDef->dataInt4 === self::HAS_BOTH_VALUE) )
+        {
+            $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] = $storageDef->dataInt2;
+        }
     }
 
     /**
