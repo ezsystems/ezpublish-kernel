@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Legacy;
 
+use Exception;
 use ezpKernel;
 use ezpKernelHandler;
 use RuntimeException;
@@ -103,7 +104,16 @@ class Kernel extends ezpKernel
 
         $this->runningCallback = true;
         $this->enterLegacyRootDir();
-        $return = parent::runCallback( $callback, $postReinitialize );
+        try
+        {
+            $return = parent::runCallback( $callback, $postReinitialize );
+        }
+        catch ( Exception $e )
+        {
+            $this->leaveLegacyRootDir();
+            $this->runningCallback = false;
+            throw $e;
+        }
         $this->leaveLegacyRootDir();
         $this->runningCallback = false;
         return $return;
