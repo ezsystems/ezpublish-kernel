@@ -23,7 +23,6 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
-
 /**
  * Content controller
  */
@@ -718,7 +717,6 @@ class Content extends RestController
      *
      * @return Exception;
      */
-
     public function listView()
     {
         return new NotImplementedException( 'ezpublish_rest.controller.content:listView' );
