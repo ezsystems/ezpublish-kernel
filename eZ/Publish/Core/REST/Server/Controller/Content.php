@@ -19,8 +19,10 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
+
 
 /**
  * Content controller
@@ -710,4 +712,26 @@ class Content extends RestController
             )
         );
     }
+
+    /**
+     * List content views
+     *
+     * @return Exception;
+     */
+
+    public function listView()
+    {
+        return new NotImplementedException( 'ezpublish_rest.controller.content:listView' );
+    }
+
+    /**
+     * Get a content view
+     *
+     * @return Exception;
+     */
+    public function getView()
+    {
+        return new NotImplementedException( 'ezpublish_rest.controller.content:getView' );
+    }
+
 }
