@@ -335,4 +335,33 @@ class CommonTest extends AbstractExtensionTestCase
         $this->assertSame( $cachePurgeServers, $this->container->getParameter( 'ezsettings.ezdemo_site.http_cache.purge_servers' ) );
         $this->assertSame( $anonymousUserId, $this->container->getParameter( 'ezsettings.ezdemo_site.anonymous_user_id' ) );
     }
+
+    public function testUserSettings()
+    {
+        $layout = 'somelayout.html.twig';
+        $loginTemplate = 'login_template.html.twig';
+        $this->load(
+            array(
+                'system' => array(
+                    'ezdemo_site' => array(
+                        'user' => array(
+                            'layout' => $layout,
+                            'login_template' => $loginTemplate,
+                        ),
+                    )
+                )
+            )
+        );
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.base_layout' ) );
+        $this->assertSame( $layout, $this->container->getParameter( 'ezsettings.ezdemo_site.security.base_layout' ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.login_template' ) );
+        $this->assertSame( $loginTemplate, $this->container->getParameter( 'ezsettings.ezdemo_site.security.login_template' ) );
+    }
+
+    public function testNoUserSettings()
+    {
+        $this->load();
+        $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.base_layout' ) );
+        $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.login_template' ) );
+    }
 }

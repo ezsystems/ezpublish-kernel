@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 use DateTime;
 use ezpKernelResult;
@@ -53,6 +54,7 @@ class LegacyResponseManager
      *
      * @param \ezpKernelResult $result
      *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @return \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse
      */
     public function generateResponseFromModuleResult( ezpKernelResult $result )
@@ -79,6 +81,14 @@ class LegacyResponseManager
         // Handling error codes sent by the legacy stack
         if ( isset( $moduleResult['errorCode'] ) )
         {
+            // If having an "Unauthorized" or "Forbidden" error code, we send an AccessDeniedException
+            // to be able to trigger redirection to login in Symfony stack.
+            if ( $moduleResult['errorCode'] == 401 || $moduleResult['errorCode'] == 403 )
+            {
+                $errorMessage = isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : 'Access denied';
+                throw new AccessDeniedException( $errorMessage );
+            }
+
             $response->setStatusCode(
                 $moduleResult['errorCode'],
                 isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : null

@@ -73,12 +73,7 @@ class Provider implements APIUserProviderInterface
             if ( $user instanceof User )
                 return $user;
 
-            $isLoggedIn = $user != -1;
-            $apiUser = $isLoggedIn ?
-                $this->getUserService()->loadUser( $user ) :
-                $this->getRepository()->getCurrentUser();
-            $roles = $isLoggedIn ? array( 'ROLE_USER' ) : array();
-            return new User( $apiUser, $roles );
+            return new User( $this->getUserService()->loadUserByLogin( $user ), array( 'ROLE_USER' ) );
         }
         catch ( NotFoundException $e )
         {
@@ -101,6 +96,11 @@ class Provider implements APIUserProviderInterface
      */
     public function refreshUser( UserInterface $user )
     {
+        if ( $user instanceof User )
+        {
+            $this->getRepository()->setCurrentUser( $user->getAPIUser() );
+        }
+
         return $user;
     }
 

@@ -52,7 +52,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
                 'X-Something-else' => 'whatever'
             )
         );
-        $request->cookies->set( 'is_logged_in', 'true' );
+        $request->cookies->set( 'eZSESSID', 'some_session_id' );
         $hash = '123abc';
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|Kernel $kernel */
@@ -113,7 +113,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
                 'X-Something-else' => 'whatever'
             )
         );
-        $request->cookies->set( 'is_logged_in', 'true' );
+        $request->cookies->set( 'eZSESSID_foobar', 'some_session_id' );
         $hash = '123abc';
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|Kernel $kernel */

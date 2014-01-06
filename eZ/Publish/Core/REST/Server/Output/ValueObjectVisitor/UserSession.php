@@ -34,9 +34,6 @@ class UserSession extends ValueObjectVisitor
         $sessionHref = $this->router->generate( 'ezpublish_rest_deleteSession', array( 'sessionId' => $data->sessionId ) );
         $visitor->setHeader( 'Location', $sessionHref );
 
-        // @deprecated Since 5.0, this cookie is used for legacy until Static cache support is removed along with this cookie
-        $visitor->setHeader( 'Set-Cookie', 'is_logged_in=true; path=/' );
-
         //@todo Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader( 'Accept-Patch', false );
 

@@ -17,6 +17,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * SiteAccess match listener.
@@ -38,11 +39,17 @@ class SiteAccessListener implements EventSubscriberInterface
      */
     private $urlAliasGenerator;
 
-    public function __construct( ContainerInterface $container, RouterInterface $defaultRouter, UrlAliasGenerator $urlAliasGenerator )
+    /**
+     * @var \Symfony\Component\Security\Http\HttpUtils
+     */
+    private $httpUtils;
+
+    public function __construct( ContainerInterface $container, RouterInterface $defaultRouter, UrlAliasGenerator $urlAliasGenerator, HttpUtils $httpUtils )
     {
         $this->container = $container;
         $this->defaultRouter = $defaultRouter;
         $this->urlAliasGenerator = $urlAliasGenerator;
+        $this->httpUtils = $httpUtils;
     }
 
     public static function getSubscribedEvents()
@@ -61,6 +68,8 @@ class SiteAccessListener implements EventSubscriberInterface
             $this->urlAliasGenerator->setSiteAccess( $siteAccess );
         if ( $this->defaultRouter instanceof SiteAccessAware )
             $this->defaultRouter->setSiteAccess( $siteAccess );
+        if ( $this->httpUtils instanceof SiteAccessAware )
+            $this->httpUtils->setSiteAccess( $siteAccess );
 
         // We already have semanticPathinfo (sub-request)
         if ( $request->attributes->has( 'semanticPathinfo' ) )

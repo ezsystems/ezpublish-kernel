@@ -63,6 +63,6 @@ class Attribute
      */
     public function __toString()
     {
-        return "ROLE_EZ_{$this->module}_{$this->function}";
+        return "EZ_ROLE_{$this->module}_{$this->function}";
     }
 }

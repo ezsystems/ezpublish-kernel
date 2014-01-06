@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the CoreVoter class.
+ * File containing the ValueObjectVoter class.
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,12 +9,14 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter;
 
-use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
-use eZ\Publish\Core\MVC\Symfony\Security\User;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 
-class CoreVoter implements VoterInterface
+/**
+ * Voter to test access to a ValueObject from Repository (e.g. Content, Location...)
+ */
+class ValueObjectVoter implements VoterInterface
 {
     /**
      * @var \Closure
@@ -35,25 +37,11 @@ class CoreVoter implements VoterInterface
         return $lazyRepository();
     }
 
-    /**
-     * Checks if the voter supports the given attribute.
-     *
-     * @param string $attribute An attribute
-     *
-     * @return Boolean true if this Voter supports the attribute, false otherwise
-     */
     public function supportsAttribute( $attribute )
     {
-        return $attribute instanceof AuthorizationAttribute;
+        return $attribute instanceof AuthorizationAttribute && isset( $attribute->limitations['valueObject'] );
     }
 
-    /**
-     * Checks if the voter supports the given class.
-     *
-     * @param string $class A class name
-     *
-     * @return true if this Voter can process the class
-     */
     public function supportsClass( $class )
     {
         return true;
@@ -61,13 +49,20 @@ class CoreVoter implements VoterInterface
 
     /**
      * Returns the vote for the given parameters.
+     * Checks if user has access to a given action on a given value object.
+     *
+     * $attributes->limitations is a hash that contains:
+     *  - 'valueObject' - The ValueObject to check access on (eZ\Publish\API\Repository\Values\ValueObject). e.g. Location or Content.
+     *  - 'targets' - The location, parent or "assignment" value object, or an array of the same.
      *
      * This method must return one of the following constants:
      * ACCESS_GRANTED, ACCESS_DENIED, or ACCESS_ABSTAIN.
      *
-     * @param TokenInterface $token A TokenInterface instance
-     * @param object $object The object to secure
-     * @param array $attributes An array of attributes associated with the method being invoked
+     * @see \eZ\Publish\API\Repository\Repository::canUser()
+     *
+     * @param TokenInterface $token      A TokenInterface instance
+     * @param object         $object     The object to secure
+     * @param array          $attributes An array of attributes associated with the method being invoked
      *
      * @return integer either ACCESS_GRANTED, ACCESS_ABSTAIN, or ACCESS_DENIED
      */
@@ -77,8 +72,18 @@ class CoreVoter implements VoterInterface
         {
             if ( $this->supportsAttribute( $attribute ) )
             {
-                if ( $this->getRepository()->hasAccess( $attribute->module, $attribute->function ) === false )
+                $targets = isset( $attribute->limitations['targets'] ) ? $attribute->limitations['targets'] : null;
+                if (
+                    $this->getRepository()->canUser(
+                        $attribute->module,
+                        $attribute->function,
+                        $attribute->limitations['valueObject'],
+                        $targets
+                    ) === false
+                )
+                {
                     return VoterInterface::ACCESS_DENIED;
+                }
 
                 return VoterInterface::ACCESS_GRANTED;
             }
