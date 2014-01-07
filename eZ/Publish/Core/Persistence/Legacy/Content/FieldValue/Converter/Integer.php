@@ -22,7 +22,7 @@ class Integer implements Converter
     const NO_MIN_MAX_VALUE = 0;
     const HAS_MIN_VALUE = 1;
     const HAS_MAX_VALUE = 2;
-    const HAS_BOTH_VALUE= 3;
+    const HAS_BOTH_VALUE = 3;
 
     /**
      * Factory for current class
@@ -94,7 +94,7 @@ class Integer implements Converter
         $fieldDef->fieldTypeConstraints->validators = array(
             self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
         );
-        if ( ( $storageDef->dataInt4 === self::HAS_MIN_VALUE or $storageDef->dataInt4 === self::HAS_BOTH_VALUE)  )
+        if ( ( $storageDef->dataInt4 === self::HAS_MIN_VALUE or $storageDef->dataInt4 === self::HAS_BOTH_VALUE) )
         {
             $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] = $storageDef->dataInt1;
         }

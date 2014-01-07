@@ -93,12 +93,12 @@ class Float implements Converter
         $fieldDef->fieldTypeConstraints->validators = array(
             self::FLOAT_VALIDATOR_IDENTIFIER => array( 'minFloatValue' => false, 'maxFloatValue' => false )
         );
-            if ( ( (int)$storageDef->dataFloat4===self::HAS_MIN_VALUE or (int)$storageDef->dataFloat4===self::HAS_BOTH_VALUE)  )
+            if ( ( (int)$storageDef->dataFloat4 === self::HAS_MIN_VALUE or (int)$storageDef->dataFloat4 === self::HAS_BOTH_VALUE) )
             {
                 $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minFloatValue'] = $storageDef->dataFloat1;
             }
 
-            if ( ((int)$storageDef->dataFloat4===self::HAS_MAX_VALUE or (int)$storageDef->dataFloat4===self::HAS_BOTH_VALUE) )
+            if ( ((int)$storageDef->dataFloat4 === self::HAS_MAX_VALUE or (int)$storageDef->dataFloat4 === self::HAS_BOTH_VALUE) )
             {
                 $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxFloatValue'] = $storageDef->dataFloat2;
             }
