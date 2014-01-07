@@ -9,22 +9,19 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class PreviewController
 {
-    /**
-     * @var \eZ\Publish\Core\Repository\Repository
-     */
-    private $repository;
-
     /**
      * @var \eZ\Publish\API\Repository\ContentService
      */
@@ -41,20 +38,26 @@ class PreviewController
     private $previewHelper;
 
     /**
+     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     */
+    private $securityContext;
+
+    /**
      * @var \Symfony\Component\HttpFoundation\Request
      */
     private $request;
 
     public function __construct(
-        Repository $repository,
+        ContentService $contentService,
         HttpKernelInterface $kernel,
-        ContentPreviewHelper $previewHelper
+        ContentPreviewHelper $previewHelper,
+        SecurityContextInterface $securityContext
     )
     {
-        $this->repository = $repository;
-        $this->contentService = $this->repository->getContentService();
+        $this->contentService = $contentService;
         $this->kernel = $kernel;
         $this->previewHelper = $previewHelper;
+        $this->securityContext = $securityContext;
     }
 
     public function setRequest( Request $request = null )
@@ -74,7 +77,7 @@ class PreviewController
             throw new AccessDeniedException();
         }
 
-        if ( !$this->repository->canUser( 'content', 'versionview', $content ) )
+        if ( !$this->securityContext->isGranted( new AuthorizationAttribute( 'content', 'versionview', array( 'valueObject' => $content ) ) ) )
         {
             throw new AccessDeniedException();
         }
