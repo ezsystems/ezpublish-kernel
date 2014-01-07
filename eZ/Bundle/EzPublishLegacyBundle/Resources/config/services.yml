@@ -125,6 +125,7 @@ services:
             - @ezpublish_legacy.config.resolver
             - @ezpublish_legacy.persistence_cache_purger
             - @ezpublish_legacy.configuration_mapper
+            - @ezpublish_legacy.security_mapper
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%

@@ -33,10 +33,22 @@ class Security implements EventSubscriberInterface
      */
     private $configResolver;
 
+    private $enabled = true;
+
     public function __construct( Repository $repository, ConfigResolverInterface $configResolver )
     {
         $this->repository = $repository;
         $this->configResolver = $configResolver;
+    }
+
+    /**
+     * Toggles the feature
+     *
+     * @param bool $enabled
+     */
+    public function setEnabled( $enabled )
+    {
+        $this->enabled = (bool)$enabled;
     }
 
     public static function getSubscribedEvents()
@@ -58,6 +70,7 @@ class Security implements EventSubscriberInterface
         if (
             !$event->getKernelHandler() instanceof ezpWebBasedKernelHandler
             || $this->configResolver->getParameter( 'legacy_mode' ) === true
+            || $this->enabled === false
         )
         {
             return;

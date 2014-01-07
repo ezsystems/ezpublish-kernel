@@ -56,7 +56,8 @@ class Configuration implements EventSubscriberInterface
     private $options;
 
     /**
-     * Disables the feature when set using setIsEnabled()
+     * Disables the feature when set using setEnabled()
+     *
      * @var bool
      */
     private $enabled = true;
@@ -80,6 +81,7 @@ class Configuration implements EventSubscriberInterface
 
     /**
      * Toggles the feature
+     *
      * @param bool $isEnabled
      */
     public function setEnabled( $isEnabled )
