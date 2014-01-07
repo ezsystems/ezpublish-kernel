@@ -92,6 +92,32 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         $listener->onKernelBuilt( $event );
     }
 
+    public function testOnKernelBuiltDisabled()
+    {
+        $kernelHandler = $this->getMock( 'ezpWebBasedKernelHandler' );
+        $legacyKernel = $this
+            ->getMockBuilder( 'eZ\Publish\Core\MVC\Legacy\Kernel' )
+            ->setConstructorArgs( array( $kernelHandler, 'foo', 'bar' ) )
+            ->getMock();
+        $event = new PostBuildKernelEvent( $legacyKernel, $kernelHandler );
+
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'legacy_mode' )
+            ->will( $this->returnValue( false ) );
+        $this->repository
+            ->expects( $this->never() )
+            ->method( 'getCurrentUser' );
+        $legacyKernel
+            ->expects( $this->never() )
+            ->method( 'runCallback' );
+
+        $listener = new Security( $this->repository, $this->configResolver );
+        $listener->setEnabled( false );
+        $listener->onKernelBuilt( $event );
+    }
+
     public function testOnKernelBuilt()
     {
         $kernelHandler = $this->getMock( 'ezpWebBasedKernelHandler' );
