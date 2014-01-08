@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
@@ -96,10 +97,19 @@ class ViewController extends Controller
 
         try
         {
+            if ( isset( $params['location'] ) && $params['location'] instanceof Location )
+            {
+                $location = $params['location'];
+            }
+            else
+            {
+                $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+            }
+
             $response->headers->set( 'X-Location-Id', $locationId );
             $response->setContent(
                 $this->renderLocation(
-                    $this->getRepository()->getLocationService()->loadLocation( $locationId ),
+                    $location,
                     $viewType,
                     $layout,
                     $params

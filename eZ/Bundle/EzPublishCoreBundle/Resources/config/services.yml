@@ -6,6 +6,7 @@ parameters:
     ezpublish.config.default_scope: ezsettings
     ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
+    ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
     ezpublish.data_collector.spi.persistence.class: eZ\Bundle\EzPublishCoreBundle\Collector\SPIPersistenceDataCollector
     ezpublish.controller.user.authentication.class: eZ\Publish\Core\MVC\Symfony\Controller\User\AuthenticationController
@@ -47,6 +48,16 @@ services:
         arguments: [@ezpublish.view_manager]
         parent: ezpublish.controller.base
         scope: request
+
+    ezpublish.controller.content.preview:
+        class: %ezpublish.controller.content.preview.class%
+        arguments:
+            - @ezpublish.api.service.content
+            - @http_kernel
+            - @ezpublish.content_preview_helper
+            - @security.context
+        calls:
+            - [setRequest, [@?request=]]
 
     ezpublish.controller.user.authentication:
         class: %ezpublish.controller.user.authentication.class%

@@ -10,21 +10,29 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Matcher;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\LocationMatcherFactory as BaseMatcherFactory;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LocationMatcherFactory extends BaseMatcherFactory
+class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAware
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     private $container;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface;
+     */
+    private $configResolver;
+
     public function __construct( ContainerInterface $container )
     {
         $this->container = $container;
+        $this->configResolver = $this->container->get( 'ezpublish.config.resolver' );
         parent::__construct(
             $this->container->get( 'ezpublish.api.repository' ),
-            $this->container->get( 'ezpublish.config.resolver' )->getParameter( 'location_view' )
+            $this->configResolver->getParameter( 'location_view' )
         );
     }
 
@@ -39,5 +47,20 @@ class LocationMatcherFactory extends BaseMatcherFactory
             return $this->container->get( $matcherIdentifier );
 
         return parent::getMatcher( $matcherIdentifier );
+    }
+
+    /**
+     * Changes internal configuration to use the one for passed SiteAccess.
+     *
+     * @param SiteAccess $siteAccess
+     */
+    public function setSiteAccess( SiteAccess $siteAccess = null )
+    {
+        if ( $siteAccess === null )
+        {
+            return;
+        }
+
+        $this->matchConfig = $this->configResolver->getParameter( 'location_view', 'ezsettings', $siteAccess->name );
     }
 }

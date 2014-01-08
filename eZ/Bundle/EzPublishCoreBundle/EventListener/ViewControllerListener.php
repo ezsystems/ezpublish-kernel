@@ -10,6 +10,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Controller\ManagerInterface as ControllerManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -64,6 +66,8 @@ class ViewControllerListener implements EventSubscriberInterface
      * Detects if there is a custom controller to use to render a Location/Content.
      *
      * @param FilterControllerEvent $event
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     public function getController( FilterControllerEvent $event )
     {
@@ -81,14 +85,26 @@ class ViewControllerListener implements EventSubscriberInterface
                     $request->attributes->get( 'locationId' )
                 );
             }
+            else if ( $request->attributes->get( 'location' ) instanceof Location )
+            {
+                $valueObject = $request->attributes->get( 'location' );
+                $request->attributes->set( 'locationId', $valueObject->id );
+            }
             else if ( $request->attributes->has( 'contentId' ) )
             {
                 $valueObject = $this->repository->sudo(
                     function ( $repository ) use ( $request )
                     {
-                        return $repository->getContentService()->loadContentInfo( $request->attributes->get( 'contentId' ) );
+                        return $repository->getContentService()->loadContentInfo(
+                            $request->attributes->get( 'contentId' )
+                        );
                     }
                 );
+            }
+            else if ( $request->attributes->get( 'contentInfo' ) instanceof ContentInfo )
+            {
+                $valueObject = $request->attributes->get( 'contentInfo' );
+                $request->attributes->set( 'contentId', $valueObject->id );
             }
         }
         catch ( UnauthorizedException $e)

@@ -46,4 +46,19 @@ final class MVCEvents
      * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\SignalEvent instance.
      */
     const API_SIGNAL = 'ezpublish.api.signal';
+
+    /**
+     * CONFIG_SCOPE_CHANGE event occurs when configuration scope is changed (e.g. for content preview in a given siteaccess).
+     *
+     * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent instance.
+     */
+    const CONFIG_SCOPE_CHANGE = 'ezpublish.config.scope_change';
+
+    /**
+     * CONFIG_SCOPE_RESTORE event occurs when original configuration scope is restored.
+     * It always happens after a scope change (see CONFIG_SCOPE_CHANGE).
+     *
+     * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent instance.
+     */
+    const CONFIG_SCOPE_RESTORE = 'ezpublish.config.scope_restore';
 }

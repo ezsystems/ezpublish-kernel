@@ -4,13 +4,13 @@ parameters:
 
     ezpublish.twig.extension.content.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension
 
-    ezpublish.view_manager.class: eZ\Publish\Core\MVC\Symfony\View\Manager
+    ezpublish.view_manager.class: eZ\Bundle\EzPublishCoreBundle\View\Manager
     ezpublish.content_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory
     ezpublish.location_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationMatcherFactory
     ezpublish.block_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\BlockMatcherFactory
-    ezpublish.content_view_provider.configured.class: eZ\Publish\Core\MVC\Symfony\View\Provider\Content\Configured
-    ezpublish.location_view_provider.configured.class: eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured
-    ezpublish.block_view_provider.configured.class: eZ\Publish\Core\MVC\Symfony\View\Provider\Block\Configured
+    ezpublish.content_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\ContentConfigured
+    ezpublish.location_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\LocationConfigured
+    ezpublish.block_view_provider.configured.class: eZ\Bundle\EzPublishCoreBundle\View\Provider\BlockConfigured
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
 

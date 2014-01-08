@@ -35,9 +35,9 @@ class GlobalHelper
      */
     public function getSiteaccess()
     {
-        if ( $this->container->has( 'ezpublish.siteaccess' ) )
+        if ( $this->container->has( 'request' ) )
         {
-            return $this->container->get( 'ezpublish.siteaccess' );
+            return $this->container->get( 'request' )->attributes->get( 'siteaccess' );
         }
     }
 
