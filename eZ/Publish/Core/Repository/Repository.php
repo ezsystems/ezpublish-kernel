@@ -280,7 +280,7 @@ class Repository implements RepositoryInterface
      * @throws \Exception Re throws exceptions thrown inside $callback
      * @return mixed
      */
-    final public function sudo( \Closure $callback )
+    public function sudo( \Closure $callback )
     {
         if ( $this->sudoFlag === true )
             throw new RuntimeException( "Recursive sudo use detected, abort abort!" );
