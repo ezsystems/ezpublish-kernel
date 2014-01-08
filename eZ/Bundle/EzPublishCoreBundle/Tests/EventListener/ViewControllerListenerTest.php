@@ -58,9 +58,16 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->controllerResolver = $this->getMock( 'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface' );
         $this->controllerManager = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\ManagerInterface' );
-        $this->repository = $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $this->repository = $repository = $this
+            ->getMockBuilder( $repositoryClass )
             ->disableOriginalConstructor()
+            ->setMethods(
+                array_diff(
+                    get_class_methods( $repositoryClass ),
+                    array( 'sudo' )
+                )
+            )
             ->getMock();
         $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
         $this->controllerListener = new ViewControllerListener( $this->controllerResolver, $this->controllerManager, $this->repository, $this->logger );

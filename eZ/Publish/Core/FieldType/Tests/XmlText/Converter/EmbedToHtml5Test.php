@@ -215,9 +215,16 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
      */
     protected function getMockRepository( $contentService, $locationService )
     {
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
         $repository = $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
+            ->getMockBuilder( $repositoryClass )
             ->disableOriginalConstructor()
+            ->setMethods(
+                array_diff(
+                    get_class_methods( $repositoryClass ),
+                    array( 'sudo' )
+                )
+            )
             ->getMock();
 
         $repository->expects( $this->any() )
