@@ -32,4 +32,11 @@ final class LegacyEvents
      * \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent
      */
     const PRE_BUILD_LEGACY_KERNEL = 'ezpublish_legacy.build_kernel';
+
+    /**
+     * The POST_BUILD_LEGACY_KERNEL event occurs after legacy kernel has been built (whatever handler is used).
+     *
+     * The event listener method receives a \eZ\Publish\Core\MVC\Legacy\Event\PostBuildKernelEvent
+     */
+    const POST_BUILD_LEGACY_KERNEL = 'ezpublish_legacy.post_build_kernel';
 }

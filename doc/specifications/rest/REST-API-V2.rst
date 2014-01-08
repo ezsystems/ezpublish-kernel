@@ -167,11 +167,6 @@ If activated the user has to login to use this and the client has to send the se
 Example request header:
     Cookie: <SessionName> : <sessionID>
 
-is_logged_in cookie
-~~~~~~~~~~~~~~~~~~~
-Session auth currently requires the `is_logged_in` cookie to be provided with every authenticated request.
-This cookie will be sent in reply to a successful session authentication.
-
 CSRF
 ~~~~
 A CSRF token needs to be sent in every request using "unsafe" methods (as in: not GET or HEAD) when a session has been established. It should be sent with header X-CSRF-Token. The token (csrfToken) is defined in response when login via POST /user/sessions.

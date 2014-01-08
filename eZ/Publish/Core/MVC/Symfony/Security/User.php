@@ -132,9 +132,9 @@ class User implements AdvancedUserInterface, EquatableInterface
      */
     public function isEqualTo( UserInterface $user )
     {
-        if ( $user instanceof User && $this->user instanceof User )
+        if ( $user instanceof User && $this->user instanceof APIUser )
         {
-            return $user->getUserObject()->id === $this->user->id;
+            return $user->getAPIUser()->id === $this->user->id;
         }
 
         return false;

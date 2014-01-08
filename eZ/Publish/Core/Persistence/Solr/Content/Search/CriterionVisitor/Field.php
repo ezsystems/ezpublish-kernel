@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap;
+use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
  * Visits the Field criterion
@@ -39,10 +40,11 @@ abstract class Field extends CriterionVisitor
     /**
      * Get field type information
      *
+     * @param CustomFieldInterface $criterion
      * @return array
      */
-    protected function getFieldTypes()
+    protected function getFieldTypes( CustomFieldInterface $criterion )
     {
-        return $this->fieldMap->getFieldTypes();
+        return $this->fieldMap->getFieldTypes( $criterion );
     }
 }

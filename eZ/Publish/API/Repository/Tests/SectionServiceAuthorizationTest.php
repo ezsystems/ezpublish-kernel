@@ -31,7 +31,10 @@ class SectionServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
@@ -40,7 +43,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionCreate->identifier = 'uniqueKey';
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->createSection( $sectionCreate );
@@ -59,7 +62,10 @@ class SectionServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
@@ -70,7 +76,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionId = $sectionService->createSection( $sectionCreate )->id;
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->loadSection( $sectionId );
@@ -90,7 +96,10 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         $standardSectionId = $this->generateId( 'section', 1 );
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         // $standardSectionId is the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
@@ -104,7 +113,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionUpdate->identifier = 'newUniqueKey';
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->updateSection( $section, $sectionUpdate );
@@ -123,7 +132,10 @@ class SectionServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
@@ -140,7 +152,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionService->createSection( $sectionCreateTwo );
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->loadSections();
@@ -158,7 +170,10 @@ class SectionServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
@@ -169,7 +184,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sectionService->createSection( $sectionCreate );
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->loadSectionByIdentifier( 'uniqueKey' );
@@ -188,7 +203,10 @@ class SectionServiceAuthorizationTest extends BaseTest
         $repository = $this->getRepository();
 
         $standardSectionId = $this->generateId( 'section', 1 );
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         // $standardSectionId is the ID of the "Standard" section in a eZ
         // Publish demo installation.
 
@@ -208,7 +226,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $section = $sectionService->loadSection( $standardSectionId );
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->assignSection( $contentInfo, $section );
@@ -226,7 +244,10 @@ class SectionServiceAuthorizationTest extends BaseTest
     {
         $repository = $this->getRepository();
 
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         $userService = $repository->getUserService();
         $sectionService = $repository->getSectionService();
 
@@ -237,7 +258,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $section = $sectionService->createSection( $sectionCreate );
 
         // Set anonymous user
-        $repository->setCurrentUser( $userService->loadAnonymousUser() );
+        $repository->setCurrentUser( $userService->loadUser( $anonymousUserId ) );
 
         // This call will fail with a "UnauthorizedException"
         $sectionService->deleteSection( $section );

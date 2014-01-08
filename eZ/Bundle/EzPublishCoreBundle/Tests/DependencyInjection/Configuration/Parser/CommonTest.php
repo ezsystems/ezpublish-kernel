@@ -293,6 +293,7 @@ class CommonTest extends AbstractExtensionTestCase
         $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.binary_dir' ) );
         $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.session_name' ) );
         $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.http_cache.purge_servers' ) );
+        $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.anonymous_user_id' ) );
     }
 
     public function testMiscSettings()
@@ -307,6 +308,7 @@ class CommonTest extends AbstractExtensionTestCase
             'http://purge.server2:1234/foo',
             'https://purge.server3/bar'
         );
+        $anonymousUserId = 10;
         $this->load(
             array(
                 'system' => array(
@@ -319,6 +321,7 @@ class CommonTest extends AbstractExtensionTestCase
                         'http_cache' => array(
                             'purge_servers' => $cachePurgeServers
                         ),
+                        'anonymous_user_id' => $anonymousUserId
                     )
                 )
             )
@@ -330,5 +333,35 @@ class CommonTest extends AbstractExtensionTestCase
         $this->assertSame( $binaryDir, $this->container->getParameter( 'ezsettings.ezdemo_site.binary_dir' ) );
         $this->assertSame( $sessionName, $this->container->getParameter( 'ezsettings.ezdemo_site.session_name' ) );
         $this->assertSame( $cachePurgeServers, $this->container->getParameter( 'ezsettings.ezdemo_site.http_cache.purge_servers' ) );
+        $this->assertSame( $anonymousUserId, $this->container->getParameter( 'ezsettings.ezdemo_site.anonymous_user_id' ) );
+    }
+
+    public function testUserSettings()
+    {
+        $layout = 'somelayout.html.twig';
+        $loginTemplate = 'login_template.html.twig';
+        $this->load(
+            array(
+                'system' => array(
+                    'ezdemo_site' => array(
+                        'user' => array(
+                            'layout' => $layout,
+                            'login_template' => $loginTemplate,
+                        ),
+                    )
+                )
+            )
+        );
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.base_layout' ) );
+        $this->assertSame( $layout, $this->container->getParameter( 'ezsettings.ezdemo_site.security.base_layout' ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.login_template' ) );
+        $this->assertSame( $loginTemplate, $this->container->getParameter( 'ezsettings.ezdemo_site.security.login_template' ) );
+    }
+
+    public function testNoUserSettings()
+    {
+        $this->load();
+        $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.base_layout' ) );
+        $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.login_template' ) );
     }
 }

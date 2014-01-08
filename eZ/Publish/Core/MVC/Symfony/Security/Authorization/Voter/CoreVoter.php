@@ -73,19 +73,14 @@ class CoreVoter implements VoterInterface
      */
     public function vote( TokenInterface $token, $object, array $attributes )
     {
-        $user = $token->getUser();
-        if ( $user instanceof User )
+        foreach ( $attributes as $attribute )
         {
-            foreach ( $attributes as $attribute )
+            if ( $this->supportsAttribute( $attribute ) )
             {
-                if ( $this->supportsAttribute( $attribute ) )
-                {
-                    // @todo: add limitation when available in the repository
-                    if ( $this->getRepository()->hasAccess( $attribute->module, $attribute->function ) === false )
-                        return VoterInterface::ACCESS_DENIED;
+                if ( $this->getRepository()->hasAccess( $attribute->module, $attribute->function ) === false )
+                    return VoterInterface::ACCESS_DENIED;
 
-                    return VoterInterface::ACCESS_GRANTED;
-                }
+                return VoterInterface::ACCESS_GRANTED;
             }
         }
 

@@ -31,6 +31,8 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException AS RestNotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\MVC\Symfony\Security\User as CoreUser;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * User controller
@@ -944,7 +946,7 @@ class User extends RestController
 
         try
         {
-            $user = $this->userService->loadUserByCredentials(
+            $apiUser = $this->userService->loadUserByCredentials(
                 $sessionInput->login,
                 $sessionInput->password
             );
@@ -957,13 +959,14 @@ class User extends RestController
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $this->container->get( 'session' );
         /** @var $authenticationToken \Symfony\Component\Security\Core\Authentication\Token\TokenInterface */
-        $authenticationToken = $this->container->get( 'security.context' )->getToken();
+        $securityContext = $this->container->get( 'security.context' );
+        $authenticationToken = $securityContext->getToken();
 
-        if ( $session->isStarted() && $authenticationToken !== null )
+        if ( $session->isStarted() && $authenticationToken !== null && $authenticationToken->getUser() instanceof CoreUser )
         {
-            /** @var $currentUser \eZ\Publish\API\Repository\Values\User\User */
-            $currentUser = $authenticationToken->getUser()->getAPIUser();
-            if ( $user->id == $currentUser->id )
+            /** @var $currentApiUser \eZ\Publish\API\Repository\Values\User\User */
+            $currentApiUser = $authenticationToken->getUser()->getAPIUser();
+            if ( $apiUser->id == $currentApiUser->id )
             {
                 return new Values\SeeOther(
                     $this->router->generate(
@@ -973,8 +976,10 @@ class User extends RestController
                 );
             }
 
-            $anonymousUser = $this->userService->loadAnonymousUser();
-            if ( $currentUser->id != $anonymousUser->id )
+            $anonymousUser = $this->userService->loadUser(
+                $this->container->getParameter( "ezpublish.config.resolver" )->getParameter( "anonymous_user_id" )
+            );
+            if ( $currentApiUser->id != $anonymousUser->id )
             {
                 // Already logged in with another user, this will be converted to HTTP status 409
                 return new Values\Conflict();
@@ -988,9 +993,17 @@ class User extends RestController
         }
 
         $session->start();
-        $session->set( "eZUserLoggedInID", $user->id );
+        $roles = array( 'ROLE_USER' );
+        $securityContext->setToken(
+            new UsernamePasswordToken(
+                new CoreUser( $apiUser, $roles ),
+                $apiUser->passwordHash,
+                'ezpublish_rest',
+                $roles
+            )
+        );
         return new Values\UserSession(
-            $user,
+            $apiUser,
             $session->getName(),
             $session->getId(),
             isset( $csrfProvider ) ?

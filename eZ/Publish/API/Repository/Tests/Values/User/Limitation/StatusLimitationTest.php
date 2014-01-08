@@ -34,8 +34,11 @@ class StatusLimitationTest extends BaseLimitationTest
         $repository = $this->getRepository();
 
         $administratorUserId = $this->generateId( 'user', 14 );
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
         // $administratorUserId is the ID of the "Administrator" user in a eZ
+        // Publish demo installation.
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
 
         // Load the user service
@@ -66,7 +69,7 @@ class StatusLimitationTest extends BaseLimitationTest
         $userService = $repository->getUserService();
 
         // Load "Anonymous User" (which has "Anonymous" role)
-        $anonymousUser = $userService->loadAnonymousUser();
+        $anonymousUser = $userService->loadUser( $anonymousUserId );
 
         // Set it as current user
         $repository->setCurrentUser( $anonymousUser );
@@ -100,7 +103,10 @@ class StatusLimitationTest extends BaseLimitationTest
         $repository = $this->getRepository();
 
         $administratorUserId = $this->generateId( 'user', 14 );
+        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous" user in a eZ
+        // Publish demo installation.
         // $administratorUserId is  the ID of the "Administrator" user in a eZ
         // Publish demo installation.
 
@@ -132,7 +138,7 @@ class StatusLimitationTest extends BaseLimitationTest
         $userService = $repository->getUserService();
 
         // Load anonymous user (which has "Anonymous" role)
-        $anonymousUser = $userService->loadAnonymousUser();
+        $anonymousUser = $userService->loadUser( $anonymousUserId );
 
         // Set it as current user
         $repository->setCurrentUser( $anonymousUser );
