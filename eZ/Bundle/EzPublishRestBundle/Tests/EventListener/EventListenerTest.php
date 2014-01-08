@@ -58,10 +58,10 @@ abstract class EventListenerTest extends PHPUnit_Framework_TestCase
         self::assertEquals( $expectedEventTypes, $supportedEventTypes );
 
         // Check that referenced methods exist
-        foreach ( $supportedEvents as $methodName )
+        foreach ( $supportedEvents as $method )
         {
             self::assertTrue(
-                method_exists( $eventListener, $methodName )
+                method_exists( $eventListener, is_array( $method ) ? $method[0] : $method )
             );
         }
     }
