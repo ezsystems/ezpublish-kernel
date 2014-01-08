@@ -66,7 +66,7 @@ class UrlAlias extends MultipleValued
 
         array_walk(
             $matchingConfig,
-            function ( &$item, $key ) {
+            function ( &$item ) {
                 $item = trim( $item, '/ ' );
             }
         );
