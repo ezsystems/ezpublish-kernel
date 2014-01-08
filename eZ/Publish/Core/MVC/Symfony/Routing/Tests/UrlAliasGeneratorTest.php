@@ -52,9 +52,16 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->router = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
         $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
         $this->repository = $repository = $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
+            ->getMockBuilder( $repositoryClass )
             ->disableOriginalConstructor()
+            ->setMethods(
+                array_diff(
+                    get_class_methods( $repositoryClass ),
+                    array( 'sudo' )
+                )
+            )
             ->getMock();
         $this->urlAliasService = $this->getMock( 'eZ\\Publish\\API\\Repository\\URLAliasService' );
         $this->locationService = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
