@@ -260,12 +260,10 @@ class ExceptionConversion extends Gateway
         }
         catch ( ezcDbException $e )
         {
-            throw $e;
             throw new RuntimeException( 'Database error', 0, $e );
         }
         catch ( PDOException $e )
         {
-            throw $e;
             throw new RuntimeException( 'Database error', 0, $e );
         }
     }
