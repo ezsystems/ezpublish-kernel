@@ -8,7 +8,6 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Routing;
 
-use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\Mapper;
 use Symfony\Component\Config\Loader\Loader;
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper;
 use Symfony\Component\Routing\RouteCollection;
