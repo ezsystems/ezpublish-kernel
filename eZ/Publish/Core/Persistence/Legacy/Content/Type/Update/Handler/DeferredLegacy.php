@@ -41,7 +41,7 @@ class DeferredLegacy extends Handler
      *
      * @return void
      */
-    public function updateContentObjects( $fromType, $toType )
+    public function updateContentObjects( Type $fromType, Type $toType )
     {
     }
 
@@ -52,7 +52,7 @@ class DeferredLegacy extends Handler
      *
      * @return void
      */
-    public function deleteOldType( $fromType )
+    public function deleteOldType( Type $fromType )
     {
     }
 
@@ -64,7 +64,7 @@ class DeferredLegacy extends Handler
      *
      * @return void
      */
-    public function publishNewType( $toType, $newStatus )
+    public function publishNewType( Type $toType, $newStatus )
     {
         $this->contentTypeGateway->publishTypeAndFields(
             $toType->id,

@@ -95,7 +95,7 @@ class Page implements Converter
      *
      * @return string
      */
-    public function generateXmlString( $page )
+    public function generateXmlString( Parts\Page $page )
     {
         $dom = new DOMDocument( '1.0', 'utf-8' );
         $dom->formatOutput = true;
@@ -152,7 +152,7 @@ class Page implements Converter
      *
      * @return \DOMElement
      */
-    protected function generateZoneXmlString( $zone, DOMDocument $dom )
+    protected function generateZoneXmlString( Parts\Zone $zone, DOMDocument $dom )
     {
         $zoneNode = $dom->createElement( 'zone' );
         foreach ( $zone->getState() as $attrName => $attrValue )
@@ -211,7 +211,7 @@ class Page implements Converter
      *
      * @return \DOMElement
      */
-    protected function generateBlockXmlString( $block, DOMDocument $dom )
+    protected function generateBlockXmlString( Parts\Block $block, DOMDocument $dom )
     {
         $blockNode = $dom->createElement( 'block' );
 
@@ -287,7 +287,7 @@ class Page implements Converter
      *
      * @return boolean|\DOMElement
      */
-    protected function generateItemXmlString( $item, DOMDocument $dom )
+    protected function generateItemXmlString( Parts\Item $item, DOMDocument $dom )
     {
         if ( !$item->XMLStorable )
         {

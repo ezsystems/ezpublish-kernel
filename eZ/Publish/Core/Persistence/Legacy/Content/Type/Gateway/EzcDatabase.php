@@ -359,11 +359,11 @@ class EzcDatabase extends Gateway
      * Set common columns for insert/update of a Type.
      *
      * @param \ezcQuery $q
-     * @param mixed $type
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      *
      * @return void
      */
-    protected function setCommonTypeColumns( ezcQuery $q, $type )
+    protected function setCommonTypeColumns( ezcQuery $q, Type $type )
     {
         $q->set(
             $this->dbHandler->quoteColumn( 'serialized_name_list' ),

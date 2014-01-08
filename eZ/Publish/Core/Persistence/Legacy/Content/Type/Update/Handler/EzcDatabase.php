@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
+use eZ\Publish\SPI\Persistence\Content\Type;
 
 /**
  * EzcDatabase based type update handler
@@ -50,7 +51,7 @@ class EzcDatabase extends Handler
      *
      * @return void
      */
-    public function updateContentObjects( $fromType, $toType )
+    public function updateContentObjects( Type $fromType, Type $toType )
     {
         $this->contentUpdater->applyUpdates(
             $fromType->id,
@@ -65,7 +66,7 @@ class EzcDatabase extends Handler
      *
      * @return void
      */
-    public function deleteOldType( $fromType )
+    public function deleteOldType( Type $fromType )
     {
         $this->contentTypeGateway->delete( $fromType->id, $fromType->status );
     }
@@ -78,7 +79,7 @@ class EzcDatabase extends Handler
      *
      * @return void
      */
-    public function publishNewType( $toType, $newStatus )
+    public function publishNewType( Type $toType, $newStatus )
     {
         $this->contentTypeGateway->publishTypeAndFields(
             $toType->id,

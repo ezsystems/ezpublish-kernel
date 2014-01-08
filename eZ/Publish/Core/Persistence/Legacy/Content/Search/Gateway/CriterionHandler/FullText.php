@@ -157,11 +157,12 @@ class FullText extends CriterionHandler
     /**
      * Get subquery to select relevant word IDs
      *
+     * @param \ezcQuerySelect $query
      * @param string $string
      *
      * @return \ezcQuerySelect
      */
-    protected function getWordIdSubquery( $query, $string )
+    protected function getWordIdSubquery( ezcQuerySelect $query, $string )
     {
         $subQuery = $query->subSelect();
         $tokens = $this->tokenizeString(

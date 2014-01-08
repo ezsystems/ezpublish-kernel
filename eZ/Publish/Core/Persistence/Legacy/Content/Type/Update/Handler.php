@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Update;
 
+use eZ\Publish\SPI\Persistence\Content\Type;
+
 /**
  * Base class for update handlers
  */
@@ -22,7 +24,7 @@ abstract class Handler
      *
      * @return void
      */
-    abstract public function updateContentObjects( $fromType, $toType );
+    abstract public function updateContentObjects( Type $fromType, Type $toType );
 
     /**
      * Deletes $fromType and all of its field definitions
@@ -31,7 +33,7 @@ abstract class Handler
      *
      * @return void
      */
-    abstract public function deleteOldType( $fromType );
+    abstract public function deleteOldType( Type $fromType );
 
     /**
      * Publishes $toType to $newStatus
@@ -41,5 +43,5 @@ abstract class Handler
      *
      * @return void
      */
-    abstract public function publishNewType( $toType, $newStatus );
+    abstract public function publishNewType( Type $toType, $newStatus );
 }

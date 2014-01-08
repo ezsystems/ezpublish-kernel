@@ -195,11 +195,11 @@ class Type extends BaseType
     /**
      * Attempts to complete the data in $value
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\Value $value
      *
      * @return void
      */
-    protected function completeValue( $value )
+    protected function completeValue( BaseValue $value )
     {
         parent::completeValue( $value );
 
