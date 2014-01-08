@@ -42,6 +42,7 @@
         "kriswallsmith/buzz": ">=0.9",
         "tedivm/stash-bundle": "0.2.*",
         "sensio/distribution-bundle": "~2.3",
+        "nelmio/cors-bundle": "dev-abstract_cors_configuration",
         "pagerfanta/pagerfanta": "~1.0",
         "ocramius/proxy-manager": "0.5.*"
     },
@@ -67,5 +68,11 @@
             "dev-master": "5.3.x-dev"
         },
         "ezpublish-legacy-dir": "vendor/ezsystems/ezpublish-legacy"
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/bdunogier/NelmioCorsBundle"
+        }
+    ]
 }

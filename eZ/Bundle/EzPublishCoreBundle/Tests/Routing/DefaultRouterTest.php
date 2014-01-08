@@ -78,6 +78,8 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
 
         $request = Request::create( $pathinfo );
 
+        $this->configResolver->expects( $this->never() )->method( 'getParameter' );
+
         /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
         $router = $this->generateRouter( array( 'match' ) );
         $router
@@ -128,18 +130,14 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
         $router = $this->generateRouter( array( 'match' ) );
         $router->setLegacyAwareRoutes( array( 'my_legacy_aware_route' ) );
 
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( true ) );
-
         $matchedParameters = array( '_route' => 'my_legacy_aware_route' );
         $router
             ->expects( $this->once() )
             ->method( 'match' )
             ->with( $semanticPathinfo )
             ->will( $this->returnValue( $matchedParameters ) );
+
+        $this->configResolver->expects( $this->never() )->method( 'getParameter' );
 
         $this->assertSame( $matchedParameters, $router->matchRequest( $request ) );
     }

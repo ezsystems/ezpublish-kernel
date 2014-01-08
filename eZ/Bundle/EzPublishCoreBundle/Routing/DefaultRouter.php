@@ -99,9 +99,9 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
         }
 
         if (
-            $this->getConfigResolver()->getParameter( 'legacy_mode' ) === true
-            && isset( $attributes['_route'] )
+            isset( $attributes['_route'] )
             && !$this->isLegacyAwareRoute( $attributes['_route'] )
+            && $this->getConfigResolver()->getParameter( 'legacy_mode' ) === true
         )
         {
             throw new ResourceNotFoundException( "Legacy mode activated, default router is bypassed" );
