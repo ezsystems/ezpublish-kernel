@@ -39,10 +39,20 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
      */
     protected $serviceContainer;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    protected $configResolver;
+
     public function __construct( ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null )
     {
         $this->serviceContainer = $container;
         parent::__construct( $container, $resource, $options, $context );
+    }
+
+    public function setConfigResolver( ConfigResolverInterface $configResolver )
+    {
+        $this->configResolver = $configResolver;
     }
 
     public function setSiteAccess( SiteAccess $siteAccess = null )
@@ -72,14 +82,6 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
     }
 
     /**
-     * @return ConfigResolverInterface
-     */
-    protected function getConfigResolver()
-    {
-        return $this->serviceContainer->get( 'ezpublish.config.resolver' );
-    }
-
-    /**
      * @param \Symfony\Component\HttpFoundation\Request $request The request to match
      *
      * @return array An array of parameters
@@ -101,7 +103,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
         if (
             isset( $attributes['_route'] )
             && !$this->isLegacyAwareRoute( $attributes['_route'] )
-            && $this->getConfigResolver()->getParameter( 'legacy_mode' ) === true
+            && $this->configResolver->getParameter( 'legacy_mode' ) === true
         )
         {
             throw new ResourceNotFoundException( "Legacy mode activated, default router is bypassed" );
