@@ -8,7 +8,6 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\CorsOptions;
 
-use Exception;
 use Nelmio\CorsBundle\Options\ProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;

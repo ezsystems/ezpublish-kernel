@@ -40,7 +40,7 @@ abstract class BinaryBaseTest extends FieldTypeTest
     {
         return array(
             array(
-                new \stdClass(),
+                $this->getMockForAbstractClass( 'eZ\Publish\Core\FieldType\Value' ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(

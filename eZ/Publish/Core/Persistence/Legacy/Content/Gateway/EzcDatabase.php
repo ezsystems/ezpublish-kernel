@@ -26,6 +26,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use ezcQueryUpdate;
+use ezcQuerySelect;
 use PDO;
 
 /**
@@ -1004,7 +1005,7 @@ class EzcDatabase extends Gateway
      * @param \ezcQuerySelect $query
      * @return string[][]
      */
-    private function listVersionsHelper( $query )
+    private function listVersionsHelper( ezcQuerySelect $query )
     {
         $query->orderBy(
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' )

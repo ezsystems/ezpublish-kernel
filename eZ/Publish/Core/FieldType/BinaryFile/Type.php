@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\FieldType\BinaryFile;
 use eZ\Publish\Core\FieldType\BinaryBase\Type as BinaryBaseType;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\Value as BaseValue;
 
 /**
  * The TextLine field type.
@@ -56,15 +57,15 @@ class Type extends BinaryBaseType
     /**
      * Attempts to complete the data in $value
      *
-     * @param mixed $value
+     * @param \eZ\Publish\Core\FieldType\BinaryFile\Value|\eZ\Publish\Core\FieldType\Value $value
      *
      * @return void
      */
-    protected function completeValue( $value )
+    protected function completeValue( Basevalue $value )
     {
         parent::completeValue( $value );
 
-        if ( !isset( $value->downloadCount ) )
+        if ( isset( $value->downloadCount ) && $value->downloadCount === null )
         {
             $value->downloadCount = 0;
         }

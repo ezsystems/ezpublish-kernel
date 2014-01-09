@@ -257,7 +257,7 @@ class EzcDatabase extends Gateway
 
         if ( $sort !== null )
         {
-            $this->sortClauseConverter->applyOrderBy( $query, $sort );
+            $this->sortClauseConverter->applyOrderBy( $query );
         }
 
         $query->limit( $limit, $offset );
