@@ -49,6 +49,14 @@ class ObjectStateGroup extends ValueObjectVisitor
         $generator->startValueElement( 'languageCodes', implode( ',', $data->languageCodes ) );
         $generator->endValueElement( 'languageCodes' );
 
+        $generator->startObjectElement( 'ObjectStates', 'ObjectStateList' );
+        $generator->startAttribute(
+            'href',
+            $this->router->generate( 'ezpublish_rest_loadObjectStates', array( 'objectStateGroupId' => $data->id ) )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'ObjectStates' );
+
         $this->visitNamesList( $generator, $data->getNames() );
         $this->visitDescriptionsList( $generator, $data->getDescriptions() );
 

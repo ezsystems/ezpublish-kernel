@@ -74,6 +74,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
             'ezpublish_rest_loadContent', array( 'contentId' => $location->location->contentId ),
             "/content/objects/{$location->location->contentId}"
         );
+        $this->addRouteExpectation(
+            'ezpublish_rest_listLocationURLAliases', array( 'locationPath' => '1/2/21/42' ),
+            "/content/objects/1/2/21/42/urlaliases"
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -101,7 +105,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
             array(
                 'tag'      => 'Location',
                 'children' => array(
-                    'count' => 13
+                    'count' => 14
                 )
             ),
             $result,
@@ -455,6 +459,48 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
             ),
             $result,
             'Invalid or non-existing <Location> childCount value element.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains Content element
+     *
+     * @param string $result
+     *
+     * @depends testVisit
+     */
+    public function testResultContainsUrlAliasesTag( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag' => 'UrlAliases'
+            ),
+            $result,
+            'Invalid <UrlAliases> element.',
+            false
+        );
+    }
+
+    /**
+     * Test if result contains Content element attributes
+     *
+     * @param string $result
+     *
+     * @depends testVisit
+     */
+    public function testResultContainsUrlAliasesTagAttributes( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag' => 'UrlAliases',
+                'attributes' => array(
+                    'media-type' => 'application/vnd.ez.api.UrlAliasRefList+xml',
+                    'href'       => '/content/objects/1/2/21/42/urlaliases',
+                )
+            ),
+            $result,
+            'Invalid <UrlAliases> attributes.',
             false
         );
     }

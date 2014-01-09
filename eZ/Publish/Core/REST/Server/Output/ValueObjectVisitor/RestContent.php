@@ -177,6 +177,17 @@ class RestContent extends ValueObjectVisitor
         );
         $generator->endValueElement( 'alwaysAvailable' );
 
+        $generator->startObjectElement( 'ObjectStates', 'ContentObjectStates' );
+        $generator->startAttribute(
+            'href',
+            $this->router->generate(
+                'ezpublish_rest_getObjectStatesForContent',
+                array( 'contentId' => $contentInfo->id )
+            )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'ObjectStates' );
+
         $generator->endObjectElement( 'Content' );
     }
 }

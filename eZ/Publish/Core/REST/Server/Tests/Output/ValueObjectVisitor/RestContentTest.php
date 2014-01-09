@@ -74,6 +74,11 @@ class RestContentTest extends ValueObjectVisitorBaseTest
             array( 'userId' => $restContent->contentInfo->ownerId ),
             "/user/users/{$restContent->contentInfo->ownerId}"
         );
+        $this->addRouteExpectation(
+            'ezpublish_rest_getObjectStatesForContent',
+            array( 'contentId' => $restContent->contentInfo->id ),
+            "/content/objects/{$restContent->contentInfo->id}/objectstates"
+        );
 
         $visitor->visit(
             $this->getVisitorMock(),

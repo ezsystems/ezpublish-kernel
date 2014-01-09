@@ -32,6 +32,11 @@ abstract class ValueObjectVisitor
     protected $router;
 
     /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    protected $templateRouter;
+
+    /**
      * Visit struct returned by controllers
      *
      * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
@@ -46,6 +51,11 @@ abstract class ValueObjectVisitor
     public function setRouter( RouterInterface $router )
     {
         $this->router = $router;
+    }
+
+    public function setTemplateRouter( RouterInterface $templateRouter )
+    {
+        $this->templateRouter = $templateRouter;
     }
 
     public function setRequestParser( RequestParser $requestParser )
