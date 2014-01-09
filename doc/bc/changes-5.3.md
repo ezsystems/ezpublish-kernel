@@ -20,6 +20,10 @@ Changes affecting version compatibility with former or future versions.
 * `is_logged_in` cookie is not sent or used any more by Symfony stack (it is still used by legacy though).
   Anonymous state is now checked by the presence of a session cookie (prefixed by `eZSESSID`).
 
+* **Lazy services**: `ezpublish.api.repository`, repository services (e.g. `ezpublish.api.service.content`),
+  and a few others (e.g. `ezpublish.config.resolver`) are now [lazy services](http://symfony.com/doc/2.3/components/dependency_injection/lazy_services.html).
+  You can now safely inject them, even in early request listeners. They will be booted only when necessary.
+
 ## Deprecations
 
 * Method `eZ\Publish\API\Repository\RoleService::removePolicy` is deprecated in
