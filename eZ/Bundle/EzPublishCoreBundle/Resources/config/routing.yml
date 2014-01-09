@@ -80,6 +80,11 @@ services:
 
     ezpublish.request_redirect_listener:
         class: %ezpublish.request_redirect_listener.class%
-        arguments: [@service_container, @?logger]
+        arguments:
+            - @ezpublish.config.resolver
+            - @router
+            - %ezpublish.siteaccess.default%
+            - @ezpublish.user.hash_generator
+            - @?logger
         tags:
             - { name: kernel.event_subscriber }
