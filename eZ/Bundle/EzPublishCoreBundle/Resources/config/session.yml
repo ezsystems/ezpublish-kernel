@@ -6,7 +6,7 @@ parameters:
 services:
     ezpublish.session_set_dynamic_name_listener:
         class: %ezpublish.session_set_dynamic_name_listener.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @?session]
         tags:
             - { name: kernel.event_subscriber }
 
