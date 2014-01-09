@@ -9,10 +9,12 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * This siteaccess listener handles routing related runtime configuration.
@@ -20,13 +22,25 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 class RoutingListener implements EventSubscriberInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    private $container;
+    private $configResolver;
 
-    public function __construct( ContainerInterface $container )
+    /**
+     * @var \Symfony\Component\Routing\RouterInterface
+     */
+    private $urlAliasRouter;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator
+     */
+    private $urlAliasGenerator;
+
+    public function __construct( ConfigResolverInterface $configResolver, RouterInterface $urlAliasRouter, Generator $urlAliasGenerator )
     {
-        $this->container = $container;
+        $this->configResolver = $configResolver;
+        $this->urlAliasRouter = $urlAliasRouter;
+        $this->urlAliasGenerator = $urlAliasGenerator;
     }
 
     public static function getSubscribedEvents()
@@ -38,11 +52,9 @@ class RoutingListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
-        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
-        $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id' );
-        $this->container->get( 'ezpublish.urlalias_router' )->setRootLocationId( $rootLocationId );
-        $urlAliasGenerator = $this->container->get( 'ezpublish.urlalias_generator' );
-        $urlAliasGenerator->setRootLocationId( $rootLocationId );
-        $urlAliasGenerator->setExcludedUriPrefixes( $configResolver->getParameter( 'content.tree_root.excluded_uri_prefixes' ) );
+        $rootLocationId = $this->configResolver->getParameter( 'content.tree_root.location_id' );
+        $this->urlAliasRouter->setRootLocationId( $rootLocationId );
+        $this->urlAliasGenerator->setRootLocationId( $rootLocationId );
+        $this->urlAliasGenerator->setExcludedUriPrefixes( $this->configResolver->getParameter( 'content.tree_root.excluded_uri_prefixes' ) );
     }
 }

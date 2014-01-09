@@ -74,7 +74,7 @@ services:
 
     ezpublish.siteaccess_listener.routing:
         class: %ezpublish.siteaccess_listener.routing.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.urlalias_router, @ezpublish.urlalias_generator]
         tags:
             - { name: kernel.event_subscriber }
 
