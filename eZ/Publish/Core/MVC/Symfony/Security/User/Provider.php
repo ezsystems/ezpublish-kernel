@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,33 +24,16 @@ class Provider implements APIUserProviderInterface
     protected $userService;
 
     /**
-     * @var \Closure
+     * @var \eZ\Publish\API\Repository\Repository
      */
-    private $lazyRepository;
+    protected $repository;
 
     /**
-     * @param callable $lazyRepository
+     * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( \Closure $lazyRepository )
+    public function __construct( Repository $repository )
     {
-        $this->lazyRepository = $lazyRepository;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Repository
-     */
-    protected function getRepository()
-    {
-        $lazyRepository = $this->lazyRepository;
-        return $lazyRepository();
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\UserService
-     */
-    protected function getUserService()
-    {
-        return $this->getRepository()->getUserService();
+        $this->repository = $repository;
     }
 
     /**
@@ -73,7 +57,7 @@ class Provider implements APIUserProviderInterface
             if ( $user instanceof User )
                 return $user;
 
-            return new User( $this->getUserService()->loadUserByLogin( $user ), array( 'ROLE_USER' ) );
+            return new User( $this->repository->getUserService()->loadUserByLogin( $user ), array( 'ROLE_USER' ) );
         }
         catch ( NotFoundException $e )
         {
@@ -98,7 +82,7 @@ class Provider implements APIUserProviderInterface
     {
         if ( $user instanceof User )
         {
-            $this->getRepository()->setCurrentUser( $user->getAPIUser() );
+            $this->repository->setCurrentUser( $user->getAPIUser() );
         }
 
         return $user;

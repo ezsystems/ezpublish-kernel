@@ -13,18 +13,18 @@ parameters:
 services:
     ezpublish.security.user_provider:
         class: %ezpublish.security.user_provider.class%
-        arguments: [@ezpublish.api.repository.lazy]
+        arguments: [@ezpublish.api.repository]
 
     ezpublish.security.voter.core:
         class: %ezpublish.security.voter.core.class%
-        arguments: [@ezpublish.api.repository.lazy]
+        arguments: [@ezpublish.api.repository]
         public: false
         tags:
             - { name: security.voter }
 
     ezpublish.security.voter.value_object:
         class: %ezpublish.security.voter.value_object.class%
-        arguments: [@ezpublish.api.repository.lazy]
+        arguments: [@ezpublish.api.repository]
         public: false
         tags:
             - { name: security.voter }

@@ -21,19 +21,10 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
      */
     private $repository;
 
-    /**
-     * @var \Closure
-     */
-    private $lazyRepository;
-
     protected function setUp()
     {
         parent::setUp();
-        $repository = $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
-        $this->lazyRepository = function () use ( $repository )
-        {
-            return $repository;
-        };
+        $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
     }
 
     /**
@@ -41,7 +32,7 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
      */
     public function testSupportsAttribute( $attribute, $expectedResult )
     {
-        $voter = new ValueObjectVoter( $this->lazyRepository );
+        $voter = new ValueObjectVoter( $this->repository );
         $this->assertSame( $expectedResult, $voter->supportsAttribute( $attribute ) );
     }
 
@@ -69,7 +60,7 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
      */
     public function testSupportsClass( $class )
     {
-        $voter = new ValueObjectVoter( $this->lazyRepository );
+        $voter = new ValueObjectVoter( $this->repository );
         $this->assertTrue( $voter->supportsClass( $class ) );
     }
 
@@ -88,7 +79,7 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
      */
     public function testVoteInvalidAttribute( array $attributes )
     {
-        $voter = new ValueObjectVoter( $this->lazyRepository );
+        $voter = new ValueObjectVoter( $this->repository );
         $this->assertSame(
             VoterInterface::ACCESS_ABSTAIN,
             $voter->vote(
@@ -115,7 +106,7 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
      */
     public function testVote( Attribute $attribute, $repositoryCanUser, $expectedResult )
     {
-        $voter = new ValueObjectVoter( $this->lazyRepository );
+        $voter = new ValueObjectVoter( $this->repository );
         $targets = isset( $attribute->limitations['targets'] ) ? $attribute->limitations['targets'] : null;
         $this->repository
             ->expects( $this->once() )

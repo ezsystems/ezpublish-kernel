@@ -21,19 +21,10 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
      */
     private $repository;
 
-    /**
-     * @var \Closure
-     */
-    private $lazyRepository;
-
     protected function setUp()
     {
         parent::setUp();
-        $repository = $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
-        $this->lazyRepository = function () use ( $repository )
-        {
-            return $repository;
-        };
+        $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
     }
 
     /**
@@ -41,7 +32,7 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
      */
     public function testSupportsAttribute( $attribute, $expectedResult )
     {
-        $voter = new CoreVoter( $this->lazyRepository );
+        $voter = new CoreVoter( $this->repository );
         $this->assertSame( $expectedResult, $voter->supportsAttribute( $attribute ) );
     }
 
@@ -69,7 +60,7 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
      */
     public function testSupportsClass( $class )
     {
-        $voter = new CoreVoter( $this->lazyRepository );
+        $voter = new CoreVoter( $this->repository );
         $this->assertTrue( $voter->supportsClass( $class ) );
     }
 
@@ -88,7 +79,7 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
      */
     public function testVoteInvalidAttribute( array $attributes )
     {
-        $voter = new CoreVoter( $this->lazyRepository );
+        $voter = new CoreVoter( $this->repository );
         $this->assertSame(
             VoterInterface::ACCESS_ABSTAIN,
             $voter->vote(
@@ -114,7 +105,7 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
      */
     public function testVote( Attribute $attribute, $repositoryCanUser, $expectedResult )
     {
-        $voter = new CoreVoter( $this->lazyRepository );
+        $voter = new CoreVoter( $this->repository );
         $this->repository
             ->expects( $this->once() )
             ->method( 'hasAccess' )

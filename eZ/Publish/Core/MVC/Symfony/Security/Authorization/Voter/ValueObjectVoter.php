@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter;
 
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -19,22 +20,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 class ValueObjectVoter implements VoterInterface
 {
     /**
-     * @var \Closure
+     * @var \eZ\Publish\API\Repository\Repository
      */
-    private $lazyRepository;
+    private $repository;
 
-    public function __construct( \Closure $lazyRepository )
+    public function __construct( Repository $repository )
     {
-        $this->lazyRepository = $lazyRepository;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Repository
-     */
-    protected function getRepository()
-    {
-        $lazyRepository = $this->lazyRepository;
-        return $lazyRepository();
+        $this->repository = $repository;
     }
 
     public function supportsAttribute( $attribute )
@@ -74,7 +66,7 @@ class ValueObjectVoter implements VoterInterface
             {
                 $targets = isset( $attribute->limitations['targets'] ) ? $attribute->limitations['targets'] : null;
                 if (
-                    $this->getRepository()->canUser(
+                    $this->repository->canUser(
                         $attribute->module,
                         $attribute->function,
                         $attribute->limitations['valueObject'],

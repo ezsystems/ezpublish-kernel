@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter;
 
+use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
@@ -16,22 +17,13 @@ use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as Authorizatio
 class CoreVoter implements VoterInterface
 {
     /**
-     * @var \Closure
+     * @var \eZ\Publish\API\Repository\Repository
      */
-    private $lazyRepository;
+    private $repository;
 
-    public function __construct( \Closure $lazyRepository )
+    public function __construct( Repository $repository )
     {
-        $this->lazyRepository = $lazyRepository;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Repository
-     */
-    protected function getRepository()
-    {
-        $lazyRepository = $this->lazyRepository;
-        return $lazyRepository();
+        $this->repository = $repository;
     }
 
     /**
@@ -76,7 +68,7 @@ class CoreVoter implements VoterInterface
         {
             if ( $this->supportsAttribute( $attribute ) )
             {
-                if ( $this->getRepository()->hasAccess( $attribute->module, $attribute->function ) === false )
+                if ( $this->repository->hasAccess( $attribute->module, $attribute->function ) === false )
                     return VoterInterface::ACCESS_DENIED;
 
                 return VoterInterface::ACCESS_GRANTED;
