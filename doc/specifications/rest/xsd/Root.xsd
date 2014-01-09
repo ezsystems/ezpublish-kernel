@@ -10,6 +10,7 @@
       <xsd:element name="contentTypes" type="ref" />
       <xsd:element name="contentTypeByIdentifier" type="ref" />
       <xsd:element name="contentTypeGroups" type="ref" />
+      <xsd:element name="contentTypeGroupByIdentifier" type="ref" />
       <xsd:element name="users" type="ref"/>
       <xsd:element name="roles" type="ref"/>
       <xsd:element name="rootLocation" type="ref"/>

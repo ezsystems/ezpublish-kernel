@@ -78,11 +78,26 @@ class Root extends ValueObjectVisitor
         $generator->endAttribute( 'href' );
         $generator->endHashElement( 'contentTypeByIdentifier' );
 
-        // Content type groups
+        // Creating a ContentTypeGroup
         $generator->startObjectElement( 'contentTypeGroups', 'ContentTypeGroupList' );
-        $generator->startAttribute( 'href', $this->router->generate( 'ezpublish_rest_loadContentTypeGroupList' ) );
+        $generator->startAttribute( 'href', $this->router->generate( 'ezpublish_rest_createContentTypeGroup' ) );
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'contentTypeGroups' );
+
+        // Content type group by identifier
+        // See comment above regarding usage of hash element
+        $generator->startHashElement( 'contentTypeGroupByIdentifier' );
+        $generator->startAttribute( 'media-type', '' );
+        $generator->endAttribute( 'media-type' );
+        $generator->startAttribute(
+            'href',
+            $this->templateRouter->generate(
+                'ezpublish_rest_loadContentTypeGroupList',
+                array( 'identifier' => '{identifier}' )
+            )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endHashElement( 'contentTypeGroupByIdentifier' );
 
         // Users
         $generator->startObjectElement( 'users', 'UserRefList' );
