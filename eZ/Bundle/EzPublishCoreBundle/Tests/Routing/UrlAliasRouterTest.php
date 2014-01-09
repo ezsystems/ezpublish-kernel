@@ -12,7 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Routing;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\URLAliasService;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
@@ -21,11 +20,6 @@ use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 
 class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $container;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -46,57 +40,32 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
                     )
                 )
             );
-        $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->configResolver )
-                    )
-                )
-            );
         parent::setUp();
     }
 
     protected function getRouter( LocationService $locationService, URLAliasService $urlAliasService, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
     {
         $router = new UrlAliasRouter( $locationService, $urlAliasService, $urlAliasGenerator, $requestContext );
-        $router->setContainer( $this->container );
+        $router->setConfigResolver( $this->configResolver );
         return $router;
     }
 
     /**
      * Resets container and configResolver mocks
      */
-    protected function resetContainerAndConfigResolver()
+    protected function resetConfigResolver()
     {
         $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->configResolver )
-                    )
-                )
-            );
-        $this->router->setContainer( $this->container );
+        $this->router->setConfigResolver( $this->configResolver );
     }
 
     /**
-     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
-     *
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setContainer
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getConfigResolver
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::matchRequest
+     * @expectedException \Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
     public function testMatchRequestDeactivatedUrlAlias()
     {
-        $this->resetContainerAndConfigResolver();
+        $this->resetConfigResolver();
         $this->configResolver
             ->expects( $this->any() )
             ->method( 'getParameter' )
@@ -110,17 +79,10 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
         $this->router->matchRequest( $this->getRequestByPathInfo( '/foo' ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setContainer
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setRootLocationId
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getUrlAlias
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getConfigResolver
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::matchRequest
-     */
     public function testMatchRequestWithRootLocation()
     {
         $rootLocationId = 123;
-        $this->resetContainerAndConfigResolver();
+        $this->resetConfigResolver();
         $this->configResolver
             ->expects( $this->any() )
             ->method( 'getParameter' )
@@ -168,16 +130,9 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
         $this->assertSame( $locationId, $request->attributes->get( 'locationId' ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setContainer
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::setRootLocationId
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getUrlAlias
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::getConfigResolver
-     * @covers eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter::matchRequest
-     */
     public function testMatchRequestWithRootLocationAndExclusion()
     {
-        $this->resetContainerAndConfigResolver();
+        $this->resetConfigResolver();
         $this->configResolver
             ->expects( $this->any() )
             ->method( 'getParameter' )

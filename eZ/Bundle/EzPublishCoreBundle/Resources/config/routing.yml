@@ -43,7 +43,7 @@ services:
             - @?router.request_context
             - @?logger
         calls:
-            - [setContainer, [@service_container]]
+            - [setConfigResolver, [@ezpublish.config.resolver]]
         tags:
             - {name: router, priority: 200}
 
