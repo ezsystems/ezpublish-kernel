@@ -32,6 +32,9 @@ Changes affecting version compatibility with former or future versions.
 * Basic authentication for REST: In `security.yml, `ezpublish_http_basic` is deprecated in
   favor of standard `http_basic`.
 
+* `ezpublish.api.repository.lazy` service is deprecated in favor of `ezpublish.api.repository`, which
+  is now a lazy service.
+
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).

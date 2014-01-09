@@ -40,9 +40,10 @@ services:
         class: %ezpublish.api.repository.factory.class%
         arguments: [@service_container]
 
+    # Deprecated
     ezpublish.api.repository.lazy_factory:
         class: %ezpublish.api.repository.lazy_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.api.repository]
 
     ezpublish.api.inner_repository:
         class: %ezpublish.api.inner_repository.class%
@@ -52,6 +53,8 @@ services:
             - @ezpublish.api.persistence_handler
         lazy: true
 
+    # Deprecated
+    # Use ezpublish.api.repository lazy service instead
     ezpublish.api.repository.lazy:
         class: Closure
         factory_service: ezpublish.api.repository.lazy_factory
