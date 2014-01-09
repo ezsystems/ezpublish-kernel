@@ -47,7 +47,12 @@ class RootTest extends ValueObjectVisitorBaseTest
             array( 'identifier' => '{identifier}' ),
             '/content/types?{&identifier}'
         );
-        $this->addRouteExpectation( 'ezpublish_rest_loadContentTypeGroupList', array(), '/content/typegroups' );
+        $this->addRouteExpectation( 'ezpublish_rest_createContentTypeGroup', array(), '/content/typegroups' );
+        $this->addTemplatedRouteExpectation(
+            'ezpublish_rest_loadContentTypeGroupList',
+            array( 'identifier' => '{identifier}' ),
+            '/content/typegroups?{&identifier}'
+        );
         $this->addRouteExpectation( 'ezpublish_rest_loadUsers', array(), '/user/users' );
         $this->addRouteExpectation( 'ezpublish_rest_listRoles', array(), '/user/roles' );
         $this->addRouteExpectation(
@@ -302,6 +307,40 @@ class RootTest extends ValueObjectVisitorBaseTest
             ),
             $result,
             'Invalid <contentTypeGroups> tag attributes.',
+            false
+        );
+    }
+
+    /**
+     * @depends testVisit
+     */
+    public function testResultContainsContentTypeGroupByIdentifierTag( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag' => 'contentTypeGroupByIdentifier'
+            ),
+            $result,
+            'Missing <ContentTypeGroupByIdentifier> element.',
+            false
+        );
+    }
+
+    /**
+     * @depends testVisit
+     */
+    public function testResultContainsContentTypeGroupByIdentifierTagAttributes( $result )
+    {
+        $this->assertTag(
+            array(
+                'tag' => 'contentTypeGroupByIdentifier',
+                'attributes' => array(
+                    'media-type' => '',
+                    'href' => '/content/typegroups?{&identifier}'
+                )
+            ),
+            $result,
+            'Invalid <contentTypeGroupByIdentifier> tag attributes.',
             false
         );
     }
