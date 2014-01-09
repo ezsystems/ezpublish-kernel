@@ -54,29 +54,24 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
         $this->repository = $repository = $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
+            ->getMockBuilder( $repositoryClass )
             ->disableOriginalConstructor()
+            ->setMethods(
+                array_diff(
+                    get_class_methods( $repositoryClass ),
+                    array( 'sudo' )
+                )
+            )
             ->getMock();
-        $lazyRepository = function () use ( $repository )
-        {
-            return $repository;
-        };
         $this->urlAliasService = $this->getMock( 'eZ\\Publish\\API\\Repository\\URLAliasService' );
         $this->locationService = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
-        $this->repository
-            ->expects( $this->any() )
-            ->method( 'getUrlAliasService' )
-            ->will( $this->returnValue( $this->urlAliasService ) );
-        $this->repository
-            ->expects( $this->any() )
-            ->method( 'getLocationService' )
-            ->will( $this->returnValue( $this->locationService ) );
         $this->urlALiasGenerator = $this
             ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\Generator\\UrlAliasGenerator' )
             ->setConstructorArgs(
                 array(
-                    $lazyRepository,
+                    $repository,
                     $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' )
                 )
             )
