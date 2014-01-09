@@ -129,7 +129,7 @@ abstract class Type extends FieldType
     /**
      * Attempts to complete the data in $value
      *
-     * @param \eZ\Publish\Core\FieldType\Value $value
+     * @param \eZ\Publish\Core\FieldType\BinaryBase\Value|\eZ\Publish\Core\FieldType\Value $value
      *
      * @return void
      */

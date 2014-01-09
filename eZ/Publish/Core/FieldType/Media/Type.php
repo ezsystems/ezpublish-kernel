@@ -195,7 +195,7 @@ class Type extends BaseType
     /**
      * Attempts to complete the data in $value
      *
-     * @param \eZ\Publish\Core\FieldType\Value $value
+     * @param \eZ\Publish\Core\FieldType\Media\Value|\eZ\Publish\Core\FieldType\Value $value
      *
      * @return void
      */
@@ -203,24 +203,24 @@ class Type extends BaseType
     {
         parent::completeValue( $value );
 
-        if ( !isset( $value->hasController ) )
+        if ( isset( $value->hasController ) && $value->hasController === null )
         {
             $value->hasController = false;
         }
-        if ( !isset( $value->autoplay ) )
+        if ( isset( $value->autoplay ) && $value->autoplay === null )
         {
             $value->autoplay = false;
         }
-        if ( !isset( $value->loop ) )
+        if ( isset( $value->loop ) && $value->loop === null )
         {
             $value->loop = false;
         }
 
-        if ( !isset( $value->height ) )
+        if ( isset( $value->height ) && $value->height === null )
         {
             $value->height = 0;
         }
-        if ( !isset( $value->width ) )
+        if ( isset( $value->width ) && $value->width === null )
         {
             $value->width = 0;
         }

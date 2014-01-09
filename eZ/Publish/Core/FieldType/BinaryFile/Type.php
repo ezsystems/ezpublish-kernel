@@ -57,7 +57,7 @@ class Type extends BinaryBaseType
     /**
      * Attempts to complete the data in $value
      *
-     * @param \eZ\Publish\Core\FieldType\Value $value
+     * @param \eZ\Publish\Core\FieldType\BinaryFile\Value|\eZ\Publish\Core\FieldType\Value $value
      *
      * @return void
      */
@@ -65,7 +65,7 @@ class Type extends BinaryBaseType
     {
         parent::completeValue( $value );
 
-        if ( !isset( $value->downloadCount ) )
+        if ( isset( $value->downloadCount ) && $value->downloadCount === null )
         {
             $value->downloadCount = 0;
         }
