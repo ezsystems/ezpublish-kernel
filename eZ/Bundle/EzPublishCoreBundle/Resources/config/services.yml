@@ -9,7 +9,6 @@ parameters:
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
     ezpublish.data_collector.spi.persistence.class: eZ\Bundle\EzPublishCoreBundle\Collector\SPIPersistenceDataCollector
-    ezpublish.controller.user.authentication.class: eZ\Publish\Core\MVC\Symfony\Controller\User\AuthenticationController
 
     # FragmentRenderer overrides
     fragment.renderer.esi.class: eZ\Bundle\EzPublishCoreBundle\Fragment\EsiFragmentRenderer
@@ -58,11 +57,6 @@ services:
             - @security.context
         calls:
             - [setRequest, [@?request=]]
-
-    ezpublish.controller.user.authentication:
-        class: %ezpublish.controller.user.authentication.class%
-        arguments: [@ezpublish.user.hash_generator]
-        parent: ezpublish.controller.base
 
     ezpublish.controller.page.view:
         class: %ezpublish.controller.page.view.class%
