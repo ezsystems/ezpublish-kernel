@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -37,9 +39,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     protected $requestContext;
 
     /**
-     * @var \Closure
+     * @var \eZ\Publish\API\Repository\LocationService
      */
-    protected $lazyRepository;
+    protected $locationService;
 
     /**
      * @var \eZ\Publish\API\Repository\URLAliasService
@@ -62,25 +64,18 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     protected $logger;
 
     public function __construct(
-        \Closure $lazyRepository,
+        LocationService $locationService,
+        URLAliasService $urlAliasService,
         UrlAliasGenerator $generator,
         RequestContext $requestContext,
         LoggerInterface $logger = null
     )
     {
-        $this->lazyRepository = $lazyRepository;
+        $this->locationService = $locationService;
+        $this->urlAliasService = $urlAliasService;
         $this->generator = $generator;
         $this->requestContext = $requestContext !== null ? $requestContext : new RequestContext();
         $this->logger = $logger;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Repository
-     */
-    protected function getRepository()
-    {
-        $lazyRepository = $this->lazyRepository;
-        return $lazyRepository();
     }
 
     /**
@@ -163,7 +158,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      */
     protected function getUrlAlias( $pathinfo )
     {
-        return $this->getRepository()->getURLAliasService()->lookup( $pathinfo );
+        return $this->urlAliasService->lookup( $pathinfo );
     }
 
     /**
@@ -228,7 +223,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                 );
             }
 
-            $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->getRepository()->getLocationService()->loadLocation( $parameters['locationId'] );
+            $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->locationService->loadLocation( $parameters['locationId'] );
             unset( $parameters['location'], $parameters['locationId'] );
             return $this->generator->generate( $location, $parameters, $absolute );
         }

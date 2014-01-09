@@ -9,6 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Routing;
 
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\URLAliasService;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
@@ -58,9 +60,9 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
         parent::setUp();
     }
 
-    protected function getRouter( \Closure $lazyRepository, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
+    protected function getRouter( LocationService $locationService, URLAliasService $urlAliasService, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
     {
-        $router = new UrlAliasRouter( $lazyRepository, $urlAliasGenerator, $requestContext );
+        $router = new UrlAliasRouter( $locationService, $urlAliasService, $urlAliasGenerator, $requestContext );
         $router->setContainer( $this->container );
         return $router;
     }

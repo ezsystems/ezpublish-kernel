@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\URLAliasService;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -81,19 +83,20 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
             ->getMock();
         $this->requestContext = new RequestContext();
 
-        $this->router = $this->getRouter( $lazyRepository, $this->urlALiasGenerator, $this->requestContext );
+        $this->router = $this->getRouter( $this->locationService, $this->urlAliasService, $this->urlALiasGenerator, $this->requestContext );
     }
 
     /**
-     * @param callable $lazyRepository
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
      * @param UrlAliasGenerator $urlAliasGenerator
      * @param RequestContext $requestContext
      *
      * @return UrlAliasRouter
      */
-    protected function getRouter( \Closure $lazyRepository, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
+    protected function getRouter( LocationService $locationService, URLAliasService $urlAliasService, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
     {
-        return new UrlAliasRouter( $lazyRepository, $urlAliasGenerator, $requestContext );
+        return new UrlAliasRouter( $locationService, $urlAliasService, $urlAliasGenerator, $requestContext );
     }
 
     /**
