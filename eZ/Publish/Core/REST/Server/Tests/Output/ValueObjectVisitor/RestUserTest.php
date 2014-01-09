@@ -66,6 +66,11 @@ class RestUserTest extends ValueObjectVisitorBaseTest
             "/content/objects/{$restUser->contentInfo->id}/locations"
         );
         $this->addRouteExpectation(
+            'ezpublish_rest_loadUserGroupsOfUser',
+            array( 'userId' => $restUser->contentInfo->id ),
+            "/user/users/{$restUser->contentInfo->id}/groups"
+        );
+        $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
             array( 'userId' => $restUser->contentInfo->ownerId ),
             "/user/users/{$restUser->contentInfo->ownerId}"

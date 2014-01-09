@@ -110,6 +110,19 @@ class RestLocation extends ValueObjectVisitor
         $generator->startValueElement( 'sortOrder', $this->serializeSortOrder( $data->location->sortOrder ) );
         $generator->endValueElement( 'sortOrder' );
 
+        $generator->startObjectElement( 'UrlAliases', 'UrlAliasRefList' );
+        $generator->startAttribute(
+            'href',
+            $this->router->generate(
+                'ezpublish_rest_listLocationURLAliases',
+                array(
+                    'locationPath' => trim( $data->location->pathString, '/' )
+                )
+            )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'UrlAliases' );
+
         $generator->endObjectElement( 'Location' );
     }
 }

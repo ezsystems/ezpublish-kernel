@@ -79,6 +79,13 @@
           <xsd:element name="Content" type="ref" />
           <xsd:element name="sortField" type="sortFieldType" />
           <xsd:element name="sortOrder" type="sortOrderType" />
+          <xsd:element name="UrlAliases" type="ref">
+              <xsd:annotation>
+                  <xsd:documentation>
+                      The location's URL aliases list
+                  </xsd:documentation>
+              </xsd:annotation>
+          </xsd:element>
         </xsd:all>
       </xsd:extension>
     </xsd:complexContent>
