@@ -47,7 +47,6 @@ services:
         class: %ezpublish.controller.content.view.class%
         arguments: [@ezpublish.view_manager]
         parent: ezpublish.controller.base
-        scope: request
 
     ezpublish.controller.content.preview:
         class: %ezpublish.controller.content.preview.class%
