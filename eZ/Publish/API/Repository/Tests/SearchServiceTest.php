@@ -2363,9 +2363,9 @@ class SearchServiceTest extends BaseTest
                     new SortClause\MapLocationDistance(
                         "testtype",
                         "maplocation",
-                        Query::SORT_ASC,
                         $wellInVodice["latitude"],
-                        $wellInVodice["longitude"]
+                        $wellInVodice["longitude"],
+                        Query::SORT_ASC
                     )
                 )
             )
@@ -2479,9 +2479,9 @@ class SearchServiceTest extends BaseTest
                     new SortClause\MapLocationDistance(
                         "testtype",
                         "maplocation",
-                        Query::SORT_DESC,
                         $well["latitude"],
-                        $well["longitude"]
+                        $well["longitude"],
+                        Query::SORT_DESC
                     )
                 )
             )
@@ -2660,26 +2660,26 @@ class SearchServiceTest extends BaseTest
         $sortClause = new SortClause\MapLocationDistance(
             "testtype",
             "maplocation",
-            Query::SORT_DESC,
             $well["latitude"],
-            $well["longitude"]
+            $well["longitude"],
+            Query::SORT_DESC
         );
         $sortClause->setCustomField( 'testtype', 'maplocation', 'custom_geolocation_field' );
 
         $query = new Query(
             array(
                 'filter' => new Criterion\LogicalAnd(
-                        array(
-                            new Criterion\ContentTypeId( $contentType->id ),
-                            new Criterion\MapLocationDistance(
-                                "maplocation",
-                                Criterion\Operator::GTE,
-                                235,
-                                $well["latitude"],
-                                $well["longitude"]
-                            )
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\MapLocationDistance(
+                            "maplocation",
+                            Criterion\Operator::GTE,
+                            235,
+                            $well["latitude"],
+                            $well["longitude"]
                         )
-                    ),
+                    )
+                ),
                 'offset' => 0,
                 'limit' => 10,
                 'sortClauses' => array(

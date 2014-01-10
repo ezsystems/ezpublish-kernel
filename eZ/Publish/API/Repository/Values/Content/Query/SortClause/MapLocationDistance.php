@@ -31,17 +31,17 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
      *
      * @param string $typeIdentifier
      * @param string $fieldIdentifier
-     * @param string $sortDirection
      * @param float $latitude
      * @param float $longitude
+     * @param string $sortDirection
      * @param null|string $languageCode
      */
     public function __construct(
         $typeIdentifier,
         $fieldIdentifier,
-        $sortDirection = Query::SORT_ASC,
         $latitude,
         $longitude,
+        $sortDirection = Query::SORT_ASC,
         $languageCode = null
     )
     {
