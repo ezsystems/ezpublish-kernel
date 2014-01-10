@@ -115,7 +115,9 @@ services:
 
     ezpublish_rest.factory:
         class: %ezpublish_rest.factory.class%
-        arguments: [@service_container, @ezpublish.api.repository]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setRequest, [@?request=]]
 
     ezpublish_rest.controller.base:
         class: %ezpublish_rest.controller.base.class%

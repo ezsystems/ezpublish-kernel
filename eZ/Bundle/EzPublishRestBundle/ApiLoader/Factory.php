@@ -1,19 +1,20 @@
 <?php
 namespace eZ\Bundle\EzPublishRestBundle\ApiLoader;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\IO\IOService;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
 class Factory
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    protected $container;
+    protected $configResolver;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -21,18 +22,31 @@ class Factory
     protected $repository;
 
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    protected $request;
+
+    /**
+     * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
-    public function __construct( ContainerInterface $container, Repository $repository )
+    public function __construct( ConfigResolverInterface $configResolver, Repository $repository )
     {
-        $this->container = $container;
+        $this->configResolver = $configResolver;
         $this->repository = $repository;
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function setRequest( Request $request = null )
+    {
+        $this->request = $request;
     }
 
     public function getBinaryFileFieldTypeProcessor( IOService $binaryFileIOService )
     {
-        $urlPrefix = $this->container->isScopeActive( 'request' ) ? $this->container->get( 'request' )->getUriForPath( '/' ) : '';
+        $urlPrefix = isset( $this->request ) ? $this->request->getUriForPath( '/' ) : '';
 
         return new FieldTypeProcessor\BinaryProcessor(
             sys_get_temp_dir(),
@@ -49,8 +63,7 @@ class Factory
      */
     public function getImageFieldTypeProcessor( RouterInterface $router )
     {
-        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
-        $variationsIdentifiers = array_keys( $configResolver->getParameter( 'image_variations' ) );
+        $variationsIdentifiers = array_keys( $this->configResolver->getParameter( 'image_variations' ) );
         sort( $variationsIdentifiers );
 
         return new FieldTypeProcessor\ImageProcessor(
