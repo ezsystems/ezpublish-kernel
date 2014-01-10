@@ -532,6 +532,7 @@ class Handler implements HandlerInterface
                                 new CriterionHandler\UserMetadata( $db ),
                                 new CriterionHandler\RelationList( $db ),
                                 new CriterionHandler\Depth( $db ),
+                                new CriterionHandler\MapLocationDistance( $db ),
                             )
                         ),
                         new Content\Search\Gateway\SortClauseConverter(
