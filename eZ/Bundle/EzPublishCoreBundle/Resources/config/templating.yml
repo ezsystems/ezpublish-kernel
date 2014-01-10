@@ -30,7 +30,14 @@ services:
 
     ezpublish.twig.extension.content:
         class: %ezpublish.twig.extension.content.class%
-        arguments: [@service_container, @ezpublish.config.resolver, @ezpublish.translation_helper, @ezpublish.field_helper]
+        arguments:
+            - @ezpublish.api.repository
+            - @ezpublish.config.resolver
+            - @ezpublish.fieldtype.parameterproviderregistry
+            - @ezpublish.fieldtype.ezxmltext.converter.html5
+            - @ezpublish.fieldtype.ezimage.variation_service
+            - @ezpublish.translation_helper
+            - @ezpublish.field_helper
         tags:
             - {name: twig.extension}
 
