@@ -36,7 +36,7 @@ class FieldMap
     /**
      * Field name generator
      *
-     * @var FieldNameGenerator
+     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
      */
     protected $nameGenerator;
 
@@ -53,8 +53,6 @@ class FieldMap
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator $nameGenerator
-     *
-     * @return void
      */
     public function __construct( FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler, FieldNameGenerator $nameGenerator )
     {
@@ -78,7 +76,8 @@ class FieldMap
      *  )
      * </code>
      *
-     * @param Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface $criterion
+     *
      * @return array
      */
     public function getFieldTypes( CustomFieldInterface $criterion )
