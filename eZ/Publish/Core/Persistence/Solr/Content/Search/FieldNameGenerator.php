@@ -46,7 +46,7 @@ class FieldNameGenerator
     /**
      * Get name for Solr document field
      *
-     * Consists of a name, and optionally field anem and a content type name.
+     * Consists of a name, and optionally field name and a content type name.
      *
      * @param string $name
      * @param string $field
