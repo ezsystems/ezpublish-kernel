@@ -237,7 +237,7 @@ services:
 
     ezpublish_legacy.request_listener:
         class: %ezpublish_legacy.request_listener.class%
-        arguments: [@service_container, @security.context]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository, @security.context]
         tags:
             - { name: kernel.event_subscriber }
 

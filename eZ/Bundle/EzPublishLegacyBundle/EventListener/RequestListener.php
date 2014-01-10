@@ -9,7 +9,8 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\EventListener;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -21,18 +22,24 @@ use eZ\Publish\Core\MVC\Symfony\Security\User;
 class RequestListener implements EventSubscriberInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    private $container;
+    private $configResolver;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
 
     /**
      * @var \Symfony\Component\Security\Core\SecurityContextInterface
      */
     private $securityContext;
 
-    public function __construct( ContainerInterface $container, SecurityContextInterface $securityContext )
+    public function __construct( ConfigResolverInterface $configResolver, Repository $repository, SecurityContextInterface $securityContext )
     {
-        $this->container = $container;
+        $this->configResolver = $configResolver;
+        $this->repository = $repository;
         $this->securityContext = $securityContext;
     }
 
@@ -52,21 +59,18 @@ class RequestListener implements EventSubscriberInterface
     public function onKernelRequest( GetResponseEvent $event )
     {
         /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver */
-        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $request = $event->getRequest();
         if (
             $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST
-            || !$configResolver->getParameter( 'legacy_mode' )
+            || !$this->configResolver->getParameter( 'legacy_mode' )
             || !$request->getSession()->has( 'eZUserLoggedInID' )
         )
         {
             return;
         }
 
-        /** @var \eZ\Publish\API\Repository\Repository $repository */
-        $repository = $this->container->get( 'ezpublish.api.repository' );
-        $apiUser = $repository->getUserService()->loadUser( $request->getSession()->get( 'eZUserLoggedInID' ) );
-        $repository->setCurrentUser( $apiUser );
+        $apiUser = $this->repository->getUserService()->loadUser( $request->getSession()->get( 'eZUserLoggedInID' ) );
+        $this->repository->setCurrentUser( $apiUser );
 
         $token = $this->securityContext->getToken();
         if ( $token instanceof TokenInterface )

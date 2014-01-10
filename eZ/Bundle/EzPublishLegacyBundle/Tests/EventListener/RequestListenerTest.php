@@ -19,9 +19,14 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 class RequestListenerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $container;
+    private $configResolver;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $repository;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Security\Core\SecurityContextInterface
@@ -31,7 +36,8 @@ class RequestListenerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
+        $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
         $this->securityContext = $this->getMock( 'Symfony\Component\Security\Core\SecurityContextInterface' );
     }
 
@@ -47,26 +53,13 @@ class RequestListenerTest extends PHPUnit_Framework_TestCase
 
     public function testOnKernelRequest()
     {
-        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-        $configResolver
+        $this->configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'legacy_mode' )
             ->will( $this->returnValue( true ) );
         $userService = $this->getMock( 'eZ\Publish\API\Repository\UserService' );
-        $repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $configResolver ),
-                        array( 'ezpublish.api.repository', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $repository ),
-                    )
-                )
-            );
-        $repository
+        $this->repository
             ->expects( $this->once() )
             ->method( 'getUserService' )
             ->will( $this->returnValue( $userService ) );
@@ -78,7 +71,7 @@ class RequestListenerTest extends PHPUnit_Framework_TestCase
             ->method( 'loadUser' )
             ->with( $userId )
             ->will( $this->returnValue( $apiUser ) );
-        $repository
+        $this->repository
             ->expects( $this->once() )
             ->method( 'setCurrentUser' )
             ->with( $apiUser );
@@ -121,7 +114,7 @@ class RequestListenerTest extends PHPUnit_Framework_TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
-        $listener = new RequestListener( $this->container, $this->securityContext );
+        $listener = new RequestListener( $this->configResolver, $this->repository, $this->securityContext );
         $listener->onKernelRequest( $event );
     }
 }
