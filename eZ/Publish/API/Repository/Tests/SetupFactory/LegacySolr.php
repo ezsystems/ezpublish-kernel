@@ -184,6 +184,8 @@ class LegacySolr extends Legacy
                         new CriterionVisitor\DateMetadata\PublishedBetween(),
                         new CriterionVisitor\FullText( $fieldMap ),
                         new CriterionVisitor\UserMetadataIn(),
+                        new CriterionVisitor\MapLocation\MapLocationDistanceIn( $fieldMap ),
+                        new CriterionVisitor\MapLocation\MapLocationDistanceRange( $fieldMap ),
                         new CriterionVisitor\Field\FieldIn( $fieldMap ),
                         new CriterionVisitor\Field\FieldRange( $fieldMap ),
                         new CriterionVisitor\Visibility(),
