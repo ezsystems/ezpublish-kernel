@@ -178,7 +178,8 @@ services:
     # Legacy storage engine
     ezpublish.api.storage_engine.legacy.factory:
         class: %ezpublish.api.storage_engine.legacy.factory.class%
-        arguments: [@service_container]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.api.storage_engine.legacy.dbhandler.factory:
         class: %ezpublish.api.storage_engine.legacy.dbhandler.factory.class%

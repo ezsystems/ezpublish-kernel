@@ -13,15 +13,11 @@ use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LegacyStorageEngineFactory
+class LegacyStorageEngineFactory extends ContainerAware
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
-
     /**
      * Collection of converters with identifier as key and FQN class name as value
      *
@@ -30,11 +26,6 @@ class LegacyStorageEngineFactory
     protected $converters = array();
 
     protected $fieldTypes = array();
-
-    public function __construct( ContainerInterface $container )
-    {
-        $this->container = $container;
-    }
 
     /**
      * Registers a field type converter as expected in legacy storage engine.
