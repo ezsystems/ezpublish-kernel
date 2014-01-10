@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
