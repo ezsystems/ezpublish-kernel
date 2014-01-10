@@ -72,9 +72,12 @@ class FieldRange extends Field
         }
 
         $queries = array();
-        foreach ( $fieldTypes[$criterion->target] as $name )
+        foreach ( $fieldTypes[$criterion->target] as $names )
         {
-            $queries[] = $name . ':' . $this->getRange( $criterion->operator, $start, $end );
+            foreach ( $names as $name )
+            {
+                $queries[] = $name . ':' . $this->getRange( $criterion->operator, $start, $end );
+            }
         }
 
         return '(' . implode( ' OR ', $queries ) . ')';

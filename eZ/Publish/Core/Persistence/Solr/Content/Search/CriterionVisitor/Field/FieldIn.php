@@ -63,9 +63,12 @@ class FieldIn extends Field
         $queries = array();
         foreach ( $criterion->value as $value )
         {
-            foreach ( $fieldTypes[$criterion->target] as $name )
+            foreach ( $fieldTypes[$criterion->target] as $names )
             {
-                $queries[] = $name . ':"' . $value . '"';
+                foreach ( $names as $name )
+                {
+                    $queries[] = $name . ':"' . $value . '"';
+                }
             }
         }
 
