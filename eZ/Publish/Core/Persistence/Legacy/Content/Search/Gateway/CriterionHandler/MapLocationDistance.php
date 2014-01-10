@@ -176,28 +176,28 @@ class MapLocationDistance extends CriterionHandler
             case Criterion\Operator::LT:
             case Criterion\Operator::LTE:
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
-                $distanceInDegrees = $this->kilometersToDegrees( $criterion->value );
+                $distanceInDegrees = pow( $this->kilometersToDegrees( $criterion->value ), 2 );
                 $distanceFilter = $subSelect->expr->$operatorFunction(
                     $distanceExpression,
-                    $subSelect->expr->mul(
+                    $subSelect->expr->round(
                         $subSelect->bindValue( $distanceInDegrees ),
-                        $subSelect->bindValue( $distanceInDegrees )
+                        10
                     )
                 );
                 break;
 
             case Criterion\Operator::BETWEEN:
-                $distanceInDegrees1 = $this->kilometersToDegrees( $criterion->value[0] );
-                $distanceInDegrees2 = $this->kilometersToDegrees( $criterion->value[1] );
+                $distanceInDegrees1 = pow( $this->kilometersToDegrees( $criterion->value[0] ), 2 );
+                $distanceInDegrees2 = pow( $this->kilometersToDegrees( $criterion->value[1] ), 2 );
                 $distanceFilter = $subSelect->expr->between(
                     $distanceExpression,
-                    $subSelect->expr->mul(
+                    $subSelect->expr->round(
                         $subSelect->bindValue( $distanceInDegrees1 ),
-                        $subSelect->bindValue( $distanceInDegrees1 )
+                        10
                     ),
-                    $subSelect->expr->mul(
+                    $subSelect->expr->round(
                         $subSelect->bindValue( $distanceInDegrees2 ),
-                        $subSelect->bindValue( $distanceInDegrees2 )
+                        10
                     )
                 );
                 break;
