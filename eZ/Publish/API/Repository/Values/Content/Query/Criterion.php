@@ -11,6 +11,7 @@
 
 namespace eZ\Publish\API\Repository\Values\Content\Query;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use InvalidArgumentException;
@@ -39,17 +40,24 @@ abstract class Criterion
     public $target;
 
     /**
+     * Additional value data, required by some criterions, MapLocationDistance for instance
+     * @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value
+     */
+    public $valueData;
+
+    /**
      * Performs operator validation based on the Criterion specifications returned by {@see getSpecifications()}
      * @param string|null $target The target the Criterion applies to: metadata identifier, field identifier...
      * @param string|null $operator
      *        The operator the Criterion uses. If null is given, will default to Operator::IN if $value is an array,
      *        Operator::IN if it is not.
      * @param string[]|int[]|int|string $value
+     * @param Value $valueData
      *
      * @todo Add a dedicated exception
      * @throws \InvalidArgumentException if the provided operator isn't supported
      */
-    public function __construct( $target, $operator, $value )
+    public function __construct( $target, $operator, $value, $valueData = null )
     {
         if ( $operator === null )
         {
@@ -113,6 +121,11 @@ abstract class Criterion
         $this->operator = $operator;
         $this->value = $value;
         $this->target = $target;
+
+        if ( $valueData !== null )
+        {
+            $this->valueData = $valueData;
+        }
     }
 
     /**
