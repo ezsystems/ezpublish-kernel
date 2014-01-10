@@ -35,20 +35,9 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
     protected $legacyAwareRoutes = array();
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $serviceContainer;
-
-    /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     protected $configResolver;
-
-    public function __construct( ContainerInterface $container, $resource, array $options = array(), RequestContext $context = null )
-    {
-        $this->serviceContainer = $container;
-        parent::__construct( $container, $resource, $options, $context );
-    }
 
     public function setConfigResolver( ConfigResolverInterface $configResolver )
     {

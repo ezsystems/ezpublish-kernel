@@ -88,7 +88,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
+     * @expectedException \Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
     public function testMatchRequestLegacyMode()
     {
