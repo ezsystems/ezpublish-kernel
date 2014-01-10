@@ -11,12 +11,12 @@ namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
-use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use DateTime;
@@ -25,11 +25,11 @@ use Exception;
 class ViewController extends Controller
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface
      */
     protected $viewManager;
 
-    public function __construct( ViewManager $viewManager )
+    public function __construct( ViewManagerInterface $viewManager )
     {
         $this->viewManager = $viewManager;
     }
