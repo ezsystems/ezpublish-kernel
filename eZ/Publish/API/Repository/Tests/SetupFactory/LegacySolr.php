@@ -202,6 +202,7 @@ class LegacySolr extends Legacy
                         new SortClauseVisitor\SectionIdentifier(),
                         new SortClauseVisitor\SectionName(),
                         new SortClauseVisitor\DatePublished(),
+                        new SortClauseVisitor\MapLocationDistance( $fieldMap ),
                     )
                 ),
                 new FacetBuilderVisitor\Aggregate(
