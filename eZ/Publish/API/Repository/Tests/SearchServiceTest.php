@@ -1990,6 +1990,723 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    protected function createTestPlaceContentType()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct( "testtype" );
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->names = array( "eng-GB" => "Test type" );
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new \DateTime();
+
+        $translatableFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct( "maplocation", "ezgmaplocation" );
+        $translatableFieldCreate->names = array( "eng-GB" => "Map location field" );
+        $translatableFieldCreate->fieldGroup = "main";
+        $translatableFieldCreate->position = 1;
+        $translatableFieldCreate->isTranslatable = false;
+        $translatableFieldCreate->isSearchable = true;
+
+        $createStruct->addFieldDefinition( $translatableFieldCreate );
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier( "Content" );
+        $contentTypeDraft = $contentTypeService->createContentType( $createStruct, array( $contentGroup ) );
+        $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
+        $contentType = $contentTypeService->loadContentType( $contentTypeDraft->id );
+
+        return $contentType;
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @group maplocation
+     */
+    public function testMapLocationDistanceLessThanOrEqual()
+    {
+        $contentType = $this->createTestPlaceContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.894877,
+                "longitude" => 15.972699,
+                "address" => "Here be wild boars",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $wildBoars = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.927334,
+                "longitude" => 15.934847,
+                "address" => "A lone tree",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $tree = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\MapLocationDistance(
+                            "maplocation",
+                            Criterion\Operator::LTE,
+                            240,
+                            43.756825,
+                            15.775074
+                        )
+                    )
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array()
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertEquals(
+            $wildBoars->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @group maplocation
+     */
+    public function testMapLocationDistanceGreaterThanOrEqual()
+    {
+        $contentType = $this->createTestPlaceContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.894877,
+                "longitude" => 15.972699,
+                "address" => "Here be wild boars",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $wildBoars = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.927334,
+                "longitude" => 15.934847,
+                "address" => "A lone tree",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $tree = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\MapLocationDistance(
+                            "maplocation",
+                            Criterion\Operator::GTE,
+                            240,
+                            43.756825,
+                            15.775074
+                        )
+                    )
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array()
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertEquals(
+            $tree->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @group maplocation
+     */
+    public function testMapLocationDistanceBetween()
+    {
+        $contentType = $this->createTestPlaceContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.894877,
+                "longitude" => 15.972699,
+                "address" => "Here be wild boars",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $wildBoars = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.927334,
+                "longitude" => 15.934847,
+                "address" => "A lone tree",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $tree = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.903777,
+                "longitude" => 15.958788,
+                "address" => "Meadow with mushrooms",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $mushrooms = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\MapLocationDistance(
+                            "maplocation",
+                            Criterion\Operator::BETWEEN,
+                            array( 239, 241 ),
+                            43.756825,
+                            15.775074
+                        )
+                    )
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array()
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertEquals(
+            $mushrooms->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @group maplocation
+     */
+    public function testMapLocationDistanceSortAscending()
+    {
+        $contentType = $this->createTestPlaceContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.894877,
+                "longitude" => 15.972699,
+                "address" => "Here be wild boars",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $wildBoars = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.927334,
+                "longitude" => 15.934847,
+                "address" => "A lone tree",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $tree = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.903777,
+                "longitude" => 15.958788,
+                "address" => "Meadow with mushrooms",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $mushrooms = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $wellInVodice = array(
+            "latitude" => 43.756825,
+            "longitude" => 15.775074
+        );
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\MapLocationDistance(
+                            "maplocation",
+                            Criterion\Operator::GTE,
+                            235,
+                            $wellInVodice["latitude"],
+                            $wellInVodice["longitude"]
+                        )
+                    )
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array(
+                    new SortClause\MapLocationDistance(
+                        "testtype",
+                        "maplocation",
+                        Query::SORT_ASC,
+                        $wellInVodice["latitude"],
+                        $wellInVodice["longitude"]
+                    )
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 3, $result->totalCount );
+        $this->assertEquals(
+            $wildBoars->id,
+            $result->searchHits[0]->valueObject->id
+        );
+        $this->assertEquals(
+            $mushrooms->id,
+            $result->searchHits[1]->valueObject->id
+        );
+        $this->assertEquals(
+            $tree->id,
+            $result->searchHits[2]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @group maplocation
+     */
+    public function testMapLocationDistanceSortDescending()
+    {
+        $contentType = $this->createTestPlaceContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.894877,
+                "longitude" => 15.972699,
+                "address" => "Here be wild boars",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $wildBoars = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.927334,
+                "longitude" => 15.934847,
+                "address" => "A lone tree",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $tree = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.903777,
+                "longitude" => 15.958788,
+                "address" => "Meadow with mushrooms",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $mushrooms = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $well = array(
+            "latitude" => 43.756825,
+            "longitude" => 15.775074
+        );
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\MapLocationDistance(
+                            "maplocation",
+                            Criterion\Operator::GTE,
+                            235,
+                            $well["latitude"],
+                            $well["longitude"]
+                        )
+                    )
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array(
+                    new SortClause\MapLocationDistance(
+                        "testtype",
+                        "maplocation",
+                        Query::SORT_DESC,
+                        $well["latitude"],
+                        $well["longitude"]
+                    )
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 3, $result->totalCount );
+        $this->assertEquals(
+            $wildBoars->id,
+            $result->searchHits[2]->valueObject->id
+        );
+        $this->assertEquals(
+            $mushrooms->id,
+            $result->searchHits[1]->valueObject->id
+        );
+        $this->assertEquals(
+            $tree->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @group maplocation
+     */
+    public function testMapLocationDistanceWithCustomField()
+    {
+        $contentType = $this->createTestPlaceContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.894877,
+                "longitude" => 15.972699,
+                "address" => "Here be wild boars",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $wildBoars = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.927334,
+                "longitude" => 15.934847,
+                "address" => "A lone tree",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $tree = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $distanceCriterion = new Criterion\MapLocationDistance(
+            "maplocation",
+            Criterion\Operator::LTE,
+            240,
+            43.756825,
+            15.775074
+        );
+        $distanceCriterion->setCustomField( 'testtype', 'maplocation', 'custom_geolocation_field' );
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        $distanceCriterion
+                    )
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array()
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertEquals(
+            $wildBoars->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @group maplocation
+     */
+    public function testMapLocationDistanceWithCustomFieldSort()
+    {
+        $contentType = $this->createTestPlaceContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.894877,
+                "longitude" => 15.972699,
+                "address" => "Here be wild boars",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $wildBoars = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.927334,
+                "longitude" => 15.934847,
+                "address" => "A lone tree",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $tree = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 45.903777,
+                "longitude" => 15.958788,
+                "address" => "Meadow with mushrooms",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $mushrooms = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $well = array(
+            "latitude" => 43.756825,
+            "longitude" => 15.775074
+        );
+
+        $sortClause = new SortClause\MapLocationDistance(
+            "testtype",
+            "maplocation",
+            Query::SORT_DESC,
+            $well["latitude"],
+            $well["longitude"]
+        );
+        $sortClause->setCustomField( 'testtype', 'maplocation', 'custom_geolocation_field' );
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\ContentTypeId( $contentType->id ),
+                            new Criterion\MapLocationDistance(
+                                "maplocation",
+                                Criterion\Operator::GTE,
+                                235,
+                                $well["latitude"],
+                                $well["longitude"]
+                            )
+                        )
+                    ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array(
+                    $sortClause
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 3, $result->totalCount );
+        $this->assertEquals(
+            $wildBoars->id,
+            $result->searchHits[2]->valueObject->id
+        );
+        $this->assertEquals(
+            $mushrooms->id,
+            $result->searchHits[1]->valueObject->id
+        );
+        $this->assertEquals(
+            $tree->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
      * Assert that query result matches the given fixture.
      *
      * @param Query $query
