@@ -9,18 +9,24 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
-class RepositoryFactory
+class RepositoryFactory extends ContainerAware
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    protected $container;
+    private $configResolver;
+
+    /**
+     * @var string
+     */
+    private $repositoryClass;
 
     /**
      * Collection of fieldTypes, lazy loaded via a closure
@@ -43,9 +49,10 @@ class RepositoryFactory
      */
     protected $roleLimitations = array();
 
-    public function __construct( ContainerInterface $container )
+    public function __construct( ConfigResolverInterface $configResolver, $repositoryClass )
     {
-        $this->container = $container;
+        $this->configResolver = $configResolver;
+        $this->repositoryClass = $repositoryClass;
     }
 
     /**
@@ -60,23 +67,20 @@ class RepositoryFactory
      */
     public function buildRepository( PersistenceHandler $persistenceHandler )
     {
-        /** @var $configResolver \eZ\Publish\Core\MVC\ConfigResolverInterface */
-        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
-        $repositoryClass = $this->container->getParameter( 'ezpublish.api.inner_repository.class' );
-        $repository = new $repositoryClass(
+        $repository = new $this->repositoryClass(
             $persistenceHandler,
             array(
                 'fieldType'     => $this->fieldTypes,
                 'role'          => array(
                     'limitationTypes'   => $this->roleLimitations
                 ),
-                'languages'     => $configResolver->getParameter( 'languages' )
+                'languages'     => $this->configResolver->getParameter( 'languages' )
             )
         );
 
         /** @var \eZ\Publish\API\Repository\Repository $repository */
         $anonymousUser = $repository->getUserService()->loadUser(
-            $configResolver->getParameter( "anonymous_user_id" )
+            $this->configResolver->getParameter( "anonymous_user_id" )
         );
         $repository->setCurrentUser( $anonymousUser );
 

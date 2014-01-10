@@ -38,7 +38,9 @@ services:
 
     ezpublish.api.repository.factory:
         class: %ezpublish.api.repository.factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, %ezpublish.api.inner_repository.class%]
+        calls:
+            - [setContainer, [@service_container]]
 
     # Deprecated
     ezpublish.api.repository.lazy_factory:
