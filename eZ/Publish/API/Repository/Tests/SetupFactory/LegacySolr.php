@@ -144,7 +144,7 @@ class LegacySolr extends Legacy
                 'ezobjectrelationlist'  => new FieldType\Unindexed(),
                 'ezemail'               => new FieldType\Unindexed(),
                 'ezoption'              => new FieldType\Unindexed(),
-                'ezgmaplocation'        => new FieldType\Unindexed(),
+                'ezgmaplocation'        => new FieldType\MapLocation\SearchField(),
                 'ezbinaryfile'          => new FieldType\Unindexed(),
                 'ezmedia'               => new FieldType\Unindexed(),
                 'ezpage'                => new FieldType\Unindexed(),

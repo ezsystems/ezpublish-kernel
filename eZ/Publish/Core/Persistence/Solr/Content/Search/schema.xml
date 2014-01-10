@@ -104,7 +104,9 @@ should not remove or drastically change the existing definitions.
     <dynamicField name="*_f" type="float" indexed="true" stored="true"/>
     <dynamicField name="*_d" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_dt" type="date" indexed="true" stored="true"/>
-    <dynamicField name="*_p" type="location" indexed="true" stored="true"/>
+    <dynamicField name="*_gl" type="location" indexed="true" stored="true"/>
+    <dynamicField name="*_gl_0_coordinate" type="double" indexed="true" stored="true"/>
+    <dynamicField name="*_gl_1_coordinate" type="double" indexed="true" stored="true"/>
     <dynamicField name="*_c" type="currency" indexed="true" stored="true"/>
 
     <field name="text" type="text" indexed="true" multiValued="true" stored="false"/>
@@ -129,7 +131,7 @@ should not remove or drastically change the existing definitions.
       type. In the custom type you can define your dedicated index and query
       rules. You can copy any existing fields into the custom field as seen
       below.
-      
+
       In this case we copy the full user name and index it as a text field.
     -->
     <field name="custom_field" type="text" indexed="true" stored="false" required="false" multiValued="true" />
