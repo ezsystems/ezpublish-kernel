@@ -10,13 +10,14 @@
 namespace eZ\Publish\Core\REST\Server;
 
 use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 
-abstract class Controller
+abstract class Controller extends ContainerAware
 {
     /**
      * @var \Symfony\Component\HttpFoundation\Request
@@ -32,11 +33,6 @@ abstract class Controller
      * @var \Symfony\Component\Routing\RouterInterface
      */
     protected $router;
-
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
 
     /**
      * @var \eZ\Publish\Core\REST\Common\RequestParser
@@ -65,9 +61,9 @@ abstract class Controller
         $this->request = $request;
     }
 
-    public function setContainer( Container $container )
+    public function setContainer( Container $container = null )
     {
-        $this->container = $container;
+        parent::setContainer( $container );
         $this->setRequest( $this->container->get( 'request' ) );
     }
 
