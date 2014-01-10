@@ -547,6 +547,7 @@ class Handler implements HandlerInterface
                                 new SortClauseHandler\ContentName( $db ),
                                 new SortClauseHandler\ContentId( $db ),
                                 new SortClauseHandler\Field( $db, $this->contentLanguageHandler() ),
+                                new SortClauseHandler\MapLocationDistance( $db, $this->contentLanguageHandler() ),
                             )
                         ),
                         new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
