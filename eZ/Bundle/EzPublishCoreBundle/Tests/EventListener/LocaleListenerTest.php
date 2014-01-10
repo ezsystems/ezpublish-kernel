@@ -43,7 +43,6 @@ class LocaleListenerTest extends PHPUnit_Framework_TestCase
      */
     public function testOnKernelRequest( array $configuredLanguages, array $convertedLocalesValueMap, $expectedLocale )
     {
-
         $this->configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )
