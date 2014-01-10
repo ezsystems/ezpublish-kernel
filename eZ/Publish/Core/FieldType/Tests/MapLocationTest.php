@@ -182,6 +182,20 @@ class MapLocationTest extends FieldTypeTest
                 ),
             ),
             array(
+                array(
+                    'latitude' => 23,
+                    'longitude' => 42,
+                    'address' => 'Somewhere',
+                ),
+                new MapLocation\Value(
+                    array(
+                        'latitude' => 23,
+                        'longitude' => 42,
+                        'address' => 'Somewhere',
+                    )
+                ),
+            ),
+            array(
                 new MapLocation\Value(
                     array(
                         'latitude' => 23.42,
