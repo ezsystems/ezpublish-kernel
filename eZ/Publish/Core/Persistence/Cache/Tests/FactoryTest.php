@@ -40,7 +40,8 @@ class FactoryTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->containerMock = $this->getMock( "Symfony\\Component\\DependencyInjection\\ContainerInterface" );
-        $this->persistenceFactory = new Factory( $this->containerMock, 'persistence_mock' );
+        $this->persistenceFactory = new Factory( 'persistence_mock' );
+        $this->persistenceFactory->setContainer( $this->containerMock );
 
         $this->persistenceMock = $this->getMock( "eZ\\Publish\\SPI\\Persistence\\Handler" );
         $this->containerMock->expects( $this->once() )
