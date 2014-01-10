@@ -14,10 +14,23 @@ use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper as BaseGlobalHelper;
 class GlobalHelper extends BaseGlobalHelper
 {
     /**
+     * @var \eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper
+     */
+    protected $legacyHelper;
+
+    /**
+     * @param \eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper $legacyHelper
+     */
+    public function setLegacyHelper( LegacyHelper $legacyHelper )
+    {
+        $this->legacyHelper = $legacyHelper;
+    }
+
+    /**
      * @return \eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper
      */
     public function getLegacy()
     {
-        return $this->container->get( 'ezpublish_legacy.templating.legacy_helper' );
+        return $this->legacyHelper;
     }
 }

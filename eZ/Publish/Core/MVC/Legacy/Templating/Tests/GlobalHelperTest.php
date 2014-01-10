@@ -14,24 +14,22 @@ use eZ\Publish\Core\MVC\Symfony\Templating\Tests\GlobalHelperTest as BaseGlobalH
 
 class GlobalHelperTest extends BaseGlobalHelperTest
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $legacyHelper;
+
     protected function setUp()
     {
         parent::setUp();
-
+        $this->legacyHelper = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Legacy\\Templating\\LegacyHelper' );
         // Force to use Legacy GlobalHelper
-        $this->helper = new GlobalHelper( $this->container );
+        $this->helper = new GlobalHelper( $this->configResolver, $this->locationService, $this->router );
+        $this->helper->setLegacyHelper( $this->legacyHelper );
     }
 
     public function testGetLegacy()
     {
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->with( 'ezpublish_legacy.templating.legacy_helper' )
-            ->will(
-                $this->returnValue( $this->getMock( 'eZ\\Publish\\Core\\MVC\\Legacy\\Templating\\LegacyHelper' ) )
-            );
-
-        $this->helper->getLegacy();
+        $this->assertSame( $this->legacyHelper, $this->helper->getLegacy() );
     }
 }

@@ -70,7 +70,9 @@ services:
 
     ezpublish.templating.global_helper.core:
         class: %ezpublish.templating.global_helper.core.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.service.location, @router]
+        calls:
+            - [setRequest, [@?request=]]
 
     ezpublish.templating.global_helper:
         alias: ezpublish.templating.global_helper.core
