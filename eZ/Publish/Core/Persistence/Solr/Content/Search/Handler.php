@@ -88,6 +88,13 @@ class Handler implements SearchHandlerInterface
     protected $sectionHandler;
 
     /**
+     * Field name generator
+     *
+     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
+     */
+    protected $fieldNameGenerator;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway $gateway
@@ -103,7 +110,8 @@ class Handler implements SearchHandlerInterface
         LocationHandler $locationHandler,
         ContentTypeHandler $contentTypeHandler,
         ObjectStateHandler $objectStateHandler,
-        SectionHandler $sectionHandler
+        SectionHandler $sectionHandler,
+        FieldNameGenerator $fieldNameGenerator
     )
     {
         $this->gateway            = $gateway;
@@ -112,6 +120,7 @@ class Handler implements SearchHandlerInterface
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
         $this->sectionHandler     = $sectionHandler;
+        $this->fieldNameGenerator = $fieldNameGenerator;
     }
 
     /**
@@ -457,10 +466,17 @@ class Handler implements SearchHandlerInterface
                 }
 
                 $fieldType = $this->fieldRegistry->getType( $field->type );
-                $prefix    = $contentType->identifier . '/' . $fieldDefinition->identifier . '/';
                 foreach ( $fieldType->getIndexData( $field ) as $indexField )
                 {
-                    $document[] = new Field( $prefix . $indexField->name, $indexField->value, $indexField->type );
+                    $document[] = new Field(
+                        $this->fieldNameGenerator->getName(
+                            $indexField->name,
+                            $fieldDefinition->identifier,
+                            $contentType->identifier
+                        ),
+                        $indexField->value,
+                        $indexField->type
+                    );
                 }
             }
         }

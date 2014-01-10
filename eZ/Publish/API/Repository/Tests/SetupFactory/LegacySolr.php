@@ -228,7 +228,8 @@ class LegacySolr extends Legacy
             $persistenceHandler->locationHandler(),
             $persistenceHandler->contentTypeHandler(),
             $persistenceHandler->objectStateHandler(),
-            $persistenceHandler->sectionHandler()
+            $persistenceHandler->sectionHandler(),
+            $nameGenerator
         );
     }
 
