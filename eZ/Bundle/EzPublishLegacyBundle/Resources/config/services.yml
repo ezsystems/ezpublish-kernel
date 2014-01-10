@@ -73,24 +73,24 @@ services:
             - @event_dispatcher
             - @ezpublish_legacy.uri_helper
             - @?logger
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish_legacy.kernel_handler.web:
         class: %ezpublish_legacy.kernel_handler.class%
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernelHandlerWeb
-        arguments: [@service_container, %ezpublish_legacy.kernel_handler.web.class%]
+        arguments: [%ezpublish_legacy.kernel_handler.web.class%]
 
     ezpublish_legacy.kernel_handler.treemenu:
         class: %ezpublish_legacy.kernel_handler.treemenu.class%
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernelHandlerTreeMenu
-        arguments: [@service_container]
 
     ezpublish_legacy.kernel_handler.cli:
         class: %ezpublish_legacy.kernel_handler.cli.class%
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernelHandlerCLI
-        arguments: [@service_container]
 
     ezpublish_legacy.kernel_handler:
         alias: ezpublish_legacy.kernel_handler.web
