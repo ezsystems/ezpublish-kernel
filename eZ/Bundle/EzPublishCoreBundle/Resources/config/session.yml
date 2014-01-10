@@ -12,7 +12,7 @@ services:
 
     ezpublish.session_init_by_post_listener:
         class: %ezpublish.session_init_by_post_listener.class%
-        arguments: [@service_container]
+        arguments: [@?session]
         tags:
             - { name: kernel.event_subscriber }
 
