@@ -11,7 +11,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * The storage engine factory.
