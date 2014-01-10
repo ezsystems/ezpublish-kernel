@@ -50,7 +50,7 @@ abstract class Criterion
      * @param string|null $target The target the Criterion applies to: metadata identifier, field identifier...
      * @param string|null $operator
      *        The operator the Criterion uses. If null is given, will default to Operator::IN if $value is an array,
-     *        Operator::IN if it is not.
+     *        Operator::EQ if it is not.
      * @param string[]|int[]|int|string $value
      * @param Value $valueData
      *
