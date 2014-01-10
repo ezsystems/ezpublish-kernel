@@ -14,11 +14,9 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RequestContext;
 
 /**
  * Extension of Symfony default router implementing RequestMatcherInterface

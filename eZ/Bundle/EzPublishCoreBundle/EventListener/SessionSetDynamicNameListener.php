@@ -14,7 +14,6 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Bundle\EzPublishCoreBundle\Kernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
