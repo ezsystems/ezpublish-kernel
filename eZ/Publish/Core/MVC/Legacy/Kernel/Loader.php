@@ -19,7 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Legacy kernel loader

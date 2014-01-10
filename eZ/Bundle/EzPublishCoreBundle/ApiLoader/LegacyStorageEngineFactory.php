@@ -14,7 +14,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LegacyStorageEngineFactory extends ContainerAware
 {
