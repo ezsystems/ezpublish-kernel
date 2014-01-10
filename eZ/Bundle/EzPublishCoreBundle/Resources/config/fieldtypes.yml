@@ -307,7 +307,9 @@ services:
 
     ezpublish.fieldType.ezdatetime.parameterProvider:
         class: %ezpublish.fieldType.locale.parameterProvider.class%
-        arguments: [@service_container, @ezpublish.locale.converter]
+        arguments: [@ezpublish.locale.converter]
+        calls:
+            - [setRequest, [@?request=]]
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdatetime}
             - {name: ezpublish.fieldType.parameterProvider, alias: ezdate}

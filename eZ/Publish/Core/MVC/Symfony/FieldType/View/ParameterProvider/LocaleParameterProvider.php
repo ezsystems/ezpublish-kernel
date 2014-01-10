@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider;
 
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderInterface;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Locale view parameter provider.
@@ -20,19 +20,26 @@ use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 class LocaleParameterProvider implements ParameterProviderInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \Symfony\Component\HttpFoundation\Request
      */
-    protected $container;
+    protected $request;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface
      */
     protected $localeConverter;
 
-    public function __construct( ContainerInterface $container, LocaleConverterInterface $localeConverter )
+    public function __construct( LocaleConverterInterface $localeConverter )
     {
-        $this->container = $container;
         $this->localeConverter = $localeConverter;
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     */
+    public function setRequest( Request $request = null )
+    {
+        $this->request = $request;
     }
 
     /**
@@ -49,11 +56,9 @@ class LocaleParameterProvider implements ParameterProviderInterface
     {
         $parameters = array();
 
-        /** @var \Symfony\Component\HttpFoundation\Request $request */
-        $request = $this->container->get( "request" );
-        if ( $request->attributes->has( '_locale' ) )
+        if ( $this->request && $this->request->attributes->has( '_locale' ) )
         {
-            $parameters['locale'] = $request->attributes->get( '_locale' );
+            $parameters['locale'] = $this->request->attributes->get( '_locale' );
         }
         else
         {

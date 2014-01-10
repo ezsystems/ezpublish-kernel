@@ -24,34 +24,17 @@ class LocaleParameterProviderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider::getViewParameters
      * @dataProvider providerForTestGetViewParameters
      */
     public function testGetViewParameters( $hasRequestLocale, $expectedLocale )
     {
         $field = new Field( array( "languageCode" => "cro-HR" ) );
-        $parameterProvider = new LocaleParameterProvider(
-            $this->getContainerMock( $hasRequestLocale ),
-            $this->getLocaleConverterMock()
-        );
+        $parameterProvider = new LocaleParameterProvider( $this->getLocaleConverterMock() );
+        $parameterProvider->setRequest( $this->getRequestMock( $hasRequestLocale ) );
         $this->assertSame(
             array( 'locale' => $expectedLocale ),
             $parameterProvider->getViewParameters( $field )
         );
-    }
-
-    protected function getContainerMock( $hasRequestLocale )
-    {
-        $mock = $this->getMock(
-            'Symfony\\Component\\DependencyInjection\\ContainerInterface'
-        );
-
-        $mock->expects( $this->any() )
-            ->method( "get" )
-            ->with( $this->equalTo( "request" ) )
-            ->will( $this->returnValue( $this->getRequestMock( $hasRequestLocale ) ) );
-
-        return $mock;
     }
 
     protected function getRequestMock( $hasLocale )
