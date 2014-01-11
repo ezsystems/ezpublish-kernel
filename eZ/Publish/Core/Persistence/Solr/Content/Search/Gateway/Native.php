@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
-use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -93,14 +92,13 @@ class Native extends Gateway
      *
      * @return void
      */
-    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler, FieldNameGenerator $nameGenerator )
+    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, FieldNameGenerator $nameGenerator )
     {
         $this->client              = $client;
         $this->criterionVisitor    = $criterionVisitor;
         $this->sortClauseVisitor   = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->fieldValueMapper    = $fieldValueMapper;
-        $this->contentHandler      = $contentHandler;
         $this->nameGenerator       = $nameGenerator;
     }
 
@@ -172,7 +170,9 @@ class Native extends Gateway
             $searchHit = new SearchHit(
                 array(
                     'score'       => $doc->score,
-                    'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_id )
+                    // @TODO: Once object stripping is implemented we would
+                    // need to re-construct the full content object here.
+                    'valueObject' => unserialize( base64_decode( $doc->ez_content_binary ) ),
                 )
             );
             $result->searchHits[] = $searchHit;
