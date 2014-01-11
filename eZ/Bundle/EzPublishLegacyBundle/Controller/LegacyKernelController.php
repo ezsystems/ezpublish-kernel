@@ -90,6 +90,23 @@ class LegacyKernelController
         $response = $this->legacyResponseManager->generateResponseFromModuleResult( $result );
         $this->legacyResponseManager->mapHeaders( headers_list(), $response );
 
+        // Handles Content-Type header sent by legacy stack
+        $pattern = '/^content-type: (.*)/i';
+        $contentTypeHeaders = preg_grep( $pattern, headers_list() );
+        if( !empty( $contentTypeHeaders ) )
+        {
+            // reset array keys
+            $contentTypeHeaders = array_values( $contentTypeHeaders );
+            // extract header value
+            preg_match( $pattern, $contentTypeHeaders[0], $headerValue );
+            // re-set header
+            $response->headers->set(
+                'Content-Type',
+                $headerValue[1],
+                true
+            );
+        }
+
         return $response;
     }
 }
