@@ -52,12 +52,12 @@ abstract class Criterion
      *        The operator the Criterion uses. If null is given, will default to Operator::IN if $value is an array,
      *        Operator::EQ if it is not.
      * @param string[]|int[]|int|string $value
-     * @param Value $valueData
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value $valueData
      *
      * @todo Add a dedicated exception
      * @throws \InvalidArgumentException if the provided operator isn't supported
      */
-    public function __construct( $target, $operator, $value, $valueData = null )
+    public function __construct( $target, $operator, $value, Value $valueData = null )
     {
         if ( $operator === null )
         {
