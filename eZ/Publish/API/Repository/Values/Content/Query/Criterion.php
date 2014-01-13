@@ -121,11 +121,7 @@ abstract class Criterion
         $this->operator = $operator;
         $this->value = $value;
         $this->target = $target;
-
-        if ( $valueData !== null )
-        {
-            $this->valueData = $valueData;
-        }
+        $this->valueData = $valueData;
     }
 
     /**
