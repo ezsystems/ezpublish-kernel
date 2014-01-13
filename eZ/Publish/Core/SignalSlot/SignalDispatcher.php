@@ -37,7 +37,7 @@ abstract class SignalDispatcher
      * $signalIdentifier
      *
      * @param string $signalIdentifier
-     * @param string $slotIdentifier
+     * @param \eZ\Publish\Core\SignalSlot\Slot $slot
      *
      * @return void
      *
@@ -45,5 +45,5 @@ abstract class SignalDispatcher
      * attachments at runtime, which can lead to hard debugging. Better only
      * accept attachments during construction (config).
      */
-    abstract public function attach( $signalIdentifier, $slotIdentifier );
+    abstract public function attach( $signalIdentifier, Slot $slot );
 }

@@ -15,7 +15,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 /**
  * Slot factory that is able to lookup slots based on identifier.
  *
- * @deprecated To be removed when unit test runs on Sf stack, and ContainerSlotFactory is used everywhere.
+ * @deprecated Slot factories are not needed any more.
  */
 class GeneralSlotFactory extends SlotFactory
 {
@@ -30,6 +30,17 @@ class GeneralSlotFactory extends SlotFactory
     public function __construct( array $slots = array() )
     {
         $this->slots = $slots;
+    }
+
+    /**
+     * Registers a new Slot by its identifier.
+     *
+     * @param string $slotIdentifier
+     * @param Slot $slot
+     */
+    public function addSlot( $slotIdentifier, Slot $slot )
+    {
+        $this->slots[$slotIdentifier] = $slot;
     }
 
     /**

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\SignalSlot\SignalDispatcher;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\SignalSlot\Slot;
 use eZ\Publish\Core\SignalSlot\SlotFactory;
 use eZ\Publish\Core\SignalSlot\Signal;
 
@@ -17,9 +18,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
  * Dispatches Signals to their assigned Slots
  *
  * An instance of this class is required by each object that needs to send
- * Signals. It is recommended, that a SignalDispatcher works together with a
- * {@link SlotFactory} to get hold of the actual Slots that listen for a given
- * Signal, which it originally only knows by their identifier.
+ * Signals.
  *
  * @internal
  */
@@ -43,21 +42,19 @@ class DefaultSignalDispatcher extends SignalDispatcher
      *
      * @var array
      */
-    protected $mapping = array();
+    protected $signalSlotMap = array();
 
     /**
      * Construct from factory
      *
-     * @param \eZ\Publish\Core\SignalSlot\SlotFactory $factory
-     * @param array $mapping
+     * @param array $signalSlotMap
      */
-    public function __construct( SlotFactory $factory, array $mapping = array() )
+    public function __construct( array $signalSlotMap = array() )
     {
-        $this->factory = $factory;
-        $this->mapping = $mapping;
-        if ( !isset( $this->mapping['*'] ) )
+        $this->signalSlotMap = $signalSlotMap;
+        if ( !isset( $this->signalSlotMap['*'] ) )
         {
-            $this->mapping['*'] = array();
+            $this->signalSlotMap['*'] = array();
         }
     }
 
@@ -73,14 +70,14 @@ class DefaultSignalDispatcher extends SignalDispatcher
     public function emit( Signal $signal )
     {
         $signalName = get_class( $signal );
-        if ( !isset( $this->mapping[$signalName] ) )
+        if ( !isset( $this->signalSlotMap[$signalName] ) )
         {
-            $this->mapping[$signalName] = array();
+            $this->signalSlotMap[$signalName] = array();
         }
 
-        foreach ( array_merge( $this->mapping['*'], $this->mapping[$signalName] ) as $slotIdentifier )
+        foreach ( array_merge( $this->signalSlotMap['*'], $this->signalSlotMap[$signalName] ) as $slot )
         {
-            $slot = $this->factory->getSlot( $slotIdentifier );
+            /** @var \eZ\Publish\Core\SignalSlot\Slot $slot */
             $slot->receive( $signal );
         }
     }
@@ -92,9 +89,9 @@ class DefaultSignalDispatcher extends SignalDispatcher
      * @access private For unit test use.
      *
      * @param string $signalIdentifier
-     * @param string $slotIdentifier
+     * @param \eZ\Publish\Core\SignalSlot\Slot $slot
      */
-    public function attach( $signalIdentifier, $slotIdentifier )
+    public function attach( $signalIdentifier, Slot $slot )
     {
         if ( $signalIdentifier[0] === '\\' )
         {
@@ -105,6 +102,6 @@ class DefaultSignalDispatcher extends SignalDispatcher
             $signalIdentifier = static::RELATIVE_SIGNAL_NAMESPACE . "\\$signalIdentifier";
         }
 
-        $this->mapping[$signalIdentifier][] = $slotIdentifier;
+        $this->signalSlotMap[$signalIdentifier][] = $slot;
     }
 }

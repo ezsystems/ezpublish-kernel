@@ -24,6 +24,9 @@ Changes affecting version compatibility with former or future versions.
   and a few others (e.g. `ezpublish.config.resolver`) are now [lazy services](http://symfony.com/doc/2.3/components/dependency_injection/lazy_services.html).
   You can now safely inject them, even in early request listeners. They will be booted only when necessary.
 
+* **SignalSlot**: Slot factories are not needed any more as Slots are now directly attached to SignalDispatcher.
+  Therefore `ContainerSlotFactory` has been removed.
+
 ## Deprecations
 
 * Method `eZ\Publish\API\Repository\RoleService::removePolicy` is deprecated in
