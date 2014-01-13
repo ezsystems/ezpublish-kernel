@@ -243,6 +243,7 @@ services:
 
     ezpublish_legacy.config_scope_listener:
         class: %ezpublish_legacy.config_scope_listener.class%
-        arguments: [@service_container]
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
