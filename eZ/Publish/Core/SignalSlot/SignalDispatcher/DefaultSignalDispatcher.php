@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\SignalSlot\SignalDispatcher;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\Slot;
-use eZ\Publish\Core\SignalSlot\SlotFactory;
 use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
