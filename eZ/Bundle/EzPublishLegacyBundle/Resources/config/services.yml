@@ -130,7 +130,7 @@ services:
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
-        arguments: [@service_container, @?request_context, @?logger]
+        arguments: [@ezpublish_legacy.url_generator, @?request_context, @?logger]
         tags:
             - {name: router, priority: -255}
 
