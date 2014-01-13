@@ -37,7 +37,8 @@ class LegacyMapperTest extends LegacyBasedTestCase
             ->will( $this->returnValue( $pathinfo ) );
         $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
 
-        $mapper = new LegacyMapper( $container );
+        $mapper = new LegacyMapper();
+        $mapper->setContainer( $container );
         $bag = new \Symfony\Component\HttpFoundation\ParameterBag();
         $mapper->onBuildKernelWebHandler(
             new PreBuildKernelWebHandlerEvent(
