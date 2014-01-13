@@ -34,17 +34,6 @@ class GeneralSlotFactory extends SlotFactory
     }
 
     /**
-     * Registers a new Slot by its identifier.
-     *
-     * @param string $slotIdentifier
-     * @param Slot $slot
-     */
-    public function addSlot( $slotIdentifier, Slot $slot )
-    {
-        $this->slots[$slotIdentifier] = $slot;
-    }
-
-    /**
      * Returns a Slot with the given $slotIdentifier
      *
      * @param string $slotIdentifier
