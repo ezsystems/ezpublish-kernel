@@ -84,12 +84,12 @@ security:
 *ezpublish/config/routing.yml*
 ```yaml
 login:
-    pattern:   /login
+    path:   /login
     defaults:  { _controller: ezpublish.security.controller:loginAction }
 login_check:
-    pattern:   /login_check
+    path:   /login_check
 logout:
-    pattern:   /logout
+    path:   /logout
 ```
 
 > **Note:**
