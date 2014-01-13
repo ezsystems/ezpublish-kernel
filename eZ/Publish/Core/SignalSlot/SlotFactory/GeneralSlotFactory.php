@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\SignalSlot\SlotFactory;
 
+use eZ\Publish\Core\SignalSlot\Slot;
 use eZ\Publish\Core\SignalSlot\SlotFactory;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
