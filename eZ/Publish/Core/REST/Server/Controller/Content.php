@@ -715,7 +715,7 @@ class Content extends RestController
     /**
      * List content views
      *
-     * @return Exception;
+     * @return NotImplementedException;
      */
     public function listView()
     {
@@ -725,11 +725,20 @@ class Content extends RestController
     /**
      * Get a content view
      *
-     * @return Exception;
+     * @return NotImplementedException;
      */
     public function getView()
     {
         return new NotImplementedException( 'ezpublish_rest.controller.content:getView' );
     }
 
+    /**
+     * Get a content view results
+     *
+     * @return NotImplementedException;
+     */
+    public function loadViewResults()
+    {
+        return new NotImplementedException( 'ezpublish_rest.controller.content:loadViewResults' );
+    }
 }
