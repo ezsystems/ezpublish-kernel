@@ -9,10 +9,12 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 
+use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
-use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 
 /**
  * Maps the session parameters to the legacy parameters
@@ -20,19 +22,41 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Session implements EventSubscriberInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
      */
-    private $container;
+    private $session;
 
-    public function __construct( ContainerInterface $container )
+    /**
+     * @var \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
+     */
+    private $sessionStorage;
+
+    /**
+     * @var string
+     */
+    private $sessionStorageKey;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
+    private $request;
+
+    public function __construct( SessionStorageInterface $sessionStorage, $sessionStorageKey, SessionInterface $session = null )
     {
-        $this->container = $container;
+        $this->sessionStorage = $sessionStorage;
+        $this->sessionStorageKey = $sessionStorageKey;
+        $this->session = $session;
+    }
+
+    public function setRequest( Request $request = null )
+    {
+        $this->request = $request;
     }
 
     public static function getSubscribedEvents()
     {
         return array(
-            LegacyEvents::PRE_BUILD_LEGACY_KERNEL => array( 'onBuildKernelHandler', 128 )
+            LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB => array( 'onBuildKernelHandler', 128 )
         );
     }
 
@@ -40,9 +64,9 @@ class Session implements EventSubscriberInterface
      * Adds the session settings to the parameters that will be injected
      * into the legacy kernel
      *
-     * @param \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent $event
+     * @param \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent $event
      */
-    public function onBuildKernelHandler( PreBuildKernelEvent $event )
+    public function onBuildKernelHandler( PreBuildKernelWebHandlerEvent $event )
     {
         $sessionInfos = array(
             'configured' => false,
@@ -52,18 +76,15 @@ class Session implements EventSubscriberInterface
             'has_previous' => false,
             'storage' => false,
         );
-        if ( $this->container->has( 'session' ) )
+        if ( isset( $this->session ) )
         {
             $sessionInfos['configured'] = true;
 
-            $session = $this->container->get( 'session' );
-            $sessionInfos['name'] = $session->getName();
-            $sessionInfos['started'] = $session->isStarted();
-            $sessionInfos['namespace'] = $this->container->getParameter(
-                'ezpublish.session.attribute_bag.storage_key'
-            );
-            $sessionInfos['has_previous'] = $this->container->isScopeActive( 'request' ) ? $this->container->get( 'request' )->hasPreviousSession() : false;
-            $sessionInfos['storage'] = $this->container->get( 'session.storage' );
+            $sessionInfos['name'] = $this->session->getName();
+            $sessionInfos['started'] = $this->session->isStarted();
+            $sessionInfos['namespace'] = $this->sessionStorageKey;
+            $sessionInfos['has_previous'] = isset( $this->request ) ? $this->request->hasPreviousSession() : false;
+            $sessionInfos['storage'] = $this->sessionStorage;
         }
 
         $event->getParameters()->set( 'session', $sessionInfos );

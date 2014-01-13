@@ -150,7 +150,9 @@ services:
 
     ezpublish_legacy.session_mapper:
         class: %ezpublish_legacy.session_mapper.class%
-        arguments: [@service_container]
+        arguments: [@session.storage, %ezpublish.session.attribute_bag.storage_key%, @?session]
+        calls:
+            - [setRequest, [@?request=]]
         tags:
             - { name: kernel.event_subscriber }
 
