@@ -68,7 +68,9 @@ services:
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
-        arguments: [@service_container, @router.default, @ezpublish.urlalias_generator, @security.http_utils]
+        arguments: [@router.default, @ezpublish.urlalias_generator, @security.http_utils]
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 

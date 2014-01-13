@@ -14,21 +14,16 @@ use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * SiteAccess match listener.
  */
-class SiteAccessListener implements EventSubscriberInterface
+class SiteAccessListener extends ContainerAware implements EventSubscriberInterface
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
     /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
@@ -44,9 +39,8 @@ class SiteAccessListener implements EventSubscriberInterface
      */
     private $httpUtils;
 
-    public function __construct( ContainerInterface $container, RouterInterface $defaultRouter, UrlAliasGenerator $urlAliasGenerator, HttpUtils $httpUtils )
+    public function __construct( RouterInterface $defaultRouter, UrlAliasGenerator $urlAliasGenerator, HttpUtils $httpUtils )
     {
-        $this->container = $container;
         $this->defaultRouter = $defaultRouter;
         $this->urlAliasGenerator = $urlAliasGenerator;
         $this->httpUtils = $httpUtils;
