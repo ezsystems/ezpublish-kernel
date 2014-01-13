@@ -160,9 +160,10 @@ services:
             - @ezpublish.config.resolver.core
             - @ezpublish.http_cache.purger
             - @ezpublish_legacy.persistence_cache_purger
-            - @service_container
             - @ezpublish.urlalias_generator
             - %ezpublish_legacy.configuration_mapper.options%
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 

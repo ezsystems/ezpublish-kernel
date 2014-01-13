@@ -17,13 +17,13 @@ use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use ezpEvent;
 use ezxFormToken;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Maps configuration parameters to the legacy parameters
  */
-class Configuration implements EventSubscriberInterface
+class Configuration extends ContainerAware implements EventSubscriberInterface
 {
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
@@ -46,11 +46,6 @@ class Configuration implements EventSubscriberInterface
     private $urlAliasGenerator;
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
-    /**
      * @var array
      */
     private $options;
@@ -66,7 +61,6 @@ class Configuration implements EventSubscriberInterface
         ConfigResolverInterface $configResolver,
         GatewayCachePurger $gatewayCachePurger,
         PersistenceCachePurger $persistenceCachePurger,
-        ContainerInterface $container,
         UrlAliasGenerator $urlAliasGenerator,
         array $options = array()
     )
@@ -74,7 +68,6 @@ class Configuration implements EventSubscriberInterface
         $this->configResolver = $configResolver;
         $this->gatewayCachePurger = $gatewayCachePurger;
         $this->persistenceCachePurger = $persistenceCachePurger;
-        $this->container = $container;
         $this->urlAliasGenerator = $urlAliasGenerator;
         $this->options = $options;
     }
