@@ -177,6 +177,58 @@ class PersistenceCachePurger implements CacheClearerInterface
     }
 
     /**
+     * Clear all content location cache, or by locationIds (legacy content/cache mechanism is location based).
+     *
+     * Either way all location and urlAlias cache is cleared as well.
+     *
+     * @param int|int[]|null $locationIds Ids of location we need to purge content cache for. Purges all content cache if null
+     *
+     * @return array|int|\int[]|null
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType On invalid $id type
+     */
+    public function locations( $locationIds = null )
+    {
+        if ( $this->allCleared === true || $this->enabled === false )
+            return;
+
+        if ( $locationIds === null )
+        {
+            $this->cache->clear( 'content', 'locations' );
+            goto relatedCache;
+        }
+        else if ( !is_array( $locationIds ) )
+        {
+            $locationIds = array( $locationIds );
+        }
+
+        foreach ( $locationIds as $id )
+        {
+            if ( !is_scalar( $id ) )
+                throw new InvalidArgumentType( "\$id", "int[]|null", $id );
+
+            try
+            {
+                $location = $this->locationHandler->load( $id );
+                $this->cache->clear( 'content', 'locations', $location->contentId );
+            }
+            catch ( NotFoundException $e )
+            {
+                $this->logger->notice(
+                    "Unable to load the location with the id '$id' to clear its cache"
+                );
+            }
+        }
+
+        // clear content related cache as well
+        relatedCache:
+        $this->cache->clear( 'urlAlias' );
+        $this->cache->clear( 'location' );
+
+        return $locationIds;
+    }
+
+    /**
      * Clear all contentType persistence cache, or by id
      *
      * @param int|null $id Purges all contentType cache if null

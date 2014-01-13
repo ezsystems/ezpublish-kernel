@@ -186,6 +186,7 @@ class Configuration implements EventSubscriberInterface
         ezpEvent::getInstance()->attach( 'content/section/cache', array( $this->persistenceCachePurger, 'section' ) );
         ezpEvent::getInstance()->attach( 'user/cache/all', array( $this->persistenceCachePurger, 'user' ) );
         ezpEvent::getInstance()->attach( 'content/translations/cache', array( $this->persistenceCachePurger, 'languages' ) );
+        ezpEvent::getInstance()->attach( 'content/location/cache', array( $this->persistenceCachePurger, 'locations' ) );
     }
 
     private function getImageSettings()
