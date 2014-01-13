@@ -144,7 +144,8 @@ services:
 
     ezpublish_legacy.siteaccess_mapper:
         class: %ezpublish_legacy.siteaccess_mapper.class%
-        arguments: [@service_container]
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 
