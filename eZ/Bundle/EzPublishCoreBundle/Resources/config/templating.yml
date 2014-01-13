@@ -53,7 +53,9 @@ services:
 
     ezpublish.content_view.matcher_factory:
         class: %ezpublish.content_view.matcher_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.location_view_provider.configured:
         class: %ezpublish.location_view_provider.configured.class%
@@ -63,7 +65,9 @@ services:
 
     ezpublish.location_view.matcher_factory:
         class: %ezpublish.location_view.matcher_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.block_view_provider.configured:
         class: %ezpublish.block_view_provider.configured.class%
@@ -73,7 +77,9 @@ services:
 
     ezpublish.block_view.matcher_factory:
         class: %ezpublish.block_view.matcher_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.templating.global_helper.core:
         class: %ezpublish.templating.global_helper.core.class%
