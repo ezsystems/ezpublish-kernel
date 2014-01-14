@@ -45,21 +45,25 @@ class CsrfListener implements EventSubscriberInterface
     private $csrfTokenIntention;
 
     /**
-     * @param \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface $csrfProvider
+     * Note that CSRF provider needs to be optional as it will not be available
+     * when CSRF protection is disabled.
+     *
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param bool $csrfEnabled
      * @param string $csrfTokenIntention
+     * @param null|\Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface $csrfProvider
      */
     public function __construct(
-        CsrfProviderInterface $csrfProvider,
         EventDispatcherInterface $eventDispatcher,
         $csrfEnabled,
-        $csrfTokenIntention )
+        $csrfTokenIntention,
+        CsrfProviderInterface $csrfProvider = null
+    )
     {
-        $this->csrfProvider = $csrfProvider;
         $this->eventDispatcher = $eventDispatcher;
         $this->csrfEnabled = $csrfEnabled;
         $this->csrfTokenIntention = $csrfTokenIntention;
+        $this->csrfProvider = $csrfProvider;
     }
 
     /**
