@@ -28,7 +28,7 @@ class ParsingDispatcher
      *  )
      * </code>
      *
-     * @var array
+     * @var \eZ\Publish\Core\REST\Common\Input\Parser[]
      */
     protected $parsers = array();
 
