@@ -53,6 +53,7 @@ class Application extends BaseApplication
         // Replacing legacy kernel handler web by the CLI one
         // @todo: this should be somewhat done in the legacy bundle
         $legacyHandlerCLI = $container->get( 'ezpublish_legacy.kernel_handler.cli' );
+        $container->set( 'ezpublish_legacy.kernel.lazy', null );
         $container->set( 'ezpublish_legacy.kernel_handler', $legacyHandlerCLI );
         $container->set( 'ezpublish_legacy.kernel_handler.web', $legacyHandlerCLI );
     }

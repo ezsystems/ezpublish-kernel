@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Tests\LegacyMapper;
 
 use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session as SessionMapper;
-use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
+use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -47,7 +47,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             array(
-                LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB => array( 'onBuildKernelHandler', 128 )
+                LegacyEvents::PRE_BUILD_LEGACY_KERNEL => array( 'onBuildKernelHandler', 128 )
             ),
             SessionMapper::getSubscribedEvents()
         );
@@ -56,7 +56,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
     public function testOnBuildKernelHandlerNoSession()
     {
         $sessionMapper = new SessionMapper( $this->sessionStorage, 'foo' );
-        $event = new PreBuildKernelWebHandlerEvent( new ParameterBag(), $this->request );
+        $event = new PreBuildKernelEvent( new ParameterBag(), $this->request );
         $sessionMapper->onBuildKernelHandler( $event );
 
         $this->assertSame(
@@ -94,7 +94,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
 
         $sessionMapper = new SessionMapper( $this->sessionStorage, $storageKey, $this->session );
         $sessionMapper->setRequest( $this->request );
-        $event = new PreBuildKernelWebHandlerEvent( new ParameterBag(), $this->request );
+        $event = new PreBuildKernelEvent( new ParameterBag(), $this->request );
 
         $sessionMapper->onBuildKernelHandler( $event );
         $this->assertSame(
