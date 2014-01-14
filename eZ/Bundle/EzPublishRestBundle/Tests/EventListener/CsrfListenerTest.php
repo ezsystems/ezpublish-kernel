@@ -310,8 +310,17 @@ class CsrfListenerTest extends EventListenerTest
      */
     protected function getEventListener( $csrfEnabled = true )
     {
+        if ( $csrfEnabled )
+        {
+            return new CsrfListener(
+                $this->getEventDispatcherMock(),
+                $csrfEnabled,
+                self::INTENTION,
+                $this->getCsrfProviderMock()
+            );
+        }
+
         return new CsrfListener(
-            $this->getCsrfProviderMock(),
             $this->getEventDispatcherMock(),
             $csrfEnabled,
             self::INTENTION
