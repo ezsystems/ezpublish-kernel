@@ -15,7 +15,7 @@ use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use ezpKernelHandler;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 /**
  * Legacy kernel loader
  */
-class Loader
+class Loader extends ContainerAware
 {
     /**
      * @var string Absolute path to the legacy root directory (eZPublish 4 install dir)
@@ -93,20 +93,18 @@ class Loader
     /**
      * Builds up the legacy kernel web handler and encapsulates it inside a closure, allowing lazy loading.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param string $webHandlerClass The legacy kernel handler class to use
      * @param array $defaultLegacyOptions Hash of options to pass to the legacy kernel handler
      *
-     * @throws \InvalidArgumentException
-     *
-     * @return \Closure|void
+     * @return \Closure
      */
-    public function buildLegacyKernelHandlerWeb( ContainerInterface $container, $webHandlerClass, array $defaultLegacyOptions = array() )
+    public function buildLegacyKernelHandlerWeb( $webHandlerClass, array $defaultLegacyOptions = array() )
     {
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
         $uriHelper = $this->uriHelper;
         $eventDispatcher = $this->eventDispatcher;
+        $container = $this->container;
 
         return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass, $uriHelper, $eventDispatcher )
         {
@@ -147,15 +145,14 @@ class Loader
     /**
      * Builds legacy kernel handler CLI
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     *
      * @return CLIHandler
      */
-    public function buildLegacyKernelHandlerCLI( ContainerInterface $container )
+    public function buildLegacyKernelHandlerCLI()
     {
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
         $eventDispatcher = $this->eventDispatcher;
+        $container = $this->container;
 
         return function () use ( $legacyRootDir, $webrootDir, $container, $eventDispatcher )
         {
@@ -178,15 +175,12 @@ class Loader
     /**
      * Builds the legacy kernel handler for the tree menu in admin interface.
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     *
      * @return \Closure A closure returning an \ezpKernelTreeMenu instance.
      */
-    public function buildLegacyKernelHandlerTreeMenu( ContainerInterface $container )
+    public function buildLegacyKernelHandlerTreeMenu()
     {
         return $this->buildLegacyKernelHandlerWeb(
-            $container,
-            $container->getParameter( 'ezpublish_legacy.kernel_handler.treemenu.class' ),
+            $this->container->getParameter( 'ezpublish_legacy.kernel_handler.treemenu.class' ),
             array(
                 'use-cache-headers'    => false,
                 'use-exceptions'       => true

@@ -10,11 +10,11 @@
 namespace eZ\Publish\Core\FieldType\XmlText\Converter;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter;
-use eZ\Publish\Core\MVC\Symfony\View\Manager;
 use eZ\Publish\API\Repository\Repository;
 use DOMDocument;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 
 /**
  * Converts embedded elements from internal XmlText representation to HTML5
@@ -28,7 +28,7 @@ class EmbedToHtml5 implements Converter
     protected $excludedAttributes = array();
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface
      */
     protected $viewManager;
 
@@ -37,7 +37,7 @@ class EmbedToHtml5 implements Converter
      */
     protected $repository;
 
-    public function __construct( Manager $viewManager, Repository $repository, array $excludedAttributes )
+    public function __construct( ViewManagerInterface $viewManager, Repository $repository, array $excludedAttributes )
     {
         $this->viewManager = $viewManager;
         $this->repository = $repository;

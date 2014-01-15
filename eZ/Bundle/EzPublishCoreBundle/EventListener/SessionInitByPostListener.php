@@ -9,11 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Initializes the session id by looking at a POST variable named like the
@@ -22,13 +22,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SessionInitByPostListener implements EventSubscriberInterface
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
      */
-    private $container;
+    private $session;
 
-    public function __construct( ContainerInterface $container )
+    public function __construct( SessionInterface $session = null )
     {
-        $this->container = $container;
+        $this->session = $session;
     }
 
     public static function getSubscribedEvents()
@@ -40,22 +40,22 @@ class SessionInitByPostListener implements EventSubscriberInterface
 
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
-        if ( !$this->container->has( 'session' ) || $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
+        if ( !$this->session || $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
         {
             return;
         }
-        $session = $this->container->get( 'session' );
-        $sessionName = $session->getName();
+
+        $sessionName = $this->session->getName();
         $request = $event->getRequest();
 
         if (
-            !$session->isStarted()
+            !$this->session->isStarted()
             && !$request->hasPreviousSession()
             && $request->request->has( $sessionName )
         )
         {
-            $session->setId( $request->request->get( $sessionName ) );
-            $session->start();
+            $this->session->setId( $request->request->get( $sessionName ) );
+            $this->session->start();
         }
     }
 }

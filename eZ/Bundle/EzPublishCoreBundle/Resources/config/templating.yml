@@ -30,7 +30,14 @@ services:
 
     ezpublish.twig.extension.content:
         class: %ezpublish.twig.extension.content.class%
-        arguments: [@service_container, @ezpublish.config.resolver, @ezpublish.translation_helper, @ezpublish.field_helper]
+        arguments:
+            - @ezpublish.api.repository
+            - @ezpublish.config.resolver
+            - @ezpublish.fieldtype.parameterproviderregistry
+            - @ezpublish.fieldtype.ezxmltext.converter.html5
+            - @ezpublish.fieldtype.ezimage.variation_service
+            - @ezpublish.translation_helper
+            - @ezpublish.field_helper
         tags:
             - {name: twig.extension}
 
@@ -46,7 +53,9 @@ services:
 
     ezpublish.content_view.matcher_factory:
         class: %ezpublish.content_view.matcher_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.location_view_provider.configured:
         class: %ezpublish.location_view_provider.configured.class%
@@ -56,7 +65,9 @@ services:
 
     ezpublish.location_view.matcher_factory:
         class: %ezpublish.location_view.matcher_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.block_view_provider.configured:
         class: %ezpublish.block_view_provider.configured.class%
@@ -66,11 +77,15 @@ services:
 
     ezpublish.block_view.matcher_factory:
         class: %ezpublish.block_view.matcher_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.templating.global_helper.core:
         class: %ezpublish.templating.global_helper.core.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.service.location, @router]
+        calls:
+            - [setRequest, [@?request=]]
 
     ezpublish.templating.global_helper:
         alias: ezpublish.templating.global_helper.core

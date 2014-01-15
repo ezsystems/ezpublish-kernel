@@ -9,35 +9,40 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider as BaseAnonymousProvider;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AnonymousAuthenticationProvider extends BaseAnonymousProvider
 {
     /**
-     * @var \Closure
+     * @var \eZ\Publish\API\Repository\Repository
      */
-    private $lazyRepository;
-
-    public function setLazyRepository( \Closure $lazyRepository )
-    {
-        $this->lazyRepository = $lazyRepository;
-    }
+    private $repository;
 
     /**
-     * @return \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    protected function getRepository()
+    private $configResolver;
+
+    public function setRepository( Repository $repository )
     {
-        $lazyRepository = $this->lazyRepository;
-        return $lazyRepository();
+        $this->repository = $repository;
+    }
+
+    public function setConfigResolver( ConfigResolverInterface $configResolver )
+    {
+        $this->configResolver = $configResolver;
     }
 
     public function authenticate( TokenInterface $token )
     {
         $token = parent::authenticate( $token );
-        $this->getRepository()->setCurrentUser(
-            $this->getRepository()->getUserService()->loadAnonymousUser()
+        $this->repository->setCurrentUser(
+            $this->repository->getUserService()->loadUser(
+                $this->configResolver->getParameter( 'anonymous_user_id' )
+            )
         );
         return $token;
     }

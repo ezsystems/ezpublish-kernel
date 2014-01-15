@@ -9,12 +9,15 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Matcher;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Matcher\LocationMatcherFactory as BaseMatcherFactory;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAware
+class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAware, ContainerAwareInterface
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -26,14 +29,18 @@ class LocationMatcherFactory extends BaseMatcherFactory implements SiteAccessAwa
      */
     private $configResolver;
 
-    public function __construct( ContainerInterface $container )
+    public function __construct( ConfigResolverInterface $configResolver, Repository $repository )
     {
-        $this->container = $container;
-        $this->configResolver = $this->container->get( 'ezpublish.config.resolver' );
+        $this->configResolver = $configResolver;
         parent::__construct(
-            $this->container->get( 'ezpublish.api.repository' ),
+            $repository,
             $this->configResolver->getParameter( 'location_view' )
         );
+    }
+
+    public function setContainer( ContainerInterface $container = null )
+    {
+        $this->container = $container;
     }
 
     /**

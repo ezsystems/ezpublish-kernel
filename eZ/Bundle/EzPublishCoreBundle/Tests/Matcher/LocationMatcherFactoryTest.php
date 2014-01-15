@@ -36,14 +36,13 @@ class LocationMatcherFactoryTest extends BaseMatcherFactoryTest
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( 'ezpublish.api.repository', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ) ),
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $resolverMock ),
                         array( $matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\MatcherInterface' ) ),
                     )
                 )
             );
 
-        $matcherFactory = new LocationMatcherFactory( $container );
+        $matcherFactory = new LocationMatcherFactory( $resolverMock, $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ) );
+        $matcherFactory->setContainer( $container );
         $matcherFactory->match( $this->getLocationMock(), 'full' );
     }
 
@@ -52,18 +51,6 @@ class LocationMatcherFactoryTest extends BaseMatcherFactoryTest
         $matcherServiceIdentifier = 'my.matcher.service';
         $resolverMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $container
-            ->expects( $this->atLeastOnce() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.api.repository', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ) ),
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $resolverMock ),
-                        array( $matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\MatcherInterface' ) ),
-                    )
-                )
-            );
 
         $resolverMock
             ->expects( $this->once() )
@@ -83,7 +70,8 @@ class LocationMatcherFactoryTest extends BaseMatcherFactoryTest
                     )
                 )
             );
-        $matcherFactory = new LocationMatcherFactory( $container );
+        $matcherFactory = new LocationMatcherFactory( $resolverMock, $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ) );
+        $matcherFactory->setContainer( $container );
         $matcherFactory->setSiteAccess();
     }
 
@@ -92,18 +80,6 @@ class LocationMatcherFactoryTest extends BaseMatcherFactoryTest
         $matcherServiceIdentifier = 'my.matcher.service';
         $resolverMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
-        $container
-            ->expects( $this->atLeastOnce() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.api.repository', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ) ),
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $resolverMock ),
-                        array( $matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\MatcherInterface' ) ),
-                    )
-                )
-            );
 
         $siteAccessName = 'siteaccess_name';
         $updatedMatchConfig = array(
@@ -139,7 +115,8 @@ class LocationMatcherFactoryTest extends BaseMatcherFactoryTest
                     )
                 )
             );
-        $matcherFactory = new LocationMatcherFactory( $container );
+        $matcherFactory = new LocationMatcherFactory( $resolverMock, $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' ) );
+        $matcherFactory->setContainer( $container );
         $matcherFactory->setSiteAccess( new SiteAccess( $siteAccessName ) );
 
         $refObj = new \ReflectionObject( $matcherFactory );

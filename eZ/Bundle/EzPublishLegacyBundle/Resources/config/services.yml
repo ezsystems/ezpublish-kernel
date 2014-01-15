@@ -73,24 +73,24 @@ services:
             - @event_dispatcher
             - @ezpublish_legacy.uri_helper
             - @?logger
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish_legacy.kernel_handler.web:
         class: %ezpublish_legacy.kernel_handler.class%
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernelHandlerWeb
-        arguments: [@service_container, %ezpublish_legacy.kernel_handler.web.class%]
+        arguments: [%ezpublish_legacy.kernel_handler.web.class%]
 
     ezpublish_legacy.kernel_handler.treemenu:
         class: %ezpublish_legacy.kernel_handler.treemenu.class%
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernelHandlerTreeMenu
-        arguments: [@service_container]
 
     ezpublish_legacy.kernel_handler.cli:
         class: %ezpublish_legacy.kernel_handler.cli.class%
         factory_service: ezpublish_legacy.kernel.lazy_loader
         factory_method: buildLegacyKernelHandlerCLI
-        arguments: [@service_container]
 
     ezpublish_legacy.kernel_handler:
         alias: ezpublish_legacy.kernel_handler.web
@@ -130,7 +130,7 @@ services:
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
-        arguments: [@service_container, @?request_context, @?logger]
+        arguments: [@ezpublish_legacy.url_generator, @?request_context, @?logger]
         tags:
             - {name: router, priority: -255}
 
@@ -144,13 +144,16 @@ services:
 
     ezpublish_legacy.siteaccess_mapper:
         class: %ezpublish_legacy.siteaccess_mapper.class%
-        arguments: [@service_container]
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish_legacy.session_mapper:
         class: %ezpublish_legacy.session_mapper.class%
-        arguments: [@service_container]
+        arguments: [@session.storage, %ezpublish.session.attribute_bag.storage_key%, @?session]
+        calls:
+            - [setRequest, [@?request=]]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -160,9 +163,10 @@ services:
             - @ezpublish.config.resolver.core
             - @ezpublish.http_cache.purger
             - @ezpublish_legacy.persistence_cache_purger
-            - @service_container
             - @ezpublish.urlalias_generator
             - %ezpublish_legacy.configuration_mapper.options%
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 
@@ -187,6 +191,7 @@ services:
     ezpublish_legacy.config.resolver:
         class: %ezpublish_legacy.config.resolver.class%
         arguments: [@ezpublish_legacy.kernel, %ezpublish_legacy.config.default_scope%]
+        lazy: true
         tags:
             - { name: ezpublish.config.resolver, priority: -255 }
 
@@ -237,12 +242,13 @@ services:
 
     ezpublish_legacy.request_listener:
         class: %ezpublish_legacy.request_listener.class%
-        arguments: [@service_container, @security.context]
+        arguments: [@ezpublish.config.resolver, @ezpublish.api.repository, @security.context]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish_legacy.config_scope_listener:
         class: %ezpublish_legacy.config_scope_listener.class%
-        arguments: [@service_container]
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }

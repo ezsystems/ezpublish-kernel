@@ -10,18 +10,13 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
  * The storage engine factory.
  */
-class StorageEngineFactory
+class StorageEngineFactory extends ContainerAware
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
-
     /**
      * Hash of registered storage engines.
      * Key is the storage engine identifier, value is its corresponding service Id
@@ -29,11 +24,6 @@ class StorageEngineFactory
      * @var array
      */
     protected $storageEngines = array();
-
-    public function __construct( ContainerInterface $container )
-    {
-        $this->container = $container;
-    }
 
     /**
      * Registers $storageEngineServiceId as a service Id to be used as a valid storage engine, with identifier $storageEngineIdentifier

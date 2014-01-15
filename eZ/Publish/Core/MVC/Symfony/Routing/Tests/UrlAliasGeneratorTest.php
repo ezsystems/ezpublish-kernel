@@ -75,10 +75,7 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $this->locationService ) );
 
         $this->urlAliasGenerator = new UrlAliasGenerator(
-            function () use ( $repository )
-            {
-                return $repository;
-            },
+            $this->repository,
             $this->router,
             $this->logger
         );

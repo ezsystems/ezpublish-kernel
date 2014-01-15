@@ -11,21 +11,11 @@ namespace eZ\Bundle\EzPublishLegacyBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ConfigScopeListener implements EventSubscriberInterface
+class ConfigScopeListener extends ContainerAware implements EventSubscriberInterface
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
-    public function __construct( ContainerInterface $container )
-    {
-        $this->container = $container;
-    }
-
     public static function getSubscribedEvents()
     {
         return array(

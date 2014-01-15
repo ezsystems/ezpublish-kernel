@@ -28,17 +28,14 @@ class LocalePassTest extends AbstractCompilerPassTest
         $container->addCompilerPass( new LocalePass() );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocalePass::process
-     */
     public function testLocaleListener()
     {
         $this->setDefinition( 'locale_listener', new Definition() );
         $this->compile();
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'locale_listener',
-            'setServiceContainer',
-            array( new Reference( 'service_container' ) )
+            'setConfigResolver',
+            array( new Reference( 'ezpublish.config.resolver' ) )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'locale_listener',

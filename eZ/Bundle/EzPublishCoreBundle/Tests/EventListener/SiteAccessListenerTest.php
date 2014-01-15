@@ -52,7 +52,8 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
             ->getMockBuilder( 'eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator' )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->listener = new SiteAccessListener( $this->container, $this->router, $this->generator, new HttpUtils() );
+        $this->listener = new SiteAccessListener( $this->router, $this->generator, new HttpUtils() );
+        $this->listener->setContainer( $this->container );
     }
 
     public function testGetSubscribedEvents()

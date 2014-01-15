@@ -93,6 +93,11 @@ class ChainRoutingPassTest extends AbstractCompilerPassTest
         // Assertion for default router
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'router.default',
+            'setConfigResolver',
+            array( new Reference( 'ezpublish.config.resolver' ) )
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'router.default',
             'setNonSiteAccessAwareRoutes',
             array( '%ezpublish.default_router.non_siteaccess_aware_routes%' )
         );

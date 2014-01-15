@@ -12,7 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
  * This class will help you get settings for a specific scope.
@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * 2. SiteAccess name
  * 3. "default"
  */
-class ConfigResolver implements VersatileScopeInterface
+class ConfigResolver extends ContainerAware implements VersatileScopeInterface
 {
     const SCOPE_GLOBAL = 'global',
           SCOPE_DEFAULT = 'default';
@@ -48,11 +48,6 @@ class ConfigResolver implements VersatileScopeInterface
      * @var array Siteaccess groups, indexed by siteaccess name
      */
     protected $groupsBySiteAccess;
-
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
 
     /**
      * @var string
@@ -72,7 +67,6 @@ class ConfigResolver implements VersatileScopeInterface
     /**
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      * @param array $groupsBySiteAccess SiteAccess groups, indexed by siteaccess.
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param string $defaultNamespace The default namespace
      * @param int $undefinedStrategy Strategy to use when encountering undefined parameters.
      *                               Must be one of
@@ -82,7 +76,6 @@ class ConfigResolver implements VersatileScopeInterface
     public function __construct(
         SiteAccess $siteAccess,
         array $groupsBySiteAccess,
-        ContainerInterface $container,
         $defaultNamespace,
         $undefinedStrategy = self::UNDEFINED_STRATEGY_EXCEPTION
     )
@@ -90,7 +83,6 @@ class ConfigResolver implements VersatileScopeInterface
         $this->siteAccess = $siteAccess;
         $this->defaultScope = $siteAccess->name;
         $this->groupsBySiteAccess = $groupsBySiteAccess;
-        $this->container = $container;
         $this->defaultNamespace = $defaultNamespace;
         $this->undefinedStrategy = $undefinedStrategy;
     }

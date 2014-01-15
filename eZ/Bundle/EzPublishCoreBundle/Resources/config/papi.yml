@@ -21,7 +21,6 @@ parameters:
 
     # Signal Slot API wrapper
     ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
-    ezpublish.signalslot.slot_factory.class: eZ\Publish\Core\SignalSlot\SlotFactory\ContainerSlotFactory
     ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
     ezpublish.signalslot.event_converter_slot.class: eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot
 
@@ -38,11 +37,14 @@ services:
 
     ezpublish.api.repository.factory:
         class: %ezpublish.api.repository.factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, %ezpublish.api.inner_repository.class%]
+        calls:
+            - [setContainer, [@service_container]]
 
+    # Deprecated
     ezpublish.api.repository.lazy_factory:
         class: %ezpublish.api.repository.lazy_factory.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.api.repository]
 
     ezpublish.api.inner_repository:
         class: %ezpublish.api.inner_repository.class%
@@ -52,6 +54,8 @@ services:
             - @ezpublish.api.persistence_handler
         lazy: true
 
+    # Deprecated
+    # Use ezpublish.api.repository lazy service instead
     ezpublish.api.repository.lazy:
         class: Closure
         factory_service: ezpublish.api.repository.lazy_factory
@@ -59,7 +63,8 @@ services:
 
     ezpublish.api.storage_engine.factory:
         class: %ezpublish.api.storage_engine.factory.class%
-        arguments: [@service_container]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.api.persistence_handler:
         #To disable cache, switch alias to ezpublish.api.storage_engine
@@ -163,11 +168,6 @@ services:
 
     ezpublish.signalslot.signal_dispatcher:
         class: %ezpublish.signalslot.signal_dispatcher.class%
-        arguments: [@ezpublish.signalslot.slot_factory]
-
-    ezpublish.signalslot.slot_factory:
-        class: %ezpublish.signalslot.slot_factory.class%
-        arguments: [@service_container]
 
     ezpublish.signalslot.event_converter_slot:
         class: %ezpublish.signalslot.event_converter_slot.class%

@@ -45,7 +45,8 @@ class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $listener = new ConfigScopeListener( $container );
+        $listener = new ConfigScopeListener();
+        $listener->setContainer( $container );
         $siteAccess = new SiteAccess( 'test' );
         $event = new ScopeChangeEvent( $siteAccess );
         $listener->onConfigScopeChange( $event );

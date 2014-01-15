@@ -10,17 +10,19 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\Kernel;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\SPI\HashGenerator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 
 class RequestEventListener implements EventSubscriberInterface
 {
@@ -30,20 +32,32 @@ class RequestEventListener implements EventSubscriberInterface
     private $logger;
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    private $container;
+    private $configResolver;
+
+    /**
+     * @var string
+     */
+    private $defaultSiteAccess;
 
     /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
     private $router;
 
-    public function __construct( ContainerInterface $container, LoggerInterface $logger = null )
+    /**
+     * @var \eZ\Publish\SPI\HashGenerator
+     */
+    private $hashGenerator;
+
+    public function __construct( ConfigResolverInterface $configResolver, RouterInterface $router, $defaultSiteAccess, HashGenerator $hashGenerator, LoggerInterface $logger = null )
     {
-        $this->container = $container;
+        $this->configResolver = $configResolver;
+        $this->defaultSiteAccess = $defaultSiteAccess;
+        $this->router = $router;
         $this->logger = $logger;
-        $this->router = $container->get( 'router' );
+        $this->hashGenerator = $hashGenerator;
     }
 
     public static function getSubscribedEvents()
@@ -68,8 +82,6 @@ class RequestEventListener implements EventSubscriberInterface
      */
     public function onKernelRequestIndex( GetResponseEvent $event )
     {
-        /** @var $configResolver \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ContainerInterface.php */
-        $configResolver = $this->container->get( 'ezpublish.config.resolver' );
         $request = $event->getRequest();
         $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' ) ?: '/';
         if (
@@ -77,7 +89,7 @@ class RequestEventListener implements EventSubscriberInterface
             && $semanticPathinfo === '/'
         )
         {
-            $indexPage = $configResolver->getParameter( 'index_page' );
+            $indexPage = $this->configResolver->getParameter( 'index_page' );
             if ( $indexPage !== null )
             {
                 $indexPage = '/' . ltrim( $indexPage, '/' );
@@ -94,16 +106,13 @@ class RequestEventListener implements EventSubscriberInterface
      */
     public function onKernelRequestSetup( GetResponseEvent $event )
     {
-        if (
-            $event->getRequestType() == HttpKernelInterface::MASTER_REQUEST
-            && $this->container->hasParameter( 'ezpublish.siteaccess.default' )
-        )
+        if ( $event->getRequestType() == HttpKernelInterface::MASTER_REQUEST )
         {
-            if ( $this->container->getParameter( 'ezpublish.siteaccess.default' ) !== 'setup' )
+            if ( $this->defaultSiteAccess !== 'setup' )
                 return;
 
             $request = $event->getRequest();
-            $requestContext = $this->container->get( 'router.request_context' );
+            $requestContext = $this->router->getContext();
             $requestContext->fromRequest( $request );
             $this->router->setContext( $requestContext );
             $setupURI = $this->router->generate( 'ezpublishSetup' );
@@ -222,10 +231,9 @@ class RequestEventListener implements EventSubscriberInterface
             return;
         }
 
-        /** @var $hashGenerator \eZ\Publish\SPI\HashGenerator */
-        $hashGenerator = $this->container->get( 'ezpublish.user.hash_generator' );
-        $userHash = $hashGenerator->generate();
-        $this->container->get( 'logger' )->debug( "UserHash: $userHash" );
+        $userHash = $this->hashGenerator->generate();
+        if ( $this->logger )
+            $this->logger->debug( "UserHash: $userHash" );
 
         $response = new Response();
         $response->headers->set( 'X-User-Hash', $userHash );

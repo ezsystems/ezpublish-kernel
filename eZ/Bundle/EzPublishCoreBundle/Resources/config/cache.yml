@@ -17,10 +17,12 @@ services:
         class: %ezpublish.cache_pool.class%
         factory_service: ezpublish.cache_pool.factory
         factory_method: getCachePool
-        arguments: [@ezpublish.config.resolver, @service_container]
+        arguments: [@ezpublish.config.resolver]
 
     ezpublish.cache_pool.factory:
         class: %ezpublish.cache_pool.factory.class%
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.cache_pool.spi.cache.decorator:
         class: %ezpublish.cache_pool.spi.cache.decorator.class%

@@ -12,7 +12,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 use eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Bundle\EzPublishCoreBundle\Kernel;
@@ -21,14 +20,23 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouterInterface;
 
 class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContainerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $container;
+    private $configResolver;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $router;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $hashGenerator;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
@@ -59,10 +67,12 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
+        $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $this->router = $this->getMock( 'Symfony\Component\Routing\RouterInterface' );
+        $this->hashGenerator = $this->getMock( 'eZ\\Publish\\SPI\\HashGenerator' );
         $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
 
-        $this->requestEventListener = new RequestEventListener( $this->container, $this->logger );
+        $this->requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'foobar', $this->hashGenerator, $this->logger );
 
         $this->request = $this
             ->getMockBuilder( 'Symfony\\Component\\HttpFoundation\\Request' )
@@ -98,13 +108,7 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnKernelRequestIndexOnIndexPage( $requestPath, $configuredIndexPath, $expectedIndexPath )
     {
-        $mockResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->with( 'ezpublish.config.resolver' )
-            ->will( $this->returnValue( $mockResolver ) );
-        $mockResolver
+        $this->configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'index_page' )
@@ -159,23 +163,11 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnKernelRequestUserHash()
     {
-        $hashGenerator = $this->getMock( 'eZ\\Publish\\SPI\\HashGenerator' );
         $hash = '123abc';
-        $hashGenerator
+        $this->hashGenerator
             ->expects( $this->once() )
             ->method( 'generate' )
             ->will( $this->returnValue( $hash ) );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.user.hash_generator', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $hashGenerator ),
-                        array( 'logger', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->logger ),
-                    )
-                )
-            );
 
         $this->request->headers->add(
             array(
@@ -236,12 +228,12 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnKernelRequestSetupSubrequest()
     {
-        $this->container
+        $this->router
             ->expects( $this->never() )
-            ->method( 'hasParameter' );
-        $this->container
+            ->method( 'getContext' );
+        $this->router
             ->expects( $this->never() )
-            ->method( 'get' );
+            ->method( 'setContext' );
 
         $event = new GetResponseEvent( $this->httpKernel, new Request, HttpKernelInterface::SUB_REQUEST );
         $this->requestEventListener->onKernelRequestSetup( $event );
@@ -250,16 +242,6 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnKernelRequestSetupAlreadyHasSiteaccess()
     {
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( 'ezpublish.siteaccess.default' )
-            ->will( $this->returnValue( true ) );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'ezpublish.siteaccess.default' )
-            ->will( $this->returnValue( 'foo' ) );
         $event = new GetResponseEvent( $this->httpKernel, new Request, HttpKernelInterface::MASTER_REQUEST );
         $this->requestEventListener->onKernelRequestSetup( $event );
         $this->assertFalse( $event->hasResponse() );
@@ -267,36 +249,17 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnKernelRequestSetupAlreadySetupUri()
     {
-        $router = $this->getMock( 'Symfony\Component\Routing\RouterInterface' );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( 'ezpublish.siteaccess.default' )
-            ->will( $this->returnValue( true ) );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'ezpublish.siteaccess.default' )
-            ->will( $this->returnValue( 'setup' ) );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'router', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $router ),
-                        array( 'router.request_context', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, new RequestContext ),
-                    )
-                )
-            );
-
-        $router
+        $this->router
             ->expects( $this->once() )
             ->method( 'generate' )
             ->with( 'ezpublishSetup' )
             ->will( $this->returnValue( '/setup' ) );
+        $this->router
+            ->expects( $this->once() )
+            ->method( 'getContext' )
+            ->will( $this->returnValue( $this->getMock( 'Symfony\Component\Routing\RequestContext' ) ) );
 
-        $requestEventListener = new RequestEventListener( $this->container, $this->logger );
+        $requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'setup', $this->hashGenerator, $this->logger );
         $event = new GetResponseEvent( $this->httpKernel, Request::create( '/setup' ), HttpKernelInterface::MASTER_REQUEST );
         $requestEventListener->onKernelRequestSetup( $event );
         $this->assertFalse( $event->hasResponse() );
@@ -304,36 +267,17 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnKernelRequestSetup()
     {
-        $router = $this->getMock( 'Symfony\Component\Routing\RouterInterface' );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( 'ezpublish.siteaccess.default' )
-            ->will( $this->returnValue( true ) );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'ezpublish.siteaccess.default' )
-            ->will( $this->returnValue( 'setup' ) );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'router', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $router ),
-                        array( 'router.request_context', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, new RequestContext ),
-                    )
-                )
-            );
-
-        $router
+        $this->router
             ->expects( $this->once() )
             ->method( 'generate' )
             ->with( 'ezpublishSetup' )
             ->will( $this->returnValue( '/setup' ) );
+        $this->router
+            ->expects( $this->once() )
+            ->method( 'getContext' )
+            ->will( $this->returnValue( $this->getMock( 'Symfony\Component\Routing\RequestContext' ) ) );
 
-        $requestEventListener = new RequestEventListener( $this->container, $this->logger );
+        $requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'setup', $this->hashGenerator, $this->logger );
         $event = new GetResponseEvent( $this->httpKernel, Request::create( '/foo/bar' ), HttpKernelInterface::MASTER_REQUEST );
         $requestEventListener->onKernelRequestSetup( $event );
         $this->assertTrue( $event->hasResponse() );

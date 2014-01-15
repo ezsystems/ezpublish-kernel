@@ -9,7 +9,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
 use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Security;
-use Symfony\Component\DependencyInjection\ContainerInterface as Container;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration;
 use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
@@ -18,7 +18,7 @@ use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
 use eZINI;
 use eZCache;
 
-class LegacySetupController
+class LegacySetupController extends ContainerAware
 {
     /**
      * The legacy kernel instance (eZ Publish 4)
@@ -77,11 +77,6 @@ class LegacySetupController
         $this->persistenceCachePurger = $persistenceCachePurger;
         $this->legacyMapper = $legacyMapper;
         $this->securityMapper = $securityMapper;
-    }
-
-    public function setContainer( Container $container )
-    {
-        $this->container = $container;
     }
 
     /**

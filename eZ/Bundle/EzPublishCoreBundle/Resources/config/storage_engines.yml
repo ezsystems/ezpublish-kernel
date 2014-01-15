@@ -116,9 +116,9 @@ services:
 
     ezpublish.spi.persistence.lazy_factory:
         class: %ezpublish.spi.persistence.lazy_factory.class%
-        arguments:
-            - @service_container
-            - %ezpublish.spi.persistence.default_id%
+        arguments: [%ezpublish.spi.persistence.default_id%]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.spi.persistence.cache.persistenceLogger:
         class: %ezpublish.spi.persistence.cache.persistenceLogger.class%
@@ -178,7 +178,8 @@ services:
     # Legacy storage engine
     ezpublish.api.storage_engine.legacy.factory:
         class: %ezpublish.api.storage_engine.legacy.factory.class%
-        arguments: [@service_container]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.api.storage_engine.legacy.dbhandler.factory:
         class: %ezpublish.api.storage_engine.legacy.dbhandler.factory.class%

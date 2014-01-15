@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use LogicException;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This compiler pass will register slots in SignalDispatcher
@@ -33,7 +34,7 @@ class SignalSlotPass implements CompilerPassInterface
                     throw new LogicException( "Could not find 'signal' attribute on '$id' service, which is mandatory for services tagged as 'ezpublish.api.slot'" );
                 }
 
-                $signalDispatcherDef->addMethodCall( 'attach', array( $attribute['signal'], $id ) );
+                $signalDispatcherDef->addMethodCall( 'attach', array( $attribute['signal'], new Reference( $id ) ) );
             }
         }
     }

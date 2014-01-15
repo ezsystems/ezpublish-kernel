@@ -9,12 +9,15 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Matcher;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentMatcherFactory as BaseFactory;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ContentMatcherFactory extends BaseFactory implements SiteAccessAware
+class ContentMatcherFactory extends BaseFactory implements SiteAccessAware, ContainerAwareInterface
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -26,14 +29,18 @@ class ContentMatcherFactory extends BaseFactory implements SiteAccessAware
      */
     private $configResolver;
 
-    public function __construct( ContainerInterface $container )
+    public function __construct( ConfigResolverInterface $configResolver, Repository $repository )
     {
-        $this->container = $container;
-        $this->configResolver = $this->container->get( 'ezpublish.config.resolver' );
+        $this->configResolver = $configResolver;
         parent::__construct(
-            $this->container->get( 'ezpublish.api.repository' ),
+            $repository,
             $this->configResolver->getParameter( 'content_view' )
         );
+    }
+
+    public function setContainer( ContainerInterface $container = null )
+    {
+        $this->container = $container;
     }
 
     /**

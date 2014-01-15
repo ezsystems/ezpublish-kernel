@@ -36,15 +36,20 @@ services:
 
     ezpublish.urlalias_router:
         class: %ezpublish.urlalias_router.class%
-        arguments: [@ezpublish.api.repository.lazy, @ezpublish.urlalias_generator, @?router.request_context, @?logger]
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish.api.service.url_alias
+            - @ezpublish.urlalias_generator
+            - @?router.request_context
+            - @?logger
         calls:
-            - [setContainer, [@service_container]]
+            - [setConfigResolver, [@ezpublish.config.resolver]]
         tags:
             - {name: router, priority: 200}
 
     ezpublish.urlalias_generator:
         class: %ezpublish.urlalias_generator.class%
-        arguments: [@ezpublish.api.repository.lazy, @router.default, @?logger]
+        arguments: [@ezpublish.api.repository, @router.default, @?logger]
         parent: ezpublish.url_generator.base
 
     ezpublish.siteaccess.matcher_builder:
@@ -63,18 +68,25 @@ services:
 
     ezpublish.siteaccess_listener:
         class: %ezpublish.siteaccess_listener.class%
-        arguments: [@service_container, @router.default, @ezpublish.urlalias_generator, @security.http_utils]
+        arguments: [@router.default, @ezpublish.urlalias_generator, @security.http_utils]
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.siteaccess_listener.routing:
         class: %ezpublish.siteaccess_listener.routing.class%
-        arguments: [@service_container]
+        arguments: [@ezpublish.config.resolver, @ezpublish.urlalias_router, @ezpublish.urlalias_generator]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.request_redirect_listener:
         class: %ezpublish.request_redirect_listener.class%
-        arguments: [@service_container, @?logger]
+        arguments:
+            - @ezpublish.config.resolver
+            - @router
+            - %ezpublish.siteaccess.default%
+            - @ezpublish.user.hash_generator
+            - @?logger
         tags:
             - { name: kernel.event_subscriber }

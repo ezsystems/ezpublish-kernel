@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
  * A reusable factory for all the "storage engine" handlers
@@ -20,25 +20,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * Tests? See Cache\Tests\FactoryTests.php
  */
-class Factory
+class Factory extends ContainerAware
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
     /**
      * @var string
      */
     private $persistenceId;
 
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param string $persistenceId
-     */
-    public function __construct( ContainerInterface $container, $persistenceId )
+    public function __construct( $persistenceId )
     {
-        $this->container = $container;
         $this->persistenceId = $persistenceId;
     }
 

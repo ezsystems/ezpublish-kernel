@@ -20,6 +20,13 @@ Changes affecting version compatibility with former or future versions.
 * `is_logged_in` cookie is not sent or used any more by Symfony stack (it is still used by legacy though).
   Anonymous state is now checked by the presence of a session cookie (prefixed by `eZSESSID`).
 
+* **Lazy services**: `ezpublish.api.repository`, repository services (e.g. `ezpublish.api.service.content`),
+  and a few others (e.g. `ezpublish.config.resolver`) are now [lazy services](http://symfony.com/doc/2.3/components/dependency_injection/lazy_services.html).
+  You can now safely inject them, even in early request listeners. They will be booted only when necessary.
+
+* **SignalSlot**: Slot factories are not needed any more as Slots are now directly attached to SignalDispatcher.
+  Therefore `ContainerSlotFactory` has been removed.
+
 ## Deprecations
 
 * Method `eZ\Publish\API\Repository\RoleService::removePolicy` is deprecated in
@@ -31,6 +38,9 @@ Changes affecting version compatibility with former or future versions.
 
 * Basic authentication for REST: In `security.yml, `ezpublish_http_basic` is deprecated in
   favor of standard `http_basic`.
+
+* `ezpublish.api.repository.lazy` service is deprecated in favor of `ezpublish.api.repository`, which
+  is now a lazy service.
 
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for

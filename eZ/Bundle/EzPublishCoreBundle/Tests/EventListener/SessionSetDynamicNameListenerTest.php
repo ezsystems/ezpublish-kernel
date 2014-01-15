@@ -21,19 +21,25 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ContainerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $container;
+    private $configResolver;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $session;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
+        $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $this->session = $this->getMock( 'Symfony\Component\HttpFoundation\Session\SessionInterface' );
     }
 
     public function testGetSubscribedEvents()
     {
-        $listener = new SessionSetDynamicNameListener( $this->container );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session );
         $this->assertSame(
             array(
                 MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 250 )
@@ -44,31 +50,13 @@ class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
 
     public function testOnSiteAccessMatchNoSession()
     {
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'has' )
-            ->with( 'session' )
-            ->will( $this->returnValue( false ) );
-        $this->container
-            ->expects( $this->never() )
-            ->method( 'get' );
-
-        $listener = new SessionSetDynamicNameListener( $this->container );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, null );
         $listener->onSiteAccessMatch( new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST ) );
     }
 
     public function testOnSiteAccessMatchSubRequest()
     {
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'has' )
-            ->with( 'session' )
-            ->will( $this->returnValue( true ) );
-        $this->container
-            ->expects( $this->never() )
-            ->method( 'get' );
-
-        $listener = new SessionSetDynamicNameListener( $this->container );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session );
         $listener->onSiteAccessMatch( new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST ) );
     }
 
@@ -77,41 +65,21 @@ class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
      */
     public function testOnSiteAccessMatch( SiteAccess $siteAccess, $configuredSessionName, $expectedSessionName )
     {
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'has' )
-            ->with( 'session' )
-            ->will( $this->returnValue( true ) );
-
-        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-        $session = $this->getMock( 'Symfony\Component\HttpFoundation\Session\SessionInterface' );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $configResolver ),
-                        array( 'session', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $session ),
-                    )
-                )
-            );
-
-        $session
+        $this->session
             ->expects( $this->once() )
             ->method( 'isStarted' )
             ->will( $this->returnValue( false ) );
-        $session
+        $this->session
             ->expects( $this->once() )
             ->method( 'setName' )
             ->with( $expectedSessionName );
-        $configResolver
+        $this->configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'session_name' )
             ->will( $this->returnValue( $configuredSessionName ) );
 
-        $listener = new SessionSetDynamicNameListener( $this->container );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session );
         $listener->onSiteAccessMatch( new PostSiteAccessMatchEvent( $siteAccess, new Request(), HttpKernelInterface::MASTER_REQUEST ) );
     }
 

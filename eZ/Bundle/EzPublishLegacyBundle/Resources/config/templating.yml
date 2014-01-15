@@ -4,8 +4,7 @@ parameters:
     ezpublish_legacy.templating.pageparts_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\PagePartsConverter
     ezpublish_legacy.templating.delegating_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\DelegatingConverter
     ezpublish_legacy.templating.generic_converter.class: eZ\Publish\Core\MVC\Legacy\Templating\Converter\GenericConverter
-    # Overriding base GlobalHelper
-    ezpublish.templating.global_helper.core.class: eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper
+    ezpublish.templating.global_helper.legacy.class: eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper
     ezpublish_legacy.templating.legacy_helper.class: eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper
 
     # eZ Template as a real template engine
@@ -45,6 +44,16 @@ services:
 
     ezpublish_legacy.templating.legacy_helper:
         class: %ezpublish_legacy.templating.legacy_helper.class%
+
+    ezpublish.templating.global_helper.legacy:
+        class: %ezpublish.templating.global_helper.legacy.class%
+        parent: ezpublish.templating.global_helper.core
+        calls:
+            - [setLegacyHelper, [@ezpublish_legacy.templating.legacy_helper]]
+
+    # Overriding core helper
+    ezpublish.templating.global_helper:
+        alias: ezpublish.templating.global_helper.legacy
 
     templating.engine.eztpl:
         class: %templating.engine.eztpl.class%

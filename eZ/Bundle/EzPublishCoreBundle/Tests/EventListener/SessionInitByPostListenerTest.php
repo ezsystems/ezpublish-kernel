@@ -20,20 +20,20 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $container;
-
-    /**
      * @var \eZ\Bundle\EzPublishCoreBundle\EventListener\SessionInitByPostListener
      */
     private $listener;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $session;
+
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
-        $this->listener = new SessionInitByPostListener( $this->container );
+        $this->session = $this->getMock( 'Symfony\Component\HttpFoundation\Session\SessionInterface' );
+        $this->listener = new SessionInitByPostListener( $this->session );
     }
 
     public function testGetSubscribedEvents()
@@ -42,35 +42,23 @@ class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
             array(
                 MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 249 )
             ),
-            $this->listener->getSubscribedEvents()
+            SessionInitByPostListener::getSubscribedEvents()
         );
     }
 
     public function testOnSiteAccessMatchNoSessionService()
     {
         $event = new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'has' )
-            ->with( 'session' )
-            ->will( $this->returnValue( false ) );
-        $this->container
-            ->expects( $this->never() )
-            ->method( 'get' );
-        $this->listener->onSiteAccessMatch( $event );
+        $listener = new SessionInitByPostListener( null );
+        $this->assertNull( $listener->onSiteAccessMatch( $event ) );
     }
 
     public function testOnSiteAccessMatchSubRequest()
     {
         $event = new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'has' )
-            ->with( 'session' )
-            ->will( $this->returnValue( true ) );
-        $this->container
+        $this->session
             ->expects( $this->never() )
-            ->method( 'get' );
+            ->method( 'getName' );
         $this->listener->onSiteAccessMatch( $event );
     }
 
@@ -79,32 +67,20 @@ class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
         $sessionName = 'eZSESSID';
         $event = new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST );
 
-        $session = $this->getMock( 'Symfony\Component\HttpFoundation\Session\SessionInterface' );
-        $session
+        $this->session
             ->expects( $this->once() )
             ->method( 'getName' )
             ->will( $this->returnValue( $sessionName ) );
-        $session
+        $this->session
             ->expects( $this->once() )
             ->method( 'isStarted' )
             ->will( $this->returnValue( false ) );
-        $session
+        $this->session
             ->expects( $this->never() )
             ->method( 'setId' );
-        $session
+        $this->session
             ->expects( $this->never() )
             ->method( 'start' );
-
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'has' )
-            ->with( 'session' )
-            ->will( $this->returnValue( true ) );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->with( 'session' )
-            ->will( $this->returnValue( $session ) );
 
         $this->listener->onSiteAccessMatch( $event );
     }
@@ -117,33 +93,21 @@ class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
         $request->request->set( $sessionName, $sessionId );
         $event = new PostSiteAccessMatchEvent( new SiteAccess(), $request, HttpKernelInterface::MASTER_REQUEST );
 
-        $session = $this->getMock( 'Symfony\Component\HttpFoundation\Session\SessionInterface' );
-        $session
+        $this->session
             ->expects( $this->once() )
             ->method( 'getName' )
             ->will( $this->returnValue( $sessionName ) );
-        $session
+        $this->session
             ->expects( $this->once() )
             ->method( 'isStarted' )
             ->will( $this->returnValue( false ) );
-        $session
+        $this->session
             ->expects( $this->once() )
             ->method( 'setId' )
             ->with( $sessionId );
-        $session
+        $this->session
             ->expects( $this->once() )
             ->method( 'start' );
-
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'has' )
-            ->with( 'session' )
-            ->will( $this->returnValue( true ) );
-        $this->container
-            ->expects( $this->once() )
-            ->method( 'get' )
-            ->with( 'session' )
-            ->will( $this->returnValue( $session ) );
 
         $this->listener->onSiteAccessMatch( $event );
     }

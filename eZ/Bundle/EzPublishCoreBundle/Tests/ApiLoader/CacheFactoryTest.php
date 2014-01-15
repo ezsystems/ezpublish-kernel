@@ -60,7 +60,8 @@ class CacheFactoryTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( false ) );
 
         $factory = new CacheFactory;
+        $factory->setContainer( $this->container );
 
-        $this->assertFalse( $factory->getCachePool( $this->configResolver, $this->container ) );
+        $this->assertFalse( $factory->getCachePool( $this->configResolver ) );
     }
 }

@@ -31,11 +31,6 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
         $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->with( 'ezpublish.config.resolver' )
-            ->will( $this->returnValue( $this->configResolver ) );
     }
 
     /**
@@ -45,11 +40,13 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
      */
     private function generateRouter( array $mockedMethods = array() )
     {
-        return $this
+        $router = $this
             ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\Routing\\DefaultRouter' )
             ->setConstructorArgs( array( $this->container, 'foo' ) )
-            ->setMethods( $mockedMethods )
+            ->setMethods( array_merge( $mockedMethods ) )
             ->getMock();
+        $router->setConfigResolver( $this->configResolver );
+        return $router;
     }
 
     public function testMatchRequestWithSemanticPathinfo()
@@ -91,7 +88,7 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
+     * @expectedException \Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
     public function testMatchRequestLegacyMode()
     {

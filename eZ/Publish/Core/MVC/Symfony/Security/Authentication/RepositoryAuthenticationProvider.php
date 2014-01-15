@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Authentication;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Security\User as EzUser;
 use Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -19,22 +20,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
 {
     /**
-     * @var \Closure
+     * @var \eZ\Publish\API\Repository\Repository
      */
-    private $lazyRepository;
+    private $repository;
 
-    public function setLazyRepository( \Closure $lazyRepository )
+    public function setRepository( Repository $repository )
     {
-        $this->lazyRepository = $lazyRepository;
-    }
-
-    /**
-     * @return \eZ\Publish\API\Repository\Repository
-     */
-    protected function getRepository()
-    {
-        $lazyRepository = $this->lazyRepository;
-        return $lazyRepository();
+        $this->repository = $repository;
     }
 
     protected function checkAuthentication( UserInterface $user, UsernamePasswordToken $token )
@@ -60,7 +52,7 @@ class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
         {
             try
             {
-                $apiUser = $this->getRepository()->getUserService()->loadUserByCredentials( $token->getUsername(), $token->getCredentials() );
+                $apiUser = $this->repository->getUserService()->loadUserByCredentials( $token->getUsername(), $token->getCredentials() );
             }
             catch ( NotFoundException $e )
             {
@@ -69,6 +61,6 @@ class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
         }
 
         // Finally inject current user in the Repository
-        $this->getRepository()->setCurrentUser( $apiUser );
+        $this->repository->setCurrentUser( $apiUser );
     }
 }

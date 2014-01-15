@@ -21,19 +21,38 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 class RoutingListenerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var ContainerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $container;
+    private $configResolver;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlAliasRouter;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $urlAliasGenerator;
 
     protected function setUp()
     {
         parent::setUp();
         $this->container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
+        $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $this->urlAliasRouter = $this
+            ->getMockBuilder( 'eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter' )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->urlAliasGenerator = $this
+            ->getMockBuilder( 'eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator' )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testGetSubscribedEvents()
     {
-        $listener = new RoutingListener( $this->container );
+        $listener = new RoutingListener( $this->configResolver, $this->urlAliasRouter, $this->urlAliasGenerator );
         $this->assertSame(
             array(
                 MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 200 )
@@ -44,31 +63,9 @@ class RoutingListenerTest extends PHPUnit_Framework_TestCase
 
     public function testOnSiteAccessMatch()
     {
-        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-        $urlAliasRouter = $this
-            ->getMockBuilder( 'eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter' )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $urlAliasGenerator = $this
-            ->getMockBuilder( 'eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator' )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->container
-            ->expects( $this->any() )
-            ->method( 'get' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'ezpublish.config.resolver', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $configResolver ),
-                        array( 'ezpublish.urlalias_router', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $urlAliasRouter ),
-                        array( 'ezpublish.urlalias_generator', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $urlAliasGenerator ),
-                    )
-                )
-            );
-
         $rootLocationId = 123;
         $excludedUriPrefixes = array( '/foo/bar', '/baz' );
-        $configResolver
+        $this->configResolver
             ->expects( $this->any() )
             ->method( 'getParameter' )
             ->will(
@@ -80,21 +77,21 @@ class RoutingListenerTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $urlAliasRouter
+        $this->urlAliasRouter
             ->expects( $this->once() )
             ->method( 'setRootLocationId' )
             ->with( $rootLocationId );
-        $urlAliasGenerator
+        $this->urlAliasGenerator
             ->expects( $this->once() )
             ->method( 'setRootLocationId' )
             ->with( $rootLocationId );
-        $urlAliasGenerator
+        $this->urlAliasGenerator
             ->expects( $this->once() )
             ->method( 'setExcludedUriPrefixes' )
             ->with( $excludedUriPrefixes );
 
         $event = new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST );
-        $listener = new RoutingListener( $this->container );
+        $listener = new RoutingListener( $this->configResolver, $this->urlAliasRouter, $this->urlAliasGenerator );
         $listener->onSiteAccessMatch( $event );
     }
 }

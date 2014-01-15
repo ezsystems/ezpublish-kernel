@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\URLAliasService;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -52,48 +54,44 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
         $this->repository = $repository = $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
+            ->getMockBuilder( $repositoryClass )
             ->disableOriginalConstructor()
+            ->setMethods(
+                array_diff(
+                    get_class_methods( $repositoryClass ),
+                    array( 'sudo' )
+                )
+            )
             ->getMock();
-        $lazyRepository = function () use ( $repository )
-        {
-            return $repository;
-        };
         $this->urlAliasService = $this->getMock( 'eZ\\Publish\\API\\Repository\\URLAliasService' );
         $this->locationService = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
-        $this->repository
-            ->expects( $this->any() )
-            ->method( 'getUrlAliasService' )
-            ->will( $this->returnValue( $this->urlAliasService ) );
-        $this->repository
-            ->expects( $this->any() )
-            ->method( 'getLocationService' )
-            ->will( $this->returnValue( $this->locationService ) );
         $this->urlALiasGenerator = $this
             ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\Generator\\UrlAliasGenerator' )
             ->setConstructorArgs(
                 array(
-                    $lazyRepository,
+                    $repository,
                     $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' )
                 )
             )
             ->getMock();
         $this->requestContext = new RequestContext();
 
-        $this->router = $this->getRouter( $lazyRepository, $this->urlALiasGenerator, $this->requestContext );
+        $this->router = $this->getRouter( $this->locationService, $this->urlAliasService, $this->urlALiasGenerator, $this->requestContext );
     }
 
     /**
-     * @param callable $lazyRepository
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
      * @param UrlAliasGenerator $urlAliasGenerator
      * @param RequestContext $requestContext
      *
      * @return UrlAliasRouter
      */
-    protected function getRouter( \Closure $lazyRepository, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
+    protected function getRouter( LocationService $locationService, URLAliasService $urlAliasService, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
     {
-        return new UrlAliasRouter( $lazyRepository, $urlAliasGenerator, $requestContext );
+        return new UrlAliasRouter( $locationService, $urlAliasService, $urlAliasGenerator, $requestContext );
     }
 
     /**

@@ -26,19 +26,23 @@ class SecurityPass implements CompilerPassInterface
             return;
         }
 
-        $lazyRepositoryReference = new Reference( 'ezpublish.api.repository.lazy' );
+        $repositoryReference = new Reference( 'ezpublish.api.repository' );
         // Inject the Repository in the authentication provider.
         // We need it for checking user credentials
         $daoAuthenticationProviderDef = $container->findDefinition( 'security.authentication.provider.dao' );
         $daoAuthenticationProviderDef->addMethodCall(
-            'setLazyRepository',
-            array( $lazyRepositoryReference )
+            'setRepository',
+            array( $repositoryReference )
         );
 
         $anonymousAuthenticationProviderDef = $container->findDefinition( 'security.authentication.provider.anonymous' );
         $anonymousAuthenticationProviderDef->addMethodCall(
-            'setLazyRepository',
-            array( $lazyRepositoryReference )
+            'setRepository',
+            array( $repositoryReference )
+        );
+        $anonymousAuthenticationProviderDef->addMethodCall(
+            'setConfigResolver',
+            array( new Reference( 'ezpublish.config.resolver' ) )
         );
     }
 }
