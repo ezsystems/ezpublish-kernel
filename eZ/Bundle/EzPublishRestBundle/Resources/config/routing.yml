@@ -1033,7 +1033,11 @@ ezpublish_rest_deleteSession:
         _controller: ezpublish_rest.controller.user:deleteSession
     methods: [DELETE]
 
-
+ezpublish_rest_loadSession:
+    path: /user/sessions/{sessionId}
+    defaults:
+        _controller: ezpublish_rest.controller.user:loadSession
+    methods: [GET]
 
 # URL aliases
 

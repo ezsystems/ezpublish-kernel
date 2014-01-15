@@ -30,6 +30,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException AS RestNotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use eZ\Publish\Core\REST\Server\Exceptions\UnauthorizedException AS RestUnauthorizedException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Security\User as CoreUser;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -1034,6 +1035,41 @@ class User extends RestController
         $session->invalidate();
 
         return new Values\NoContent();
+    }
+
+    /**
+     * Load given session.
+     *
+     * @param string $sessionId
+     * @return \eZ\Publish\Core\REST\Server\Values\UserSession
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException if session ID dismatch
+     */
+    public function loadSession( $sessionId )
+    {
+        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
+        $session = $this->container->get( 'session' );
+
+        if ( $session->getId() != $sessionId )
+        {
+            throw new UnauthorizedException( "user", 'Session' );
+        }
+
+        if ( $this->container->getParameter( 'form.type_extension.csrf.enabled' ) )
+        {
+            /** @var $csrfProvider \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface */
+            $csrfProvider = $this->container->get( 'form.csrf_provider' );
+        }
+
+        return new Values\UserSession(
+            $this->repository->getCurrentUser(),
+            $session->getName(),
+            $session->getId(),
+            isset( $csrfProvider ) ?
+                $csrfProvider->generateCsrfToken(
+                    $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' )
+                ) :
+                ""
+        );
     }
 
     /**
