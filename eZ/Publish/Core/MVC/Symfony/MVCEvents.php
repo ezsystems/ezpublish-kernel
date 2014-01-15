@@ -61,4 +61,12 @@ final class MVCEvents
      * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent instance.
      */
     const CONFIG_SCOPE_RESTORE = 'ezpublish.config.scope_restore';
+
+    /**
+     * INTERACTIVE_LOGIN event occurs when a user has been authenticated by a foreign user provider.
+     * Listening to this event gives a chance to retrieve a valid API user to be injected in repository.
+     *
+     * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent instance.
+     */
+    const INTERACTIVE_LOGIN = 'ezpublish.security.interactive_login';
 }
