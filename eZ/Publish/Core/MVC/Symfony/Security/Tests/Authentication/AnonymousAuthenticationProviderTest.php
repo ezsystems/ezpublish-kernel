@@ -20,27 +20,31 @@ class AnonymousAuthenticationProviderTest extends PHPUnit_Framework_TestCase
     private $repository;
 
     /**
-     * @var \Closure
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $lazyRepository;
+    private $configResolver;
 
     protected function setUp()
     {
         parent::setUp();
-        $repository = $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
-        $this->lazyRepository = function () use ( $repository )
-        {
-            return $repository;
-        };
+        $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
+        $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
     }
 
     public function testAuthenticate()
     {
+        $anonymousUserId = 10;
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'anonymous_user_id' )
+            ->will( $this->returnValue( $anonymousUserId ) );
         $userService = $this->getMock( 'eZ\Publish\API\Repository\UserService' );
         $anonymousUser = $this->getMock( 'eZ\Publish\API\Repository\Values\User\User' );
         $userService
             ->expects( $this->once() )
-            ->method( 'loadAnonymousUser' )
+            ->method( 'loadUser' )
+            ->with( $anonymousUserId )
             ->will( $this->returnValue( $anonymousUser ) );
         $this->repository
             ->expects( $this->once() )
@@ -53,7 +57,8 @@ class AnonymousAuthenticationProviderTest extends PHPUnit_Framework_TestCase
 
         $key = 'some_key';
         $authProvider = new AnonymousAuthenticationProvider( $key );
-        $authProvider->setLazyRepository( $this->lazyRepository );
+        $authProvider->setRepository( $this->repository );
+        $authProvider->setConfigResolver( $this->configResolver );
         $anonymousToken = $this
             ->getMockBuilder( 'Symfony\Component\Security\Core\Authentication\Token\AnonymousToken' )
             ->setConstructorArgs( array( $key, $this->getMock( 'Symfony\Component\Security\Core\User\UserInterface' ) ) )

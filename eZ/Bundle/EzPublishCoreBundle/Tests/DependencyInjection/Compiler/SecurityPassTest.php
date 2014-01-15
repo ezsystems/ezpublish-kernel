@@ -34,13 +34,13 @@ class SecurityPassTest extends AbstractCompilerPassTest
         $this->compile();
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.provider.dao',
-            'setLazyRepository',
-            array( new Reference( 'ezpublish.api.repository.lazy' ) )
+            'setRepository',
+            array( new Reference( 'ezpublish.api.repository' ) )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.provider.anonymous',
-            'setLazyRepository',
-            array( new Reference( 'ezpublish.api.repository.lazy' ) )
+            'setRepository',
+            array( new Reference( 'ezpublish.api.repository' ) )
         );
     }
 }

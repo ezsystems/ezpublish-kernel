@@ -37,17 +37,13 @@ class RepositoryAuthenticationProviderTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->encoderFactory = $this->getMock( 'Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface' );
         $repository = $this->repository = $this->getMock( 'eZ\Publish\API\Repository\Repository' );
-        $lazyRepository = function () use ( $repository )
-        {
-            return $repository;
-        };
         $this->authProvider = new RepositoryAuthenticationProvider(
             $this->getMock( 'Symfony\Component\Security\Core\User\UserProviderInterface' ),
             $this->getMock( 'Symfony\Component\Security\Core\User\UserCheckerInterface' ),
             'foo',
             $this->encoderFactory
         );
-        $this->authProvider->setLazyRepository( $lazyRepository );
+        $this->authProvider->setRepository( $repository );
     }
 
     public function testAuthenticationNotEzUser()
@@ -72,7 +68,7 @@ class RepositoryAuthenticationProviderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Core\Exception\BadCredentialsException
+     * @expectedException \Symfony\Component\Security\Core\Exception\BadCredentialsException
      */
     public function testCheckAuthenticationCredentialsChanged()
     {
@@ -120,7 +116,7 @@ class RepositoryAuthenticationProviderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Core\Exception\BadCredentialsException
+     * @expectedException \Symfony\Component\Security\Core\Exception\BadCredentialsException
      */
     public function testCheckAuthenticationFailed()
     {
