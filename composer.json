@@ -53,7 +53,9 @@
         "matthiasnoback/symfony-dependency-injection-test": "0.2.*"
     },
     "replace": {
-        "ezsystems/ezpublish": "*"
+        "ezsystems/ezpublish": "*",
+        "ezsystems/ezpublish-api": "self.version",
+        "ezsystems/ezpublish-spi": "self.version"
     },
     "autoload": {
         "psr-0": {
