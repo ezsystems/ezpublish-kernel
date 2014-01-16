@@ -81,12 +81,6 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::getRepository
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::loadLocation
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::getPathPrefixByRootLocationId
-     */
     public function testGetPathPrefixByRootLocationId()
     {
         $rootLocationId = 123;
@@ -109,9 +103,6 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider providerTestIsPrefixExcluded
-     *
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::setExcludedUriPrefixes
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::isUriPrefixExcluded
      */
     public function testIsPrefixExcluded( $uri, $expectedIsExcluded )
     {
@@ -141,9 +132,6 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::loadLocation
-     */
     public function testLoadLocation()
     {
         $locationId = 123;
@@ -158,9 +146,6 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider providerTestDoGenerate
-     *
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::doGenerate
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::setSiteAccess
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLAlias $urlAlias
      * @param array $parameters
@@ -207,9 +192,6 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::doGenerate
-     */
     public function testDoGenerateNoUrlAlias()
     {
         $location = new Location( array( 'id' => 123 ) );
@@ -233,9 +215,6 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider providerTestDoGenerateRootLocation
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::setRootLocationId
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::setExcludedUriPrefixes
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator::doGenerate
      *
      * @param URLAlias $urlAlias
      * @param $isOutsideAndNotExcluded
