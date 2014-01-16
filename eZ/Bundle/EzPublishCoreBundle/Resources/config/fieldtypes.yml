@@ -563,6 +563,7 @@ services:
         arguments: [%ezpublish.fieldType.ezpage.pageService.class%, @ezpublish.config.resolver, @ezpublish.fieldType.ezpage.storage_gateway]
         calls:
             - [setRepository, [@ezpublish.api.repository]]
+        lazy: true
 
     ezpublish.fieldType.ezpage.parameterProvider:
         class: %ezpublish.fieldType.ezpage.parameterProvider.class%
