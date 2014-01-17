@@ -13,7 +13,7 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 use DOMDocument;
 
 /**
- * Basic for TextLine field type
+ * Value for XmlText field type
  */
 class Value extends BaseValue
 {
