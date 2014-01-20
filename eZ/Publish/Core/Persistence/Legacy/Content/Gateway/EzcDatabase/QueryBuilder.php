@@ -142,9 +142,15 @@ class QueryBuilder
         if ( $translations !== null )
         {
             $query->where(
-                $query->expr->in(
-                    $this->dbHandler->quoteColumn( 'language_code', 'ezcontentobject_attribute' ),
-                    $translations
+                $query->expr->lOr(
+                    $query->expr->in(
+                        $this->dbHandler->quoteColumn( 'language_code', 'ezcontentobject_attribute' ),
+                        $translations
+                    ),
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( 'language_id', 'ezcontentobject_attribute' ),
+                        1
+                    )
                 )
             );
         }

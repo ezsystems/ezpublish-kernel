@@ -398,7 +398,8 @@ class ContentService implements ContentServiceInterface
             foreach ( $languages as $languageCode )
             {
                 if (
-                    !in_array(
+                    !$spiContent->versionInfo->contentInfo->alwaysAvailable
+                    && !in_array(
                         $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $languageCode )->id,
                         $spiContent->versionInfo->languageIds
                     )
