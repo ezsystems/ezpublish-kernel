@@ -6125,8 +6125,7 @@ Get session information
 
 
 :Error codes:
-    :401: If the authorization failed
-    :409: If header contained a session cookie but different user was authorized
+    :401: If the authorization failed (if the session ID doesn't match the logged in user's)
 
 
 XML Example
