@@ -108,13 +108,13 @@ class LocationServiceTest extends ServiceTest
             ),
             array(
                 'loadLocationChildren',
-                array( $root, 0, 1 ),
+                array( $root, null, 0, 1 ),
                 $rootChildren,
                 0
             ),
             array(
                 'getLocationChildCount',
-                array( $root ),
+                array( $root, null ),
                 1,
                 0
             ),
