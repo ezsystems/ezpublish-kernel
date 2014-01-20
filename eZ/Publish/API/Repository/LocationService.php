@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Location service, used for complex subtree operations
@@ -83,21 +84,23 @@ interface LocationService
      * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 );
+    public function loadLocationChildren( Location $location, Criterion $filter = null, $offset = 0, $limit = -1 );
 
     /**
      * Returns the number of children which are readable by the current user of a location object
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      *
      * @return int
      */
-    public function getLocationChildCount( Location $location );
+    public function getLocationChildCount( Location $location, Criterion $filter = null );
 
     /**
      * Creates the new $location in the content repository for the given content

@@ -337,6 +337,8 @@ class Location extends RestController
      * @param $locationPath
      *
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
+     *
+     * @todo : read filter criterion from request
      */
     public function loadLocationChildren( $locationPath )
     {
@@ -349,6 +351,7 @@ class Location extends RestController
                 $this->locationService->loadLocation(
                     $this->extractLocationIdFromPath( $locationPath )
                 ),
+                null,
                 $offset >= 0 ? $offset : 0,
                 $limit >= 0 ? $limit : -1
             )->locations as $location
