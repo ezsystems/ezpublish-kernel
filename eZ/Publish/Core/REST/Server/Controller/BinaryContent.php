@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 
+use eZ\Publish\Core\REST\Server\Values\CachedValue;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 
@@ -77,9 +78,21 @@ class BinaryContent extends RestController
 
         try
         {
-            return $this->imageVariationHandler->getVariation(
+            $variation = $this->imageVariationHandler->getVariation(
                 $field, $versionInfo, $variationIdentifier
             );
+
+            if ( $content->contentInfo->mainLocationId === null )
+            {
+                return $variation;
+            }
+            else
+            {
+                return new CachedValue(
+                    $variation,
+                    array( 'locationId' => $content->contentInfo->mainLocationId )
+                );
+            }
         }
         catch ( InvalidVariationException $e )
         {

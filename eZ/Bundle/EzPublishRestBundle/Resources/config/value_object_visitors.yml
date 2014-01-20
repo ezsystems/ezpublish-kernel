@@ -113,6 +113,9 @@ parameters:
     ezpublish_rest.output.value_object_visitor.TemporaryRedirect.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\TemporaryRedirect
     ezpublish_rest.output.value_object_visitor.Options.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Options
 
+    # Cache
+    ezpublish_rest.output.value_object_visitor.cached_value.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\CachedValue
+
 services:
     ezpublish_rest.output.value_object_visitor.base:
         class: %ezpublish_rest.output.value_object_visitor.base.class%
@@ -618,3 +621,13 @@ services:
         arguments: [ true  ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\Options }
+
+    ezpublish_rest.output.value_object_visitor.cached_value:
+        class: %ezpublish_rest.output.value_object_visitor.cached_value.class%
+        parent: ezpublish_rest.output.value_object_visitor.base
+        arguments:
+            - @ezpublish.config.resolver
+        calls:
+            - [setRequest, [@request=]]
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\CachedValue }
