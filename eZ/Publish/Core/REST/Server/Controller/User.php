@@ -1049,7 +1049,7 @@ class User extends RestController
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $this->container->get( 'session' );
 
-        if ( $session->getId() != $sessionId )
+        if ( $session->getId() != $sessionId || $this->repository->getCurrentUser()->login == "anonymous" )
         {
             throw new UnauthorizedException( "user", 'Session' );
         }
