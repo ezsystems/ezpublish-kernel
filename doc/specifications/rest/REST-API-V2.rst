@@ -6125,7 +6125,7 @@ Get session information
 
 
 :Error codes:
-    :401: If the authorization failed (if the session ID doesn't match the logged in user's)
+    :401: If the authorization failed (user not logged in, or session ID mismatch)
 
 
 XML Example
