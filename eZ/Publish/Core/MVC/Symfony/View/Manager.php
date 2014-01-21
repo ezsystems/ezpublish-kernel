@@ -18,6 +18,7 @@ use eZ\Publish\Core\MVC\Symfony\View\Provider\Block as BlockViewProvider;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PreContentViewEvent;
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -89,11 +90,24 @@ class Manager implements ViewManagerInterface
      */
     protected $viewBaseLayout;
 
-    public function __construct( EngineInterface $templateEngine, EventDispatcherInterface $eventDispatcher, Repository $repository, $viewBaseLayout, LoggerInterface $logger = null )
+    /**
+     * @var ConfigResolverInterface
+     */
+    protected $configResolver;
+
+    public function __construct(
+        EngineInterface $templateEngine,
+        EventDispatcherInterface $eventDispatcher,
+        Repository $repository,
+        ConfigResolverInterface $configResolver,
+        $viewBaseLayout,
+        LoggerInterface $logger = null
+    )
     {
         $this->templateEngine = $templateEngine;
         $this->eventDispatcher = $eventDispatcher;
         $this->repository = $repository;
+        $this->configResolver = $configResolver;
         $this->viewBaseLayout = $viewBaseLayout;
         $this->logger = $logger;
     }
@@ -256,7 +270,10 @@ class Manager implements ViewManagerInterface
                 return $this->renderContentView(
                     $view,
                     $parameters + array(
-                        'content' => $this->repository->getContentService()->loadContentByContentInfo( $location->getContentInfo() )
+                        'content' => $this->repository->getContentService()->loadContentByContentInfo(
+                            $location->getContentInfo(),
+                            $this->configResolver->getParameter( 'languages' )
+                        )
                     )
                 );
             }
