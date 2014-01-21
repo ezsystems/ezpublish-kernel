@@ -395,25 +395,26 @@ class ContentService implements ContentServiceInterface
 
         if ( !empty( $languages ) )
         {
-            foreach ( $languages as $languageCode )
-            {
-                if (
-                    !$spiContent->versionInfo->contentInfo->alwaysAvailable
-                    && !in_array(
-                        $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $languageCode )->id,
-                        $spiContent->versionInfo->languageIds
-                    )
-                )
+            $contentLanguageHandler = $this->persistenceHandler->contentLanguageHandler();
+            $languageIds = array_map(
+                function( $languageCode ) use( $contentLanguageHandler )
                 {
-                    throw new NotFoundException(
-                        "Content",
-                        array(
-                            $isRemoteId ? "remoteId" : "id" => $id,
-                            "languages" => $languages,
-                            "versionNo" => $versionNo
-                        )
-                    );
-                }
+                    return $contentLanguageHandler->loadByLanguageCode( $languageCode )->id;
+                },
+                $languages
+            );
+
+            $matchingLanguages = array_intersect( $languageIds, $spiContent->versionInfo->languageIds );
+            if ( empty( $matchingLanguages ) && !$spiContent->versionInfo->contentInfo->alwaysAvailable )
+            {
+                throw new NotFoundException(
+                    "Content",
+                    array(
+                        $isRemoteId ? "remoteId" : "id" => $id,
+                        "languages" => $languages,
+                        "versionNo" => $versionNo
+                    )
+                );
             }
         }
 
