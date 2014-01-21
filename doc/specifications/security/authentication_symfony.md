@@ -122,8 +122,7 @@ This makes it easy to integrate any kind of login handlers, including SSO and ex
 (e.g. [FR3DLdapBundle](https://github.com/Maks3w/FR3DLdapBundle), [HWIOauthBundle](https://github.com/hwi/HWIOAuthBundle),
 [FOSUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle), [BeSimpleSsoAuthBundle](http://github.com/BeSimple/BeSimpleSsoAuthBundle)...).
 
-The only requirement, whatever user provider is used, is to inject a valid eZ user in the repository.
-This can be done by listening to `SecurityEvents::INTERACTIVE_LOGIN` event which is triggered once authentication has been made.
+Further explanation can be found in the [multiple user providers specification](multiple_user_providers.md).
 
 ### Integration with legacy
 

@@ -10,11 +10,10 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 
-class User implements AdvancedUserInterface, EquatableInterface
+class User implements UserInterface, EquatableInterface
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
@@ -116,21 +115,7 @@ class User implements AdvancedUserInterface, EquatableInterface
         $this->user = $user;
     }
 
-    /**
-     * The equality comparison should neither be done by referential equality
-     * nor by comparing identities (i.e. getId() === getId()).
-     *
-     * However, you do not need to compare every attribute, but only those that
-     * are relevant for assessing whether re-authentication is required.
-     *
-     * Also implementation should consider that $user instance may implement
-     * the extended user interface `AdvancedUserInterface`.
-     *
-     * @param UserInterface $user
-     *
-     * @return Boolean
-     */
-    public function isEqualTo( UserInterface $user )
+    public function isEqualTo( BaseUserInterface $user )
     {
         if ( $user instanceof User && $this->user instanceof APIUser )
         {

@@ -5,6 +5,7 @@ parameters:
     ezpublish.security.voter.core.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\CoreVoter
     ezpublish.security.voter.value_object.class: eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\ValueObjectVoter
     ezpublish.security.controller.class: eZ\Publish\Core\MVC\Symfony\Controller\SecurityController
+    ezpublish.security.login_listener.class: eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener
     security.http_utils.class: eZ\Publish\Core\MVC\Symfony\Security\HttpUtils
     ezpublish.user.identity.class: eZ\Publish\Core\MVC\Symfony\Security\User\Identity
     ezpublish.user.hash_generator.class: eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
@@ -34,6 +35,12 @@ services:
         arguments: [@templating, @ezpublish.config.resolver, @?form.csrf_provider]
         calls:
             - [setRequest, [@?request=]]
+
+    ezpublish.security.login_listener:
+        class: %ezpublish.security.login_listener.class%
+        arguments: [@ezpublish.api.repository, @ezpublish.config.resolver, @event_dispatcher, @security.context]
+        tags:
+            - { name: kernel.event_subscriber }
 
     ezpublish.user.identity:
         class: %ezpublish.user.identity.class%

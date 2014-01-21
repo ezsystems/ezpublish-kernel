@@ -12,17 +12,14 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
+use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class Provider implements APIUserProviderInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $userService;
-
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
@@ -43,9 +40,9 @@ class Provider implements APIUserProviderInterface
      *
      * @param string|\eZ\Publish\Core\MVC\Symfony\Security\User $user Either the user ID to load an instance of User object. A value of -1 represents an anonymous user.
      *
-     * @return \Symfony\Component\Security\Core\User\UserInterface
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException if the user is not found
+     * @return \eZ\Publish\Core\MVC\Symfony\Security\UserInterface
      *
+     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException if the user is not found
      */
     public function loadUserByUsername( $user )
     {
@@ -54,7 +51,7 @@ class Provider implements APIUserProviderInterface
             // SecurityContext always tries to authenticate anonymous users when checking granted access.
             // In that case $user is an instance of \eZ\Publish\Core\MVC\Symfony\Security\User.
             // We don't need to reload the user here.
-            if ( $user instanceof User )
+            if ( $user instanceof UserInterface )
                 return $user;
 
             return new User( $this->repository->getUserService()->loadUserByLogin( $user ), array( 'ROLE_USER' ) );
@@ -72,19 +69,21 @@ class Provider implements APIUserProviderInterface
      * totally reloaded (e.g. from the database), or if the UserInterface
      * object can just be merged into some internal array of users / identity
      * map.
-     * @param UserInterface $user
      *
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @param \Symfony\Component\Security\Core\User\UserInterface $user
      *
-     * @return UserInterface
+     * @throws \Symfony\Component\Security\Core\Exception\UnsupportedUserException
+     *
+     * @return \Symfony\Component\Security\Core\User\UserInterface
      */
-    public function refreshUser( UserInterface $user )
+    public function refreshUser( CoreUserInterface $user )
     {
-        if ( $user instanceof User )
+        if ( !$user instanceof UserInterface )
         {
-            $this->repository->setCurrentUser( $user->getAPIUser() );
+            throw new UnsupportedUserException( sprintf( 'Instances of "%s" are not supported.', get_class( $user ) ) );
         }
 
+        $this->repository->setCurrentUser( $user->getAPIUser() );
         return $user;
     }
 
