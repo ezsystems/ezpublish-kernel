@@ -1,0 +1,136 @@
+{% extends "eZDemoBundle::pagelayout.html.twig" %}
+
+{% block navbar %}
+    {% set contentId = content.contentInfo.id %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="attribute-header" style="margin:25px 0;">
+        <h1 class="long">XHTML5 editing content #{{ content.contentInfo.id }}: {{ content.contentInfo.name }}</h1>
+    </div>
+
+    <h3>Edit</h3>
+    <div style="margin:5px 0;">
+        <form method="post" action="somepage">
+            <textarea name="content" style="width:100%; height:350px;">
+                {{ content.fields.test["eng-GB"].xml|richtext_to_html5_edit }}
+            </textarea>
+        </form>
+    </div>
+    <div style="margin:25px 0;">
+        <button id="save">Save</button>
+    </div>
+    <h3>Render</h3>
+    <div style="border:1px solid red; padding:10px">{{ content.fields.test["eng-GB"].xml|richtext_to_html5 }}</div>
+    <h3>Source</h3>
+    <pre style="border:1px solid blue; margin:5px 0;">{{ content.fields.test["eng-GB"].xml|richtext_to_html5|escape }}</pre>
+    <script>
+        {% raw %}
+        function addslashes( str ) {
+            return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
+        }
+        var verbose = false;
+        jQuery( "#save" ).click( function() {
+            jQuery.ajax( {
+                type: "POST",
+                beforeSend: function ( request )
+                {
+                    request.setRequestHeader( "X-HTTP-Method-Override", "COPY" ),
+                    request.setRequestHeader( "Accept", "application/vnd.ez.api.Version+json" )
+                },
+                url: {% endraw %}"/api/ezp/v2/content/objects/{{ content.contentInfo.id }}/versions/{{ content.contentInfo.currentVersionNo }}"{% raw %}
+            }).done(
+                function ( data, status, jqXHR ) {
+                    if ( verbose ) alert( "Create draft: " + status + " " + jqXHR.status );
+                    if ( status !== "success" ) return;
+                    jQuery.ajax( {
+                        type: "POST",
+                        beforeSend: function ( request )
+                        {
+                            request.setRequestHeader( "Accept", "application/vnd.ez.api.Version+json" ),
+                            request.setRequestHeader( "Content-Type", "application/vnd.ez.api.VersionUpdate+json" ),
+                            request.setRequestHeader( "X-HTTP-Method-Override", "PATCH" )
+                        },
+                        url: data.Version._href,
+                        data: '{\
+                            "VersionUpdate": {\
+                                "initialLanguageCode": "eng-GB",\
+                                "fields": {\
+                                    "field": [\
+                                        {\
+                                            "id": "1234",\
+                                            "fieldDefinitionIdentifier": "test",\
+                                            "languageCode": "eng-GB",\
+                                            "fieldValue": {\
+                                                "xml": "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?><section xmlns=\\"http://ez.no/namespaces/ezpublish5/xhtml5/edit\\">'
+                                                    + addslashes( tinymce.activeEditor.getContent().replace(/(\r\n|\n|\r)/gm,"") ) +
+                                                '</section>"}}]}}}'
+                    }).done(
+                        function ( data, status, jqXHR ) {
+                            if ( verbose ) alert( "Update draft: " + status + " " + jqXHR.status );
+                            if ( status !== "success" ) return;
+                            jQuery.ajax( {
+                                type: "PUBLISH",
+                                url: data.Version._href
+                            }).done(
+                                function ( data, status, jqXHR ) {
+                                    if ( verbose ) alert( "Publish draft: " + status + " " + jqXHR.status );
+                                    if ( status !== "nocontent" ) return;
+                                    if ( verbose ) alert( "Page will be reloaded" );
+                                    location.reload(true);
+                                }
+                            );
+                        }
+                    );
+                }
+            );
+        });
+        {% endraw %}
+    </script>
+
+    <script src="http://tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            schema: "html5-strict",
+            mode: "textareas",
+            plugins: [
+                "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                "searchreplace wordcount visualblocks visualchars code fullscreen",
+                "insertdatetime media nonbreaking save table contextmenu directionality",
+                "emoticons template paste textcolor"
+            ],
+            extended_valid_elements : 'youtube[width|height|src]',
+            custom_elements : 'youtube',
+            style_formats: [
+                {title: "Headers", items: [
+                    {title: "h1", block: "h1"},
+                    {title: "h2", block: "h2"},
+                    {title: "h3", block: "h3"},
+                    {title: "h4", block: "h4"},
+                    {title: "h5", block: "h5"},
+                    {title: "h6", block: "h6"}
+                ]},
+
+                {title: "Blocks", items: [
+                    {title: "p", block: "p"},
+                    {title: "div", block: "div"},
+                    {title: "pre", block: "pre"}
+                ]},
+
+                {title: "Containers", items: [
+                    {title: "section", block: "section", wrapper: true, merge_siblings: false},
+                    {title: "article", block: "article", wrapper: true, merge_siblings: false},
+                    {title: "blockquote", block: "blockquote", wrapper: true},
+                    {title: "hgroup", block: "hgroup", wrapper: true},
+                    {title: "aside", block: "aside", wrapper: true},
+                    {title: "figure", block: "figure", wrapper: true}
+                ]}
+            ],
+            visualblocks_default_state: true,
+            end_container_on_empty_block: true,
+            entity_encoding : "raw"
+        });
+    </script>
+{% endblock %}
+

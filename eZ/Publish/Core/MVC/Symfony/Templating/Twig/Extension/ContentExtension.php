@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\XmlText\Converter\Html5 as Html5Converter;
+use eZ\Publish\Core\FieldType\RichText\Converter as RichTextConverterInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Twig_Extension;
@@ -84,6 +85,20 @@ class ContentExtension extends Twig_Extension
     protected $xmlTextConverter;
 
     /**
+     * Converter used to transform RichText content to HTML5 for rendering purposes
+     *
+     * @var \eZ\Publish\Core\FieldType\RichText\Converter
+     */
+    protected $richTextConverter;
+
+    /**
+     * Converter used to transform RichText content to HTML5 for editing purposes
+     *
+     * @var \eZ\Publish\Core\FieldType\RichText\Converter
+     */
+    protected $richTextEditConverter;
+
+    /**
      * Hash of field type identifiers (i.e. "ezstring"), indexed by field definition identifier
      *
      * @var array
@@ -130,6 +145,8 @@ class ContentExtension extends Twig_Extension
         ConfigResolverInterface $resolver,
         ParameterProviderRegistryInterface $parameterProviderRegistry,
         Html5Converter $xmlTextConverter,
+        RichTextConverterInterface $richTextConverter,
+        RichTextConverterInterface $richTextEditConverter,
         VariationHandler $imageVariationService,
         TranslationHelper $translationHelper,
         FieldHelper $fieldHelper
@@ -151,6 +168,8 @@ class ContentExtension extends Twig_Extension
         $this->configResolver = $resolver;
         $this->parameterProviderRegistry = $parameterProviderRegistry;
         $this->xmlTextConverter = $xmlTextConverter;
+        $this->richTextConverter = $richTextConverter;
+        $this->richTextEditConverter = $richTextEditConverter;
         $this->imageVariationService = $imageVariationService;
         $this->translationHelper = $translationHelper;
         $this->fieldHelper = $fieldHelper;
@@ -215,6 +234,16 @@ class ContentExtension extends Twig_Extension
             new Twig_SimpleFilter(
                 'xmltext_to_html5',
                 array( $this, 'xmlTextToHtml5' ),
+                array( 'is_safe' => array( 'html' ) )
+            ),
+            new Twig_SimpleFilter(
+                'richtext_to_html5',
+                array( $this, 'richTextToHtml5' ),
+                array( 'is_safe' => array( 'html' ) )
+            ),
+            new Twig_SimpleFilter(
+                'richtext_to_html5_edit',
+                array( $this, 'richTextToHtml5Edit' ),
                 array( 'is_safe' => array( 'html' ) )
             )
         );
@@ -364,6 +393,30 @@ class ContentExtension extends Twig_Extension
     public function xmltextToHtml5( $xmlData )
     {
         return $this->xmlTextConverter->convert( $xmlData );
+    }
+
+    /**
+     * Implements the "richtext_to_html5" filter
+     *
+     * @param \DOMDocument $xmlData
+     *
+     * @return string
+     */
+    public function richTextToHtml5( $xmlData )
+    {
+        return $this->richTextConverter->convert( $xmlData )->saveHTML();
+    }
+
+    /**
+     * Implements the "richtext_to_html5_edit" filter
+     *
+     * @param \DOMDocument $xmlData
+     *
+     * @return string
+     */
+    public function richTextToHtml5Edit( $xmlData )
+    {
+        return $this->richTextEditConverter->convert( $xmlData )->saveHTML();
     }
 
     /**

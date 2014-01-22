@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+  <xs:attributeGroup name="id">
+    <xs:attribute name="id" form="qualified" type="xs:string"/>
+  </xs:attributeGroup>
+  <xs:attribute name="title" type="xs:string"/>
+  <xs:attribute name="colspan"/>
+  <xs:attribute name="rowspan"/>
+  <xs:attribute name="width"/>
+</xs:schema>

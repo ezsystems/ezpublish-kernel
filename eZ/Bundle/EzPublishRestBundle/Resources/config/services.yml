@@ -38,6 +38,7 @@ parameters:
     ezpublish_rest.field_type_processor.ezobjectrelationlist.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationListProcessor
     ezpublish_rest.field_type_processor.ezobjectrelation.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\RelationProcessor
     ezpublish_rest.field_type_processor.eztime.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\TimeProcessor
+    ezpublish_rest.field_type_processor.ezrichtext.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\RichTextProcessor
     ezpublish_rest.field_type_processor.ezxmltext.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\XmlTextProcessor
     ezpublish_rest.field_type_processor.ezbinaryfile.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor
     ezpublish_rest.field_type_processor.ezpage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor
@@ -279,6 +280,11 @@ services:
         class: %ezpublish_rest.field_type_processor.eztime.class%
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: eztime }
+
+    ezpublish_rest.field_type_processor.ezrichtext:
+        class: %ezpublish_rest.field_type_processor.ezrichtext.class%
+        tags:
+            - { name: ezpublish_rest.field_type_processor, alias: ezrichtext }
 
     ezpublish_rest.field_type_processor.ezxmltext:
         class: %ezpublish_rest.field_type_processor.ezxmltext.class%

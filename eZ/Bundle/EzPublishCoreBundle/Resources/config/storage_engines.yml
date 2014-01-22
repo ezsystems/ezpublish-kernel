@@ -58,6 +58,15 @@ parameters:
         - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/latin.tr.result
         - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr.result
 
+    # RichText XSLT converters
+    ezpublish.fieldType.ezrichtext.converter.xslt_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText\XsltConverter
+    ezpublish.fieldType.ezrichtext.converter.ezxmlToDocbook.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/stylesheets/ezxml_docbook.xsl
+    ezpublish.fieldType.ezrichtext.converter.docbookToEzxml.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/stylesheets/docbook_ezxml.xsl
+
+    # XmlText XSD validator
+    ezpublish.fieldType.ezrichtext.validator.ezxml.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText\XsdValidator
+    ezpublish.fieldType.ezrichtext.validator.ezxml.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/schemas/ezxml.xsd
+
     # Value converters
     ezpublish.fieldType.ezauthor.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author
     ezpublish.fieldType.ezbinaryfile.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\BinaryFile
@@ -83,6 +92,8 @@ parameters:
     ezpublish.fieldType.ezselection.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection
     ezpublish.fieldType.ezstring.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
     ezpublish.fieldType.eztext.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock
+    ezpublish.fieldType.ezrichtext.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText
+    ezpublish.fieldType.ezrichtext.storage_gateway.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezxmltext.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText
     ezpublish.fieldType.ezxmltext.storage_gateway.class: eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezsrrating.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating
@@ -305,6 +316,16 @@ services:
         class: %ezpublish.fieldType.eztext.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: eztext, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezrichtext.converter:
+        class: %ezpublish.fieldType.ezrichtext.converter.class%
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezrichtext, lazy: true, callback: '::create'}
+
+    ezpublish.fieldType.ezrichtext.storage_gateway:
+        class: %ezpublish.fieldType.ezrichtext.storage_gateway.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezrichtext, identifier: LegacyStorage}
 
     ezpublish.fieldType.ezxmltext.converter:
         class: %ezpublish.fieldType.ezxmltext.converter.class%
