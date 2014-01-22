@@ -69,12 +69,18 @@ class LocationService implements LocationServiceInterface
     protected $nameSchemaService;
 
     /**
+     * @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     */
+    protected $permissionsCriterionHandler;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
+     * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
      * @param array $settings
      */
     public function __construct(
@@ -82,6 +88,7 @@ class LocationService implements LocationServiceInterface
         Handler $handler,
         DomainMapper $domainMapper,
         NameSchemaService $nameSchemaService,
+        PermissionsCriterionHandler $permissionsCriterionHandler,
         array $settings = array()
     )
     {
@@ -93,6 +100,7 @@ class LocationService implements LocationServiceInterface
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
         );
+        $this->permissionsCriterionHandler = $permissionsCriterionHandler;
     }
 
     /**
@@ -124,7 +132,7 @@ class LocationService implements LocationServiceInterface
         /** Check read access to whole source subtree
          * @var boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion $contentReadCriterion
          */
-        $contentReadCriterion = $this->repository->getSearchService()->getPermissionsCriterion();
+        $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion();
         if ( $contentReadCriterion === false )
         {
             throw new UnauthorizedException( 'content', 'read' );
@@ -290,38 +298,28 @@ class LocationService implements LocationServiceInterface
         if ( !is_int( $limit ) )
             throw new InvalidArgumentValue( "limit", $limit );
 
-        $searchResult = $this->searchChildrenLocations(
-            $location->id,
-            $location->sortField,
-            $location->sortOrder,
-            $offset,
-            $limit
-        );
-
         $childLocations = array();
-        foreach ( $searchResult->searchHits as $spiSearchHit )
+        foreach (
+            $this->searchChildrenLocations(
+                $location->id,
+                $location->sortField,
+                $location->sortOrder,
+                $offset,
+                $limit
+            ) as $spiLocation
+        )
         {
-            $spiContentLocations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
-                $spiSearchHit->valueObject->versionInfo->contentInfo->id,
-                $location->id
-            );
-            foreach ( $spiContentLocations as $spiLocation )
+            $childLocation = $this->buildDomainLocationObject( $spiLocation );
+            if ( $this->repository->canUser( 'content', 'read', $childLocation->getContentInfo(), $childLocation ) )
             {
-                if ( $spiLocation->parentId == $location->id )
-                {
-                    $childLocation = $this->buildDomainLocationObject( $spiLocation );
-                    if ( $this->repository->canUser( 'content', 'read', $childLocation->getContentInfo(), $childLocation ) )
-                    {
-                        $childLocations[] = $childLocation;
-                    }
-                }
+                $childLocations[] = $childLocation;
             }
         }
 
         return new LocationList(
             array(
                 "locations" => $childLocations,
-                "totalCount" => (int)$searchResult->totalCount
+                "totalCount" => $this->getLocationChildCount( $location )
             )
         );
     }
@@ -335,13 +333,14 @@ class LocationService implements LocationServiceInterface
      */
     public function getLocationChildCount( APILocation $location )
     {
-        return $this->searchChildrenLocations(
-            $location->id,
-            null,
-            APILocation::SORT_ORDER_ASC,
-            0,
-            0
-        )->totalCount;
+        $criterion = new CriterionParentLocationId( $location->id );
+
+        if ( !$this->permissionsCriterionHandler->addPermissionsCriterion( $criterion ) )
+        {
+            return array();
+        }
+
+        return $this->persistenceHandler->locationSearchHandler()->getLocationCount( $criterion );
     }
 
     /**
@@ -355,25 +354,35 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function searchChildrenLocations( $parentLocationId, $sortField = null, $sortOrder = APILocation::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
+    protected function searchChildrenLocations(
+        $parentLocationId,
+        $sortField = null,
+        $sortOrder = APILocation::SORT_ORDER_ASC,
+        $offset = 0,
+        $limit = -1
+    )
     {
-        $query = new Query(
-            array(
-                'filter' => new CriterionParentLocationId( $parentLocationId ),
-                'offset' => ( $offset >= 0 ? (int)$offset : 0 ),
-                'limit' => ( $limit >= 0 ? (int)$limit  : null )
-            )
-        );
+        $filter = new CriterionParentLocationId( $parentLocationId );
 
-        if ( $sortField !== null )
-            $query->sortClauses = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
-
-        if ( !$this->repository->getSearchService()->addPermissionsCriterion( $query->filter ) )
+        if ( !$this->permissionsCriterionHandler->addPermissionsCriterion( $filter ) )
         {
             return array();
         }
 
-        return $this->persistenceHandler->searchHandler()->findContent( $query );
+        $query = new Query(
+            array(
+                "filter" => $filter,
+                "offset" => $offset >= 0 ? (int)$offset : 0,
+                "limit" => $limit >= 0 ? (int)$limit : null
+            )
+        );
+
+        if ( $sortField !== null )
+        {
+            $query->sortClauses = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
+        }
+
+        return $this->persistenceHandler->locationSearchHandler()->findLocations( $query );
     }
 
     /**
@@ -644,7 +653,7 @@ class LocationService implements LocationServiceInterface
         /** Check read access to whole source subtree
          * @var boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion $contentReadCriterion
          */
-        $contentReadCriterion = $this->repository->getSearchService()->getPermissionsCriterion();
+        $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion();
         if ( $contentReadCriterion === false )
         {
             throw new UnauthorizedException( 'content', 'read' );
@@ -728,7 +737,7 @@ class LocationService implements LocationServiceInterface
         /** Check remove access to descendants
          * @var boolean|\eZ\Publish\API\Repository\Values\Content\Query\Criterion $contentReadCriterion
          */
-        $contentReadCriterion = $this->repository->getSearchService()->getPermissionsCriterion( 'content', 'remove' );
+        $contentReadCriterion = $this->permissionsCriterionHandler->getPermissionsCriterion( 'content', 'remove' );
         if ( $contentReadCriterion === false )
         {
             throw new UnauthorizedException( 'content', 'remove' );
@@ -880,8 +889,8 @@ class LocationService implements LocationServiceInterface
             //@todo: enable
             // case APILocation::SORT_FIELD_NODE_ID:
 
-            //@todo: enable
-            // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
+            case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
+                return new SortClause\ContentId( $sortOrder );
 
             default:
                 return new SortClause\LocationPathString( $sortOrder );

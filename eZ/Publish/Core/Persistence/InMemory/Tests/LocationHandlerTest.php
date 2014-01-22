@@ -98,6 +98,7 @@ class LocationHandlerTest extends HandlerTest
                         "sectionId" => 1,
                         "typeId" => $type->id,
                         "initialLanguageId" => 2,
+                        "remoteId" => "contentRemote$i",
                         "fields" => array(
                             new Field(
                                 array(
@@ -124,6 +125,7 @@ class LocationHandlerTest extends HandlerTest
                     array(
                         "contentId" => $this->lastContentId,
                         "contentVersion" => 1,
+                        "remoteId" => "locationRemote$i",
                         "mainLocationId" => $this->lastLocationId,
                         "sortField" => Location::SORT_FIELD_NAME,
                         "sortOrder" => Location::SORT_ORDER_ASC,

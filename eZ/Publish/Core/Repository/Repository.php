@@ -166,6 +166,13 @@ class Repository implements RepositoryInterface
     protected $domainMapper;
 
     /**
+     * Instance of permissions criterion handler
+     *
+     * @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     */
+    protected $permissionsCriterionHandler;
+
+    /**
      * Array of arrays of commit events indexed by the transaction count.
      *
      * @var array
@@ -525,6 +532,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler,
             $this->getDomainMapper(),
             $this->getNameSchemaService(),
+            $this->getPermissionsCriterionHandler(),
             $this->serviceSettings['location']
         );
         return $this->locationService;
@@ -677,6 +685,7 @@ class Repository implements RepositoryInterface
             $this,
             $this->persistenceHandler->searchHandler(),
             $this->getDomainMapper(),
+            $this->getPermissionsCriterionHandler(),
             $this->serviceSettings['search']
         );
         return $this->searchService;
@@ -751,6 +760,22 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->contentLanguageHandler()
         );
         return $this->domainMapper;
+    }
+
+    /**
+     * Get PermissionsCriterionHandler
+     *
+     * @access private Internal service for the Core Services
+     *
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     */
+    protected function getPermissionsCriterionHandler()
+    {
+        return $this->permissionsCriterionHandler !== null ?
+            $this->permissionsCriterionHandler :
+            $this->permissionsCriterionHandler = new PermissionsCriterionHandler( $this );
     }
 
     /**
