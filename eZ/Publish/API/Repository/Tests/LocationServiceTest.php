@@ -761,7 +761,7 @@ class LocationServiceTest extends BaseTest
         $location = $locationService->loadLocation( $locationId );
 
         $childLocations = $locationService->loadLocationChildren(
-            $location, 2
+            $location, null, 2
         );
         /* END: Use Case */
 
@@ -834,7 +834,7 @@ class LocationServiceTest extends BaseTest
         $location = $locationService->loadLocation( $locationId );
 
         $childLocations = $locationService->loadLocationChildren(
-            $location, 2, 2
+            $location, null, 2, 2
         );
         /* END: Use Case */
 

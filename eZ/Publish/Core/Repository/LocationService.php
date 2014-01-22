@@ -13,6 +13,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
@@ -271,12 +272,13 @@ class LocationService implements LocationServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 )
+    public function loadLocationChildren( APILocation $location, Query\Criterion $filter = null, $offset = 0, $limit = -1 )
     {
         if ( !$this->domainMapper->isValidLocationSortField( $location->sortField ) )
             throw new InvalidArgumentValue( "sortField", $location->sortField, "Location" );
@@ -292,6 +294,7 @@ class LocationService implements LocationServiceInterface
 
         $searchResult = $this->searchChildrenLocations(
             $location->id,
+            $filter,
             $location->sortField,
             $location->sortOrder,
             $offset,
@@ -330,13 +333,15 @@ class LocationService implements LocationServiceInterface
      * Returns the number of children which are readable by the current user of a location object
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      *
      * @return int
      */
-    public function getLocationChildCount( APILocation $location )
+    public function getLocationChildCount( APILocation $location, Query\Criterion $filter = null )
     {
         return $this->searchChildrenLocations(
             $location->id,
+            $filter,
             null,
             APILocation::SORT_ORDER_ASC,
             0,
@@ -348,6 +353,7 @@ class LocationService implements LocationServiceInterface
      * Searches children locations of the provided parent location id
      *
      * @param mixed $parentLocationId
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @param int $sortField
      * @param int $sortOrder
      * @param int $offset
@@ -355,11 +361,26 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function searchChildrenLocations( $parentLocationId, $sortField = null, $sortOrder = APILocation::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
+    protected function searchChildrenLocations( $parentLocationId, Query\Criterion $filter = null, $sortField = null, $sortOrder = APILocation::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
     {
+        $parentFilter = new CriterionParentLocationId( $parentLocationId );
+        if ( $filter !== null )
+        {
+            $filter = new LogicalAnd(
+                array(
+                    $parentFilter,
+                    $filter,
+                )
+            );
+        }
+        else
+        {
+            $filter = $parentFilter;
+        }
+
         $query = new Query(
             array(
-                'filter' => new CriterionParentLocationId( $parentLocationId ),
+                'filter' => $filter,
                 'offset' => ( $offset >= 0 ? (int)$offset : 0 ),
                 'limit' => ( $limit >= 0 ? (int)$limit  : null )
             )
