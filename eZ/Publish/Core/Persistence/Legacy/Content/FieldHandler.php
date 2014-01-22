@@ -358,7 +358,9 @@ class FieldHandler
      */
     public function updateFields( Content $content, UpdateStruct $updateStruct )
     {
+        $updatedFields = array();
         $fieldsToCopy = array();
+        $nonTranslatableCopiesUpdateSet = array();
         $mainLanguageCode = $content->versionInfo->contentInfo->mainLanguageCode;
         $languageCodes = $existingLanguageCodes = $this->getLanguageCodes( $content->versionInfo->languageIds );
         $contentFieldMap = $this->getFieldMap( $content->fields );
@@ -378,6 +380,7 @@ class FieldHandler
                     if ( isset( $field->id ) )
                     {
                         $this->updateField( $field, $content );
+                        $updatedFields[$fieldDefinition->id][$languageCode] = $field;
                     }
                     else
                     {
@@ -408,14 +411,62 @@ class FieldHandler
                     && isset( $updateFieldMap[$fieldDefinition->id][$mainLanguageCode] )
                 )
                 {
-                    // Use value from main language code
-                    $fieldsToCopy[$fieldDefinition->id][$languageCode] =
-                        $updateFieldMap[$fieldDefinition->id][$mainLanguageCode];
+                    // Register for processing after all given fields are updated
+                    $nonTranslatableCopiesUpdateSet[$fieldDefinition->id][] = $languageCode;
                 }
+
+                // If no above conditions were met - do nothing
+            }
+        }
+
+        foreach ( $nonTranslatableCopiesUpdateSet as $fieldDefinitionId => $languageCodes )
+        {
+            foreach ( $languageCodes as $languageCode )
+            {
+                $this->updateCopiedField(
+                    $contentFieldMap[$fieldDefinitionId][$languageCode],
+                    $updateFieldMap[$fieldDefinitionId][$mainLanguageCode],
+                    $updatedFields[$fieldDefinitionId][$mainLanguageCode],
+                    $content
+                );
             }
         }
 
         $this->copyFields( $fieldsToCopy, $content );
+    }
+
+    /**
+     * Updates a language copy of a non-translatable field.
+     *
+     * External data is being copied here as some FieldTypes require original field external data.
+     * By default copying falls back to storing, it is upon external storage implementation to override
+     * the behaviour as needed.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $updateField
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $originalField
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     */
+    protected function updateCopiedField( Field $field, Field $updateField, Field $originalField, Content $content )
+    {
+        $field->versionNo = $content->versionInfo->versionNo;
+        $field->value = clone $updateField->value;
+
+        $this->contentGateway->updateField(
+            $field,
+            $this->mapper->convertToStorageValue( $field )
+        );
+
+        // If the storage handler returns true, it means that $field value has been modified
+        // So we need to update it in order to store those modifications
+        // Field converter is called once again via the Mapper
+        if ( $this->storageHandler->copyFieldData( $content->versionInfo, $field, $originalField ) === true )
+        {
+            $this->contentGateway->updateField(
+                $field,
+                $this->mapper->convertToStorageValue( $field )
+            );
+        }
     }
 
     /**
