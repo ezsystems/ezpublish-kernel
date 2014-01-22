@@ -1,39 +1,38 @@
 <?php
 /**
- * File containing the Content Search handler class
+ * File containing the MapLocationDistanceIn criterion visitor class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Field;
+namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\MapLocation;
 
+use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\MapLocation;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Field;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
- * Visits the Field criterion
+ * Visits the MapLocationDistance criterion
  */
-class FieldIn extends Field
+class MapLocationDistanceIn extends MapLocation
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion
      *
-     * @param Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return boolean
      */
     public function canVisit( Criterion $criterion )
     {
         return
-            $criterion instanceof Criterion\Field &&
+            $criterion instanceof Criterion\MapLocationDistance &&
             ( ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
-                $criterion->operator === Operator::EQ ||
-                $criterion->operator === Operator::CONTAINS );
+              $criterion->operator === Operator::EQ );
     }
 
     /**
@@ -41,18 +40,20 @@ class FieldIn extends Field
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
-     * @param Criterion $criterion
-     * @param CriterionVisitor $subVisitor
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
      *
      * @return string
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
+        $location = $criterion->valueData;
         $fieldTypes = $this->getFieldTypes( $criterion );
-
         $criterion->value = (array)$criterion->value;
 
-        if ( !isset( $fieldTypes[$criterion->target] ) )
+        if ( !isset( $fieldTypes[$criterion->target][$this->typeName] ) &&
+            !isset( $fieldTypes[$criterion->target]["custom"] ) )
         {
             throw new InvalidArgumentException(
                 "\$criterion->target",
@@ -60,15 +61,21 @@ class FieldIn extends Field
             );
         }
 
+        if ( isset( $fieldTypes[$criterion->target]["custom"] ) )
+        {
+            $names = $fieldTypes[$criterion->target]["custom"];
+        }
+        else
+        {
+            $names = $fieldTypes[$criterion->target][$this->typeName];
+        }
+
         $queries = array();
         foreach ( $criterion->value as $value )
         {
-            foreach ( $fieldTypes[$criterion->target] as $names )
+            foreach ( $names as $name )
             {
-                foreach ( $names as $name )
-                {
-                    $queries[] = $name . ':"' . $value . '"';
-                }
+                $queries[] = "geodist({$name},{$location->latitude},{$location->longitude}):{$value}";
             }
         }
 

@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
@@ -36,7 +34,7 @@ class FieldMap
     /**
      * Field name generator
      *
-     * @var FieldNameGenerator
+     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
      */
     protected $nameGenerator;
 
@@ -53,8 +51,6 @@ class FieldMap
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator $nameGenerator
-     *
-     * @return void
      */
     public function __construct( FieldRegistry $fieldRegistry, ContentTypeHandler $contentTypeHandler, FieldNameGenerator $nameGenerator )
     {
@@ -78,7 +74,8 @@ class FieldMap
      *  )
      * </code>
      *
-     * @param Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface $criterion
+     *
      * @return array
      */
     public function getFieldTypes( CustomFieldInterface $criterion )
@@ -101,14 +98,14 @@ class FieldMap
 
                     if ( $customField = $criterion->getCustomField( $contentType->identifier, $fieldDefinition->identifier ) )
                     {
-                        $this->fieldTypes[$fieldDefinition->identifier][] = $customField;
+                        $this->fieldTypes[$fieldDefinition->identifier]["custom"][] = $customField;
                         continue;
                     }
 
                     $fieldType = $this->fieldRegistry->getType( $fieldDefinition->fieldType );
                     foreach ( $fieldType->getIndexDefinition() as $name => $type )
                     {
-                        $this->fieldTypes[$fieldDefinition->identifier][] =
+                        $this->fieldTypes[$fieldDefinition->identifier][$type->type][] =
                             $this->nameGenerator->getTypedName(
                                 $this->nameGenerator->getName( $name, $fieldDefinition->identifier, $contentType->identifier ),
                                 $type

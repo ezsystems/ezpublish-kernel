@@ -48,7 +48,7 @@ class FullText extends Criterion implements CriterionInterface, CustomFieldInter
     /**
      * Boost for certain fields
      *
-     * Array of boosts to apply for cetrain fields – the array should look like
+     * Array of boosts to apply for certain fields – the array should look like
      * this:
      *
      * <code>

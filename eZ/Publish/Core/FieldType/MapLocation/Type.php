@@ -98,7 +98,7 @@ class Type extends FieldType
      */
     protected function checkValueStructure( BaseValue $value )
     {
-        if ( !is_float( $value->latitude ) )
+        if ( !is_float( $value->latitude ) && !is_int( $value->latitude ) )
         {
             throw new InvalidArgumentType(
                 '$value->latitude',
@@ -106,7 +106,7 @@ class Type extends FieldType
                 $value->latitude
             );
         }
-        if ( !is_float( $value->longitude ) )
+        if ( !is_float( $value->longitude ) && !is_int( $value->longitude ) )
         {
             throw new InvalidArgumentType(
                 '$value->longitude',

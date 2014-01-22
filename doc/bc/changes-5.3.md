@@ -27,6 +27,12 @@ Changes affecting version compatibility with former or future versions.
 * **SignalSlot**: Slot factories are not needed any more as Slots are now directly attached to SignalDispatcher.
   Therefore `ContainerSlotFactory` has been removed.
 
+* New search criterion `eZ\Publish\API\Repository\Values\Content\Query\Criterion\MapLocationDistance`
+  is introduced.
+
+* New search sort clause `eZ\Publish\API\Repository\Values\Content\Query\SortClause\MapLocationDistance`
+  is introduced.
+
 ## Deprecations
 
 * Method `eZ\Publish\API\Repository\RoleService::removePolicy` is deprecated in

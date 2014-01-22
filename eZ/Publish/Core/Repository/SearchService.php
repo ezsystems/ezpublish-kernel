@@ -137,12 +137,12 @@ class SearchService implements SearchServiceInterface
     {
         foreach ( $query->sortClauses as $key => $sortClause )
         {
-            if ( !$sortClause instanceof SortClause\Field )
+            if ( !$sortClause instanceof SortClause\Field && !$sortClause instanceof SortClause\MapLocationDistance )
             {
                 continue;
             }
 
-            /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
+            /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget|\eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget $fieldTarget */
             $fieldTarget = $sortClause->targetData;
             $contentType = $this->repository->getContentTypeService()->loadContentTypeByIdentifier(
                 $fieldTarget->typeIdentifier

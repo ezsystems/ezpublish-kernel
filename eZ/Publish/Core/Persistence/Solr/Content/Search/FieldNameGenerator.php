@@ -40,12 +40,13 @@ class FieldNameGenerator
         "ez_date"     => "dt",
         "ez_point"    => "p",
         "ez_currency" => "c",
+        "ez_geolocation" => "gl",
     );
 
     /**
      * Get name for Solr document field
      *
-     * Consists of a name, and optionally field anem and a content type name.
+     * Consists of a name, and optionally field name and a content type name.
      *
      * @param string $name
      * @param string $field
@@ -55,7 +56,7 @@ class FieldNameGenerator
      */
     public function getName( $name, $field = null, $type = null )
     {
-        return implode( '/', array_filter( array( $type, $field, $name ) ) );
+        return implode( '_', array_filter( array( $type, $field, $name ) ) );
     }
 
     /**

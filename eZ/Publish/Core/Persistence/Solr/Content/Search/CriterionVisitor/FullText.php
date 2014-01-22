@@ -72,9 +72,12 @@ class FullText extends CriterionVisitor
                 continue;
             }
 
-            foreach ( $fields[$field] as $fieldName )
+            foreach ( $fields[$field] as $fieldNames )
             {
-                $queries[] = $fieldName . ":" . $criterion->value . "^" . $boost;
+                foreach ( $fieldNames as $fieldName )
+                {
+                    $queries[] = $fieldName . ":" . $criterion->value . "^" . $boost;
+                }
             }
         }
 

@@ -57,4 +57,3 @@ abstract class FieldType extends ValueObject
      */
     public $inResult = true;
 }
-

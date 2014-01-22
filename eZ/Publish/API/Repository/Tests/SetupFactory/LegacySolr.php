@@ -144,7 +144,7 @@ class LegacySolr extends Legacy
                 'ezobjectrelationlist'  => new FieldType\Unindexed(),
                 'ezemail'               => new FieldType\Unindexed(),
                 'ezoption'              => new FieldType\Unindexed(),
-                'ezgmaplocation'        => new FieldType\Unindexed(),
+                'ezgmaplocation'        => new FieldType\MapLocation\SearchField(),
                 'ezbinaryfile'          => new FieldType\Unindexed(),
                 'ezmedia'               => new FieldType\Unindexed(),
                 'ezpage'                => new FieldType\Unindexed(),
@@ -184,16 +184,10 @@ class LegacySolr extends Legacy
                         new CriterionVisitor\DateMetadata\PublishedBetween(),
                         new CriterionVisitor\FullText( $fieldMap ),
                         new CriterionVisitor\UserMetadataIn(),
-                        new CriterionVisitor\Field\FieldIn(
-                            $fieldMap,
-                            $persistenceHandler->contentTypeHandler(),
-                            $nameGenerator
-                        ),
-                        new CriterionVisitor\Field\FieldRange(
-                            $fieldMap,
-                            $persistenceHandler->contentTypeHandler(),
-                            $nameGenerator
-                        ),
+                        new CriterionVisitor\MapLocation\MapLocationDistanceIn( $fieldMap ),
+                        new CriterionVisitor\MapLocation\MapLocationDistanceRange( $fieldMap ),
+                        new CriterionVisitor\Field\FieldIn( $fieldMap ),
+                        new CriterionVisitor\Field\FieldRange( $fieldMap ),
                         new CriterionVisitor\Visibility(),
                         new CriterionVisitor\CustomField(),
                     )
@@ -208,6 +202,7 @@ class LegacySolr extends Legacy
                         new SortClauseVisitor\SectionIdentifier(),
                         new SortClauseVisitor\SectionName(),
                         new SortClauseVisitor\DatePublished(),
+                        new SortClauseVisitor\MapLocationDistance( $fieldMap ),
                     )
                 ),
                 new FacetBuilderVisitor\Aggregate(
@@ -227,6 +222,7 @@ class LegacySolr extends Legacy
                         new FieldValueMapper\DateMapper(),
                         new FieldValueMapper\PriceMapper(),
                         new FieldValueMapper\MultipleBooleanMapper(),
+                        new FieldValueMapper\GeoLocationMapper(),
                     )
                 ),
                 $persistenceHandler->contentHandler(),
@@ -236,7 +232,8 @@ class LegacySolr extends Legacy
             $persistenceHandler->locationHandler(),
             $persistenceHandler->contentTypeHandler(),
             $persistenceHandler->objectStateHandler(),
-            $persistenceHandler->sectionHandler()
+            $persistenceHandler->sectionHandler(),
+            $nameGenerator
         );
     }
 

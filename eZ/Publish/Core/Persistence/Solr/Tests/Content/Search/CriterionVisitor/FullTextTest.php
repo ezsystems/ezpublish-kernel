@@ -33,7 +33,13 @@ class FullTextTest extends TestCase
         $fieldMap
             ->expects( $this->any() )
             ->method( 'getFieldTypes' )
-            ->will( $this->returnValue( array( 'title' => array( 'title_1_s', 'title_2_s' ) ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'title' => array( "ez_string" => array( 'title_1_s', 'title_2_s' ) )
+                    )
+                )
+            );
 
         return new CriterionVisitor\FullText( $fieldMap );
     }
