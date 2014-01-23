@@ -48,6 +48,18 @@ class EzPublishCoreExtension extends Extension
             $container,
             new FileLocator( __DIR__ . '/../Resources/config' )
         );
+
+        // Twig configuration only available on dev env.
+        if ( $container->getParameter( 'kernel.debug' ) )
+        {
+            $twigOptions = $container->getParameter( 'twig.options' );
+            if ( !isset( $twigOptions['base_template_class'] ) )
+            {
+                $twigOptions['base_template_class'] = 'eZ\\Bundle\\EzPublishCoreBundle\\Twig\\DebugTemplate';
+                $container->setParameter( 'twig.options', $twigOptions );
+            }
+        }
+
         $configuration = $this->getConfiguration( $configs, $container );
 
         // Note: this is where the transformation occurs
