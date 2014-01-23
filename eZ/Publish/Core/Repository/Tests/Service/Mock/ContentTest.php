@@ -368,6 +368,229 @@ class ContentTest extends BaseServiceMockTest
         $this->assertEquals( "result", $result );
     }
 
+    public function testLoadContent()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService( array( 'internalLoadContent' ) );
+        $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
+        $versionInfo = $this
+            ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\VersionInfo' )
+            ->setConstructorArgs( array( array( 'status' => APIVersionInfo::STATUS_PUBLISHED ) ) )
+            ->getMockForAbstractClass();
+        $content
+            ->expects( $this->once() )
+            ->method( 'getVersionInfo' )
+            ->will( $this->returnValue( $versionInfo ) );
+        $contentId = 123;
+        $contentService
+            ->expects( $this->once() )
+            ->method( 'internalLoadContent' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $content ) );
+
+        $repository
+            ->expects( $this->once() )
+            ->method( 'canUser' )
+            ->with( 'content', 'read', $content )
+            ->will( $this->returnValue( true ) );
+
+        $this->assertSame( $content, $contentService->loadContent( $contentId ) );
+    }
+
+    public function testLoadContentNonPublished()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService( array( 'internalLoadContent' ) );
+        $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
+        $versionInfo = $this
+            ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\VersionInfo' )
+            ->setConstructorArgs( array( array( 'status' => APIVersionInfo::STATUS_DRAFT ) ) )
+            ->getMockForAbstractClass();
+        $content
+            ->expects( $this->once() )
+            ->method( 'getVersionInfo' )
+            ->will( $this->returnValue( $versionInfo ) );
+        $contentId = 123;
+        $contentService
+            ->expects( $this->once() )
+            ->method( 'internalLoadContent' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $content ) );
+
+        $repository
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'canUser' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'content', 'read', $content, null, true ),
+                        array( 'content', 'versionread', $content, null, true ),
+                    )
+                )
+            );
+
+        $this->assertSame( $content, $contentService->loadContent( $contentId ) );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function testLoadContentUnauthorized()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService( array( 'internalLoadContent' ) );
+        $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
+        $contentId = 123;
+        $contentService
+            ->expects( $this->once() )
+            ->method( 'internalLoadContent' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $content ) );
+
+        $repository
+            ->expects( $this->once() )
+            ->method( 'canUser' )
+            ->with( 'content', 'read', $content )
+            ->will( $this->returnValue( false ) );
+
+        $contentService->loadContent( $contentId );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function testLoadContentNotPublishedStatusUnauthorized()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService( array( 'internalLoadContent' ) );
+        $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
+        $versionInfo = $this
+            ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\VersionInfo' )
+            ->setConstructorArgs( array( array( 'status' => APIVersionInfo::STATUS_DRAFT ) ) )
+            ->getMockForAbstractClass();
+        $content
+            ->expects( $this->once() )
+            ->method( 'getVersionInfo' )
+            ->will( $this->returnValue( $versionInfo ) );
+        $contentId = 123;
+        $contentService
+            ->expects( $this->once() )
+            ->method( 'internalLoadContent' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $content ) );
+
+        $repository
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'canUser' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'content', 'read', $content, null, true ),
+                        array( 'content', 'versionread', $content, null, false ),
+                    )
+                )
+            );
+
+        $contentService->loadContent( $contentId );
+    }
+
+    /**
+     * @dataProvider internalLoadContentProvider
+     */
+    public function testInternalLoadContent( $id, $languages, $versionNo, $isRemoteId )
+    {
+        $contentService = $this->getPartlyMockedContentService();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+        $realVersionNo = $versionNo;
+        $realId = $id;
+
+        if ( $isRemoteId )
+        {
+            $realVersionNo = $versionNo ?: 7;
+            $realId = 123;
+            $spiContentInfo = new SPIContentInfo( array( 'currentVersionNo' => $realVersionNo, 'id' => $realId ) );
+            $contentHandler
+                ->expects( $this->once() )
+                ->method( 'loadContentInfoByRemoteId' )
+                ->with( $id )
+                ->will( $this->returnValue( $spiContentInfo ) );
+        }
+        else if ( $versionNo === null )
+        {
+            $realVersionNo = 7;
+            $spiContentInfo = new SPIContentInfo( array( 'currentVersionNo' => $realVersionNo ) );
+            $contentHandler
+                ->expects( $this->once() )
+                ->method( 'loadContentInfo' )
+                ->with( $id )
+                ->will( $this->returnValue( $spiContentInfo ) );
+        }
+
+        $spiContent = new SPIContent();
+        $contentHandler
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->with( $realId, $realVersionNo, $languages )
+            ->will( $this->returnValue( $spiContent ) );
+        $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
+        $this->getDomainMapperMock()
+            ->expects( $this->once() )
+            ->method( 'buildContentDomainObject' )
+            ->with( $spiContent )
+            ->will( $this->returnValue( $content ) );
+
+        $this->assertSame(
+            $content,
+            $contentService->internalLoadContent( $id, $languages, $versionNo, $isRemoteId )
+        );
+    }
+
+    public function internalLoadContentProvider()
+    {
+        return array(
+            array( 123, null, null, false ),
+            array( 123, null, 456, false ),
+            array( 456, null, 123, false ),
+            array( 456, null, 2, false ),
+            array( 456, array( 'eng-GB' ), 2, false ),
+            array( 456, array( 'eng-GB', 'fre-FR' ), null, false ),
+            array( 456, array( 'eng-GB', 'fre-FR', 'nor-NO' ), 2, false ),
+            // With remoteId
+            array( 123, null, null, true ),
+            array( 'someRemoteId', null, 456, true ),
+            array( 456, null, 123, true ),
+            array( 'someRemoteId', null, 2, true ),
+            array( 'someRemoteId', array( 'eng-GB' ), 2, true ),
+            array( 456, array( 'eng-GB', 'fre-FR' ), null, true ),
+            array( 'someRemoteId', array( 'eng-GB', 'fre-FR', 'nor-NO' ), 2, true ),
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     */
+    public function testInternalLoadContentNotFound()
+    {
+        $contentService = $this->getPartlyMockedContentService();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+        $id = 123;
+        $versionNo = 7;
+        $languages = null;
+        $contentHandler
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->with( $id, $versionNo, $languages )
+            ->will(
+                $this->throwException(
+                    $this->getMock( 'eZ\Publish\API\Repository\Exceptions\NotFoundException' )
+                )
+            );
+
+        $contentService->internalLoadContent( $id, $languages, $versionNo );
+    }
+
     /**
      * Test for the loadContentByContentInfo() method.
      *
