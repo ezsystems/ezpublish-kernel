@@ -76,7 +76,7 @@ class IOFactory
             {
                 $storageDirectoryParts[] = $this->configResolver->getParameter( $setting );
             }
-            $storageDirectory = implode( DIRECTORY_SEPARATOR, $storageDirectoryParts );
+            $storageDirectory = implode( '/', $storageDirectoryParts );
         }
         return new $handlerClass( $storageDirectory );
     }

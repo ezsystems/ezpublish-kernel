@@ -524,7 +524,7 @@ class Legacy implements IOHandlerInterface
             return $path;
         }
 
-        if ( strpos( $path, $this->storageDirectory . DIRECTORY_SEPARATOR ) !== 0 )
+        if ( strpos( $path, $this->storageDirectory . '/' ) !== 0 )
         {
             throw new InvalidArgumentException( '$path', "Storage directory '$this->storageDirectory' not found in $path" );
         }
