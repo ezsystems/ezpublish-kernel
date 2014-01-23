@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\Collector;
+namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
@@ -190,8 +190,7 @@ class EzPublishDataCollector extends DataCollector
      */
     public function getTemplateList( $currentSA )
     {
-        $isLegacyMode = $this->getIsLegacyMode( $currentSA );
-        if ( $isLegacyMode )
+        if ( $this->getIsLegacyMode( $currentSA ) )
         {
             $templateList = DebugKernel::getLegacyTemplatesList( $this->container );
         }

@@ -7,16 +7,17 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\Collector;
+namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
 use \eZTemplate;
 
 class DebugKernel
 {
     /**
-     * @var list of loaded templates
+     * List of loaded templates
+     * @var array
      **/
-    protected static $templateList = array( "compact", "full" );
+    protected static $templateList = array( "compact" => array(), "full" => array() );
 
     /**
      * Add templates when loading a page
@@ -27,7 +28,7 @@ class DebugKernel
         if ( substr( $templateName, -5 ) === '.twig' )
         {
             self::$templateList["full"][$templateName] = $executeTime;
-            if ( !isset( self::$templateList[$templateName] ) )
+            if ( !isset( self::$templateList["compact"][$templateName] ) )
             {
                 self::$templateList["compact"][$templateName] = 1;
             }
