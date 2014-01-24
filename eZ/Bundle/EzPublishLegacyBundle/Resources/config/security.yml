@@ -1,6 +1,7 @@
 parameters:
     ezpublish_legacy.security.login_cleanup_listener.class: eZ\Publish\Core\MVC\Legacy\Security\Firewall\LoginCleanupListener
     ezpublish_legacy.security_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Security
+    ezpublish_legacy.security.sso_firewall_listener.class: eZ\Publish\Core\MVC\Legacy\Security\Firewall\SSOListener
 
 services:
     ezpublish_legacy.security.login_cleanup_listener:
@@ -13,3 +14,16 @@ services:
         arguments: [@ezpublish.api.repository, @ezpublish.config.resolver]
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish_legacy.security.sso_firewall_listener:
+        class: %ezpublish_legacy.security.sso_firewall_listener.class%
+        abstract: true
+        arguments:
+            - @security.context
+            - @security.authentication.manager
+            - ~     # Will be replaced at compile time by the security factory to be the right user provider
+            - @?logger
+            - @?event_dispatcher
+        calls:
+            - [setLegacyKernelClosure, [@ezpublish_legacy.kernel]]
+            - [setUserService, [@ezpublish.api.service.user]]
