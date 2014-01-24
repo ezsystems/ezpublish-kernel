@@ -9,32 +9,44 @@
 
 namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use \eZTemplate;
 
-class DebugKernel
+/**
+ * Class TemplateDebugInfo
+ * @package eZ\Bundle\EzPublishCoreBundle\Collector
+ *
+ *
+ * Holds debug info about twig templates and exposes function to get legacy template info
+ * @todo Move legacy code to LegacyBundle, and then consider moving left overs to DebugTemplate class (rename TwigDebugTemplate?)
+ */
+class TemplateDebugInfo
 {
     /**
-     * List of loaded templates
-     * @var array
+     * @var array List of loaded templates
      **/
     protected static $templateList = array( "compact" => array(), "full" => array() );
 
     /**
      * Add templates when loading a page
-     **/
-    public static function addTemplate( $templateName, $executeTime )
+     *
+     * @param string $templateName
+     * @param int $executionTime in milliseconds
+     */
+    public static function addTemplate( $templateName, $executionTime )
     {
         // Remove information about TwigLayoutDecorator
         if ( substr( $templateName, -5 ) === '.twig' )
         {
-            self::$templateList["full"][$templateName] = $executeTime;
             if ( !isset( self::$templateList["compact"][$templateName] ) )
             {
                 self::$templateList["compact"][$templateName] = 1;
+                self::$templateList["full"][$templateName] = $executionTime;
             }
             else
             {
                 self::$templateList["compact"][$templateName]++;
+                self::$templateList["full"][$templateName] += $executionTime;
             }
         }
     }
@@ -52,11 +64,11 @@ class DebugKernel
     /**
      * Returns array of loaded legacy templates
      *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      * @return array
-     **/
-    public static function getLegacyTemplatesList( $container )
+     */
+    public static function getLegacyTemplatesList( \Closure $legacyKernel )
     {
-        $legacyKernel = $container->get( 'ezpublish_legacy.kernel' );
         $templateStats = $legacyKernel()->runCallback(
             function ()
             {
@@ -64,25 +76,26 @@ class DebugKernel
             }
         );
 
+        $templateList = array( 'compact' => array(), 'full' => array() );
         foreach ( $templateStats as $tplInfo )
         {
             $requestedTpl = $tplInfo["requested-template-name"];
             $actualTpl    = $tplInfo["actual-template-name"];
             $fullPath     = $tplInfo["template-filename"];
 
-            self::$templateList["full"][$actualTpl] = array(
+            $templateList["full"][$actualTpl] = array(
                 "loaded" => $requestedTpl,
                 "fullPath" => $fullPath
             );
-            if ( !isset( self::$templateList["compact"][$requestedTpl] ) )
+            if ( !isset( $templateList["compact"][$requestedTpl] ) )
             {
-                self::$templateList["compact"][$requestedTpl] = 1;
+                $templateList["compact"][$requestedTpl] = 1;
             }
             else
             {
-                self::$templateList["compact"][$requestedTpl]++;
+                $templateList["compact"][$requestedTpl]++;
             }
         }
-        return self::$templateList;
+        return $templateList;
     }
 }

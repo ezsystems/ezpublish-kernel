@@ -4,10 +4,9 @@ parameters:
 services:
     ezpublish.debug.data_collector:
         class: %ezpublish.debug.data_collector.class%
-        arguments: [ @ezpublish.spi.persistence.cache.persistenceLogger, @service_container ]
+        arguments: [ @ezpublish.spi.persistence.cache.persistenceLogger, @ezpublish_legacy.kernel ]
         tags:
             -
                 name: data_collector
                 template: "EzPublishDebugBundle:Profiler:layout"
                 id: "ezpublish.debug.toolbar"
-                priority: 300    # EzPublish profiling
