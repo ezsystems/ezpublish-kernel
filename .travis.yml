@@ -99,7 +99,7 @@ before_script:
 script: "phpunit -d date.timezone=$TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG $COVERAGE"
 
 after_script:
-  - if [[ "$COVERAGE" != "none" ]]; then php vendor/bin/coveralls ; fi
+  - if [ "$COVERAGE" != "none" ]; then php vendor/bin/coveralls ; fi
 
 # disable mail notifications
 notification:
