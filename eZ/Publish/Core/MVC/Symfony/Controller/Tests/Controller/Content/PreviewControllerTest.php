@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests\Controller\Content;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
@@ -24,27 +26,22 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $repository;
+    protected $contentService;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $contentService;
+    protected $httpKernel;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $httpKernel;
+    protected $previewHelper;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $previewHelper;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $securityContext;
+    protected $securityContext;
 
     protected function setUp()
     {
@@ -60,9 +57,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @return PreviewController
      */
-    public function testPreviewUnauthorized()
+    protected function getPreviewController()
     {
         $controller = new PreviewController(
             $this->contentService,
@@ -70,6 +67,16 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             $this->previewHelper,
             $this->securityContext
         );
+
+        return $controller;
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     */
+    public function testPreviewUnauthorized()
+    {
+        $controller = $this->getPreviewController();
         $contentId = 123;
         $lang = 'eng-GB';
         $versionNo = 3;
@@ -86,12 +93,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testPreviewCanUserFail()
     {
-        $controller = new PreviewController(
-            $this->contentService,
-            $this->httpKernel,
-            $this->previewHelper,
-            $this->securityContext
-        );
+        $controller = $this->getPreviewController();
         $contentId = 123;
         $lang = 'eng-GB';
         $versionNo = 3;
@@ -164,21 +166,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->method( 'restoreConfigScope' );
 
         // Request expectations
-        $duplicatedRequest = new Request();
-        $duplicatedRequest->attributes->add(
-            array(
-                '_controller' => 'ez_content:viewLocation',
-                'location' => $location,
-                'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
-                'layout' => true,
-                'params' => array(
-                    'content' => $content,
-                    'location' => $location,
-                    'isPreview' => true,
-                    'siteaccess' => $previewSiteAccess
-                )
-            )
-        );
+        $duplicatedRequest = $this->getDuplicatedRequest( $location, $content, $previewSiteAccess );
         $request
             ->expects( $this->once() )
             ->method( 'duplicate' )
@@ -192,16 +180,40 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->with( $duplicatedRequest, HttpKernelInterface::SUB_REQUEST )
             ->will( $this->returnValue( $expectedResponse ) );
 
-        $controller = new PreviewController(
-            $this->contentService,
-            $this->httpKernel,
-            $this->previewHelper,
-            $this->securityContext
-        );
+        $controller = $this->getPreviewController();
         $controller->setRequest( $request );
         $this->assertSame(
             $expectedResponse,
             $controller->previewContentAction( $contentId, $versionNo, $lang, $previewSiteAccessName )
         );
+    }
+
+    /**
+     * @param $location
+     * @param $content
+     * @param $previewSiteAccess
+     *
+     * @return Request
+     */
+    protected function getDuplicatedRequest( Location $location, Content $content, SiteAccess $previewSiteAccess )
+    {
+        $duplicatedRequest = new Request();
+        $duplicatedRequest->attributes->add(
+            array(
+                '_controller' => 'ez_content:viewLocation',
+                'location' => $location,
+                'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
+                'layout' => true,
+                'semanticPathinfo' => '/foo/bar',
+                'params' => array(
+                    'content' => $content,
+                    'location' => $location,
+                    'isPreview' => true,
+                    'siteaccess' => $previewSiteAccess
+                )
+            )
+        );
+
+        return $duplicatedRequest;
     }
 }
