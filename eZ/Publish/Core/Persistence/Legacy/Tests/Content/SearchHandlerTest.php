@@ -738,6 +738,46 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\AncestorLocationId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentAncestorFilterIntEq()
+    {
+        $this->assertSearchResults(
+            array( 67, 68, 69, 70, 71, 72, 73, 74 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\AncestorLocationId( 69 ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\AncestorLocationId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testContentAncestorFilterStrEq()
+    {
+        $this->assertSearchResults(
+            array( 67, 68, 69, 70, 71, 72, 73, 74 ),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'filter' => new Criterion\AncestorLocationId( '69' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
