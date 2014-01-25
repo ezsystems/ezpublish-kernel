@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeCreateStruct;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeCreate;
 
 class ContentTypeCreateTest extends BaseTest
@@ -287,7 +287,7 @@ class ContentTypeCreateTest extends BaseTest
     protected function getContentTypeServiceMock()
     {
         $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentTypeService',
             array(),
             array(),
             '',

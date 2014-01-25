@@ -15,8 +15,8 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\UserList;
 use eZ\Publish\Core\REST\Server\Values\RestUser;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\Core\REST\Common;
 
 class UserListTest extends ValueObjectVisitorBaseTest

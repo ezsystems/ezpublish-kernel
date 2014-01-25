@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate;
-use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentUpdateStruct;
 
 class VersionUpdateTest extends BaseTest
 {
@@ -183,7 +183,7 @@ class VersionUpdateTest extends BaseTest
     protected function getContentServiceMock()
     {
         $contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService',
             array(),
             array(),
             '',

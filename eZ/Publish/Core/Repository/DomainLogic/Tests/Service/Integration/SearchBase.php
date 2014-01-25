@@ -1,15 +1,15 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\SearchBase class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration\SearchBase class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
@@ -23,7 +23,7 @@ abstract class SearchBase extends BaseServiceTest
     /**
      * Test for the findContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\SearchService::findContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SearchService::findContent
      */
     public function testFindContent()
     {
@@ -59,7 +59,7 @@ abstract class SearchBase extends BaseServiceTest
     /**
      * Test for the findContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\SearchService::findContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SearchService::findContent
      */
     public function testFindContentWithLanguageFilter()
     {
@@ -95,7 +95,7 @@ abstract class SearchBase extends BaseServiceTest
     /**
      * Test for the findSingle() method.
      *
-     * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SearchService::findSingle
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testFindSingleThrowsNotFoundException()
@@ -115,7 +115,7 @@ abstract class SearchBase extends BaseServiceTest
     /**
      * Test for the findSingle() method.
      *
-     * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SearchService::findSingle
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFindSingleThrowsInvalidArgumentException()

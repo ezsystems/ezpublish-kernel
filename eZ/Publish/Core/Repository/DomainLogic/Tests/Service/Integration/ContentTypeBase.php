@@ -1,15 +1,15 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\ContentTypeBase class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration\ContentTypeBase class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -26,7 +26,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeGroupCreateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
      */
@@ -51,7 +51,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeGroupCreateStruct() method.
      *
      * @depends testNewContentTypeGroupCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct $createStruct
      *
@@ -76,7 +76,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the createContentTypeGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeGroup
      *
      * @return array
      */
@@ -113,7 +113,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeGroupCreateStruct() method.
      *
      * @depends testCreateContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @param array $data
      *
@@ -144,7 +144,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the createContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeGroup
      *
      * @return void
      */
@@ -172,7 +172,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the createContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeGroup
      *
      * @return void
      */
@@ -205,7 +205,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroup() method.
      *
      * @depends testCreateContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeGroup
      *
      * @return array
      */
@@ -246,7 +246,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroup() method.
      *
      * @depends testLoadContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeGroup
      *
      * @param array $data
      *
@@ -261,7 +261,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeGroup
      *
      * @return void
      */
@@ -278,7 +278,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentTypeGroupByIdentifier() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroupByIdentifier
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeGroupByIdentifier
      *
      * @return array
      */
@@ -308,7 +308,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroupByIdentifier() method.
      *
      * @depends testLoadContentTypeGroupByIdentifier
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroupByIdentifier
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeGroupByIdentifier
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $data
      *
@@ -360,7 +360,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroupByIdentifier() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroupByIdentifier
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeGroupByIdentifier
      *
      * @return void
      */
@@ -381,7 +381,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testLoadContentTypeGroup
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroups
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeGroups
      *
      * @return array
      */
@@ -415,7 +415,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroups() method.
      *
      * @depends testLoadContentTypeGroups
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeGroups
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeGroups
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $groups
      *
@@ -457,7 +457,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeGroupUpdateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupUpdateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeGroupUpdateStruct
      *
      * @return void
      */
@@ -479,7 +479,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateContentTypeGroup() method.
      *
      * @depends testLoadContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeGroup
      *
      * @return array
      */
@@ -528,7 +528,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateContentTypeGroup() method.
      *
      * @depends testUpdateContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeGroup
      *
      * @param array $data
      *
@@ -593,7 +593,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeGroup
      *
      * @return void
      */
@@ -632,7 +632,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeGroup
      *
      * @return void
      */
@@ -668,7 +668,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentTypeGroup
      * @depends testLoadContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::deleteContentTypeGroup
      *
      * @return void
      */
@@ -700,7 +700,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the deleteContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::deleteContentTypeGroup
      *
      * @return void
      */
@@ -722,7 +722,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the deleteContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::deleteContentTypeGroup
      *
      * @return void
      */
@@ -773,7 +773,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeUpdateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
@@ -797,7 +797,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeUpdateStruct() method.
      *
      * @depends testNewContentTypeUpdateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
      *
@@ -817,7 +817,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeCreateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
      */
@@ -843,7 +843,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeCreateStruct() method.
      *
      * @depends testNewContentTypeCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      *
@@ -875,7 +875,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newContentTypeCreateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newFieldDefinitionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
      */
@@ -902,7 +902,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeCreateStruct() method.
      *
      * @depends testNewFieldDefinitionCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newFieldDefinitionCreateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      *
@@ -933,7 +933,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the newFieldDefinitionUpdateStruct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newFieldDefinitionUpdateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newFieldDefinitionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
@@ -957,7 +957,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newFieldDefinitionUpdateStruct() method.
      *
      * @depends testNewFieldDefinitionUpdateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeUpdateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeUpdateStruct
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      *
@@ -1098,7 +1098,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the createContentTypeGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeGroup
      *
      * @return array
      */
@@ -1200,7 +1200,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the newContentTypeGroupCreateStruct() method.
      *
      * @depends testCreateContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::newContentTypeGroupCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::newContentTypeGroupCreateStruct
      *
      * @param array $data
      *
@@ -1210,7 +1210,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         /** @var $typeCreate \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct */
         $typeCreate = $data['expected'];
-        /** @var $contentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        /** @var $contentType \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType */
         $contentType = $data['actual'];
         /** @var $groups \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] */
         $groups = $data['groups'];
@@ -1383,7 +1383,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeGroup
      *
      * @return void
      */
@@ -1407,7 +1407,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Another ContentType with identifier 'new-type' exists
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeGroup
      *
      * @return void
      */
@@ -1449,7 +1449,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Another ContentType with remoteId 'new-remoteid' exists
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeGroup
      *
      * @return void
      */
@@ -1490,7 +1490,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Argument must contain at least one FieldDefinitionCreateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeGroup
      *
      * @return array
      */
@@ -1528,7 +1528,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Argument contains duplicate field definition identifier 'title'
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeGroup
      *
      * @return array
      */
@@ -1596,7 +1596,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentType() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentType
      *
      * @return array
      */
@@ -1632,7 +1632,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentType() method.
      *
      * @depends testLoadContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentType
      *
      * @param array $data
      *
@@ -1654,9 +1654,9 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     protected function compareContentTypes( array $data, array $properties = array(), array $fieldProperties = array() )
     {
-        /** @var $storedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        /** @var $storedContentType \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType */
         $storedContentType = $data['expected'];
-        /** @var $loadedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        /** @var $loadedContentType \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType */
         $loadedContentType = $data['actual'];
 
         $propertiesNames = array(
@@ -1774,7 +1774,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentType() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentType
      *
      * @return void
      */
@@ -1792,7 +1792,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentTypeByIdentifier() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeByIdentifier
      *
      * @return array
      */
@@ -1823,7 +1823,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeByIdentifier() method.
      *
      * @depends testLoadContentTypeByIdentifier
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeByIdentifier
      *
      * @param array $data
      *
@@ -1838,7 +1838,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeByIdentifier() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByIdentifier
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeByIdentifier
      *
      * @return void
      */
@@ -1856,7 +1856,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentTypeByRemoteId() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeByRemoteId
      *
      * @return array
      */
@@ -1887,7 +1887,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeByRemoteId() method.
      *
      * @depends testLoadContentTypeByRemoteId
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeByRemoteId
      *
      * @param array $data
      *
@@ -1902,7 +1902,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeByRemoteId() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeByRemoteId
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeByRemoteId
      *
      * @return void
      */
@@ -1920,7 +1920,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the loadContentTypeDraft() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeDraft
      *
      * @return array
      */
@@ -1951,7 +1951,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeDraft() method.
      *
      * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeDraft
      *
      * @param array $data
      *
@@ -1966,7 +1966,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeDraft() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypeDraft
      *
      * @return array
      */
@@ -1986,7 +1986,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::publishContentTypeDraft
      *
      * @return void
      */
@@ -2020,7 +2020,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testPublishContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::publishContentTypeDraft
      *
      * @return void
      */
@@ -2046,7 +2046,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testPublishContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::publishContentTypeDraft
      *
      * @return void
      */
@@ -2069,7 +2069,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the publishContentTypeDraft() method.
      *
      * @depends testPublishContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::publishContentTypeDraft
      *
      * @return void
      */
@@ -2104,7 +2104,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the publishContentTypeDraft() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::publishContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::publishContentTypeDraft
      *
      * @return void
      */
@@ -2131,7 +2131,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testCreateContentTypeGroup
      * @depends testCreateContentType
      * @depends testPublishContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypes
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypes
      *
      * @todo when all fieldTypes are functional revisit this and simplify by testing against fixtures
      *
@@ -2223,7 +2223,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the loadContentTypeGroups() method.
      *
      * @depends testLoadContentTypes
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::loadContentTypes
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::loadContentTypes
      *
      * @param array $types
      *
@@ -2254,7 +2254,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @depends testPublishContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeDraft
      *
      * @return array
      */
@@ -2283,15 +2283,15 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the createContentTypeDraft() method.
      *
      * @depends testCreateContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeDraft
      *
      * @param array $data
      */
     public function testCreateContentTypeDraftValues( array $data )
     {
-        /** @var $publishedType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        /** @var $publishedType \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType */
         $publishedType = $data['expected'];
-        /** @var $draftType \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft */
+        /** @var $draftType \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeDraft */
         $draftType = $data['actual'];
 
         $typeProperties = array(
@@ -2321,7 +2321,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the createContentTypeDraft() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeDraft
      *
      * @return void
      */
@@ -2342,7 +2342,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::createContentTypeDraft
      *
      * @return void
      */
@@ -2367,7 +2367,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testCreateContentType
      * @depends testLoadContentTypeDraft
      * @depends testNewContentTypeUpdateStruct
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeDraft
      *
      * @return array
      */
@@ -2424,7 +2424,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateContentTypeDraft() method.
      *
      * @depends testUpdateContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeDraft
      *
      * @param array $data
      *
@@ -2480,7 +2480,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateContentTypeDraft() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeDraft
      *
      * @return void
      */
@@ -2503,7 +2503,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeDraft
      *
      * @return void
      */
@@ -2529,7 +2529,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeDraft
      *
      * @return void
      */
@@ -2555,7 +2555,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateContentTypeDraft
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateContentTypeDraft
      *
      * @return void
      */
@@ -2580,7 +2580,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testLoadContentTypeByIdentifier
      * @depends testLoadContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::deleteContentType
      *
      * @return void
      */
@@ -2610,7 +2610,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testDeleteContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::deleteContentType
      *
      * @return void
      */
@@ -2630,7 +2630,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the deleteContentType() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::deleteContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::deleteContentType
      *
      * @return void
      */
@@ -2649,7 +2649,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the copyContentType() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::copyContentType
      *
      * @return array
      */
@@ -2676,7 +2676,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the copyContentType() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::copyContentType
      *
      * @return array
      */
@@ -2709,9 +2709,9 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     protected function assertCopyContentTypeValues( array $data )
     {
-        /** @var $originalType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        /** @var $originalType \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType */
         $originalType = $data["originalType"];
-        /** @var $copiedType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
+        /** @var $copiedType \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType */
         $copiedType = $data["copiedType"];
         $userId = $data["userId"];
         $time = $data["time"];
@@ -2753,7 +2753,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the copyContentType() method.
      *
      * @depends testCopyContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::copyContentType
      *
      * @param array $data
      *
@@ -2768,7 +2768,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the copyContentType() method.
      *
      * @depends testCopyContentTypeWithSecondArgument
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::copyContentType
      *
      * @param array $data
      *
@@ -2783,7 +2783,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the copyContentType() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::copyContentType
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::copyContentType
      *
      * @return void
      */
@@ -2805,7 +2805,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testLoadContentTypeGroupByIdentifier
      * @depends testLoadContentTypeByIdentifier
      * @depends testLoadContentType
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::assignContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::assignContentTypeGroup
      *
      * @return void
      */
@@ -2841,7 +2841,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the assignContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::assignContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::assignContentTypeGroup
      *
      * @return void
      */
@@ -2863,7 +2863,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testAssignContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::assignContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::assignContentTypeGroup
      *
      * @return void
      */
@@ -2890,7 +2890,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @depends testLoadContentTypeByIdentifier
      * @depends testLoadContentType
      * @depends testAssignContentTypeGroup
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::unassignContentTypeGroup
      *
      * @return void
      */
@@ -2930,7 +2930,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the unassignContentTypeGroup() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::unassignContentTypeGroup
      *
      * @return void
      */
@@ -2957,7 +2957,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUnassignContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::unassignContentTypeGroup
      *
      * @return void
      */
@@ -2979,7 +2979,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUnassignContentTypeGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::unassignContentTypeGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::unassignContentTypeGroup
      *
      * @return void
      */
@@ -3004,7 +3004,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @dep_ends testCreateContentType
      * @dep_ends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::addFieldDefinition
      *
      * @return array
      */
@@ -3056,7 +3056,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::addFieldDefinition
      *
      * @return array
      */
@@ -3125,7 +3125,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @dep_ends testAddFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::addFieldDefinition
      *
      * @return void
      */
@@ -3152,7 +3152,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the addFieldDefinition() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::addFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::addFieldDefinition
      *
      * @return void
      */
@@ -3184,7 +3184,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::removeFieldDefinition
      *
      * @return array
      */
@@ -3221,7 +3221,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the removeFieldDefinition() method.
      *
      * @depends testRemoveFieldDefinition
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::removeFieldDefinition
      *
      * @param array $data
      *
@@ -3251,7 +3251,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testRemoveFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::removeFieldDefinition
      *
      * @return void
      */
@@ -3278,7 +3278,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testRemoveFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::removeFieldDefinition
      *
      * @return void
      */
@@ -3305,7 +3305,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the removeFieldDefinition() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::removeFieldDefinition
      *
      * @return void
      */
@@ -3325,7 +3325,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testCreateContentType
      * @depends testLoadContentTypeDraft
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateFieldDefinition
      *
      * @return array
      */
@@ -3382,7 +3382,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateFieldDefinition() method.
      *
      * @depends testUpdateFieldDefinition
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateFieldDefinition
      *
      * @return array
      */
@@ -3426,7 +3426,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     /**
      * Test for the updateFieldDefinition() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateFieldDefinition
      */
     public function testUpdateFieldDefinitionWithEmptyStruct()
     {
@@ -3523,7 +3523,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateFieldDefinition
      *
      * @return void
      */
@@ -3557,7 +3557,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      * Test for the updateFieldDefinition() method.
      *
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateFieldDefinition
      *
      * @return void
      */
@@ -3585,7 +3585,7 @@ abstract class ContentTypeBase extends BaseServiceTest
      *
      * @depends testUpdateFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentTypeService::updateFieldDefinition
      *
      * @return void
      */

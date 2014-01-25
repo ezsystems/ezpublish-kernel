@@ -10,13 +10,13 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
-use eZ\Publish\Core\Repository\Values\User\UserGroup;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroup;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\UserGroupRefList;
 use eZ\Publish\Core\REST\Server\Values\RestUserGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\Core\REST\Common;
 
 class UserGroupRefListTest extends ValueObjectVisitorBaseTest

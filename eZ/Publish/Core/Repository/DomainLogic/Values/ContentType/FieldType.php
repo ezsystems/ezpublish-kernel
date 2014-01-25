@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Values\ContentType;
+namespace eZ\Publish\Core\Repository\DomainLogic\Values\ContentType;
 
 use eZ\Publish\API\Repository\FieldType as FieldTypeInterface;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldTypeInterface;
@@ -15,7 +15,7 @@ use eZ\Publish\SPI\FieldType\FieldType as SPIFieldTypeInterface;
 /**
  * This class represents a FieldType available to Public API users
  *
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  * @see eZ\Publish\API\Repository\FieldType
  */
 class FieldType implements FieldTypeInterface

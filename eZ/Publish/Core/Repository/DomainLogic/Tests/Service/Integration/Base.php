@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration;
 
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\Repository\Values\User\User;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\User;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 /**
@@ -63,7 +63,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\Repository\Values\User\User
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\User\User
      */
     protected function createUserVersion1()
     {

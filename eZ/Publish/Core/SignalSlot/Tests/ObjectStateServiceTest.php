@@ -12,8 +12,8 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectState;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectStateGroup;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ObjectStateService;

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
@@ -21,7 +21,7 @@ use RuntimeException;
 
 /**
  * Repository class
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 class Repository implements RepositoryInterface
 {
@@ -126,28 +126,28 @@ class Repository implements RepositoryInterface
     /**
      * Instance of name schema resolver service
      *
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService
      */
     protected $nameSchemaService;
 
     /**
      * Instance of relation processor service
      *
-     * @var \eZ\Publish\Core\Repository\RelationProcessor
+     * @var \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor
      */
     protected $relationProcessor;
 
     /**
      * Instance of URL alias service
      *
-     * @var \eZ\Publish\Core\Repository\URLAliasService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\URLAliasService
      */
     protected $urlAliasService;
 
     /**
      * Instance of URL wildcard service
      *
-     * @var \eZ\Publish\Core\Repository\URLWildcardService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService
      */
     protected $urlWildcardService;
 
@@ -161,14 +161,14 @@ class Repository implements RepositoryInterface
     /**
      * Instance of domain mapper
      *
-     * @var \eZ\Publish\Core\Repository\DomainMapper
+     * @var \eZ\Publish\Core\Repository\DomainLogic\DomainMapper
      */
     protected $domainMapper;
 
     /**
      * Instance of permissions criterion handler
      *
-     * @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @var \eZ\Publish\Core\Repository\DomainLogic\PermissionsCriterionHandler
      */
     protected $permissionsCriterionHandler;
 
@@ -713,7 +713,7 @@ class Repository implements RepositoryInterface
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
-     * @return \eZ\Publish\Core\Repository\NameSchemaService
+     * @return \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService
      */
     protected function getNameSchemaService()
     {
@@ -731,7 +731,7 @@ class Repository implements RepositoryInterface
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
-     * @return \eZ\Publish\Core\Repository\RelationProcessor
+     * @return \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor
      */
     protected function getRelationProcessor()
     {
@@ -749,7 +749,7 @@ class Repository implements RepositoryInterface
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
-     * @return \eZ\Publish\Core\Repository\DomainMapper
+     * @return \eZ\Publish\Core\Repository\DomainLogic\DomainMapper
      */
     protected function getDomainMapper()
     {
@@ -770,7 +770,7 @@ class Repository implements RepositoryInterface
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
-     * @return \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @return \eZ\Publish\Core\Repository\DomainLogic\PermissionsCriterionHandler
      */
     protected function getPermissionsCriterionHandler()
     {

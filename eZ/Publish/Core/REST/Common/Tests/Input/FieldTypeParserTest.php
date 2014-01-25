@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -36,28 +36,28 @@ class FieldTypeParserTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService',
             array(),
             array(),
             '',
             false
         );
         $this->contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentTypeService',
             array(),
             array(),
             '',
             false
         );
         $this->fieldTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\FieldTypeService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\FieldTypeService',
             array(),
             array(),
             '',
             false
         );
         $this->contentTypeMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\Values\\ContentType\\ContentType',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\Values\\ContentType\\ContentType',
             array(),
             array(),
             '',

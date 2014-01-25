@@ -1,14 +1,14 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\Repository\LocationService class.
+ * File containing the eZ\Publish\Core\Repository\DomainLogic\LocationService class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -39,12 +39,12 @@ use Exception;
  *
  * @example Examples/location.php
  *
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 class LocationService implements LocationServiceInterface
 {
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\DomainLogic\Repository
      */
     protected $repository;
 
@@ -59,17 +59,17 @@ class LocationService implements LocationServiceInterface
     protected $settings;
 
     /**
-     * @var \eZ\Publish\Core\Repository\DomainMapper
+     * @var \eZ\Publish\Core\Repository\DomainLogic\DomainMapper
      */
     protected $domainMapper;
 
     /**
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService
      */
     protected $nameSchemaService;
 
     /**
-     * @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @var \eZ\Publish\Core\Repository\DomainLogic\PermissionsCriterionHandler
      */
     protected $permissionsCriterionHandler;
 
@@ -78,9 +78,9 @@ class LocationService implements LocationServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
-     * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
+     * @param \eZ\Publish\Core\Repository\DomainLogic\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService $nameSchemaService
+     * @param \eZ\Publish\Core\Repository\DomainLogic\PermissionsCriterionHandler $permissionsCriterionHandler
      * @param array $settings
      */
     public function __construct(

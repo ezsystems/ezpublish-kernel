@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\Helper\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\Helper\TranslationHelper;
 

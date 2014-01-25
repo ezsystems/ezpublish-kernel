@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 use eZ\Publish\API\Repository;
 use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\Repository\Values\Content\Relation;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**

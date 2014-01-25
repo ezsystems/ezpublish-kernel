@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Values\ContentType;
+namespace eZ\Publish\Core\Repository\DomainLogic\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
 

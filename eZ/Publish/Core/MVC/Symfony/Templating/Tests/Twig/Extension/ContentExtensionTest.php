@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension;
 use eZ\Publish\Core\Helper\TranslationHelper;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use Twig_Test_IntegrationTestCase;

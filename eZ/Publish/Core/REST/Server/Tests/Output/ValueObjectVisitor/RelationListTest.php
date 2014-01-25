@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\RelationList;
-use eZ\Publish\Core\Repository\Values\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content;
 use eZ\Publish\Core\REST\Common;
 
 class RelationListTest extends ValueObjectVisitorBaseTest

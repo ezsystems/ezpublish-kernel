@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
 use PHPUnit_Framework_TestCase;
 
 /**

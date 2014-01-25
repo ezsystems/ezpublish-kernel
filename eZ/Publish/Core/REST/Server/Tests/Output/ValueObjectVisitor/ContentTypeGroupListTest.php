@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList;
-use eZ\Publish\Core\Repository\Values\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType;
 use eZ\Publish\Core\REST\Common;
 
 class ContentTypeGroupListTest extends ValueObjectVisitorBaseTest

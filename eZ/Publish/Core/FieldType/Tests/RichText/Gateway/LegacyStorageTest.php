@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\RichText\Gateway;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\RichText\Gateway;
 
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 
 /**
  * Tests the RichText LegacyStorage
- * @package eZ\Publish\Core\Repository\Tests\FieldType\RichText\Gateway
+ * @package eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\RichText\Gateway
  */
 class LegacyStorageTest extends TestCase
 {

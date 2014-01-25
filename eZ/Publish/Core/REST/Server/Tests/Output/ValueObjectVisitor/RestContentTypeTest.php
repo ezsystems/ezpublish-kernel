@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\Core\Repository\Values;
+use eZ\Publish\Core\Repository\DomainLogic\Values;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\Core\REST\Server\Values\RestContentType;
 

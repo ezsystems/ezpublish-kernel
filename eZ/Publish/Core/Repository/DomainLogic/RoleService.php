@@ -1,28 +1,28 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\Repository\RoleService class.
+ * File containing the eZ\Publish\Core\Repository\DomainLogic\RoleService class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
 use eZ\Publish\Core\Base\Exceptions\LimitationValidationException;
-use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
-use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\PolicyCreateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
-use eZ\Publish\Core\Repository\Values\User\Role;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
-use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
-use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
-use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\User;
@@ -45,7 +45,7 @@ use Exception;
 /**
  * This service provides methods for managing Roles and Policies
  *
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 class RoleService implements RoleServiceInterface
 {

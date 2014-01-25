@@ -31,7 +31,7 @@ class LimitationConverterTest extends TestCase
      */
     public function testObjectStateToLegacy()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/../../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
+        $this->insertDatabaseFixture( __DIR__ . '/../../../../../Repository/DomainLogic/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
 
         $converter = $this->getLimitationConverter();
 
@@ -84,7 +84,7 @@ class LimitationConverterTest extends TestCase
      */
     public function testObjectStateToSPI()
     {
-        $this->insertDatabaseFixture( __DIR__ . '/../../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
+        $this->insertDatabaseFixture( __DIR__ . '/../../../../../Repository/DomainLogic/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
 
         $converter = $this->getLimitationConverter();
 

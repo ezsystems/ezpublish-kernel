@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Values\Content;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Values\Content;
 
-use eZ\Publish\Core\Repository\Values\Content\TrashItem;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\TrashItem;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -18,7 +18,7 @@ use PHPUnit_Framework_TestCase;
 class TrashItemTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\Content\TrashItem::getProperties
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\Values\Content\TrashItem::getProperties
      */
     public function testObjectProperties()
     {

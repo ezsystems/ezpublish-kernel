@@ -8,7 +8,7 @@
  * @package eZ\Publish\API\Repository
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
 use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -20,8 +20,8 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState as APIObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as APIObjectStateGroup;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
-use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectState;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\SPI\Persistence\Content\ObjectState as SPIObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group as SPIObjectStateGroup;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
@@ -37,7 +37,7 @@ use Exception;
  *
  * @example Examples/objectstates.php tbd.
  *
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 class ObjectStateService implements ObjectStateServiceInterface
 {

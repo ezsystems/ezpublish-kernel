@@ -1,19 +1,19 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\RelationProcessorTest class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\RelationProcessorTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock;
 
-use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Relation;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct;
 
@@ -25,7 +25,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the __construct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::__construct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor::__construct
      */
     public function testConstructor()
     {
@@ -48,7 +48,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the getFieldRelations() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::getFieldRelations
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor::getFieldRelations
      */
     public function testGetFieldRelations()
     {
@@ -229,7 +229,7 @@ class RelationProcessorTest extends BaseServiceMockTest
      * Test for the appendFieldRelations() method.
      *
      * @dataProvider providerForTestAppendRelations
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::appendFieldRelations
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor::appendFieldRelations
      */
     public function testAppendFieldRelations( array $fieldRelations, array $expected )
     {
@@ -304,7 +304,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the appendFieldRelations() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::appendFieldRelations
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor::appendFieldRelations
      */
     public function testAppendFieldRelationsLocationMappingWorks()
     {
@@ -372,7 +372,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the processFieldRelations() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::processFieldRelations
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor::processFieldRelations
      */
     public function testProcessFieldRelationsNoChanges()
     {
@@ -437,7 +437,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the processFieldRelations() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::processFieldRelations
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor::processFieldRelations
      */
     public function testProcessFieldRelationsAddsRelations()
     {
@@ -532,7 +532,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the processFieldRelations() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::processFieldRelations
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor::processFieldRelations
      */
     public function testProcessFieldRelationsRemovesRelations()
     {
@@ -615,7 +615,7 @@ class RelationProcessorTest extends BaseServiceMockTest
 
     protected function getStubbedRelation( $id, $type, $fieldDefinitionId, $contentId )
     {
-        return new \eZ\Publish\Core\Repository\Values\Content\Relation(
+        return new \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation(
             array(
                 "id" => $id,
                 "type" => $type,
@@ -634,12 +634,12 @@ class RelationProcessorTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\RelationProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedRelationProcessor( array $methods = null )
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RelationProcessor",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\RelationProcessor",
             $methods,
             array(
                 $this->getRepositoryMock(),
@@ -654,7 +654,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     protected function getFieldTypeServiceMock()
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\FieldTypeService",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\FieldTypeService",
             array(),
             array(),
             '',

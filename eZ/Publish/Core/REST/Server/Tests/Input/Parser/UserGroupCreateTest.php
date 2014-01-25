@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate;
-use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroupCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
 
 class UserGroupCreateTest extends BaseTest
 {
@@ -356,7 +356,7 @@ class UserGroupCreateTest extends BaseTest
     protected function getUserServiceMock()
     {
         $userServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\UserService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\UserService',
             array(),
             array(),
             '',
@@ -392,7 +392,7 @@ class UserGroupCreateTest extends BaseTest
     protected function getContentTypeServiceMock()
     {
         $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentTypeService',
             array(),
             array(),
             '',

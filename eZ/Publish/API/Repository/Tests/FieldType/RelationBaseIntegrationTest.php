@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
-use eZ\Publish\Core\Repository\Values\Content\Relation;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
@@ -72,9 +72,9 @@ abstract class RelationBaseIntegrationTest extends BaseIntegrationTest
     /**
      * Normalizes given $relations for easier comparison.
      *
-     * @param \eZ\Publish\Core\Repository\Values\Content\Relation[] $relations
+     * @param \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation[] $relations
      *
-     * @return \eZ\Publish\Core\Repository\Values\Content\Relation[]
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation[]
      */
     protected function normalizeRelations( array $relations )
     {

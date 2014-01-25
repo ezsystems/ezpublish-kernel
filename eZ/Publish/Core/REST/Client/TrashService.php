@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\TrashService as APITrashService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
-use eZ\Publish\Core\Repository\Values\Content\TrashItem;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\TrashItem;
 
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;

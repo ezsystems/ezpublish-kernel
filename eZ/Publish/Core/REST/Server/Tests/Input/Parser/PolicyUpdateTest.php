@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\PolicyUpdate;
-use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\PolicyUpdateStruct;
 
 class PolicyUpdateTest extends BaseTest
 {
@@ -161,7 +161,7 @@ class PolicyUpdateTest extends BaseTest
     protected function getRoleServiceMock()
     {
         $roleServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\RoleService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\RoleService',
             array(),
             array(),
             '',

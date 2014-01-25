@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Values\Content;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Values\Content;
 
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -18,7 +18,7 @@ use PHPUnit_Framework_TestCase;
 class LocationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\Content\Location::getProperties
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location::getProperties
      */
     public function testObjectProperties()
     {

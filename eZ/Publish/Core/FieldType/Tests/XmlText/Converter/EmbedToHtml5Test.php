@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\XmlText\Converter;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
@@ -16,7 +16,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * Tests the EmbedToHtml5 Preconverter
  * Class EmbedToHtml5Test
- * @package eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter
+ * @package eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\XmlText\Converter
  */
 class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
 {
@@ -193,7 +193,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
      */
     protected function getMockContentService()
     {
-        return $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\ContentService' )
+        return $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService' )
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -203,7 +203,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
      */
     protected function getMockLocationService()
     {
-        return $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\LocationService' )
+        return $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\DomainLogic\\LocationService' )
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -215,7 +215,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
      */
     protected function getMockRepository( $contentService, $locationService )
     {
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository';
         $repository = $this
             ->getMockBuilder( $repositoryClass )
             ->disableOriginalConstructor()

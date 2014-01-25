@@ -14,8 +14,8 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\VersionList;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Values\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType;
 use eZ\Publish\Core\REST\Common;
 
 class VersionListTest extends ValueObjectVisitorBaseTest

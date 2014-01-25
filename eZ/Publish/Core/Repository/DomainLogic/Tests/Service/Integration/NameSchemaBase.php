@@ -1,20 +1,20 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\NameSchemaBase class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration\NameSchemaBase class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
-use eZ\Publish\Core\Repository\NameSchemaService;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\DomainLogic\NameSchemaService;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 
@@ -24,13 +24,13 @@ use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 abstract class NameSchemaBase extends BaseServiceTest
 {
     /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolve
+     * Test eZ\Publish\Core\Repository\DomainLogic\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService::resolve
      * @dataProvider providerForTestResolve
      */
     public function testResolve( $nameSchema, $expectedName )
     {
-        /** @var $service \eZ\Publish\Core\Repository\NameSchemaService */
+        /** @var $service \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService */
         $service = new NameSchemaService( $this->repository );
 
         list( $content, $contentType ) = $this->buildTestObjects();
@@ -46,12 +46,12 @@ abstract class NameSchemaBase extends BaseServiceTest
     }
 
     /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolve
+     * Test eZ\Publish\Core\Repository\DomainLogic\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService::resolve
      */
     public function testResolveWithSettings()
     {
-        /** @var $service \eZ\Publish\Core\Repository\NameSchemaService */
+        /** @var $service \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService */
         $service = new NameSchemaService( $this->repository );
 
         $this->setConfiguration(
@@ -231,7 +231,7 @@ abstract class NameSchemaBase extends BaseServiceTest
     }
 
     /**
-     * @return \eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition[]
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition[]
      */
     protected function getFieldDefinitions()
     {

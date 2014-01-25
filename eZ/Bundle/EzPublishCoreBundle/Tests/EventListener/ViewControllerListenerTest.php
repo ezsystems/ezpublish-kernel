@@ -58,7 +58,7 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->controllerResolver = $this->getMock( 'Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface' );
         $this->controllerManager = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\ManagerInterface' );
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository';
         $this->repository = $repository = $this
             ->getMockBuilder( $repositoryClass )
             ->disableOriginalConstructor()

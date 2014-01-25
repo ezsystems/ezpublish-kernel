@@ -8,7 +8,7 @@
  * @package eZ\Publish\API\Repository
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldType;
 
 /**
  * An implementation of this class provides access to FieldTypes

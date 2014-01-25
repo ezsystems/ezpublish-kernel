@@ -13,7 +13,7 @@ use eZ\Publish\Core\FieldType\RichText\Value as RichTextValue;
 use eZ\Publish\Core\FieldType\RichText\Type as RichTextType;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use DOMDocument;
-use eZ\Publish\Core\Repository\Values\Content\Relation;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
@@ -60,7 +60,7 @@ EOT
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
-     * @return \eZ\Publish\Core\Repository\Values\Content\Relation[]
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation[]
      */
     public function getCreateExpectedRelations( Content $content )
     {
@@ -87,7 +87,7 @@ EOT
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
-     * @return \eZ\Publish\Core\Repository\Values\Content\Relation[]
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation[]
      */
     public function getUpdateExpectedRelations( Content $content )
     {

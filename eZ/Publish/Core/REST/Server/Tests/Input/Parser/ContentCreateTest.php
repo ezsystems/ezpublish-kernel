@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate;
 
 class ContentCreateTest extends BaseTest
@@ -578,7 +578,7 @@ class ContentCreateTest extends BaseTest
     protected function getContentServiceMock()
     {
         $contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService',
             array(),
             array(),
             '',
@@ -614,7 +614,7 @@ class ContentCreateTest extends BaseTest
     protected function getContentTypeServiceMock()
     {
         $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentTypeService',
             array(),
             array(),
             '',

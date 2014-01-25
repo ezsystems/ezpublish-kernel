@@ -8,13 +8,13 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;

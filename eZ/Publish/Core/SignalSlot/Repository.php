@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Repository class
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 class Repository implements RepositoryInterface
 {
@@ -120,14 +120,14 @@ class Repository implements RepositoryInterface
     /**
      * Instance of URL alias service
      *
-     * @var \eZ\Publish\Core\Repository\UrlAliasService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\UrlAliasService
      */
     protected $urlAliasService;
 
     /**
      * Instance of URL wildcard service
      *
-     * @var \eZ\Publish\Core\Repository\URLWildcardService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService
      */
     protected $urlWildcardService;
 

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\RichText;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\RichText;
 
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use PHPUnit_Framework_TestCase;
 
 /**
- * @package eZ\Publish\Core\Repository\Tests\FieldType\RichText\Gateway
+ * @package eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\RichText\Gateway
  */
 class RichTextStorageTest extends PHPUnit_Framework_TestCase
 {

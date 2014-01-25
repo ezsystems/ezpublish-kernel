@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
-use eZ\Publish\Core\Repository\Values\Content\TrashItem;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\TrashItem;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 

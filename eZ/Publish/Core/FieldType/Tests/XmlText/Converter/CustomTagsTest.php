@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\XmlText\Converter;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\CustomTags;
 use PHPUnit_Framework_TestCase;

@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Values\User;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Values\User;
 
-use eZ\Publish\Core\Repository\Values\User\UserGroup;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroup;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -18,7 +18,7 @@ use PHPUnit_Framework_TestCase;
 class UserGroupTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\User\User::getProperties
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\Values\User\User::getProperties
      */
     public function testObjectProperties()
     {

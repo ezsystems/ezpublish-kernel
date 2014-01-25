@@ -1,23 +1,23 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\Repository\UserService class.
+ * File containing the eZ\Publish\Core\Repository\DomainLogic\UserService class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
-use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\Core\Repository\Values\User\UserGroup;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
-use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -47,7 +47,7 @@ use Exception;
  *
  * @example Examples/user.php
  *
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 class UserService implements UserServiceInterface
 {

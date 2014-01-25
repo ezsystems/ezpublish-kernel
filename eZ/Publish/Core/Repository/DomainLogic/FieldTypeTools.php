@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\Repository\FieldTypeTools class.
+ * File containing the eZ\Publish\Core\Repository\DomainLogic\FieldTypeTools class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,7 +8,7 @@
  * @package eZ\Publish\API\Repository
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
 use eZ\Publish\API\Repository\FieldTypeTools as FieldTypeToolsInterface;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;

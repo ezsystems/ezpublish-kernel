@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\PolicyCreate;
-use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\PolicyCreateStruct;
 
 class PolicyCreateTest extends BaseTest
 {
@@ -251,7 +251,7 @@ class PolicyCreateTest extends BaseTest
     protected function getRoleServiceMock()
     {
         $roleServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\RoleService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\RoleService',
             array(),
             array(),
             '',

@@ -1,14 +1,14 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\Repository\ContentService class.
+ * File containing the eZ\Publish\Core\Repository\DomainLogic\ContentService class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -33,10 +33,10 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
-use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
-use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentUpdateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\TranslationValues;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct as SPIContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
@@ -49,12 +49,12 @@ use Exception;
  *
  * @example Examples/content.php
  *
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 class ContentService implements ContentServiceInterface
 {
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\DomainLogic\Repository
      */
     protected $repository;
 
@@ -69,17 +69,17 @@ class ContentService implements ContentServiceInterface
     protected $settings;
 
     /**
-     * @var \eZ\Publish\Core\Repository\DomainMapper
+     * @var \eZ\Publish\Core\Repository\DomainLogic\DomainMapper
      */
     protected $domainMapper;
 
     /**
-     * @var \eZ\Publish\Core\Repository\RelationProcessor
+     * @var \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor
      */
     protected $relationProcessor;
 
     /**
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService
      */
     protected $nameSchemaService;
 
@@ -88,9 +88,9 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\RelationProcessor $relationProcessor
-     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
+     * @param \eZ\Publish\Core\Repository\DomainLogic\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\DomainLogic\RelationProcessor $relationProcessor
+     * @param \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService $nameSchemaService
      * @param array $settings
      */
     public function __construct(
@@ -1188,7 +1188,7 @@ class ContentService implements ContentServiceInterface
     {
         $contentUpdateStruct = clone $contentUpdateStruct;
 
-        /** @var $content \eZ\Publish\Core\Repository\Values\Content\Content */
+        /** @var $content \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content */
         $content = $this->loadContent(
             $versionInfo->getContentInfo()->id,
             null,

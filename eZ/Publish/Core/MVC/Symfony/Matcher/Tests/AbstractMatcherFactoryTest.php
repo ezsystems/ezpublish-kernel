@@ -184,7 +184,7 @@ abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
     protected function getRepositoryMock()
     {
         return $this
-            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
+            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository' )
             ->disableOriginalConstructor()
             ->getMock();
     }

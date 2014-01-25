@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration\Legacy;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as APILegacySetupFactory;
 use eZ\Publish\Core\Base\ServiceContainer;

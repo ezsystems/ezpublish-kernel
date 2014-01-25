@@ -20,7 +20,7 @@ use DateTime;
 class EZP21089Test extends BaseTest
 {
     /**
-     * @var \eZ\Publish\Core\Repository\Values\ContentType\ContentType
+     * @var \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType
      */
     private $contentType;
 

@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 use eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentUpdateStruct;
 
 class UserUpdateTest extends BaseTest
 {
@@ -287,7 +287,7 @@ class UserUpdateTest extends BaseTest
     protected function getUserServiceMock()
     {
         $userServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\UserService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\UserService',
             array(),
             array(),
             '',
@@ -311,7 +311,7 @@ class UserUpdateTest extends BaseTest
     protected function getContentServiceMock()
     {
         $contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService',
             array(),
             array(),
             '',

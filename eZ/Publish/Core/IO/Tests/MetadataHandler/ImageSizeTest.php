@@ -21,7 +21,7 @@ class ImageSizeTest extends PHPUnit_Framework_TestCase
     public function testExtract()
     {
         $metadataHandler = new ImageSizeMetadataHandler;
-        $file = 'eZ/Publish/Core/Repository/Tests/Service/Integration/ezplogo.png';
+        $file = 'eZ/Publish/Core/Repository/DomainLogic/Tests/Service/Integration/ezplogo.png';
         self::assertEquals(
             array( 'width' => 189, 'height' => 200, 'mime' => 'image/png' ),
             $metadataHandler->extract( $file )

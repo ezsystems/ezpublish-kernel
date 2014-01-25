@@ -61,7 +61,7 @@ stores data in the way legacy kernel is used to finding it.
 
 Important parts of this layer is:
 * [eZ/Publish/API](eZ/Publish/API/)  *Public API Interfaces*
-* [eZ/Publish/Core/Repository](eZ/Publish/Core/Repository/)  *Public API Repository implementation*
+* [eZ/Publish/Core/Repository/DomainLogic](eZ/Publish/Core/Repository/DomainLogic/)  *Public API Repository implementation*
 
 #### (Private) SPI(Service Provider Interface)
 

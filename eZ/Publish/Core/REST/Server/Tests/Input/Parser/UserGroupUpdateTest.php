@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\UserGroupUpdate;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
-use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentUpdateStruct;
 
 class UserGroupUpdateTest extends BaseTest
 {
@@ -222,14 +222,14 @@ class UserGroupUpdateTest extends BaseTest
             array(
                 $this->getContentServiceMock(),
                 $this->getMock(
-                    'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+                    'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentTypeService',
                     array(),
                     array(),
                     '',
                     false
                 ),
                 $this->getMock(
-                    'eZ\\Publish\\Core\\Repository\\FieldTypeService',
+                    'eZ\\Publish\\Core\\Repository\\DomainLogic\\FieldTypeService',
                     array(),
                     array(),
                     '',
@@ -256,7 +256,7 @@ class UserGroupUpdateTest extends BaseTest
     protected function getUserServiceMock()
     {
         $userServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\UserService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\UserService',
             array(),
             array(),
             '',
@@ -280,7 +280,7 @@ class UserGroupUpdateTest extends BaseTest
     protected function getLocationServiceMock()
     {
         $userServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\LocationService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\LocationService',
             array(),
             array(),
             '',
@@ -315,7 +315,7 @@ class UserGroupUpdateTest extends BaseTest
     protected function getContentServiceMock()
     {
         $contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService',
             array(),
             array(),
             '',

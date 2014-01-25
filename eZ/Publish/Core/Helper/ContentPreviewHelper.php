@@ -15,7 +15,7 @@ use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ContentPreviewHelper implements SiteAccessAware

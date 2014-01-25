@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
-use eZ\Publish\Core\Repository\Values\User\User;
-use eZ\Publish\Core\Repository\Values\User\UserGroup;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\User;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use PHPUnit_Framework_TestCase;
 
@@ -153,7 +153,7 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
      * @param mixed $userId
      * @param mixed $userRemoteId
      * @param int $userVersionNo
-     * @return \eZ\Publish\Core\Repository\Values\User\User
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\User\User
      */
     protected function getUser( $userId, $userRemoteId, $userVersionNo )
     {
@@ -175,7 +175,7 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
      * @param mixed $groupId
      * @param mixed $groupRemoteId
      * @param int $groupVersioNo
-     * @return \eZ\Publish\Core\Repository\Values\User\UserGroup
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroup
      */
     protected function getUserGroup( $groupId, $groupRemoteId, $groupVersioNo )
     {

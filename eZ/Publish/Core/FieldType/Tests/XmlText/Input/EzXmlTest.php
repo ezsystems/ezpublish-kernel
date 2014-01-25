@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Input;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\XmlText\Input;
 
 use eZ\Publish\Core\FieldType\XmlText\Input\EzXml;
 use PHPUnit_Framework_TestCase;

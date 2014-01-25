@@ -1,31 +1,31 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\ContentTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
-use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
-use eZ\Publish\Core\Repository\ContentService;
-use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
-use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\Core\Repository\DomainLogic\ContentService;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
@@ -52,7 +52,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the __construct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::__construct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::__construct
      */
     public function testConstructor()
     {
@@ -113,7 +113,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::loadVersionInfoById
      */
     public function testLoadVersionInfoById()
     {
@@ -168,7 +168,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::loadVersionInfoById
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadVersionInfoByIdThrowsNotFoundException()
@@ -200,7 +200,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::loadVersionInfoById
      * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedExceptionNonPublishedVersion()
@@ -245,7 +245,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::loadVersionInfoById
      */
     public function testLoadVersionInfoByIdPublishedVersion()
     {
@@ -291,7 +291,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::loadVersionInfoById
      */
     public function testLoadVersionInfoByIdNonPublishedVersion()
     {
@@ -337,12 +337,12 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the loadVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfo
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoById
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdThrowsNotFoundException
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdThrowsUnauthorizedExceptionNonPublishedVersion
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdPublishedVersion
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdNonPublishedVersion
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::loadVersionInfo
+     * @depends eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\ContentTest::testLoadVersionInfoById
+     * @depends eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdThrowsNotFoundException
+     * @depends eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdThrowsUnauthorizedExceptionNonPublishedVersion
+     * @depends eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdPublishedVersion
+     * @depends eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\ContentTest::testLoadVersionInfoByIdNonPublishedVersion
      */
     public function testLoadVersionInfo()
     {
@@ -594,7 +594,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the loadContentByContentInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByContentInfo
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::loadContentByContentInfo
      */
     public function testLoadContentByContentInfo()
     {
@@ -625,7 +625,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the loadContentByVersionInfo() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadContentByVersionInfo
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::loadContentByVersionInfo
      */
     public function testLoadContentByVersionInfo()
     {
@@ -660,7 +660,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the deleteContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::deleteContent
      * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testDeleteContentThrowsUnauthorizedException()
@@ -691,7 +691,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the deleteContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::deleteContent
      */
     public function testDeleteContent()
     {
@@ -753,7 +753,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the deleteContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::deleteContent
      * @expectedException \Exception
      */
     public function testDeleteContentWithRollback()
@@ -797,7 +797,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Argument '$contentCreateStruct' is invalid: 'mainLanguageCode' property must be set
      */
@@ -810,7 +810,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Argument '$contentCreateStruct' is invalid: 'contentType' property must be set
      */
@@ -826,7 +826,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCreateContentThrowsUnauthorizedException()
@@ -885,7 +885,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @exceptionMessage Argument '$contentCreateStruct' is invalid: Another content with remoteId 'faraday' exists
      */
@@ -1363,11 +1363,11 @@ class ContentTest extends BaseServiceMockTest
      *
      * Testing the simplest use case.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::cloneField
-     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::cloneField
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @dataProvider providerForTestCreateContentNonRedundantFieldSet1
      */
     public function testCreateContentNonRedundantFieldSet1( $mainLanguageCode, $structFields, $spiFields )
@@ -1465,11 +1465,11 @@ class ContentTest extends BaseServiceMockTest
      *
      * Testing multiple languages with multiple translatable fields with empty default value.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::cloneField
-     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::cloneField
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @dataProvider providerForTestCreateContentNonRedundantFieldSet2
      */
     public function testCreateContentNonRedundantFieldSet2( $mainLanguageCode, $structFields, $spiFields )
@@ -1677,11 +1677,11 @@ class ContentTest extends BaseServiceMockTest
      *
      * Testing multiple languages with multiple translatable fields with empty default value.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::cloneField
-     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::cloneField
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @dataProvider providerForTestCreateContentNonRedundantFieldSetComplex
      */
     public function testCreateContentNonRedundantFieldSetComplex( $mainLanguageCode, $structFields, $spiFields )
@@ -1729,8 +1729,8 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @dataProvider providerForTestCreateContentWithInvalidLanguage
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @expectedExceptionMessage Could not find 'Language' with identifier 'Klingon'
@@ -1895,9 +1895,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentValidationExceptionFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @expectedExceptionMessage Field definition 'identifier' does not exist in given ContentType
@@ -1932,9 +1932,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentValidationExceptionTranslation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @expectedExceptionMessage A value is set for non translatable field definition 'identifier' with language 'eng-US'
@@ -2115,9 +2115,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentValidationExceptionRequiredField
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      */
@@ -2339,9 +2339,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentFieldValidationException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @expectedExceptionMessage Content fields did not validate
@@ -2372,10 +2372,10 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::buildSPILocationCreateStructs
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::buildSPILocationCreateStructs
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      */
     public function testCreateContentWithLocations()
     {
@@ -2508,10 +2508,10 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::buildSPILocationCreateStructs
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::buildSPILocationCreateStructs
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Multiple LocationCreateStructs with the same parent Location '321' are given
      */
@@ -2639,10 +2639,10 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      */
     public function testCreateContentObjectStates()
     {
@@ -2744,10 +2744,10 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the createContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
-     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
-     * @covers \eZ\Publish\Core\Repository\ContentService::createContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForCreate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentValidationExceptionTranslation
      * @expectedException \Exception
      * @expectedExceptionMessage Store failed
@@ -2805,7 +2805,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @dataProvider providerForTestUpdateContentThrowsBadStateException
      */
@@ -2843,7 +2843,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testUpdateContentThrowsUnauthorizedException()
@@ -2962,7 +2962,7 @@ class ContentTest extends BaseServiceMockTest
      *
      * @param string $initialLanguageCode
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $structFields
-     * @param \eZ\Publish\Core\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content $content
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions
      * @param array $languageCodes
      *
@@ -3358,9 +3358,9 @@ class ContentTest extends BaseServiceMockTest
      *
      * Testing the simplest use case.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentNonRedundantFieldSet1
      */
     public function testUpdateContentNonRedundantFieldSet1( $initialLanguageCode, $structFields, $spiFields )
@@ -3571,9 +3571,9 @@ class ContentTest extends BaseServiceMockTest
      *
      * Testing with translatable field.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentNonRedundantFieldSet2
      */
     public function testUpdateContentNonRedundantFieldSet2( $initialLanguageCode, $structFields, $spiFields )
@@ -3833,9 +3833,9 @@ class ContentTest extends BaseServiceMockTest
      *
      * Testing with new language and untranslatable field.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentNonRedundantFieldSet3
      */
     public function testUpdateContentNonRedundantFieldSet3( $initialLanguageCode, $structFields, $spiFields )
@@ -4138,9 +4138,9 @@ class ContentTest extends BaseServiceMockTest
      *
      * Testing with empty values.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentNonRedundantFieldSet4
      */
     public function testUpdateContentNonRedundantFieldSet4( $initialLanguageCode, $structFields, $spiFields )
@@ -4517,9 +4517,9 @@ class ContentTest extends BaseServiceMockTest
      *
      * Testing more complex cases.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentNonRedundantFieldSetComplex
      */
     public function testUpdateContentNonRedundantFieldSetComplex( $initialLanguageCode, $structFields, $spiFields )
@@ -4568,8 +4568,8 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentWithInvalidLanguage
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @expectedExceptionMessage Could not find 'Language' with identifier 'Klingon'
@@ -4754,9 +4754,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentThrowsContentValidationExceptionFieldDefinition
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @expectedExceptionMessage Field definition 'identifier' does not exist in given ContentType
@@ -4791,9 +4791,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentThrowsContentValidationExceptionTranslation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      * @expectedExceptionMessage A value is set for non translatable field definition 'identifier' with language 'eng-US'
@@ -4973,9 +4973,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentThrowsContentValidationExceptionRequiredField
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      */
@@ -5196,9 +5196,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentThrowsContentFieldValidationException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @expectedExceptionMessage Content fields did not validate
@@ -5228,9 +5228,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the updateContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
-     * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getLanguageCodesForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::mapFieldsForUpdate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::updateContent
      * @expectedException \Exception
      * @expectedExceptionMessage Store failed
      */
@@ -5292,7 +5292,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the copyContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::copyContent
      * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testCopyContentThrowsUnauthorizedException()
@@ -5324,9 +5324,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the copyContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
-     * @covers \eZ\Publish\Core\Repository\ContentService::internalPublishVersion
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::copyContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::internalPublishVersion
      */
     public function testCopyContent()
     {
@@ -5413,9 +5413,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the copyContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
-     * @covers \eZ\Publish\Core\Repository\ContentService::internalPublishVersion
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::copyContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::internalPublishVersion
      */
     public function testCopyContentWithVersionInfo()
     {
@@ -5502,9 +5502,9 @@ class ContentTest extends BaseServiceMockTest
     /**
      * Test for the copyContent() method.
      *
-     * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
-     * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
-     * @covers \eZ\Publish\Core\Repository\ContentService::internalPublishVersion
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::copyContent
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::getDefaultObjectStates
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\ContentService::internalPublishVersion
      * @expectedException \Exception
      * @expectedExceptionMessage Handler threw an exception
      */
@@ -5715,14 +5715,14 @@ class ContentTest extends BaseServiceMockTest
     protected $domainMapperMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\DomainMapper
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\DomainLogic\DomainMapper
      */
     protected function getDomainMapperMock()
     {
         if ( !isset( $this->domainMapperMock ) )
         {
             $this->domainMapperMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainMapper" )
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainLogic\\DomainMapper" )
                 ->disableOriginalConstructor()
                 ->getMock();
         }
@@ -5733,14 +5733,14 @@ class ContentTest extends BaseServiceMockTest
     protected $relationProcessorMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\RelationProcessor
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\DomainLogic\RelationProcessor
      */
     protected function getRelationProcessorMock()
     {
         if ( !isset( $this->relationProcessorMock ) )
         {
             $this->relationProcessorMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\RelationProcessor" )
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainLogic\\RelationProcessor" )
                 ->disableOriginalConstructor()
                 ->getMock();
         }
@@ -5751,14 +5751,14 @@ class ContentTest extends BaseServiceMockTest
     protected $nameSchemaServiceMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\NameSchemaService
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\DomainLogic\NameSchemaService
      */
     protected function getNameSchemaServiceMock()
     {
         if ( !isset( $this->nameSchemaServiceMock ) )
         {
             $this->nameSchemaServiceMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\NameSchemaService" )
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainLogic\\NameSchemaService" )
                 ->disableOriginalConstructor()
                 ->getMock();
         }
@@ -5776,7 +5776,7 @@ class ContentTest extends BaseServiceMockTest
         if ( !isset( $this->fieldTypeServiceMock ) )
         {
             $this->fieldTypeServiceMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\FieldTypeService" )
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainLogic\\FieldTypeService" )
                 ->disableOriginalConstructor()
                 ->getMock();
         }
@@ -5821,7 +5821,7 @@ class ContentTest extends BaseServiceMockTest
     }
 
     /**
-     * @var \eZ\Publish\Core\Repository\ContentService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\ContentService
      */
     protected $partlyMockedContentService;
 
@@ -5832,14 +5832,14 @@ class ContentTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\DomainLogic\ContentService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedContentService( array $methods = null )
     {
         if ( !isset( $this->partlyMockedContentService ) )
         {
             $this->partlyMockedContentService = $this->getMock(
-                "eZ\\Publish\\Core\\Repository\\ContentService",
+                "eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService",
                 $methods,
                 array(
                     $this->getRepositoryMock(),

@@ -176,7 +176,7 @@ class ContentTypeUpdateTest extends BaseTest
     protected function getContentTypeServiceMock()
     {
         $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentTypeService',
             array(),
             array(),
             '',

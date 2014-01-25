@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner;
 
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserRoleAssignment;
 use eZ\Publish\SPI\User\Identity;
 use eZ\Publish\SPI\User\IdentityAware;
 
@@ -20,7 +20,7 @@ use eZ\Publish\SPI\User\IdentityAware;
 class Role implements IdentityAware
 {
     /**
-     * @var \eZ\Publish\Core\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\DomainLogic\Repository
      */
     protected $repository;
 

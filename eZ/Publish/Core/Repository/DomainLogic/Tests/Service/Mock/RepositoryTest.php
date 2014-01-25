@@ -1,15 +1,15 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\RepositoryTest class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\RepositoryTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock;
 
-use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
 use eZ\Publish\SPI\Persistence\User\Role;
 use eZ\Publish\SPI\Persistence\User\Policy;
@@ -196,7 +196,7 @@ class RepositoryTest extends BaseServiceMockTest
     /**
      * Test for the sudo() & hasAccess() method.
      *
-     * @covers \eZ\Publish\Core\Repository\Repository::sudo
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\Repository::sudo
      * @covers \eZ\Publish\API\Repository\Repository::hasAccess
      * @dataProvider providerForTestHasAccessReturnsFalse
      */
@@ -254,14 +254,14 @@ class RepositoryTest extends BaseServiceMockTest
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $roleServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleService",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\RoleService",
             array(),
             array(),
             '',
             false
         );
         $repositoryMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\Repository",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository",
             array( "getRoleService", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
@@ -310,7 +310,7 @@ class RepositoryTest extends BaseServiceMockTest
             $permissionSets[] = $permissionSet;
         }
 
-        /** @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
+        /** @var $repositoryMock \eZ\Publish\Core\Repository\DomainLogic\Repository */
         self::assertEquals(
             $permissionSets,
             $repositoryMock->hasAccess( "test-module", "test-function" )
@@ -368,14 +368,14 @@ class RepositoryTest extends BaseServiceMockTest
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $limitationTypeMock = $this->getMock( "eZ\\Publish\\SPI\\Limitation\\Type" );
         $repositoryMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\Repository",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository",
             array( "getRoleService", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
             )
         );
         $roleServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleService",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\RoleService",
             array( "buildDomainPolicyObject", "getLimitationType" ),
             array(),
             '',
@@ -437,7 +437,7 @@ class RepositoryTest extends BaseServiceMockTest
             $permissionSets[] = $permissionSet;
         }
 
-        /** @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
+        /** @var $repositoryMock \eZ\Publish\Core\Repository\DomainLogic\Repository */
         self::assertEquals(
             $permissionSets,
             $repositoryMock->hasAccess( "test-module", "test-function" )
@@ -494,7 +494,7 @@ class RepositoryTest extends BaseServiceMockTest
     public function testCanUserSimple( $permissionSets, $result )
     {
         $repositoryMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\Repository",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository",
             array( "hasAccess", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
@@ -510,7 +510,7 @@ class RepositoryTest extends BaseServiceMockTest
         /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
         $valueObject = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ValueObject" );
 
-        /** @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
+        /** @var $repositoryMock \eZ\Publish\Core\Repository\DomainLogic\Repository */
         self::assertEquals(
             $result,
             $repositoryMock->canUser( "test-module", "test-function", $valueObject, $valueObject )
@@ -527,7 +527,7 @@ class RepositoryTest extends BaseServiceMockTest
     public function testCanUserWithoutLimitations()
     {
         $repositoryMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\Repository",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository",
             array( "hasAccess", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
@@ -566,7 +566,7 @@ class RepositoryTest extends BaseServiceMockTest
         /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
         $valueObject = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ValueObject" );
 
-        /** @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
+        /** @var $repositoryMock \eZ\Publish\Core\Repository\DomainLogic\Repository */
         self::assertTrue( $repositoryMock->canUser( "test-module", "test-function", $valueObject, $valueObject ) );
     }
 
@@ -703,14 +703,14 @@ class RepositoryTest extends BaseServiceMockTest
         /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
         $valueObject = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ValueObject" );
         $repositoryMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\Repository",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository",
             array( "getCurrentUser", "getRoleService", "hasAccess" ),
             array(),
             "",
             false
         );
         $roleServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleService",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\RoleService",
             array( "getLimitationType" ),
             array(),
             "",
@@ -789,7 +789,7 @@ class RepositoryTest extends BaseServiceMockTest
             }
         }
 
-        /** @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
+        /** @var $repositoryMock \eZ\Publish\Core\Repository\DomainLogic\Repository */
         self::assertEquals(
             $userCan,
             $repositoryMock->canUser( "test-module", "test-function", $valueObject, $valueObject )
@@ -805,7 +805,7 @@ class RepositoryTest extends BaseServiceMockTest
     public function testCanUserThrowsInvalidArgumentException()
     {
         $repositoryMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\Repository",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository",
             array( "hasAccess" ),
             array(),
             "",
@@ -821,7 +821,7 @@ class RepositoryTest extends BaseServiceMockTest
         /** @var $valueObject \eZ\Publish\API\Repository\Values\ValueObject */
         $valueObject = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ValueObject" );
 
-        /** @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
+        /** @var $repositoryMock \eZ\Publish\Core\Repository\DomainLogic\Repository */
         $repositoryMock->canUser( "test-module", "test-function", $valueObject, "This is not a target" );
     }
 
@@ -853,7 +853,7 @@ class RepositoryTest extends BaseServiceMockTest
     {
         $userServiceMock = $this->getMock( "eZ\\Publish\\API\\Repository\\UserService" );
         $repositoryMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\Repository",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository",
             array( "getUserService" ),
             array(
                 $this->getPersistenceMock(),

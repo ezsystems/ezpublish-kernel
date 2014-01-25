@@ -18,7 +18,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use PHPUnit_Framework_TestCase;
 
@@ -54,7 +54,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository';
         $this->repository = $repository = $this
             ->getMockBuilder( $repositoryClass )
             ->disableOriginalConstructor()

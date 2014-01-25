@@ -1,19 +1,19 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\UrlAliasTest class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\UrlAliasTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock;
 
-use eZ\Publish\Core\Repository\URLAliasService;
-use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\Core\Repository\DomainLogic\URLAliasService;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias as SPIUrlAlias;
 use eZ\Publish\API\Repository\Values\Content\UrlAlias;
-use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 use Exception;
@@ -30,7 +30,7 @@ class UrlAliasTest extends BaseServiceMockTest
     {
         $repositoryMock = $this->getRepositoryMock();
         $languageServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\LanguageService",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\LanguageService",
             array(), array(), "", false
         );
         /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler $urlAliasHandler */
@@ -2779,9 +2779,9 @@ class UrlAliasTest extends BaseServiceMockTest
     /**
      * Test for the createGlobalUrlAlias() method.
      *
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\UrlAliasTest::testCreateUrlAlias
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\UrlAliasTest::testCreateUrlAliasWithRollback
-     * @depends eZ\Publish\Core\Repository\Tests\Service\Mock\UrlAliasTest::testCreateUrlAliasThrowsInvalidArgumentException
+     * @depends eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\UrlAliasTest::testCreateUrlAlias
+     * @depends eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\UrlAliasTest::testCreateUrlAliasWithRollback
+     * @depends eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\UrlAliasTest::testCreateUrlAliasThrowsInvalidArgumentException
      */
     public function testCreateGlobalUrlAliasForLocation()
     {
@@ -2789,7 +2789,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $mockedService = $this->getPartlyMockedURLAliasServiceService( array( "createUrlAlias" ) );
         $location = $this->getLocationStub();
         $locationServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\LocationService",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\LocationService",
             array(), array(), "", false
         );
 
@@ -2842,7 +2842,7 @@ class UrlAliasTest extends BaseServiceMockTest
     /**
      * @param int $id
      *
-     * @return \eZ\Publish\Core\Repository\Values\Content\Location
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location
      */
     protected function getLocationStub( $id = 42 )
     {
@@ -2871,12 +2871,12 @@ class UrlAliasTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\URLAliasService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\DomainLogic\URLAliasService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedURLAliasServiceService( array $methods = null )
     {
         $languageServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\LanguageService",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\LanguageService",
             array(), array(), "", false
         );
         $languageServiceMock->expects(
@@ -2896,7 +2896,7 @@ class UrlAliasTest extends BaseServiceMockTest
         );
 
         return $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\URLAliasService",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\URLAliasService",
             $methods,
             array(
                 $this->getRepositoryMock(),

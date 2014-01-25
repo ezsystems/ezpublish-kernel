@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Gateway;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\XmlText\Gateway;
 
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -18,7 +18,7 @@ use PHPUnit_Framework_TestCase;
 /**
  * Tests the LegacyStorage
  * Class LegacyStorageTest
- * @package eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Gateway
+ * @package eZ\Publish\Core\Repository\DomainLogic\Tests\FieldType\XmlText\Gateway
  */
 class LegacyStorageTest extends PHPUnit_Framework_TestCase
 {

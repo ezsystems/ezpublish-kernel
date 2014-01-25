@@ -1,15 +1,15 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\SectionTest class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration\SectionTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException;
@@ -106,7 +106,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for creating sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::createSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::createSection
      */
     public function testCreateSection()
     {
@@ -130,7 +130,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for creating sections throwing InvalidArgumentException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\SectionService::createSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::createSection
      */
     public function testCreateSectionThrowsInvalidArgumentException()
     {
@@ -145,7 +145,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for updating sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::updateSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::updateSection
      */
     public function testUpdateSection()
     {
@@ -170,7 +170,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for updating sections
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Repository\SectionService::updateSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::updateSection
      */
     public function testUpdateSectionThrowsInvalidArgumentException()
     {
@@ -187,7 +187,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for loading sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::loadSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::loadSection
      */
     public function testLoadSection()
     {
@@ -208,7 +208,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for loading sections throwing NotFoundException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\SectionService::loadSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::loadSection
      */
     public function testLoadSectionThrowsNotFoundException()
     {
@@ -219,7 +219,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for loading all sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::loadSections
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::loadSections
      */
     public function testLoadSections()
     {
@@ -236,7 +236,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for loading section by identifier
-     * @covers \eZ\Publish\Core\Repository\SectionService::loadSectionByIdentifier
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::loadSectionByIdentifier
      */
     public function testLoadSectionByIdentifier()
     {
@@ -257,7 +257,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for loading section by identifier throwing NotFoundException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\SectionService::loadSectionByIdentifier
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::loadSectionByIdentifier
      */
     public function testLoadSectionByIdentifierThrowsNotFoundException()
     {
@@ -268,7 +268,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for counting content assigned to section
-     * @covers \eZ\Publish\Core\Repository\SectionService::countAssignedContents
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::countAssignedContents
      */
     public function testCountAssignedContents()
     {
@@ -291,7 +291,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for assigning section to content
-     * @covers \eZ\Publish\Core\Repository\SectionService::assignSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::assignSection
      */
     public function testAssignSection()
     {
@@ -312,7 +312,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for deleting sections
-     * @covers \eZ\Publish\Core\Repository\SectionService::deleteSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::deleteSection
      */
     public function testDeleteSection()
     {
@@ -339,7 +339,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for deleting sections throwing NotFoundException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Repository\SectionService::deleteSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::deleteSection
      */
     public function testDeleteSectionThrowsNotFoundException()
     {
@@ -353,7 +353,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for deleting sections throwing BadStateException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @covers \eZ\Publish\Core\Repository\SectionService::deleteSection
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::deleteSection
      */
     public function testDeleteSectionThrowsBadStateException()
     {
@@ -366,7 +366,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for creating new SectionCreateStruct
-     * @covers \eZ\Publish\Core\Repository\SectionService::newSectionCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::newSectionCreateStruct
      */
     public function testNewSectionCreateStruct()
     {
@@ -387,7 +387,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for creating new SectionUpdateStruct
-     * @covers \eZ\Publish\Core\Repository\SectionService::newSectionUpdateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\SectionService::newSectionUpdateStruct
      */
     public function testNewSectionUpdateStruct()
     {

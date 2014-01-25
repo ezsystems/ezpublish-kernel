@@ -1,15 +1,15 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\UrlWildcardTest class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\UrlWildcardTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Integration;
 
-use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard as SPIURLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
@@ -22,7 +22,7 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the __construct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::__construct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::__construct
      */
     public function testConstructor()
     {
@@ -37,7 +37,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the create() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::create
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCreateThrowsUnauthorizedException()
@@ -62,7 +62,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the create() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::create
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateThrowsInvalidArgumentException()
@@ -111,7 +111,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the create() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::create
      * @dataProvider providerForTestCreateThrowsContentValidationException
      * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
      */
@@ -161,7 +161,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the create() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::create
      * @dataProvider providerForTestCreate
      */
     public function testCreate( $sourceUrl, $destinationUrl, $forward )
@@ -236,7 +236,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the create() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::create
      * @expectedException \Exception
      */
     public function testCreateWithRollback()
@@ -291,7 +291,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the remove() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::remove
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testRemoveThrowsUnauthorizedException()
@@ -316,7 +316,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the remove() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::remove
      */
     public function testRemove()
     {
@@ -354,7 +354,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the remove() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::remove
      * @expectedException \Exception
      */
     public function testRemoveWithRollback()
@@ -395,7 +395,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the load() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::remove
      * @expectedException \Exception
      */
     public function testLoadThrowsException()
@@ -421,7 +421,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the load() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::remove
      */
     public function testLoad()
     {
@@ -467,7 +467,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the loadAll() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::loadAll
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::loadAll
      */
     public function testLoadAll()
     {
@@ -493,7 +493,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the loadAll() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::loadAll
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::loadAll
      */
     public function testLoadAllWithLimitAndOffset()
     {
@@ -585,7 +585,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the translate() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::translate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::translate
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @dataProvider providerForTestTranslateThrowsNotFoundException
      */
@@ -694,7 +694,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the translate() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::translate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::translate
      * @dataProvider providerForTestTranslate
      */
     public function testTranslate( $createArray, $url, $uri )
@@ -731,7 +731,7 @@ class UrlWildcardTest extends BaseServiceMockTest
      * Test for the translate() method.
      *
      * @depends testConstructor
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::translate
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService::translate
      */
     public function testTranslateUsesLongestMatchingWildcard()
     {
@@ -787,12 +787,12 @@ class UrlWildcardTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\URLWildcardService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedURLWildcardService( array $methods = null )
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\URLWildcardService",
+            "eZ\\Publish\\Core\\Repository\\DomainLogic\\URLWildcardService",
             $methods,
             array(
                 $this->getRepositoryMock(),

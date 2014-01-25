@@ -8,14 +8,14 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
-use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
-use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
-use eZ\Publish\Core\Repository\Values\Content\Relation;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\TranslationValues;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\ContentService;

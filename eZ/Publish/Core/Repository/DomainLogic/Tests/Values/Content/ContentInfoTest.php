@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Values\Content;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use PHPUnit_Framework_TestCase;

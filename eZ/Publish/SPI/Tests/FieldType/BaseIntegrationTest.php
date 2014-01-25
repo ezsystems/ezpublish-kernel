@@ -234,7 +234,7 @@ abstract class BaseIntegrationTest extends TestCase
             $this->handler = self::$container->get( "legacy_db_handler" );
             $this->db = $this->handler->getName();
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
+            $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Repository/DomainLogic/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
             self::$setUp = $this->handler;
         }
         else

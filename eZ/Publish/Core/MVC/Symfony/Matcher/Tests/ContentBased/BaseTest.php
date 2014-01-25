@@ -48,7 +48,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     protected function getRepositoryMock()
     {
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository';
 
         return $this
             ->getMockBuilder( $repositoryClass )

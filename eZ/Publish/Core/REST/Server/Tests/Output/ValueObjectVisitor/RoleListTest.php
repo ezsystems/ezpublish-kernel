@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\RoleList;
-use eZ\Publish\Core\Repository\Values\User;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User;
 use eZ\Publish\Core\REST\Common;
 
 class RoleListTest extends ValueObjectVisitorBaseTest

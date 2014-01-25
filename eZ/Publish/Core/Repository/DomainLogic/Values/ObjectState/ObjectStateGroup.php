@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Values\ObjectState;
+namespace eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as APIObjectStateGroup;
 

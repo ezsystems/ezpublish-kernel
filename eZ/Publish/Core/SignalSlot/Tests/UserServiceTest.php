@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
-use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
-use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\UserService;

@@ -107,7 +107,7 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
             ->setConstructorArgs( array( array( 'id' => $contentId, 'mainLocationId' => $locationId ) ) )
             ->getMockForAbstractClass();
         $location = $this
-            ->getMockBuilder( 'eZ\Publish\Core\Repository\Values\Content\Location' )
+            ->getMockBuilder( 'eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location' )
             ->setConstructorArgs( array( array( 'id' => $locationId, 'contentInfo' => $contentInfo ) ) )
             ->getMockForAbstractClass();
         $this->contentService

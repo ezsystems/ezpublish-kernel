@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock;
 
 use PHPUnit_Framework_TestCase;
-use eZ\Publish\Core\Repository\Repository;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Repository;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\User;
 
 /**
  * Base test case for tests on services using Mock testing

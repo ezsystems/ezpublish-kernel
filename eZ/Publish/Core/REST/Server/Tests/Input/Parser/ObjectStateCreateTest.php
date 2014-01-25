@@ -254,7 +254,7 @@ class ObjectStateCreateTest extends BaseTest
     protected function getObjectStateServiceMock()
     {
         $objectStateServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ObjectStateService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ObjectStateService',
             array(),
             array(),
             '',

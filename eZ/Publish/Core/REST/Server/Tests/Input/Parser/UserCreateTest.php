@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\UserCreate;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserCreateStruct;
 
 class UserCreateTest extends BaseTest
 {
@@ -491,7 +491,7 @@ class UserCreateTest extends BaseTest
     protected function getUserServiceMock()
     {
         $userServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\UserService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\UserService',
             array(),
             array(),
             '',
@@ -530,7 +530,7 @@ class UserCreateTest extends BaseTest
     protected function getContentTypeServiceMock()
     {
         $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentTypeService',
             array(),
             array(),
             '',

@@ -50,7 +50,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->templateEngineMock = $this->getMock( 'Symfony\\Component\\Templating\\EngineInterface' );
         $this->eventDispatcherMock = $this->getMock( 'Symfony\\Component\\EventDispatcher\\EventDispatcherInterface' );
-        $this->repositoryMock = $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\Repository' )
+        $this->repositoryMock = $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\DomainLogic\\Repository' )
             ->disableOriginalConstructor()
             ->getMock();
         $this->configResolverMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
@@ -218,7 +218,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
             ->with( 'languages' )
             ->will( $this->returnValue( $languages ) );
 
-        $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
+        $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService" )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -275,7 +275,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
+        $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService" )
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -335,7 +335,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
+        $contentService = $this->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentService" )
             ->disableOriginalConstructor()
             ->getMock();
 

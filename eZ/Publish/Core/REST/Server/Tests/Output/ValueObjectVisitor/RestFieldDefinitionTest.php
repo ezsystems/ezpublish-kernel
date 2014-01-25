@@ -15,7 +15,7 @@ use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server;
 use eZ\Publish\Core\REST\Common;
 
-use eZ\Publish\Core\Repository\Values;
+use eZ\Publish\Core\Repository\DomainLogic\Values;
 
 class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
 {

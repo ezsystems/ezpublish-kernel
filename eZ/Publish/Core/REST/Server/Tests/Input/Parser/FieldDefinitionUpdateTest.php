@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionUpdate;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
 
 /**
  * @todo Test with fieldSettings and validatorConfiguration when specified
@@ -204,7 +204,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     protected function getContentTypeServiceMock()
     {
         $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\ContentTypeService',
             array(),
             array(),
             '',

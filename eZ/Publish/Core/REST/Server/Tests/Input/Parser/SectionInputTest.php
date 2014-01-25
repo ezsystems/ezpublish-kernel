@@ -86,7 +86,7 @@ class SectionInputTest extends BaseTest
     protected function getSectionServiceMock()
     {
         $sectionServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\SectionService',
+            'eZ\\Publish\\Core\\Repository\\DomainLogic\\SectionService',
             array(),
             array(),
             '',

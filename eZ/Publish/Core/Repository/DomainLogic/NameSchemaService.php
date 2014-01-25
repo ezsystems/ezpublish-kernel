@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -62,7 +62,7 @@ class NameSchemaService
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param array $settings
      *
-     * @return \eZ\Publish\Core\Repository\NameSchemaService
+     * @return \eZ\Publish\Core\Repository\DomainLogic\NameSchemaService
      */
     public function __construct( RepositoryInterface $repository, array $settings = array() )
     {
@@ -211,7 +211,7 @@ class NameSchemaService
      * Fetches the list of available Field identifiers in the token and returns
      * an array of their current title value.
      *
-     * @see \eZ\Publish\Core\Repository\FieldType::getName()
+     * @see \eZ\Publish\Core\Repository\DomainLogic\FieldType::getName()
      *
      * @param string[] $schemaIdentifiers
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType $fieldDefinitions

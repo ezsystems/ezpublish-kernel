@@ -1,14 +1,14 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\Repository\ContentTypeService class.
+ * File containing the eZ\Publish\Core\Repository\DomainLogic\ContentTypeService class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\DomainLogic;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -27,11 +27,11 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIC
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeDraft;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct as SPIContentTypeCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct as SPIContentTypeUpdateStruct;
@@ -55,7 +55,7 @@ use Exception;
 /**
  * @example Examples/contenttype.php
  *
- * @package eZ\Publish\Core\Repository
+ * @package eZ\Publish\Core\Repository\DomainLogic
  */
 class ContentTypeService implements ContentTypeServiceInterface
 {
@@ -75,7 +75,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     protected $settings;
 
     /**
-     * @var \eZ\Publish\Core\Repository\DomainMapper
+     * @var \eZ\Publish\Core\Repository\DomainLogic\DomainMapper
      */
     protected $domainMapper;
 
@@ -84,7 +84,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\DomainLogic\DomainMapper $domainMapper
      * @param array $settings
      */
     public function __construct(
@@ -222,7 +222,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Get all Content Type Groups
      *
-     * @return \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup[]
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeGroup[]
      */
     public function loadContentTypeGroups()
     {
@@ -354,7 +354,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group $spiGroup
      *
-     * @return \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeGroup
+     * @return \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentTypeGroup
      */
     protected function buildContentTypeGroupDomainObject( SPIContentTypeGroup $spiGroup )
     {

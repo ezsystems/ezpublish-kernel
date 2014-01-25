@@ -1,15 +1,15 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\RoleTest class
+ * File contains: eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\RoleTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock;
 
-use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\Core\Repository\DomainLogic\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
@@ -20,10 +20,10 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the createRole() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::createRole
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateRoleCreateStruct
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitations
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::createRole
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateRoleCreateStruct
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitations
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testCreateRoleThrowsLimitationValidationException()
@@ -87,9 +87,9 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the addPolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::addPolicy
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitations
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::addPolicy
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitations
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testAddPolicyThrowsLimitationValidationException()
@@ -152,9 +152,9 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the updatePolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::updatePolicy
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitations
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::updatePolicy
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitations
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testUpdatePolicyThrowsLimitationValidationException()
@@ -222,7 +222,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUser() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUser
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testAssignRoleToUserThrowsUnauthorizedException()
@@ -249,8 +249,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUser() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUser
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testAssignRoleToUserThrowsLimitationValidationException()
@@ -297,8 +297,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUser() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUser
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testAssignRoleToUserThrowsBadStateException()
@@ -331,8 +331,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUser() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUser
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      */
     public function testAssignRoleToUser()
     {
@@ -412,8 +412,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUser() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUser
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      */
     public function testAssignRoleToUserWithNullLimitation()
     {
@@ -473,8 +473,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUser() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUser
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      * @expectedException \Exception
      */
     public function testAssignRoleToUserWithRollback()
@@ -535,7 +535,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUserGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUserGroup
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testAssignRoleToUserGroupThrowsUnauthorizedException()
@@ -562,8 +562,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUserGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUserGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testAssignRoleToUserGroupThrowsLimitationValidationException()
@@ -610,8 +610,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUserGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUserGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testAssignRoleGroupToUserThrowsBadStateException()
@@ -644,8 +644,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUserGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUserGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      */
     public function testAssignRoleToUserGroup()
     {
@@ -725,8 +725,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUserGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUserGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      */
     public function testAssignRoleToUserGroupWithNullLimitation()
     {
@@ -786,8 +786,8 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the assignRoleToUserGroup() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\RoleService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::assignRoleToUserGroup
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::validateLimitation
      * @expectedException \Exception
      */
     public function testAssignRoleToUserGroupWithRollback()
@@ -848,7 +848,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the deletePolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::deletePolicy
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::deletePolicy
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeletePolicyThrowsUnauthorizedException()
@@ -871,7 +871,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the deletePolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::deletePolicy
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::deletePolicy
      * @expectedException \Exception
      * @expectedExceptionMessage Handler threw an exception
      */
@@ -917,7 +917,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the deletePolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::deletePolicy
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::deletePolicy
      */
     public function testDeletePolicy()
     {
@@ -961,7 +961,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the removePolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::removePolicy
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::removePolicy
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testRemovePolicyThrowsUnauthorizedException()
@@ -986,7 +986,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the removePolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::removePolicy
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::removePolicy
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testRemovePolicyThrowsInvalidArgumentException()
@@ -1027,7 +1027,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the removePolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::removePolicy
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::removePolicy
      * @expectedException \Exception
      * @expectedExceptionMessage Handler threw an exception
      */
@@ -1081,7 +1081,7 @@ class RoleTest extends BaseServiceMockTest
     /**
      * Test for the removePolicy() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RoleService::removePolicy
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\RoleService::removePolicy
      */
     public function testRemovePolicy()
     {
@@ -1153,7 +1153,7 @@ class RoleTest extends BaseServiceMockTest
     }
 
     /**
-     * @var \eZ\Publish\Core\Repository\RoleService
+     * @var \eZ\Publish\Core\Repository\DomainLogic\RoleService
      */
     protected $partlyMockedRoleService;
 
@@ -1164,14 +1164,14 @@ class RoleTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\RoleService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\DomainLogic\RoleService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedRoleService( array $methods = null )
     {
         if ( !isset( $this->partlyMockedRoleService ) )
         {
             $this->partlyMockedRoleService = $this->getMock(
-                "eZ\\Publish\\Core\\Repository\\RoleService",
+                "eZ\\Publish\\Core\\Repository\\DomainLogic\\RoleService",
                 $methods,
                 array(
                     $this->getRepositoryMock(),

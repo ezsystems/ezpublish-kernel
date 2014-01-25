@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\Values\ContentType;
+namespace eZ\Publish\Core\Repository\DomainLogic\Tests\Values\ContentType;
 
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -18,7 +18,7 @@ use PHPUnit_Framework_TestCase;
 class ContentTypeTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Values\ContentType\ContentType::getProperties
+     * @covers \eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType::getProperties
      */
     public function testObjectProperties()
     {
