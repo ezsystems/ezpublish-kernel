@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 /**
  * A criterion that matches content based on its ancestor location id
  *
+ * A faster criterion that can be used if you have the complete path of the desired ancestor node is {@see Subtree}
  * Parent location id is done using {@see ParentLocationId}
  *
  * Supported operators:

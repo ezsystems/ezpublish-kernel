@@ -44,22 +44,23 @@ class AncestorLocationId extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
-        $subSelect = $query->subSelect();
-        $subSelect
-            ->select(
-                $this->dbHandler->quoteColumn( 'contentobject_id' )
-            )->from(
-                $this->dbHandler->quoteTable( 'ezcontentobject_tree' )
-            )->where(
-                $query->expr->like(
-                    $this->dbHandler->quoteColumn( 'path_string' ),
-                    $query->bindValue( '%/' . $criterion->value[0] . '/%' )
+        $table = $this->getUniqueTableName();
+
+        $query
+            ->leftJoin(
+                $query->alias(
+                    $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
+                    $this->dbHandler->quoteIdentifier( $table )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id', $table ),
+                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
                 )
             );
 
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
-            $subSelect
+        return $query->expr->like(
+            $this->dbHandler->quoteColumn( 'path_string', $table ),
+            $query->bindValue( '%/' . $criterion->value[0] . '/%' )
         );
     }
 }
