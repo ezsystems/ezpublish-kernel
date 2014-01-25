@@ -6,14 +6,14 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\Core\Repository\DomainLogic\Values\User\User;
 use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
 use PHPUnit_Framework_TestCase;
 
 abstract class ServiceTest extends PHPUnit_Framework_TestCase
@@ -29,7 +29,7 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
      * @param mixed $innerService mock of the inner service used by the signal 
      * slot one used to test whether the original method is called is correctly 
      * called.
-     * @param eZ\Publish\Core\SignalSlot\SignalDispatcher $dispatcher mock of 
+     * @param eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $dispatcher mock of
      * the dispatcher used to test whether the emit method is correctly called
      *
      * @return an instance of the SignalSlot service
@@ -62,7 +62,7 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $dispatcher = $this->getMock( 'eZ\\Publish\\Core\\SignalSlot\\SignalDispatcher' );
+        $dispatcher = $this->getMock( 'eZ\\Publish\\Core\\Repository\\SignalSlot\\SignalDispatcher' );
         $that = $this;
         $d = $dispatcher->expects( $this->exactly( $emitNr ) )
             ->method( 'emit' );

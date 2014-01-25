@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\Core\Repository\DomainLogic\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -17,8 +17,8 @@ use eZ\Publish\Core\Repository\DomainLogic\Values\Content\TranslationValues;
 use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Relation;
 use eZ\Publish\Core\Repository\DomainLogic\Values\ContentType\ContentType;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\ContentService;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\ContentService;
 
 class ContentServiceTest extends ServiceTest
 {
@@ -144,7 +144,7 @@ class ContentServiceTest extends ServiceTest
                 array( $contentCreateStruct, array( $locationCreateStruct ) ),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\CreateContentSignal',
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo
@@ -155,7 +155,7 @@ class ContentServiceTest extends ServiceTest
                 array( $contentInfo, $contentMetadataUpdateStruct ),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal',
                 array( 'contentId' => $contentId )
             ),
             array(
@@ -163,7 +163,7 @@ class ContentServiceTest extends ServiceTest
                 array( $contentInfo ),
                 $contentInfo,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\DeleteContentSignal',
                 array( 'contentId' => $contentId )
             ),
             array(
@@ -171,7 +171,7 @@ class ContentServiceTest extends ServiceTest
                 array( $contentInfo, $versionInfo, $user ),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentDraftSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\CreateContentDraftSignal',
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
@@ -189,7 +189,7 @@ class ContentServiceTest extends ServiceTest
                 array( $translationInfo, $translationValues, $user ),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\TranslateVersionSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\TranslateVersionSignal',
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
@@ -201,7 +201,7 @@ class ContentServiceTest extends ServiceTest
                 array( $versionInfo, $contentUpdateStruct ),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\UpdateContentSignal',
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo
@@ -212,7 +212,7 @@ class ContentServiceTest extends ServiceTest
                 array( $versionInfo ),
                 $content,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\PublishVersionSignal',
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo
@@ -223,7 +223,7 @@ class ContentServiceTest extends ServiceTest
                 array( $versionInfo ),
                 $versionInfo,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteVersionSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\DeleteVersionSignal',
                 array(
                     'contentId' => $contentId,
                     'versionNo' => $versionNo
@@ -240,7 +240,7 @@ class ContentServiceTest extends ServiceTest
                 array( $contentInfo, $copyLocationCreateStruct, $versionInfo ),
                 $copiedContent,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\CopyContentSignal',
                 array(
                     'srcContentId' => $contentId,
                     'srcVersionNo' => $versionNo,
@@ -266,7 +266,7 @@ class ContentServiceTest extends ServiceTest
                 array( $versionInfo, $relationDestContentInfo ),
                 $newRelation,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\AddRelationSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\AddRelationSignal',
                 array(
                     'srcContentId' => $contentId,
                     'srcVersionNo' => $versionNo,
@@ -278,7 +278,7 @@ class ContentServiceTest extends ServiceTest
                 array( $versionInfo, $relationDestContentInfo ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteRelationSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\DeleteRelationSignal',
                 array(
                     'srcContentId' => $contentId,
                     'srcVersionNo' => $versionNo,
@@ -290,7 +290,7 @@ class ContentServiceTest extends ServiceTest
                 array( $translationInfo ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ContentService\AddTranslationInfoSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\AddTranslationInfoSignal',
                 array()
             ),
             array(

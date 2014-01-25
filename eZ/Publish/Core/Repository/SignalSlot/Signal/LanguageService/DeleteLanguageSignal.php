@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\LanguageService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * DeleteLanguageSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\LanguageService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService
  */
 class DeleteLanguageSignal extends Signal
 {

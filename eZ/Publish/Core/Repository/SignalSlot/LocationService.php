@@ -7,25 +7,25 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\CopySubtreeSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\CopySubtreeSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\CreateLocationSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\UpdateLocationSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\SwapLocationSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\HideLocationSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\UnhideLocationSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService\DeleteLocationSignal;
 
 /**
  * LocationService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class LocationService implements LocationServiceInterface
 {
@@ -39,7 +39,7 @@ class LocationService implements LocationServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -50,7 +50,7 @@ class LocationService implements LocationServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\LocationService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( LocationServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

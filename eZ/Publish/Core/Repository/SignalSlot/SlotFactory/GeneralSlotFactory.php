@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\SlotFactory;
+namespace eZ\Publish\Core\Repository\SignalSlot\SlotFactory;
 
-use eZ\Publish\Core\SignalSlot\Slot;
-use eZ\Publish\Core\SignalSlot\SlotFactory;
+use eZ\Publish\Core\Repository\SignalSlot\Slot;
+use eZ\Publish\Core\Repository\SignalSlot\SlotFactory;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
@@ -21,12 +21,12 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 class GeneralSlotFactory extends SlotFactory
 {
     /**
-     * @var \eZ\Publish\Core\SignalSlot\Slot[]
+     * @var \eZ\Publish\Core\Repository\SignalSlot\Slot[]
      */
     protected $slots = array();
 
     /**
-     * @param \eZ\Publish\Core\SignalSlot\Slot[] $slots
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Slot[] $slots
      */
     public function __construct( array $slots = array() )
     {
@@ -40,7 +40,7 @@ class GeneralSlotFactory extends SlotFactory
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException When no slot is found
      *
-     * @return \eZ\Publish\Core\SignalSlot\Slot
+     * @return \eZ\Publish\Core\Repository\SignalSlot\Slot
      */
     public function getSlot( $slotIdentifier )
     {

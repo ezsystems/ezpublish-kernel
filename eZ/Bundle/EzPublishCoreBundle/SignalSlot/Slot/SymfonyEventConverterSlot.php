@@ -11,8 +11,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot;
 
 use eZ\Publish\Core\MVC\Symfony\Event\SignalEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
-use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\SignalSlot\Slot;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Slot;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\ContentService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * CopyContentSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\ContentService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService
  */
 class CopyContentSignal extends Signal
 {

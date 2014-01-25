@@ -7,17 +7,17 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateUrlAliasSignal;
-use eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateGlobalUrlAliasSignal;
-use eZ\Publish\Core\SignalSlot\Signal\URLAliasService\RemoveAliasesSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\URLAliasService\CreateUrlAliasSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\URLAliasService\CreateGlobalUrlAliasSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\URLAliasService\RemoveAliasesSignal;
 
 /**
  * URLAliasService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class URLAliasService implements URLAliasServiceInterface
 {
@@ -31,7 +31,7 @@ class URLAliasService implements URLAliasServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -42,7 +42,7 @@ class URLAliasService implements URLAliasServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\URLAliasService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( URLAliasServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

@@ -7,20 +7,20 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\SignalSlot\Signal\TrashService\TrashSignal;
-use eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal;
-use eZ\Publish\Core\SignalSlot\Signal\TrashService\EmptyTrashSignal;
-use eZ\Publish\Core\SignalSlot\Signal\TrashService\DeleteTrashItemSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService\TrashSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService\RecoverSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService\EmptyTrashSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService\DeleteTrashItemSignal;
 
 /**
  * TrashService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class TrashService implements TrashServiceInterface
 {
@@ -34,7 +34,7 @@ class TrashService implements TrashServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -45,7 +45,7 @@ class TrashService implements TrashServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\TrashService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( TrashServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

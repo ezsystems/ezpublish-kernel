@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Slot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 use eZ\Publish\Core\Persistence\Solr\Slot;
 
 /**
@@ -20,7 +20,7 @@ class Trash extends Slot
     /**
      * Receive the given $signal and react on it
      *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal $signal
      */
     public function receive( Signal $signal )
     {

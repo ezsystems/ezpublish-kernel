@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Tests\SignalDispatcher;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests\SignalDispatcher;
 
-use eZ\Publish\Core\SignalSlot;
+use eZ\Publish\Core\Repository\SignalSlot;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -17,7 +17,7 @@ use PHPUnit_Framework_TestCase;
  */
 class LegacySlotsTest extends PHPUnit_Framework_TestCase
 {
-    const SIGNAL_SLOT_NS = '\\eZ\\Publish\\Core\\SignalSlot';
+    const SIGNAL_SLOT_NS = '\\eZ\\Publish\\Core\\Repository\\SignalSlot';
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -31,13 +31,13 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\SignalSlot\Slot\AbstractLegacySlot::getLegacyKernel
+     * @covers \eZ\Publish\Core\Repository\SignalSlot\Slot\AbstractLegacySlot::getLegacyKernel
      */
     public function testAbstractLegacySlot()
     {
         $ezpKernelHandlerMock = $this->ezpKernelHandlerMock;
         $legacySlot = $this->getMock(
-            '\\eZ\\Publish\\Core\\SignalSlot\\Slot\\AbstractLegacySlot',
+            '\\eZ\\Publish\\Core\\Repository\\SignalSlot\\Slot\\AbstractLegacySlot',
             // methods
             array(),
             // ctor arguments
@@ -86,7 +86,7 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
         $slotClassName = self::SIGNAL_SLOT_NS . '\\Slot\\' . $slotName;
 
         /**
-         * @var \eZ\Publish\Core\SignalSlot\Slot $slot
+         * @var \eZ\Publish\Core\Repository\SignalSlot\Slot $slot
          */
         $slot = new $slotClassName(
             function () use ( $ezpKernelHandlerMock )
@@ -101,7 +101,7 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( null ) );
 
         /**
-         * @var \eZ\Publish\Core\SignalSlot\Signal $signal
+         * @var \eZ\Publish\Core\Repository\SignalSlot\Signal $signal
          */
         $signal = new $signalClassName( $signalProperties );
         $slot->receive( $signal );
@@ -116,7 +116,7 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
         $slotClassName = self::SIGNAL_SLOT_NS . '\\Slot\\' . $slotName;
 
         /**
-         * @var \eZ\Publish\Core\SignalSlot\Slot $slot
+         * @var \eZ\Publish\Core\Repository\SignalSlot\Slot $slot
          */
         $slot = new $slotClassName(
             function () use ( $ezpKernelHandlerMock )
@@ -131,7 +131,7 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( null ) );
 
         /**
-         * @var \eZ\Publish\Core\SignalSlot\Signal $signal
+         * @var \eZ\Publish\Core\Repository\SignalSlot\Signal $signal
          */
         $signal = $this->getMock( self::SIGNAL_SLOT_NS . '\\Signal' );
         $slot->receive( $signal );

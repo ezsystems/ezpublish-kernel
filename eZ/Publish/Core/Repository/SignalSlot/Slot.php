@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 /**
  * A Slot can be assigned to receive a certain Signal.

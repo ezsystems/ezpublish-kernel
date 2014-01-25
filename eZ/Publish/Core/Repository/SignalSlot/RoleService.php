@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
@@ -19,20 +19,20 @@ use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdatePolicySignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserSignal;
-use eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\CreateRoleSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\UpdateRoleSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\AddPolicySignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\RemovePolicySignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\UpdatePolicySignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\DeleteRoleSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\AssignRoleToUserGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\AssignRoleToUserSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\UnassignRoleFromUserSignal;
 
 /**
  * RoleService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class RoleService implements RoleServiceInterface
 {
@@ -46,7 +46,7 @@ class RoleService implements RoleServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -57,7 +57,7 @@ class RoleService implements RoleServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\RoleService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( RoleServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

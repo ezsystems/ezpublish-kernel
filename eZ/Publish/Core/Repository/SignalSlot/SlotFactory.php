@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 /**
  * Fetches (creates) Slots by their identifier
@@ -23,7 +23,7 @@ abstract class SlotFactory
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException When no slot is found
      *
-     * @return \eZ\Publish\Core\SignalSlot\Slot
+     * @return \eZ\Publish\Core\Repository\SignalSlot\Slot
      */
     abstract public function getSlot( $slotIdentifier );
 }

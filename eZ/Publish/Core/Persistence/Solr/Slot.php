@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Solr;
 
-use eZ\Publish\Core\SignalSlot\Slot as BaseSlot;
+use eZ\Publish\Core\Repository\SignalSlot\Slot as BaseSlot;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\SPI\Persistence\Handler;
 

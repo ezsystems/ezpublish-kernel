@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\RoleService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * RemovePolicySignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\RoleService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService
  */
 class RemovePolicySignal extends Signal
 {

@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
@@ -15,8 +15,8 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectState;
 use eZ\Publish\Core\Repository\DomainLogic\Values\ObjectState\ObjectStateGroup;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\ObjectStateService;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\ObjectStateService;
 
 class ObjectStateServiceTest extends ServiceTest
 {
@@ -62,7 +62,7 @@ class ObjectStateServiceTest extends ServiceTest
                 array( $objectStateGroupCreateStruct ),
                 $objectStateGroup,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\CreateObjectStateGroupSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\CreateObjectStateGroupSignal',
                 array( 'objectStateGroupId' => $objectStateGroupId )
             ),
             array(
@@ -88,7 +88,7 @@ class ObjectStateServiceTest extends ServiceTest
                 array( $objectStateGroup, $objectStateGroupUpdateStruct ),
                 $objectStateGroup,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\UpdateObjectStateGroupSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\UpdateObjectStateGroupSignal',
                 array( 'objectStateGroupId' => $objectStateGroupId )
             ),
             array(
@@ -96,7 +96,7 @@ class ObjectStateServiceTest extends ServiceTest
                 array( $objectStateGroup ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\DeleteObjectStateGroupSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\DeleteObjectStateGroupSignal',
                 array( 'objectStateGroupId' => $objectStateGroupId )
             ),
             array(
@@ -104,7 +104,7 @@ class ObjectStateServiceTest extends ServiceTest
                 array( $objectStateGroup, $objectStateCreateStruct ),
                 $objectState,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\CreateObjectStateSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\CreateObjectStateSignal',
                 array(
                     'objectStateGroupId' => $objectStateGroupId,
                     'objectStateId' => $objectStateId
@@ -121,7 +121,7 @@ class ObjectStateServiceTest extends ServiceTest
                 array( $objectState, $objectStateUpdateStruct ),
                 $objectState,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\UpdateObjectStateSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\UpdateObjectStateSignal',
                 array(
                     'objectStateId' => $objectStateId
                 )
@@ -131,7 +131,7 @@ class ObjectStateServiceTest extends ServiceTest
                 array( $objectState, $priority ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetPriorityOfObjectStateSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\SetPriorityOfObjectStateSignal',
                 array(
                     'objectStateId' => $objectStateId,
                     'priority' => $priority
@@ -142,7 +142,7 @@ class ObjectStateServiceTest extends ServiceTest
                 array( $objectState ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\DeleteObjectStateSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\DeleteObjectStateSignal',
                 array(
                     'objectStateId' => $objectStateId
                 )
@@ -152,7 +152,7 @@ class ObjectStateServiceTest extends ServiceTest
                 array( $contentInfo, $objectStateGroup, $objectState ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\SetContentStateSignal',
                 array(
                     'objectStateId' => $objectStateId,
                     'contentId' => $contentId,

@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\TrashService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * DeleteTrashItemSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\TrashService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService
  */
 class DeleteTrashItemSignal extends Signal
 {

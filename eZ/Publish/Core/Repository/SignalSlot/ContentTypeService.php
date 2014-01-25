@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
@@ -21,24 +21,24 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UpdateContentTypeGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\DeleteContentTypeGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeDraftSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UpdateContentTypeDraftSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\DeleteContentTypeSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CopyContentTypeSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\AssignContentTypeGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UnassignContentTypeGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\AddFieldDefinitionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\RemoveFieldDefinitionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UpdateFieldDefinitionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\PublishContentTypeDraftSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\CreateContentTypeGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\UpdateContentTypeGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\DeleteContentTypeGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\CreateContentTypeSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\CreateContentTypeDraftSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\UpdateContentTypeDraftSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\DeleteContentTypeSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\CopyContentTypeSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\AssignContentTypeGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\UnassignContentTypeGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\AddFieldDefinitionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\RemoveFieldDefinitionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\UpdateFieldDefinitionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService\PublishContentTypeDraftSignal;
 
 /**
  * ContentTypeService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class ContentTypeService implements ContentTypeServiceInterface
 {
@@ -52,7 +52,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -63,7 +63,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\ContentTypeService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( ContentTypeServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

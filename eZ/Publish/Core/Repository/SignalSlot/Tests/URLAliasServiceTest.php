@@ -6,13 +6,13 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\URLAliasService;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\URLAliasService;
 
 class URLAliasServiceTest extends ServiceTest
 {
@@ -86,7 +86,7 @@ class URLAliasServiceTest extends ServiceTest
                 ),
                 $locationUrlAlias,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateUrlAliasSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\URLAliasService\CreateUrlAliasSignal',
                 array( 'urlAliasId' => $urlAliasId )
             ),
             array(
@@ -100,7 +100,7 @@ class URLAliasServiceTest extends ServiceTest
                 ),
                 $globalUrlAlias,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateGlobalUrlAliasSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\URLAliasService\CreateGlobalUrlAliasSignal',
                 array( 'urlAliasId' => $globalUrlAliasId )
             ),
             array(
@@ -120,7 +120,7 @@ class URLAliasServiceTest extends ServiceTest
                 array( $aliasList ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\RemoveAliasesSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\URLAliasService\RemoveAliasesSignal',
                 array(
                     'aliasList' => $aliasList
                 )

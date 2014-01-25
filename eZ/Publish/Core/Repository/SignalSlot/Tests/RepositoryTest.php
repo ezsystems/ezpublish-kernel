@@ -6,9 +6,9 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
-use eZ\Publish\Core\SignalSlot\Repository;
+use eZ\Publish\Core\Repository\SignalSlot\Repository;
 use eZ\Publish\Core\Repository\DomainLogic\Values\User\User;
 use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
@@ -29,7 +29,7 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $this->getMock( $innerClass ) ) );
         $repository = new Repository(
             $innerRepository,
-            $this->getMock( 'eZ\\Publish\\Core\\SignalSlot\\SignalDispatcher' )
+            $this->getMock( 'eZ\\Publish\\Core\\Repository\\SignalSlot\\SignalDispatcher' )
         );
 
         $service = $repository->{$method}();
@@ -44,67 +44,67 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
             array(
                 'getContentService',
                 '\eZ\Publish\API\Repository\ContentService',
-                '\eZ\Publish\Core\SignalSlot\ContentService'
+                '\eZ\Publish\Core\Repository\SignalSlot\ContentService'
             ),
             array(
                 'getContentLanguageService',
                 '\eZ\Publish\API\Repository\LanguageService',
-                '\eZ\Publish\Core\SignalSlot\LanguageService'
+                '\eZ\Publish\Core\Repository\SignalSlot\LanguageService'
             ),
             array(
                 'getContentTypeService',
                 '\eZ\Publish\API\Repository\ContentTypeService',
-                '\eZ\Publish\Core\SignalSlot\ContentTypeService'
+                '\eZ\Publish\Core\Repository\SignalSlot\ContentTypeService'
             ),
             array(
                 'getLocationService',
                 '\eZ\Publish\API\Repository\LocationService',
-                '\eZ\Publish\Core\SignalSlot\LocationService'
+                '\eZ\Publish\Core\Repository\SignalSlot\LocationService'
             ),
             array(
                 'getTrashService',
                 '\eZ\Publish\API\Repository\TrashService',
-                '\eZ\Publish\Core\SignalSlot\TrashService'
+                '\eZ\Publish\Core\Repository\SignalSlot\TrashService'
             ),
             array(
                 'getSectionService',
                 '\eZ\Publish\API\Repository\SectionService',
-                '\eZ\Publish\Core\SignalSlot\SectionService'
+                '\eZ\Publish\Core\Repository\SignalSlot\SectionService'
             ),
             array(
                 'getUserService',
                 '\eZ\Publish\API\Repository\UserService',
-                '\eZ\Publish\Core\SignalSlot\UserService'
+                '\eZ\Publish\Core\Repository\SignalSlot\UserService'
             ),
             array(
                 'getURLAliasService',
                 '\eZ\Publish\API\Repository\URLAliasService',
-                '\eZ\Publish\Core\SignalSlot\URLAliasService'
+                '\eZ\Publish\Core\Repository\SignalSlot\URLAliasService'
             ),
             array(
                 'getURLWildcardService',
                 '\eZ\Publish\API\Repository\URLWildcardService',
-                '\eZ\Publish\Core\SignalSlot\URLWildcardService'
+                '\eZ\Publish\Core\Repository\SignalSlot\URLWildcardService'
             ),
             array(
                 'getObjectStateService',
                 '\eZ\Publish\API\Repository\ObjectStateService',
-                '\eZ\Publish\Core\SignalSlot\ObjectStateService'
+                '\eZ\Publish\Core\Repository\SignalSlot\ObjectStateService'
             ),
             array(
                 'getRoleService',
                 '\eZ\Publish\API\Repository\RoleService',
-                '\eZ\Publish\Core\SignalSlot\RoleService'
+                '\eZ\Publish\Core\Repository\SignalSlot\RoleService'
             ),
             array(
                 'getSearchService',
                 '\eZ\Publish\API\Repository\SearchService',
-                '\eZ\Publish\Core\SignalSlot\SearchService'
+                '\eZ\Publish\Core\Repository\SignalSlot\SearchService'
             ),
             array(
                 'getFieldTypeService',
                 '\eZ\Publish\API\Repository\FieldTypeService',
-                '\eZ\Publish\Core\SignalSlot\FieldTypeService'
+                '\eZ\Publish\Core\Repository\SignalSlot\FieldTypeService'
             ),
         );
     }
@@ -126,7 +126,7 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
             );
         $repository = new Repository(
             $innerRepository,
-            $this->getMock( 'eZ\\Publish\\Core\\SignalSlot\\SignalDispatcher' )
+            $this->getMock( 'eZ\\Publish\\Core\\Repository\\SignalSlot\\SignalDispatcher' )
         );
 
         $result = call_user_func_array(

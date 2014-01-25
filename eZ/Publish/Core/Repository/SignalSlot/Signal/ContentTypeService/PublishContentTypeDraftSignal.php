@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\ContentTypeService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * PublishContentTypeDraftSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\ContentTypeService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\ContentTypeService
  */
 class PublishContentTypeDraftSignal extends Signal
 {

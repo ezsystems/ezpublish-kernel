@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\UserService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\UserService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * UpdateUserGroupSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\UserService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\UserService
  */
 class UpdateUserGroupSignal extends Signal
 {

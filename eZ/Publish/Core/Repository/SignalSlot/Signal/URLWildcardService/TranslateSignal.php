@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\URLWildcardService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\URLWildcardService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * TranslateSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\URLWildcardService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\URLWildcardService
  */
 class TranslateSignal extends Signal
 {

@@ -6,12 +6,12 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\Core\FieldType\TextLine\Type;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\FieldTypeService;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\FieldTypeService;
 
 class FieldTypeServiceTest extends ServiceTest
 {

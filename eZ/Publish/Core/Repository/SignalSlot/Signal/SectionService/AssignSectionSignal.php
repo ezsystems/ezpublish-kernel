@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\SectionService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * AssignSectionSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\SectionService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService
  */
 class AssignSectionSignal extends Signal
 {

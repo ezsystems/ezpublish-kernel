@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 
 /**
  * FieldTypeService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class FieldTypeService implements FieldTypeServiceInterface
 {
@@ -27,7 +27,7 @@ class FieldTypeService implements FieldTypeServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -38,7 +38,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\FieldTypeService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( FieldTypeServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

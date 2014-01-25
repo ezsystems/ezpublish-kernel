@@ -22,8 +22,8 @@ parameters:
     ezpublish.api.service.location.class: eZ\Publish\Core\Repository\DomainLogic\LocationService
 
     # Signal Slot API wrapper
-    ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
-    ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
+    ezpublish.signalslot.repository.class: eZ\Publish\Core\Repository\SignalSlot\Repository
+    ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
     ezpublish.signalslot.event_converter_slot.class: eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot
 
     # Using legacy storage engine for data compatibility with 4.x

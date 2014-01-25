@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\ObjectStateService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * SetContentStateSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\ObjectStateService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService
  */
 class SetContentStateSignal extends Signal
 {

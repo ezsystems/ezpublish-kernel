@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
@@ -17,18 +17,18 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\CreateObjectStateGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\UpdateObjectStateGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\DeleteObjectStateGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\CreateObjectStateSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\UpdateObjectStateSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetPriorityOfObjectStateSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\DeleteObjectStateSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\CreateObjectStateGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\UpdateObjectStateGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\DeleteObjectStateGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\CreateObjectStateSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\UpdateObjectStateSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\SetPriorityOfObjectStateSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\DeleteObjectStateSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ObjectStateService\SetContentStateSignal;
 
 /**
  * ObjectStateService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class ObjectStateService implements ObjectStateServiceInterface
 {
@@ -42,7 +42,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -53,7 +53,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\ObjectStateService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( ObjectStateServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\LocationService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * MoveSubtreeSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\LocationService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\LocationService
  */
 class MoveSubtreeSignal extends Signal
 {

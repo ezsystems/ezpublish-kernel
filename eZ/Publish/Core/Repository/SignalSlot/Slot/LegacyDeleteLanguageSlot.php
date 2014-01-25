@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Slot;
+namespace eZ\Publish\Core\Repository\SignalSlot\Slot;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 use eZContentLanguage;
 
 /**
@@ -20,7 +20,7 @@ class LegacyDeleteLanguageSlot extends AbstractLegacySlot
     /**
      * Receive the given $signal and react on it
      *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Signal $signal
      *
      * @return void
      */

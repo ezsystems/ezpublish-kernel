@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\Core\Repository\DomainLogic\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
@@ -18,8 +18,8 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Repository\DomainLogic\Values\User\UserGroupRoleAssignment;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\RoleService;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\RoleService;
 
 class RoleServiceTest extends ServiceTest
 {
@@ -83,7 +83,7 @@ class RoleServiceTest extends ServiceTest
                 array( $roleCreateStruct ),
                 $role,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\CreateRoleSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\CreateRoleSignal',
                 array( 'roleId' => $roleId )
             ),
             array(
@@ -91,7 +91,7 @@ class RoleServiceTest extends ServiceTest
                 array( $role, $roleUpdateStruct ),
                 $role,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\UpdateRoleSignal',
                 array( 'roleId' => $roleId )
             ),
             array(
@@ -99,7 +99,7 @@ class RoleServiceTest extends ServiceTest
                 array( $role, $policyCreateStruct ),
                 $role,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicySignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\AddPolicySignal',
                 array(
                     'roleId' => $roleId,
                     'policyId' => $roleId
@@ -110,7 +110,7 @@ class RoleServiceTest extends ServiceTest
                 array( $role, $policy ),
                 $role,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\RemovePolicySignal',
                 array(
                     'roleId' => $roleId,
                     'policyId' => $policyId
@@ -121,7 +121,7 @@ class RoleServiceTest extends ServiceTest
                 array( $policy ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\RemovePolicySignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\RemovePolicySignal',
                 array(
                     'roleId' => $roleId,
                     'policyId' => $policyId
@@ -132,7 +132,7 @@ class RoleServiceTest extends ServiceTest
                 array( $policy, $policyUpdateStruct ),
                 $policy,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdatePolicySignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\UpdatePolicySignal',
                 array( 'policyId' => $policyId )
             ),
             array(
@@ -158,7 +158,7 @@ class RoleServiceTest extends ServiceTest
                 array( $role ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\DeleteRoleSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\DeleteRoleSignal',
                 array( 'roleId' => $roleId )
             ),
             array(
@@ -172,7 +172,7 @@ class RoleServiceTest extends ServiceTest
                 array( $role, $userGroup, $roleLimitation ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserGroupSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\AssignRoleToUserGroupSignal',
                 array(
                     'roleId' => $roleId,
                     'userGroupId' => $userGroupId,
@@ -184,7 +184,7 @@ class RoleServiceTest extends ServiceTest
                 array( $role, $userGroup ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\UnassignRoleFromUserGroupSignal',
                 array(
                     'roleId' => $roleId,
                     'userGroupId' => $userGroupId,
@@ -195,7 +195,7 @@ class RoleServiceTest extends ServiceTest
                 array( $role, $user, $roleLimitation ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\AssignRoleToUserSignal',
                 array(
                     'roleId' => $roleId,
                     'userId' => $userId,
@@ -207,7 +207,7 @@ class RoleServiceTest extends ServiceTest
                 array( $role, $user ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\RoleService\UnassignRoleFromUserSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\RoleService\UnassignRoleFromUserSignal',
                 array(
                     'roleId' => $roleId,
                     'userId' => $userId,

@@ -7,21 +7,21 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\SignalSlot\Signal\SectionService\CreateSectionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\SectionService\UpdateSectionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\SectionService\DeleteSectionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\CreateSectionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\UpdateSectionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\AssignSectionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\DeleteSectionSignal;
 
 /**
  * SectionService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class SectionService implements SectionServiceInterface
 {
@@ -35,7 +35,7 @@ class SectionService implements SectionServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -46,7 +46,7 @@ class SectionService implements SectionServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\SectionService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( SectionServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

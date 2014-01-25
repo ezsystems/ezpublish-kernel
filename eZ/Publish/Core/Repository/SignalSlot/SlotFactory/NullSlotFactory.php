@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\SlotFactory;
+namespace eZ\Publish\Core\Repository\SignalSlot\SlotFactory;
 
-use eZ\Publish\Core\SignalSlot\SlotFactory;
+use eZ\Publish\Core\Repository\SignalSlot\SlotFactory;
 use RuntimeException;
 
 class NullSlotFactory extends SlotFactory
@@ -19,7 +19,7 @@ class NullSlotFactory extends SlotFactory
      *
      * @param string $slotIdentifier
      *
-     * @return \eZ\Publish\Core\SignalSlot\Slot
+     * @return \eZ\Publish\Core\Repository\SignalSlot\Slot
      */
     public function getSlot( $slotIdentifier )
     {

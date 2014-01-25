@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\SignalDispatcher;
+namespace eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\Slot;
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\Slot;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * Dispatches Signals to their assigned Slots
@@ -26,12 +26,12 @@ class DefaultSignalDispatcher extends SignalDispatcher
     /**
      * Relative namespace for internal signals.
      */
-    const RELATIVE_SIGNAL_NAMESPACE = 'eZ\\Publish\\Core\\SignalSlot\\Signal';
+    const RELATIVE_SIGNAL_NAMESPACE = 'eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal';
 
     /**
      * Slot factory
      *
-     * @var \eZ\Publish\Core\SignalSlot\SlotFactory
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SlotFactory
      */
     protected $factory;
 
@@ -76,7 +76,7 @@ class DefaultSignalDispatcher extends SignalDispatcher
 
         foreach ( array_merge( $this->signalSlotMap['*'], $this->signalSlotMap[$signalName] ) as $slot )
         {
-            /** @var \eZ\Publish\Core\SignalSlot\Slot $slot */
+            /** @var \eZ\Publish\Core\Repository\SignalSlot\Slot $slot */
             $slot->receive( $signal );
         }
     }
@@ -88,7 +88,7 @@ class DefaultSignalDispatcher extends SignalDispatcher
      * @access private For unit test use.
      *
      * @param string $signalIdentifier
-     * @param \eZ\Publish\Core\SignalSlot\Slot $slot
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Slot $slot
      */
     public function attach( $signalIdentifier, Slot $slot )
     {

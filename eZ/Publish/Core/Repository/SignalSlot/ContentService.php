@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
@@ -20,22 +20,22 @@ use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentDraftSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\TranslateVersionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteVersionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\AddRelationSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteRelationSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\AddTranslationInfoSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\CreateContentSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\DeleteContentSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\CreateContentDraftSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\TranslateVersionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\UpdateContentSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\PublishVersionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\DeleteVersionSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\CopyContentSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\AddRelationSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\DeleteRelationSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\ContentService\AddTranslationInfoSignal;
 
 /**
  * ContentService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class ContentService implements ContentServiceInterface
 {
@@ -49,7 +49,7 @@ class ContentService implements ContentServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -60,7 +60,7 @@ class ContentService implements ContentServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\ContentService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( ContentServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

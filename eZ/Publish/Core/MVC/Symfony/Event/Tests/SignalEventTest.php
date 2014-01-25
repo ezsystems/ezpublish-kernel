@@ -20,7 +20,7 @@ class SignalEventTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSignal()
     {
-        $signal = $this->getMock( 'eZ\\Publish\\Core\\SignalSlot\\Signal' );
+        $signal = $this->getMock( 'eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal' );
         $event = new SignalEvent( $signal );
         $this->assertSame( $signal, $event->getSignal() );
     }

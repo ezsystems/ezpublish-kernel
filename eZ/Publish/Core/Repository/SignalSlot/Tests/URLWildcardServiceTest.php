@@ -6,13 +6,13 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\URLWildcardService;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\URLWildcardService;
 
 class URLWildcardServiceTest extends ServiceTest
 {
@@ -49,7 +49,7 @@ class URLWildcardServiceTest extends ServiceTest
                 array( $sourceUrl, $destinationUrl, $forward ),
                 $wildcard,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\CreateSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\URLWildcardService\CreateSignal',
                 array( 'urlWildcardId' => $wildcardId )
             ),
             array(
@@ -57,7 +57,7 @@ class URLWildcardServiceTest extends ServiceTest
                 array( $wildcard ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\RemoveSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\URLWildcardService\RemoveSignal',
                 array( 'urlWildcardId' => $wildcardId )
             ),
             array(
@@ -82,7 +82,7 @@ class URLWildcardServiceTest extends ServiceTest
                     )
                 ),
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\TranslateSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\URLWildcardService\TranslateSignal',
                 array( 'url' => $sourceUrl )
             )
         );

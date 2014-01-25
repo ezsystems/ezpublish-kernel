@@ -7,17 +7,17 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
-use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\CreateSignal;
-use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\RemoveSignal;
-use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\TranslateSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\URLWildcardService\CreateSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\URLWildcardService\RemoveSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\URLWildcardService\TranslateSignal;
 
 /**
  * URLWildcardService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class URLWildcardService implements URLWildcardServiceInterface
 {
@@ -31,7 +31,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -42,7 +42,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\URLWildcardService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( URLWildcardServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

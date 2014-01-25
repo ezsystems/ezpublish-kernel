@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Signal\URLAliasService;
+namespace eZ\Publish\Core\Repository\SignalSlot\Signal\URLAliasService;
 
-use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal;
 
 /**
  * CreateGlobalUrlAliasSignal class
- * @package eZ\Publish\Core\SignalSlot\Signal\URLAliasService
+ * @package eZ\Publish\Core\Repository\SignalSlot\Signal\URLAliasService
  */
 class CreateGlobalUrlAliasSignal extends Signal
 {

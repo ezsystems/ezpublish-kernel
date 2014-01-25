@@ -6,14 +6,14 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Section;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\SectionService;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\SectionService;
 
 class SectionServiceTest extends ServiceTest
 {
@@ -54,7 +54,7 @@ class SectionServiceTest extends ServiceTest
                 array( $sectionCreateStruct ),
                 $section,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\SectionService\CreateSectionSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\CreateSectionSignal',
                 array( 'sectionId' => $sectionId )
             ),
             array(
@@ -62,7 +62,7 @@ class SectionServiceTest extends ServiceTest
                 array( $section, $sectionUpdateStruct ),
                 $section,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\SectionService\UpdateSectionSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\UpdateSectionSignal',
                 array( 'sectionId' => $sectionId )
             ),
             array(
@@ -94,7 +94,7 @@ class SectionServiceTest extends ServiceTest
                 array( $contentInfo, $section ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\AssignSectionSignal',
                 array(
                     'contentId' => $contentId,
                     'sectionId' => $sectionId
@@ -105,7 +105,7 @@ class SectionServiceTest extends ServiceTest
                 array( $section ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\SectionService\DeleteSectionSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\SectionService\DeleteSectionSignal',
                 array(
                     'sectionId' => $sectionId
                 )

@@ -28,6 +28,6 @@ class SymfonyEventConverterSlotTest extends PHPUnit_Framework_TestCase
             ->with( MVCEvents::API_SIGNAL, $this->isInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\Event\\SignalEvent' ) );
 
         $slot = new SymfonyEventConverterSlot( $eventDispatcher );
-        $slot->receive( $this->getMock( 'eZ\\Publish\\Core\\SignalSlot\\Signal' ) );
+        $slot->receive( $this->getMock( 'eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal' ) );
     }
 }

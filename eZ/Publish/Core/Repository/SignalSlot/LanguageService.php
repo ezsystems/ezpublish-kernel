@@ -7,20 +7,20 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
-use eZ\Publish\Core\SignalSlot\Signal\LanguageService\CreateLanguageSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LanguageService\UpdateLanguageNameSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LanguageService\EnableLanguageSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LanguageService\DisableLanguageSignal;
-use eZ\Publish\Core\SignalSlot\Signal\LanguageService\DeleteLanguageSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\CreateLanguageSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\UpdateLanguageNameSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\EnableLanguageSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\DisableLanguageSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\DeleteLanguageSignal;
 
 /**
  * LanguageService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class LanguageService implements LanguageServiceInterface
 {
@@ -34,7 +34,7 @@ class LanguageService implements LanguageServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -45,7 +45,7 @@ class LanguageService implements LanguageServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\LanguageService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( LanguageServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

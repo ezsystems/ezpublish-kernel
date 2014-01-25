@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 /**
  * Dispatches Signals to their assigned Slots
@@ -37,7 +37,7 @@ abstract class SignalDispatcher
      * $signalIdentifier
      *
      * @param string $signalIdentifier
-     * @param \eZ\Publish\Core\SignalSlot\Slot $slot
+     * @param \eZ\Publish\Core\Repository\SignalSlot\Slot $slot
      *
      * @return void
      *

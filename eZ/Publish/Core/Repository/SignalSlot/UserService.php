@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot;
+namespace eZ\Publish\Core\Repository\SignalSlot;
 
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
@@ -16,19 +16,19 @@ use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\UserService\MoveUserGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserSignal;
-use eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserSignal;
-use eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserSignal;
-use eZ\Publish\Core\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal;
-use eZ\Publish\Core\SignalSlot\Signal\UserService\UnAssignUserFromUserGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\CreateUserGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\DeleteUserGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\MoveUserGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\UpdateUserGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\CreateUserSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\DeleteUserSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\UpdateUserSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal;
+use eZ\Publish\Core\Repository\SignalSlot\Signal\UserService\UnAssignUserFromUserGroupSignal;
 
 /**
  * UserService class
- * @package eZ\Publish\Core\SignalSlot
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class UserService implements UserServiceInterface
 {
@@ -42,7 +42,7 @@ class UserService implements UserServiceInterface
     /**
      * SignalDispatcher
      *
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
+     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
      */
     protected $signalDispatcher;
 
@@ -53,7 +53,7 @@ class UserService implements UserServiceInterface
      * dispatcher
      *
      * @param \eZ\Publish\API\Repository\UserService $service
-     * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
     public function __construct( UserServiceInterface $service, SignalDispatcher $signalDispatcher )
     {

@@ -52,7 +52,7 @@
         <directory>eZ/Publish/SPI</directory>
     </testsuite>
     <testsuite name="eZ Publish SignalSlot test suite">
-        <directory>eZ/Publish/Core/SignalSlot</directory>
+        <directory>eZ/Publish/Core/Repository/SignalSlot</directory>
     </testsuite>
     <testsuite name="eZ\Publish\Core\Pagination">
         <directory>eZ/Publish/Core/Pagination</directory>

@@ -6,15 +6,15 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\Core\Repository\DomainLogic\Values\Content\TrashItem;
 use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\TrashService;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\TrashService;
 
 class TrashServiceTest extends ServiceTest
 {
@@ -68,7 +68,7 @@ class TrashServiceTest extends ServiceTest
                 array( $location ),
                 $trashItem,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\TrashService\TrashSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService\TrashSignal',
                 array( 'locationId' => $locationId )
             ),
             array(
@@ -76,7 +76,7 @@ class TrashServiceTest extends ServiceTest
                 array( $trashItem, $root ),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService\RecoverSignal',
                 array(
                     'trashItemId' => $trashItemId,
                     'newParentLocationId' => $rootId,
@@ -88,7 +88,7 @@ class TrashServiceTest extends ServiceTest
                 array(),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\TrashService\EmptyTrashSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService\EmptyTrashSignal',
                 array()
             ),
             array(
@@ -96,7 +96,7 @@ class TrashServiceTest extends ServiceTest
                 array( $trashItem ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\TrashService\DeleteTrashItemSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\TrashService\DeleteTrashItemSignal',
                 array( 'trashItemId' => $trashItemId )
             ),
             array(

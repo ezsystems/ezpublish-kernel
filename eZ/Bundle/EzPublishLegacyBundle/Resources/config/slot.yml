@@ -1,26 +1,26 @@
 parameters:
-    ezpublish_legacy.signalslot.assign_section.class: eZ\Publish\Core\SignalSlot\Slot\LegacyAssignSectionSlot
-    ezpublish_legacy.signalslot.copy_content.class: eZ\Publish\Core\SignalSlot\Slot\LegacyCopyContentSlot
-    ezpublish_legacy.signalslot.create_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyCreateLocationSlot
-    ezpublish_legacy.signalslot.delete_content.class: eZ\Publish\Core\SignalSlot\Slot\LegacyDeleteContentSlot
-    ezpublish_legacy.signalslot.delete_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyDeleteLocationSlot
-    ezpublish_legacy.signalslot.delete_version.class: eZ\Publish\Core\SignalSlot\Slot\LegacyDeleteVersionSlot
-    ezpublish_legacy.signalslot.hide_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyHideLocationSlot
-    ezpublish_legacy.signalslot.move_subtree.class: eZ\Publish\Core\SignalSlot\Slot\LegacyMoveSubtreeSlot
-    ezpublish_legacy.signalslot.publish_version.class: eZ\Publish\Core\SignalSlot\Slot\LegacyPublishVersionSlot
-    ezpublish_legacy.signalslot.set_content_state.class: eZ\Publish\Core\SignalSlot\Slot\LegacySetContentStateSlot
-    ezpublish_legacy.signalslot.swap_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacySwapLocationSlot
-    ezpublish_legacy.signalslot.unhide_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUnhideLocationSlot
-    ezpublish_legacy.signalslot.update_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUpdateLocationSlot
-    ezpublish_legacy.signalslot.publish_content_type_draft.class: eZ\Publish\Core\SignalSlot\Slot\LegacyPublishContentTypeDraftSlot
-    ezpublish_legacy.signalslot.create_language.class: eZ\Publish\Core\SignalSlot\Slot\LegacyCreateLanguageSlot
-    ezpublish_legacy.signalslot.delete_language.class: eZ\Publish\Core\SignalSlot\Slot\LegacyDeleteLanguageSlot
-    ezpublish_legacy.signalslot.disable_language.class: eZ\Publish\Core\SignalSlot\Slot\LegacyDisableLanguageSlot
-    ezpublish_legacy.signalslot.enable_language.class: eZ\Publish\Core\SignalSlot\Slot\LegacyEnableLanguageSlot
-    ezpublish_legacy.signalslot.update_language_name.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUpdateLanguageNameSlot
-    ezpublish_legacy.signalslot.update_user.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUpdateUserSlot
-    ezpublish_legacy.signalslot.assign_user_to_user_group.class: eZ\Publish\Core\SignalSlot\Slot\LegacyAssignUserToUserGroupSlot
-    ezpublish_legacy.signalslot.unassign_user_from_user_group.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUnassignUserFromUserGroupSlot
+    ezpublish_legacy.signalslot.assign_section.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyAssignSectionSlot
+    ezpublish_legacy.signalslot.copy_content.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyCopyContentSlot
+    ezpublish_legacy.signalslot.create_location.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyCreateLocationSlot
+    ezpublish_legacy.signalslot.delete_content.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyDeleteContentSlot
+    ezpublish_legacy.signalslot.delete_location.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyDeleteLocationSlot
+    ezpublish_legacy.signalslot.delete_version.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyDeleteVersionSlot
+    ezpublish_legacy.signalslot.hide_location.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyHideLocationSlot
+    ezpublish_legacy.signalslot.move_subtree.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyMoveSubtreeSlot
+    ezpublish_legacy.signalslot.publish_version.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyPublishVersionSlot
+    ezpublish_legacy.signalslot.set_content_state.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacySetContentStateSlot
+    ezpublish_legacy.signalslot.swap_location.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacySwapLocationSlot
+    ezpublish_legacy.signalslot.unhide_location.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyUnhideLocationSlot
+    ezpublish_legacy.signalslot.update_location.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyUpdateLocationSlot
+    ezpublish_legacy.signalslot.publish_content_type_draft.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyPublishContentTypeDraftSlot
+    ezpublish_legacy.signalslot.create_language.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyCreateLanguageSlot
+    ezpublish_legacy.signalslot.delete_language.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyDeleteLanguageSlot
+    ezpublish_legacy.signalslot.disable_language.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyDisableLanguageSlot
+    ezpublish_legacy.signalslot.enable_language.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyEnableLanguageSlot
+    ezpublish_legacy.signalslot.update_language_name.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyUpdateLanguageNameSlot
+    ezpublish_legacy.signalslot.update_user.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyUpdateUserSlot
+    ezpublish_legacy.signalslot.assign_user_to_user_group.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyAssignUserToUserGroupSlot
+    ezpublish_legacy.signalslot.unassign_user_from_user_group.class: eZ\Publish\Core\Repository\SignalSlot\Slot\LegacyUnassignUserFromUserGroupSlot
 
 services:
     ezpublish_legacy.signalslot.assign_section:

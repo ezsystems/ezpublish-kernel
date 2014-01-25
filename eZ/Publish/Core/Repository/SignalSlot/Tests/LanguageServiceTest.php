@@ -6,13 +6,13 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\SignalSlot\Tests;
+namespace eZ\Publish\Core\Repository\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
 
-use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use eZ\Publish\Core\SignalSlot\LanguageService;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\LanguageService;
 
 class LanguageServiceTest extends ServiceTest
 {
@@ -53,7 +53,7 @@ class LanguageServiceTest extends ServiceTest
                 array( $languageCreateStruct ),
                 $language,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LanguageService\CreateLanguageSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\CreateLanguageSignal',
                 array( 'languageId' => $languageId )
             ),
             array(
@@ -61,7 +61,7 @@ class LanguageServiceTest extends ServiceTest
                 array( $language, $languageNewName ),
                 $language,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LanguageService\UpdateLanguageNameSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\UpdateLanguageNameSignal',
                 array(
                     'languageId' => $languageId,
                     'newName' => $languageNewName
@@ -72,7 +72,7 @@ class LanguageServiceTest extends ServiceTest
                 array( $language ),
                 $language,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LanguageService\EnableLanguageSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\EnableLanguageSignal',
                 array(
                     'languageId' => $languageId,
                 )
@@ -82,7 +82,7 @@ class LanguageServiceTest extends ServiceTest
                 array( $language ),
                 $language,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LanguageService\DisableLanguageSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\DisableLanguageSignal',
                 array(
                     'languageId' => $languageId,
                 )
@@ -110,7 +110,7 @@ class LanguageServiceTest extends ServiceTest
                 array( $language ),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LanguageService\DeleteLanguageSignal',
+                'eZ\Publish\Core\Repository\SignalSlot\Signal\LanguageService\DeleteLanguageSignal',
                 array(
                     'languageId' => $languageId,
                 )

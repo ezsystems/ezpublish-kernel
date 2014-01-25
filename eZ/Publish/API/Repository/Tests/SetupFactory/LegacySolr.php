@@ -21,9 +21,9 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 use eZ\Publish\Core\Persistence\Solr\Slot;
 use eZ\Publish\Core\FieldType;
-use eZ\Publish\Core\SignalSlot\Repository as SignalSlotRepository;
-use eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher;
-use eZ\Publish\Core\SignalSlot\SlotFactory\GeneralSlotFactory;
+use eZ\Publish\Core\Repository\SignalSlot\Repository as SignalSlotRepository;
+use eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher\DefaultSignalDispatcher;
+use eZ\Publish\Core\Repository\SignalSlot\SlotFactory\GeneralSlotFactory;
 use eZ\Publish\Core\Persistence\Legacy\Handler as LegacyPersistenceHandler;
 use eZ\Publish\Core\Persistence\Cache\Handler as CachePersistenceHandler;
 
@@ -66,21 +66,21 @@ class LegacySolr extends Legacy
                 array(
                     // Attention: we are passing the NON SignalSlotted repository here because it is still under creation
                     // this might be an issue and might require a dedicated setRepository() method.
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\PublishVersionSignal" => array( new Slot\PublishVersion( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\CopyContentSignal" => array( new Slot\CopyContent( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteContentSignal" => array( new Slot\DeleteContent( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteVersionSignal" => array( new Slot\DeleteVersion( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\DeleteLocationSignal" => array( new Slot\DeleteLocation( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( new Slot\CreateUser( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserGroupSignal" => array( new Slot\CreateUserGroup( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\MoveUserGroupSignal" => array( new Slot\MoveUserGroup( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\CopySubtreeSignal" => array( new Slot\CopySubtree( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\MoveSubtreeSignal" => array( new Slot\MoveSubtree( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\TrashSignal" => array( new Slot\Trash( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\RecoverSignal" => array( new Slot\Recover( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\HideLocationSignal" => array( new Slot\HideLocation( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\UnhideLocationSignal" => array( new Slot\UnhideLocation( $repository, $persistenceHandler ) ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ObjectStateService\\SetContentStateSignal" => array( new Slot\SetContentState( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\ContentService\\PublishVersionSignal" => array( new Slot\PublishVersion( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\ContentService\\CopyContentSignal" => array( new Slot\CopyContent( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\ContentService\\DeleteContentSignal" => array( new Slot\DeleteContent( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\ContentService\\DeleteVersionSignal" => array( new Slot\DeleteVersion( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\LocationService\\DeleteLocationSignal" => array( new Slot\DeleteLocation( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( new Slot\CreateUser( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\UserService\\CreateUserGroupSignal" => array( new Slot\CreateUserGroup( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\UserService\\MoveUserGroupSignal" => array( new Slot\MoveUserGroup( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\LocationService\\CopySubtreeSignal" => array( new Slot\CopySubtree( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\LocationService\\MoveSubtreeSignal" => array( new Slot\MoveSubtree( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\TrashService\\TrashSignal" => array( new Slot\Trash( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\TrashService\\RecoverSignal" => array( new Slot\Recover( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\LocationService\\HideLocationSignal" => array( new Slot\HideLocation( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\LocationService\\UnhideLocationSignal" => array( new Slot\UnhideLocation( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\Repository\\SignalSlot\\Signal\\ObjectStateService\\SetContentStateSignal" => array( new Slot\SetContentState( $repository, $persistenceHandler ) ),
                 )
             )
         );

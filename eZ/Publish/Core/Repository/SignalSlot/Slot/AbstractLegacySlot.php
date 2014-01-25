@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\SignalSlot\Slot;
+namespace eZ\Publish\Core\Repository\SignalSlot\Slot;
 
-use eZ\Publish\Core\SignalSlot\Slot;
+use eZ\Publish\Core\Repository\SignalSlot\Slot;
 use Closure;
 use ezpKernelHandler;
 

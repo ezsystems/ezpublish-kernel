@@ -41,7 +41,7 @@ final class MVCEvents
      * The API_SIGNAL event occurs when the SignalSlot repository services emit a signal.
      * This make it possible to react to it, depending on which signal is emitted.
      *
-     * All available signals can be found under eZ\Publish\Core\SignalSlot\Signal namespace.
+     * All available signals can be found under eZ\Publish\Core\Repository\SignalSlot\Signal namespace.
      *
      * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\SignalEvent instance.
      */
