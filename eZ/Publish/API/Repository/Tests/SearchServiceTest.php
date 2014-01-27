@@ -390,7 +390,7 @@ class SearchServiceTest extends BaseTest
                                 'boost' => array(
                                     'title' => 2,
                                 ),
-                                'fuzzyness' => .5,
+                                'fuzziness' => .5,
                             )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )

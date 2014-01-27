@@ -61,7 +61,7 @@ class FullTextTest extends TestCase
         $visitor = $this->getFullTextCriterionVisitor();
 
         $criterion = new Criterion\FullText( "Hello" );
-        $criterion->fuzzyness = .5;
+        $criterion->fuzziness = .5;
 
         $this->assertEquals(
             "(text:Hello~0.5)",
@@ -102,7 +102,7 @@ class FullTextTest extends TestCase
         $visitor = $this->getFullTextCriterionVisitor();
 
         $criterion = new Criterion\FullText( "Hello" );
-        $criterion->fuzzyness = .5;
+        $criterion->fuzziness = .5;
         $criterion->boost = array( 'title' => 2 );
 
         $this->assertEquals(
