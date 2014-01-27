@@ -61,19 +61,19 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
     /**
      * Assert that the elements are
      */
-    protected function assertSearchResults( $expectedIds, $locations )
+    protected function assertSearchResults( $expectedIds, $searchResult )
     {
-        $result = array_map(
-            function ( $location )
+        $ids = array_map(
+            function ( $hit )
             {
-                return $location->id;
+                return $hit->valueObject->id;
             },
-            $locations
+            $searchResult->searchHits
         );
 
-        sort( $result );
+        sort( $ids );
 
-        $this->assertEquals( $expectedIds, $result );
+        $this->assertEquals( $expectedIds, $ids );
     }
 
     /**
@@ -238,7 +238,7 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
     {
         $handler = $this->getLocationSearchHandler();
 
-        $locations = $handler->findLocations(
+        $searchResult = $handler->findLocations(
             new LocationQuery(
                 array(
                     'filter' => new Criterion\Location\Id( 2 )
@@ -246,14 +246,15 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
-        $this->assertEquals( 1, count( $locations ) );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertCount( 1, $searchResult->searchHits );
     }
 
     public function testFindWithZeroLimit()
     {
         $handler = $this->getLocationSearchHandler();
 
-        $locations = $handler->findLocations(
+        $searchResult = $handler->findLocations(
             new LocationQuery(
                 array(
                     'filter' => new Criterion\Location\Id( 2 ),
@@ -263,7 +264,8 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
-        $this->assertEquals( array(), $locations );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( array(), $searchResult->searchHits );
     }
 
     /**
@@ -273,7 +275,7 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
     {
         $handler = $this->getLocationSearchHandler();
 
-        $locations = $handler->findLocations(
+        $searchResult = $handler->findLocations(
             new LocationQuery(
                 array(
                     'filter' => new Criterion\Location\Id( 2 ),
@@ -283,7 +285,8 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
-        $this->assertEquals( 1, count( $locations ) );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertCount( 1, $searchResult->searchHits );
     }
 
     /**
@@ -293,7 +296,7 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
     {
         $handler = $this->getLocationSearchHandler();
 
-        $locations = $handler->findLocations(
+        $searchResult = $handler->findLocations(
             new LocationQuery(
                 array(
                     'filter' => new Criterion\Location\Id( 2 ),
@@ -303,7 +306,8 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
-        $this->assertEquals( 0, count( $locations ) );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( array(), $searchResult->searchHits );
     }
 
     public function testLocationIdFilter()

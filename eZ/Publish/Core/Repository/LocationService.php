@@ -302,17 +302,16 @@ class LocationService implements LocationServiceInterface
             throw new InvalidArgumentValue( "limit", $limit );
 
         $childLocations = array();
-        foreach (
-            $this->searchChildrenLocations(
-                $location->id,
-                $location->sortField,
-                $location->sortOrder,
-                $offset,
-                $limit
-            ) as $spiLocation
-        )
+        $searchResult = $this->searchChildrenLocations(
+            $location->id,
+            $location->sortField,
+            $location->sortOrder,
+            $offset,
+            $limit
+        );
+        foreach ( $searchResult->searchHits as $searchHit )
         {
-            $childLocation = $this->domainMapper->buildLocationDomainObject( $spiLocation );
+            $childLocation = $this->domainMapper->buildLocationDomainObject( $searchHit->valueObject );
             if ( $this->repository->canUser( 'content', 'read', $childLocation->getContentInfo(), $childLocation ) )
             {
                 $childLocations[] = $childLocation;

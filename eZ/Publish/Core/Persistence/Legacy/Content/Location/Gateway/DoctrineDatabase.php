@@ -144,9 +144,10 @@ class DoctrineDatabase extends Gateway
      */
     public function find( Query $query )
     {
+        $count = $this->count( $query->filter );
         if ( $query->limit === 0 )
         {
-            return array();
+            return array( "count" => $count, "rows" => array() );
         }
 
         $selectQuery = $this->handler->createSelectQuery();
@@ -205,7 +206,10 @@ class DoctrineDatabase extends Gateway
         $statement = $selectQuery->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( PDO::FETCH_ASSOC );
+        return array(
+            "count" => $count,
+            "rows" => $statement->fetchAll( PDO::FETCH_ASSOC )
+        );
     }
 
     /**
@@ -222,10 +226,35 @@ class DoctrineDatabase extends Gateway
             ->select(
                 $query->alias( $query->expr->count( '*' ), 'count' )
             )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
-            ->where(
-                $this->criteriaConverter->convertCriteria( $query, $criterion )
-            );
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) );
+
+        $query->innerJoin(
+            'ezcontentobject',
+            'ezcontentobject_tree.contentobject_id',
+            'ezcontentobject.id'
+        );
+        $query->innerJoin(
+            'ezcontentobject_version',
+            'ezcontentobject.id',
+            'ezcontentobject_version.contentobject_id'
+        );
+        $query->where(
+            $this->criteriaConverter->convertCriteria( $query, $criterion ),
+            $query->expr->eq(
+                'ezcontentobject.status',
+                //ContentInfo::STATUS_PUBLISHED
+                $query->bindValue( 1, null, PDO::PARAM_INT )
+            ),
+            $query->expr->eq(
+                'ezcontentobject_version.status',
+                //VersionInfo::STATUS_PUBLISHED
+                $query->bindValue( 1, null, PDO::PARAM_INT )
+            ),
+            $query->expr->neq(
+                $this->handler->quoteColumn( "depth" ),
+                $query->bindValue( 0, null, PDO::PARAM_INT )
+            )
+        );
 
         $statement = $query->prepare();
         $statement->execute();

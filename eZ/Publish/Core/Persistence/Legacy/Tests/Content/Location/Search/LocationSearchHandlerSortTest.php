@@ -60,14 +60,14 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertEquals( $expectedIds, $ids );
     }
 
-    protected function getIds( $locations )
+    protected function getIds( $searchResult )
     {
         $ids = array_map(
-            function ( $location )
+            function ( $hit )
             {
-                return $location->id;
+                return $hit->valueObject->id;
             },
-            $locations
+            $searchResult->searchHits
         );
 
         return $ids;
