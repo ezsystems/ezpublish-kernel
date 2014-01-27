@@ -9,6 +9,7 @@ parameters:
     ezpublish_rest.output.value_object_visitor.BadRequestException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\BadRequestException
     ezpublish_rest.output.value_object_visitor.ForbiddenException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ForbiddenException
     ezpublish_rest.output.value_object_visitor.Exception.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\Exception
+    ezpublish_rest.output.value_object_visitor.NotImplementedException.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\NotImplementedException
 
     # Section
     ezpublish_rest.output.value_object_visitor.SectionList.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\SectionList
@@ -167,6 +168,13 @@ services:
         arguments: [ true  ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException }
+
+    ezpublish_rest.output.value_object_visitor.NotImplementedException:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.NotImplementedException.class%
+        arguments: [ true  ]
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Exceptions\NotImplementedException }
 
     ezpublish_rest.output.value_object_visitor.Exception:
         parent: ezpublish_rest.output.value_object_visitor.base
