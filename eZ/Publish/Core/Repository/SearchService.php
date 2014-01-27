@@ -11,13 +11,17 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location as LocationCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\Search\Handler;
+use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as LocationSearchHandler;
 
 /**
  * Search service
@@ -43,6 +47,11 @@ class SearchService implements SearchServiceInterface
     protected $searchHandler;
 
     /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler
+     */
+    protected $locationSearchHandler;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -62,6 +71,7 @@ class SearchService implements SearchServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandler
      * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
      * @param array $settings
@@ -69,6 +79,7 @@ class SearchService implements SearchServiceInterface
     public function __construct(
         RepositoryInterface $repository,
         Handler $searchHandler,
+        LocationSearchHandler $locationSearchHandler,
         DomainMapper $domainMapper,
         PermissionsCriterionHandler $permissionsCriterionHandler,
         array $settings = array()
@@ -76,6 +87,7 @@ class SearchService implements SearchServiceInterface
     {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
+        $this->locationSearchHandler = $locationSearchHandler;
         $this->domainMapper = $domainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
@@ -104,6 +116,8 @@ class SearchService implements SearchServiceInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
         $this->validateSortClauses( $query );
+        $this->validateContentCriteria( array( $query->query ) );
+        $this->validateContentCriteria( array( $query->filter ) );
 
         if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $query->filter ) )
         {
@@ -125,6 +139,30 @@ class SearchService implements SearchServiceInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Checks that $criteria does not contain Location criterions.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion[] $criteria
+     */
+    protected function validateContentCriteria( array $criteria )
+    {
+        foreach ( $criteria as $criterion )
+        {
+            if ( $criterion instanceof LocationCriterion )
+            {
+                throw new InvalidArgumentException(
+                    "\$query", "Location criterions cannot be used in Content query"
+                );
+            }
+            if ( $criterion instanceof LogicalOperator )
+            {
+                $this->validateContentCriteria( $criterion->criteria );
+            }
+        }
     }
 
     /**
@@ -211,5 +249,44 @@ class SearchService implements SearchServiceInterface
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
     {
 
+    }
+
+    /**
+     * Finds Locations for the given query.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    public function findLocations( LocationQuery $query, $filterOnUserPermissions = true )
+    {
+        $query = clone $query;
+        $query->filter = $query->filter ?: new Criterion\MatchAll();
+
+        $this->validateSortClauses( $query );
+
+        if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $query->filter ) )
+        {
+            return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
+        }
+
+        if ( $query->limit === null )
+        {
+            $query->limit = self::MAX_LIMIT;
+        }
+
+        $result = $this->locationSearchHandler->findLocations( $query );
+
+        foreach ( $result->searchHits as $hit )
+        {
+            $hit->valueObject = $this->domainMapper->buildLocationDomainObject(
+                $hit->valueObject
+            );
+        }
+
+        return $result;
     }
 }

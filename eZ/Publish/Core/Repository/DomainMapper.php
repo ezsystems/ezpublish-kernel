@@ -18,9 +18,11 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
@@ -224,6 +226,46 @@ class DomainMapper
     }
 
     /**
+     * Builds domain location object from provided persistence location
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function buildLocationDomainObject( SPILocation $spiLocation )
+    {
+        // TODO: this is hardcoded workaround for missing ContentInfo on root location
+        if ( $spiLocation->id == 1 )
+            $contentInfo = new ContentInfo(
+                array(
+                    'id' => 0,
+                    'name' => 'Top Level Nodes',
+                    'sectionId' => 1,
+                    'mainLocationId' => 1,
+                    'contentTypeId' => 1,
+                )
+            );
+        else
+            $contentInfo = $this->repository->getContentService()->internalLoadContentInfo( $spiLocation->contentId );
+
+        return new Location(
+            array(
+                'contentInfo' => $contentInfo,
+                'id' => $spiLocation->id,
+                'priority' => $spiLocation->priority,
+                'hidden' => $spiLocation->hidden,
+                'invisible' => $spiLocation->invisible,
+                'remoteId' => $spiLocation->remoteId,
+                'parentLocationId' => $spiLocation->parentId,
+                'pathString' => $spiLocation->pathString,
+                'depth' => $spiLocation->depth,
+                'sortField' => $spiLocation->sortField,
+                'sortOrder' => $spiLocation->sortOrder,
+            )
+        );
+    }
+
+    /**
      * Creates an array of SPI location create structs from given array of API location create structs
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
@@ -238,7 +280,7 @@ class DomainMapper
      */
     public function buildSPILocationCreateStruct(
         $locationCreateStruct,
-        Location $parentLocation,
+        APILocation $parentLocation,
         $mainLocation,
         $contentId,
         $contentVersionNo
@@ -320,18 +362,18 @@ class DomainMapper
     {
         switch ( $sortField )
         {
-            case Location::SORT_FIELD_PATH:
-            case Location::SORT_FIELD_PUBLISHED:
-            case Location::SORT_FIELD_MODIFIED:
-            case Location::SORT_FIELD_SECTION:
-            case Location::SORT_FIELD_DEPTH:
-            case Location::SORT_FIELD_CLASS_IDENTIFIER:
-            case Location::SORT_FIELD_CLASS_NAME:
-            case Location::SORT_FIELD_PRIORITY:
-            case Location::SORT_FIELD_NAME:
-            case Location::SORT_FIELD_MODIFIED_SUBNODE:
-            case Location::SORT_FIELD_NODE_ID:
-            case Location::SORT_FIELD_CONTENTOBJECT_ID:
+            case APILocation::SORT_FIELD_PATH:
+            case APILocation::SORT_FIELD_PUBLISHED:
+            case APILocation::SORT_FIELD_MODIFIED:
+            case APILocation::SORT_FIELD_SECTION:
+            case APILocation::SORT_FIELD_DEPTH:
+            case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
+            case APILocation::SORT_FIELD_CLASS_NAME:
+            case APILocation::SORT_FIELD_PRIORITY:
+            case APILocation::SORT_FIELD_NAME:
+            case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
+            case APILocation::SORT_FIELD_NODE_ID:
+            case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
                 return true;
         }
 
@@ -349,8 +391,8 @@ class DomainMapper
     {
         switch ( $sortOrder )
         {
-            case Location::SORT_ORDER_DESC:
-            case Location::SORT_ORDER_ASC:
+            case APILocation::SORT_ORDER_DESC:
+            case APILocation::SORT_ORDER_ASC:
                 return true;
         }
 

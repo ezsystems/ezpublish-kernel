@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -98,5 +99,20 @@ class SearchService implements SearchServiceInterface
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
     {
         return $this->service->suggest( $prefix, $fieldPaths, $limit, $filter );
+    }
+
+    /**
+     * Finds Locations for the given query.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    public function findLocations( LocationQuery $query, $filterOnUserPermissions = true )
+    {
+        return $this->service->findLocations( $query, $filterOnUserPermissions );
     }
 }
