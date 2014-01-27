@@ -522,18 +522,6 @@ class Handler implements HandlerInterface
         if ( !isset( $this->searchHandler ) )
         {
             $db = $this->dbHandler;
-            $commaSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
-                $db, $this->transformationProcessor, ","
-            );
-            $hyphenSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
-                $db, $this->transformationProcessor, "-"
-            );
-            $compositeValueHandler = new CriterionHandler\FieldValue\Handler\Composite(
-                $db, $this->transformationProcessor
-            );
-            $simpleValueHandler = new CriterionHandler\FieldValue\Handler\Simple(
-                $db, $this->transformationProcessor
-            );
             $this->searchHandler = new Content\Search\Handler(
                 new Content\Search\Gateway\ExceptionConversion(
                     new Content\Search\Gateway\DoctrineDatabase(
@@ -755,18 +743,6 @@ class Handler implements HandlerInterface
         if ( !isset( $this->locationGateway ) )
         {
             $dbHandler = $this->dbHandler;
-            $commaSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
-                $dbHandler, $this->transformationProcessor, ","
-            );
-            $hyphenSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
-                $dbHandler, $this->transformationProcessor, "-"
-            );
-            $compositeValueHandler = new CriterionHandler\FieldValue\Handler\Composite(
-                $dbHandler, $this->transformationProcessor
-            );
-            $simpleValueHandler = new CriterionHandler\FieldValue\Handler\Simple(
-                $dbHandler, $this->transformationProcessor
-            );
             $this->locationGateway = new Content\Location\Gateway\ExceptionConversion(
                 new Content\Location\Gateway\DoctrineDatabase(
                     $dbHandler,
