@@ -12,7 +12,7 @@ namespace eZ\Publish\API\Repository\Values\Content;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This class is used to perform a query
+ * This class is used to perform a Content query
  *
  * @property $criterion Deprecated alias for $query
  */

@@ -1,42 +1,37 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location\RemoteId class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
- * A criterion that matches content based on its parent location id
- *
- * Own location id is done using {@see LocationId}
+ * A criterion that matches Location based on its remote id
  *
  * Supported operators:
- * - IN: matches against a list of location ids
- * - EQ: matches against a unique location id
- *
- * @deprecated Since 5.3, use Location search instead
+ * - IN: will match from a list of location remote IDs
+ * - EQ: will match against one location remote ID
  */
-class ParentLocationId extends Criterion implements CriterionInterface
+class RemoteId extends Location implements CriterionInterface
 {
     /**
-     * Creates a new ParentLocationId criterion
+     * Creates a new Location RemoteId criterion
      *
-     * @param int|int[] $value One or more locationId parent locations must be matched against
+     * @param int|int[] $value One or more of Location remote ids that must be matched
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
-     *
-     * @deprecated Since 5.3, use Location search instead
      */
-    public function __construct( $value )
+    public function __construct( $value  )
     {
         parent::__construct( null, null, $value );
     }

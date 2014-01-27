@@ -22,7 +22,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-
 class FieldFacetBuilder extends FacetBuilder
 {
     const COUNT_ASC = 0;

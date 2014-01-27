@@ -19,6 +19,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * Supported operators:
  * - IN: will match from a list of location remote IDs
  * - EQ: will match against one location remote ID
+ *
+ * @deprecated Since 5.3, use Location search instead
  */
 class LocationRemoteId extends Criterion implements CriterionInterface
 {
@@ -29,6 +31,8 @@ class LocationRemoteId extends Criterion implements CriterionInterface
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
+     *
+     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $value  )
     {

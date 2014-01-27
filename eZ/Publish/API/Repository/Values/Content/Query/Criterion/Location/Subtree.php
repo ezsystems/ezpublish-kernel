@@ -1,37 +1,34 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location\Subtree class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
- * Criterion that matches content that belongs to a given (list of) Subtree(s)
+ * Criterion that matches Location that belongs to a given (list of) Subtree(s)
  *
- * Content will be matched if it is part of at least one of the given subtree path strings
- *
- * @deprecated Since 5.3, use Location search instead
+ * Location will be matched if it in at least one of the given subtree path strings
  */
-class Subtree extends Criterion implements CriterionInterface
+class Subtree extends Location implements CriterionInterface
 {
     /**
-     * Creates a new SubTree criterion
+     * Creates a new Subtree criterion
      *
      * @param string|string[] $value an array of subtree path strings, eg: /1/2/
      *
      * @throws InvalidArgumentException if a non path string is given
      * @throws InvalidArgumentException if the value type doesn't match the operator
-     *
-     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $value )
     {

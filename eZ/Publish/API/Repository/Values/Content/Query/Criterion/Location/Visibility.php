@@ -1,25 +1,24 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location\Visibility class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use InvalidArgumentException;
 
 /**
- * A criterion that matches content based on its visibility
- *
- * @deprecated Since 5.3, use Location search instead
+ * A criterion that matches Location based on its visibility
  */
-class Visibility extends Criterion implements CriterionInterface
+class Visibility extends Location implements CriterionInterface
 {
     /**
      * Visibility constant: visible
@@ -34,11 +33,9 @@ class Visibility extends Criterion implements CriterionInterface
     /**
      * Creates a new Visibility criterion
      *
-     * @param int $value Visibility: self::VISIBLE, self::HIDDEN
+     * @param int $value one of self::VISIBLE and self::HIDDEN
      *
      * @throws \InvalidArgumentException
-     *
-     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $value )
     {

@@ -1,29 +1,26 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\SortClause\LocationPriority class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Priority class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
- * Sets sort direction on the location priority date for a content query
- *
- * @deprecated Since 5.3, use Location search instead
+ * Sets sort direction on the Location priority for a Location query
  */
-class LocationPriority extends SortClause
+class Priority extends SortClause
 {
     /**
      * Constructs a new LocationPriority SortClause
-     * @param string $sortDirection
      *
-     * @deprecated Since 5.3, use Location search instead
+     * @param string $sortDirection
      */
     public function __construct( $sortDirection = Query::SORT_ASC )
     {

@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 
 /**
  * Search service
@@ -62,4 +63,16 @@ interface SearchService
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null );
+
+    /**
+     * Finds Locations for the given query.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if query is not valid
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    public function findLocations( LocationQuery $query, $filterOnUserPermissions = true );
 }

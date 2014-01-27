@@ -1,38 +1,34 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationPriority class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location\Priority class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
- * A criterion that matches content based on its own location priority
+ * A criterion that matches Location based on its priority
  *
  * Supported operators:
- * - BETWEEN: matches content whose location priority is between (included) the TWO given priorities
- * - GT, GTE: matches content whose location priority is greater than/greater than or equals the given priority
- * - LT, LTE: matches content whose location priority is lower than/lower than or equals the given priority
- *
- * @deprecated Since 5.3, use Location search instead
+ * - BETWEEN: matches location whose priority is between (included) the TWO given priorities
+ * - GT, GTE: matches location whose priority is greater than/greater than or equals the given priority
+ * - LT, LTE: matches location whose priority is lower than/lower than or equals the given priority
  */
-class LocationPriority extends Criterion implements CriterionInterface
+class Priority extends Location implements CriterionInterface
 {
-
     /**
      * Creates a new LocationPriority criterion
      *
      * @param string $operator One of the Operator constants
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator
-     *
-     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $operator, $value )
     {
