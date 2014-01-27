@@ -9,12 +9,17 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Search;
 
+use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\SortClauseConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\SortClauseHandler;
 
 /**
  * Test case for LocationSearchHandler
@@ -77,8 +82,36 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
      */
     protected function getLocationSearchHandler()
     {
+        $rules = array();
+        foreach ( glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
+        {
+            $rules[] = str_replace( self::getInstallationDir(), '', $file );
+        }
+
         return new Location\Search\Handler(
-            new Location\Gateway\DoctrineDatabase( $this->getDatabaseHandler() ),
+            new Location\Gateway\DoctrineDatabase(
+                $this->getDatabaseHandler(),
+                new CriteriaConverter(
+                    array(
+                        new CriterionHandler\Location\Id( $this->getDatabaseHandler() ),
+                        new CriterionHandler\Location\ParentLocationId( $this->getDatabaseHandler() ),
+                    )
+                ),
+                new SortClauseConverter(
+                    array(
+                        new SortClauseHandler\Location\Id( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\Location\Depth( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\Location\Path( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\Location\Priority( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\Location\Visibility( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\ContentName( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\DateModified( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\DatePublished( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\SectionIdentifier( $this->getDatabaseHandler() ),
+                    )
+                )
+            ),
             $this->getLocationMapperMock()
         );
     }

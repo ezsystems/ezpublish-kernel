@@ -470,6 +470,46 @@ class Handler implements HandlerInterface
         return $this->storageHandler;
     }
 
+    protected function getCriterionFieldValueConverter()
+    {
+        if ( !isset( $this->criterionFieldValueConverter ) )
+        {
+            $db = $this->dbHandler;
+            $commaSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
+                $db, $this->transformationProcessor, ","
+            );
+            $hyphenSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
+                $db, $this->transformationProcessor, "-"
+            );
+            $compositeValueHandler = new CriterionHandler\FieldValue\Handler\Composite(
+                $db, $this->transformationProcessor
+            );
+            $simpleValueHandler = new CriterionHandler\FieldValue\Handler\Simple(
+                $db, $this->transformationProcessor
+            );
+
+
+            $this->criterionFieldValueConverter = new CriterionHandler\FieldValue\Converter(
+                new CriterionHandler\FieldValue\HandlerRegistry(
+                    array(
+                        "ezboolean" => $simpleValueHandler,
+                        "ezcountry" => $commaSeparatedCollectionValueHandler,
+                        "ezdate" => $simpleValueHandler,
+                        "ezdatetime" => $simpleValueHandler,
+                        "ezemail" => $simpleValueHandler,
+                        "ezinteger" => $simpleValueHandler,
+                        "ezobjectrelation" => $simpleValueHandler,
+                        "ezobjectrelationlist" => $commaSeparatedCollectionValueHandler,
+                        "ezselection" => $hyphenSeparatedCollectionValueHandler,
+                        "eztime" => $simpleValueHandler,
+                    )
+                ),
+                $compositeValueHandler
+            );
+        }
+        return $this->criterionFieldValueConverter;
+    }
+
     /**
      * @return \eZ\Publish\SPI\Persistence\Content\Search\Handler
      */
@@ -519,23 +559,7 @@ class Handler implements HandlerInterface
                                 new CriterionHandler\Field(
                                     $db,
                                     $this->converterRegistry,
-                                    new CriterionHandler\FieldValue\Converter(
-                                        new CriterionHandler\FieldValue\HandlerRegistry(
-                                            array(
-                                                "ezboolean" => $simpleValueHandler,
-                                                "ezcountry" => $commaSeparatedCollectionValueHandler,
-                                                "ezdate" => $simpleValueHandler,
-                                                "ezdatetime" => $simpleValueHandler,
-                                                "ezemail" => $simpleValueHandler,
-                                                "ezinteger" => $simpleValueHandler,
-                                                "ezobjectrelation" => $simpleValueHandler,
-                                                "ezobjectrelationlist" => $commaSeparatedCollectionValueHandler,
-                                                "ezselection" => $hyphenSeparatedCollectionValueHandler,
-                                                "eztime" => $simpleValueHandler,
-                                            )
-                                        ),
-                                        $compositeValueHandler
-                                    ),
+                                    $this->getCriterionFieldValueConverter(),
                                     $this->transformationProcessor
                                 ),
                                 new CriterionHandler\ObjectStateId( $db ),
@@ -726,12 +750,76 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->locationGateway ) )
         {
+            $dbHandler = $this->dbHandler;
+            $commaSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
+                $dbHandler, $this->transformationProcessor, ","
+            );
+            $hyphenSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
+                $dbHandler, $this->transformationProcessor, "-"
+            );
+            $compositeValueHandler = new CriterionHandler\FieldValue\Handler\Composite(
+                $dbHandler, $this->transformationProcessor
+            );
+            $simpleValueHandler = new CriterionHandler\FieldValue\Handler\Simple(
+                $dbHandler, $this->transformationProcessor
+            );
             $this->locationGateway = new Content\Location\Gateway\ExceptionConversion(
                 new Content\Location\Gateway\DoctrineDatabase(
-                    $this->dbHandler,
-                    $this->getLanguageMaskGenerator(),
-                    $this->transformationProcessor,
-                    $this->converterRegistry
+                    $dbHandler,
+                    new Content\Location\Gateway\CriteriaConverter(
+                        array(
+                            new Content\Location\Gateway\CriterionHandler\Location\Id( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\Location\Depth( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\Location\ParentLocationId( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\Location\Priority( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\Location\RemoteId( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\Location\Subtree( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\Location\Visibility( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\ContentId( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\ContentTypeGroupId( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\ContentTypeId( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\ContentTypeIdentifier( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\DateMetadata( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\Field(
+                                $dbHandler,
+                                $this->converterRegistry,
+                                $this->getCriterionFieldValueConverter(),
+                                $this->transformationProcessor
+                            ),
+                            new Content\Location\Gateway\CriterionHandler\FullText(
+                                $dbHandler,
+                                $this->transformationProcessor
+                            ),
+                            new Content\Location\Gateway\CriterionHandler\LanguageCode(
+                                $dbHandler,
+                                $this->getLanguageMaskGenerator()
+                            ),
+                            new Content\Location\Gateway\CriterionHandler\LogicalAnd( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\LogicalNot( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\LogicalOr( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\MapLocationDistance( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\MatchAll( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\ObjectStateId( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\RelationList( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\RemoteId( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\SectionId( $dbHandler ),
+                            new Content\Location\Gateway\CriterionHandler\UserMetadata( $dbHandler ),
+                        )
+                    ),
+                    new Content\Location\Gateway\SortClauseConverter(
+                        array(
+                            new Content\Location\Gateway\SortClauseHandler\Location\Id( $dbHandler ),
+                            new Content\Location\Gateway\SortClauseHandler\Location\Depth( $dbHandler ),
+                            new Content\Location\Gateway\SortClauseHandler\Location\Path( $dbHandler ),
+                            new Content\Location\Gateway\SortClauseHandler\Location\Priority( $dbHandler ),
+                            new Content\Location\Gateway\SortClauseHandler\Location\Visibility( $dbHandler ),
+                            new Content\Location\Gateway\SortClauseHandler\ContentId( $dbHandler ),
+                            new Content\Location\Gateway\SortClauseHandler\ContentName( $dbHandler ),
+                            new Content\Location\Gateway\SortClauseHandler\DateModified( $dbHandler ),
+                            new Content\Location\Gateway\SortClauseHandler\DatePublished( $dbHandler ),
+                            new Content\Location\Gateway\SortClauseHandler\SectionIdentifier( $dbHandler ),
+                        )
+                    )
                 )
             );
         }

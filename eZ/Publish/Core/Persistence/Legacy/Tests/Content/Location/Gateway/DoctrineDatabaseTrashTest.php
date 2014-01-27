@@ -22,7 +22,17 @@ class DoctrineDatabaseTrashTest extends TestCase
     protected function getLocationGateway()
     {
         $dbHandler = $this->getDatabaseHandler();
-        return new DoctrineDatabase( $dbHandler );
+        return new DoctrineDatabase(
+            $dbHandler,
+            $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\CriteriaConverter" )
+                ->disableOriginalConstructor()
+                ->getMock(),
+            $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\SortClauseConverter" )
+                ->disableOriginalConstructor()
+                ->getMock()
+        );
     }
 
     /**

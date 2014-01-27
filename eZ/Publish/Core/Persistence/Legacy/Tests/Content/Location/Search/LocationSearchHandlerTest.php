@@ -12,12 +12,16 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Search;
 use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\SortClauseConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\SortClauseHandler;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler as ContentCriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
@@ -77,9 +81,11 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
      *
      * This method returns a fully functional search handler to perform tests on.
      *
+     * @param array $fullTextSearchConfiguration
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Search\Handler
      */
-    protected function getLocationSearchHandler()
+    protected function getLocationSearchHandler( array $fullTextSearchConfiguration = array() )
     {
         $rules = array();
         foreach ( glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
@@ -94,18 +100,97 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
             ),
             $rules
         );
+        $commaSeparatedCollectionValueHandler = new ContentCriterionHandler\FieldValue\Handler\Collection(
+            $this->getDatabaseHandler(),
+            $transformationProcessor,
+            ","
+        );
+        $hyphenSeparatedCollectionValueHandler = new ContentCriterionHandler\FieldValue\Handler\Collection(
+            $this->getDatabaseHandler(),
+            $transformationProcessor,
+            "-"
+        );
+        $simpleValueHandler = new ContentCriterionHandler\FieldValue\Handler\Simple(
+            $this->getDatabaseHandler(),
+            $transformationProcessor
+        );
+        $compositeValueHandler = new ContentCriterionHandler\FieldValue\Handler\Composite(
+            $this->getDatabaseHandler(),
+            $transformationProcessor
+        );
+
         return new Location\Search\Handler(
             new Location\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
-                $this->getLanguageMaskGenerator(),
-                $transformationProcessor,
-                new ConverterRegistry(
+                new CriteriaConverter(
                     array(
-                        'ezdatetime' => new DateAndTime(),
-                        'ezinteger' => new Integer(),
-                        'ezstring' => new TextLine(),
-                        'ezprice' => new Integer(),
-                        'ezurl' => new Url()
+                        new CriterionHandler\Location\Id( $this->getDatabaseHandler() ),
+                        new CriterionHandler\Location\Depth( $this->getDatabaseHandler() ),
+                        new CriterionHandler\Location\ParentLocationId( $this->getDatabaseHandler() ),
+                        new CriterionHandler\Location\Priority( $this->getDatabaseHandler() ),
+                        new CriterionHandler\Location\RemoteId( $this->getDatabaseHandler() ),
+                        new CriterionHandler\Location\Subtree( $this->getDatabaseHandler() ),
+                        new CriterionHandler\Location\Visibility( $this->getDatabaseHandler() ),
+                        new CriterionHandler\ContentId( $this->getDatabaseHandler() ),
+                        new CriterionHandler\ContentTypeGroupId( $this->getDatabaseHandler() ),
+                        new CriterionHandler\ContentTypeId( $this->getDatabaseHandler() ),
+                        new CriterionHandler\ContentTypeIdentifier( $this->getDatabaseHandler() ),
+                        new CriterionHandler\DateMetadata( $this->getDatabaseHandler() ),
+                        new CriterionHandler\Field(
+                            $this->getDatabaseHandler(),
+                            new ConverterRegistry(
+                                array(
+                                    'ezdatetime' => new DateAndTime(),
+                                    'ezinteger' => new Integer(),
+                                    'ezstring' => new TextLine(),
+                                    'ezprice' => new Integer(),
+                                    'ezurl' => new Url()
+                                )
+                            ),
+                            new ContentCriterionHandler\FieldValue\Converter(
+                                new ContentCriterionHandler\FieldValue\HandlerRegistry(
+                                    array(
+                                        "ezboolean" => $simpleValueHandler,
+                                        "ezcountry" => $commaSeparatedCollectionValueHandler,
+                                        "ezdate" => $simpleValueHandler,
+                                        "ezdatetime" => $simpleValueHandler,
+                                        "ezemail" => $simpleValueHandler,
+                                        "ezinteger" => $simpleValueHandler,
+                                        "ezobjectrelation" => $simpleValueHandler,
+                                        "ezobjectrelationlist" => $commaSeparatedCollectionValueHandler,
+                                        "ezselection" => $hyphenSeparatedCollectionValueHandler,
+                                        "eztime" => $simpleValueHandler,
+                                    )
+                                ),
+                                $compositeValueHandler
+                            ),
+                            $transformationProcessor
+                        ),
+                        new CriterionHandler\FullText(
+                            $this->getDatabaseHandler(),
+                            $transformationProcessor,
+                            $fullTextSearchConfiguration
+                        ),
+                        new CriterionHandler\LanguageCode(
+                            $this->getDatabaseHandler(),
+                            $this->getLanguageMaskGenerator()
+                        ),
+                        new CriterionHandler\LogicalAnd( $this->getDatabaseHandler() ),
+                        new CriterionHandler\LogicalNot( $this->getDatabaseHandler() ),
+                        new CriterionHandler\LogicalOr( $this->getDatabaseHandler() ),
+                        new CriterionHandler\MapLocationDistance( $this->getDatabaseHandler() ),
+                        new CriterionHandler\MatchAll( $this->getDatabaseHandler() ),
+                        new CriterionHandler\ObjectStateId( $this->getDatabaseHandler() ),
+                        new CriterionHandler\RelationList( $this->getDatabaseHandler() ),
+                        new CriterionHandler\RemoteId( $this->getDatabaseHandler() ),
+                        new CriterionHandler\SectionId( $this->getDatabaseHandler() ),
+                        new CriterionHandler\UserMetadata( $this->getDatabaseHandler() ),
+                    )
+                ),
+                new SortClauseConverter(
+                    array(
+                        new SortClauseHandler\Location\Id( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                     )
                 )
             ),
@@ -1038,7 +1123,6 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
 
     public function testFullTextDisabledWildcardFilter()
     {
-        $this->markTestIncomplete( "Needs DI" );
         $this->assertSearchResults(
             array(),
             $this->getLocationSearchHandler(

@@ -3005,7 +3005,17 @@ class UrlAliasHandlerTest extends TestCase
 
         if ( !isset( $this->locationGateway ) )
         {
-            $this->locationGateway = new DoctrineDatabaseLocation( $this->dbHandler );
+            $this->locationGateway = new DoctrineDatabaseLocation(
+                $this->dbHandler,
+                $this
+                    ->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\CriteriaConverter" )
+                    ->disableOriginalConstructor()
+                    ->getMock(),
+                $this
+                    ->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\SortClauseConverter" )
+                    ->disableOriginalConstructor()
+                    ->getMock()
+            );
         }
 
         return $this->locationGateway;
