@@ -42,6 +42,7 @@
     <testsuite name="eZ Publish HMVC test suite">
       <directory>eZ/Publish/Core/MVC/Symfony</directory>
       <directory>eZ/Bundle</directory>
+      <exclude>eZ/Bundle/EzPublishRestBundle/Tests/Functional</exclude>
     </testsuite>
     <testsuite name="eZ Publish legacy test suite">
         <directory>eZ/Publish/Core/MVC/Legacy</directory>
