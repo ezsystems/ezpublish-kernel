@@ -95,6 +95,9 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
                     array(
                         new CriterionHandler\Location\Id( $this->getDatabaseHandler() ),
                         new CriterionHandler\Location\ParentLocationId( $this->getDatabaseHandler() ),
+                        new CriterionHandler\LogicalAnd( $this->getDatabaseHandler() ),
+                        new CriterionHandler\MatchAll( $this->getDatabaseHandler() ),
+                        new CriterionHandler\SectionId( $this->getDatabaseHandler() ),
                     )
                 ),
                 new SortClauseConverter(
@@ -109,6 +112,8 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
                         new SortClauseHandler\DateModified( $this->getDatabaseHandler() ),
                         new SortClauseHandler\DatePublished( $this->getDatabaseHandler() ),
                         new SortClauseHandler\SectionIdentifier( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\SectionName( $this->getDatabaseHandler() ),
+                        new SortClauseHandler\Field( $this->getDatabaseHandler(), $this->getLanguageHandler() ),
                     )
                 )
             ),
@@ -466,6 +471,151 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $this->assertSearchResults(
             array( 228, 45 ),
             $locations
+        );
+    }
+
+    public function testSortSectionName()
+    {
+        $handler = $this->getLocationSearchHandler();
+
+        $result = $handler->findLocations(
+            new LocationQuery(
+                array(
+                    'filter' => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\SectionName(),
+                    )
+                )
+            )
+        );
+
+        // First, results of section "Media" should appear, then the ones of "Protected",
+        // "Setup" and "Users"
+        // From inside a specific section, no particular order should be defined
+        // the logic is then to have a set of sorted id's to compare with
+        // the comparison being done slice by slice.
+        $idMapSet = array(
+            "media" => array( 43, 51, 52, 53, 59, 60, 61, 62, 63, 64, 65, 66, 68, 202, 203 ),
+            "protected" => array( 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166 ),
+            "setup" => array( 48, 54 ),
+            "users" => array( 5, 12, 13, 14, 15, 44, 45 ),
+        );
+        $locationIds = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->id;
+            },
+            $result->searchHits
+        );
+        $index = 0;
+
+        foreach ( $idMapSet as $idSet )
+        {
+            $locationIdsSubset = array_slice( $locationIds, $index, $count = count( $idSet ) );
+            $index += $count;
+            sort( $locationIdsSubset );
+            $this->assertEquals(
+                $idSet,
+                $locationIdsSubset
+            );
+        }
+    }
+
+    public function testSortFieldText()
+    {
+        $handler = $this->getLocationSearchHandler();
+
+        $result = $handler->findLocations(
+            new LocationQuery(
+                array(
+                    'filter' => new Criterion\SectionId( array( 1 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\Field( "article", "title", LocationQuery::SORT_ASC, "eng-US" ),
+                    )
+                )
+            )
+        );
+
+        // There are several identical titles, need to take care about this
+        $idMapSet = array(
+            "aenean malesuada ligula" => array( 85 ),
+            "aliquam pulvinar suscipit tellus" => array( 104 ),
+            "asynchronous publishing" => array( 150, 217 ),
+            "canonical links" => array( 149, 218 ),
+            "class aptent taciti" => array( 90 ),
+            "class aptent taciti sociosqu" => array( 84 ),
+            "duis auctor vehicula erat" => array( 91 ),
+            "etiam posuere sodales arcu" => array( 80 ),
+            "etiam sodales mauris" => array( 89 ),
+            "ez publish enterprise" => array( 153 ),
+            "fastcgi" => array( 146, 220 ),
+            "fusce sagittis sagittis" => array( 79 ),
+            "fusce sagittis sagittis urna" => array( 83 ),
+            "get involved" => array( 109 ),
+            "how to develop with ez publish" => array( 129, 213 ),
+            "how to manage ez publish" => array( 120, 204 ),
+            "how to use ez publish" => array( 110, 195 ),
+            "improved block editing" => array( 138 ),
+            "improved front-end editing" => array( 141 ),
+            "improved user registration workflow" => array( 134 ),
+            "in hac habitasse platea" => array( 81 ),
+            "lots of websites, one ez publish installation" => array( 132 ),
+            "rest api interface" => array( 152, 216 ),
+            "separate content & design in ez publish" => array( 193 ),
+            "support for red hat enterprise" => array( 147, 219 ),
+            "tutorials for" => array( 108 ),
+        );
+        $locationIds = array_map(
+            function ( $hit )
+            {
+                return $hit->valueObject->id;
+            },
+            $result->searchHits
+        );
+        $index = 0;
+
+        foreach ( $idMapSet as $idSet )
+        {
+            $locationIdsSubset = array_slice( $locationIds, $index, $count = count( $idSet ) );
+            $index += $count;
+            sort( $locationIdsSubset );
+            $this->assertEquals(
+                $idSet,
+                $locationIdsSubset
+            );
+        }
+    }
+
+    public function testSortFieldNumeric()
+    {
+        $handler = $this->getLocationSearchHandler();
+
+        $result = $handler->findLocations(
+            new LocationQuery(
+                array(
+                    'filter' => new Criterion\SectionId( array( 1 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\Field( "product", "price", LocationQuery::SORT_ASC, "eng-US" ),
+                    )
+                )
+            )
+        );
+
+        $this->assertEquals(
+            array( 75, 73, 74, 71 ),
+            array_map(
+                function ( $hit )
+                {
+                    return $hit->valueObject->id;
+                },
+                $result->searchHits
+            )
         );
     }
 }
