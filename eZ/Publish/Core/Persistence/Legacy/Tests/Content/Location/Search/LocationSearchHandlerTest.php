@@ -623,7 +623,6 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-
     public function testContentIdFilterIn()
     {
         $this->assertSearchResults(
@@ -1129,17 +1128,15 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
     {
         $this->assertSearchResults(
             array(),
-            $this->getLocationSearchHandler(
-                array( 'enableWildcards' => false )
-            )->findLocations(
-                    new LocationQuery(
-                        array(
-                            'filter' => new Criterion\FullText( 'applie*' ),
-                            'limit' => 10,
-                        )
+            $this->getLocationSearchHandler( array( 'enableWildcards' => false ) )->findLocations(
+                new LocationQuery(
+                    array(
+                        'filter' => new Criterion\FullText( 'applie*' ),
+                        'limit' => 10,
                     )
                 )
-            );
+            )
+        );
     }
 
     public function testFullTextFilterStopwordRemoval()
