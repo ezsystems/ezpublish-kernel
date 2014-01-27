@@ -488,7 +488,6 @@ class Handler implements HandlerInterface
                 $db, $this->transformationProcessor
             );
 
-
             $this->criterionFieldValueConverter = new CriterionHandler\FieldValue\Converter(
                 new CriterionHandler\FieldValue\HandlerRegistry(
                     array(
