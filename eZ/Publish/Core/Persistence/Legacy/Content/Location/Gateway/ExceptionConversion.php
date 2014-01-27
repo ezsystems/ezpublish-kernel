@@ -114,14 +114,15 @@ class ExceptionConversion extends Gateway
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $sortClauses
      *
      * @return int
      */
-    public function count( Criterion $criterion )
+    public function count( Criterion $criterion, $sortClauses )
     {
         try
         {
-            return $this->innerGateway->count( $criterion );
+            return $this->innerGateway->count( $criterion, $sortClauses );
         }
         catch ( DBALException $e )
         {

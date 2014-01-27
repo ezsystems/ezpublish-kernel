@@ -65,10 +65,11 @@ abstract class Gateway
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $sortClauses
      *
      * @return int
      */
-    abstract public function count( Criterion $criterion );
+    abstract public function count( Criterion $criterion, $sortClauses );
 
     /**
      * Loads data for all Locations for $contentId, optionally only in the

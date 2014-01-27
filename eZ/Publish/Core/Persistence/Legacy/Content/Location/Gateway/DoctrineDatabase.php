@@ -144,7 +144,7 @@ class DoctrineDatabase extends Gateway
      */
     public function find( Query $query )
     {
-        $count = $this->count( $query->filter );
+        $count = $this->count( $query->filter, $query->sortClauses );
         if ( $query->limit === 0 )
         {
             return array( "count" => $count, "rows" => array() );
@@ -158,17 +158,18 @@ class DoctrineDatabase extends Gateway
             $this->sortClauseConverter->applySelect( $selectQuery, $query->sortClauses );
         }
 
-        $selectQuery->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) );
-        $selectQuery->innerJoin(
-            'ezcontentobject',
-            'ezcontentobject_tree.contentobject_id',
-            'ezcontentobject.id'
-        );
-        $selectQuery->innerJoin(
-            'ezcontentobject_version',
-            'ezcontentobject.id',
-            'ezcontentobject_version.contentobject_id'
-        );
+        $selectQuery
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->innerJoin(
+                'ezcontentobject',
+                'ezcontentobject_tree.contentobject_id',
+                'ezcontentobject.id'
+            )
+            ->innerJoin(
+                'ezcontentobject_version',
+                'ezcontentobject.id',
+                'ezcontentobject_version.contentobject_id'
+            );
 
         if ( $query->sortClauses !== null )
         {
@@ -216,28 +217,32 @@ class DoctrineDatabase extends Gateway
      * Search for nodes based on $criterion and returns an array with basic node data
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $sortClauses
      *
      * @return array
      */
-    public function count( Criterion $criterion )
+    public function count( Criterion $criterion, $sortClauses )
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select(
-                $query->alias( $query->expr->count( '*' ), 'count' )
+            ->select( $query->alias( $query->expr->count( '*' ), 'count' ) )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->innerJoin(
+                'ezcontentobject',
+                'ezcontentobject_tree.contentobject_id',
+                'ezcontentobject.id'
             )
-            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) );
+            ->innerJoin(
+                'ezcontentobject_version',
+                'ezcontentobject.id',
+                'ezcontentobject_version.contentobject_id'
+            );
 
-        $query->innerJoin(
-            'ezcontentobject',
-            'ezcontentobject_tree.contentobject_id',
-            'ezcontentobject.id'
-        );
-        $query->innerJoin(
-            'ezcontentobject_version',
-            'ezcontentobject.id',
-            'ezcontentobject_version.contentobject_id'
-        );
+        if ( $sortClauses !== null )
+        {
+            $this->sortClauseConverter->applyJoin( $query, $sortClauses );
+        }
+
         $query->where(
             $this->criteriaConverter->convertCriteria( $query, $criterion ),
             $query->expr->eq(
