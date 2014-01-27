@@ -284,8 +284,6 @@ class LocationService implements LocationServiceInterface
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
-     *
-     * @deprecated Since 5.3, use Location search instead
      */
     public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 )
     {
@@ -311,17 +309,13 @@ class LocationService implements LocationServiceInterface
         );
         foreach ( $searchResult->searchHits as $searchHit )
         {
-            $childLocation = $this->domainMapper->buildLocationDomainObject( $searchHit->valueObject );
-            if ( $this->repository->canUser( 'content', 'read', $childLocation->getContentInfo(), $childLocation ) )
-            {
-                $childLocations[] = $childLocation;
-            }
+            $childLocations[] = $searchHit->valueObject;
         }
 
         return new LocationList(
             array(
                 "locations" => $childLocations,
-                "totalCount" => $this->getLocationChildCount( $location )
+                "totalCount" => $searchResult->totalCount
             )
         );
     }
@@ -335,14 +329,15 @@ class LocationService implements LocationServiceInterface
      */
     public function getLocationChildCount( APILocation $location )
     {
-        $criterion = new Criterion\Location\ParentLocationId( $location->id );
+        $searchResult = $this->searchChildrenLocations(
+            $location->id,
+            $location->sortField,
+            $location->sortOrder,
+            0,
+            0
+        );
 
-        if ( !$this->permissionsCriterionHandler->addPermissionsCriterion( $criterion ) )
-        {
-            return array();
-        }
-
-        return $this->persistenceHandler->locationSearchHandler()->getLocationCount( $criterion );
+        return $searchResult->totalCount;
     }
 
     /**
@@ -364,16 +359,9 @@ class LocationService implements LocationServiceInterface
         $limit = -1
     )
     {
-        $filter = new Criterion\Location\ParentLocationId( $parentLocationId );
-
-        if ( !$this->permissionsCriterionHandler->addPermissionsCriterion( $filter ) )
-        {
-            return array();
-        }
-
         $query = new LocationQuery(
             array(
-                "filter" => $filter,
+                "filter" => new Criterion\Location\ParentLocationId( $parentLocationId ),
                 "offset" => $offset >= 0 ? (int)$offset : 0,
                 "limit" => $limit >= 0 ? (int)$limit : null
             )
@@ -384,7 +372,7 @@ class LocationService implements LocationServiceInterface
             $query->sortClauses = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
         }
 
-        return $this->persistenceHandler->locationSearchHandler()->findLocations( $query );
+        return $this->repository->getSearchService()->findLocations( $query );
     }
 
     /**
