@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\SortClauseHandler;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\SortClauseHandler\Location;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
@@ -16,7 +16,7 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
 /**
  * Content locator gateway implementation using the DoctrineDatabase.
  */
-class LocationPathString extends SortClauseHandler
+class Depth extends SortClauseHandler
 {
     /**
      * Check if this sort clause handler accepts to handle the given sort clause.
@@ -27,7 +27,7 @@ class LocationPathString extends SortClauseHandler
      */
     public function accept( SortClause $sortClause )
     {
-        return $sortClause instanceof SortClause\LocationPathString;
+        return $sortClause instanceof SortClause\Location\Depth;
     }
 
     /**
@@ -48,8 +48,8 @@ class LocationPathString extends SortClauseHandler
             ->select(
                 $query->alias(
                     $this->dbHandler->quoteColumn(
-                        "path_string",
-                        "ezcontentobject_tree"
+                        'depth',
+                        'ezcontentobject_tree'
                     ),
                     $column = $this->getSortColumnName( $number )
                 )

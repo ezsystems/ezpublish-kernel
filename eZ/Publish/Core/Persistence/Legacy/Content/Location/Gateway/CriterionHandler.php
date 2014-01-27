@@ -12,9 +12,25 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 abstract class CriterionHandler
 {
+    /**
+     * Map of criterion operators to the respective function names in the zeta
+     * Database abstraction layer.
+     *
+     * @var array
+     */
+    protected $comparatorMap = array(
+        Operator::EQ => "eq",
+        Operator::GT => "gt",
+        Operator::GTE => "gte",
+        Operator::LT => "lt",
+        Operator::LTE => "lte",
+        Operator::LIKE => "like",
+    );
+
     /**
      * Database handler
      *

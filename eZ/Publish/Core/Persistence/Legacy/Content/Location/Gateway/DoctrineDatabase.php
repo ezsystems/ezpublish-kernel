@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Database\Query as DatabaseQuery;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
@@ -23,6 +24,11 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use RuntimeException;
 use PDO;
+
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler as ContentCriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 
 /**
  * Location gateway implementation using the Doctrine database.
@@ -59,31 +65,92 @@ class DoctrineDatabase extends Gateway
      *
      * @return void
      */
-    public function __construct( DatabaseHandler $handler )
+    public function __construct(
+        DatabaseHandler $handler,
+        LanguageMaskGenerator $languageMaskGenerator,
+        TransformationProcessor $processor,
+        ConverterRegistry $converterRegistry
+    )
     {
         $this->handler = $handler;
+
+        $commaSeparatedCollectionValueHandler = new ContentCriterionHandler\FieldValue\Handler\Collection(
+            $handler, $processor, ","
+        );
+        $hyphenSeparatedCollectionValueHandler = new ContentCriterionHandler\FieldValue\Handler\Collection(
+            $handler, $processor, "-"
+        );
+        $compositeValueHandler = new ContentCriterionHandler\FieldValue\Handler\Composite(
+            $handler, $processor
+        );
+        $simpleValueHandler = new ContentCriterionHandler\FieldValue\Handler\Simple(
+            $handler, $processor
+        );
         // @todo:
         // - inject CriteriaConverter
-        // - complete with other criterions
         $this->criteriaConverter = new CriteriaConverter(
             array(
-                new CriterionHandler\LocationId( $handler ),
-                new CriterionHandler\ParentLocationId( $handler ),
+                new CriterionHandler\Location\Id( $handler ),
+                new CriterionHandler\Location\Depth( $handler ),
+                new CriterionHandler\Location\ParentLocationId( $handler ),
+                new CriterionHandler\Location\Priority( $handler ),
+                new CriterionHandler\Location\RemoteId( $handler ),
+                new CriterionHandler\Location\Subtree( $handler ),
+                new CriterionHandler\Location\Visibility( $handler ),
+                new CriterionHandler\ContentId( $handler ),
+                new CriterionHandler\ContentTypeGroupId( $handler ),
+                new CriterionHandler\ContentTypeId( $handler ),
+                new CriterionHandler\ContentTypeIdentifier( $handler ),
+                new CriterionHandler\DateMetadata( $handler ),
+                new CriterionHandler\Field(
+                    $handler,
+                    $converterRegistry,
+                    new ContentCriterionHandler\FieldValue\Converter(
+                        new ContentCriterionHandler\FieldValue\HandlerRegistry(
+                            array(
+                                "ezboolean" => $simpleValueHandler,
+                                "ezcountry" => $commaSeparatedCollectionValueHandler,
+                                "ezdate" => $simpleValueHandler,
+                                "ezdatetime" => $simpleValueHandler,
+                                "ezemail" => $simpleValueHandler,
+                                "ezinteger" => $simpleValueHandler,
+                                "ezobjectrelation" => $simpleValueHandler,
+                                "ezobjectrelationlist" => $commaSeparatedCollectionValueHandler,
+                                "ezselection" => $hyphenSeparatedCollectionValueHandler,
+                                "eztime" => $simpleValueHandler,
+                            )
+                        ),
+                        $compositeValueHandler
+                    ),
+                    $processor
+                ),
+                new CriterionHandler\FullText( $handler, $processor ),
+                new CriterionHandler\LanguageCode( $handler, $languageMaskGenerator ),
                 new CriterionHandler\LogicalAnd( $handler ),
+                new CriterionHandler\LogicalNot( $handler ),
+                new CriterionHandler\LogicalOr( $handler ),
+                new CriterionHandler\MapLocationDistance( $handler ),
+                new CriterionHandler\MatchAll( $handler ),
+                new CriterionHandler\ObjectStateId( $handler ),
+                new CriterionHandler\RelationList( $handler ),
+                new CriterionHandler\RemoteId( $handler ),
+                new CriterionHandler\SectionId( $handler ),
+                new CriterionHandler\UserMetadata( $handler ),
             )
         );
         // @todo:
         // - inject SortClauseConverter
-        // - complete with other sort clauses
         $this->sortClauseConverter = new SortClauseConverter(
             array(
+                new SortClauseHandler\Location\Id( $handler ),
+                new SortClauseHandler\Location\Depth( $handler ),
+                new SortClauseHandler\Location\Path( $handler ),
+                new SortClauseHandler\Location\Priority( $handler ),
+                new SortClauseHandler\Location\Visibility( $handler ),
                 new SortClauseHandler\ContentId( $handler ),
                 new SortClauseHandler\ContentName( $handler ),
                 new SortClauseHandler\DateModified( $handler ),
                 new SortClauseHandler\DatePublished( $handler ),
-                new SortClauseHandler\LocationDepth( $handler ),
-                new SortClauseHandler\LocationPathString( $handler ),
-                new SortClauseHandler\LocationPriority( $handler ),
                 new SortClauseHandler\SectionIdentifier( $handler ),
             )
         );
@@ -177,6 +244,16 @@ class DoctrineDatabase extends Gateway
         }
 
         $selectQuery->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) );
+        $selectQuery->innerJoin(
+            'ezcontentobject',
+            'ezcontentobject_tree.contentobject_id',
+            'ezcontentobject.id'
+        );
+        $selectQuery->innerJoin(
+            'ezcontentobject_version',
+            'ezcontentobject.id',
+            'ezcontentobject_version.contentobject_id'
+        );
 
         if ( $query->sortClauses !== null )
         {
@@ -184,7 +261,21 @@ class DoctrineDatabase extends Gateway
         }
 
         $selectQuery->where(
-            $this->criteriaConverter->convertCriteria( $selectQuery, $query->filter )
+            $this->criteriaConverter->convertCriteria( $selectQuery, $query->filter ),
+            $selectQuery->expr->eq(
+                'ezcontentobject.status',
+                //ContentInfo::STATUS_PUBLISHED
+                $selectQuery->bindValue( 1, null, PDO::PARAM_INT )
+            ),
+            $selectQuery->expr->eq(
+                'ezcontentobject_version.status',
+                //VersionInfo::STATUS_PUBLISHED
+                $selectQuery->bindValue( 1, null, PDO::PARAM_INT )
+            ),
+            $selectQuery->expr->neq(
+                $this->handler->quoteColumn( "depth" ),
+                $selectQuery->bindValue( 0, null, PDO::PARAM_INT )
+            )
         );
 
         if ( $query->sortClauses !== null )

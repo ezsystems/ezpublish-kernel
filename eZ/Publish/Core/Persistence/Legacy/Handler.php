@@ -727,7 +727,12 @@ class Handler implements HandlerInterface
         if ( !isset( $this->locationGateway ) )
         {
             $this->locationGateway = new Content\Location\Gateway\ExceptionConversion(
-                new Content\Location\Gateway\DoctrineDatabase( $this->dbHandler )
+                new Content\Location\Gateway\DoctrineDatabase(
+                    $this->dbHandler,
+                    $this->getLanguageMaskGenerator(),
+                    $this->transformationProcessor,
+                    $this->converterRegistry
+                )
             );
         }
         return $this->locationGateway;

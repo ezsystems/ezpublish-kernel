@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the DoctrineDatabase parent location id criterion handler class
+ * File containing the DoctrineDatabase location id criterion handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriterionHandler;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriterionHandler\Location;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriteriaConverter;
@@ -15,9 +15,9 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * Parent location id criterion handler
+ * Location id criterion handler
  */
-class ParentLocationId extends CriterionHandler
+class Id extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -28,7 +28,7 @@ class ParentLocationId extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\ParentLocationId;
+        return $criterion instanceof Criterion\Location\Id;
     }
 
     /**
@@ -45,7 +45,7 @@ class ParentLocationId extends CriterionHandler
     public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
         return $query->expr->in(
-            $this->dbHandler->quoteColumn( 'parent_node_id' ),
+            $this->dbHandler->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
             $criterion->value
         );
     }
