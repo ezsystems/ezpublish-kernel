@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use RuntimeException;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * Content locator gateway implementation using the DoctrineDatabase.
@@ -43,7 +43,7 @@ class CriteriaConverter
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param Criterion $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
      * @return \ezcQueryExpression
      */
@@ -57,7 +57,9 @@ class CriteriaConverter
             }
         }
 
-        throw new RuntimeException( 'No conversion for criterion found.' );
+        throw new NotImplementedException(
+            "No visitor available for: " . get_class( $criterion ) . ' with operator ' . $criterion->operator
+        );
     }
 }
 
