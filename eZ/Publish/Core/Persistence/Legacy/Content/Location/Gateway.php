@@ -69,14 +69,6 @@ abstract class Gateway
     abstract public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null );
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $sortClauses
-     *
-     * @return int
-     */
-    abstract public function count( Criterion $criterion, $sortClauses );
-
-    /**
      * Loads data for all Locations for $contentId, optionally only in the
      * subtree starting at $rootLocationId
      *

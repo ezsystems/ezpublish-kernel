@@ -141,13 +141,13 @@ class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      *
      * @return mixed[][]
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null )
     {
-        $count = $this->count( $criterion, $sortClauses );
+        $count = $this->getTotalCount( $criterion, $sortClauses );
         if ( $limit === 0 )
         {
             return array( "count" => $count, "rows" => array() );
@@ -217,14 +217,14 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Search for nodes based on $criterion and returns an array with basic node data
+     * Returns total results count for $criterion and $sortClauses
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $sortClauses
+     * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      *
      * @return array
      */
-    public function count( Criterion $criterion, $sortClauses )
+    protected function getTotalCount( Criterion $criterion, $sortClauses )
     {
         $query = $this->handler->createSelectQuery();
         $query

@@ -118,28 +118,6 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param array $sortClauses
-     *
-     * @return int
-     */
-    public function count( Criterion $criterion, $sortClauses )
-    {
-        try
-        {
-            return $this->innerGateway->count( $criterion, $sortClauses );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-    }
-
-    /**
      * Loads data for all Locations for $contentId, optionally only in the
      * subtree starting at $rootLocationId
      *
