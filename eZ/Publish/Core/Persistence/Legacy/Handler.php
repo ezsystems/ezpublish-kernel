@@ -799,7 +799,14 @@ class Handler implements HandlerInterface
                             new Content\Location\Gateway\SortClauseHandler\DatePublished( $dbHandler ),
                             new Content\Location\Gateway\SortClauseHandler\SectionIdentifier( $dbHandler ),
                             new Content\Location\Gateway\SortClauseHandler\SectionName( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\Field( $dbHandler, $this->contentLanguageHandler() ),
+                            new Content\Location\Gateway\SortClauseHandler\Field(
+                                $dbHandler,
+                                $this->contentLanguageHandler()
+                            ),
+                            new Content\Location\Gateway\SortClauseHandler\MapLocationDistance(
+                                $dbHandler,
+                                $this->contentLanguageHandler()
+                            ),
                         )
                     )
                 )
