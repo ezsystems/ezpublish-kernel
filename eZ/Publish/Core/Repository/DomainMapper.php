@@ -311,18 +311,19 @@ class DomainMapper
             throw new InvalidArgumentValue( "sortOrder", $locationCreateStruct->sortOrder, "LocationCreateStruct" );
         }
 
-        if ( null === $locationCreateStruct->remoteId )
+        $remoteId = $locationCreateStruct->remoteId;
+        if ( null === $remoteId )
         {
-            $locationCreateStruct->remoteId = $this->getUniqueHash( $locationCreateStruct );
+            $remoteId = $this->getUniqueHash( $locationCreateStruct );
         }
         else
         {
             try
             {
-                $this->repository->getLocationService()->loadLocationByRemoteId( $locationCreateStruct->remoteId );
+                $this->repository->getLocationService()->loadLocationByRemoteId( $remoteId );
                 throw new InvalidArgumentException(
                     "\$locationCreateStructs",
-                    "Another Location with remoteId '{$locationCreateStruct->remoteId}' exists"
+                    "Another Location with remoteId '{$remoteId}' exists"
                 );
             }
             catch ( NotFoundException $e )
@@ -338,7 +339,7 @@ class DomainMapper
                 // If we declare the new Location as hidden, it is automatically invisible
                 // Otherwise it picks up visibility from parent Location
                 "invisible" => ( $locationCreateStruct->hidden === true || $parentLocation->hidden || $parentLocation->invisible ),
-                "remoteId" => $locationCreateStruct->remoteId,
+                "remoteId" => $remoteId,
                 "contentId" => $contentId,
                 "contentVersion" => $contentVersionNo,
                 // pathIdentificationString will be set in storage
