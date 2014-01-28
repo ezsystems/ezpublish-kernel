@@ -338,7 +338,9 @@ class DomainMapper
                 "hidden" => $locationCreateStruct->hidden,
                 // If we declare the new Location as hidden, it is automatically invisible
                 // Otherwise it picks up visibility from parent Location
-                "invisible" => ( $locationCreateStruct->hidden === true || $parentLocation->hidden || $parentLocation->invisible ),
+                // Note: There is no need to check for hidden status of parent, as hidden Location
+                // is always invisible as well
+                "invisible" => ( $locationCreateStruct->hidden === true || $parentLocation->invisible ),
                 "remoteId" => $remoteId,
                 "contentId" => $contentId,
                 "contentVersion" => $contentVersionNo,
