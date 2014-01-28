@@ -154,7 +154,7 @@ class DoctrineDatabase extends Gateway
         }
 
         $selectQuery = $this->handler->createSelectQuery();
-        $selectQuery->select( '*' );
+        $selectQuery->select( 'ezcontentobject_tree.*' );
 
         if ( $sortClauses !== null )
         {
