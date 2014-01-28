@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use \eZTemplate;
+use eZTemplate;
 
 /**
  * Class TemplateDebugInfo
@@ -72,7 +72,7 @@ class TemplateDebugInfo
         $templateStats = $legacyKernel()->runCallback(
             function ()
             {
-                return \eZTemplate::templatesUsageStatistics();
+                return eZTemplate::templatesUsageStatistics();
             }
         );
 
@@ -87,13 +87,13 @@ class TemplateDebugInfo
                 "loaded" => $requestedTpl,
                 "fullPath" => $fullPath
             );
-            if ( !isset( $templateList["compact"][$requestedTpl] ) )
+            if ( !isset( $templateList["compact"][$actualTpl] ) )
             {
-                $templateList["compact"][$requestedTpl] = 1;
+                $templateList["compact"][$actualTpl] = 1;
             }
             else
             {
-                $templateList["compact"][$requestedTpl]++;
+                $templateList["compact"][$actualTpl]++;
             }
         }
         return $templateList;
