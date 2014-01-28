@@ -117,6 +117,9 @@ parameters:
     # Cache
     ezpublish_rest.output.value_object_visitor.cached_value.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\CachedValue
 
+    # Services
+    ezpublish_rest.output.value_object_visitor.CountryList.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\CountryList
+
 services:
     ezpublish_rest.output.value_object_visitor.base:
         class: %ezpublish_rest.output.value_object_visitor.base.class%
@@ -578,6 +581,13 @@ services:
         class: %ezpublish_rest.output.value_object_visitor.ContentObjectStates.class%
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Common\Values\ContentObjectStates }
+
+    # Services
+    ezpublish_rest.output.value_object_visitor.CountryList:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.CountryList.class%
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\CountryList}
 
     # REST specific
     ezpublish_rest.output.value_object_visitor.TemporaryRedirect:

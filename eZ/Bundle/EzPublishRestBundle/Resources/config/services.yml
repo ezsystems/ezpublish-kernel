@@ -19,6 +19,7 @@ parameters:
     ezpublish_rest.controller.url_wildcard.class: eZ\Publish\Core\REST\Server\Controller\URLWildcard
     ezpublish_rest.controller.url_alias.class: eZ\Publish\Core\REST\Server\Controller\URLAlias
     ezpublish_rest.controller.options.class: eZ\Publish\Core\REST\Server\Controller\Options
+    ezpublish_rest.controller.services.class: eZ\Publish\Core\REST\Server\Controller\Services
 
     ezpublish_rest.factory.class: eZ\Bundle\EzPublishRestBundle\ApiLoader\Factory
     ezpublish_rest.request_parser.class: eZ\Bundle\EzPublishRestBundle\RequestParser\Router
@@ -238,6 +239,10 @@ services:
     ezpublish_rest.controller.options:
         class: %ezpublish_rest.controller.options.class%
         parent: ezpublish_rest.controller.base
+
+    ezpublish_rest.controller.services:
+        class: %ezpublish_rest.controller.services.class%
+        arguments: [%ezpublish.fieldType.ezcountry.data%]
 
     ezpublish_rest.field_type_processor_registry:
         class: %ezpublish_rest.field_type_processor_registry.class%
