@@ -92,15 +92,20 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * Returns total count and data for all Locations satisfying the parameters.
      *
-     * @return mixed
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param int $offset
+     * @param int|null $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     *
+     * @return mixed[][]
      */
-    public function find( Query $query )
+    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null )
     {
         try
         {
-            return $this->innerGateway->find( $query );
+            return $this->innerGateway->find( $criterion, $offset, $limit, $sortClauses );
         }
         catch ( DBALException $e )
         {

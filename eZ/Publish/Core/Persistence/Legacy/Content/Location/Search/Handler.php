@@ -65,7 +65,14 @@ class Handler implements BaseLocationSearchHandler
             throw new NotImplementedException( "Facets are not supported by the legacy search engine." );
         }
 
-        $data = $this->locationGateway->find( $query );
+        // The legacy search does not know about scores, so we just
+        // combine the query with the filter
+        $data = $this->locationGateway->find(
+            new Criterion\LogicalAnd( array( $query->query, $query->filter ) ),
+            $query->offset,
+            $query->limit,
+            $query->sortClauses
+        );
 
         $result = new SearchResult();
         $result->time = microtime( true ) - $start;
@@ -73,10 +80,7 @@ class Handler implements BaseLocationSearchHandler
 
         foreach ( $this->locationMapper->createLocationsFromRows( $data['rows'] ) as $location )
         {
-            $searchHit = new SearchHit();
-            $searchHit->valueObject = $location;
-
-            $result->searchHits[] = $searchHit;
+            $result->searchHits[] = new SearchHit( array( "valueObject" => $location ) );
         }
 
         return $result;

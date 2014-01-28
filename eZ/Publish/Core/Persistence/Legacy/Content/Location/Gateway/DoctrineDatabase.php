@@ -136,16 +136,19 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Search for nodes based on $query and returns an array with basic node data
+     * Returns total count and data for all Locations satisfying the parameters.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param int $offset
+     * @param int|null $limit
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      *
-     * @return array
+     * @return mixed[][]
      */
-    public function find( Query $query )
+    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null )
     {
-        $count = $this->count( $query->filter, $query->sortClauses );
-        if ( $query->limit === 0 )
+        $count = $this->count( $criterion, $sortClauses );
+        if ( $limit === 0 )
         {
             return array( "count" => $count, "rows" => array() );
         }
@@ -153,9 +156,9 @@ class DoctrineDatabase extends Gateway
         $selectQuery = $this->handler->createSelectQuery();
         $selectQuery->select( '*' );
 
-        if ( $query->sortClauses !== null )
+        if ( $sortClauses !== null )
         {
-            $this->sortClauseConverter->applySelect( $selectQuery, $query->sortClauses );
+            $this->sortClauseConverter->applySelect( $selectQuery, $sortClauses );
         }
 
         $selectQuery
@@ -171,13 +174,13 @@ class DoctrineDatabase extends Gateway
                 'ezcontentobject_version.contentobject_id'
             );
 
-        if ( $query->sortClauses !== null )
+        if ( $sortClauses !== null )
         {
-            $this->sortClauseConverter->applyJoin( $selectQuery, $query->sortClauses );
+            $this->sortClauseConverter->applyJoin( $selectQuery, $sortClauses );
         }
 
         $selectQuery->where(
-            $this->criteriaConverter->convertCriteria( $selectQuery, $query->filter ),
+            $this->criteriaConverter->convertCriteria( $selectQuery, $criterion ),
             $selectQuery->expr->eq(
                 'ezcontentobject.status',
                 //ContentInfo::STATUS_PUBLISHED
@@ -194,14 +197,14 @@ class DoctrineDatabase extends Gateway
             )
         );
 
-        if ( $query->sortClauses !== null )
+        if ( $sortClauses !== null )
         {
-            $this->sortClauseConverter->applyOrderBy( $selectQuery, $query->sortClauses );
+            $this->sortClauseConverter->applyOrderBy( $selectQuery, $sortClauses );
         }
 
         $selectQuery->limit(
-            $query->limit > 0 ? $query->limit : self::MAX_LIMIT,
-            $query->offset
+            $limit > 0 ? $limit : self::MAX_LIMIT,
+            $offset
         );
 
         $statement = $selectQuery->prepare();
