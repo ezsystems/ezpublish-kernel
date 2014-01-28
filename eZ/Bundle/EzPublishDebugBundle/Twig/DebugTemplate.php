@@ -24,11 +24,55 @@ abstract class DebugTemplate extends Twig_Template
     public function display( array $context, array $blocks = array() )
     {
         $startTime = microtime( true );
-        echo "<!-- BEGIN " . $this->getTemplateName() . "-->";
+
+        $templateListBefore = TemplateDebugInfo::getTemplatesList();
+
+        echo "<!-- " . $this->getTemplateName() . " START -->";
         parent::display( $context, $blocks );
-        echo "<!-- END " . $this->getTemplateName() . "-->";
+        echo "<!-- " . $this->getTemplateName() . " END -->";
+
         $endTime = microtime( true );
 
-        TemplateDebugInfo::addTemplate( $this->getTemplateName(), round( ( $endTime - $startTime ) * 1000 ) );
+        $templateListAfter = TemplateDebugInfo::getTemplatesList();
+
+        TemplateDebugInfo::addTemplate(
+            $this->getTemplateName(),
+            $this->computeExecutionTime(
+                round( ( $endTime - $startTime ) * 1000 ),
+                $templateListBefore['full'],
+                $templateListAfter['full']
+            )
+        );
+    }
+
+    /**
+     * Given a raw $executionTime, and list of templates before and after display, computes the *real* execution time
+     * by substracting the time taken to display nested templates
+     *
+     * @param int $executionTime milliseconds
+     * @param array $templateListBefore templateName => executionTime
+     * @param array $templateListAfter templateName => executionTime
+     *
+     * @return int Computed execution time in milliseconds
+     */
+    protected function computeExecutionTime( $executionTime, $templateListBefore, $templateListAfter )
+    {
+        foreach ( $templateListAfter as $templateName => $nestedExecutionTime )
+        {
+            if ( isset( $templateListBefore[$templateName] ) )
+            {
+                if ( $templateListBefore[$templateName] == $templateListAfter[$templateName] )
+                {
+                    continue;
+                }
+                $executionTime -= ( $nestedExecutionTime - $templateListBefore[$templateName] );
+            }
+            else
+            {
+                $executionTime -= $nestedExecutionTime;
+            }
+        }
+
+        return $executionTime;
     }
 }
