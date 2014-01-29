@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\Persistence\Database;
 
 use PDO;
 
+/**
+ * @property-read \eZ\Publish\Core\Persistence\Database\Expression $expr
+ */
 interface Query
 {
     /**

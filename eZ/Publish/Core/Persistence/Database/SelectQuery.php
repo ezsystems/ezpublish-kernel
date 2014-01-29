@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Database;
 
+/**
+ * @property-read \eZ\Publish\Core\Persistence\Database\Expression $expr
+ */
 interface SelectQuery extends Query
 {
     const ASC = 'ASC';
@@ -236,11 +239,11 @@ interface SelectQuery extends Query
 
     /**
      * Returns the SQL for a right join or prepares $fromString for a right join.
-     * 
+     *
      * This method could be used in two forms:
      *
      * <b>rightJoin( 't2', $joinCondition )</b>
-     * 
+     *
      * Takes 2 string arguments and returns \eZ\Publish\Core\Persistence\Database\SelectQuery.
      *
      * The first parameter is the name of the table to join with. The table to
@@ -257,14 +260,14 @@ interface SelectQuery extends Query
      * </code>
      *
      * <b>rightJoin( 't2', 't1.id', 't2.id' )</b>
-     * 
+     *
      * Takes 3 string arguments and returns \eZ\Publish\Core\Persistence\Database\SelectQuery. This is a simplified form
      * of the 2 parameter version.  rightJoin( 't2', 't1.id', 't2.id' ) is
      * equal to rightJoin( 't2', $this->expr->eq('t1.id', 't2.id' ) );
      *
      * The first parameter is the name of the table to join with. The table to
      * which is joined should have been previously set with the from() method.
-     * 
+     *
      * The second parameter is the name of the column on the table set
      * previously with the from() method and the third parameter the name of
      * the column to join with on the table that was specified in the first

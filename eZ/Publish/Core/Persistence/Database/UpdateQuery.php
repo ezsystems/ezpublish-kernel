@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\Persistence\Database;
 
+/**
+ * @property-read \eZ\Publish\Core\Persistence\Database\Expression $expr
+ */
 interface UpdateQuery extends Query
 {
     /**
