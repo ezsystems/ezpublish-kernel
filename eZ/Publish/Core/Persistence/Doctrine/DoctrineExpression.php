@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Doctrine;
 
 use eZ\Publish\Core\Persistence\Database\Expression;
 use Doctrine\DBAL\Connection;
+use eZ\Publish\Core\Persistence\Database\QueryException;
 
 class DoctrineExpression implements Expression
 {
@@ -737,7 +738,7 @@ class DoctrineExpression implements Expression
         $elements = $this->getIdentifiers( $elements );
         if ( count( $elements ) < 1 )
         {
-            throw new InvalidArgumentException(
+            throw new QueryException(
                 "The operation '{$type}' expected at least 1 argument but none provided."
             );
         }
