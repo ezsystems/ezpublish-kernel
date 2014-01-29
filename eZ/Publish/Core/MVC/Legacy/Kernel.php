@@ -51,6 +51,16 @@ class Kernel extends ezpKernel
     }
 
     /**
+     * Checks if LegacyKernel has already been instantiated.
+     *
+     * @return bool
+     */
+    public static function hasInstance()
+    {
+        return static::$instance !== null;
+    }
+
+    /**
      * Changes the current working directory to the legacy root dir.
      * Calling this method is mandatory to use legacy kernel since a lot of resources in eZ Publish 4.x relatively defined.
      */

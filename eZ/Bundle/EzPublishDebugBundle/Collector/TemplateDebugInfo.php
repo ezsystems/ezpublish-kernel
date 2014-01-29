@@ -9,7 +9,7 @@
 
 namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZTemplate;
 
 /**
@@ -64,11 +64,19 @@ class TemplateDebugInfo
     /**
      * Returns array of loaded legacy templates
      *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param \Closure $legacyKernel
+     *
      * @return array
      */
     public static function getLegacyTemplatesList( \Closure $legacyKernel )
     {
+        $templateList = array( 'compact' => array(), 'full' => array() );
+        // Only retrieve legacy templates list if the kernel has been booted at least once.
+        if ( !LegacyKernel::hasInstance() )
+        {
+            return $templateList;
+        }
+
         $templateStats = $legacyKernel()->runCallback(
             function ()
             {
@@ -76,7 +84,6 @@ class TemplateDebugInfo
             }
         );
 
-        $templateList = array( 'compact' => array(), 'full' => array() );
         foreach ( $templateStats as $tplInfo )
         {
             $requestedTpl = $tplInfo["requested-template-name"];
