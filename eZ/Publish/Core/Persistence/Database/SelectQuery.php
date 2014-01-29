@@ -309,7 +309,7 @@ interface SelectQuery extends Query
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
      * @param string|array(string) $... Either a string with a logical expression name
      * or an array with logical expressions.
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function where();
 
@@ -332,7 +332,7 @@ interface SelectQuery extends Query
      *
      * @param string $limit integer expression
      * @param string $offset integer expression
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function limit( $limit, $offset = '' );
 

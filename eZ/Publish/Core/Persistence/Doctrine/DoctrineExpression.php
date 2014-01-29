@@ -15,12 +15,12 @@ use Doctrine\DBAL\Connection;
 class DoctrineExpression implements Expression
 {
     /**
-     * @var Doctrine\DBAL\Connection
+     * @var \Doctrine\DBAL\Connection
      */
     private $connection;
 
     /**
-     * @var Doctrine\DBAL\Platforms\AbstractPlatform
+     * @var \Doctrine\DBAL\Platforms\AbstractPlatform
      */
     private $platform;
 

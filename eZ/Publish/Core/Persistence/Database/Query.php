@@ -24,7 +24,7 @@ interface Query
     public function subSelect();
 
     /**
-     * @return PDOStatement
+     * @return \PDOStatement
      */
     public function prepare();
 
