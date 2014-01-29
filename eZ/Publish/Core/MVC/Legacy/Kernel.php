@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Legacy;
 use Exception;
 use ezpKernel;
 use ezpKernelHandler;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 /**
@@ -36,14 +37,29 @@ class Kernel extends ezpKernel
     private $runningCallback = false;
 
     /**
+     * Directory where kernel was originally running from.
+     * @see self::runCallback()
+     *
+     * @var string
+     */
+    private $previousRunningDir;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param \ezpKernelHandler $kernelHandler
      * @param string $legacyRootDir Must be a absolute dir
      * @param string $webRootDir Must be a absolute dir
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct( ezpKernelHandler $kernelHandler, $legacyRootDir, $webRootDir )
+    public function __construct( ezpKernelHandler $kernelHandler, $legacyRootDir, $webRootDir, LoggerInterface $logger = null )
     {
         $this->legacyRootDir = $legacyRootDir;
         $this->webRootDir = $webRootDir;
+        $this->logger = $logger;
 
         $this->enterLegacyRootDir();
         parent::__construct( $kernelHandler );
@@ -67,15 +83,37 @@ class Kernel extends ezpKernel
      */
     public function enterLegacyRootDir()
     {
+        $this->previousRunningDir = getcwd();
+        if ( $this->logger )
+        {
+            $this->logger->debug( "Legacy kernel: Leaving '$this->previousRunningDir' for '$this->legacyRootDir'" );
+        }
         chdir( $this->legacyRootDir );
     }
 
     /**
-     * Leaves the legacy root dir and switches back to the initial webroot dir.
+     * Leaves the legacy root dir and switches back to the dir where execution was happening before we entered LegacyRootDir.
      */
     public function leaveLegacyRootDir()
     {
-        chdir( $this->webRootDir );
+        $previousDir = $this->previousRunningDir;
+        if ( !$previousDir )
+        {
+            if ( $this->logger )
+            {
+                $this->logger->warning(
+                    "Trying to leave legacy root dir without a previously executing dir. Falling back to '$this->webRootDir'"
+                );
+            }
+            $previousDir = $this->webRootDir;
+        }
+
+        $this->previousRunningDir = null;
+        if ( $this->logger )
+        {
+            $this->logger->debug( "Legacy kernel: Leaving '$this->legacyRootDir' for '$previousDir'" );
+        }
+        chdir( $previousDir );
     }
 
     /**
