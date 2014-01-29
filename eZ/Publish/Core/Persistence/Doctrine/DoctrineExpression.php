@@ -400,7 +400,7 @@ class DoctrineExpression implements Expression
                     break;
                 case is_int( $value ):
                 case is_float( $value ):
-                    $values[$key] = (string) $value;
+                    $values[$key] = (string)$value;
                     break;
                 default:
                     $values[$key] = $this->connection->quote( $value );
