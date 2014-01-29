@@ -8,7 +8,6 @@ parameters:
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
-    ezpublish.data_collector.spi.persistence.class: eZ\Bundle\EzPublishCoreBundle\Collector\SPIPersistenceDataCollector
 
     # FragmentRenderer overrides
     fragment.renderer.esi.class: eZ\Bundle\EzPublishCoreBundle\Fragment\EsiFragmentRenderer
@@ -78,16 +77,6 @@ services:
     # {{ render( controller( "ez_page:viewBlock", {'block': myBlock} ) ) }}
     ez_page:
         alias: ezpublish.controller.page.view
-
-    # SPI profiling
-    ezpublish.data_collector.spi.persistence:
-        class: %ezpublish.data_collector.spi.persistence.class%
-        arguments: [ @ezpublish.spi.persistence.cache.persistenceLogger ]
-        tags:
-            -
-                name: data_collector
-                template: "EzPublishCoreBundle:Profiler:layout"
-                id: "ezpublish.spi.persistence"
 
     ezpublish.controller_manager:
         class: %ezpublish.controller_manager.class%

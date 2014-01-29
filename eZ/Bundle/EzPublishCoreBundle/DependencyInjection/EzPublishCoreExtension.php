@@ -48,6 +48,7 @@ class EzPublishCoreExtension extends Extension
             $container,
             new FileLocator( __DIR__ . '/../Resources/config' )
         );
+
         $configuration = $this->getConfiguration( $configs, $container );
 
         // Note: this is where the transformation occurs

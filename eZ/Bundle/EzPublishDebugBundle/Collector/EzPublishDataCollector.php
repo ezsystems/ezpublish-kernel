@@ -1,23 +1,25 @@
 <?php
 /**
- * File containing the SPIPersistenceDataCollector class.
+ * File containing the EzPublishDataCollector class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\Collector;
+namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 
 /**
+ * Collects list of templates from eZ 5 stack or Legacy Stack
  * Collects number of calls made to SPI Persistence as logged by eZ\Publish\Core\Persistence\Cache\*.
  */
-class SPIPersistenceDataCollector extends DataCollector
+class EzPublishDataCollector extends DataCollector
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
@@ -25,11 +27,17 @@ class SPIPersistenceDataCollector extends DataCollector
     protected $logger;
 
     /**
+     * @var \Closure
+     */
+    protected $legacyKernel;
+
+    /**
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
-    public function __construct( PersistenceLogger $logger )
+    public function __construct( PersistenceLogger $logger, \Closure $legacyKernel )
     {
         $this->logger = $logger;
+        $this->legacyKernel = $legacyKernel;
     }
 
     /**
@@ -47,7 +55,9 @@ class SPIPersistenceDataCollector extends DataCollector
             'count' => $this->logger->getCount(),
             'calls_logging_enabled' => $this->logger->isCallsLoggingEnabled(),
             'calls' => $this->logger->getCalls(),
-            'handlers' => $this->logger->getLoadedUnCachedHandlers()
+            'handlers' => $this->logger->getLoadedUnCachedHandlers(),
+            'templates' => TemplateDebugInfo::getTemplatesList(),
+            'legacy_templates' => TemplateDebugInfo::getLegacyTemplatesList( $this->legacyKernel )
         );
     }
 
@@ -60,7 +70,7 @@ class SPIPersistenceDataCollector extends DataCollector
      */
     public function getName()
     {
-        return 'ezpublish.spi.persistence';
+        return 'ezpublish.debug.toolbar';
     }
 
     /**
@@ -135,5 +145,25 @@ class SPIPersistenceDataCollector extends DataCollector
     public function getHandlersCount()
     {
         return array_sum( $this->data['handlers'] );
+    }
+
+    /**
+     * Returns templates list
+     *
+     * @return array
+     */
+    public function getTemplates()
+    {
+        return $this->data['templates'];
+    }
+
+    /**
+     * Returns templates list
+     *
+     * @return array
+     */
+    public function getLegacyTemplates()
+    {
+        return $this->data['legacy_templates'];
     }
 }
