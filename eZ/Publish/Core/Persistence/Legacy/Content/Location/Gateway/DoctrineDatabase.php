@@ -199,7 +199,7 @@ class DoctrineDatabase extends Gateway
 
         if ( $sortClauses !== null )
         {
-            $this->sortClauseConverter->applyOrderBy( $selectQuery, $sortClauses );
+            $this->sortClauseConverter->applyOrderBy( $selectQuery );
         }
 
         $selectQuery->limit(

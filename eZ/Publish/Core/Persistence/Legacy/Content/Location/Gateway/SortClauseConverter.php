@@ -103,11 +103,10 @@ class SortClauseConverter
      * Apply order by parts of sort clauses to query
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param array $sortClauses
      *
      * @return void
      */
-    public function applyOrderBy( SelectQuery $query, array $sortClauses )
+    public function applyOrderBy( SelectQuery $query )
     {
         foreach ( $this->sortColumns as $column => $direction )
         {
