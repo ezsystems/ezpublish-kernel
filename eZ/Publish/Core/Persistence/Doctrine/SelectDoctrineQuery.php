@@ -24,7 +24,6 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
         'orderBy' => array(),
         'groupBy' => array(),
         'having' => array(),
-        'orderBy' => array(),
     );
 
     /**
