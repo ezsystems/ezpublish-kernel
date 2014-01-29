@@ -419,6 +419,13 @@ class ContentHandler implements ContentHandlerInterface
         if ( isset( $translations ) )
             $fieldMatch["languageCode"] = $translations;
         $content->fields = $this->backend->find( 'Content\\Field', $fieldMatch );
+        if ( empty( $content->fields ) )
+        {
+            throw new NotFoundException(
+                'Content',
+                "contentId:{$id}, versionNo:{$version}" . ( $translations ? ', ' . implode( ',', $translations ) : '' )
+            );
+        }
 
         $content->versionInfo = $versions[0];
         return $content;

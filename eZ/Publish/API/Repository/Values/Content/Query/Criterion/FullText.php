@@ -37,13 +37,13 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 class FullText extends Criterion implements CriterionInterface, CustomFieldInterface
 {
     /**
-     * Fuzzyness of the fulltext search.
+     * Fuzziness of the fulltext search.
      *
      * May be a value between 0. (fuzzy) and 1. (sharp).
      *
      * @var float
      */
-    public $fuzzyness = 1.;
+    public $fuzziness = 1.;
 
     /**
      * Boost for certain fields

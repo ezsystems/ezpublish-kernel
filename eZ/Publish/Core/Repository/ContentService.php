@@ -393,29 +393,6 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if ( !empty( $languages ) )
-        {
-            foreach ( $languages as $languageCode )
-            {
-                if (
-                    !in_array(
-                        $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode( $languageCode )->id,
-                        $spiContent->versionInfo->languageIds
-                    )
-                )
-                {
-                    throw new NotFoundException(
-                        "Content",
-                        array(
-                            $isRemoteId ? "remoteId" : "id" => $id,
-                            "languages" => $languages,
-                            "versionNo" => $versionNo
-                        )
-                    );
-                }
-            }
-        }
-
         return $this->domainMapper->buildContentDomainObject( $spiContent );
     }
 

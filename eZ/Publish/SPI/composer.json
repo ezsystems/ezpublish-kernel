@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-0": {
-            "eZ": ""
+            "eZ\\Publish\\SPI": ""
         }
     },
     "extra": {

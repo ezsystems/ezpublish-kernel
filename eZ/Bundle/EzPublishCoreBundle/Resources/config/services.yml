@@ -49,7 +49,7 @@ services:
         arguments: [@ezpublish.view_manager]
         parent: ezpublish.controller.base
 
-    ezpublish.controller.content.preview:
+    ezpublish.controller.content.preview.core:
         class: %ezpublish.controller.content.preview.class%
         arguments:
             - @ezpublish.api.service.content
@@ -58,6 +58,9 @@ services:
             - @security.context
         calls:
             - [setRequest, [@?request=]]
+
+    ezpublish.controller.content.preview:
+        alias: ezpublish.controller.content.preview.core
 
     ezpublish.controller.page.view:
         class: %ezpublish.controller.page.view.class%

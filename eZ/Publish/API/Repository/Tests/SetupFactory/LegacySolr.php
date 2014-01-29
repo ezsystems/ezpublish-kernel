@@ -63,43 +63,24 @@ class LegacySolr extends Legacy
         $repository = new SignalSlotRepository(
             $repository,
             new DefaultSignalDispatcher(
-                new GeneralSlotFactory(
-                    array(
-                        // Attention: we are passing the NON SignalSlotted repository here because it is still under creation
-                        // this might be an issue and might require a dedicated setRepository() method.
-                        "solr-publish-version" => new Slot\PublishVersion( $repository, $persistenceHandler ),
-                        "solr-copy-content" => new Slot\CopyContent( $repository, $persistenceHandler ),
-                        "solr-delete-content" => new Slot\DeleteContent( $repository, $persistenceHandler ),
-                        "solr-delete-version" => new Slot\DeleteVersion( $repository, $persistenceHandler ),
-                        "solr-delete-location" => new Slot\DeleteLocation( $repository, $persistenceHandler ),
-                        "solr-create-user" => new Slot\CreateUser( $repository, $persistenceHandler ),
-                        "solr-create-user-group" => new Slot\CreateUserGroup( $repository, $persistenceHandler ),
-                        "solr-move-user-group" => new Slot\MoveUserGroup( $repository, $persistenceHandler ),
-                        "solr-copy-subtree" => new Slot\CopySubtree( $repository, $persistenceHandler ),
-                        "solr-move-subtree" => new Slot\MoveSubtree( $repository, $persistenceHandler ),
-                        "solr-trash" => new Slot\Trash( $repository, $persistenceHandler ),
-                        "solr-trash-recover" => new Slot\Recover( $repository, $persistenceHandler ),
-                        "solr-hide-location" => new Slot\HideLocation( $repository, $persistenceHandler ),
-                        "solr-unhide-location" => new Slot\UnhideLocation( $repository, $persistenceHandler ),
-                        "solr-set-content-state" => new Slot\SetContentState( $repository, $persistenceHandler ),
-                    )
-                ),
                 array(
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\PublishVersionSignal" => array( "solr-publish-version" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteContentSignal" => array( "solr-delete-content" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteVersionSignal" => array( "solr-delete-version" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\CopyContentSignal" => array( "solr-copy-content" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\DeleteLocationSignal" => array( "solr-delete-location" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\CopySubtreeSignal" => array( "solr-copy-subtree" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\MoveSubtreeSignal" => array( "solr-move-subtree" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\HideLocationSignal" => array( "solr-hide-location" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\UnhideLocationSignal" => array( "solr-unhide-location" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\TrashSignal" => array( "solr-trash" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\RecoverSignal" => array( "solr-trash-recover" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( "solr-create-user" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserGroupSignal" => array( "solr-create-user-group" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\MoveUserGroupSignal" => array( "solr-move-user-group" ),
-                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ObjectStateService\\SetContentStateSignal" => array( "solr-set-content-state" ),
+                    // Attention: we are passing the NON SignalSlotted repository here because it is still under creation
+                    // this might be an issue and might require a dedicated setRepository() method.
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\PublishVersionSignal" => array( new Slot\PublishVersion( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\CopyContentSignal" => array( new Slot\CopyContent( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteContentSignal" => array( new Slot\DeleteContent( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ContentService\\DeleteVersionSignal" => array( new Slot\DeleteVersion( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\DeleteLocationSignal" => array( new Slot\DeleteLocation( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserSignal" => array( new Slot\CreateUser( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\CreateUserGroupSignal" => array( new Slot\CreateUserGroup( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\UserService\\MoveUserGroupSignal" => array( new Slot\MoveUserGroup( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\CopySubtreeSignal" => array( new Slot\CopySubtree( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\MoveSubtreeSignal" => array( new Slot\MoveSubtree( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\TrashSignal" => array( new Slot\Trash( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\TrashService\\RecoverSignal" => array( new Slot\Recover( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\HideLocationSignal" => array( new Slot\HideLocation( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\LocationService\\UnhideLocationSignal" => array( new Slot\UnhideLocation( $repository, $persistenceHandler ) ),
+                    "eZ\\Publish\\Core\\SignalSlot\\Signal\\ObjectStateService\\SetContentStateSignal" => array( new Slot\SetContentState( $repository, $persistenceHandler ) ),
                 )
             )
         );

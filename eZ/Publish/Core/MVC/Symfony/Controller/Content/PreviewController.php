@@ -11,7 +11,10 @@ namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,17 +87,7 @@ class PreviewController
         $newSiteAccess = $this->previewHelper->changeConfigScope( $siteAccessName );
 
         $response = $this->kernel->handle(
-            $this->request->duplicate(
-                null, null,
-                array(
-                    '_controller' => 'ez_content:viewLocation',
-                    'location' => $location,
-                    'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
-                    'layout' => true,
-                    'params' => array( 'content' => $content, 'location' => $location, 'isPreview' => true ),
-                    'siteaccess' => $newSiteAccess
-                )
-            ),
+            $this->getForwardRequest( $location, $content, $newSiteAccess ),
             HttpKernelInterface::SUB_REQUEST
         );
         $response->headers->remove( 'cache-control' );
@@ -103,5 +96,34 @@ class PreviewController
         $this->previewHelper->restoreConfigScope();
 
         return $response;
+    }
+
+    /**
+     * Returns the Request object that will be forwarded to the kernel for previewing the content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $previewSiteAccess
+     *
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    protected function getForwardRequest( Location $location, Content $content, SiteAccess $previewSiteAccess )
+    {
+        return $this->request->duplicate(
+            null, null,
+            array(
+                '_controller' => 'ez_content:viewLocation',
+                'location' => $location,
+                'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
+                'layout' => true,
+                'params' => array(
+                    'content' => $content,
+                    'location' => $location,
+                    'isPreview' => true
+                ),
+                'siteaccess' => $previewSiteAccess,
+                'semanticPathinfo' => $this->request->attributes->get( 'semanticPathinfo' ),
+            )
+        );
     }
 }

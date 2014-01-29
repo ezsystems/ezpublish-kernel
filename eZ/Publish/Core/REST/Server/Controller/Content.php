@@ -19,6 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 
@@ -759,5 +760,35 @@ class Content extends RestController
                 'searchResults' => $this->repository->getSearchService()->findContent( $viewInput->query ),
             )
         );
+    }
+
+    /**
+     * List content views
+     *
+     * @return NotImplementedException;
+     */
+    public function listView()
+    {
+        return new NotImplementedException( 'ezpublish_rest.controller.content:listView' );
+    }
+
+    /**
+     * Get a content view
+     *
+     * @return NotImplementedException;
+     */
+    public function getView()
+    {
+        return new NotImplementedException( 'ezpublish_rest.controller.content:getView' );
+    }
+
+    /**
+     * Get a content view results
+     *
+     * @return NotImplementedException;
+     */
+    public function loadViewResults()
+    {
+        return new NotImplementedException( 'ezpublish_rest.controller.content:loadViewResults' );
     }
 }

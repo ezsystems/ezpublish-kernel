@@ -86,8 +86,8 @@ class FullText extends CriterionVisitor
             array_map(
                 function ($search) use ($criterion) {
                     return $search . (
-                        $criterion->fuzzyness < 1 ?
-                            sprintf( "~%.1f", $criterion->fuzzyness ) :
+                        $criterion->fuzziness < 1 ?
+                            sprintf( "~%.1f", $criterion->fuzziness ) :
                             ""
                         );
                 },
