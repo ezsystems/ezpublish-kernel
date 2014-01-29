@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\UpdateQuery;
 use eZ\Publish\Core\Persistence\Database\InsertQuery;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\SPI\Persistence\Content;
@@ -27,7 +28,6 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
-use ezcQuerySelect;
 use PDO;
 
 /**
@@ -1006,7 +1006,7 @@ class EzcDatabase extends Gateway
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @return string[][]
      */
-    private function listVersionsHelper( ezcQuerySelect $query )
+    private function listVersionsHelper( SelectQuery $query )
     {
         $query->orderBy(
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' )
