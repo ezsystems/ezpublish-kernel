@@ -63,26 +63,23 @@ class DoctrineExpression implements Expression
      * @param string $by
      * @return string
      */
-    private function combine($args, $by)
+    private function combine( array $args, $by )
     {
-        if ( count( $args ) === 1 && is_array( $args[0] ) )
-        {
-            $args = $args[0];
-        }
+        $args = $this->arrayFlatten( $args );
 
         if ( count( $args ) < 1 )
         {
-            throw new QueryException();
+            throw new QueryException(
+                "The expression '{$by}' expected at least 1 argument but none provided."
+            );
         }
 
-        if ( count( $args ) == 1 )
+        if ( count( $args ) === 1 )
         {
             return $args[0];
         }
-        else
-        {
-            return '( ' . join( $by, $args ) . ' )';
-        }
+
+        return '( ' . join( $by, $args ) . ' )';
     }
 
     /**
@@ -734,8 +731,7 @@ class DoctrineExpression implements Expression
     private function basicMath( $type )
     {
         $args = func_get_args();
-        $elements = eZ\Publish\Core\Persistence\Database\SelectQuery::arrayFlatten( array_slice( $args, 1 ) );
-        $elements = $this->getIdentifiers( $elements );
+        $elements = $this->arrayFlatten( array_slice( $args, 1 ) );
         if ( count( $elements ) < 1 )
         {
             throw new QueryException(
@@ -750,5 +746,30 @@ class DoctrineExpression implements Expression
         {
             return '( ' . join( " $type ", $elements ) . ' )';
         }
+    }
+
+    /**
+     * Returns all the elements in $array as one large single dimensional array.
+     *
+     * @param array $array
+     * @return array
+     */
+    private function arrayFlatten( array $array )
+    {
+        $flat = array();
+        foreach ( $array as $arg )
+        {
+            switch ( gettype( $arg ) )
+            {
+                case 'array':
+                    $flat = array_merge( $flat, $arg );
+                    break;
+
+                default:
+                    $flat[] = $arg;
+                    break;
+            }
+        }
+        return $flat;
     }
 }
