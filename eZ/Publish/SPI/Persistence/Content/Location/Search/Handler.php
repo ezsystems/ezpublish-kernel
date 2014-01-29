@@ -23,13 +23,4 @@ interface Handler
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
      */
     public function findLocations( LocationQuery $query );
-
-    /**
-     * Counts all locations given some $criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     *
-     * @return int
-     */
-    public function getLocationCount( Criterion $criterion );
 }
