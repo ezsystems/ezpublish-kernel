@@ -27,9 +27,7 @@ abstract class DebugTemplate extends Twig_Template
 
         $templateListBefore = TemplateDebugInfo::getTemplatesList();
 
-        echo "<!-- " . $this->getTemplateName() . " START -->";
         parent::display( $context, $blocks );
-        echo "<!-- " . $this->getTemplateName() . " END -->";
 
         $endTime = microtime( true );
 
