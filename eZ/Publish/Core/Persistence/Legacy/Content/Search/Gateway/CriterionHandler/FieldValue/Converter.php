@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
- * Content locator gateway implementation using the zeta database component.
+ * Content locator gateway implementation using the DoctrineDatabase.
  */
 class Converter
 {

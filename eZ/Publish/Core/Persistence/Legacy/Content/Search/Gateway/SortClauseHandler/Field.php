@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing a EzcDatabase sort clause handler class
+ * File containing a DoctrineDatabase sort clause handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * Content locator gateway implementation using the zeta database component.
+ * Content locator gateway implementation using the DoctrineDatabase.
  */
 class Field extends SortClauseHandler
 {

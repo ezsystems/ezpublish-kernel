@@ -25,7 +25,7 @@ class DoctrineDatabase extends Gateway
     protected $dbHandler;
 
     /**
-     * Creates a new EzcDatabase Section Gateway
+     * Creates a new DoctrineDatabase Section Gateway
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      */

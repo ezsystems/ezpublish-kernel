@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase criterion handler class
+ * File containing the DoctrineDatabase criterion handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -15,13 +15,13 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as Criteri
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * Content locator gateway implementation using the zeta database component.
+ * Content locator gateway implementation using the DoctrineDatabase.
  */
 abstract class CriterionHandler
 {
     /**
-     * Map of criterion operators to the respective function names in the zeta
-     * Database abstraction layer.
+     * Map of criterion operators to the respective function names
+     * in the DoctrineDatabase DBAL.
      *
      * @var array
      */

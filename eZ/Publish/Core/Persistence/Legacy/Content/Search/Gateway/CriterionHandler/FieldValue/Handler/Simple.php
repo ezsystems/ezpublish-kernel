@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase Simple field value handler class
+ * File containing the DoctrineDatabase Simple field value handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * Content locator gateway implementation using the zeta database component.
+ * Content locator gateway implementation using the DoctrineDatabase.
  *
  * Simple value handler is used for creating a filter on a value that makes sense to match on only as a whole.
  * Eg. timestamp, integer, boolean, relation Content id

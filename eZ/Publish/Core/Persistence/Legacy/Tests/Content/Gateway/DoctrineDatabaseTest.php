@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\EzcDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\DoctrineDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -23,9 +23,9 @@ use eZ\Publish\API\Repository\Values\Content\Relation as RelationValue;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
- * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase.
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase.
  */
-class EzcDatabaseTest extends LanguageAwareTestCase
+class DoctrineDatabaseTest extends LanguageAwareTestCase
 {
     /**
      * Database gateway to test.

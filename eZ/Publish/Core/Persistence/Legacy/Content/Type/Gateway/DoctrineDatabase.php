@@ -84,7 +84,7 @@ class DoctrineDatabase extends Gateway
     );
 
     /**
-     * Zeta Components database handler.
+     * DoctrineDatabase handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */

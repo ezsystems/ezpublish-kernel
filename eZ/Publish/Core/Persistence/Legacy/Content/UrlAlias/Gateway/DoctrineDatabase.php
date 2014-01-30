@@ -62,7 +62,7 @@ class DoctrineDatabase extends Gateway
     protected $languageMaskGenerator;
 
     /**
-     * Creates a new EzcDatabase UrlAlias Gateway
+     * Creates a new DoctrineDatabase UrlAlias Gateway
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
