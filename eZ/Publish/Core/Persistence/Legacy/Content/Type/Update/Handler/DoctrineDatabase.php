@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase Type Update Handler class
+ * File containing the DoctrineDatabase Type Update Handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -15,9 +15,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 use eZ\Publish\SPI\Persistence\Content\Type;
 
 /**
- * EzcDatabase based type update handler
+ * Doctrine database based type update handler
  */
-class EzcDatabase extends Handler
+class DoctrineDatabase extends Handler
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway

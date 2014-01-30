@@ -29,12 +29,12 @@ use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase as UrlAliasGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase as UrlAliasGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\ExceptionConversion as UrlAliasExceptionConversionGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler as UrlWildcardHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcardMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase as UrlWildcardGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase as UrlWildcardGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 use eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
@@ -88,7 +88,7 @@ class Handler implements HandlerInterface
     /**
      * Content type handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler
      */
     protected $contentTypeHandler;
 
@@ -186,7 +186,7 @@ class Handler implements HandlerInterface
     /**
      * Language handler
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
      */
     protected $languageHandler;
 
@@ -327,7 +327,7 @@ class Handler implements HandlerInterface
     /**
      * @todo remove circular dependency with LocationHandler
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     public function contentHandler()
     {
@@ -373,9 +373,9 @@ class Handler implements HandlerInterface
         if ( !isset( $this->contentGateway ) )
         {
             $this->contentGateway = new Content\Gateway\ExceptionConversion(
-                new Content\Gateway\EzcDatabase(
+                new Content\Gateway\DoctrineDatabase(
                     $this->dbHandler,
-                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
+                    new Content\Gateway\DoctrineDatabase\QueryBuilder( $this->dbHandler ),
                     $this->contentLanguageHandler(),
                     $this->getLanguageMaskGenerator()
                 )
@@ -492,7 +492,7 @@ class Handler implements HandlerInterface
             );
             $this->searchHandler = new Content\Search\Handler(
                 new Content\Search\Gateway\ExceptionConversion(
-                    new Content\Search\Gateway\EzcDatabase(
+                    new Content\Search\Gateway\DoctrineDatabase(
                         $db,
                         new Content\Search\Gateway\CriteriaConverter(
                             array(
@@ -565,7 +565,7 @@ class Handler implements HandlerInterface
                                 new SortClauseHandler\MapLocationDistance( $db, $this->contentLanguageHandler() ),
                             )
                         ),
-                        new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
+                        new Content\Gateway\DoctrineDatabase\QueryBuilder( $this->dbHandler ),
                         $this->contentLanguageHandler(),
                         $this->getLanguageMaskGenerator()
                     )
@@ -609,12 +609,12 @@ class Handler implements HandlerInterface
             if ( isset( $this->config['defer_type_update'] ) && $this->config['defer_type_update'] )
             {
                 $this->typeUpdateHandler = new Type\Update\Handler\DeferredLegacy(
-                    $this->getContentGateway()
+                    $this->getContentTypeGateway()
                 );
             }
             else
             {
-                $this->typeUpdateHandler = new Type\Update\Handler\EzcDatabase(
+                $this->typeUpdateHandler = new Type\Update\Handler\DoctrineDatabase(
                     $this->getContentTypeGateway(),
                     new Type\ContentUpdater(
                         $this->searchHandler(),
@@ -638,7 +638,7 @@ class Handler implements HandlerInterface
         if ( !isset( $this->contentTypeGateway ) )
         {
             $this->contentTypeGateway = new Type\Gateway\ExceptionConversion(
-                new Type\Gateway\EzcDatabase(
+                new Type\Gateway\DoctrineDatabase(
                     $this->dbHandler,
                     $this->getLanguageMaskGenerator()
                 )
@@ -657,7 +657,7 @@ class Handler implements HandlerInterface
             $this->languageHandler = new Content\Language\CachingHandler(
                 new Content\Language\Handler(
                     new Content\Language\Gateway\ExceptionConversion(
-                        new Content\Language\Gateway\EzcDatabase( $this->dbHandler )
+                        new Content\Language\Gateway\DoctrineDatabase( $this->dbHandler )
                     ),
                     new LanguageMapper()
                 ),
@@ -684,7 +684,7 @@ class Handler implements HandlerInterface
     /**
      * @todo remove circular dependency with ContentHandler
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
      */
     public function locationHandler()
     {
@@ -703,7 +703,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\SearchHandler
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler
      */
     public function locationSearchHandler()
     {
@@ -720,14 +720,14 @@ class Handler implements HandlerInterface
     /**
      * Returns a location gateway
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase
      */
     protected function getLocationGateway()
     {
         if ( !isset( $this->locationGateway ) )
         {
             $this->locationGateway = new Content\Location\Gateway\ExceptionConversion(
-                new Content\Location\Gateway\EzcDatabase( $this->dbHandler )
+                new Content\Location\Gateway\DoctrineDatabase( $this->dbHandler )
             );
         }
         return $this->locationGateway;
@@ -748,7 +748,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler
      */
     public function objectStateHandler()
     {
@@ -765,14 +765,14 @@ class Handler implements HandlerInterface
     /**
      * Returns an object state gateway
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase
      */
     protected function getObjectStateGateway()
     {
         if ( !isset( $this->objectStateGateway ) )
         {
             $this->objectStateGateway = new Content\ObjectState\Gateway\ExceptionConversion(
-                new Content\ObjectState\Gateway\EzcDatabase(
+                new Content\ObjectState\Gateway\DoctrineDatabase(
                     $this->dbHandler,
                     $this->getLanguageMaskGenerator()
                 )
@@ -806,9 +806,9 @@ class Handler implements HandlerInterface
         {
             $this->userHandler = new User\Handler(
                 new User\Gateway\ExceptionConversion(
-                    new User\Gateway\EzcDatabase( $this->dbHandler )
+                    new User\Gateway\DoctrineDatabase( $this->dbHandler )
                 ),
-                new User\Role\Gateway\EzcDatabase( $this->dbHandler ),
+                new User\Role\Gateway\DoctrineDatabase( $this->dbHandler ),
                 new UserMapper(),
                 new LimitationConverter( array( new ObjectStateLimitationHandler( $this->dbHandler ) ) )
             );
@@ -825,7 +825,7 @@ class Handler implements HandlerInterface
         {
             $this->sectionHandler = new Content\Section\Handler(
                 new Content\Section\Gateway\ExceptionConversion(
-                    new Content\Section\Gateway\EzcDatabase( $this->dbHandler )
+                    new Content\Section\Gateway\DoctrineDatabase( $this->dbHandler )
                 )
             );
         }
@@ -872,7 +872,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a UrlAlias gateway
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase
      */
     protected function getUrlAliasGateway()
     {
@@ -939,7 +939,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a UrlWildcard gateway
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
      */
     protected function getUrlWildcardGateway()
     {
@@ -1014,7 +1014,7 @@ class Handler implements HandlerInterface
             if ( isset( $this->languageHandler ) )
                 $this->languageHandler->clearCache();
         }
-        catch ( ezcDbTransactionException $e )
+        catch ( Exception $e )
         {
             throw new RuntimeException( $e->getMessage() );
         }

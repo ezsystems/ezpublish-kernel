@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway\EzcDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway\DoctrineDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,18 +10,18 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase;
 use eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
- * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase.
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase.
  */
-class EzcDatabaseTest extends TestCase
+class DoctrineDatabaseTest extends TestCase
 {
     /**
      * Database gateway to test.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase
      */
     protected $databaseGateway;
 
@@ -40,7 +40,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::__construct
      *
      * @return void
      */
@@ -58,8 +58,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::insertLanguage
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::setCommonLanguageColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::insertLanguage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
      */
     public function testInsertLanguage()
     {
@@ -101,8 +101,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::updateLanguage
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::setCommonLanguageColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::updateLanguage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
      */
     public function testUpdateLanguage()
     {
@@ -131,8 +131,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::loadLanguageData
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::createFindQuery
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadLanguageData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
      */
     public function testLoadLanguageData()
     {
@@ -155,8 +155,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::loadAllLanguagesData
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::createFindQuery
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadAllLanguagesData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
      */
     public function testLoadAllLanguagesData()
     {
@@ -184,7 +184,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::deleteLanguage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::deleteLanguage
      *
      * @return void
      */
@@ -219,15 +219,15 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Returns a ready to test EzcDatabase gateway
+     * Returns a ready to test DoctrineDatabase gateway
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase
      */
     protected function getDatabaseGateway()
     {
         if ( !isset( $this->databaseGateway ) )
         {
-            $this->databaseGateway = new EzcDatabase(
+            $this->databaseGateway = new DoctrineDatabase(
                 $this->getDatabaseHandler()
             );
         }

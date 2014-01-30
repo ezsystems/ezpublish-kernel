@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the UrlWildcard ezcDatabase Gateway class
+ * File containing the DoctrineDatabase UrlWildcard Gateway class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 /**
  * UrlWildcard Gateway
  */
-class EzcDatabase extends Gateway
+class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
@@ -32,7 +32,7 @@ class EzcDatabase extends Gateway
     protected $dbHandler;
 
     /**
-     * Creates a new EzcDatabase Section Gateway
+     * Creates a new DoctrineDatabase Section Gateway
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      */

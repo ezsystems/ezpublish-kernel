@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentTypeGateway class
+ * File containing the DoctrineDatabase User Role Gateway class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -17,9 +17,9 @@ use eZ\Publish\SPI\Persistence\User\Role;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
- * Base class for content type gateways.
+ * User Role gateway implementation using the Doctrine database.
  */
-class EzcDatabase extends Gateway
+class DoctrineDatabase extends Gateway
 {
     /**
      * Database handler

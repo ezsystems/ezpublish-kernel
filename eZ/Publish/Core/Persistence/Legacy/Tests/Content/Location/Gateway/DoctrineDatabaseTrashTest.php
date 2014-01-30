@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway\EzpDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway\DoctrineDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,23 +10,23 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
- * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase
  */
-class EzpDatabaseTrashTest extends TestCase
+class DoctrineDatabaseTrashTest extends TestCase
 {
     protected function getLocationGateway()
     {
         $dbHandler = $this->getDatabaseHandler();
-        return new EzcDatabase( $dbHandler );
+        return new DoctrineDatabase( $dbHandler );
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::trashLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::trashLocation
      * @todo test updated content status
      */
     public function testTrashLocation()
@@ -51,7 +51,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::trashLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::trashLocation
      */
     public function testTrashLocationUpdateTrashTable()
     {
@@ -91,7 +91,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::untrashLocation
      * @dataProvider getUntrashedLocationValues
      */
     public function testUntrashLocationDefault( $property, $value )
@@ -113,7 +113,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::untrashLocation
      */
     public function testUntrashLocationNewParent()
     {
@@ -134,7 +134,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::untrashLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashInvalidLocation()
@@ -146,7 +146,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::untrashLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashLocationInvalidParent()
@@ -159,7 +159,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::untrashLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::untrashLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashLocationInvalidOldParent()
@@ -194,7 +194,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::loadTrashByLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::loadTrashByLocation
      * @dataProvider getLoadTrashValues
      */
     public function testLoadTrashByLocationId( $field, $value )
@@ -213,7 +213,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::listTrashed
      */
     public function testListEmptyTrash()
     {
@@ -240,7 +240,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::listTrashed
      */
     public function testListFullTrash()
     {
@@ -255,7 +255,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::listTrashed
      */
     public function testListTrashLimited()
     {
@@ -291,7 +291,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::listTrashed
      * @dataProvider getTrashValues
      */
     public function testListTrashItem( $key, $value )
@@ -305,7 +305,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::listTrashed
      */
     public function testListTrashSortedPathStringDesc()
     {
@@ -339,7 +339,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::listTrashed
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::listTrashed
      */
     public function testListTrashSortedDepth()
     {
@@ -374,7 +374,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::cleanupTrash
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::cleanupTrash
      */
     public function testCleanupTrash()
     {
@@ -393,7 +393,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::removeElementFromTrash
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::removeElementFromTrash
      */
     public function testRemoveElementFromTrash()
     {
@@ -413,7 +413,7 @@ class EzpDatabaseTrashTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::countLocationsByContentId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::countLocationsByContentId
      */
     public function testCountLocationsByContentId()
     {

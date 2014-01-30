@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase content locator gateway class
+ * File containing the DoctrineDatabase Content search Gateway class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
@@ -20,9 +20,9 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * Content locator gateway implementation using the zeta handler component.
+ * Content locator gateway implementation using the Doctrine database.
  */
-class EzcDatabase extends Gateway
+class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
@@ -33,28 +33,28 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var DatabaseHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $handler;
 
     /**
      * Criteria converter
      *
-     * @var CriteriaConverter
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter
      */
     protected $criteriaConverter;
 
     /**
      * Sort clause converter
      *
-     * @var SortClauseConverter
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseConverter
      */
     protected $sortClauseConverter;
 
     /**
      * Content load query builder
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
     protected $queryBuilder;
 
@@ -75,9 +75,12 @@ class EzcDatabase extends Gateway
     /**
      * Construct from handler handler
      *
-     * @param \DatabaseHandler $handler
-     *
-     * @return void
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $criteriaConverter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseConverter $sortClauseConverter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder $queryBuilder
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(
         DatabaseHandler $handler,

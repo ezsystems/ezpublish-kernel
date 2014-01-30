@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ObjectState ezcDatabase Gateway class
+ * File containing the DoctrineDatabase ObjectState Gateway class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,9 +16,9 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
- * ObjectState ezcDatabase Gateway
+ * ObjectState Doctrine database Gateway
  */
-class EzcDatabase extends Gateway
+class DoctrineDatabase extends Gateway
 {
     /**
      * Database handler
@@ -35,7 +35,7 @@ class EzcDatabase extends Gateway
     protected $maskGenerator;
 
     /**
-     * Creates a new EzcDatabase ObjectState Gateway
+     * Creates a new Doctrine database ObjectState Gateway
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator

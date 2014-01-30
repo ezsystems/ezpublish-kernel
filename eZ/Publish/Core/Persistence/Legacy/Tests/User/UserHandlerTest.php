@@ -24,8 +24,8 @@ class UserHandlerTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new User\Handler(
-            new User\Gateway\EzcDatabase( $dbHandler ),
-            new User\Role\Gateway\EzcDatabase( $dbHandler ),
+            new User\Gateway\DoctrineDatabase( $dbHandler ),
+            new User\Role\Gateway\DoctrineDatabase( $dbHandler ),
             new User\Mapper(),
             new LimitationConverter( array( new ObjectStateLimitationHandler( $dbHandler ) ) )
         );

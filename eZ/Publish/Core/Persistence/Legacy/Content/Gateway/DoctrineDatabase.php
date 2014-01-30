@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase content gateway class
+ * File containing the DoctrineDatabase Content Gateway class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\UpdateQuery;
 use eZ\Publish\Core\Persistence\Database\InsertQuery;
@@ -31,12 +31,12 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use PDO;
 
 /**
- * ezcDatabase based content gateway
+ * Doctrine database based content gateway
  */
-class EzcDatabase extends Gateway
+class DoctrineDatabase extends Gateway
 {
     /**
-     * Zeta Components database handler.
+     * Doctrine database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
@@ -45,7 +45,7 @@ class EzcDatabase extends Gateway
     /**
      * Query builder.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
     protected $queryBuilder;
 
@@ -67,8 +67,8 @@ class EzcDatabase extends Gateway
      * Creates a new gateway based on $db
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder $queryBuilder
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler $languageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder $queryBuilder
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(

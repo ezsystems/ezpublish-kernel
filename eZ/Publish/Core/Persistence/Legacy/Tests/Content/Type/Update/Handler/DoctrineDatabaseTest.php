@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\UpdateHandler;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -33,7 +33,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     protected $contentUpdaterMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase::updateContentObjects
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::updateContentObjects
      *
      * @return void
      */
@@ -67,7 +67,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase::deleteOldType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::deleteOldType
      *
      * @return void
      */
@@ -90,7 +90,7 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase::publishNewType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::publishNewType
      *
      * @return void
      */
@@ -133,11 +133,11 @@ class ContentTypeHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * Returns the Update Handler to test
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase
      */
     protected function getUpdateHandler()
     {
-        return new EzcDatabase(
+        return new DoctrineDatabase(
             $this->getGatewayMock(),
             $this->getContentUpdaterMock()
         );

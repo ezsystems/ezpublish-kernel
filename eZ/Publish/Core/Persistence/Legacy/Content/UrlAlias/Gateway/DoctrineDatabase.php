@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the UrlAlias ezcDatabase Gateway class
+ * File containing the DoctrineDatabase UrlAlias Gateway class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -17,7 +17,7 @@ use eZ\Publish\Core\Persistence\Database\Query;
 /**
  * UrlAlias Gateway
  */
-class EzcDatabase extends Gateway
+class DoctrineDatabase extends Gateway
 {
     /**
      * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
@@ -48,7 +48,7 @@ class EzcDatabase extends Gateway
     );
 
     /**
-     * Zeta Components database handler.
+     * Doctrine database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */

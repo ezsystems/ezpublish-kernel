@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\Gateway\EzcDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\Gateway\DoctrineDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,18 +10,18 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
 /**
- * Test case for eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase.
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase.
  */
-class EzcDatabaseTest extends TestCase
+class DoctrineDatabaseTest extends TestCase
 {
     /**
      * Database gateway to test.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
      */
     protected $gateway;
 
@@ -49,7 +49,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the __construct() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase::__construct
      */
     public function testConstructor()
     {
@@ -66,7 +66,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlWildcardData() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase::loadUrlWildcardData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase::loadUrlWildcardData
      */
     public function testLoadUrlWildcardData()
     {
@@ -84,7 +84,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlWildcardsData() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase::loadUrlWildcardsData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase::loadUrlWildcardsData
      */
     public function testLoadUrlWildcardsData()
     {
@@ -102,7 +102,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlWildcardsData() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase::loadUrlWildcardsData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase::loadUrlWildcardsData
      */
     public function testLoadUrlWildcardsDataWithOffset()
     {
@@ -123,7 +123,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlWildcardsData() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase::loadUrlWildcardsData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase::loadUrlWildcardsData
      */
     public function testLoadUrlWildcardsDataWithOffsetAndLimit()
     {
@@ -143,7 +143,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the insertUrlWildcard() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase::insertUrlWildcard
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase::insertUrlWildcard
      * @depends testLoadUrlWildcardData
      */
     public function testInsertUrlWildcard()
@@ -175,7 +175,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the deleteUrlWildcard() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase::deleteUrlWildcard
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase::deleteUrlWildcard
      * @depends testLoadUrlWildcardData
      */
     public function testDeleteUrlWildcard()
@@ -189,15 +189,15 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Returns the EzcDatabase gateway to test
+     * Returns the DoctrineDatabase gateway to test
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
      */
     protected function getGateway()
     {
         if ( !isset( $this->gateway ) )
         {
-            $this->gateway = new EzcDatabase( $this->getDatabaseHandler() );
+            $this->gateway = new DoctrineDatabase( $this->getDatabaseHandler() );
         }
         return $this->gateway;
     }

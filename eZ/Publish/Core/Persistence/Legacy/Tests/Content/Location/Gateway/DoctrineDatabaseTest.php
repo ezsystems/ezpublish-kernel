@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway\EzpDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway\DoctrineDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,18 +12,18 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
- * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase
  */
-class EzpDatabaseTest extends TestCase
+class DoctrineDatabaseTest extends TestCase
 {
     protected function getLocationGateway()
     {
         $dbHandler = $this->getDatabaseHandler();
-        return new EzcDatabase( $dbHandler );
+        return new DoctrineDatabase( $dbHandler );
     }
 
     public static function getLoadLocationValues()
@@ -368,7 +368,7 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::getMainNodeId
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::getMainNodeId
      * @depends testCreateLocation
      */
     public function testGetMainNodeId()
@@ -609,7 +609,7 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '77',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+            DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $query = $this->handler->createSelectQuery();
@@ -647,7 +647,7 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '77',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+            DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $query = $this->handler->createSelectQuery();
@@ -666,7 +666,7 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::updateLocationsContentVersionNo
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::updateLocationsContentVersionNo
      */
     public function testUpdateLocationsContentVersionNo()
     {
@@ -709,7 +709,7 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::deleteNodeAssignment
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::deleteNodeAssignment
      *
      * @return void
      */
@@ -735,7 +735,7 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::deleteNodeAssignment
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::deleteNodeAssignment
      *
      * @return void
      */
@@ -821,7 +821,7 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '77',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+            DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $handler->createLocationsFromNodeAssignments( 68, 1 );
@@ -878,7 +878,7 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '77',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+            DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $handler->createLocationsFromNodeAssignments( 68, 1 );
@@ -923,7 +923,7 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '224',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+            DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $handler->createLocationsFromNodeAssignments( 68, 1 );
@@ -968,7 +968,7 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '225',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+            DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $handler->createLocationsFromNodeAssignments( 68, 1 );
@@ -1009,14 +1009,14 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '77',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
+            DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $handler->createLocationsFromNodeAssignments( 68, 1 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array( array( EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP ) ),
+            array( array( DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP ) ),
             $query
                 ->select( 'op_code' )
                 ->from( 'eznode_assignment' )
@@ -1032,7 +1032,7 @@ class EzpDatabaseTest extends TestCase
     /**
      * Test for the setSectionForSubtree() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::setSectionForSubtree
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::setSectionForSubtree
      */
     public function testSetSectionForSubtree()
     {
@@ -1053,7 +1053,7 @@ class EzpDatabaseTest extends TestCase
     /**
      * Test for the changeMainLocation() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::changeMainLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::changeMainLocation
      */
     public function testChangeMainLocation()
     {
@@ -1136,7 +1136,7 @@ class EzpDatabaseTest extends TestCase
     /**
      * Test for the getChildren() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::getChildren
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::getChildren
      */
     public function testGetChildren()
     {
@@ -1155,7 +1155,7 @@ class EzpDatabaseTest extends TestCase
     /**
      * Test for the getFallbackMainNodeData() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::getFallbackMainNodeData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::getFallbackMainNodeData
      */
     public function testGetFallbackMainNodeData()
     {
@@ -1183,7 +1183,7 @@ class EzpDatabaseTest extends TestCase
     /**
      * Test for the removeLocation() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::removeLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::removeLocation
      */
     public function testRemoveLocation()
     {
@@ -1214,7 +1214,7 @@ class EzpDatabaseTest extends TestCase
     /**
      * Test for the updatePathIdentificationString() method.
      *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::updatePathIdentificationString
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::updatePathIdentificationString
      * @dataProvider providerForTestUpdatePathIdentificationString
      */
     public function testUpdatePathIdentificationString( $locationId, $parentLocationId, $text, $expected )

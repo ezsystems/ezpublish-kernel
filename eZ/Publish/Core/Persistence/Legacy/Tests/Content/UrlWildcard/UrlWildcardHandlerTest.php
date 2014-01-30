@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
@@ -215,7 +215,7 @@ class UrlWildcardHandlerTest extends TestCase
     );
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
      */
     protected $gateway;
 
@@ -236,7 +236,7 @@ class UrlWildcardHandlerTest extends TestCase
     {
         if ( !isset( $this->urlWildcardHandler ) )
         {
-            $this->gateway = new EzcDatabase( $this->getDatabaseHandler() );
+            $this->gateway = new DoctrineDatabase( $this->getDatabaseHandler() );
             $this->mapper = new Mapper();
 
             $this->urlWildcardHandler = new Handler(

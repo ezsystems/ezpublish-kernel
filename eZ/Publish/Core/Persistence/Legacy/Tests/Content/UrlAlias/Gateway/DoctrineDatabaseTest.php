@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias\Gateway\EzcDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias\Gateway\DoctrineDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,18 +10,18 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase as LanguageGateway;
 
 /**
- * Test case for eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase.
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase.
  *
  * @group urlalias-gateway
  */
-class EzcDatabaseTest extends TestCase
+class DoctrineDatabaseTest extends TestCase
 {
     /**
      * Database gateway to test.
@@ -31,7 +31,7 @@ class EzcDatabaseTest extends TestCase
     protected $gateway;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::__construct
      */
     public function testConstructor()
     {
@@ -48,7 +48,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataNonExistent()
     {
@@ -63,7 +63,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasData()
     {
@@ -106,7 +106,7 @@ class EzcDatabaseTest extends TestCase
      *
      * Test with fixture containing language mask with multiple languages.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadUrlAliasData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataMultipleLanguages()
     {
@@ -193,7 +193,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadPathData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
      * @dataProvider providerForTestLoadPathData
      */
     public function testLoadPathData( $id, $pathData )
@@ -255,7 +255,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::loadPathData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
      * @dataProvider providerForTestLoadPathDataMultipleLanguages
      */
     public function testLoadPathDataMultipleLanguages( $id, $pathData )
@@ -295,8 +295,8 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::cleanupAfterPublish
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::historize
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::historize
      * @dataProvider providerForTestCleanupAfterPublishHistorize
      */
     public function testCleanupAfterPublishHistorize( $action, $languageId, $parentId, $textMD5 )
@@ -340,8 +340,8 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::cleanupAfterPublish
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeTranslation
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeTranslation
      * @dataProvider providerForTestCleanupAfterPublishRemovesLanguage
      */
     public function testCleanupAfterPublishRemovesLanguage( $action, $languageId, $parentId, $textMD5 )
@@ -364,7 +364,7 @@ class EzcDatabaseTest extends TestCase
      *
      * @todo document
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::reparent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::reparent
      */
     public function testReparent()
     {
@@ -394,7 +394,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the remove() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::remove
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
      */
     public function testRemove()
     {
@@ -414,7 +414,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the remove() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::remove
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
      */
     public function testRemoveWithId()
     {
@@ -434,7 +434,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the removeCustomAlias() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeCustomAlias
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
      */
     public function testRemoveCustomAlias()
     {
@@ -452,7 +452,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the removeByAction() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::removeCustomAlias
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
      */
     public function testRemoveCustomAliasFails()
     {
@@ -468,7 +468,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Test for the getNextId() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase::getNextId
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::getNextId
      */
     public function testGetNextId()
     {
@@ -479,9 +479,9 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Returns the EzcDatabase gateway to test
+     * Returns the DoctrineDatabase gateway to test
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase
      */
     protected function getGateway()
     {
@@ -493,7 +493,7 @@ class EzcDatabaseTest extends TestCase
                 ),
                 new LanguageMapper()
             );
-            $this->gateway = new EzcDatabase(
+            $this->gateway = new DoctrineDatabase(
                 $this->getDatabaseHandler(),
                 new LanguageMaskGenerator( $languageHandler )
             );

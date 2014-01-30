@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway\EzcDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway\DoctrineDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,19 +10,19 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 
 /**
- * Test case for eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase.
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase.
  */
-class EzcDatabaseTest extends LanguageAwareTestCase
+class DoctrineDatabaseTest extends LanguageAwareTestCase
 {
     /**
      * Database gateway to test.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase
      */
     protected $databaseGateway;
 
@@ -52,7 +52,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::__construct
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateData
      *
      * @return void
      */
@@ -98,7 +98,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateDataByIdentifier
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateDataByIdentifier
      *
      * @return void
      */
@@ -127,7 +127,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateListData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateListData
      *
      * @return void
      */
@@ -171,7 +171,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupData
      *
      * @return void
      */
@@ -199,7 +199,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupDataByIdentifier
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupDataByIdentifier
      *
      * @return void
      */
@@ -227,7 +227,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateGroupListData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupListData
      *
      * @return void
      */
@@ -257,7 +257,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::insertObjectState
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectState
      *
      * @return void
      */
@@ -289,7 +289,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::insertObjectState
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectState
      *
      * @return void
      */
@@ -329,7 +329,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectState
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectState
      *
      * @return void
      */
@@ -361,7 +361,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::deleteObjectState
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectState
      *
      * @return void
      */
@@ -378,7 +378,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStateLinks
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStateLinks
      *
      * @return void
      */
@@ -419,7 +419,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::deleteObjectStateLinks
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectStateLinks
      *
      * @return void
      */
@@ -445,7 +445,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::insertObjectStateGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectStateGroup
      *
      * @return void
      */
@@ -475,7 +475,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStateGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStateGroup
      *
      * @return void
      */
@@ -506,7 +506,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::deleteObjectStateGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectStateGroup
      *
      * @return void
      */
@@ -523,7 +523,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::setContentState
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::setContentState
      *
      * @return void
      */
@@ -548,7 +548,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::loadObjectStateDataForContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateDataForContent
      *
      * @return void
      */
@@ -577,7 +577,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::getContentCount
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::getContentCount
      *
      * @return void
      */
@@ -592,7 +592,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase::updateObjectStatePriority
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStatePriority
      *
      * @return void
      */
@@ -657,15 +657,15 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a ready to test EzcDatabase gateway
+     * Returns a ready to test DoctrineDatabase gateway
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase
      */
     protected function getDatabaseGateway()
     {
         if ( !isset( $this->databaseGateway ) )
         {
-            $this->databaseGateway = new EzcDatabase(
+            $this->databaseGateway = new DoctrineDatabase(
                 $this->getDatabaseHandler(),
                 $this->getLanguageMaskGenerator()
             );

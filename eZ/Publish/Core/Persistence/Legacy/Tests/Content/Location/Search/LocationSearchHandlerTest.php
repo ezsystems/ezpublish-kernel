@@ -74,7 +74,7 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
     protected function getLocationSearchHandler()
     {
         return new Location\Search\Handler(
-            new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+            new Location\Gateway\DoctrineDatabase( $this->getDatabaseHandler() ),
             $this->getLocationMapperMock()
         );
     }

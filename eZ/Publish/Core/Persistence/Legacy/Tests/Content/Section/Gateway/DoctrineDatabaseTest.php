@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section\Gateway\EzcDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section\Gateway\DoctrineDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,17 +10,17 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
-use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase;
 
 /**
- * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase.
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase.
  */
-class EzcDatabaseTest extends TestCase
+class DoctrineDatabaseTest extends TestCase
 {
     /**
      * Database gateway to test.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase
      */
     protected $databaseGateway;
 
@@ -39,7 +39,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::__construct
      *
      * @return void
      */
@@ -56,7 +56,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::insertSection
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::insertSection
      *
      * @return void
      */
@@ -84,7 +84,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::updateSection
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::updateSection
      *
      * @return void
      */
@@ -111,7 +111,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::loadSectionData
      *
      * @return void
      */
@@ -134,7 +134,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadAllSectionData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::loadAllSectionData
      *
      * @return void
      */
@@ -188,7 +188,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionDataByIdentifier
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::loadSectionDataByIdentifier
      *
      * @return void
      */
@@ -211,7 +211,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::countContentObjectsInSection
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::countContentObjectsInSection
      *
      * @return void
      */
@@ -232,7 +232,7 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::deleteSection
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::deleteSection
      *
      * @return void
      */
@@ -268,7 +268,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::assignSectionToContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::assignSectionToContent
      * @depends testCountContentObjectsInSection
      */
     public function testAssignSectionToContent()
@@ -290,15 +290,15 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Returns a ready to test EzcDatabase gateway
+     * Returns a ready to test DoctrineDatabase gateway
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase
      */
     protected function getDatabaseGateway()
     {
         if ( !isset( $this->databaseGateway ) )
         {
-            $this->databaseGateway = new EzcDatabase(
+            $this->databaseGateway = new DoctrineDatabase(
                 $this->getDatabaseHandler()
             );
         }
