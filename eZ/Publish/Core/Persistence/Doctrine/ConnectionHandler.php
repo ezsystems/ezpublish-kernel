@@ -10,9 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Doctrine;
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Database\QueryException;
-
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\DBALException;
