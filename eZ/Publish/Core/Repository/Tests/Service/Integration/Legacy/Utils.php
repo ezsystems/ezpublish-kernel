@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy;
 
 use eZ\Publish\Core\Repository\Tests\Service\Integration\InMemory\Utils as InMemoryUtils;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 /**
  * Utils class for InMemory test
