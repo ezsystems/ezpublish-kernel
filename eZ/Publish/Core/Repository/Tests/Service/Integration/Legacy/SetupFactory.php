@@ -42,7 +42,7 @@ class SetupFactory extends APILegacySetupFactory
 
             $serviceSettings['persistence_handler']['alias'] = 'persistence_handler_legacy';
             $serviceSettings['io_handler']['alias'] = 'io_handler_legacy';
-            $serviceSettings['doctrine_db_handler']['arguments']['dsn'] = self::$dsn;
+            $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
 
             static::$legacyServiceContainer = new ServiceContainer(
                 $serviceSettings,

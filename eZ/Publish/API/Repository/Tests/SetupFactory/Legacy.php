@@ -306,7 +306,7 @@ class Legacy extends SetupFactory
      */
     protected function getDatabaseHandler()
     {
-        return $this->getServiceContainer()->get( 'doctrine_db_handler' );
+        return $this->getServiceContainer()->get( 'legacy_db_handler' );
     }
 
     /**
@@ -397,7 +397,7 @@ class Legacy extends SetupFactory
             $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-US';
             $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-GB';
 
-            $serviceSettings['doctrine_db_handler']['arguments']['dsn'] = self::$dsn;
+            $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
 
             self::$serviceContainer = new ServiceContainer(
                 $serviceSettings,
