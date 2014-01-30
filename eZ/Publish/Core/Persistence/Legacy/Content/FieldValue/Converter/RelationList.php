@@ -21,7 +21,7 @@ use DOMDocument;
 class RelationList implements Converter
 {
     /**
-     * @var \ezcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     private $db;
 

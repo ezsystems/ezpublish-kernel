@@ -2915,7 +2915,7 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
     protected $dbHandler;
 

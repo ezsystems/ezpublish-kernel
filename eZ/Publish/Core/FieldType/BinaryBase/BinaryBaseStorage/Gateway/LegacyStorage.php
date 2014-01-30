@@ -143,7 +143,7 @@ abstract class LegacyStorage extends Gateway
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
-     * @return \ezcDbHandler|\eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {

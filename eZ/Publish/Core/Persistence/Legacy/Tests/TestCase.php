@@ -71,14 +71,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Get a ezcDbHandler
+     * Get a Doctrine database connection handler
      *
-     * Get a ezcDbHandler, which can be used to interact with the configured
+     * Get a ConnectionHandler, which can be used to interact with the configured
      * database. The database connection string is read from an optional
      * environment variable "DATABASE" and defaults to an in-memory SQLite
      * database.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
     public function getDatabaseHandler()
     {
