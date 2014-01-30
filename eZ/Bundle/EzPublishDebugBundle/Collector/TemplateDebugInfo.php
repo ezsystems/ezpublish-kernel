@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZTemplate;
+use RuntimeException;
 
 /**
  * Class TemplateDebugInfo
@@ -77,12 +78,20 @@ class TemplateDebugInfo
             return $templateList;
         }
 
-        $templateStats = $legacyKernel()->runCallback(
-            function ()
-            {
-                return eZTemplate::templatesUsageStatistics();
-            }
-        );
+        try
+        {
+            $templateStats = $legacyKernel()->runCallback(
+                function ()
+                {
+                    return eZTemplate::templatesUsageStatistics();
+                }
+            );
+        }
+        catch ( RuntimeException $e )
+        {
+            // Ignore the exception thrown by legacy kernel as this would break debug toolbar (and thus debug info display).
+            // Furthermore, some legacy kernel handlers don't support runCallback (e.g. ezpKernelTreeMenu)
+        }
 
         foreach ( $templateStats as $tplInfo )
         {

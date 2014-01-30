@@ -73,18 +73,19 @@ class Loader extends ContainerAware
         $eventDispatcher = $this->eventDispatcher;
         return function () use ( $legacyKernelHandler, $legacyRootDir, $webrootDir, $eventDispatcher )
         {
-            static $legacyKernel;
-            if ( !$legacyKernel instanceof LegacyKernel )
+            if ( LegacyKernel::hasInstance() )
             {
-                if ( $legacyKernelHandler instanceof \Closure )
-                    $legacyKernelHandler = $legacyKernelHandler();
-                $legacyKernel = new LegacyKernel( $legacyKernelHandler, $legacyRootDir, $webrootDir );
-
-                $eventDispatcher->dispatch(
-                    LegacyEvents::POST_BUILD_LEGACY_KERNEL,
-                    new PostBuildKernelEvent( $legacyKernel, $legacyKernelHandler )
-                );
+                return LegacyKernel::instance();
             }
+
+            if ( $legacyKernelHandler instanceof \Closure )
+                $legacyKernelHandler = $legacyKernelHandler();
+            $legacyKernel = new LegacyKernel( $legacyKernelHandler, $legacyRootDir, $webrootDir );
+
+            $eventDispatcher->dispatch(
+                LegacyEvents::POST_BUILD_LEGACY_KERNEL,
+                new PostBuildKernelEvent( $legacyKernel, $legacyKernelHandler )
+            );
 
             return $legacyKernel;
         };
