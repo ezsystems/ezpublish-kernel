@@ -9,7 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
@@ -59,12 +59,12 @@ class LegacyStorageEngineFactory extends ContainerAware
     /**
      * Builds the Legacy Storage Engine
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbhandler
+     * @param \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler $dbhandler
      * @param boolean $deferTypeUpdate
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Handler
      */
-    public function buildLegacyEngine( EzcDbHandler $dbhandler, $deferTypeUpdate )
+    public function buildLegacyEngine( ConnectionHandler $dbhandler, $deferTypeUpdate )
     {
         $legacyEngineClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.class' );
         return new $legacyEngineClass(

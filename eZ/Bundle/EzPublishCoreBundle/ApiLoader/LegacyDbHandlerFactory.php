@@ -28,7 +28,7 @@ class LegacyDbHandlerFactory
     /**
      * Builds the DB handler used by the legacy storage engine.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
     public function buildLegacyDbHandler()
     {
