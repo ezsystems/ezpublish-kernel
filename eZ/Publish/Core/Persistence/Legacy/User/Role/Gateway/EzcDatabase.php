@@ -132,8 +132,7 @@ class EzcDatabase extends Gateway
             )
         );
 
-        if( $userId !== null )
-        {
+        if( $userId !== null ) {
             $query->where(
                 $query->expr->eq(
                     $this->handler->quoteColumn( 'contentobject_id', 'ezuser_role' ),
