@@ -723,7 +723,7 @@ class DoctrineExpression implements Expression
      * must contain a value or an expression or an array with values or
      * expressions.
      *
-     * @throws ezcDbAbstractionException if called with no parameters.
+     * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
      * @param string $type the type of operation, can be '+', '-', '*' or '/'.
      * @param string|array(string) $...
      * @return string an expression
