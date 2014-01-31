@@ -28,12 +28,26 @@ class LegacyDbHandlerFactory
     /**
      * Builds the DB handler used by the legacy storage engine.
      *
+     * @throws \RuntimeException
      * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     public function buildLegacyDbHandler()
     {
-        return EzcDbHandler::create(
-            $this->configResolver->getParameter( 'database.params' )
-        );
+        $dbParams = $this->configResolver->getParameter( 'database.params' );
+
+        try
+        {
+            $handler = EzcDbHandler::create( $dbParams );
+        }
+        catch ( \PDOException $e )
+        {
+            $msg =
+                "Unable to create Legacy DB handler {$dbParams['type']}:host={$dbParams['host']};database={$dbParams['database']}."
+                . " Please check your database settings in ezpublish_*.yml.";
+
+            throw new \RuntimeException( $msg, null, $e );
+        }
+
+        return $handler;
     }
 }
