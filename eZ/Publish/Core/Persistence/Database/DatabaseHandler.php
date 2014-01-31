@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\Persistence\Database;
 
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+
 /**
  * Interface for relational database abstractions supported by eZ.
  */
-interface DatabaseHandler
+interface DatabaseHandler extends EzcDbHandler
 {
     /**
      * Name of the database technology
