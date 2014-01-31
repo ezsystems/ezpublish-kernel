@@ -45,7 +45,7 @@ class SubselectDoctrineQuery extends SelectDoctrineQuery
      * The parameter $param specifies the variable that you want to bind. If
      * $placeholder is not provided bind() will automatically create a
      * placeholder for you. An automatic placeholder will be of the name
-     * 'ezcValue1', 'ezcValue2' etc.
+     * 'placeholder1', 'placeholder2' etc.
      *
      * Example:
      * <code>
@@ -90,7 +90,7 @@ class SubselectDoctrineQuery extends SelectDoctrineQuery
      * The parameter $value specifies the value that you want to bind. If
      * $placeholder is not provided bindValue() will automatically create a
      * placeholder for you. An automatic placeholder will be of the name
-     * 'ezcValue1', 'ezcValue2' etc.
+     * 'placeholder1', 'placeholder2' etc.
      *
      * Example:
      * <code>
