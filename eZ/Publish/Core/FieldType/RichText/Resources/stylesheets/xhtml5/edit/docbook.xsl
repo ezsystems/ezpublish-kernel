@@ -250,7 +250,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:element name="{$tablename}">
+    <xsl:element name="{$tablename}" namespace="http://docbook.org/ns/docbook">
       <xsl:if test="@class">
         <xsl:attribute name="class">
           <xsl:value-of select="@class"/>
