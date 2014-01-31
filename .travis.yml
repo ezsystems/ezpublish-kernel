@@ -2,16 +2,19 @@ language: php
 
 # run tests on php misc php versions
 php:
+  - 5.5
   - 5.3.3
   - 5.3
   - 5.4
-  - 5.5
 
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
   global:
     - DB_NAME="testdb"
+    - COVERAGE_FILE="none"
   matrix:
+    - TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York" COVERAGE_FILE="build/logs/clover-phpunit.xml"
+    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York" COVERAGE_FILE="build/logs/clover-phpunit-integration-legacy.xml"
     - TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
     - TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
     - TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
@@ -43,7 +46,7 @@ matrix:
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
     - php: 5.4
       env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
-    - php: 5.4
+    - php: 5.5
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
     - php: 5.4
       env: SOLR_VERSION="4.6.0" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
@@ -59,6 +62,22 @@ matrix:
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
     - php: 5.5
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
+    - php: 5.3
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York" COVERAGE_FILE="build/logs/clover-phpunit.xml"
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York" COVERAGE_FILE="build/logs/clover-phpunit.xml"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York" COVERAGE_FILE="build/logs/clover-phpunit.xml"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York" COVERAGE_FILE="none"
+    - php: 5.3
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York" COVERAGE_FILE="build/logs/clover-phpunit-integration-legacy.xml"
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York" COVERAGE_FILE="build/logs/clover-phpunit-integration-legacy.xml"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York" COVERAGE_FILE="build/logs/clover-phpunit-integration-legacy.xml"
+    - php: 5.5
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York" COVERAGE_FILE="none"
 
 # test only master (+ Pull requests)
 branches:
@@ -67,15 +86,20 @@ branches:
 
 # setup requirements for running unit tests
 before_script:
-  - if [ $DB == "mysql" ]; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" -uroot ; fi
-  - if [ $DB == "postgresql" ]; then psql -c "CREATE DATABASE $DB_NAME;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres $DB_NAME ; fi
+  - if [ "$DB" = "mysql" ]; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" -uroot ; fi
+  - if [ "$DB" = "postgresql" ]; then psql -c "CREATE DATABASE $DB_NAME;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres $DB_NAME ; fi
   - cp config.php-DEVELOPMENT config.php
   - ./composer_install_github_key.sh
   - composer install --dev --prefer-source
   - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl https://raw.github.com/moliware/travis-solr/master/travis-solr.sh | SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
+  - if [[ "$TEST_CONFIG" = *"coverage"* ]]; then mkdir -p build/logs ; fi
+  - if [ "$COVERAGE_FILE" != "none" ]; then export COVERAGE="--coverage-clover $COVERAGE_FILE"; else export COVERAGE=""; fi
 
 # execute phpunit as the script command
-script: "phpunit -d date.timezone=$TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG"
+script: "phpunit -d date.timezone=$TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG $COVERAGE"
+
+after_script:
+  - if [ "$COVERAGE" != "none" ]; then php vendor/bin/coveralls ; fi
 
 # disable mail notifications
 notification:
