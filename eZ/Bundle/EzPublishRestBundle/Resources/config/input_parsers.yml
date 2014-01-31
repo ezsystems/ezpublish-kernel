@@ -53,7 +53,6 @@ parameters:
     ezpublish_rest.input.parser.internal.criterion.SectionIdentifier.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\SectionIdentifier
     ezpublish_rest.input.parser.internal.criterion.SectionId.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\SectionId
     ezpublish_rest.input.parser.internal.criterion.Subtree.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Subtree
-    ezpublish_rest.input.parser.internal.criterion.UrlAlias.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UrlAlias
     ezpublish_rest.input.parser.internal.criterion.UserMetadata.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\UserMetadata
     ezpublish_rest.input.parser.internal.criterion.Visibility.class: eZ\Publish\Core\REST\Server\Input\Parser\Criterion\Visibility
 
