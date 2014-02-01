@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Repository class
- * @package eZ\Publish\Core\Repository\DomainLogic
+ * @package eZ\Publish\Core\Repository\SignalSlot
  */
 class Repository implements RepositoryInterface
 {
@@ -24,7 +24,7 @@ class Repository implements RepositoryInterface
      *
      * @var \eZ\Publish\API\Repository\Repository
      */
-    protected $repository;
+    protected $innerRepository;
 
     /**
      * SignalDispatcher
@@ -97,13 +97,6 @@ class Repository implements RepositoryInterface
     protected $contentTypeService;
 
     /**
-     * Instance of IO service
-     *
-     * @var \eZ\Publish\API\Repository\IOService
-     */
-    protected $ioService;
-
-    /**
      * Instance of object state service
      *
      * @var \eZ\Publish\API\Repository\ObjectStateService
@@ -120,14 +113,14 @@ class Repository implements RepositoryInterface
     /**
      * Instance of URL alias service
      *
-     * @var \eZ\Publish\Core\Repository\DomainLogic\UrlAliasService
+     * @var \eZ\Publish\API\Repository\UrlAliasService
      */
     protected $urlAliasService;
 
     /**
      * Instance of URL wildcard service
      *
-     * @var \eZ\Publish\Core\Repository\DomainLogic\URLWildcardService
+     * @var \eZ\Publish\API\Repository\URLWildcardService
      */
     protected $urlWildcardService;
 
@@ -137,12 +130,12 @@ class Repository implements RepositoryInterface
      * Construct repository object from aggregated repository and signal
      * dispatcher
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\API\Repository\Repository $innerRepository
      * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
      */
-    public function __construct( RepositoryInterface $repository, SignalDispatcher $signalDispatcher )
+    public function __construct( RepositoryInterface $innerRepository, SignalDispatcher $signalDispatcher )
     {
-        $this->repository       = $repository;
+        $this->innerRepository  = $innerRepository;
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -153,7 +146,7 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUser()
     {
-        return $this->repository->getCurrentUser();
+        return $this->innerRepository->getCurrentUser();
     }
 
     /**
@@ -165,7 +158,7 @@ class Repository implements RepositoryInterface
      */
     public function setCurrentUser( User $user )
     {
-        return $this->repository->setCurrentUser( $user );
+        $this->innerRepository->setCurrentUser( $user );
     }
 
     /**
@@ -192,7 +185,7 @@ class Repository implements RepositoryInterface
      */
     public function sudo( \Closure $callback )
     {
-        return $this->repository->sudo( $callback );
+        return $this->innerRepository->sudo( $callback );
     }
 
     /**
@@ -208,7 +201,7 @@ class Repository implements RepositoryInterface
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        return $this->repository->hasAccess( $module, $function, $user );
+        return $this->innerRepository->hasAccess( $module, $function, $user );
     }
 
     /**
@@ -229,7 +222,7 @@ class Repository implements RepositoryInterface
      */
     public function canUser( $module, $function, ValueObject $object, $targets = null )
     {
-        return $this->repository->canUser( $module, $function, $object, $targets );
+        return $this->innerRepository->canUser( $module, $function, $object, $targets );
     }
 
     /**
@@ -244,7 +237,7 @@ class Repository implements RepositoryInterface
         if ( $this->contentService !== null )
             return $this->contentService;
 
-        $this->contentService = new ContentService( $this->repository->getContentService(), $this->signalDispatcher );
+        $this->contentService = new ContentService( $this->innerRepository->getContentService(), $this->signalDispatcher );
         return $this->contentService;
     }
 
@@ -260,7 +253,7 @@ class Repository implements RepositoryInterface
         if ( $this->languageService !== null )
             return $this->languageService;
 
-        $this->languageService = new LanguageService( $this->repository->getContentLanguageService(), $this->signalDispatcher );
+        $this->languageService = new LanguageService( $this->innerRepository->getContentLanguageService(), $this->signalDispatcher );
         return $this->languageService;
     }
 
@@ -277,7 +270,7 @@ class Repository implements RepositoryInterface
         if ( $this->contentTypeService !== null )
             return $this->contentTypeService;
 
-        $this->contentTypeService = new ContentTypeService( $this->repository->getContentTypeService(), $this->signalDispatcher );
+        $this->contentTypeService = new ContentTypeService( $this->innerRepository->getContentTypeService(), $this->signalDispatcher );
         return $this->contentTypeService;
     }
 
@@ -293,7 +286,7 @@ class Repository implements RepositoryInterface
         if ( $this->locationService !== null )
             return $this->locationService;
 
-        $this->locationService = new LocationService( $this->repository->getLocationService(), $this->signalDispatcher );
+        $this->locationService = new LocationService( $this->innerRepository->getLocationService(), $this->signalDispatcher );
         return $this->locationService;
     }
 
@@ -310,7 +303,7 @@ class Repository implements RepositoryInterface
         if ( $this->trashService !== null )
             return $this->trashService;
 
-        $this->trashService = new TrashService( $this->repository->getTrashService(), $this->signalDispatcher );
+        $this->trashService = new TrashService( $this->innerRepository->getTrashService(), $this->signalDispatcher );
         return $this->trashService;
     }
 
@@ -326,7 +319,7 @@ class Repository implements RepositoryInterface
         if ( $this->sectionService !== null )
             return $this->sectionService;
 
-        $this->sectionService = new SectionService( $this->repository->getSectionService(), $this->signalDispatcher );
+        $this->sectionService = new SectionService( $this->innerRepository->getSectionService(), $this->signalDispatcher );
         return $this->sectionService;
     }
 
@@ -342,7 +335,7 @@ class Repository implements RepositoryInterface
         if ( $this->userService !== null )
             return $this->userService;
 
-        $this->userService = new UserService( $this->repository->getUserService(), $this->signalDispatcher );
+        $this->userService = new UserService( $this->innerRepository->getUserService(), $this->signalDispatcher );
         return $this->userService;
     }
 
@@ -356,7 +349,7 @@ class Repository implements RepositoryInterface
         if ( $this->urlAliasService !== null )
             return $this->urlAliasService;
 
-        $this->urlAliasService = new URLAliasService( $this->repository->getURLAliasService(), $this->signalDispatcher );
+        $this->urlAliasService = new URLAliasService( $this->innerRepository->getURLAliasService(), $this->signalDispatcher );
         return $this->urlAliasService;
     }
 
@@ -370,7 +363,7 @@ class Repository implements RepositoryInterface
         if ( $this->urlWildcardService !== null )
             return $this->urlWildcardService;
 
-        $this->urlWildcardService = new URLWildcardService( $this->repository->getURLWildcardService(), $this->signalDispatcher );
+        $this->urlWildcardService = new URLWildcardService( $this->innerRepository->getURLWildcardService(), $this->signalDispatcher );
         return $this->urlWildcardService;
     }
 
@@ -384,7 +377,7 @@ class Repository implements RepositoryInterface
         if ( $this->objectStateService !== null )
             return $this->objectStateService;
 
-        $this->objectStateService = new ObjectStateService( $this->repository->getObjectStateService(), $this->signalDispatcher );
+        $this->objectStateService = new ObjectStateService( $this->innerRepository->getObjectStateService(), $this->signalDispatcher );
         return $this->objectStateService;
     }
 
@@ -398,7 +391,7 @@ class Repository implements RepositoryInterface
         if ( $this->roleService !== null )
             return $this->roleService;
 
-        $this->roleService = new RoleService( $this->repository->getRoleService(), $this->signalDispatcher );
+        $this->roleService = new RoleService( $this->innerRepository->getRoleService(), $this->signalDispatcher );
         return $this->roleService;
     }
 
@@ -412,7 +405,7 @@ class Repository implements RepositoryInterface
         if ( $this->searchService !== null )
             return $this->searchService;
 
-        $this->searchService = new SearchService( $this->repository->getSearchService(), $this->signalDispatcher );
+        $this->searchService = new SearchService( $this->innerRepository->getSearchService(), $this->signalDispatcher );
         return $this->searchService;
     }
 
@@ -426,7 +419,7 @@ class Repository implements RepositoryInterface
         if ( $this->fieldTypeService !== null )
             return $this->fieldTypeService;
 
-        $this->fieldTypeService = new FieldTypeService( $this->repository->getFieldTypeService(), $this->signalDispatcher );
+        $this->fieldTypeService = new FieldTypeService( $this->innerRepository->getFieldTypeService(), $this->signalDispatcher );
         return $this->fieldTypeService;
     }
 
@@ -438,7 +431,7 @@ class Repository implements RepositoryInterface
      */
     public function beginTransaction()
     {
-        return $this->repository->beginTransaction();
+        return $this->innerRepository->beginTransaction();
     }
 
     /**
@@ -450,7 +443,7 @@ class Repository implements RepositoryInterface
      */
     public function commit()
     {
-        return $this->repository->commit();
+        return $this->innerRepository->commit();
     }
 
     /**
@@ -462,7 +455,7 @@ class Repository implements RepositoryInterface
      */
     public function rollback()
     {
-        return $this->repository->rollback();
+        return $this->innerRepository->rollback();
     }
 
     /**
@@ -472,20 +465,6 @@ class Repository implements RepositoryInterface
      */
     public function commitEvent( $event )
     {
-        $this->repository->commitEvent( $event );
-    }
-
-    /**
-     * Only for internal use.
-     *
-     * Creates a \DateTime object for $timestamp in the current time zone
-     *
-     * @param int $timestamp
-     *
-     * @return \DateTime
-     */
-    public function createDateTime( $timestamp = null )
-    {
-        return $this->repository->createDateTime( $timestamp );
+        $this->innerRepository->commitEvent( $event );
     }
 }

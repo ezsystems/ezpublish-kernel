@@ -137,9 +137,6 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
 
     public function aggregatedMethods()
     {
-        $ts = 374390100;
-        $dt = new \DateTime();
-        $dt->setTimestamp( $ts );
         return array(
             array(
                 'getCurrentUser',
@@ -175,11 +172,6 @@ class RepositoryTest extends PHPUnit_Framework_TestCase
                 'rollback',
                 array(),
                 true
-            ),
-            array(
-                'createDateTime',
-                array( $ts ),
-                $dt
             ),
         );
     }

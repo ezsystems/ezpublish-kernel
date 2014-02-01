@@ -874,23 +874,4 @@ class Repository implements RepositoryInterface
             $event( true );
         }
     }
-
-    /**
-     * Only for internal use.
-     *
-     * Creates a \DateTime object for $timestamp in the current time zone
-     *
-     * @param int $timestamp
-     *
-     * @return \DateTime
-     */
-    public function createDateTime( $timestamp = null )
-    {
-        $dateTime = new \DateTime();
-        if ( $timestamp !== null )
-        {
-            $dateTime->setTimestamp( $timestamp );
-        }
-        return $dateTime;
-    }
 }
