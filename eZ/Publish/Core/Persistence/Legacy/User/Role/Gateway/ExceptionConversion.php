@@ -69,11 +69,11 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function loadRole( $roleId )
+    public function loadRole( $roleId, $userId = null )
     {
         try
         {
-            return $this->innerGateway->loadRole( $roleId );
+            return $this->innerGateway->loadRole( $roleId, $userId );
         }
         catch ( ezcDbException $e )
         {

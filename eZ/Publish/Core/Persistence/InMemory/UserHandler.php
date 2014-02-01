@@ -173,7 +173,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    public function loadRole( $roleId )
+    public function loadRole( $roleId, $userId = null )
     {
         $list = $this->backend->find(
             'User\\Role',

@@ -34,7 +34,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function loadRole( $roleId );
+    abstract public function loadRole( $roleId, $userId = null );
 
     /**
      * Loads a specified role by $identifier
