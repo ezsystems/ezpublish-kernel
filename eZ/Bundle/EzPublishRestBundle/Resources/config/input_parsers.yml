@@ -458,12 +458,6 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.Subtree }
 
-    ezpublish_rest.input.parser.internal.criterion.UrlmediaType:
-        parent: ezpublish_rest.input.parser
-        class: %ezpublish_rest.input.parser.internal.criterion.UrlAlias.class%
-        tags:
-            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.criterion.UrlAlias }
-
     ezpublish_rest.input.parser.internal.criterion.UserMetadata:
         parent: ezpublish_rest.input.parser
         class: %ezpublish_rest.input.parser.internal.criterion.UserMetadata.class%
