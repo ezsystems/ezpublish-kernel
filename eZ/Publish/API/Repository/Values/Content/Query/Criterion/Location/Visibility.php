@@ -18,7 +18,7 @@ use InvalidArgumentException;
 /**
  * A criterion that matches Location based on its visibility
  */
-class Visibility extends Location implements CriterionInterface
+class Visibility extends Location
 {
     /**
      * Visibility constant: visible

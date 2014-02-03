@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: will match from a list of location remote IDs
  * - EQ: will match against one location remote ID
  */
-class RemoteId extends Location implements CriterionInterface
+class RemoteId extends Location
 {
     /**
      * Creates a new Location RemoteId criterion

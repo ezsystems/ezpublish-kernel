@@ -23,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: matches against a list of location ids
  * - EQ: matches against a unique location id
  */
-class ParentLocationId extends Location implements CriterionInterface
+class ParentLocationId extends Location
 {
     /**
      * Creates a new ParentLocationId criterion

@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  *
  * Provides Location filtering based on depth
  */
-class Depth extends Location implements CriterionInterface
+class Depth extends Location
 {
     /**
      * Creates a new Depth criterion

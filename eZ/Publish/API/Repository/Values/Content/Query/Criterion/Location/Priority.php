@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - GT, GTE: matches location whose priority is greater than/greater than or equals the given priority
  * - LT, LTE: matches location whose priority is lower than/lower than or equals the given priority
  */
-class Priority extends Location implements CriterionInterface
+class Priority extends Location
 {
     /**
      * Creates a new LocationPriority criterion

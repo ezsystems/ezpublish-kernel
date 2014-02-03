@@ -20,7 +20,7 @@ use InvalidArgumentException;
  *
  * Location will be matched if it in at least one of the given subtree path strings
  */
-class Subtree extends Location implements CriterionInterface
+class Subtree extends Location
 {
     /**
      * Creates a new Subtree criterion
