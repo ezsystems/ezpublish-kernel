@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase criteria converter class
+ * File containing the DoctrineDatabase criteria converter class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,11 +10,11 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
- * Content locator gateway implementation using the zeta database component.
+ * Content locator gateway implementation using the DoctrineDatabase.
  */
 class CriteriaConverter
 {
@@ -42,12 +42,12 @@ class CriteriaConverter
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param Criterion $criterion
      *
      * @return \ezcQueryExpression
      */
-    public function convertCriteria( ezcQuerySelect $query, Criterion $criterion )
+    public function convertCriteria( SelectQuery $query, Criterion $criterion )
     {
         foreach ( $this->handler as $handler )
         {

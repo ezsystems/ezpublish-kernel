@@ -10,14 +10,14 @@
 namespace eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;
 use RuntimeException;
 
 class LegacyStorage extends Gateway
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
@@ -28,7 +28,7 @@ class LegacyStorage extends Gateway
      *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
+     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
      */
     public function setConnection( $dbHandler )
     {
@@ -36,7 +36,7 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof EzcDbHandler )
+        if ( !$dbHandler instanceof DatabaseHandler )
         {
             throw new RuntimeException( "Invalid dbHandler passed" );
         }
@@ -49,7 +49,7 @@ class LegacyStorage extends Gateway
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {
@@ -142,7 +142,6 @@ class LegacyStorage extends Gateway
 
         if ( !empty( $linksRemoteIds ) )
         {
-            /** @var $q \ezcQuerySelect */
             $q = $this->getConnection()->createSelectQuery();
             $q
                 ->select( "id", "remote_id" )

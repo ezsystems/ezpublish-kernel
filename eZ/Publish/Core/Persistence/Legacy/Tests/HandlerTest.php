@@ -437,7 +437,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\EzcDbHandler::create
+     * @covers \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler::createFromDSN
      *
      * @return void
      */

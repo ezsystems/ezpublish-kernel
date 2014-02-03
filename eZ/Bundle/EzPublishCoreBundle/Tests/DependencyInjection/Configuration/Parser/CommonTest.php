@@ -167,12 +167,12 @@ class CommonTest extends AbstractExtensionTestCase
                     ),
                     'database.params' => array(
                         'host' => 'localhost',
-                        'database' => 'ezdemo',
-                        'type' => 'sqlite',
+                        'dbname' => 'ezdemo',
+                        'driver' => 'pdo_sqlite',
                         'user' => 'root',
                         'password' => 'root',
                         'charset' => 'utf8',
-                        'driver-opts' => array()
+                        'driverOptions' => array()
                     )
                 )
             ),
@@ -199,12 +199,12 @@ class CommonTest extends AbstractExtensionTestCase
                     ),
                     'database.params' => array(
                         'host' => 'some.server',
-                        'database' => 'my_database',
-                        'type' => 'mysql',
+                        'dbname' => 'my_database',
+                        'driver' => 'pdo_mysql',
                         'user' => 'foo_bar_baz',
                         'password' => '123abc456@woot%$&#',
                         'charset' => 'utf8',
-                        'driver-opts' => array( 'foo' => 'bar', 'some_param' => '123bzz;!' )
+                        'driverOptions' => array( 'foo' => 'bar', 'some_param' => '123bzz;!' )
                     )
                 )
             ),
@@ -231,12 +231,12 @@ class CommonTest extends AbstractExtensionTestCase
                     ),
                     'database.params' => array(
                         'host' => 'localhost',
-                        'database' => 'ezdemo',
-                        'type' => 'pgsql',
+                        'dbname' => 'ezdemo',
+                        'driver' => 'pdo_pgsql',
                         'user' => 'root',
                         'password' => '$!root123',
                         'charset' => 'utf16',
-                        'driver-opts' => array()
+                        'driverOptions' => array()
                     )
                 )
             ),

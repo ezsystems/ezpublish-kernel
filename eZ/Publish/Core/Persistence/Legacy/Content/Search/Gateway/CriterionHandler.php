@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase criterion handler class
+ * File containing the DoctrineDatabase criterion handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,19 +9,19 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator as CriterionOperator;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * Content locator gateway implementation using the zeta database component.
+ * Content locator gateway implementation using the DoctrineDatabase.
  */
 abstract class CriterionHandler
 {
     /**
-     * Map of criterion operators to the respective function names in the zeta
-     * Database abstraction layer.
+     * Map of criterion operators to the respective function names
+     * in the DoctrineDatabase DBAL.
      *
      * @var array
      */
@@ -37,16 +37,16 @@ abstract class CriterionHandler
     /**
      * Database handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new criterion handler
      *
-     * @param \EzcDbHandler $dbHandler
+     * @param \DatabaseHandler $dbHandler
      */
-    public function __construct( EzcDbHandler $dbHandler )
+    public function __construct( DatabaseHandler $dbHandler )
     {
         $this->dbHandler = $dbHandler;
     }
@@ -68,12 +68,12 @@ abstract class CriterionHandler
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
      * @param CriteriaConverter $converter
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param Criterion $criterion
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    abstract public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion );
+    abstract public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion );
 
     /**
      * Returns a unique table name

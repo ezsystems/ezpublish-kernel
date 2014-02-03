@@ -13,7 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
 use eZ\Publish\SPI\Persistence\User\Policy;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Role;
-use ezcDbException;
+use Doctrine\DBAL\DBALException;
 use PDOException;
 use RuntimeException;
 
@@ -52,7 +52,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->createRole( $role );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -75,7 +75,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadRole( $roleId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -98,7 +98,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadRoleByIdentifier( $identifier );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -119,7 +119,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadRoles();
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -142,7 +142,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadRolesForContentObjects( $contentIds );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -166,7 +166,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadRoleAssignmentsByGroupId( $groupId, $inherited );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -189,7 +189,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadPoliciesByUserId( $userId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -212,7 +212,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->updateRole( $role );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -233,7 +233,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->deleteRole( $roleId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -257,7 +257,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->addPolicy( $roleId, $policy );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -281,7 +281,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->addPolicyLimitations( $policyId, $limitations );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -304,7 +304,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->removePolicy( $policyId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -327,7 +327,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->removePolicyLimitations( $policyId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }

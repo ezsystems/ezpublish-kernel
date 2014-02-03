@@ -10,24 +10,24 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 abstract class CriterionHandler
 {
     /**
      * Database handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new criterion handler
      *
-     * @param \EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      */
-    public function __construct( EzcDbHandler $dbHandler )
+    public function __construct( DatabaseHandler $dbHandler )
     {
         $this->dbHandler = $dbHandler;
     }
@@ -47,8 +47,8 @@ abstract class CriterionHandler
      * accept() must be called before calling this method.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriteriaConverter $converter
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      */
-    abstract public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion );
+    abstract public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion );
 }

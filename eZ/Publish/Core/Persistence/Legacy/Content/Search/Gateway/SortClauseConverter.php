@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase sort clause converter class
+ * File containing the DoctrineDatabase sort clause converter class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
@@ -45,12 +45,12 @@ class SortClauseConverter
     /**
      * Apply select parts of sort clauses to query
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param array $sortClauses
      *
      * @throws \RuntimeException
      */
-    public function applySelect( ezcQuerySelect $query, array $sortClauses )
+    public function applySelect( SelectQuery $query, array $sortClauses )
     {
         foreach ( $sortClauses as $nr => $sortClause )
         {
@@ -73,12 +73,12 @@ class SortClauseConverter
     /**
      * Apply join parts of sort clauses to query
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param array $sortClauses
      *
      * @throws \RuntimeException
      */
-    public function applyJoin( ezcQuerySelect $query, array $sortClauses )
+    public function applyJoin( SelectQuery $query, array $sortClauses )
     {
         foreach ( $sortClauses as $nr => $sortClause )
         {
@@ -98,15 +98,17 @@ class SortClauseConverter
     /**
      * Apply order by parts of sort clauses to query
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
+     *
+     * @return void
      */
-    public function applyOrderBy( ezcQuerySelect $query )
+    public function applyOrderBy( SelectQuery $query )
     {
         foreach ( $this->sortColumns as $column => $direction )
         {
             $query->orderBy(
                 $column,
-                $direction === Query::SORT_ASC ? ezcQuerySelect::ASC : ezcQuerySelect::DESC
+                $direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC
             );
         }
 

@@ -138,11 +138,35 @@ class Common extends AbstractParser
                 }
                 else
                 {
-                    // Renaming dbParams to parameters supported by ezcDb.
-                    $database['database'] = $database['database_name'];
+                    // Renaming dbParams to parameters supported by Doctrine.
+                    $database['dbname'] = $database['database_name'];
                     $database['host'] = $database['server'];
-                    $database['driver-opts'] = $database['options'];
-                    unset( $database['database_name'], $database['server'], $database['options'] );
+                    $driverMap = array(
+                        'mysql' => 'pdo_mysql',
+                        'pgsql' => 'pdo_pgsql',
+                        'sqlite' => 'pdo_sqlite',
+                    );
+                    if ( isset( $driverMap[$database['type']] ) )
+                    {
+                        $database['driver'] = $driverMap[$database['type']];
+                    }
+                    else
+                    {
+                        $database['driver'] = $database['type'];
+                    }
+                    if ( isset( $database['socket'] ) )
+                    {
+                        $database['unix_socket'] = $database['socket'];
+                    }
+                    $database['driverOptions'] = $database['options'];
+                    unset(
+                        $database['database_name'],
+                        $database['server'],
+                        $database['type'],
+                        $database['options'],
+                        $database['socket'],
+                        $database['server']
+                    );
                     $container->setParameter( "ezsettings.$sa.database.params", $database );
                 }
             }

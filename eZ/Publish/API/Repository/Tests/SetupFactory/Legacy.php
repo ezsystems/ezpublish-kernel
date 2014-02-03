@@ -302,7 +302,7 @@ class Legacy extends SetupFactory
     /**
      * Returns the database handler from the service container
      *
-     * @return EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
     protected function getDatabaseHandler()
     {
@@ -397,7 +397,6 @@ class Legacy extends SetupFactory
             $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-US';
             $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-GB';
 
-            $serviceSettings['persistence_handler_legacy']['arguments']['config']['dsn'] = self::$dsn;
             $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
 
             self::$serviceContainer = new ServiceContainer(

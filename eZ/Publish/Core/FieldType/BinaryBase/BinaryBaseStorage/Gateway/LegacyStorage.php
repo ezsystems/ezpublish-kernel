@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Database\InsertQuery;
 
 abstract class LegacyStorage extends Gateway
 {
@@ -59,13 +61,13 @@ abstract class LegacyStorage extends Gateway
      * add additional columns to be fetched from the database. Please do not
      * forget to call the parent when overwriting this method.
      *
-     * @param \ezcQuerySelect $selectQuery
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $selectQuery
      * @param int $fieldId
      * @param int $versionNo
      *
      * @return void
      */
-    protected function setFetchColumns( \ezcQuerySelect $selectQuery, $fieldId, $versionNo )
+    protected function setFetchColumns( SelectQuery $selectQuery, $fieldId, $versionNo )
     {
         $connection = $this->getConnection();
 
@@ -83,13 +85,13 @@ abstract class LegacyStorage extends Gateway
      * add additional columns to be set in the database. Please do not forget
      * to call the parent when overwriting this method.
      *
-     * @param \ezcQueryInsert $insertQuery
+     * @param \eZ\Publish\Core\Persistence\Database\InsertQuery $insertQuery
      * @param VersionInfo $versionInfo
      * @param Field $field
      *
      * @return void
      */
-    protected function setInsertColumns( \ezcQueryInsert $insertQuery, VersionInfo $versionInfo, Field $field )
+    protected function setInsertColumns( InsertQuery $insertQuery, VersionInfo $versionInfo, Field $field )
     {
         $connection = $this->getConnection();
 
@@ -120,7 +122,7 @@ abstract class LegacyStorage extends Gateway
      *
      * @return void
      * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler}
+     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
      */
     public function setConnection( $dbHandler )
     {
@@ -128,7 +130,7 @@ abstract class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler )
+        if ( !$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler )
         {
             throw new \RuntimeException( "Invalid dbHandler passed" );
         }
@@ -141,7 +143,7 @@ abstract class LegacyStorage extends Gateway
      *
      * @throws \RuntimeException if no connection has been set, yet.
      *
-     * @return \ezcDbHandler|\eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {

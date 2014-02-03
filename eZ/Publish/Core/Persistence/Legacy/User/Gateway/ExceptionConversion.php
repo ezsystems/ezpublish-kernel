@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\User\Gateway;
 use eZ\Publish\SPI\Persistence\User;
-use ezcDbException;
+use Doctrine\DBAL\DBALException;
 use PDOException;
 use RuntimeException;
 
@@ -50,7 +50,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->createUser( $user );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -71,7 +71,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->deleteUser( $userId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -94,7 +94,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->load( $userId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -117,7 +117,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->loadByLogin( $login );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -140,7 +140,7 @@ class ExceptionConversion extends Gateway
          {
              return $this->innerGateway->loadByEmail( $email );
          }
-         catch ( \ezcDbException $e )
+         catch ( \DBALException $e )
          {
              throw new \RuntimeException( 'Database error', 0, $e );
          }
@@ -161,7 +161,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->updateUser( $user );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -184,7 +184,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->assignRole( $contentId, $roleId, $limitation );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }
@@ -206,7 +206,7 @@ class ExceptionConversion extends Gateway
         {
             return $this->innerGateway->removeRole( $contentId, $roleId );
         }
-        catch ( ezcDbException $e )
+        catch ( DBALException $e )
         {
             throw new RuntimeException( 'Database error', 0, $e );
         }

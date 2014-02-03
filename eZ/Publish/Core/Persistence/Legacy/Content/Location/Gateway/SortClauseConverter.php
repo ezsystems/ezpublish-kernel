@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase sort clause converter class
+ * File containing the DoctrineDatabase sort clause converter class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
@@ -47,12 +47,12 @@ class SortClauseConverter
      *
      * @throws \RuntimeException If no handler is available for sort clause
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      *
      * @return void
      */
-    public function applySelect( ezcQuerySelect $query, array $sortClauses )
+    public function applySelect( SelectQuery $query, array $sortClauses )
     {
         foreach ( $sortClauses as $nr => $sortClause )
         {
@@ -77,12 +77,12 @@ class SortClauseConverter
      *
      * @throws \RuntimeException If no handler is available for sort clause
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      *
      * @return void
      */
-    public function applyJoin( ezcQuerySelect $query, array $sortClauses )
+    public function applyJoin( SelectQuery $query, array $sortClauses )
     {
         foreach ( $sortClauses as $nr => $sortClause )
         {
@@ -102,18 +102,18 @@ class SortClauseConverter
     /**
      * Apply order by parts of sort clauses to query
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param array $sortClauses
      *
      * @return void
      */
-    public function applyOrderBy( ezcQuerySelect $query, array $sortClauses )
+    public function applyOrderBy( SelectQuery $query, array $sortClauses )
     {
         foreach ( $this->sortColumns as $column => $direction )
         {
             $query->orderBy(
                 $column,
-                $direction === Query::SORT_ASC ? ezcQuerySelect::ASC : ezcQuerySelect::DESC
+                $direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC
             );
         }
 

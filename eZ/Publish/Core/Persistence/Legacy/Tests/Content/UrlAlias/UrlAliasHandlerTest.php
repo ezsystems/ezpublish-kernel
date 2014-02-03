@@ -12,11 +12,11 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase as EzcDatabaseLocation;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase as DoctrineDatabaseLocation;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler as LanguageHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase as LanguageGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase as LanguageGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased;
@@ -2881,7 +2881,7 @@ class UrlAliasHandlerTest extends TestCase
      */
     protected function countRows()
     {
-        /** @var \ezcQuerySelect $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             $query->expr->count( "*" )
@@ -2900,7 +2900,7 @@ class UrlAliasHandlerTest extends TestCase
      */
     protected function dump()
     {
-        /** @var \ezcQuerySelect $query */
+        /** @var \eZ\Publish\Core\Persistence\Database\SelectQuery $query */
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
             "*"
@@ -2915,7 +2915,7 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
     protected $dbHandler;
 
@@ -2977,7 +2977,7 @@ class UrlAliasHandlerTest extends TestCase
             new LanguageMapper()
         );
         $languageMaskGenerator = new LanguageMaskGenerator( $languageHandler );
-        $gateway = new EzcDatabase(
+        $gateway = new DoctrineDatabase(
             $this->dbHandler,
             $languageMaskGenerator
         );
@@ -3005,7 +3005,7 @@ class UrlAliasHandlerTest extends TestCase
 
         if ( !isset( $this->locationGateway ) )
         {
-            $this->locationGateway = new EzcDatabaseLocation( $this->dbHandler );
+            $this->locationGateway = new DoctrineDatabaseLocation( $this->dbHandler );
         }
 
         return $this->locationGateway;

@@ -192,7 +192,7 @@ EOT
     /**
      * Returns the database handler from the service container
      *
-     * @return \EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
     protected function getDatabaseHandler()
     {
