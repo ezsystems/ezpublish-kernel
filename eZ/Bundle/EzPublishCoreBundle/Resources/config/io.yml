@@ -1,14 +1,13 @@
 parameters:
     ezpublish.core.io.handler.in_memory.class: eZ\Publish\Core\IO\Handler\InMemory
     ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
-    ezpublish.core.io.service_factory: eZ\Publish\Core\MVC\Symfony\
-    ezpublish.core.io.service_factory: eZ\Publish\Core\MVC\Symfony\
+    ezpublish.core.io.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\IOFactory
     ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
     ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
 
 services:
     ezpublish.core.io.factory:
-        class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\IOFactory
+        class: %ezpublish.core.io.factory.class%
         arguments:
             - @ezpublish.config.resolver
             - @ezpublish.core.io.mimeTypeDetector
