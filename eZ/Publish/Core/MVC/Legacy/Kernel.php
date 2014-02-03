@@ -36,6 +36,11 @@ class Kernel extends ezpKernel
     private $runningCallback = false;
 
     /**
+     * @var string
+     */
+    private $previousRunningDir;
+
+    /**
      * @param \ezpKernelHandler $kernelHandler
      * @param string $legacyRootDir Must be a absolute dir
      * @param string $webRootDir Must be a absolute dir
@@ -67,15 +72,21 @@ class Kernel extends ezpKernel
      */
     public function enterLegacyRootDir()
     {
+        $this->previousRunningDir = getcwd();
         chdir( $this->legacyRootDir );
     }
 
     /**
-     * Leaves the legacy root dir and switches back to the initial webroot dir.
+     * Leaves the legacy root dir and switches back to the dir where execution was happening before we entered LegacyRootDir.
+     * @throws \RuntimeException
      */
     public function leaveLegacyRootDir()
     {
-        chdir( $this->webRootDir );
+        if ( $this->previousRunningDir == null )
+        {
+            throw new RuntimeException( 'Trying to leave legacy root dir without a previously executing dir. Inception?' );
+        }
+        chdir( $this->previousRunningDir );
     }
 
     /**
