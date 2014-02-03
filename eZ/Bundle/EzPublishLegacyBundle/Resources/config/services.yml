@@ -143,6 +143,7 @@ services:
         arguments: [@ezpublish_legacy.url_generator, @?request_context, @?logger]
         tags:
             - {name: router, priority: -255}
+        lazy: true
 
     ezpublish_legacy.uri_helper:
         class: %ezpublish_legacy.uri_helper.class%
