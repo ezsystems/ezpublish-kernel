@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase MapLocationDistance criterion handler class
+ * File containing the DoctrineDatabase MapLocationDistance criterion handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -11,11 +11,10 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriterionH
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriteriaConverter;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
@@ -32,24 +31,6 @@ class MapLocationDistance extends CriterionHandler
      * Radius of the planet in kilometers
      */
     const EARTH_RADIUS = 6371.01;
-
-    /**
-     * DB handler to fetch additional field information
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler|\ezcDbHandler
-     */
-    protected $dbHandler;
-
-    /**
-     * Construct from handler handler
-     *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
-     *
-     */
-    public function __construct( EzcDbHandler $dbHandler )
-    {
-        $this->dbHandler = $dbHandler;
-    }
 
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -123,12 +104,12 @@ class MapLocationDistance extends CriterionHandler
      * @throws \RuntimeException If given criterion operator is not handled
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriteriaConverter $converter
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
+    public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
         $this->checkSearchableFields( $criterion->target );
         $subSelect = $query->subSelect();
@@ -264,13 +245,13 @@ class MapLocationDistance extends CriterionHandler
     /**
      * Credit for the formula goes to http://janmatuschek.de/LatitudeLongitudeBoundingCoordinates
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location
      * @param double $distance
      *
      * @return array
      */
-    protected function getBoundingConstraints( ezcQuerySelect $query, MapLocationValue $location, $distance )
+    protected function getBoundingConstraints( SelectQuery $query, MapLocationValue $location, $distance )
     {
         $boundingCoordinates = $this->getBoundingCoordinates( $location, $distance );
         return array(

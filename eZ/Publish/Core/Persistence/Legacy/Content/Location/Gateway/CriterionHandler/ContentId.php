@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase Content id criterion handler class
+ * File containing the DoctrineDatabase Content id criterion handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriterionH
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
  * Content ID criterion handler
@@ -37,12 +37,12 @@ class ContentId extends CriterionHandler
      * accept() must be called before calling this method.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\CriteriaConverter $converter
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *
-     * @return \ezcQueryExpression
+     * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
+    public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
         return $query->expr->in(
             $this->dbHandler->quoteColumn( "contentobject_id", "ezcontentobject_tree" ),

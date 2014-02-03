@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing a EzcDatabase MapLocationDistance sort clause handler class
+ * File containing a DoctrineDatabase MapLocationDistance sort clause handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,14 +10,14 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\SortClauseHandler;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\SortClauseHandler;
-use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use ezcQuerySelect;
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
- * Content locator gateway implementation using the zeta database component.
+ * Content locator gateway implementation using the DoctrineDatabase.
  */
 class MapLocationDistance extends SortClauseHandler
 {
@@ -31,13 +31,14 @@ class MapLocationDistance extends SortClauseHandler
     /**
      * Creates a new Field sort clause handler
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      */
-    public function __construct( EzcDbHandler $dbHandler, LanguageHandler $languageHandler )
+    public function __construct( DatabaseHandler $dbHandler, LanguageHandler $languageHandler )
     {
-        $this->languageHandler = $languageHandler;
         parent::__construct( $dbHandler );
+
+        $this->languageHandler = $languageHandler;
     }
 
     /**
@@ -58,13 +59,13 @@ class MapLocationDistance extends SortClauseHandler
      * Returns the name of the (aliased) column, which information should be
      * used for sorting.
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      *
      * @return string
      */
-    public function applySelect( ezcQuerySelect $query, SortClause $sortClause, $number )
+    public function applySelect( SelectQuery $query, SortClause $sortClause, $number )
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget $target */
         $target = $sortClause->targetData;
@@ -111,13 +112,13 @@ class MapLocationDistance extends SortClauseHandler
     /**
      * Applies joins to the query, required to fetch sort data
      *
-     * @param \ezcQuerySelect $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      *
      * @return void
      */
-    public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number )
+    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number )
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
         $fieldTarget = $sortClause->targetData;
