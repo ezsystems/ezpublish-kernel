@@ -165,6 +165,7 @@ services:
     ezpublish.signalslot.repository:
         class: %ezpublish.signalslot.repository.class%
         arguments: [@ezpublish.api.inner_repository, @ezpublish.signalslot.signal_dispatcher]
+        lazy: true
 
     ezpublish.signalslot.signal_dispatcher:
         class: %ezpublish.signalslot.signal_dispatcher.class%
