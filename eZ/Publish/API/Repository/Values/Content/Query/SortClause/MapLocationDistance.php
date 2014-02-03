@@ -29,10 +29,10 @@ class MapLocationDistance extends SortClause implements CustomFieldInterface
     /**
      * Constructs a new MapLocationDistance SortClause on Type $typeIdentifier and Field $fieldIdentifier
      *
-     * @param string $typeIdentifier
-     * @param string $fieldIdentifier
-     * @param float $latitude
-     * @param float $longitude
+     * @param string $typeIdentifier ContentType identifier
+     * @param string $fieldIdentifier FieldDefinition identifier
+     * @param float $latitude Latitude of the location that distance is calculated from
+     * @param float $longitude Longitude of the location that distance is calculated from
      * @param string $sortDirection
      * @param null|string $languageCode
      */

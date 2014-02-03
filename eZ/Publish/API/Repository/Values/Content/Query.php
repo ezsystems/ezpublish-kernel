@@ -25,6 +25,14 @@ class Query extends ValueObject
     /**
      * The Query filter
      *
+     * For the storage backend that supports it (Solr) filters the result set
+     * without influencing score. It also offers better performance as filter
+     * part of the Query can be cached.
+     *
+     * In case when the backend does not distinguish between query and filter
+     * (Legacy Storage implementation), it will simply be combined with Query query
+     * using LogicalAnd criterion.
+     *
      * Can contain multiple criterion, as items of a logical one (by default
      * AND)
      *
@@ -34,6 +42,9 @@ class Query extends ValueObject
 
     /**
      * The Query query
+     *
+     * For the storage backend that supports it (Solr Storage) query will influence
+     * score of the search results.
      *
      * Can contain multiple criterion, as items of a logical one (by default
      * AND). Defaults to MatchAll.
