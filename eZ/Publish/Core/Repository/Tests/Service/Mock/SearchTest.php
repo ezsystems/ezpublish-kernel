@@ -91,6 +91,123 @@ class SearchTest extends BaseServiceMockTest
         );
     }
 
+    public function providerForFindContentValidatesLocationCriteriaAndSortClauses()
+    {
+        return array(
+            array(
+                new Query( array( "filter" => new Criterion\Location\Id( 42 ) ) ),
+                "Argument '\$query' is invalid: Location criterions cannot be used in Content search"
+            ),
+            array(
+                new Query( array( "query" => new Criterion\Location\Id( 42 ) ) ),
+                "Argument '\$query' is invalid: Location criterions cannot be used in Content search"
+            ),
+            array(
+                new Query(
+                    array(
+                        "query" => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\Location\Id( 42 )
+                            )
+                        )
+                    )
+                ),
+                "Argument '\$query' is invalid: Location criterions cannot be used in Content search"
+            ),
+            array(
+                new Query( array( "sortClauses" => array( new SortClause\Location\Id() ) ) ),
+                "Argument '\$query' is invalid: Location sort clauses cannot be used in Content search"
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider providerForFindContentValidatesLocationCriteriaAndSortClauses
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFindContentValidatesLocationCriteriaAndSortClauses( $query, $exceptionMessage )
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
+        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $locationSearchHandlerMock,
+            $this->getDomainMapperMock(),
+            $permissionsCriterionHandlerMock,
+            array()
+        );
+
+        try
+        {
+            $service->findContent( $query );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            $this->assertEquals( $exceptionMessage, $e->getMessage() );
+            throw $e;
+        }
+
+        $this->fail( "Expected exception was not thrown" );
+    }
+
+    public function providerForFindSingleValidatesLocationCriteria()
+    {
+        return array(
+            array(
+                new Criterion\Location\Id( 42 ),
+                "Argument '\$filter' is invalid: Location criterions cannot be used in Content search"
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\Location\Id( 42 )
+                    )
+                ),
+                "Argument '\$filter' is invalid: Location criterions cannot be used in Content search"
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider providerForFindSingleValidatesLocationCriteria
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFindSingleValidatesLocationCriteria( $criterion, $exceptionMessage )
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
+        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $locationSearchHandlerMock,
+            $this->getDomainMapperMock(),
+            $permissionsCriterionHandlerMock,
+            array()
+        );
+
+        try
+        {
+            $service->findSingle( $criterion );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            $this->assertEquals( $exceptionMessage, $e->getMessage() );
+            throw $e;
+        }
+
+        $this->fail( "Expected exception was not thrown" );
+    }
+
     /**
      * Test for the findContent() method.
      *

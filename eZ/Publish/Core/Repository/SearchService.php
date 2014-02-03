@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Location as LocationCriterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location as LocationSortClause;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -115,9 +116,10 @@ class SearchService implements SearchServiceInterface
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
+        $this->validateContentCriteria( array( $query->query ), "\$query" );
+        $this->validateContentCriteria( array( $query->filter ), "\$query" );
+        $this->validateContentSortClauses( $query );
         $this->validateSortClauses( $query );
-        $this->validateContentCriteria( array( $query->query ) );
-        $this->validateContentCriteria( array( $query->filter ) );
 
         if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $query->filter ) )
         {
@@ -147,20 +149,41 @@ class SearchService implements SearchServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion[] $criteria
+     * @param string $argumentName
      */
-    protected function validateContentCriteria( array $criteria )
+    protected function validateContentCriteria( array $criteria, $argumentName )
     {
         foreach ( $criteria as $criterion )
         {
             if ( $criterion instanceof LocationCriterion )
             {
                 throw new InvalidArgumentException(
-                    "\$query", "Location criterions cannot be used in Content query"
+                    $argumentName, "Location criterions cannot be used in Content search"
                 );
             }
             if ( $criterion instanceof LogicalOperator )
             {
-                $this->validateContentCriteria( $criterion->criteria );
+                $this->validateContentCriteria( $criterion->criteria, $argumentName );
+            }
+        }
+    }
+
+    /**
+     * Checks that $query does not contain Location sort clauses.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     */
+    protected function validateContentSortClauses( Query $query )
+    {
+        foreach ( $query->sortClauses as $sortClause )
+        {
+            if ( $sortClause instanceof LocationSortClause )
+            {
+                throw new InvalidArgumentException(
+                    "\$query", "Location sort clauses cannot be used in Content search"
+                );
             }
         }
     }
@@ -228,6 +251,8 @@ class SearchService implements SearchServiceInterface
      */
     public function findSingle( Criterion $filter, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
+        $this->validateContentCriteria( array( $filter ), "\$filter" );
+
         if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $filter ) )
         {
             throw new NotFoundException( 'Content', '*' );
