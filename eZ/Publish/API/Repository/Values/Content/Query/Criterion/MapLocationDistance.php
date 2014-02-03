@@ -37,11 +37,12 @@ class MapLocationDistance extends Criterion implements CriterionInterface, Custo
     protected $boost;
 
     /**
-     * @param string $target
-     * @param string $operator
-     * @param float $distance
-     * @param float $latitude
-     * @param float $longitude
+     * @param string $target FieldDefinition identifier
+     * @param string $operator One of the supported Operator constants
+     * @param float|float[] $distance The match value in kilometers, either as an array
+     *                                or as a single value, depending on the operator
+     * @param float $latitude Latitude of the location that distance is calculated from
+     * @param float $longitude Longitude of the location that distance is calculated from
      */
     public function __construct( $target, $operator, $distance, $latitude, $longitude )
     {
