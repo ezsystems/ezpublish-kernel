@@ -10,12 +10,12 @@
 namespace eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location;
 
 /**
  * Sets sort direction on the Location path for a Location query
  */
-class Path extends SortClause
+class Path extends Location
 {
     /**
      * Constructs a new LocationPath SortClause
