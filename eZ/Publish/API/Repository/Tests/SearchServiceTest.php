@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
@@ -28,253 +30,274 @@ use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
  */
 class SearchServiceTest extends BaseTest
 {
-    public function getFilterSearches()
+    public function getFilterContentSearches()
     {
         $fixtureDir = $this->getFixtureDir();
         return array(
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\ContentId(
-                            array( 1, 4, 10 )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\ContentId(
+                        array( 1, 4, 10 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'ContentId.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\LogicalAnd(
-                            array(
-                                new Criterion\ContentId(
-                                    array( 1, 4, 10 )
-                                ),
-                                new Criterion\ContentId(
-                                    array( 4, 12 )
-                                ),
-                            )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\ContentId(
+                                array( 1, 4, 10 )
+                            ),
+                            new Criterion\ContentId(
+                                array( 4, 12 )
+                            ),
+                        )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'LogicalAnd.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\LogicalOr(
-                            array(
-                                new Criterion\ContentId(
-                                    array( 1, 4, 10 )
-                                ),
-                                new Criterion\ContentId(
-                                    array( 4, 12 )
-                                ),
-                            )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\LogicalOr(
+                        array(
+                            new Criterion\ContentId(
+                                array( 1, 4, 10 )
+                            ),
+                            new Criterion\ContentId(
+                                array( 4, 12 )
+                            ),
+                        )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'LogicalOr.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\LogicalAnd(
-                            array(
+                array(
+                    'filter' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\ContentId(
+                                array( 1, 4, 10 )
+                            ),
+                            new Criterion\LogicalNot(
                                 new Criterion\ContentId(
-                                    array( 1, 4, 10 )
-                                ),
-                                new Criterion\LogicalNot(
-                                    new Criterion\ContentId(
-                                        array( 10, 12 )
-                                    )
-                                ),
-                            )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                                    array( 10, 12 )
+                                )
+                            ),
+                        )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'LogicalNot.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\Subtree(
-                            '/1/5/'
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . 'Subtree.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\ContentTypeId(
-                            4
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\ContentTypeId(
+                        4
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'ContentTypeId.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\ContentTypeGroupId(
-                            2
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\ContentTypeGroupId(
+                        2
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'ContentTypeGroupId.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
-                            Criterion\Operator::GT,
-                            1343140540
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::GT,
+                        1343140540
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DateMetadataGt.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
-                            Criterion\Operator::GTE,
-                            1311154215
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::GTE,
+                        1311154215
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DateMetadataGte.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
-                            Criterion\Operator::LTE,
-                            1311154215
-                        ),
-                        'limit' => 10,
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::LTE,
+                        1311154215
+                    ),
+                    'limit' => 10,
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DateMetadataLte.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
-                            Criterion\Operator::IN,
-                            array( 1033920794, 1060695457, 1343140540 )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::IN,
+                        array( 1033920794, 1060695457, 1343140540 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DateMetadataIn.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
-                            Criterion\Operator::BETWEEN,
-                            array( 1033920776, 1072180276 )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::BETWEEN,
+                        array( 1033920776, 1072180276 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DateMetadataBetween.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::CREATED,
-                            Criterion\Operator::BETWEEN,
-                            array( 1033920776, 1072180278 )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::CREATED,
+                        Criterion\Operator::BETWEEN,
+                        array( 1033920776, 1072180278 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DateMetadataCreated.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\LocationId(
-                            array( 1, 2, 5 )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . 'LocationId.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\ParentLocationId(
-                            array( 1 )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . 'ParentLocationId.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\RemoteId(
-                            array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\RemoteId(
+                        array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'RemoteId.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\LocationRemoteId(
-                            array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . 'LocationRemoteId.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\SectionId(
-                            array( 2 )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\SectionId(
+                        array( 2 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'SectionId.php',
             ),
             array(
-                new Query(
-                    array(
-                        // There is no Status Criterion anymore, this should match all published as well
-                        'filter' => new Criterion\Subtree(
+                array(
+                    'filter' => new Criterion\Field(
+                        'name',
+                        Criterion\Operator::EQ,
+                        'Members'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'Field.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\Field(
+                        'name',
+                        Criterion\Operator::IN,
+                        array( 'Members', 'Anonymous Users' )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'FieldIn.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::BETWEEN,
+                        array( 1033920275, 1033920794 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'FieldBetween.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\LogicalOr(
+                        array(
+                            new Criterion\Field(
+                                'name',
+                                Criterion\Operator::EQ,
+                                'Members'
+                            ),
+                            new Criterion\DateMetadata(
+                                Criterion\DateMetadata::MODIFIED,
+                                Criterion\Operator::BETWEEN,
+                                array( 1033920275, 1033920794 )
+                            ),
+                        )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'FieldOr.php',
+            ),
+        );
+    }
+    public function getFilterContentSearchesDeprecated()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
+            array(
+                array(
+                    'filter' => new Criterion\Subtree(
+                            '/1/5/'
+                        ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'Subtree.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\LocationId(
+                            array( 1, 2, 5 )
+                        ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'LocationId.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\ParentLocationId(
+                            array( 1 )
+                        ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'ParentLocationId.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\LocationRemoteId(
+                            array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
+                        ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'LocationRemoteId.php',
+            ),
+            array(
+                array(
+                    // There is no Status Criterion anymore, this should match all published as well
+                    'filter' => new Criterion\Subtree(
                             '/1/'
                         ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'Status.php',
                 // Result having the same sort level should be sorted between them to be system independent
@@ -301,214 +324,240 @@ class SearchServiceTest extends BaseTest
                     );
                 }
             ),
-            array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\Field(
-                            'name',
-                            Criterion\Operator::EQ,
-                            'Members'
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . 'Field.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\Field(
-                            'name',
-                            Criterion\Operator::IN,
-                            array( 'Members', 'Anonymous Users' )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . 'FieldIn.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\DateMetadata(
-                            Criterion\DateMetadata::MODIFIED,
-                            Criterion\Operator::BETWEEN,
-                            array( 1033920275, 1033920794 )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . 'FieldBetween.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\LogicalOr(
-                            array(
-                                new Criterion\Field(
-                                    'name',
-                                    Criterion\Operator::EQ,
-                                    'Members'
-                                ),
-                                new Criterion\DateMetadata(
-                                    Criterion\DateMetadata::MODIFIED,
-                                    Criterion\Operator::BETWEEN,
-                                    array( 1033920275, 1033920794 )
-                                ),
-                            )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . 'FieldOr.php',
-            ),
         );
     }
 
-    public function getQuerySearches()
+    public function getLocationFilterSearches()
     {
         $fixtureDir = $this->getFixtureDir();
         return array(
             array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\ContentId(
-                            array( 58, 10 )
-                        ),
-                        'query'    => new Criterion\FullText( 'contact' ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\Location\Subtree(
+                        '/1/5/'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'Subtree.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\Location\Id(
+                        array( 1, 2, 5 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'LocationId.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\Location\ParentLocationId(
+                        array( 1 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'ParentLocationId.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\Location\RemoteId(
+                        array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'LocationRemoteId.php',
+            ),
+        );
+    }
+
+    public function getContentQuerySearches()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
+            array(
+                array(
+                    'filter' => new Criterion\ContentId(
+                        array( 58, 10 )
+                    ),
+                    'query'    => new Criterion\FullText( 'contact' ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'FullTextFiltered.php',
             ),
             array(
-                new Query(
-                    array(
-                        'query'    => new Criterion\FullText(
-                            'contact',
-                            array(
-                                'boost' => array(
-                                    'title' => 2,
-                                ),
-                                'fuzziness' => .5,
-                            )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'query' => new Criterion\FullText(
+                        'contact',
+                        array(
+                            'boost' => array(
+                                'title' => 2,
+                            ),
+                            'fuzziness' => .5,
+                        )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'FullText.php',
             ),
             array(
-                new Query(
-                    array(
-                        'query'    => new Criterion\FullText(
-                            'Contact*'
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'query' => new Criterion\FullText(
+                        'Contact*'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'FullTextWildcard.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\LanguageCode( "eng-GB" ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\LanguageCode( "eng-GB" ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'LanguageCode.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\LanguageCode( array( "eng-US", "eng-GB" ) ),
-                        'offset' => 10,
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\LanguageCode( array( "eng-US", "eng-GB" ) ),
+                    'offset' => 10,
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'LanguageCodeIn.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\LanguageCode( "eng-GB", true ),
-                        'offset' => 10,
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\LanguageCode( "eng-GB", true ),
+                    'offset' => 10,
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'LanguageCodeAlwaysAvailable.php',
             ),
+        );
+    }
+
+    public function getContentQuerySearchesDeprecated()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::EQ, 1 ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\Depth( Criterion\Operator::EQ, 1 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'Depth.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::IN, array( 1, 3 ) ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\Depth( Criterion\Operator::IN, array( 1, 3 ) ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DepthIn.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::GT, 2 ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\Depth( Criterion\Operator::GT, 2 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DepthGt.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::GTE, 2 ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\Depth( Criterion\Operator::GTE, 2 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DepthGte.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::LT, 2 ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\Depth( Criterion\Operator::LT, 2 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'Depth.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::LTE, 2 ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\Depth( Criterion\Operator::LTE, 2 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DepthLte.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Depth( Criterion\Operator::BETWEEN, array( 1, 2 ) ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'criterion' => new Criterion\Depth( Criterion\Operator::BETWEEN, array( 1, 2 ) ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DepthLte.php',
             ),
             array(
-                new Query(
-                    array(
-                        'criterion' => new Criterion\Visibility(
+                array(
+                    'criterion' => new Criterion\Visibility(
                             Criterion\Visibility::VISIBLE
                         ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'Visibility.php',
+            ),
+        );
+    }
+
+    public function getLocationQuerySearches()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
+            array(
+                array(
+                    'criterion' => new Criterion\Location\Depth( Criterion\Operator::EQ, 1 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'Depth.php',
+            ),
+            array(
+                array(
+                    'criterion' => new Criterion\Location\Depth( Criterion\Operator::IN, array( 1, 3 ) ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DepthIn.php',
+            ),
+            array(
+                array(
+                    'criterion' => new Criterion\Location\Depth( Criterion\Operator::GT, 2 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DepthGt.php',
+            ),
+            array(
+                array(
+                    'criterion' => new Criterion\Location\Depth( Criterion\Operator::GTE, 2 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DepthGte.php',
+            ),
+            array(
+                array(
+                    'criterion' => new Criterion\Location\Depth( Criterion\Operator::LT, 2 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'Depth.php',
+            ),
+            array(
+                array(
+                    'criterion' => new Criterion\Location\Depth( Criterion\Operator::LTE, 2 ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DepthLte.php',
+            ),
+            array(
+                array(
+                    'criterion' => new Criterion\Location\Depth( Criterion\Operator::BETWEEN, array( 1, 2 ) ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DepthLte.php',
+            ),
+            array(
+                array(
+                    'criterion' => new Criterion\Location\Visibility(
+                        Criterion\Location\Visibility::VISIBLE
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'Visibility.php',
             ),
@@ -518,12 +567,53 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
-     * @dataProvider getFilterSearches
+     * @dataProvider getFilterContentSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testFindContentFiltered( Query $query, $fixture, $closure = null )
+    public function testFindContentFiltered( $queryData, $fixture, $closure = null )
     {
+        $query = new Query( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @deprecated
+     * @dataProvider getFilterContentSearchesDeprecated
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindContentFilteredDeprecated( $queryData, $fixture, $closure = null )
+    {
+        $query = new Query( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @dataProvider getFilterContentSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindLocationsContentFiltered( $queryData, $fixture, $closure = null )
+    {
+        $query = new LocationQuery( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @dataProvider getLocationFilterSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindLocationsFiltered( $queryData, $fixture, $closure = null )
+    {
+        $query = new LocationQuery( $queryData );
         $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
@@ -552,12 +642,53 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
-     * @dataProvider getQuerySearches
+     * @dataProvider getContentQuerySearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testQueryContent( Query $query, $fixture, $closure = null )
+    public function testQueryContent( $queryData, $fixture, $closure = null )
     {
+        $query = new Query( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @deprecated
+     * @dataProvider getContentQuerySearchesDeprecated
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testQueryContentDeprecated( $queryData, $fixture, $closure = null )
+    {
+        $query = new Query( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @dataProvider getContentQuerySearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testQueryContentLocations( $queryData, $fixture, $closure = null )
+    {
+        $query = new LocationQuery( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @dataProvider getLocationQuerySearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testQueryLocations( $queryData, $fixture, $closure = null )
+    {
+        $query = new LocationQuery( $queryData );
         $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
@@ -565,39 +696,33 @@ class SearchServiceTest extends BaseTest
     {
         return array(
             array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\Field(
-                            'name',
-                            Criterion\Operator::EQ,
-                            'Members'
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\Field(
+                        'name',
+                        Criterion\Operator::EQ,
+                        'Members'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
             ),
             array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\Field(
-                            'name',
-                            Criterion\Operator::EQ,
-                            'members'
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\Field(
+                        'name',
+                        Criterion\Operator::EQ,
+                        'members'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
             ),
             array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\Field(
-                            'name',
-                            Criterion\Operator::EQ,
-                            'MEMBERS'
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
+                array(
+                    'filter' => new Criterion\Field(
+                        'name',
+                        Criterion\Operator::EQ,
+                        'MEMBERS'
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
                 ),
             ),
         );
@@ -610,8 +735,25 @@ class SearchServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testFieldFiltersCaseSensitivity( Query $query )
+    public function testFindContentFieldFiltersCaseSensitivity( $queryData )
     {
+        $query = new Query( $queryData );
+        $this->assertQueryFixture(
+            $query,
+            $this->getFixtureDir() . 'Field.php'
+        );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @dataProvider getCaseInsensitiveSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindLocationsFieldFiltersCaseSensitivity( $queryData )
+    {
+        $query = new LocationQuery( $queryData );
         $this->assertQueryFixture(
             $query,
             $this->getFixtureDir() . 'Field.php'
@@ -848,18 +990,16 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    public function getSortedSearches()
+    public function getSortedContentSearches()
     {
         $fixtureDir = $this->getFixtureDir();
         return array(
             array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 2 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'sortClauses' => array()
-                    )
+                array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array()
                 ),
                 $fixtureDir . 'SortNone.php',
                 // Result having the same sort level should be sorted between them to be system independent
@@ -875,24 +1015,99 @@ class SearchServiceTest extends BaseTest
                 },
             ),
             array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 2 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'sortClauses' => array( new SortClause\LocationPathString( Query::SORT_DESC ) )
+                array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array(
+                        new SortClause\DatePublished(),
+                        new SortClause\ContentId(),
                     )
+                ),
+                $fixtureDir . 'SortDatePublished.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\SectionIdentifier(),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortSectionIdentifier.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\SectionName(),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortSectionName.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\SectionId( array( 2, 3 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\ContentName(),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortContentName.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\ContentTypeId( 1 ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-US" ),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortFolderName.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\SectionId( array( 5 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\Field( "template_look", "title", Query::SORT_ASC ),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortTemplateTitle.php',
+            ),
+        );
+    }
+
+    public function getSortedContentSearchesDeprecated()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
+            array(
+                array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array( new SortClause\LocationPathString( Query::SORT_DESC ) )
                 ),
                 $fixtureDir . 'SortPathString.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 2 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'sortClauses' => array( new SortClause\LocationDepth( Query::SORT_ASC ) )
-                    )
+                array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array( new SortClause\LocationDepth( Query::SORT_ASC ) )
                 ),
                 $fixtureDir . 'SortLocationDepth.php',
                 // Result having the same sort level should be sorted between them to be system independent
@@ -922,30 +1137,26 @@ class SearchServiceTest extends BaseTest
                 },
             ),
             array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 3 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'sortClauses' => array(
-                            new SortClause\LocationPathString( Query::SORT_DESC ),
-                            new SortClause\ContentName( Query::SORT_ASC )
-                        )
+                array(
+                    'filter' => new Criterion\SectionId( array( 3 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array(
+                        new SortClause\LocationPathString( Query::SORT_DESC ),
+                        new SortClause\ContentName( Query::SORT_ASC )
                     )
                 ),
                 $fixtureDir . 'SortMultiple.php',
             ),
             array(
                 // FIXME: this test is not relevant since all priorities are "0"
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 2 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'sortClauses' => array(
-                            new SortClause\LocationPriority( Query::SORT_DESC ),
-                            new SortClause\ContentId(),
-                        )
+                array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array(
+                        new SortClause\LocationPriority( Query::SORT_DESC ),
+                        new SortClause\ContentId(),
                     )
                 ),
                 $fixtureDir . 'SortDesc.php',
@@ -962,89 +1173,92 @@ class SearchServiceTest extends BaseTest
                     );
                 },
             ),
+        );
+    }
+
+    public function getSortedLocationSearches()
+    {
+        $fixtureDir = $this->getFixtureDir();
+        return array(
             array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 2 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'sortClauses' => array(
-                            new SortClause\DatePublished(),
-                            new SortClause\ContentId(),
-                        )
-                    )
+                array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array( new SortClause\Location\Path( Query::SORT_DESC ) )
                 ),
-                $fixtureDir . 'SortDatePublished.php',
+                $fixtureDir . 'SortPathString.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
-                        'offset'      => 0,
-                        'limit'       => null,
-                        'sortClauses' => array(
-                            new SortClause\SectionIdentifier(),
-                            new SortClause\ContentId(),
-                        )
-                    )
+                array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array( new SortClause\Location\Depth( Query::SORT_ASC ) )
                 ),
-                $fixtureDir . 'SortSectionIdentifier.php',
+                $fixtureDir . 'SortLocationDepth.php',
+                // Result having the same sort level should be sorted between them to be system independent
+                function ( &$data )
+                {
+                    // Result with ids:
+                    //     4 has depth = 1
+                    //     11, 12, 13, 42, 59 have depth = 2
+                    //     10, 14 have depth = 3
+                    $map = array(
+                        4 => 0,
+                        11 => 1,
+                        12 => 2,
+                        13 => 3,
+                        42 => 4,
+                        59 => 5,
+                        10 => 6,
+                        14 => 7,
+                    );
+                    usort(
+                        $data->searchHits,
+                        function ( $a, $b ) use ( $map )
+                        {
+                            return ( $map[$a->valueObject["id"]] < $map[$b->valueObject["id"]] ) ? -1 : 1;
+                        }
+                    );
+                },
             ),
             array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
-                        'offset'      => 0,
-                        'limit'       => null,
-                        'sortClauses' => array(
-                            new SortClause\SectionName(),
-                            new SortClause\ContentId(),
-                        )
+                array(
+                    'filter' => new Criterion\SectionId( array( 3 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array(
+                        new SortClause\Location\Path( Query::SORT_DESC ),
+                        new SortClause\ContentName( Query::SORT_ASC )
                     )
                 ),
-                $fixtureDir . 'SortSectionName.php',
+                $fixtureDir . 'SortMultiple.php',
             ),
             array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 2, 3 ) ),
-                        'offset'      => 0,
-                        'limit'       => null,
-                        'sortClauses' => array(
-                            new SortClause\ContentName(),
-                            new SortClause\ContentId(),
-                        )
+                // FIXME: this test is not relevant since all priorities are "0"
+                array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array(
+                        new SortClause\Location\Priority( Query::SORT_DESC ),
+                        new SortClause\ContentId(),
                     )
                 ),
-                $fixtureDir . 'SortContentName.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter'    => new Criterion\ContentTypeId( 1 ),
-                        'offset'      => 0,
-                        'limit'       => null,
-                        'sortClauses' => array(
-                            new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-US" ),
-                            new SortClause\ContentId(),
-                        )
-                    )
-                ),
-                $fixtureDir . 'SortFolderName.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 5 ) ),
-                        'offset'      => 0,
-                        'limit'       => null,
-                        'sortClauses' => array(
-                            new SortClause\Field( "template_look", "title", Query::SORT_ASC ),
-                            new SortClause\ContentId(),
-                        )
-                    )
-                ),
-                $fixtureDir . 'SortTemplateTitle.php',
+                $fixtureDir . 'SortDesc.php',
+                // Result having the same sort level should be sorted between them to be system independent
+                // Update when above FIXME has been resolved.
+                function ( &$data )
+                {
+                    usort(
+                        $data->searchHits,
+                        function ( $a, $b )
+                        {
+                            return ( $a->valueObject["id"] < $b->valueObject["id"] ) ? -1 : 1;
+                        }
+                    );
+                },
             ),
         );
     }
@@ -1687,12 +1901,53 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
-     * @dataProvider getSortedSearches
+     * @dataProvider getSortedContentSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
-    public function testFindAndSortContent( Query $query, $fixture, $closure = null )
+    public function testFindAndSortContent( $queryData, $fixture, $closure = null )
     {
+        $query = new Query( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @deprecated
+     * @dataProvider getSortedContentSearchesDeprecated
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindAndSortContentDeprecated( $queryData, $fixture, $closure = null )
+    {
+        $query = new Query( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @dataProvider getSortedContentSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindAndSortContentLocations( $queryData, $fixture, $closure = null )
+    {
+        $query = new LocationQuery( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @dataProvider getSortedLocationSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindAndSortLocations( $queryData, $fixture, $closure = null )
+    {
+        $query = new LocationQuery( $queryData );
         $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
@@ -2722,7 +2977,18 @@ class SearchServiceTest extends BaseTest
 
         try
         {
-            $result = $searchService->findContent( $query );
+            if ( $query instanceof LocationQuery )
+            {
+                $result = $searchService->findLocations( $query );
+            }
+            else if ( $query instanceof Query )
+            {
+                $result = $searchService->findContent( $query );
+            }
+            else
+            {
+                $this->fail( "Expected instance of LocationQuery or Query, got: " . gettype( $query ) );
+            }
             $this->simplifySearchResult( $result );
         }
         catch ( NotImplementedException $e )
@@ -2799,6 +3065,13 @@ class SearchServiceTest extends BaseTest
                 case $hit->valueObject instanceof Content:
                     $hit->valueObject = array(
                         'id'    => $hit->valueObject->contentInfo->id,
+                        'title' => $hit->valueObject->contentInfo->name,
+                    );
+                    break;
+
+                case $hit->valueObject instanceof Location:
+                    $hit->valueObject = array(
+                        'id' => $hit->valueObject->contentInfo->id,
                         'title' => $hit->valueObject->contentInfo->name,
                     );
                     break;
