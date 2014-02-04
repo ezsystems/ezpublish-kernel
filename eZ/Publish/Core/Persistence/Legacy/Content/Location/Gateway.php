@@ -57,18 +57,6 @@ abstract class Gateway
     abstract public function getBasicNodeDataByRemoteId( $remoteId );
 
     /**
-     * Returns total count and data for all Locations satisfying the parameters.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param int $offset
-     * @param int|null $limit
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
-     *
-     * @return mixed[][]
-     */
-    abstract public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null );
-
-    /**
      * Loads data for all Locations for $contentId, optionally only in the
      * subtree starting at $rootLocationId
      *

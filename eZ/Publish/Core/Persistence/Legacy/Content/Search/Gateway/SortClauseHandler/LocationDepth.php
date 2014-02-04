@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
@@ -36,7 +36,7 @@ class LocationDepth extends SortClauseHandler
      * Returns the name of the (aliased) column, which information should be
      * used for sorting.
      *
-     * @param \SelectQuery $query
+     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      *

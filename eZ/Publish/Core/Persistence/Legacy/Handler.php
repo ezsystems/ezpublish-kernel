@@ -18,7 +18,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as TypeMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\Location\Search\Handler as LocationSearchHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Handler as LocationSearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper as ObjectStateMapper;
@@ -26,7 +26,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler as ContentCriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\CriterionHandler as LocationCriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler as CommonCriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper as UrlAliasMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase as UrlAliasGateway;
@@ -35,7 +37,9 @@ use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler as UrlWildcardHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper as UrlWildcardMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase as UrlWildcardGateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler as ContentSortClauseHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\SortClauseHandler as LocationSortClauseHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler as CommonSortClauseHandler;
 use eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter;
 use eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler as ObjectStateLimitationHandler;
@@ -116,7 +120,7 @@ class Handler implements HandlerInterface
     /**
      * Location search handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Search\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Handler
      */
     protected $locationSearchHandler;
 
@@ -126,6 +130,13 @@ class Handler implements HandlerInterface
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
+
+    /**
+     * Location search gateway
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway
+     */
+    protected $locationSearchGateway;
 
     /**
      * Location mapper
@@ -280,7 +291,7 @@ class Handler implements HandlerInterface
     protected $transformationProcessor;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FieldValue\Converter
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Converter
      */
     protected $criterionFieldValueConverter;
 
@@ -480,21 +491,21 @@ class Handler implements HandlerInterface
         if ( !isset( $this->criterionFieldValueConverter ) )
         {
             $db = $this->dbHandler;
-            $commaSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
+            $commaSeparatedCollectionValueHandler = new CommonCriterionHandler\FieldValue\Handler\Collection(
                 $db, $this->transformationProcessor, ","
             );
-            $hyphenSeparatedCollectionValueHandler = new CriterionHandler\FieldValue\Handler\Collection(
+            $hyphenSeparatedCollectionValueHandler = new CommonCriterionHandler\FieldValue\Handler\Collection(
                 $db, $this->transformationProcessor, "-"
             );
-            $compositeValueHandler = new CriterionHandler\FieldValue\Handler\Composite(
+            $compositeValueHandler = new CommonCriterionHandler\FieldValue\Handler\Composite(
                 $db, $this->transformationProcessor
             );
-            $simpleValueHandler = new CriterionHandler\FieldValue\Handler\Simple(
+            $simpleValueHandler = new CommonCriterionHandler\FieldValue\Handler\Simple(
                 $db, $this->transformationProcessor
             );
 
-            $this->criterionFieldValueConverter = new CriterionHandler\FieldValue\Converter(
-                new CriterionHandler\FieldValue\HandlerRegistry(
+            $this->criterionFieldValueConverter = new CommonCriterionHandler\FieldValue\Converter(
+                new CommonCriterionHandler\FieldValue\HandlerRegistry(
                     array(
                         "ezboolean" => $simpleValueHandler,
                         "ezcountry" => $commaSeparatedCollectionValueHandler,
@@ -526,59 +537,59 @@ class Handler implements HandlerInterface
                 new Content\Search\Gateway\ExceptionConversion(
                     new Content\Search\Gateway\DoctrineDatabase(
                         $db,
-                        new Content\Search\Gateway\CriteriaConverter(
+                        new Content\Search\Common\Gateway\CriteriaConverter(
                             array(
-                                new CriterionHandler\MatchAll( $db ),
-                                new CriterionHandler\ContentId( $db ),
-                                new CriterionHandler\LogicalNot( $db ),
-                                new CriterionHandler\LogicalAnd( $db ),
-                                new CriterionHandler\LogicalOr( $db ),
-                                new CriterionHandler\Subtree( $db ),
-                                new CriterionHandler\ContentTypeId( $db ),
-                                new CriterionHandler\ContentTypeIdentifier( $db ),
-                                new CriterionHandler\ContentTypeGroupId( $db ),
-                                new CriterionHandler\DateMetadata( $db ),
-                                new CriterionHandler\LocationId( $db ),
-                                new CriterionHandler\LocationPriority( $db ),
-                                new CriterionHandler\ParentLocationId( $db ),
-                                new CriterionHandler\RemoteId( $db ),
-                                new CriterionHandler\LocationRemoteId( $db ),
-                                new CriterionHandler\SectionId( $db ),
-                                new CriterionHandler\FullText(
+                                new CommonCriterionHandler\MatchAll( $db ),
+                                new CommonCriterionHandler\ContentId( $db ),
+                                new CommonCriterionHandler\LogicalNot( $db ),
+                                new CommonCriterionHandler\LogicalAnd( $db ),
+                                new CommonCriterionHandler\LogicalOr( $db ),
+                                new ContentCriterionHandler\Subtree( $db ),
+                                new CommonCriterionHandler\ContentTypeId( $db ),
+                                new CommonCriterionHandler\ContentTypeIdentifier( $db ),
+                                new CommonCriterionHandler\ContentTypeGroupId( $db ),
+                                new CommonCriterionHandler\DateMetadata( $db ),
+                                new ContentCriterionHandler\LocationId( $db ),
+                                new ContentCriterionHandler\LocationPriority( $db ),
+                                new ContentCriterionHandler\ParentLocationId( $db ),
+                                new CommonCriterionHandler\RemoteId( $db ),
+                                new ContentCriterionHandler\LocationRemoteId( $db ),
+                                new CommonCriterionHandler\SectionId( $db ),
+                                new CommonCriterionHandler\FullText(
                                     $db,
                                     $this->transformationProcessor
                                 ),
-                                new CriterionHandler\Field(
+                                new CommonCriterionHandler\Field(
                                     $db,
                                     $this->converterRegistry,
                                     $this->getCriterionFieldValueConverter(),
                                     $this->transformationProcessor
                                 ),
-                                new CriterionHandler\ObjectStateId( $db ),
-                                new CriterionHandler\LanguageCode(
+                                new CommonCriterionHandler\ObjectStateId( $db ),
+                                new CommonCriterionHandler\LanguageCode(
                                     $db,
                                     $this->getLanguageMaskGenerator()
                                 ),
-                                new CriterionHandler\Visibility( $db ),
-                                new CriterionHandler\UserMetadata( $db ),
-                                new CriterionHandler\RelationList( $db ),
-                                new CriterionHandler\Depth( $db ),
-                                new CriterionHandler\MapLocationDistance( $db ),
+                                new ContentCriterionHandler\Visibility( $db ),
+                                new CommonCriterionHandler\UserMetadata( $db ),
+                                new CommonCriterionHandler\RelationList( $db ),
+                                new ContentCriterionHandler\Depth( $db ),
+                                new CommonCriterionHandler\MapLocationDistance( $db ),
                             )
                         ),
-                        new Content\Search\Gateway\SortClauseConverter(
+                        new Content\Search\Common\Gateway\SortClauseConverter(
                             array(
-                                new SortClauseHandler\LocationPathString( $db ),
-                                new SortClauseHandler\LocationDepth( $db ),
-                                new SortClauseHandler\LocationPriority( $db ),
-                                new SortClauseHandler\DateModified( $db ),
-                                new SortClauseHandler\DatePublished( $db ),
-                                new SortClauseHandler\SectionIdentifier( $db ),
-                                new SortClauseHandler\SectionName( $db ),
-                                new SortClauseHandler\ContentName( $db ),
-                                new SortClauseHandler\ContentId( $db ),
-                                new SortClauseHandler\Field( $db, $this->contentLanguageHandler() ),
-                                new SortClauseHandler\MapLocationDistance( $db, $this->contentLanguageHandler() ),
+                                new ContentSortClauseHandler\LocationPathString( $db ),
+                                new ContentSortClauseHandler\LocationDepth( $db ),
+                                new ContentSortClauseHandler\LocationPriority( $db ),
+                                new CommonSortClauseHandler\DateModified( $db ),
+                                new CommonSortClauseHandler\DatePublished( $db ),
+                                new CommonSortClauseHandler\SectionIdentifier( $db ),
+                                new CommonSortClauseHandler\SectionName( $db ),
+                                new CommonSortClauseHandler\ContentName( $db ),
+                                new CommonSortClauseHandler\ContentId( $db ),
+                                new CommonSortClauseHandler\Field( $db, $this->contentLanguageHandler() ),
+                                new CommonSortClauseHandler\MapLocationDistance( $db, $this->contentLanguageHandler() ),
                             )
                         ),
                         new Content\Gateway\DoctrineDatabase\QueryBuilder( $this->dbHandler ),
@@ -726,11 +737,93 @@ class Handler implements HandlerInterface
         if ( !isset( $this->locationSearchHandler ) )
         {
             $this->locationSearchHandler = new LocationSearchHandler(
-                $this->getLocationGateway(),
+                $this->getLocationSearchGateway(),
                 $this->getLocationMapper()
             );
         }
         return $this->locationSearchHandler;
+    }
+
+    /**
+     * Returns a location gateway
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\DoctrineDatabase
+     */
+    protected function getLocationSearchGateway()
+    {
+        if ( !isset( $this->locationSearchGateway ) )
+        {
+            $dbHandler = $this->dbHandler;
+            $this->locationSearchGateway = new Content\Search\Location\Gateway\ExceptionConversion(
+                new Content\Search\Location\Gateway\DoctrineDatabase(
+                    $dbHandler,
+                    new Content\Search\Common\Gateway\CriteriaConverter(
+                        array(
+                            new LocationCriterionHandler\Location\Id( $dbHandler ),
+                            new LocationCriterionHandler\Location\Depth( $dbHandler ),
+                            new LocationCriterionHandler\Location\ParentLocationId( $dbHandler ),
+                            new LocationCriterionHandler\Location\Priority( $dbHandler ),
+                            new LocationCriterionHandler\Location\RemoteId( $dbHandler ),
+                            new LocationCriterionHandler\Location\Subtree( $dbHandler ),
+                            new LocationCriterionHandler\Location\Visibility( $dbHandler ),
+                            new CommonCriterionHandler\ContentId( $dbHandler ),
+                            new CommonCriterionHandler\ContentTypeGroupId( $dbHandler ),
+                            new CommonCriterionHandler\ContentTypeId( $dbHandler ),
+                            new CommonCriterionHandler\ContentTypeIdentifier( $dbHandler ),
+                            new CommonCriterionHandler\DateMetadata( $dbHandler ),
+                            new CommonCriterionHandler\Field(
+                                $dbHandler,
+                                $this->converterRegistry,
+                                $this->getCriterionFieldValueConverter(),
+                                $this->transformationProcessor
+                            ),
+                            new CommonCriterionHandler\FullText(
+                                $dbHandler,
+                                $this->transformationProcessor
+                            ),
+                            new CommonCriterionHandler\LanguageCode(
+                                $dbHandler,
+                                $this->getLanguageMaskGenerator()
+                            ),
+                            new CommonCriterionHandler\LogicalAnd( $dbHandler ),
+                            new CommonCriterionHandler\LogicalNot( $dbHandler ),
+                            new CommonCriterionHandler\LogicalOr( $dbHandler ),
+                            new CommonCriterionHandler\MapLocationDistance( $dbHandler ),
+                            new CommonCriterionHandler\MatchAll( $dbHandler ),
+                            new CommonCriterionHandler\ObjectStateId( $dbHandler ),
+                            new CommonCriterionHandler\RelationList( $dbHandler ),
+                            new CommonCriterionHandler\RemoteId( $dbHandler ),
+                            new CommonCriterionHandler\SectionId( $dbHandler ),
+                            new CommonCriterionHandler\UserMetadata( $dbHandler ),
+                        )
+                    ),
+                    new Content\Search\Common\Gateway\SortClauseConverter(
+                        array(
+                            new LocationSortClauseHandler\Location\Id( $dbHandler ),
+                            new LocationSortClauseHandler\Location\Depth( $dbHandler ),
+                            new LocationSortClauseHandler\Location\Path( $dbHandler ),
+                            new LocationSortClauseHandler\Location\Priority( $dbHandler ),
+                            new LocationSortClauseHandler\Location\Visibility( $dbHandler ),
+                            new CommonSortClauseHandler\ContentId( $dbHandler ),
+                            new CommonSortClauseHandler\ContentName( $dbHandler ),
+                            new CommonSortClauseHandler\DateModified( $dbHandler ),
+                            new CommonSortClauseHandler\DatePublished( $dbHandler ),
+                            new CommonSortClauseHandler\SectionIdentifier( $dbHandler ),
+                            new CommonSortClauseHandler\SectionName( $dbHandler ),
+                            new CommonSortClauseHandler\Field(
+                                $dbHandler,
+                                $this->contentLanguageHandler()
+                            ),
+                            new CommonSortClauseHandler\MapLocationDistance(
+                                $dbHandler,
+                                $this->contentLanguageHandler()
+                            ),
+                        )
+                    )
+                )
+            );
+        }
+        return $this->locationSearchGateway;
     }
 
     /**
@@ -744,72 +837,7 @@ class Handler implements HandlerInterface
         {
             $dbHandler = $this->dbHandler;
             $this->locationGateway = new Content\Location\Gateway\ExceptionConversion(
-                new Content\Location\Gateway\DoctrineDatabase(
-                    $dbHandler,
-                    new Content\Location\Gateway\CriteriaConverter(
-                        array(
-                            new Content\Location\Gateway\CriterionHandler\Location\Id( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\Location\Depth( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\Location\ParentLocationId( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\Location\Priority( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\Location\RemoteId( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\Location\Subtree( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\Location\Visibility( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\ContentId( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\ContentTypeGroupId( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\ContentTypeId( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\ContentTypeIdentifier( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\DateMetadata( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\Field(
-                                $dbHandler,
-                                $this->converterRegistry,
-                                $this->getCriterionFieldValueConverter(),
-                                $this->transformationProcessor
-                            ),
-                            new Content\Location\Gateway\CriterionHandler\FullText(
-                                $dbHandler,
-                                $this->transformationProcessor
-                            ),
-                            new Content\Location\Gateway\CriterionHandler\LanguageCode(
-                                $dbHandler,
-                                $this->getLanguageMaskGenerator()
-                            ),
-                            new Content\Location\Gateway\CriterionHandler\LogicalAnd( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\LogicalNot( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\LogicalOr( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\MapLocationDistance( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\MatchAll( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\ObjectStateId( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\RelationList( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\RemoteId( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\SectionId( $dbHandler ),
-                            new Content\Location\Gateway\CriterionHandler\UserMetadata( $dbHandler ),
-                        )
-                    ),
-                    new Content\Location\Gateway\SortClauseConverter(
-                        array(
-                            new Content\Location\Gateway\SortClauseHandler\Location\Id( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\Location\Depth( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\Location\Path( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\Location\Priority( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\Location\Visibility( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\ContentId( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\ContentName( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\DateModified( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\DatePublished( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\SectionIdentifier( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\SectionName( $dbHandler ),
-                            new Content\Location\Gateway\SortClauseHandler\Field(
-                                $dbHandler,
-                                $this->contentLanguageHandler()
-                            ),
-                            new Content\Location\Gateway\SortClauseHandler\MapLocationDistance(
-                                $dbHandler,
-                                $this->contentLanguageHandler()
-                            ),
-                        )
-                    )
-                )
+                new Content\Location\Gateway\DoctrineDatabase( $dbHandler )
             );
         }
         return $this->locationGateway;

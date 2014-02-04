@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
@@ -41,7 +41,7 @@ class Visibility extends CriterionHandler
      * is to use inner joins on ezcontentobject_tree table, but this is not currently
      * supported in legacy search gateway
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter $converter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *

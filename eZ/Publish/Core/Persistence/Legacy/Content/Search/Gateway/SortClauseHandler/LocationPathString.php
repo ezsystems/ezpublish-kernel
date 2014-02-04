@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
