@@ -258,8 +258,8 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'filter' => new Criterion\Subtree(
-                            '/1/5/'
-                        ),
+                        '/1/5/'
+                    ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'Subtree.php',
@@ -267,8 +267,8 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'filter' => new Criterion\LocationId(
-                            array( 1, 2, 5 )
-                        ),
+                        array( 1, 2, 5 )
+                    ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'LocationId.php',
@@ -276,8 +276,8 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'filter' => new Criterion\ParentLocationId(
-                            array( 1 )
-                        ),
+                        array( 1 )
+                    ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'ParentLocationId.php',
@@ -285,8 +285,8 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'filter' => new Criterion\LocationRemoteId(
-                            array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
-                        ),
+                        array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
+                    ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'LocationRemoteId.php',
@@ -295,8 +295,8 @@ class SearchServiceTest extends BaseTest
                 array(
                     // There is no Status Criterion anymore, this should match all published as well
                     'filter' => new Criterion\Subtree(
-                            '/1/'
-                        ),
+                        '/1/'
+                    ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'Status.php',
@@ -490,8 +490,8 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'criterion' => new Criterion\Visibility(
-                            Criterion\Visibility::VISIBLE
-                        ),
+                        Criterion\Visibility::VISIBLE
+                    ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'Visibility.php',
