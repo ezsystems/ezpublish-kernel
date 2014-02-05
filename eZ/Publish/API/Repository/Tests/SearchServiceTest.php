@@ -2979,6 +2979,11 @@ class SearchServiceTest extends BaseTest
         {
             if ( $query instanceof LocationQuery )
             {
+                $setupFactory = $this->getSetupFactory();
+                if ( $setupFactory instanceof LegacySolr )
+                {
+                    $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+                }
                 $result = $searchService->findLocations( $query );
             }
             else if ( $query instanceof Query )
