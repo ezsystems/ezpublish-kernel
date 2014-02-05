@@ -1504,6 +1504,46 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testFullTextFilterEmptyString()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FullText( '' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
+     */
+    public function testFullTextFilterTransformedString()
+    {
+        $this->assertSearchResults(
+            array(),
+            $this->getContentSearchHandler()->findContent(
+                new Query(
+                    array(
+                        'criterion' => new Criterion\FullText( '>' ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ObjectStateId
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
      */
