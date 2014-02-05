@@ -91,6 +91,7 @@ class TemplateDebugInfo
         {
             // Ignore the exception thrown by legacy kernel as this would break debug toolbar (and thus debug info display).
             // Furthermore, some legacy kernel handlers don't support runCallback (e.g. ezpKernelTreeMenu)
+            $templateStats = array();
         }
 
         foreach ( $templateStats as $tplInfo )
