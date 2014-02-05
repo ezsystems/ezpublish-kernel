@@ -71,7 +71,8 @@ class Loader extends ContainerAware
         $legacyRootDir = $this->legacyRootDir;
         $webrootDir = $this->webrootDir;
         $eventDispatcher = $this->eventDispatcher;
-        return function () use ( $legacyKernelHandler, $legacyRootDir, $webrootDir, $eventDispatcher )
+        $logger = $this->logger;
+        return function () use ( $legacyKernelHandler, $legacyRootDir, $webrootDir, $eventDispatcher, $logger )
         {
             if ( LegacyKernel::hasInstance() )
             {
@@ -80,7 +81,7 @@ class Loader extends ContainerAware
 
             if ( $legacyKernelHandler instanceof \Closure )
                 $legacyKernelHandler = $legacyKernelHandler();
-            $legacyKernel = new LegacyKernel( $legacyKernelHandler, $legacyRootDir, $webrootDir );
+            $legacyKernel = new LegacyKernel( $legacyKernelHandler, $legacyRootDir, $webrootDir, $logger );
 
             $eventDispatcher->dispatch(
                 LegacyEvents::POST_BUILD_LEGACY_KERNEL,

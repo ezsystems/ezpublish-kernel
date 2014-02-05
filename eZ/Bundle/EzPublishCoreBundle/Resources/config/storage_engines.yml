@@ -39,25 +39,25 @@ parameters:
     # # Transformation rules resources.
     # # @todo: Should they be somewhat configurable for the developer?
     ezpublish.api.storage_engine.transformation_rules.resources:
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/basic.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/cyrillic.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/greek.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/hebrew.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/latin.tr
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/basic.tr
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/cyrillic.tr
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/greek.tr
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/hebrew.tr
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/latin.tr
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr
 
     # Using preprocessed files:
     #
     ezpublish.api.storage_engine.transformation_processor.class: eZ\Publish\Core\Persistence\TransformationProcessor\PreprocessedBased
     ezpublish.api.storage_engine.preprocessed_transformation_rules.resources:
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/basic.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/cyrillic.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/greek.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/hebrew.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/latin.tr.result
-        - ../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr.result
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr.result
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/basic.tr.result
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/cyrillic.tr.result
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/greek.tr.result
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/hebrew.tr.result
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/latin.tr.result
+        - %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr.result
 
     # RichText XSLT converters
     ezpublish.fieldType.ezrichtext.converter.xslt_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText\XsltConverter
