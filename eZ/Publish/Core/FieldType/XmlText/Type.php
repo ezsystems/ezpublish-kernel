@@ -117,7 +117,7 @@ class Type extends FieldType
      */
     public function isEmptyValue( SPIValue $value )
     {
-        if ( $value->xml === null )
+        if ( $value->xml === null || $value->xml->documentElement === null )
         {
             return true;
         }
