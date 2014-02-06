@@ -50,25 +50,25 @@ use Exception;
 class RoleService implements RoleServiceInterface
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var RepositoryInterface
      */
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\User\Handler
+     * @var Handler
      */
     protected $userHandler;
 
     /**
-     * @var array
+     * @var array[]
      */
     protected $settings;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
+     * @param RepositoryInterface $repository
+     * @param Handler $userHandler
      * @param array $settings
      */
     public function __construct( RepositoryInterface $repository, Handler $userHandler, array $settings = array() )
@@ -108,19 +108,6 @@ class RoleService implements RoleServiceInterface
         );
     }
 
-    /**
-     * Creates a new Role
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists or if limitation of the
-     *                                                                        same type is repeated in the policy create struct or if
-     *                                                                        limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
     public function createRole( APIRoleCreateStruct $roleCreateStruct )
     {
         if ( !is_string( $roleCreateStruct->identifier ) || empty( $roleCreateStruct->identifier ) )
@@ -163,17 +150,6 @@ class RoleService implements RoleServiceInterface
         return $this->buildDomainRoleObject( $createdRole );
     }
 
-    /**
-     * Updates the name of the role
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
     public function updateRole( APIRole $role, RoleUpdateStruct $roleUpdateStruct )
     {
         if ( $roleUpdateStruct->identifier !== null && !is_string( $roleUpdateStruct->identifier ) )
@@ -226,19 +202,6 @@ class RoleService implements RoleServiceInterface
         return $this->loadRole( $loadedRole->id );
     }
 
-    /**
-     * Adds a new policy to the role
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy create
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyCreateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
     public function addPolicy( APIRole $role, APIPolicyCreateStruct $policyCreateStruct )
     {
         if ( !is_string( $policyCreateStruct->module ) || empty( $policyCreateStruct->module ) )
@@ -287,19 +250,6 @@ class RoleService implements RoleServiceInterface
         return $this->loadRole( $loadedRole->id );
     }
 
-    /**
-     * removes a policy from the role
-     *
-     * @deprecated since 5.3, use {@link deletePolicy()} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
-     */
     public function removePolicy( APIRole $role, APIPolicy $policy )
     {
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
@@ -315,13 +265,6 @@ class RoleService implements RoleServiceInterface
         return $this->loadRole( $role->id );
     }
 
-    /**
-     * Deletes a policy
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
-     */
     public function deletePolicy( APIPolicy $policy )
     {
         if ( $this->repository->hasAccess( 'role', 'update' ) !== true )
@@ -330,17 +273,6 @@ class RoleService implements RoleServiceInterface
         $this->internalDeletePolicy( $policy );
     }
 
-    /**
-     * Deletes a policy
-     *
-     * Used by {@link removePolicy()} and {@link deletePolicy()}
-     *
-     * @param APIPolicy $policy
-     *
-     * @throws \Exception
-     *
-     * @return void
-     */
     protected function internalDeletePolicy( APIPolicy $policy )
     {
         $this->repository->beginTransaction();
@@ -356,20 +288,6 @@ class RoleService implements RoleServiceInterface
         }
     }
 
-    /**
-     * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitations are replaced by the ones in $roleUpdateStruct
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if limitation of the same type is repeated in policy update
-     *                                                                        struct or if limitation is not allowed on module/function
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
-     */
     public function updatePolicy( APIPolicy $policy, APIPolicyUpdateStruct $policyUpdateStruct )
     {
         if ( !is_string( $policy->module ) )
@@ -415,16 +333,6 @@ class RoleService implements RoleServiceInterface
         return $this->buildDomainPolicyObject( $spiPolicy );
     }
 
-    /**
-     * Loads a role for the given id
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
-     *
-     * @param mixed $id
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
     public function loadRole( $id )
     {
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
@@ -434,16 +342,6 @@ class RoleService implements RoleServiceInterface
         return $this->buildDomainRoleObject( $spiRole );
     }
 
-    /**
-     * Loads a role for the given identifier
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
     public function loadRoleByIdentifier( $identifier )
     {
         if ( !is_string( $identifier ) )
@@ -456,13 +354,6 @@ class RoleService implements RoleServiceInterface
         return $this->buildDomainRoleObject( $spiRole );
     }
 
-    /**
-     * Loads all roles
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role[]
-     */
     public function loadRoles()
     {
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
@@ -479,13 +370,6 @@ class RoleService implements RoleServiceInterface
         return $roles;
     }
 
-    /**
-     * Deletes the given role
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     */
     public function deleteRole( APIRole $role )
     {
         if ( $this->repository->hasAccess( 'role', 'delete' ) !== true )
@@ -506,15 +390,6 @@ class RoleService implements RoleServiceInterface
         }
     }
 
-    /**
-     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
-     *
-     * @param mixed $userId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
-     */
     public function loadPoliciesByUserId( $userId )
     {
         $spiPolicies = $this->userHandler->loadPoliciesByUserId( $userId );
@@ -531,16 +406,6 @@ class RoleService implements RoleServiceInterface
         return $policies;
     }
 
-    /**
-     * Assigns a role to the given user group
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
-     */
     public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
     {
         if ( $this->repository->canUser( 'role', 'assign', $userGroup, $role ) !== true )
@@ -581,15 +446,6 @@ class RoleService implements RoleServiceInterface
         }
     }
 
-    /**
-     * removes a role from the given user group.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  If the role is not assigned to the given user group
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     */
     public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup )
     {
         if ( $this->repository->canUser( 'role', 'assign', $userGroup, $role ) !== true )
@@ -613,16 +469,6 @@ class RoleService implements RoleServiceInterface
         }
     }
 
-    /**
-     * Assigns a role to the given user
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
-     */
     public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null )
     {
         if ( $this->repository->canUser( 'role', 'assign', $user, $role ) !== true )
@@ -663,15 +509,6 @@ class RoleService implements RoleServiceInterface
         }
     }
 
-    /**
-     * removes a role from the given user.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the role is not assigned to the user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     */
     public function unassignRoleFromUser( APIRole $role, User $user )
     {
         if ( $this->repository->canUser( 'role', 'assign', $user, $role ) !== true )
@@ -695,15 +532,6 @@ class RoleService implements RoleServiceInterface
         }
     }
 
-    /**
-     * Returns the assigned user and user groups to this role
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
-     */
     public function getRoleAssignments( APIRole $role )
     {
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
@@ -765,17 +593,6 @@ class RoleService implements RoleServiceInterface
         return $roleAssignments;
     }
 
-    /**
-     * Returns the roles assigned to the given user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param boolean $inherited
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If the current user is not allowed to read a role
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid User object
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
-     */
     public function getRoleAssignmentsForUser( User $user, $inherited = false )
     {
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
@@ -794,15 +611,6 @@ class RoleService implements RoleServiceInterface
         return $roleAssignments;
     }
 
-    /**
-     * Returns the roles assigned to the given user group
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
-     */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
     {
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
@@ -818,13 +626,6 @@ class RoleService implements RoleServiceInterface
         return $roleAssignments;
     }
 
-    /**
-     * Instantiates a role create class
-     *
-     * @param string $name
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
-     */
     public function newRoleCreateStruct( $name )
     {
         return new RoleCreateStruct(
@@ -835,14 +636,6 @@ class RoleService implements RoleServiceInterface
         );
     }
 
-    /**
-     * Instantiates a policy create class
-     *
-     * @param string $module
-     * @param string $function
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
-     */
     public function newPolicyCreateStruct( $module, $function )
     {
         return new PolicyCreateStruct(
@@ -854,11 +647,6 @@ class RoleService implements RoleServiceInterface
         );
     }
 
-    /**
-     * Instantiates a policy update class
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
-     */
     public function newPolicyUpdateStruct()
     {
         return new PolicyUpdateStruct(
@@ -868,11 +656,6 @@ class RoleService implements RoleServiceInterface
         );
     }
 
-    /**
-     * Instantiates a policy update class
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
-     */
     public function newRoleUpdateStruct()
     {
         return new RoleUpdateStruct();
@@ -881,9 +664,9 @@ class RoleService implements RoleServiceInterface
     /**
      * Maps provided SPI Role value object to API Role value object
      *
-     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     * @param SPIRole $role
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return APIRole
      */
     protected function buildDomainRoleObject( SPIRole $role )
     {
@@ -906,10 +689,10 @@ class RoleService implements RoleServiceInterface
      * Maps provided SPI Policy value object to API Policy value object
      *
      * @access private Only accessible for other services and the internals of the repository
-     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
-     * @param \eZ\Publish\SPI\Persistence\User\Role|null $role
+     * @param SPIPolicy $policy
+     * @param SPIRole|null $role
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     * @return Policy
      */
     public function buildDomainPolicyObject( SPIPolicy $policy, SPIRole $role = null )
     {
@@ -936,11 +719,11 @@ class RoleService implements RoleServiceInterface
     /**
      * Builds the API UserRoleAssignment object from provided SPI RoleAssignment object
      *
-     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment $spiRoleAssignment
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     * @param SPIRoleAssignment $spiRoleAssignment
+     * @param User $user
+     * @param APIRole $role
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
+     * @return UserRoleAssignment
      */
     public function buildDomainUserRoleAssignmentObject( SPIRoleAssignment $spiRoleAssignment, User $user = null, APIRole $role = null )
     {
@@ -967,11 +750,11 @@ class RoleService implements RoleServiceInterface
     /**
      * Builds the API UserGroupRoleAssignment object from provided SPI RoleAssignment object
      *
-     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment $spiRoleAssignment
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     * @param SPIRoleAssignment $spiRoleAssignment
+     * @param UserGroup $userGroup
+     * @param APIRole $role
      *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
+     * @return UserGroupRoleAssignment
      */
     public function buildDomainUserGroupRoleAssignmentObject( SPIRoleAssignment $spiRoleAssignment, UserGroup $userGroup = null, APIRole $role = null )
     {
@@ -996,16 +779,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Returns the LimitationType registered with the given identifier
-     *
-     * Returns the correct implementation of API Limitation value object
-     * based on provided identifier
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\SPI\Limitation\Type
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
+     * {@inheritDoc}
      */
     public function getLimitationType( $identifier )
     {
@@ -1015,21 +789,6 @@ class RoleService implements RoleServiceInterface
         return $this->settings['limitationTypes'][$identifier];
     }
 
-    /**
-     * Returns the LimitationType's assigned to a given module/function
-     *
-     * Typically used for:
-     *  - Internal validation limitation value use on Policies
-     *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
-     *
-     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
-     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
-     *
-     * @return \eZ\Publish\SPI\Limitation\Type[]
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
-     *                                                                 refers to a non existing identifier.
-     */
     public function getLimitationTypesByModuleFunction( $module, $function )
     {
         if ( empty( $this->settings['limitationMap'][$module][$function] ) )
@@ -1053,9 +812,9 @@ class RoleService implements RoleServiceInterface
     /**
      * Creates SPI Role value object from provided API role create struct
      *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
+     * @param APIRoleCreateStruct $roleCreateStruct
      *
-     * @return \eZ\Publish\SPI\Persistence\User\Role
+     * @return SPIRole
      */
     protected function buildPersistenceRoleObject( APIRoleCreateStruct $roleCreateStruct )
     {
@@ -1082,9 +841,9 @@ class RoleService implements RoleServiceInterface
      *
      * @param string $module
      * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
+     * @param Limitation[] $limitations
      *
-     * @return \eZ\Publish\SPI\Persistence\User\Policy
+     * @return SPIPolicy
      */
     protected function buildPersistencePolicyObject( $module, $function, array $limitations )
     {
@@ -1112,7 +871,7 @@ class RoleService implements RoleServiceInterface
      *
      * @uses validatePolicy()
      *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
+     * @param APIRoleCreateStruct $roleCreateStruct
      *
      * @return \eZ\Publish\Core\FieldType\ValidationError[][][]
      */
@@ -1141,12 +900,12 @@ class RoleService implements RoleServiceInterface
      *
      * @uses validateLimitations()
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the same limitation is repeated or if
+     * @throws InvalidArgumentException If the same limitation is repeated or if
      *                                                                   limitation is not allowed on module/function
      *
      * @param string $module
      * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
+     * @param Limitation[] $limitations
      *
      * @return \eZ\Publish\Core\FieldType\ValidationError[][]
      */
@@ -1185,7 +944,7 @@ class RoleService implements RoleServiceInterface
      *
      * @uses validateLimitation()
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
+     * @param Limitation[] $limitations
      *
      * @return \eZ\Publish\Core\FieldType\ValidationError[][]
      */
@@ -1207,9 +966,9 @@ class RoleService implements RoleServiceInterface
     /**
      * Validates single Limitation.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException If the Role settings is in a bad state
+     * @throws BadStateException If the Role settings is in a bad state
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     * @param Limitation $limitation
      *
      * @return \eZ\Publish\Core\FieldType\ValidationError[]
      */

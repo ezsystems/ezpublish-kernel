@@ -35,9 +35,9 @@ interface RoleService
      *                                                                        limitation is not allowed on module/function
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a policy limitation in the $roleCreateStruct is not valid
      *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
+     * @param RoleCreateStruct $roleCreateStruct
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return Role
      */
     public function createRole( RoleCreateStruct $roleCreateStruct );
 
@@ -47,10 +47,10 @@ interface RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the name of the role already exists
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
+     * @param Role $role
+     * @param RoleUpdateStruct $roleUpdateStruct
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return Role
      */
     public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct );
 
@@ -62,10 +62,10 @@ interface RoleService
      *                                                                        struct or if limitation is not allowed on module/function
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyCreateStruct is not valid
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
+     * @param Role $role
+     * @param PolicyCreateStruct $policyCreateStruct
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return Role
      */
     public function addPolicy( Role $role, PolicyCreateStruct $policyCreateStruct );
 
@@ -77,10 +77,10 @@ interface RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
+     * @param Role $role
+     * @param Policy $policy the policy to remove from the role
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
+     * @return Role the updated role
      */
     public function removePolicy( Role $role, Policy $policy );
 
@@ -89,7 +89,7 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to delete
+     * @param Policy $policy the policy to delete
      */
     public function deletePolicy( Policy $policy );
 
@@ -102,10 +102,10 @@ interface RoleService
      *                                                                        struct or if limitation is not allowed on module/function
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if a limitation in the $policyUpdateStruct is not valid
      *
-     * @param \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct $policyUpdateStruct
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy
+     * @param PolicyUpdateStruct $policyUpdateStruct
+     * @param Policy $policy
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
+     * @return Policy
      */
     public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct );
 
@@ -117,7 +117,7 @@ interface RoleService
      *
      * @param mixed $id
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return Role
      */
     public function loadRole( $id );
 
@@ -129,7 +129,7 @@ interface RoleService
      *
      * @param string $identifier
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
+     * @return Role
      */
     public function loadRoleByIdentifier( $identifier );
 
@@ -138,7 +138,7 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Role[]
+     * @return Role[]
      */
     public function loadRoles();
 
@@ -147,7 +147,7 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     * @param Role $role
      */
     public function deleteRole( Role $role );
 
@@ -158,7 +158,7 @@ interface RoleService
      *
      * @param mixed $userId
      *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
+     * @return Policy[]
      */
     public function loadPoliciesByUserId( $userId );
 
@@ -168,9 +168,9 @@ interface RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
+     * @param Role $role
+     * @param UserGroup $userGroup
+     * @param RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
     public function assignRoleToUserGroup( Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null );
 
@@ -180,8 +180,8 @@ interface RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException  If the role is not assigned to the given user group
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param Role $role
+     * @param UserGroup $userGroup
      */
     public function unassignRoleFromUserGroup( Role $role, UserGroup $userGroup );
 
@@ -191,9 +191,9 @@ interface RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
+     * @param Role $role
+     * @param User $user
+     * @param RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
     public function assignRoleToUser( Role $role, User $user, RoleLimitation $roleLimitation = null );
 
@@ -203,8 +203,8 @@ interface RoleService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the role is not assigned to the user
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param Role $role
+     * @param User $user
      */
     public function unassignRoleFromUser( Role $role, User $user );
 
@@ -213,7 +213,7 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
      *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
+     * @param Role $role
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
      */
@@ -224,7 +224,7 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param User $user
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
      */
@@ -235,7 +235,7 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
      *
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
+     * @param UserGroup $userGroup
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
      */
@@ -246,7 +246,7 @@ interface RoleService
      *
      * @param string $name
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
+     * @return RoleCreateStruct
      */
     public function newRoleCreateStruct( $name );
 
@@ -256,21 +256,21 @@ interface RoleService
      * @param string $module
      * @param string $function
      *
-     * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
+     * @return PolicyCreateStruct
      */
     public function newPolicyCreateStruct( $module, $function );
 
     /**
      * Instantiates a policy update class
      *
-     * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
+     * @return PolicyUpdateStruct
      */
     public function newPolicyUpdateStruct();
 
     /**
      * Instantiates a policy update class
      *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
+     * @return RoleUpdateStruct
      */
     public function newRoleUpdateStruct();
 
