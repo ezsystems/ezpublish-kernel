@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Doctrine;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Statement;
+use eZ\Publish\Core\Persistence\Database\QueryException;
 use PDO;
 
 abstract class AbstractDoctrineQuery
