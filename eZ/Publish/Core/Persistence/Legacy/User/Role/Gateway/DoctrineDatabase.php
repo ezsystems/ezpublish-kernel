@@ -93,7 +93,6 @@ class DoctrineDatabase extends Gateway
         $query->select(
             $this->handler->aliasedColumn( $query, 'id', 'ezrole' ),
             $this->handler->aliasedColumn( $query, 'name', 'ezrole' ),
-            $this->handler->aliasedColumn( $query, 'contentobject_id', 'ezuser_role' ),
             $this->handler->aliasedColumn( $query, 'id', 'ezpolicy' ),
             $this->handler->aliasedColumn( $query, 'function_name', 'ezpolicy' ),
             $this->handler->aliasedColumn( $query, 'module_name', 'ezpolicy' ),
@@ -101,12 +100,6 @@ class DoctrineDatabase extends Gateway
             $this->handler->aliasedColumn( $query, 'value', 'ezpolicy_limitation_value' )
         )->from(
             $this->handler->quoteTable( 'ezrole' )
-        )->leftJoin(
-            $this->handler->quoteTable( 'ezuser_role' ),
-            $query->expr->eq(
-                $this->handler->quoteColumn( 'role_id', 'ezuser_role' ),
-                $this->handler->quoteColumn( 'id', 'ezrole' )
-            )
         )->leftJoin(
             $this->handler->quoteTable( 'ezpolicy' ),
             $query->expr->eq(
