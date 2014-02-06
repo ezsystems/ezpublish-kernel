@@ -260,25 +260,6 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testLoadRoleWithGroups()
-    {
-        $handler = $this->getUserHandler();
-
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
-
-        $role = $handler->createRole( $role );
-
-        $handler->assignRole( 23, $role->id );
-        $handler->assignRole( 42, $role->id );
-
-        $loaded = $handler->loadRole( $role->id );
-        $this->assertEquals(
-            array( 23, 42 ),
-            $loaded->groupIds
-        );
-    }
-
     public function testLoadRoleWithPolicies()
     {
         $handler = $this->getUserHandler();
@@ -343,11 +324,6 @@ class UserHandlerTest extends TestCase
                 )
             ),
             $loaded->policies
-        );
-
-        $this->assertEquals(
-            array( 23, 42 ),
-            $loaded->groupIds
         );
     }
 
