@@ -172,8 +172,6 @@ interface SelectQuery extends Query
      * $q->select( 'id' )->from( 't1' )->innerJoin( 't2', 't1.id', 't2.id' );
      * </code>
      *
-     * @apichange Remove 4 argument version.
-     *
      * @throws \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
@@ -226,8 +224,6 @@ interface SelectQuery extends Query
      * $q->select( 'id' )->from( 't1' )->leftJoin( 't2', 't1.id', 't2.id' );
      * </code>
      *
-     * @apichange Remove 4 argument version.
-     *
      * @throws \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
@@ -279,8 +275,6 @@ interface SelectQuery extends Query
      * // SELECT id FROM t1 LEFT JOIN t2 ON t1.id = t2.id
      * $q->select( 'id' )->from( 't1' )->rightJoin( 't2', 't1.id', 't2.id' );
      * </code>
-     *
-     * @apichange Remove 4 argument version.
      *
      * @throws \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
