@@ -415,7 +415,14 @@ class Handler implements BaseUserHandler
      */
     public function loadRoleAssignmentsByRoleId( $roleId )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        $data = $this->roleGateway->loadRoleAssignmentsByRoleId( $roleId );
+
+        if ( empty( $data ) )
+        {
+            return array();
+        }
+
+        return $this->mapper->mapRoleAssignments( $data );
     }
 
     /**

@@ -362,6 +362,36 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Loads role assignments for given role ID
+     *
+     * @param mixed $roleId
+     *
+     * @return array
+     */
+    public function loadRoleAssignmentsByRoleId( $roleId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn( 'contentobject_id' ),
+            $this->handler->quoteColumn( 'limit_identifier' ),
+            $this->handler->quoteColumn( 'limit_value' ),
+            $this->handler->quoteColumn( 'role_id' )
+        )->from(
+            $this->handler->quoteTable( 'ezuser_role' )
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'role_id' ),
+                $query->bindValue( $roleId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Returns the user policies associated with the user
      *
      * @param mixed $userId
