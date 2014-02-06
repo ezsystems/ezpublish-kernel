@@ -513,22 +513,34 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Delete the specified role
+     * Delete the specified role including all of its assignments
      *
      * @param mixed $roleId
      */
     public function deleteRole( $roleId )
     {
-        $query = $this->handler->createDeleteQuery();
-        $query
-            ->deleteFrom( $this->handler->quoteTable( 'ezrole' ) )
+        $deleteAssignmentsQuery = $this->handler->createDeleteQuery();
+        $deleteAssignmentsQuery
+            ->deleteFrom( $this->handler->quoteTable( 'ezuser_role' ) )
             ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'id' ),
-                    $query->bindValue( $roleId, null, \PDO::PARAM_INT )
+                $deleteAssignmentsQuery->expr->eq(
+                    $this->handler->quoteColumn( 'role_id' ),
+                    $deleteAssignmentsQuery->bindValue( $roleId, null, \PDO::PARAM_INT )
                 )
             );
-        $query->prepare()->execute();
+
+        $deleteRoleQuery = $this->handler->createDeleteQuery();
+        $deleteRoleQuery
+            ->deleteFrom( $this->handler->quoteTable( 'ezrole' ) )
+            ->where(
+                $deleteRoleQuery->expr->eq(
+                    $this->handler->quoteColumn( 'id' ),
+                    $deleteRoleQuery->bindValue( $roleId, null, \PDO::PARAM_INT )
+                )
+            );
+
+        $deleteAssignmentsQuery->prepare()->execute();
+        $deleteRoleQuery->prepare()->execute();
     }
 
     /**

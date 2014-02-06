@@ -200,32 +200,11 @@ class ExceptionConversion extends Gateway
      * @param mixed $contentId
      * @param mixed $roleId
      */
-    public function removeRoleFromGroup( $contentId, $roleId )
+    public function removeRole( $contentId, $roleId )
     {
         try
         {
-            return $this->innerGateway->removeRoleFromGroup( $contentId, $roleId );
-        }
-        catch ( DBALException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-        catch ( PDOException $e )
-        {
-            throw new RuntimeException( 'Database error', 0, $e );
-        }
-    }
-
-    /**
-     * Remove role from all users and user groups
-     *
-     * @param mixed $roleId
-     */
-    public function removeRole( $roleId )
-    {
-        try
-        {
-            return $this->innerGateway->removeRole( $roleId );
+            return $this->innerGateway->removeRole( $contentId, $roleId );
         }
         catch ( DBALException $e )
         {

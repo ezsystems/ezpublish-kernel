@@ -223,7 +223,7 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Delete the specified role
+     * Delete the specified role including all of its assignments
      *
      * @param mixed $roleId
      */
