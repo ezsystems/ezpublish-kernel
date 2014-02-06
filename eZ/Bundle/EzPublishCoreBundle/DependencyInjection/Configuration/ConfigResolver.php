@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
 use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
@@ -31,7 +32,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  * 2. SiteAccess name
  * 3. "default"
  */
-class ConfigResolver extends ContainerAware implements VersatileScopeInterface
+class ConfigResolver extends ContainerAware implements VersatileScopeInterface, SiteAccessAware
 {
     const SCOPE_GLOBAL = 'global',
           SCOPE_DEFAULT = 'default';
@@ -65,7 +66,6 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface
     protected $undefinedStrategy;
 
     /**
-     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      * @param array $groupsBySiteAccess SiteAccess groups, indexed by siteaccess.
      * @param string $defaultNamespace The default namespace
      * @param int $undefinedStrategy Strategy to use when encountering undefined parameters.
@@ -74,17 +74,20 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface
      *                                  - ConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
      */
     public function __construct(
-        SiteAccess $siteAccess,
         array $groupsBySiteAccess,
         $defaultNamespace,
         $undefinedStrategy = self::UNDEFINED_STRATEGY_EXCEPTION
     )
     {
-        $this->siteAccess = $siteAccess;
-        $this->defaultScope = $siteAccess->name;
         $this->groupsBySiteAccess = $groupsBySiteAccess;
         $this->defaultNamespace = $defaultNamespace;
         $this->undefinedStrategy = $undefinedStrategy;
+    }
+
+    public function setSiteAccess( SiteAccess $siteAccess = null )
+    {
+        $this->siteAccess = $siteAccess;
+        $this->defaultScope = $siteAccess->name;
     }
 
     /**

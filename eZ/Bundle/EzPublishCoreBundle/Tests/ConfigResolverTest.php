@@ -42,11 +42,11 @@ class ConfigResolverTest extends PHPUnit_Framework_TestCase
     private function getResolver( $defaultNS = 'ezsettings', $undefinedStrategy = ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, array $groupsBySiteAccess = array() )
     {
         $configResolver = new ConfigResolver(
-            $this->siteAccess,
             $groupsBySiteAccess,
             $defaultNS,
             $undefinedStrategy
         );
+        $configResolver->setSiteAccess( $this->siteAccess );
         $configResolver->setContainer( $this->containerMock );
 
         return $configResolver;

@@ -152,6 +152,8 @@ services:
         class: %ezpublish_legacy.url_generator.class%
         arguments: [@ezpublish_legacy.kernel]
         parent: ezpublish.url_generator.base
+        calls:
+            - [setSiteAccess, [@ezpublish.siteaccess]]
 
     ezpublish_legacy.siteaccess_mapper:
         class: %ezpublish_legacy.siteaccess_mapper.class%
@@ -242,12 +244,6 @@ services:
     ezpublish_legacy.rest_listener:
         class: %ezpublish_legacy.rest_listener.class%
         arguments: [%ezpublish_rest.csrf_token_intention%]
-        tags:
-            - { name: kernel.event_subscriber }
-
-    ezpublish_legacy.siteaccess_listener:
-        class: %ezpublish_legacy.siteaccess_listener.class%
-        arguments: [@ezpublish_legacy.url_generator]
         tags:
             - { name: kernel.event_subscriber }
 

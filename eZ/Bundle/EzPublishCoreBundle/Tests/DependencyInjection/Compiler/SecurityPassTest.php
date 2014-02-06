@@ -22,6 +22,7 @@ class SecurityPassTest extends AbstractCompilerPassTest
         parent::setUp();
         $this->setDefinition( 'security.authentication.provider.dao', new Definition() );
         $this->setDefinition( 'security.authentication.provider.anonymous', new Definition() );
+        $this->setDefinition( 'security.http_utils', new Definition() );
     }
 
     protected function registerCompilerPass( ContainerBuilder $container )
@@ -41,6 +42,11 @@ class SecurityPassTest extends AbstractCompilerPassTest
             'security.authentication.provider.anonymous',
             'setRepository',
             array( new Reference( 'ezpublish.api.repository' ) )
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'security.http_utils',
+            'setSiteAccess',
+            array( new Reference( 'ezpublish.siteaccess' ) )
         );
     }
 }

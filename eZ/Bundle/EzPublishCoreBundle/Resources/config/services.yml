@@ -22,11 +22,13 @@ services:
     ezpublish.siteaccess:
         class: %ezpublish.siteaccess.class%
         arguments: [%ezpublish.siteaccess.default.name%]
+        synchronized: true
 
     ezpublish.config.resolver.core:
         class: %ezpublish.config.resolver.dynamic.class%
-        arguments: [@ezpublish.siteaccess, %ezpublish.siteaccess.groups_by_siteaccess%, %ezpublish.config.default_scope%]
+        arguments: [%ezpublish.siteaccess.groups_by_siteaccess%, %ezpublish.config.default_scope%]
         calls:
+            - [setSiteAccess, [@ezpublish.siteaccess]]
             - [setContainer, [@service_container]]
         lazy: true
         tags:

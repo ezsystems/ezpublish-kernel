@@ -33,6 +33,10 @@ Changes affecting version compatibility with former or future versions.
 * New search sort clause `eZ\Publish\API\Repository\Values\Content\Query\SortClause\MapLocationDistance`
   is introduced.
 
+* Constructor signature of `eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver` has changed.
+  SiteAccess is no longer injected in constructor, but with dedicated setter.
+  This setter is defined in `eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware` interface, which `ConfigResolver` now implements.
+
 ## Deprecations
 
 * Method `eZ\Publish\API\Repository\RoleService::removePolicy` is deprecated in
