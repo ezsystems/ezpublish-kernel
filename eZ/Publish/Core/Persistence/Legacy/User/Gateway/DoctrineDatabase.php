@@ -300,12 +300,12 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Remove role from user
+     * Remove role from user or user group
      *
      * @param mixed $contentId
      * @param mixed $roleId
      */
-    public function removeRole( $contentId, $roleId )
+    public function removeRoleFromGroup( $contentId, $roleId )
     {
         $query = $this->handler->createDeleteQuery();
         $query
@@ -322,6 +322,26 @@ class DoctrineDatabase extends Gateway
                     )
                 )
             );
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Remove role from all users and user groups
+     *
+     * @param mixed $roleId
+     */
+    public function removeRole( $roleId )
+    {
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( $this->handler->quoteTable( 'ezuser_role' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'role_id' ),
+                    $query->bindValue( $roleId, null, \PDO::PARAM_INT )
+                )
+            );
+
         $query->prepare()->execute();
     }
 }
