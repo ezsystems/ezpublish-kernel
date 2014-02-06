@@ -12,9 +12,6 @@ namespace eZ\Publish\Core\Persistence\Doctrine;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Database\QueryException;
 
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
-
 class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
 {
     private $parts = array(
