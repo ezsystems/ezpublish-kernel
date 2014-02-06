@@ -595,10 +595,24 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->canUser( 'role', 'assign', $userGroup, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
-        $spiRole = $this->userHandler->loadRole( $role->id );
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $userGroup->id );
+        $isAssigned = false;
+        foreach ( $spiRoleAssignments as $spiRoleAssignment )
+        {
+            if ( $spiRoleAssignment->roleId === $role->id )
+            {
+                $isAssigned = true;
+                break;
+            }
+        }
 
-        if ( !in_array( $userGroup->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "userGroup", "role is not assigned to the user group" );
+        if ( !$isAssigned )
+        {
+            throw new InvalidArgumentException(
+                "\$userGroup",
+                "Role is not assigned to the given UserGroup"
+            );
+        }
 
         $this->repository->beginTransaction();
         try
@@ -677,10 +691,24 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->canUser( 'role', 'assign', $user, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
-        $spiRole = $this->userHandler->loadRole( $role->id );
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $user->id );
+        $isAssigned = false;
+        foreach ( $spiRoleAssignments as $spiRoleAssignment )
+        {
+            if ( $spiRoleAssignment->roleId === $role->id )
+            {
+                $isAssigned = true;
+                break;
+            }
+        }
 
-        if ( !in_array( $user->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "user", "role is not assigned to the user" );
+        if ( !$isAssigned )
+        {
+            throw new InvalidArgumentException(
+                "\$user",
+                "Role is not assigned to the given User"
+            );
+        }
 
         $this->repository->beginTransaction();
         try
