@@ -172,7 +172,7 @@ interface SelectQuery extends Query
      * $q->select( 'id' )->from( 't1' )->innerJoin( 't2', 't1.id', 't2.id' );
      * </code>
      *
-     * @throws \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException if called with inconsistent parameters or if
+     * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
      * @param string $table2,... The table to join with, followed by either the
@@ -224,7 +224,7 @@ interface SelectQuery extends Query
      * $q->select( 'id' )->from( 't1' )->leftJoin( 't2', 't1.id', 't2.id' );
      * </code>
      *
-     * @throws \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException if called with inconsistent parameters or if
+     * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
      * @param string $table2,... The table to join with, followed by either the
@@ -276,7 +276,7 @@ interface SelectQuery extends Query
      * $q->select( 'id' )->from( 't1' )->rightJoin( 't2', 't1.id', 't2.id' );
      * </code>
      *
-     * @throws \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException if called with inconsistent parameters or if
+     * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
      * @param string $table2,... The table to join with, followed by either the

@@ -79,7 +79,7 @@ abstract class AbstractDoctrineQuery
     }
 
     /**
-     * @return PDOStatement
+     * @return \Doctrine\DBAL\Statement
      */
     public function prepare()
     {
@@ -96,7 +96,7 @@ abstract class AbstractDoctrineQuery
      * This method must be called if you have used the bind methods
      * in your query and you build the method yourself using build.
      *
-     * @param PDOStatement $stmt
+     * @param \Doctrine\DBAL\Statement $stmt
      * @return void
      */
     private function doBind( Statement $stmt )

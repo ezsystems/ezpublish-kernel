@@ -175,7 +175,7 @@ class SubselectDoctrineQuery extends SelectDoctrineQuery
      * ?>
      * </code>
      *
-     * @return ezcQuerySubSelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function subSelect()
     {

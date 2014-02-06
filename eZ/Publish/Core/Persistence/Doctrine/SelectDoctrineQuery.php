@@ -224,7 +224,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * $q->select( 'id' )->from( 't1' )->innerJoin( 't2', 't1.id', 't2.id' );
      * </code>
      *
-     * @throws \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException if called with inconsistent parameters or if
+     * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
      * @param string $table2,... The table to join with, followed by either the
@@ -314,7 +314,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * $q->select( 'id' )->from( 't1' )->leftJoin( 't2', 't1.id', 't2.id' );
      * </code>
      *
-     * @throws \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException if called with inconsistent parameters or if
+     * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
      * @param string $table2,... The table to join with, followed by either the
@@ -369,7 +369,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * $q->select( 'id' )->from( 't1' )->rightJoin( 't2', 't1.id', 't2.id' );
      * </code>
      *
-     * @throws \eZ\Publish\Core\Persistence\Database\SelectQueryInvalidException if called with inconsistent parameters or if
+     * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with inconsistent parameters or if
      *         invoked without preceding call to from().
      *
      * @param string $table2,... The table to join with, followed by either the
@@ -399,7 +399,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      * @throws \eZ\Publish\Core\Persistence\Database\QueryException if called with no parameters.
      * @param string|array(string) $... Either a string with a logical expression name
      * or an array with logical expressions.
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function where()
     {
@@ -437,7 +437,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
      *
      * @param string $limit integer expression
      * @param string $offset integer expression
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuerySelect
+     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
     public function limit( $limit, $offset = '' )
     {
