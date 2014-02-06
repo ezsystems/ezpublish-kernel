@@ -1182,6 +1182,10 @@ class RoleServiceTest extends BaseTest
             $roleLimitation = $roleAssignment->getRoleLimitation();
             if ( $roleLimitation )
             {
+                $this->assertInstanceOf(
+                    "\\eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment",
+                    $roleAssignment
+                );
                 break;
             }
         }
