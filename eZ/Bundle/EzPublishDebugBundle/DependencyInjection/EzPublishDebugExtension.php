@@ -13,9 +13,7 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\DependencyInjection\Loader\FileLoader;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Yaml\Yaml;
 
 class EzPublishDebugExtension extends Extension implements PrependExtensionInterface
 {

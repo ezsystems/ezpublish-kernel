@@ -9,7 +9,6 @@
 
 namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
