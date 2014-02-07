@@ -93,7 +93,7 @@ services:
         class: %ezpublish_legacy.signalslot.unhide_location.class%
         arguments: [@ezpublish_legacy.kernel]
         tags:
-            - { name: ezpublish.api.slot, signal: LocationService\LegacyUnhideLocationSlot }
+            - { name: ezpublish.api.slot, signal: LocationService\UnhideLocationSignal }
 
     ezpublish_legacy.signalslot.update_location:
         class: %ezpublish_legacy.signalslot.update_location.class%
