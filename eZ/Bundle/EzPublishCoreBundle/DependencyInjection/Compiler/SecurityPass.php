@@ -44,5 +44,16 @@ class SecurityPass implements CompilerPassInterface
             'setConfigResolver',
             array( new Reference( 'ezpublish.config.resolver' ) )
         );
+
+        if ( !$container->hasDefinition( 'security.http_utils' ) )
+        {
+            return;
+        }
+
+        $httpUtilsRef = $container->findDefinition( 'security.http_utils' );
+        $httpUtilsRef->addMethodCall(
+            'setSiteAccess',
+            array( new Reference( 'ezpublish.siteaccess' ) )
+        );
     }
 }

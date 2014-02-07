@@ -116,14 +116,6 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'set' )
             ->with( 'ezpublish.siteaccess', $siteAccess );
-        $this->generator
-            ->expects( $this->once() )
-            ->method( 'setSiteAccess' )
-            ->with( $siteAccess );
-        $this->router
-            ->expects( $this->once() )
-            ->method( 'setSiteAccess' )
-            ->with( $siteAccess );
 
         $this->listener->onSiteAccessMatch( $event );
         $this->assertSame( $expectedSemanticPathinfo, $request->attributes->get( 'semanticPathinfo' ) );
@@ -149,14 +141,6 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'set' )
             ->with( 'ezpublish.siteaccess', $siteAccess );
-        $this->generator
-            ->expects( $this->once() )
-            ->method( 'setSiteAccess' )
-            ->with( $siteAccess );
-        $this->router
-            ->expects( $this->once() )
-            ->method( 'setSiteAccess' )
-            ->with( $siteAccess );
 
         $this->listener->onSiteAccessMatch( $event );
         $this->assertSame( $semanticPathinfo, $request->attributes->get( 'semanticPathinfo' ) );
