@@ -18,7 +18,6 @@ parameters:
     ezpublish.spi.persistence.default_id: synthetical-parameter-set-in-RegisterStorageEnginePass
 
     # storage engines
-    ezpublish.api.storage_engine.in_memory.class: eZ\Publish\Core\Persistence\InMemory\Handler
     ezpublish.api.storage_engine.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
     ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
     ezpublish.api.storage_engine.legacy.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyStorageEngineFactory
@@ -185,12 +184,6 @@ services:
     ezpublish.spi.persistence.cache.urlAliasHandler:
         class: %ezpublish.spi.persistence.cache.urlAliasHandler.class%
         parent: ezpublish.spi.persistence.cache.abstractHandler
-
-    # InMemory storage engine for unit test use
-    ezpublish.api.storage_engine.in_memory:
-        class: %ezpublish.api.storage_engine.in_memory.class%
-        tags:
-            - {name: ezpublish.storageEngine, alias: inMemory}
 
     # Legacy storage engine
     ezpublish.api.storage_engine.legacy.factory:

@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
-use eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryHandler;
-
 /**
  * Test case for Persistence\Cache\Handler
  */
@@ -22,16 +20,23 @@ class PersistenceHandlerTest extends HandlerTest
     protected $persistenceFactoryMockMethods = array( 'getPersistenceHandler' );
 
     /**
+     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $innerPersistenceHandlerMock;
+
+    /**
      * Setup the PersistenceHandlerTest.
      */
     protected function setUp()
     {
         parent::setUp();
 
+        $this->innerPersistenceHandlerMock = $this->getMock( "eZ\\Publish\\SPI\\Persistence\\Handler" );
+
         $this->persistenceFactoryMock
             ->expects( $this->any() )
             ->method( 'getPersistenceHandler' )
-            ->will( $this->returnValue( new InMemoryHandler() ) );
+            ->will( $this->returnValue( $this->innerPersistenceHandlerMock ) );
     }
 
     /**
@@ -131,9 +136,8 @@ class PersistenceHandlerTest extends HandlerTest
     public function testObjectStateHandler()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logUnCachedHandler' );
-        $handler = $this->persistenceHandler->objectStateHandler();
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler', $handler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ObjectStateHandler', $handler );
+        $this->innerPersistenceHandlerMock->expects( $this->once() )->method( 'objectStateHandler' );
+        $this->persistenceHandler->objectStateHandler();
     }
 
     /**
@@ -183,8 +187,8 @@ class PersistenceHandlerTest extends HandlerTest
     public function testUrlWildcardHandler()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logUnCachedHandler' );
-        $handler = $this->persistenceHandler->urlWildcardHandler();
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlWildcard\\Handler', $handler );
-        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UrlWildcardHandler', $handler );
+        $this->innerPersistenceHandlerMock->expects( $this->once() )->method( 'urlWildcardHandler' );
+        $this->persistenceHandler->urlWildcardHandler();
+
     }
 }
