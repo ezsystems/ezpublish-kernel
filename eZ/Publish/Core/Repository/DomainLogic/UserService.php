@@ -409,6 +409,20 @@ class UserService implements UserServiceInterface
         $locationService = $this->repository->getLocationService();
         $contentTypeService = $this->repository->getContentTypeService();
 
+        // @TODO: Fix when moving to Repo/Permission
+        if ( $userCreateStruct->ownerId === null )
+        {
+            $userCreateStruct->ownerId = 14;
+        }
+        if ( $userCreateStruct->sectionId === null )
+        {
+            $userCreateStruct->sectionId = 1;
+        }
+        if ( $userCreateStruct->alwaysAvailable === null )
+        {
+            $userCreateStruct->alwaysAvailable = false;
+        }
+
         if ( $userCreateStruct->contentType === null )
         {
             $userContentType = $contentTypeService->loadContentType( $this->settings['userClassID'] );

@@ -9,13 +9,14 @@
 
 namespace eZ\Publish\Core\Repository\DomainLogic;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\Content;
+use eZ\Publish\Core\Repository\DomainLogic\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\Limitation;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Exception;
 use RuntimeException;
 
@@ -31,20 +32,6 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $persistenceHandler;
-
-    /**
-     * Currently logged in user object for permission purposes
-     *
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
-    protected $currentUser;
-
-    /**
-     * Flag to specify if current execution is sudo mode, only set by {@see sudo()}.
-     *
-     * @var bool
-     */
-    private $sudoFlag = false;
 
     /**
      * Instance of content service
@@ -200,7 +187,7 @@ class Repository implements RepositoryInterface
      * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\User|null $user
      */
-    public function __construct( PersistenceHandler $persistenceHandler, array $serviceSettings = array(), User $user = null )
+    public function __construct( PersistenceHandler $persistenceHandler, array $serviceSettings = array() )
     {
         $this->persistenceHandler = $persistenceHandler;
         $this->serviceSettings = $serviceSettings + array(
@@ -228,9 +215,6 @@ class Repository implements RepositoryInterface
         {
             $this->serviceSettings['language']['languages'] = $this->serviceSettings['languages'];
         }
-
-        if ( $user !== null )
-            $this->setCurrentUser( $user );
     }
 
     /**
@@ -240,14 +224,7 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUser()
     {
-        if ( !$this->currentUser instanceof User )
-        {
-            $this->currentUser = $this->getUserService()->loadUser(
-                $this->serviceSettings["user"]["anonymousUserID"]
-            );
-        }
-
-        return $this->currentUser;
+        throw new RuntimeException( "@todo Will be removed, permission is own layer, no need" );
     }
 
     /**
@@ -259,10 +236,7 @@ class Repository implements RepositoryInterface
      */
     public function setCurrentUser( User $user )
     {
-        if ( !$user->id )
-            throw new InvalidArgumentValue( '$user->id', $user->id );
-
-        $this->currentUser = $user;
+        throw new RuntimeException( "@todo Will be removed, permission is own layer, no need" );
     }
 
     /**
@@ -289,22 +263,7 @@ class Repository implements RepositoryInterface
      */
     public function sudo( \Closure $callback )
     {
-        if ( $this->sudoFlag === true )
-            throw new RuntimeException( "Recursive sudo use detected, abort abort!" );
-
-        $this->sudoFlag = true;
-        try
-        {
-            $returnValue = $callback( $this );
-        }
-        catch ( Exception $e  )
-        {
-            $this->sudoFlag = false;
-            throw $e;
-        }
-
-        $this->sudoFlag = false;
-        return $returnValue;
+        throw new RuntimeException( "@todo Will be removed, permission is own layer, no need" );
     }
 
     /**
@@ -320,57 +279,7 @@ class Repository implements RepositoryInterface
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        // Full access if sudoFlag is set by {@see sudo()}
-        if ( $this->sudoFlag === true )
-            return true;
-
-        if ( $user === null )
-            $user = $this->getCurrentUser();
-
-        // Uses SPI to avoid triggering permission checks in Role/User service
-        $permissionSets = array();
-        $roleService = $this->getRoleService();
-        $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId( $user->id, true );
-        foreach ( $spiRoleAssignments as $spiRoleAssignment )
-        {
-            $permissionSet = array( 'limitation' => null, 'policies' => array() );
-
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole( $spiRoleAssignment->roleId );
-            foreach ( $spiRole->policies as $spiPolicy )
-            {
-                if ( $spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null )
-                    return true;
-
-                if ( $spiPolicy->module !== $module && $spiPolicy->module !== '*' )
-                    continue;
-
-                if ( $spiPolicy->function === '*' && $spiRoleAssignment->limitationIdentifier === null )
-                    return true;
-
-                if ( $spiPolicy->function !== $function && $spiPolicy->function !== '*' )
-                    continue;
-
-                if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
-                    return true;
-
-                $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
-            }
-
-            if ( !empty( $permissionSet['policies'] ) )
-            {
-                if ( $spiRoleAssignment->limitationIdentifier !== null )
-                    $permissionSet['limitation'] = $roleService
-                        ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
-                        ->buildValue( $spiRoleAssignment->values );
-
-                $permissionSets[] = $permissionSet;
-            }
-        }
-
-        if ( !empty( $permissionSets ) )
-            return $permissionSets;
-
-        return false;// No policies matching $module and $function, or they contained limitations
+        return true;
     }
 
     /**
@@ -391,63 +300,7 @@ class Repository implements RepositoryInterface
      */
     public function canUser( $module, $function, ValueObject $object, $targets = null )
     {
-        $permissionSets = $this->hasAccess( $module, $function );
-        if ( $permissionSets === false || $permissionSets === true )
-        {
-            return $permissionSets;
-        }
-
-        if ( $targets instanceof ValueObject )
-        {
-            $targets = array( $targets );
-        }
-        else if ( $targets !== null && !is_array( $targets ) )
-        {
-            throw new InvalidArgumentType(
-                "\$targets",
-                "null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]",
-                $targets
-            );
-        }
-
-        $roleService = $this->getRoleService();
-        $currentUser = $this->getCurrentUser();
-        foreach ( $permissionSets as $permissionSet )
-        {
-            /**
-             * @var \eZ\Publish\API\Repository\Values\User\Limitation[] $permissionSet
-             */
-            if ( $permissionSet['limitation'] instanceof Limitation )
-            {
-                $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets ) )
-                    continue;// Continue to next policy set, all limitations must pass
-            }
-
-            /**
-             * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
-             */
-            foreach ( $permissionSet['policies'] as $policy )
-            {
-                $limitations = $policy->getLimitations();
-                if ( $limitations === '*' )
-                    return true;
-
-                $limitationsPass = true;
-                foreach ( $limitations as $limitation )
-                {
-                    $type = $roleService->getLimitationType( $limitation->getIdentifier() );
-                    if ( !$type->evaluate( $limitation, $currentUser, $object, $targets ) )
-                    {
-                        $limitationsPass = false;
-                        break;// Break to next policy, all limitations must pass
-                    }
-                }
-                if ( $limitationsPass )
-                    return true;
-            }
-        }
-        return false;// None of the limitation sets wanted to let you in, sorry!
+        return true;
     }
 
     /**

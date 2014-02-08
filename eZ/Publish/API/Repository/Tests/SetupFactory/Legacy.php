@@ -101,7 +101,7 @@ class Legacy extends SetupFactory
         }
 
         $this->clearInternalCaches();
-        $repository = $this->getServiceContainer()->get( 'inner_repository' );
+        $repository = $this->getServiceContainer()->get( 'permission_repository' );
         $repository->setCurrentUser(
             $repository->getUserService()->loadUser( 14 )
         );

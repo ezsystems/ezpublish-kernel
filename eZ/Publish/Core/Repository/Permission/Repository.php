@@ -7,15 +7,21 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\SignalSlot;
+namespace eZ\Publish\Core\Repository\Permission;
 
+/*
+use eZ\Publish\API\Repository\Values\User\Limitation;
+use Exception;
+use RuntimeException;
+*/
 use eZ\Publish\API\Repository\PermissionRepository as PermissionRepositoryInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Repository class
- * @package eZ\Publish\Core\Repository\SignalSlot
+ * @package eZ\Publish\Core\Repository\Permission
  */
 class Repository implements PermissionRepositoryInterface
 {
@@ -27,11 +33,9 @@ class Repository implements PermissionRepositoryInterface
     protected $innerRepository;
 
     /**
-     * SignalDispatcher
-     *
-     * @var \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher
+     * @var PermissionsService
      */
-    protected $signalDispatcher;
+    protected $permissionsService;
 
     /**
      * Instance of content service
@@ -127,16 +131,17 @@ class Repository implements PermissionRepositoryInterface
     /**
      * Constructor
      *
-     * Construct repository object from aggregated repository and signal
-     * dispatcher
+     * Construct repository object from aggregated repository and permission
+     * service
+     *
      *
      * @param \eZ\Publish\API\Repository\Repository $innerRepository
-     * @param \eZ\Publish\Core\Repository\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param PermissionsService $permissionsService
      */
-    public function __construct( PermissionRepositoryInterface $innerRepository, SignalDispatcher $signalDispatcher )
+    public function __construct( RepositoryInterface $innerRepository, PermissionsService $permissionsService )
     {
-        $this->innerRepository  = $innerRepository;
-        $this->signalDispatcher = $signalDispatcher;
+        $this->innerRepository = $innerRepository;
+        $this->permissionsService = $permissionsService;
     }
 
     /**
@@ -146,7 +151,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getCurrentUser()
     {
-        return $this->innerRepository->getCurrentUser();
+        return $this->permissionsService->getCurrentUser();
     }
 
     /**
@@ -158,7 +163,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function setCurrentUser( User $user )
     {
-        $this->innerRepository->setCurrentUser( $user );
+        $this->permissionsService->setCurrentUser( $user );
     }
 
     /**
@@ -201,7 +206,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        return $this->innerRepository->hasAccess( $module, $function, $user );
+        return $this->permissionsService->hasAccess( $module, $function, $user );
     }
 
     /**
@@ -222,7 +227,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function canUser( $module, $function, ValueObject $object, $targets = null )
     {
-        return $this->innerRepository->canUser( $module, $function, $object, $targets );
+        return $this->permissionsService->canUser( $module, $function, $object, $targets );
     }
 
     /**
@@ -237,7 +242,7 @@ class Repository implements PermissionRepositoryInterface
         if ( $this->contentService !== null )
             return $this->contentService;
 
-        $this->contentService = new ContentService( $this->innerRepository->getContentService(), $this->signalDispatcher );
+        $this->contentService = new ContentService( $this->innerRepository->getContentService(), $this->permissionsService );
         return $this->contentService;
     }
 
@@ -250,6 +255,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getContentLanguageService()
     {
+        return $this->innerRepository->getContentLanguageService();
         if ( $this->languageService !== null )
             return $this->languageService;
 
@@ -267,6 +273,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getContentTypeService()
     {
+        return $this->innerRepository->getContentTypeService();
         if ( $this->contentTypeService !== null )
             return $this->contentTypeService;
 
@@ -283,6 +290,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getLocationService()
     {
+        return $this->innerRepository->getLocationService();
         if ( $this->locationService !== null )
             return $this->locationService;
 
@@ -300,6 +308,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getTrashService()
     {
+        return $this->innerRepository->getTrashService();
         if ( $this->trashService !== null )
             return $this->trashService;
 
@@ -316,6 +325,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getSectionService()
     {
+        return $this->innerRepository->getSectionService();
         if ( $this->sectionService !== null )
             return $this->sectionService;
 
@@ -332,6 +342,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getUserService()
     {
+        return $this->innerRepository->getUserService();
         if ( $this->userService !== null )
             return $this->userService;
 
@@ -346,6 +357,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getURLAliasService()
     {
+        return $this->innerRepository->getURLAliasService();
         if ( $this->urlAliasService !== null )
             return $this->urlAliasService;
 
@@ -360,6 +372,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getURLWildcardService()
     {
+        return $this->innerRepository->getURLWildcardService();
         if ( $this->urlWildcardService !== null )
             return $this->urlWildcardService;
 
@@ -374,6 +387,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getObjectStateService()
     {
+        return $this->innerRepository->getObjectStateService();
         if ( $this->objectStateService !== null )
             return $this->objectStateService;
 
@@ -388,6 +402,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getRoleService()
     {
+        return $this->innerRepository->getRoleService();
         if ( $this->roleService !== null )
             return $this->roleService;
 
@@ -402,6 +417,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getSearchService()
     {
+        return $this->innerRepository->getSearchService();
         if ( $this->searchService !== null )
             return $this->searchService;
 
@@ -416,6 +432,7 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getFieldTypeService()
     {
+        return $this->innerRepository->getFieldTypeService();
         if ( $this->fieldTypeService !== null )
             return $this->fieldTypeService;
 
