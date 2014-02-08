@@ -10,20 +10,12 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\Core\REST\Common\Value as RestValue;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo as VersionInfo;
 
 /**
  * Version list view model
  */
 class VersionList extends RestValue
 {
-
-   private static $allowedVersionStatuses = array(
-       VersionInfo::STATUS_DRAFT,
-       VersionInfo::STATUS_PUBLISHED,
-       VersionInfo::STATUS_ARCHIVED
-    );
-
     /**
      * Versions
      *
@@ -46,14 +38,7 @@ class VersionList extends RestValue
      */
     public function __construct( array $versions, $path )
     {
-        $this->versions = [];
-        foreach($versions as $version)
-        {
-            if (in_array($version->status, self::$allowedVersionStatuses))
-            {
-                $this->versions[] = $version;
-            }
-        }
+        $this->versions = $versions;
         $this->path = $path;
     }
 }
