@@ -68,7 +68,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
                 'limitationValues' => array( 'foo', 'bar' )
             )
         );
-        $returnedRoleAssigments = array(
+        $returnedRoleAssignments = array(
             $this->generateRoleAssignmentMock(
                 array(
                     'role' => $this->generateRoleMock(
@@ -104,7 +104,7 @@ class RoleTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'getRoleAssignmentsForUser' )
             ->with( $user, true )
-            ->will( $this->returnValue( $returnedRoleAssigments ) );
+            ->will( $this->returnValue( $returnedRoleAssignments ) );
 
         $this->assertSame( array(), $identity->getInformation() );
         $definer = new RoleDefiner( $this->repositoryMock );

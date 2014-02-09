@@ -68,7 +68,7 @@ class Type extends FieldType
     public function isEmptyValue( SPIValue $value )
     {
         // @todo workaround for a bug in PHP 5.3.3 {@link https://bugs.php.net/bug.php?id=61326},
-        // when support for it ends this implementation should be removed for overriden method
+        // when support for it ends this implementation should be removed for overridden method
         return (array)$value->authors == (array)$this->getEmptyValue()->authors;
     }
 

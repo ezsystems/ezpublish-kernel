@@ -39,7 +39,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  * reduce singular and and or constructs…
  *
  * 4) Additionally we might need a post-query filtering step, which filters
- * content objects based on criteria, which could not be convertedd in to
+ * content objects based on criteria, which could not be converted in to
  * database statements.
  */
 class Handler implements SearchHandlerInterface

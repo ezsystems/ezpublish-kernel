@@ -190,7 +190,7 @@ class Content extends APIContent
     }
 
     /**
-     * Magic isset for singaling existence of convenience properties
+     * Magic isset for signaling existence of convenience properties
      *
      * @param string $property
      *

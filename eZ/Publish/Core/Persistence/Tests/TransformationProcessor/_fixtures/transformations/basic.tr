@@ -43,7 +43,7 @@ doublequote_normalize:
 # Turns fancy double quote into ASCII double quote
 U+00AB = U+0022 # left-pointing double angle quotation mark
 U+00BB = U+0022 # right-pointing double angle quotation mark
-U+02DD = U+0027 # double accute accent
+U+02DD = U+0027 # double acute accent
 
 apostrophe_to_doublequote:
 # Turns apostrophe into doublequote

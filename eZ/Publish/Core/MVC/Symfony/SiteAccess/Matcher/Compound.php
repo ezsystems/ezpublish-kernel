@@ -51,14 +51,14 @@ abstract class Compound implements CompoundInterface, URILexer
         $this->matchersMap = array();
     }
 
-    public function setMatcherBuilder( MatcherBuilderInterface $matcherBuidler )
+    public function setMatcherBuilder( MatcherBuilderInterface $matcherBuilder )
     {
-        $this->matcherBuilder = $matcherBuidler;
+        $this->matcherBuilder = $matcherBuilder;
         foreach ( $this->config as $i => $rule )
         {
             foreach ( $rule['matchers'] as $matcherClass => $matchingConfig )
             {
-                $this->matchersMap[$i][$matcherClass] = $matcherBuidler->buildMatcher( $matcherClass, $matchingConfig, $this->request );
+                $this->matchersMap[$i][$matcherClass] = $matcherBuilder->buildMatcher( $matcherClass, $matchingConfig, $this->request );
             }
         }
     }
