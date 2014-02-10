@@ -2366,28 +2366,6 @@ abstract class ContentBase extends BaseServiceTest
      * Test for the loadReverseRelations() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadReverseRelations
-     */
-    public function testLoadReverseRelations()
-    {
-        list( $contentDraft, $contentType ) = $this->createTestContent();
-        $contentService = $this->repository->getContentService();
-
-        $mediaContentInfo = $contentService->loadContentInfoByRemoteId( 'a6e35cbcb7cd6ae4b691f3eee30cd262' );
-
-        $contentService->addRelation(
-            $contentDraft->getVersionInfo(),
-            $mediaContentInfo
-        );
-
-        $relations = $contentService->loadReverseRelations( $mediaContentInfo );
-
-        $this->assertRelations( $relations, $contentDraft->contentInfo, $mediaContentInfo );
-    }
-
-    /**
-     * Test for the loadReverseRelations() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\ContentService::loadReverseRelations
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testLoadReverseRelationsThrowsUnauthorizedException()
