@@ -437,7 +437,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testCreateUser()
     {
-        self::markTestSkipped( "Breaks with InMemory storage, due to incorrect fixtures" );
         $userService = $this->repository->getUserService();
 
         $userCreateStruct = $userService->newUserCreateStruct( "new_user", "new_user@ez.no", "password", "eng-GB" );
@@ -613,7 +612,6 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testUpdateUser()
     {
-        self::markTestSkipped( "Breaks with InMemory storage, due to incorrect fixtures" );
         $userService = $this->repository->getUserService();
 
         $userUpdateStruct = $userService->newUserUpdateStruct();
