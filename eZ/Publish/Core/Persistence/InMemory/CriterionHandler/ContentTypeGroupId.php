@@ -13,7 +13,7 @@ use eZ\Publish\Core\Persistence\InMemory\CriterionHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * Content type groupe id criterion handler
+ * Content type group id criterion handler
  */
 class ContentTypeGroupId extends CriterionHandler
 {

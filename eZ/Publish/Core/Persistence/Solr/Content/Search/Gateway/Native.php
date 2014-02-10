@@ -42,7 +42,7 @@ class Native extends Gateway
     protected $criterionVisitor;
 
     /**
-     * Sort cluase visitor
+     * Sort clause visitor
      *
      * @var SortClauseVisitor
      */
@@ -56,7 +56,7 @@ class Native extends Gateway
     protected $facetBuilderVisitor;
 
     /**
-     * Field valu mapper
+     * Field value mapper
      *
      * @var FieldValueMapper
      */

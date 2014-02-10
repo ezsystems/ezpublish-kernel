@@ -673,7 +673,7 @@ class ContentTypeService implements APIContentTypeService, Sessionable
      * Creates a draft from an existing content type.
      *
      * This is a complete copy of the content
-     * type wiich has the state STATUS_DRAFT.
+     * type which has the state STATUS_DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there is already a draft assigned to another user

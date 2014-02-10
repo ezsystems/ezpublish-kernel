@@ -18,7 +18,7 @@ be re-injected in all services that depends on it.
 
 ## Usage
 In order to take advantage of synchronized SiteAccess injection, you need to use a method call in your service definition.
-Additionnaly, you can use `eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware` interface.
+Additionally, you can use `eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware` interface.
 
 As an example, let's define a simple service which depends on the repository's ContentService and the current SiteAccess.
 In that case, SiteAccess object will be injected whenever it changes, via `setSiteAccess()` setter method.

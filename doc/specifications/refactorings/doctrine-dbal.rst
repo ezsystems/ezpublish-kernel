@@ -28,7 +28,7 @@ for Search in little helpers that generate the query parts.
 - Identifier Generation
 - Very low level PDO based type abstraction
 
-Concerns that other seperated parts handle:
+Concerns that other separated parts handle:
 
 - Converting and casting the SQL rows into objects (Mapper)
 
@@ -80,11 +80,11 @@ Repeat for every gateway:
 4. Copy one Gateway at a time from EzcDatabase to DoctrineDatabase DBAL implementation
 5. Adjust DBAL gateway to Doctrine APIs
 6. Switch Persistence Handler to return the new Doctrine implementation
-7. Extend ExceptionConvertion Gateway to handle `DBALException` as well.
+7. Extend ExceptionConversion Gateway to handle `DBALException` as well.
 
 Currently the aliasing/quoting code is pretty dominant in the Gateways, because
 of the way the ezc Query Objects work. Hiding this implementation detail
-behind a simple Table Gateway helps simplify the code alot. ::
+behind a simple Table Gateway helps simplify the code a lot. ::
 
    <?php
    interface TableGateway
@@ -137,7 +137,7 @@ Key is the introduction of an interface for the query objects and the handler:
         public function getSequenceName( $table, $column );
     }
 
-The Query objets have the same API that Zeta Database has, including
+The Query objects have the same API that Zeta Database has, including
 the expression object `$q->expr->...`.
 
 This can be translated to SQL executable by Doctrine DBAL.

@@ -61,7 +61,7 @@ class Backend
      *                    the corresponding value object.
      *                    Foreign keys: In some cases value objects does not contain these as they are internal, so this
      *                                  needs to be handled in InMemory handlers by assigning keys like "_typeId" on
-     *                                  Type\FieldDefintion hash values for instance. These will be stored and can be
+     *                                  Type\FieldDefinition hash values for instance. These will be stored and can be
      *                                  matched with find(), but will not be returned as part of VO so purely internal.
      */
     public function __construct( array $data )

@@ -163,7 +163,7 @@ class FieldDefinitionUpdate extends Base
      * Returns field definition by 'typeFieldDefinitionDraft' pattern URL.
      *
      * Assumes given $data array has '__url' element set.
-     * @todo depends on temporary solution to give parser acces to the URL
+     * @todo depends on temporary solution to give parser access to the URL
      * @see \eZ\Publish\Core\REST\Server\Controller\ContentType::updateFieldDefinition
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException

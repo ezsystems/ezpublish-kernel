@@ -123,7 +123,7 @@ class ContentService implements APIContentService, Sessionable
      *
      * To load fields use loadContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to create the content in the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
      *
      * @param string $remoteId
@@ -411,8 +411,8 @@ class ContentService implements APIContentService, Sessionable
      *
      * (see {@link ContentMetadataUpdateStruct}) of a content object - to update fields use updateContent
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to update the content meta data
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already existis
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update the content meta data
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already exists
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct
@@ -427,7 +427,7 @@ class ContentService implements APIContentService, Sessionable
     /**
      * Deletes a content object including all its versions and locations including their subtrees.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to delete the content (in one of the locations of the given content object)
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      */
@@ -437,10 +437,10 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
-     * Creates a draft from a publshed or archived version.
+     * Creates a draft from a published or archived version.
      *
      * If no version is given, the current published version is used.
-     * 4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.
+     * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
      * It can be changed on updating the version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the draft
@@ -697,7 +697,7 @@ class ContentService implements APIContentService, Sessionable
      * @example Examples/translation_5x.php
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destiantioon version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *

@@ -62,7 +62,7 @@ class FieldMap
     /**
      * Get field type information
      *
-     * Retuns an array in the form:
+     * Returns an array in the form:
      *
      * <code>
      *  array(
