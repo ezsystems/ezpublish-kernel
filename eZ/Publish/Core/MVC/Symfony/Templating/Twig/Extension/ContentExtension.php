@@ -24,6 +24,8 @@ use eZ\Publish\Core\FieldType\XmlText\Converter\Html5 as Html5Converter;
 use eZ\Publish\Core\FieldType\RichText\Converter as RichTextConverterInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Variation\VariationHandler;
+use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
+use Psr\Log\LoggerInterface;
 use Twig_Extension;
 use Twig_Environment;
 use Twig_SimpleFunction;
@@ -140,6 +142,11 @@ class ContentExtension extends Twig_Extension
      */
     protected $fieldHelper;
 
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
     public function __construct(
         Repository $repository,
         ConfigResolverInterface $resolver,
@@ -149,7 +156,8 @@ class ContentExtension extends Twig_Extension
         RichTextConverterInterface $richTextEditConverter,
         VariationHandler $imageVariationService,
         TranslationHelper $translationHelper,
-        FieldHelper $fieldHelper
+        FieldHelper $fieldHelper,
+        LoggerInterface $logger = null
     )
     {
         $comp = function ( $a, $b )
@@ -173,6 +181,7 @@ class ContentExtension extends Twig_Extension
         $this->imageVariationService = $imageVariationService;
         $this->translationHelper = $translationHelper;
         $this->fieldHelper = $fieldHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -430,7 +439,17 @@ class ContentExtension extends Twig_Extension
      */
     public function getImageVariation( Field $field, VersionInfo $versionInfo, $variationName )
     {
-        return $this->imageVariationService->getVariation( $field, $versionInfo, $variationName );
+        try
+        {
+            return $this->imageVariationService->getVariation( $field, $versionInfo, $variationName );
+        }
+        catch ( InvalidVariationException $e )
+        {
+            if ( isset( $this->logger ) )
+            {
+                $this->logger->error( "Couldn't get variation '{$variationName}' for image with id {$field->value->id}" );
+            }
+        }
     }
 
     /**
