@@ -129,10 +129,9 @@ abstract class Kernel extends BaseKernel
             return $this->userHash = static::ANONYMOUS_HASH;
         }
 
-        // We must have a session at that point since we're supposed to be connected, so HTTP_COOKIE must contain session id.
-        // HTTP_COOKIE header will be used as cache key to store the user hash.
+        // Try to retrieve user hash in cache first.
         // This will avoid to boot the kernel each time to retrieve the user hash.
-        $stashItem = $this->getCachePool()->getItem( 'ez_user_hash/' . $request->headers->get( 'cookie' ) );
+        $stashItem = $this->getCachePool()->getItem( 'ez_user_hash/' . $this->getUserHashCacheKey( $request ) );
         $this->userHash = $stashItem->get();
         if ( $stashItem->isMiss() )
         {
@@ -167,7 +166,7 @@ abstract class Kernel extends BaseKernel
     {
         foreach ( $request->cookies as $name => $value )
         {
-            if ( strpos( $name, static::SESSION_NAME_PREFIX ) === 0 )
+            if ( $this->isSessionName( $name ) )
             {
                 return false;
             }
@@ -214,5 +213,41 @@ abstract class Kernel extends BaseKernel
     protected function getUserHashCacheTtl()
     {
         return 600;
+    }
+
+    /**
+     * Returns the cache key under which the user hash will be stored.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return string
+     */
+    protected function getUserHashCacheKey( Request $request )
+    {
+        // There can be several session cookies (i.e. session name beginning by static::SESSION_NAME_PREFIX) for the same
+        // domain / path as we can have several siteaccesses sharing the same session context.
+        // Hence we concatenate session Ids together.
+        $cacheKeyArray = array();
+        foreach ( $request->cookies as $name => $value )
+        {
+            if ( $this->isSessionName( $name ) )
+            {
+                $cacheKeyArray[] = $value;
+            }
+        }
+
+        return implode( '|', $cacheKeyArray );
+    }
+
+    /**
+     * Checks if passed string can be considered as a session name, such as would be used in cookies.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    private function isSessionName( $name )
+    {
+        return strpos( $name, static::SESSION_NAME_PREFIX ) === 0;
     }
 }
