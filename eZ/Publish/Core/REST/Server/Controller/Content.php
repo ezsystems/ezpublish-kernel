@@ -67,7 +67,13 @@ class Content extends RestController
     public function loadContent( $contentId )
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
-        $mainLocation = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+
+        $mainLocation = null;
+        if ( !empty( $contentInfo->mainLocationId ) )
+        {
+            $mainLocation = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+        }
+
         $contentType = $this->repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
 
         $contentVersion = null;
