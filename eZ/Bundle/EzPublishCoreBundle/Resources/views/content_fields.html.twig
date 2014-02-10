@@ -71,7 +71,7 @@
 
 {% block ezdatetime_field %}
 {% spaceless %}
-    {% if field.value.value %}
+    {% if not ez_is_field_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
             {% set field_value = field.value.value|localizeddate( 'short', 'medium', parameters.locale ) %}
         {% else %}
@@ -84,7 +84,7 @@
 
 {% block ezdate_field %}
 {% spaceless %}
-    {% if field.value.date %}
+    {% if not ez_is_field_empty( content, field ) %}
         {% set field_value = field.value.date|localizeddate( 'short', 'none', parameters.locale ) %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
@@ -93,7 +93,7 @@
 
 {% block eztime_field %}
 {% spaceless %}
-    {% if field.value.time %}
+    {% if not ez_is_field_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
             {% set field_value = field.value.time|localizeddate( 'none', 'medium', parameters.locale ) %}
         {% else %}
@@ -106,7 +106,7 @@
 
 {% block ezemail_field %}
 {% spaceless %}
-    {% if field.value.email %}
+    {% if not ez_is_field_empty( content, field ) %}
         {% set field_value = field.value.email %}
         <a href="mailto:{{ field.value.email|escape( 'url' ) }}" {{ block( 'field_attributes' ) }}>{{ field.value.email }}</a>
     {% endif %}
@@ -115,7 +115,7 @@
 
 {% block ezinteger_field %}
 {% spaceless %}
-    {% if field.value %}
+    {% if not ez_is_field_empty( content, field ) %}
         {% set field_value = field.value.value %}
         {{ block( 'simple_inline_field' ) }}
     {% endif %}
@@ -125,7 +125,7 @@
 {# @todo: handle localization #}
 {% block ezfloat_field %}
 {% spaceless %}
-    {% if field.value %}
+    {% if not ez_is_field_empty( content, field ) %}
         {% set field_value = field.value.value %}
         {{ block( 'simple_inline_field' ) }}
     {% endif %}
@@ -134,7 +134,7 @@
 
 {% block ezurl_field %}
 {% spaceless %}
-    {% if field.value %}
+    {% if not ez_is_field_empty( content, field ) %}
         <a href="{{ field.value.link }}"
             {{ block( 'field_attributes' ) }}>{{ field.value.text ? field.value.text : field.value.link }}</a>
     {% endif %}
@@ -143,7 +143,7 @@
 
 {% block ezkeyword_field %}
 {% spaceless %}
-    {% if field.value.values|length() > 0 %}
+    {% if not ez_is_field_empty( content, field ) %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for keyword in field.value.values %}
             <li>{{ keyword }}</li>
@@ -190,7 +190,7 @@
 {# @todo: handle the unit of the fileSize (si operator in legacy template engine) #}
 {% block ezbinaryfile_field %}
 {% spaceless %}
-    {% if field.value.fileName %}
+    {% if not ez_is_field_empty( content, field ) %}
         {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
                         ~ '/version/' ~ contentInfo.currentVersionNo ~  "/file/"
                         ~ field.value.fileName|escape( 'url' ) %}
@@ -201,7 +201,7 @@
 {% endblock %}
 
 {% block ezmedia_field %}
-{% if field.value %}
+{% if not ez_is_field_empty( content, field ) %}
 {% spaceless %}
     {% set type = fieldSettings.mediaType %}
     {% set value = field.value %}
@@ -260,7 +260,7 @@
 
 {% block ezobjectrelationlist_field %}
 {% spaceless %}
-    {% if field.value.destinationContentIds|length > 0 %}
+    {% if not ez_is_field_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
         {% for contentId in field.value.destinationContentIds %}
         <li>
@@ -387,7 +387,7 @@
  #}
 {% block ezimage_field %}
 {% spaceless %}
-{% if field.value.fileName %}
+{% if not ez_is_field_empty( content, field ) %}
 <figure {{ block( 'field_attributes' ) }}>
     {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
     <img src="{{ asset( imageAlias.uri ) }}" width="{{ imageAlias.width }}" height="{{ imageAlias.height }}" alt="{{ field.value.alternativeText }}" />
@@ -398,7 +398,7 @@
 
 {% block ezobjectrelation_field %}
 {% spaceless %}
-{% if field.value.destinationContentId %}
+{% if not ez_is_field_empty( content, field ) %}
     <div {{ block( 'field_attributes' ) }}>
         {{ render( controller( "ez_content:viewContent", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
     </div>
@@ -409,7 +409,7 @@
 {# pageService is exposed under parameters.pageService thanks to Page\ParameterProvider #}
 {% block ezpage_field %}
 {% spaceless %}
-{% if field.value.page is not null %}
+{% if not ez_is_field_empty( content, field ) %}
     {% set layout = field.value.page.layout %}
     {% set template = parameters.pageService.getLayoutTemplate( layout ) %}
     {% include template with { 'zones': field.value.page.zones, 'zone_layout': layout, 'pageService': parameters.pageService } %}

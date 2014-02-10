@@ -25,10 +25,16 @@ use Twig_Loader_Array;
 
 class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
 {
+    /**
+     * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fieldHelperMock;
 
     public function getExtensions()
     {
         $configResolver = $this->getConfigResolverMock();
+        $this->fieldHelperMock = $this->getMockBuilder( 'eZ\\Publish\\Core\\Helper\\FieldHelper' )
+            ->disableOriginalConstructor()->getMock();
 
         return array(
             new ContentExtension(
@@ -40,7 +46,7 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
                 $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\RichText\\Converter' )->disableOriginalConstructor()->getMock(),
                 $this->getMock( 'eZ\Publish\SPI\Variation\VariationHandler' ),
                 new TranslationHelper( $configResolver, $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ) ),
-                $this->getMockBuilder( 'eZ\\Publish\\Core\\Helper\\FieldHelper' )->disableOriginalConstructor()->getMock()
+                $this->fieldHelperMock
             )
         );
     }
@@ -236,6 +242,18 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
 
         return $content;
 
+    }
+
+    protected function getField( $isEmpty )
+    {
+        $field = new Field( array( 'fieldDefIdentifier' => 'testfield', 'value' => null ) );
+
+        $this->fieldHelperMock
+            ->expects( $this->once() )
+            ->method( 'isFieldEmpty' )
+            ->will( $this->returnValue( $isEmpty ) );
+
+        return $field;
     }
 
     private function getTemplatePath( $tpl )
