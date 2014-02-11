@@ -1469,13 +1469,13 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
                 new LocationQuery(
                     array(
                         'filter' => new Criterion\LogicalAnd(
-                                array(
-                                    new Criterion\Location\ParentLocationId( 224 ),
-                                    new Criterion\Location\IsMainLocation(
-                                        Criterion\Location\IsMainLocation::NOT_MAIN
-                                    )
+                            array(
+                                new Criterion\Location\ParentLocationId( 224 ),
+                                new Criterion\Location\IsMainLocation(
+                                    Criterion\Location\IsMainLocation::NOT_MAIN
                                 )
-                            ),
+                            )
+                        ),
                         'limit' => 10,
                     )
                 )
