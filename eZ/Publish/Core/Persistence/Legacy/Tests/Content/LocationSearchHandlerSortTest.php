@@ -108,6 +108,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
                         new LocationSortClauseHandler\Location\Path( $this->getDatabaseHandler() ),
                         new LocationSortClauseHandler\Location\Priority( $this->getDatabaseHandler() ),
                         new LocationSortClauseHandler\Location\Visibility( $this->getDatabaseHandler() ),
+                        new LocationSortClauseHandler\Location\IsMainLocation( $this->getDatabaseHandler() ),
                         new CommonSortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                         new CommonSortClauseHandler\ContentName( $this->getDatabaseHandler() ),
                         new CommonSortClauseHandler\DateModified( $this->getDatabaseHandler() ),
@@ -617,6 +618,52 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
                 },
                 $result->searchHits
             )
+        );
+    }
+
+    public function testSortIsMainLocationAscending()
+    {
+        $handler = $this->getLocationSearchHandler();
+
+        $locations = $handler->findLocations(
+            new LocationQuery(
+                array(
+                    'filter' => new Criterion\Location\ParentLocationId( 224 ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\Location\IsMainLocation( LocationQuery::SORT_ASC ),
+                    )
+                )
+            )
+        );
+
+        $this->assertSearchResults(
+            array( 510, 225 ),
+            $locations
+        );
+    }
+
+    public function testSortIsMainLocationDescending()
+    {
+        $handler = $this->getLocationSearchHandler();
+
+        $locations = $handler->findLocations(
+            new LocationQuery(
+                array(
+                    'filter' => new Criterion\Location\ParentLocationId( 224 ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\Location\IsMainLocation( LocationQuery::SORT_DESC ),
+                    )
+                )
+            )
+        );
+
+        $this->assertSearchResults(
+            array( 225, 510 ),
+            $locations
         );
     }
 }

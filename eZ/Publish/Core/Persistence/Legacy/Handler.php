@@ -805,6 +805,7 @@ class Handler implements HandlerInterface
                             new LocationSortClauseHandler\Location\Path( $dbHandler ),
                             new LocationSortClauseHandler\Location\Priority( $dbHandler ),
                             new LocationSortClauseHandler\Location\Visibility( $dbHandler ),
+                            new LocationSortClauseHandler\Location\IsMainLocation( $dbHandler ),
                             new CommonSortClauseHandler\ContentId( $dbHandler ),
                             new CommonSortClauseHandler\ContentName( $dbHandler ),
                             new CommonSortClauseHandler\DateModified( $dbHandler ),
