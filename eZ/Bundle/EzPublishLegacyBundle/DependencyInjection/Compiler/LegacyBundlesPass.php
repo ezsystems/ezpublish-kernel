@@ -25,6 +25,11 @@ class LegacyBundlesPass implements CompilerPassInterface
 
     public function process( ContainerBuilder $container )
     {
+        if ( !$container->has( 'ezpublish_legacy.legacy_bundles.extension_locator' ) )
+        {
+            return;
+        }
+
         $locator = $container->get( 'ezpublish_legacy.legacy_bundles.extension_locator' );
 
         $extensionNames = array();
@@ -33,7 +38,7 @@ class LegacyBundlesPass implements CompilerPassInterface
             $bundleExtensions = $locator->locate( $bundle->getPath() );
             array_walk(
                 $bundleExtensions,
-                function( &$path, $key ) {
+                function( &$path ) {
                     $path = basename( $path );
                 }
             );

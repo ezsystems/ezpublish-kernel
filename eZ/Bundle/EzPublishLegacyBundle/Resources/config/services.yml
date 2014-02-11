@@ -33,6 +33,8 @@ parameters:
         imagemagick_executable_path: %ezpublish.image.imagemagick.executable_path%
         imagemagick_executable: %ezpublish.image.imagemagick.executable%
         imagemagick_filters: %ezpublish.image.imagemagick.filters%
+    ezpublish_legacy.legacy_bundles_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\LegacyBundles
+
     ezpublish_legacy.content_exception_handler.class: eZ\Publish\Core\MVC\Legacy\EventListener\APIContentExceptionListener
     ezpublish_legacy.config.resolver.class: eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver
     ezpublish_legacy.config.default_scope: site
@@ -180,6 +182,16 @@ services:
             - @ezpublish_legacy.persistence_cache_purger
             - @ezpublish.urlalias_generator
             - %ezpublish_legacy.configuration_mapper.options%
+        calls:
+            - [setContainer, [@service_container]]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_legacy.legacy_bundles_mapper:
+        class: %ezpublish_legacy.legacy_bundles_mapper.class%
+        arguments:
+            - @ezpublish.config.resolver.core
+            - { extensions: %ezpublish_legacy.legacy_bundles_extensions% }
         calls:
             - [setContainer, [@service_container]]
         tags:
