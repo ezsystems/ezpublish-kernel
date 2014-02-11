@@ -25,10 +25,10 @@ class LegacyBundleInstallCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName( 'ezpublish:legacybundle:install' )
+            ->setName( 'ezpublish:legacybundles:install_extensions' )
             ->addOption( 'symlink', null, InputOption::VALUE_NONE, 'Symlinks the assets instead of copying it' )
             ->addOption( 'relative', null, InputOption::VALUE_NONE, 'Make relative symlinks' )
-            ->setDescription( 'Installs legacy extensions defined in Symfony bundles into ezpublish_legacy.' )
+            ->setDescription( 'Installs (symlink/copy) legacy extensions defined in Symfony bundles into ezpublish_legacy.' )
             ->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> installs <info>legacy extensions</info> stored in a Symfony 2 bundle
@@ -39,6 +39,8 @@ EOT
 
     protected function execute( InputInterface $input, OutputInterface $output )
     {
+        $legacyExtensionsLocator = $this->getContainer()->get( 'ezpublish_legacy.legacy_bundles.extension_locator' );
+
         $kernel = $this->getContainer()->get( 'kernel' );
         foreach ( $kernel->getBundles() as $bundle )
         {
@@ -47,7 +49,7 @@ EOT
                 continue;
             }
 
-            foreach ( $this->loadLegacyBundleExtensions( $bundle ) as $extensionDir )
+            foreach ( $legacyExtensionsLocator->locate( $bundle->getPath() ) as $extensionDir )
             {
                 $output->writeln( $extensionDir );
                 $this->linkLegacyExtension(
@@ -59,19 +61,11 @@ EOT
         }
     }
 
-    protected function loadLegacyBundleExtensions( Bundle $bundle )
-    {
-        $return = array();
-        foreach ( glob( $bundle->getPath() . "/ezpublish_legacy/*", GLOB_ONLYDIR ) as $directory )
-        {
-            $return[] = $directory;
-        }
-        return $return;
-    }
-
     /**
      * Links the legacy extension at $path into ezpublish_legacy/extensions
-     * @param string $path Absolute path to a legacy extension folder
+     * @param string $extensionPath Absolute path to a legacy extension folder
+     * @param bool $symlink
+     * @param bool $relative
      */
     protected function linkLegacyExtension( $extensionPath, $symlink = true, $relative = false )
     {
@@ -80,20 +74,18 @@ EOT
 
         $targetPath = "$legacyRootDir/extension/" . basename( $extensionPath );
         $filesystem->remove( $targetPath );
-        echo "Target path: $targetPath\n";
         if ( $symlink )
         {
             if ( $relative )
             {
-                $originDir = $filesystem->makePathRelative( $extensionPath, realpath( $targetPath ) );
+                $extensionPath = $filesystem->makePathRelative( $extensionPath, realpath( "$legacyRootDir/extension/" ) );
             }
 
-            $filesystem->symlink( $originDir, $targetPath );
+            $filesystem->symlink( $extensionPath, $targetPath );
         }
         else
         {
             $filesystem->mkdir( $targetPath, 0777 );
-            // We use a custom iterator to ignore VCS files
             $filesystem->mirror( $extensionPath, $targetPath, Finder::create()->in( $extensionPath ) );
         }
     }
