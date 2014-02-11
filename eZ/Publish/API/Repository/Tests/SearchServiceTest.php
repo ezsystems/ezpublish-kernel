@@ -2962,6 +2962,201 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindMainLocation()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+        }
+
+        $plainSiteLocationId = 56;
+        $designLocationId = 58;
+        $partnersContentId = 59;
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        // Add secondary Location for "Partners" user group, under "Design" page
+        $locationService->createLocation(
+            $contentService->loadContentInfo( $partnersContentId ),
+            $locationService->newLocationCreateStruct( $designLocationId )
+        );
+
+        $query = new LocationQuery(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\Location\ParentLocationId( $designLocationId ),
+                        new Criterion\Location\IsMainLocation(
+                            Criterion\Location\IsMainLocation::MAIN
+                        )
+                    )
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array()
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations( $query );
+
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertEquals( $plainSiteLocationId, $result->searchHits[0]->valueObject->id );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindNonMainLocation()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+        }
+
+        $designLocationId = 58;
+        $partnersContentId = 59;
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        // Add secondary Location for "Partners" user group, under "Design" page
+        $newLocation = $locationService->createLocation(
+            $contentService->loadContentInfo( $partnersContentId ),
+            $locationService->newLocationCreateStruct( $designLocationId )
+        );
+
+        $query = new LocationQuery(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\Location\ParentLocationId( $designLocationId ),
+                        new Criterion\Location\IsMainLocation(
+                            Criterion\Location\IsMainLocation::NOT_MAIN
+                        ),
+                    )
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array()
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations( $query );
+
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertEquals( $newLocation->id, $result->searchHits[0]->valueObject->id );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testSortMainLocationAscending()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+        }
+
+        $plainSiteLocationId = 56;
+        $designLocationId = 58;
+        $partnersContentId = 59;
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        // Add secondary Location for "Partners" user group, under "Design" page
+        $newLocation = $locationService->createLocation(
+            $contentService->loadContentInfo( $partnersContentId ),
+            $locationService->newLocationCreateStruct( $designLocationId )
+        );
+
+        $query = new LocationQuery(
+            array(
+                'filter' => new Criterion\Location\ParentLocationId( $designLocationId ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array(
+                    new SortClause\Location\IsMainLocation(
+                        LocationQuery::SORT_ASC
+                    )
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations( $query );
+
+        $this->assertEquals( 2, $result->totalCount );
+        $this->assertEquals( $newLocation->id, $result->searchHits[0]->valueObject->id );
+        $this->assertEquals( $plainSiteLocationId, $result->searchHits[1]->valueObject->id );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testSortMainLocationDescending()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+        }
+
+        $plainSiteLocationId = 56;
+        $designLocationId = 58;
+        $partnersContentId = 59;
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        // Add secondary Location for "Partners" user group, under "Design" page
+        $newLocation = $locationService->createLocation(
+            $contentService->loadContentInfo( $partnersContentId ),
+            $locationService->newLocationCreateStruct( $designLocationId )
+        );
+
+        $query = new LocationQuery(
+            array(
+                'filter' => new Criterion\Location\ParentLocationId( $designLocationId ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array(
+                    new SortClause\Location\IsMainLocation(
+                        LocationQuery::SORT_DESC
+                    )
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findLocations( $query );
+
+        $this->assertEquals( 2, $result->totalCount );
+        $this->assertEquals( $plainSiteLocationId, $result->searchHits[0]->valueObject->id );
+        $this->assertEquals( $newLocation->id, $result->searchHits[1]->valueObject->id );
+    }
+
+    /**
      * Assert that query result matches the given fixture.
      *
      * @param Query $query
