@@ -9,16 +9,41 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Fragment;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Bundle\FrameworkBundle\Fragment\ContainerAwareHIncludeFragmentRenderer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
-class HincludeFragmentRenderer extends ContainerAwareHIncludeFragmentRenderer
+class HincludeFragmentRenderer extends ContainerAwareHIncludeFragmentRenderer implements SiteAccessAware
 {
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    private $siteAccess;
+
     /**
      * @var FragmentUriGenerator
      */
     private $fragmentUriGenerator;
+
+    /**
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     */
+    public function setSiteAccess( SiteAccess $siteAccess = null )
+    {
+        $this->siteAccess = $siteAccess;
+    }
+
+    public function setFragmentPath( $path )
+    {
+        if ( $this->siteAccess && $this->siteAccess->matcher instanceof SiteAccess\URILexer )
+        {
+            $path = $this->siteAccess->matcher->analyseLink( $path );
+        }
+
+        parent::setFragmentPath( $path );
+    }
 
     protected function generateFragmentUri( ControllerReference $reference, Request $request, $absolute = false )
     {
