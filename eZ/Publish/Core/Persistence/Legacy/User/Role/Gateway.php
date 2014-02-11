@@ -72,6 +72,15 @@ abstract class Gateway
     abstract public function loadRoleAssignmentsByGroupId( $groupId, $inherited = false );
 
     /**
+     * Loads role assignments for given role ID
+     *
+     * @param mixed $roleId
+     *
+     * @return array
+     */
+    abstract public function loadRoleAssignmentsByRoleId( $roleId );
+
+    /**
      * Returns the user policies associated with the user
      *
      * @param mixed $userId
@@ -90,7 +99,7 @@ abstract class Gateway
     abstract public function updateRole( RoleUpdateStruct $role );
 
     /**
-     * Delete the specified role
+     * Delete the specified role including all of its assignments
      *
      * @param mixed $roleId
      */

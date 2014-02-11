@@ -260,25 +260,6 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testLoadRoleWithGroups()
-    {
-        $handler = $this->getUserHandler();
-
-        $role = new Persistence\User\Role();
-        $role->identifier = 'Test';
-
-        $role = $handler->createRole( $role );
-
-        $handler->assignRole( 23, $role->id );
-        $handler->assignRole( 42, $role->id );
-
-        $loaded = $handler->loadRole( $role->id );
-        $this->assertEquals(
-            array( 23, 42 ),
-            $loaded->groupIds
-        );
-    }
-
     public function testLoadRoleWithPolicies()
     {
         $handler = $this->getUserHandler();
@@ -343,11 +324,6 @@ class UserHandlerTest extends TestCase
                 )
             ),
             $loaded->policies
-        );
-
-        $this->assertEquals(
-            array( 23, 42 ),
-            $loaded->groupIds
         );
     }
 
@@ -888,6 +864,36 @@ class UserHandlerTest extends TestCase
                 )
             ),
             $handler->loadRoleAssignmentsByGroupId( 13, true )
+        );
+    }
+
+    public function testLoadRoleAssignmentsByRoleId()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/../../../../Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
+        $handler = $this->getUserHandler();
+
+        $this->assertEquals(
+            array(
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'roleId' => 1,
+                        'contentId' => 11
+                    )
+                ),
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'roleId' => 1,
+                        'contentId' => 42
+                    )
+                ),
+                new Persistence\User\RoleAssignment(
+                    array(
+                        'roleId' => 1,
+                        'contentId' => 59
+                    )
+                ),
+            ),
+            $handler->loadRoleAssignmentsByRoleId( 1 )
         );
     }
 }

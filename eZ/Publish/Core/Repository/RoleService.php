@@ -595,10 +595,24 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->canUser( 'role', 'assign', $userGroup, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
-        $spiRole = $this->userHandler->loadRole( $role->id );
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $userGroup->id );
+        $isAssigned = false;
+        foreach ( $spiRoleAssignments as $spiRoleAssignment )
+        {
+            if ( $spiRoleAssignment->roleId === $role->id )
+            {
+                $isAssigned = true;
+                break;
+            }
+        }
 
-        if ( !in_array( $userGroup->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "userGroup", "role is not assigned to the user group" );
+        if ( !$isAssigned )
+        {
+            throw new InvalidArgumentException(
+                "\$userGroup",
+                "Role is not assigned to the given UserGroup"
+            );
+        }
 
         $this->repository->beginTransaction();
         try
@@ -677,10 +691,24 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->canUser( 'role', 'assign', $user, $role ) !== true )
             throw new UnauthorizedException( 'role', 'assign' );
 
-        $spiRole = $this->userHandler->loadRole( $role->id );
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $user->id );
+        $isAssigned = false;
+        foreach ( $spiRoleAssignments as $spiRoleAssignment )
+        {
+            if ( $spiRoleAssignment->roleId === $role->id )
+            {
+                $isAssigned = true;
+                break;
+            }
+        }
 
-        if ( !in_array( $user->id, $spiRole->groupIds ) )
-            throw new InvalidArgumentException( "user", "role is not assigned to the user" );
+        if ( !$isAssigned )
+        {
+            throw new InvalidArgumentException(
+                "\$user",
+                "Role is not assigned to the given User"
+            );
+        }
 
         $this->repository->beginTransaction();
         try
@@ -709,51 +737,33 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
-        $userHandler = $this->userHandler;
-        $spiRole = $userHandler->loadRole( $role->id );
-
         $userService = $this->repository->getUserService();
-
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByRoleId( $role->id );
         $roleAssignments = array();
-        foreach ( $spiRole->groupIds as $groupId )
+
+        foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
-            // $spiRole->groupIds can contain both group and user IDs
-            // We'll check if the ID belongs to group, if not, see if it belongs to user
+            // First check if the Role is assigned to a User
+            // If no User is found, see if it belongs to a UserGroup
             try
             {
-                $userGroup = $userService->loadUserGroup( $groupId );
-
-                $spiRoleAssignments = $userHandler->loadRoleAssignmentsByGroupId( $userGroup->id );
-                foreach ( $spiRoleAssignments as $spiRoleAssignment )
-                {
-                    if ( $spiRoleAssignment->roleId == $role->id )
-                    {
-                        $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject(
-                            $spiRoleAssignment,
-                            $userGroup,
-                            $role
-                        );
-                    }
-                }
+                $user = $userService->loadUser( $spiRoleAssignment->contentId );
+                $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject(
+                    $spiRoleAssignment,
+                    $user,
+                    $role
+                );
             }
             catch ( APINotFoundException $e )
             {
                 try
                 {
-                    $user = $userService->loadUser( $groupId );
-
-                    $spiRoleAssignments = $userHandler->loadRoleAssignmentsByGroupId( $user->id );
-                    foreach ( $spiRoleAssignments as $spiRoleAssignment )
-                    {
-                        if ( $spiRoleAssignment->roleId == $role->id )
-                        {
-                            $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject(
-                                $spiRoleAssignment,
-                                $user,
-                                $role
-                            );
-                        }
-                    }
+                    $userGroup = $userService->loadUserGroup( $spiRoleAssignment->contentId );
+                    $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject(
+                        $spiRoleAssignment,
+                        $userGroup,
+                        $role
+                    );
                 }
                 catch ( APINotFoundException $e )
                 {

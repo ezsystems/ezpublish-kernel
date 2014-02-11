@@ -286,11 +286,6 @@ class Handler implements BaseUserHandler
             $this->roleGateway->removePolicy( $policy->id );
         }
 
-        foreach ( $role->groupIds as $groupId )
-        {
-            $this->userGateway->removeRole( $groupId, $role->id );
-        }
-
         $this->roleGateway->deleteRole( $role->id );
     }
 
@@ -415,7 +410,14 @@ class Handler implements BaseUserHandler
      */
     public function loadRoleAssignmentsByRoleId( $roleId )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        $data = $this->roleGateway->loadRoleAssignmentsByRoleId( $roleId );
+
+        if ( empty( $data ) )
+        {
+            return array();
+        }
+
+        return $this->mapper->mapRoleAssignments( $data );
     }
 
     /**

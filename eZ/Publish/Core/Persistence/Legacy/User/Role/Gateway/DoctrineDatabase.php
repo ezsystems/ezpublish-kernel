@@ -93,7 +93,6 @@ class DoctrineDatabase extends Gateway
         $query->select(
             $this->handler->aliasedColumn( $query, 'id', 'ezrole' ),
             $this->handler->aliasedColumn( $query, 'name', 'ezrole' ),
-            $this->handler->aliasedColumn( $query, 'contentobject_id', 'ezuser_role' ),
             $this->handler->aliasedColumn( $query, 'id', 'ezpolicy' ),
             $this->handler->aliasedColumn( $query, 'function_name', 'ezpolicy' ),
             $this->handler->aliasedColumn( $query, 'module_name', 'ezpolicy' ),
@@ -101,12 +100,6 @@ class DoctrineDatabase extends Gateway
             $this->handler->aliasedColumn( $query, 'value', 'ezpolicy_limitation_value' )
         )->from(
             $this->handler->quoteTable( 'ezrole' )
-        )->leftJoin(
-            $this->handler->quoteTable( 'ezuser_role' ),
-            $query->expr->eq(
-                $this->handler->quoteColumn( 'role_id', 'ezuser_role' ),
-                $this->handler->quoteColumn( 'id', 'ezrole' )
-            )
         )->leftJoin(
             $this->handler->quoteTable( 'ezpolicy' ),
             $query->expr->eq(
@@ -362,6 +355,36 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Loads role assignments for given role ID
+     *
+     * @param mixed $roleId
+     *
+     * @return array
+     */
+    public function loadRoleAssignmentsByRoleId( $roleId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn( 'contentobject_id' ),
+            $this->handler->quoteColumn( 'limit_identifier' ),
+            $this->handler->quoteColumn( 'limit_value' ),
+            $this->handler->quoteColumn( 'role_id' )
+        )->from(
+            $this->handler->quoteTable( 'ezuser_role' )
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'role_id' ),
+                $query->bindValue( $roleId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Returns the user policies associated with the user
      *
      * @param mixed $userId
@@ -483,22 +506,34 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Delete the specified role
+     * Delete the specified role including all of its assignments
      *
      * @param mixed $roleId
      */
     public function deleteRole( $roleId )
     {
-        $query = $this->handler->createDeleteQuery();
-        $query
-            ->deleteFrom( $this->handler->quoteTable( 'ezrole' ) )
+        $deleteAssignmentsQuery = $this->handler->createDeleteQuery();
+        $deleteAssignmentsQuery
+            ->deleteFrom( $this->handler->quoteTable( 'ezuser_role' ) )
             ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'id' ),
-                    $query->bindValue( $roleId, null, \PDO::PARAM_INT )
+                $deleteAssignmentsQuery->expr->eq(
+                    $this->handler->quoteColumn( 'role_id' ),
+                    $deleteAssignmentsQuery->bindValue( $roleId, null, \PDO::PARAM_INT )
                 )
             );
-        $query->prepare()->execute();
+
+        $deleteRoleQuery = $this->handler->createDeleteQuery();
+        $deleteRoleQuery
+            ->deleteFrom( $this->handler->quoteTable( 'ezrole' ) )
+            ->where(
+                $deleteRoleQuery->expr->eq(
+                    $this->handler->quoteColumn( 'id' ),
+                    $deleteRoleQuery->bindValue( $roleId, null, \PDO::PARAM_INT )
+                )
+            );
+
+        $deleteAssignmentsQuery->prepare()->execute();
+        $deleteRoleQuery->prepare()->execute();
     }
 
     /**
