@@ -1438,7 +1438,22 @@ class DoctrineDatabase extends Gateway
     public function loadRelations( $contentId, $contentVersionNo = null, $relationType = null )
     {
         $query = $this->queryBuilder->createRelationFindQuery();
-        $query->where(
+        $query->innerJoin(
+            $query->alias(
+                $this->dbHandler->quoteTable( "ezcontentobject" ),
+                "ezcontentobject_to"
+            ),
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "to_contentobject_id", "ezcontentobject_link" ),
+                    $this->dbHandler->quoteColumn( "id", "ezcontentobject_to" )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "status", "ezcontentobject_to" ),
+                    $query->bindValue( 1, null, \PDO::PARAM_INT )
+                )
+            )
+        )->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'from_contentobject_id', 'ezcontentobject_link' ),
                 $query->bindValue( $contentId, null, \PDO::PARAM_INT )
@@ -1524,6 +1539,10 @@ class DoctrineDatabase extends Gateway
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' ),
                     $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'status', 'ezcontentobject' ),
+                    $query->bindValue( 1, null, \PDO::PARAM_INT )
                 )
             )
         );
