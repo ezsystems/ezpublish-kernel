@@ -766,6 +766,7 @@ class Handler implements HandlerInterface
                             new LocationCriterionHandler\Location\RemoteId( $dbHandler ),
                             new LocationCriterionHandler\Location\Subtree( $dbHandler ),
                             new LocationCriterionHandler\Location\Visibility( $dbHandler ),
+                            new LocationCriterionHandler\Location\IsMainLocation( $dbHandler ),
                             new CommonCriterionHandler\ContentId( $dbHandler ),
                             new CommonCriterionHandler\ContentTypeGroupId( $dbHandler ),
                             new CommonCriterionHandler\ContentTypeId( $dbHandler ),

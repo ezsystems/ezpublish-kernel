@@ -131,6 +131,7 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
                         new LocationCriterionHandler\Location\RemoteId( $this->getDatabaseHandler() ),
                         new LocationCriterionHandler\Location\Subtree( $this->getDatabaseHandler() ),
                         new LocationCriterionHandler\Location\Visibility( $this->getDatabaseHandler() ),
+                        new LocationCriterionHandler\Location\IsMainLocation( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ContentId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ContentTypeGroupId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ContentTypeId( $this->getDatabaseHandler() ),
@@ -1431,6 +1432,50 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
                                 )
                             )
                         ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testIsMainLocationFilter()
+    {
+        $this->assertSearchResults(
+            array( 225 ),
+            $this->getLocationSearchHandler()->findLocations(
+                new LocationQuery(
+                    array(
+                        'filter' => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\Location\ParentLocationId( 224 ),
+                                new Criterion\Location\IsMainLocation(
+                                    Criterion\Location\IsMainLocation::MAIN
+                                )
+                            )
+                        ),
+                        'limit' => 10,
+                    )
+                )
+            )
+        );
+    }
+
+    public function testIsNotMainLocationFilter()
+    {
+        $this->assertSearchResults(
+            array( 510 ),
+            $this->getLocationSearchHandler()->findLocations(
+                new LocationQuery(
+                    array(
+                        'filter' => new Criterion\LogicalAnd(
+                                array(
+                                    new Criterion\Location\ParentLocationId( 224 ),
+                                    new Criterion\Location\IsMainLocation(
+                                        Criterion\Location\IsMainLocation::NOT_MAIN
+                                    )
+                                )
+                            ),
                         'limit' => 10,
                     )
                 )
