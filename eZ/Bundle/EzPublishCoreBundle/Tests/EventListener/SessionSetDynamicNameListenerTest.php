@@ -30,16 +30,22 @@ class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
      */
     private $session;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionStorage;
+
     protected function setUp()
     {
         parent::setUp();
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->session = $this->getMock( 'Symfony\Component\HttpFoundation\Session\SessionInterface' );
+        $this->sessionStorage = $this->getMock( 'Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface' );
     }
 
     public function testGetSubscribedEvents()
     {
-        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session, $this->sessionStorage );
         $this->assertSame(
             array(
                 MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 250 )
@@ -79,7 +85,7 @@ class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
             ->with( 'session_name' )
             ->will( $this->returnValue( $configuredSessionName ) );
 
-        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session, $this->sessionStorage );
         $listener->onSiteAccessMatch( new PostSiteAccessMatchEvent( $siteAccess, new Request(), HttpKernelInterface::MASTER_REQUEST ) );
     }
 

@@ -74,8 +74,21 @@ class Common extends AbstractParser
                 ->info( 'Whether to use legacy mode or not. If true, will let the legacy kernel handle url aliases.' )
             ->end()
             ->scalarNode( 'session_name' )
-                ->info( 'The session name. If you want a session name per siteaccess, use "{siteaccess_hash}" token. Will override default session name from framework.session.name' )
-                ->example( array( 'session_name' => 'eZSESSID{siteaccess_hash}' ) )
+                ->info( 'DEPRECATED. Use session.name' )
+            ->end()
+            ->arrayNode( 'session' )
+                ->info( 'Session options. Will override options defined in Symfony framework.session.*' )
+                ->children()
+                    ->scalarNode( 'name' )
+                        ->info( 'The session name. If you want a session name per siteaccess, use "{siteaccess_hash}" token. Will override default session name from framework.session.name' )
+                        ->example( array( 'session_name' => 'eZSESSID{siteaccess_hash}' ) )
+                    ->end()
+                    ->scalarNode( 'cookie_lifetime' )->end()
+                    ->scalarNode( 'cookie_path' )->end()
+                    ->scalarNode( 'cookie_domain' )->end()
+                    ->booleanNode( 'cookie_secure' )->end()
+                    ->booleanNode( 'cookie_httponly' )->end()
+                ->end()
             ->end()
             ->scalarNode( 'index_page' )
                 ->info( "The page that the index page will show. Default value is null." )
@@ -186,8 +199,22 @@ class Common extends AbstractParser
                 $container->setParameter( "ezsettings.$sa.storage_dir", $settings['storage_dir'] );
             if ( isset( $settings['binary_dir'] ) )
                 $container->setParameter( "ezsettings.$sa.binary_dir", $settings['binary_dir'] );
+
+            $this->registerInternalConfigArray( 'session', $config, $container );
+            // session_name setting is deprecated in favor of session.name
+            $sessionOptions = $container->hasParameter( "ezsettings.$sa.session" ) ? $container->getParameter( "ezsettings.$sa.session" ) : array();
+            if ( isset( $sessionOptions['name'] ) )
+            {
+                $container->setParameter( "ezsettings.$sa.session_name", $sessionOptions['name'] );
+            }
+            // session_name is deprecated, but if present, in addition to session.name, consider it instead (BC).
             if ( isset( $settings['session_name'] ) )
+            {
+                $sessionOptions['name'] = $settings['session_name'];
                 $container->setParameter( "ezsettings.$sa.session_name", $settings['session_name'] );
+                $container->setParameter( "ezsettings.$sa.session", $sessionOptions );
+            }
+
             if ( isset( $settings['http_cache']['purge_servers'] ) )
                 $container->setParameter( "ezsettings.$sa.http_cache.purge_servers", $settings['http_cache']['purge_servers'] );
             if ( isset( $settings['anonymous_user_id'] ) )
