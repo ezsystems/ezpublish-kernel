@@ -144,6 +144,11 @@ class DomainMapper
         $fields = array();
         foreach ( $spiFields as $spiField )
         {
+            if ( !isset( $fieldIdentifierMap[$spiField->fieldDefinitionId] ) )
+            {
+                continue;
+            }
+
             $fields[] = new Field(
                 array(
                     "id" => $spiField->id,
