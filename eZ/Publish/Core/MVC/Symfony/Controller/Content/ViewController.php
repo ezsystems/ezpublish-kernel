@@ -106,6 +106,10 @@ class ViewController extends Controller
             else
             {
                 $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+                if ( $location->invisible )
+                {
+                    throw new NotFoundHttpException( "Location #$locationId cannot be displayed as it is flagged as invisible." );
+                }
             }
 
             $response->headers->set( 'X-Location-Id', $locationId );
