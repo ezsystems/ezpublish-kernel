@@ -87,6 +87,21 @@ class Session implements EventSubscriberInterface
             $sessionInfos['storage'] = $this->sessionStorage;
         }
 
-        $event->getParameters()->set( 'session', $sessionInfos );
+        $legacyKernelParameters = $event->getParameters();
+        $legacyKernelParameters->set( 'session', $sessionInfos );
+
+        // Deactivate session cookie settings in legacy kernel.
+        // This will force using settings defined in Symfony.
+        $sessionSettings = array(
+            'site.ini/Session/CookieTimeout' => false,
+            'site.ini/Session/CookiePath' => false,
+            'site.ini/Session/CookieDomain' => false,
+            'site.ini/Session/CookieSecure' => false,
+            'site.ini/Session/CookieHttponly' => false,
+        );
+        $legacyKernelParameters->set(
+            "injected-settings",
+            $sessionSettings + (array)$legacyKernelParameters->get( "injected-settings" )
+        );
     }
 }
