@@ -44,11 +44,6 @@ EOT
         $kernel = $this->getContainer()->get( 'kernel' );
         foreach ( $kernel->getBundles() as $bundle )
         {
-            if ( !$bundle->getContainerExtension() instanceof LegacyBundleExtensionInterface )
-            {
-                continue;
-            }
-
             foreach ( $legacyExtensionsLocator->locate( $bundle->getPath() ) as $extensionDir )
             {
                 $output->writeln( $extensionDir );
