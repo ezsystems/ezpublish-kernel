@@ -82,11 +82,11 @@ class LegacyBundles extends ContainerAware implements EventSubscriberInterface
             return;
         }
 
-        $settings = array( "site.ini/ExtensionSettings/ActiveExtensions[]" => $this->options['extensions'] );
+        $settings = array( "site.ini/ExtensionSettings/ActiveExtensions" => $this->options['extensions'] );
 
         $event->getParameters()->set(
-            "injected-settings",
-            $settings + (array)$event->getParameters()->get( "injected-settings" )
+            "injected-merge-settings",
+            $settings + (array)$event->getParameters()->get( "injected-merge-settings" )
         );
     }
 }
