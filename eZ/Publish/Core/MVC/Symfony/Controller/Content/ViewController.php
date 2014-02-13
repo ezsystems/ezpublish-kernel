@@ -132,6 +132,10 @@ class ViewController extends Controller
         {
             throw new NotFoundHttpException( $e->getMessage(), $e );
         }
+        catch ( NotFoundHttpException $e )
+        {
+            throw $e;
+        }
         catch ( Exception $e )
         {
             return $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
