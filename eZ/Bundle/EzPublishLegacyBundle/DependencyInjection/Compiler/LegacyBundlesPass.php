@@ -16,7 +16,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class LegacyBundlesPass implements CompilerPassInterface
 {
-    /** @var \Symfony\Component\HttpKernel\KernelInterface */private $kernel;
+    /** @var \Symfony\Component\HttpKernel\KernelInterface */
+    private $kernel;
 
     public function __construct( KernelInterface $kernel )
     {
@@ -35,18 +36,9 @@ class LegacyBundlesPass implements CompilerPassInterface
         $extensionNames = array();
         foreach ( $this->kernel->getBundles() as $bundle )
         {
-            $bundleExtensions = $locator->locate( $bundle->getPath() );
-            array_walk(
-                $bundleExtensions,
-                function( &$path ) {
-                    $path = basename( $path );
-                }
-            );
-
-            $extensionNames = array_merge( $extensionNames, $bundleExtensions );
+            $extensionNames += array_flip( $locator->getExtensionNames( $bundle ) );
         }
 
-        array_unique( $extensionNames );
-        $container->setParameter( 'ezpublish_legacy.legacy_bundles_extensions', $extensionNames );
+        $container->setParameter( 'ezpublish_legacy.legacy_bundles_extensions', array_keys( $extensionNames ) );
     }
 }

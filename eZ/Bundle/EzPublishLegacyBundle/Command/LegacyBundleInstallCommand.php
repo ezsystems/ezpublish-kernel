@@ -44,7 +44,7 @@ EOT
         $kernel = $this->getContainer()->get( 'kernel' );
         foreach ( $kernel->getBundles() as $bundle )
         {
-            foreach ( $legacyExtensionsLocator->locate( $bundle->getPath() ) as $extensionDir )
+            foreach ( $legacyExtensionsLocator->getExtensionDirectories( $bundle->getPath() ) as $extensionDir )
             {
                 $output->writeln( $extensionDir );
                 $this->linkLegacyExtension(

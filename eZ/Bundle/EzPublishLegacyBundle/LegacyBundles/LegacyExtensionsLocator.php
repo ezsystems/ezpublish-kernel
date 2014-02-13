@@ -9,21 +9,21 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\LegacyBundles;
 
 use DirectoryIterator;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class LegacyExtensionsLocator implements LegacyExtensionsLocatorInterface
 {
-    public function locate( $bundlePath )
+    public function getExtensionDirectories( $bundlePath )
     {
         $bundlePath = rtrim( $bundlePath, '/\\' );
         $legacyPath = "$bundlePath/ezpublish_legacy/";
 
-        $return = array();
-
         if ( !is_dir( $legacyPath ) )
         {
-            return $return;
+            return array();
         }
 
+        $return = array();
         /** @var $item DirectoryIterator */
         foreach ( new DirectoryIterator( $legacyPath ) as $item )
         {
@@ -38,5 +38,26 @@ class LegacyExtensionsLocator implements LegacyExtensionsLocatorInterface
             }
         }
         return $return;
+    }
+
+    public function getExtensionNames( BundleInterface $bundle )
+    {
+        $extensions = $this->getExtensionDirectories( $bundle->getPath() );
+        array_walk(
+            $extensions,
+            function( &$path ) {
+                $path = basename( $path );
+            }
+        );
+
+        if ( $bundle instanceof LegacyBundleInterface )
+        {
+            $extensions = array_merge(
+                $extensions,
+                $bundle->getLegacyExtensionsNames()
+            );
+        }
+
+        return $extensions;
     }
 }

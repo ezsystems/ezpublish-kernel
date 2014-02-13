@@ -23,7 +23,7 @@ class LegacyExtensionsLocatorTest extends PHPUnit_Framework_TestCase
         $this->initVfs();
     }
 
-    public function testLocate()
+    public function testGetExtensionDirectories()
     {
         $locator = new LegacyExtensionsLocator( $this->vfsRoot );
 
@@ -32,17 +32,39 @@ class LegacyExtensionsLocatorTest extends PHPUnit_Framework_TestCase
                 vfsStream::url( 'eZ/TestBundle/ezpublish_legacy/extension1' ),
                 vfsStream::url( 'eZ/TestBundle/ezpublish_legacy/extension2' )
             ),
-            $locator->locate( vfsStream::url( 'eZ/TestBundle/' ) )
+            $locator->getExtensionDirectories( vfsStream::url( 'eZ/TestBundle/' ) )
         );
     }
 
-    public function testLocateNoLegacy()
+    public function testGetExtensionDirectoriesNoLegacy()
     {
         $locator = new LegacyExtensionsLocator( $this->vfsRoot );
 
         self::assertEquals(
             array(),
-            $locator->locate( vfsStream::url( 'No/Such/Bundle/' ) )
+            $locator->getExtensionDirectories( vfsStream::url( 'No/Such/Bundle/' ) )
+        );
+    }
+
+    public function testGetExtensionsNames()
+    {
+        $bundle = $this->getMock( 'eZ\Bundle\EzPublishLegacyBundle\LegacyBundles\LegacyExtensionsLocatorInterface' );
+        $bundle->expects( $this->any() )
+            ->method( 'getPath' )
+            ->will( $this->returnValue( vfsStream::url( 'eZ/TestBundle/' ) ) );
+        $bundle->expects( $this->any() )
+            ->method( 'getLegacyExtensionsNames' )
+            ->will( $this->returnValue( array( 'extension3' ) ) );
+
+        $locator = new LegacyExtensionsLocator( $this->vfsRoot );
+
+        self::assertEquals(
+            array(
+                'extension1',
+                'extension2',
+                'extension3'
+            ),
+            $locator->getExtensionNames( $bundle )
         );
     }
 
