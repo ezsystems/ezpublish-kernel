@@ -77,7 +77,7 @@ Feature: Creating a Content Type Group
         And I add to request the header "Content-Type" with "application/vnd.ez.api.ContentTypeGroupInput+json"
         And I add to request body an invalid "Create ContentTypeGroup" in "json"
         And I send the request
-        Then I see "403 Bad Request" reponse code
+        Then I see "400 Bad Request" reponse code
 
     @qa-258
     Scenario Outline: Attempt to create a Content Type Group with body type different from Content-Type header
