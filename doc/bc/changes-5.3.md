@@ -52,6 +52,9 @@ Changes affecting version compatibility with former or future versions.
 * `ezpublish.api.repository.lazy` service is deprecated in favor of `ezpublish.api.repository`, which
   is now a lazy service.
 
+* In semantic configuration, `ezpublish.system.<siteAccessName>.session_name` is deprecated.
+  Use `ezpublish.system.<siteAccessName>.session.name` instead.
+
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).
