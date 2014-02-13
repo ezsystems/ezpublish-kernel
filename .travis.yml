@@ -18,7 +18,7 @@ env:
     - TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
     - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
     - SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
-    - SOLR_VERSION="4.6.0" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+    - SOLR_VERSION="4.6.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
 
 matrix:
   allow_failures:
