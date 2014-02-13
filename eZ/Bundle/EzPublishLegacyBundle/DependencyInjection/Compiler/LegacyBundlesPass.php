@@ -43,7 +43,7 @@ class LegacyBundlesPass implements CompilerPassInterface
                 }
             );
 
-            $extensionNames += $bundleExtensions;
+            $extensionNames = array_merge( $extensionNames, $bundleExtensions );
         }
 
         array_unique( $extensionNames );

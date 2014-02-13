@@ -27,7 +27,7 @@ class LegacyExtensionsLocator implements LegacyExtensionsLocatorInterface
         /** @var $item DirectoryIterator */
         foreach ( new DirectoryIterator( $legacyPath ) as $item )
         {
-            if ( !$item->isDir() )
+            if ( !$item->isDir() or $item->isDot() )
             {
                 continue;
             }
