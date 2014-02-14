@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence;
 
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
@@ -23,13 +24,13 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 class Factory extends ContainerAware
 {
     /**
-     * @var string
+     * @var \eZ\Publish\SPI\Persistence\Handler
      */
-    private $persistenceId;
+    protected $persistenceHandler;
 
-    public function __construct( $persistenceId )
+    public function __construct( PersistenceHandler $persistenceHandler )
     {
-        $this->persistenceId = $persistenceId;
+        $this->persistenceHandler = $persistenceHandler;
     }
 
     /**
@@ -45,7 +46,7 @@ class Factory extends ContainerAware
      */
     public function getContentHandler()
     {
-        return $this->getPersistenceHandler()->contentHandler();
+        return $this->persistenceHandler->contentHandler();
     }
 
     /**
@@ -53,7 +54,7 @@ class Factory extends ContainerAware
      */
     public function getSearchHandler()
     {
-        return $this->getPersistenceHandler()->searchHandler();
+        return $this->persistenceHandler->searchHandler();
     }
 
     /**
@@ -61,7 +62,7 @@ class Factory extends ContainerAware
      */
     public function getContentTypeHandler()
     {
-        return $this->getPersistenceHandler()->contentTypeHandler();
+        return $this->persistenceHandler->contentTypeHandler();
     }
 
     /**
@@ -69,7 +70,7 @@ class Factory extends ContainerAware
      */
     public function getContentLanguageHandler()
     {
-        return $this->getPersistenceHandler()->contentLanguageHandler();
+        return $this->persistenceHandler->contentLanguageHandler();
     }
 
     /**
@@ -77,7 +78,7 @@ class Factory extends ContainerAware
      */
     public function getLocationHandler()
     {
-        return $this->getPersistenceHandler()->locationHandler();
+        return $this->persistenceHandler->locationHandler();
     }
 
     /**
@@ -85,7 +86,7 @@ class Factory extends ContainerAware
      */
     public function getLocationSearchHandler()
     {
-        return $this->getPersistenceHandler()->locationSearchHandler();
+        return $this->persistenceHandler->locationSearchHandler();
     }
 
     /**
@@ -93,7 +94,7 @@ class Factory extends ContainerAware
      */
     public function getObjectStateHandler()
     {
-        return $this->getPersistenceHandler()->objectStateHandler();
+        return $this->persistenceHandler->objectStateHandler();
     }
 
     /**
@@ -101,7 +102,7 @@ class Factory extends ContainerAware
      */
     public function getTrashHandler()
     {
-        return $this->getPersistenceHandler()->trashHandler();
+        return $this->persistenceHandler->trashHandler();
     }
 
     /**
@@ -109,7 +110,7 @@ class Factory extends ContainerAware
      */
     public function getUserHandler()
     {
-        return $this->getPersistenceHandler()->userHandler();
+        return $this->persistenceHandler->userHandler();
     }
 
     /**
@@ -117,7 +118,7 @@ class Factory extends ContainerAware
      */
     public function getSectionHandler()
     {
-        return $this->getPersistenceHandler()->sectionHandler();
+        return $this->persistenceHandler->sectionHandler();
     }
 
     /**
@@ -125,7 +126,7 @@ class Factory extends ContainerAware
      */
     public function getUrlAliasHandler()
     {
-        return $this->getPersistenceHandler()->urlAliasHandler();
+        return $this->persistenceHandler->urlAliasHandler();
     }
 
     /**
@@ -133,6 +134,6 @@ class Factory extends ContainerAware
      */
     public function getUrlWildcardHandler()
     {
-        return $this->getPersistenceHandler()->urlWildcardHandler();
+        return $this->persistenceHandler->urlWildcardHandler();
     }
 }

@@ -19,7 +19,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class LegacyStorageEnginePass implements CompilerPassInterface
 {
-
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */

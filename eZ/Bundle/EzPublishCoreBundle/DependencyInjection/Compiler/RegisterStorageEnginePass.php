@@ -11,6 +11,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use LogicException;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This compiler pass will register eZ Publish storage engines
@@ -34,25 +36,19 @@ class RegisterStorageEnginePass implements CompilerPassInterface
         if ( !$container->hasDefinition( 'ezpublish.api.storage_engine.factory' ) )
             return;
 
-        $default = $container->getParameter( 'ezpublish.api.storage_engine.default' );
         $storageEngineFactoryDef = $container->getDefinition( 'ezpublish.api.storage_engine.factory' );
-
         foreach ( $container->findTaggedServiceIds( 'ezpublish.storageEngine' ) as $id => $attributes )
         {
             foreach ( $attributes as $attribute )
             {
                 if ( !isset( $attribute['alias'] ) )
-                    throw new \LogicException( 'ezpublish.storageEngine service tag needs an "alias" attribute to identify the field type. None given.' );
-
-                // Set the default id on parameter ezpublish.spi.persistence.default_id for lazy factory
-                if ( $attribute['alias'] === $default )
-                    $container->setParameter( 'ezpublish.spi.persistence.default_id', $id );
+                    throw new LogicException( 'ezpublish.storageEngine service tag needs an "alias" attribute to identify the field type. None given.' );
 
                 // Register the storage engine on the main storage engine factory
                 $storageEngineFactoryDef->addMethodCall(
                     'registerStorageEngine',
                     array(
-                        $id,
+                        new Reference( $id ),
                         $attribute['alias']
                     )
                 );
