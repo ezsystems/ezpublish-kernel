@@ -44,9 +44,9 @@
         "sensio/distribution-bundle": "~2.3",
         "nelmio/cors-bundle": "1.3.*",
         "pagerfanta/pagerfanta": "~1.0",
-        "doctrine/dbal": "~2.4",
+        "doctrine/dbal": "2.5.*@beta",
         "ocramius/proxy-manager": "0.5.*",
-        "doctrine/doctrine-bundle": "~1.2.0"
+        "doctrine/doctrine-bundle": "1.3.*@beta"
     },
     "require-dev": {
         "ezsystems/ezpublish-legacy": "@dev",
