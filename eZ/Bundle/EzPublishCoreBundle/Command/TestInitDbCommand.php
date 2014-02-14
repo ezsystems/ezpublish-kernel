@@ -35,8 +35,14 @@ EOT
         $database = $this->getContainer()->get( 'ezpublish.config.resolver' )->getParameter( 'database.params' );
         if ( is_array( $database ) )
         {
-            $dbType = $database['type'];
-            $database = $database['database'];
+            $driverMap = array(
+                'pdo_mysql' => 'mysql',
+                'pdo_pgsql' => 'pgsql',
+                'pdo_sqlite' => 'sqlite',
+            );
+
+            $dbType = $driverMap[$database['driver']];
+            $database = $database['dbname'];
         }
         else
         {
