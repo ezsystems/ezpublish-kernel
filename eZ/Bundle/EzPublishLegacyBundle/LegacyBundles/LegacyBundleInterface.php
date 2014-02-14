@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 /**
  * By implementing this interface, a bundle can return custom name of legacy extensions that should be injected.
  */
-interface LegacyBundleInterface extends BundleInterface
+interface LegacyBundleInterface
 {
     /**
      * Returns a list of legacy extension names

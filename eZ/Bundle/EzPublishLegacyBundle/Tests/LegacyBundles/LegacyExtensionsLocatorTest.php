@@ -9,6 +9,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\Tests\LegacyBundles;
 
 use eZ\Bundle\EzPublishLegacyBundle\LegacyBundles\LegacyExtensionsLocator;
+use Mockery;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\visitor\vfsStreamStructureVisitor;
 use PHPUnit_Framework_TestCase;
@@ -48,13 +49,16 @@ class LegacyExtensionsLocatorTest extends PHPUnit_Framework_TestCase
 
     public function testGetExtensionsNames()
     {
-        $bundle = $this->getMock( 'eZ\Bundle\EzPublishLegacyBundle\LegacyBundles\LegacyExtensionsLocatorInterface' );
-        $bundle->expects( $this->any() )
-            ->method( 'getPath' )
-            ->will( $this->returnValue( vfsStream::url( 'eZ/TestBundle/' ) ) );
-        $bundle->expects( $this->any() )
-            ->method( 'getLegacyExtensionsNames' )
-            ->will( $this->returnValue( array( 'extension3' ) ) );
+        $bundle = Mockery::mock(
+            'eZ\Bundle\EzPublishLegacyBundle\LegacyBundles\LegacyBundleInterface,' .
+            'Symfony\Component\HttpKernel\Bundle\BundleInterface'
+        );
+        $bundle
+            ->shouldReceive( 'getPath' )
+            ->andReturn( vfsStream::url( 'eZ/TestBundle/' ) );
+        $bundle
+            ->shouldReceive( 'getLegacyExtensionsNames' )
+            ->andReturn( array( 'extension3' ) );
 
         $locator = new LegacyExtensionsLocator( $this->vfsRoot );
 
