@@ -387,4 +387,87 @@ class CommonTest extends AbstractExtensionTestCase
         $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.base_layout' ) );
         $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.security.login_template' ) );
     }
+
+    /**
+     * @dataProvider sessionSettingsProvider
+     */
+    public function testSessionSettings( array $inputParams, array $expected )
+    {
+        $this->load(
+            array(
+                'system' => array(
+                    'ezdemo_site' => $inputParams
+                )
+            )
+        );
+
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.session' ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.session_name' ) );
+        $this->assertEquals( $expected['session'], $this->container->getParameter( 'ezsettings.ezdemo_site.session' ) );
+        $this->assertEquals( $expected['session_name'], $this->container->getParameter( 'ezsettings.ezdemo_site.session_name' ) );
+    }
+
+    public function sessionSettingsProvider()
+    {
+        return array(
+            array(
+                array(
+                    'session' => array(
+                        'name' => 'foo',
+                        'cookie_path' => '/foo',
+                        'cookie_domain' => 'foo.com',
+                        'cookie_lifetime' => 86400,
+                        'cookie_secure' => false,
+                        'cookie_httponly' => true,
+                    )
+                ),
+                array(
+                    'session' => array(
+                        'name' => 'foo',
+                        'cookie_path' => '/foo',
+                        'cookie_domain' => 'foo.com',
+                        'cookie_lifetime' => 86400,
+                        'cookie_secure' => false,
+                        'cookie_httponly' => true,
+                    ),
+                    'session_name' => 'foo'
+                )
+            ),
+            array(
+                array(
+                    'session' => array(
+                        'name' => 'foo',
+                        'cookie_path' => '/foo',
+                        'cookie_domain' => 'foo.com',
+                        'cookie_lifetime' => 86400,
+                        'cookie_secure' => false,
+                        'cookie_httponly' => true,
+                    ),
+                    'session_name' => 'bar'
+                ),
+                array(
+                    'session' => array(
+                        'name' => 'bar',
+                        'cookie_path' => '/foo',
+                        'cookie_domain' => 'foo.com',
+                        'cookie_lifetime' => 86400,
+                        'cookie_secure' => false,
+                        'cookie_httponly' => true,
+                    ),
+                    'session_name' => 'bar'
+                )
+            ),
+            array(
+                array(
+                    'session_name' => 'some_other_session_name'
+                ),
+                array(
+                    'session' => array(
+                        'name' => 'some_other_session_name',
+                    ),
+                    'session_name' => 'some_other_session_name'
+                )
+            ),
+        );
+    }
 }

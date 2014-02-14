@@ -13,6 +13,7 @@ parameters:
     fragment.renderer.esi.class: eZ\Bundle\EzPublishCoreBundle\Fragment\EsiFragmentRenderer
     fragment.renderer.inline.class: eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer
     fragment.renderer.hinclude.class: eZ\Bundle\EzPublishCoreBundle\Fragment\HincludeFragmentRenderer
+    ezpublish.fragment_listener.factory.class: eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentListenerFactory
 
     ezpublish.controller_manager.class: eZ\Publish\Core\MVC\Symfony\Controller\Manager
     ezpublish.controller_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener
@@ -89,3 +90,9 @@ services:
         arguments: [@controller_resolver, @ezpublish.controller_manager, @ezpublish.api.repository, @logger]
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish.fragment_listener.factory:
+        class: %ezpublish.fragment_listener.factory.class%
+        arguments: [%fragment.path%]
+        calls:
+            - [setRequest, [@?request=]]

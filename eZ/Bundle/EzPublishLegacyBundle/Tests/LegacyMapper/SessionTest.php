@@ -68,6 +68,13 @@ class SessionTest extends PHPUnit_Framework_TestCase
                     'namespace' => false,
                     'has_previous' => false,
                     'storage' => false,
+                ),
+                'injected-settings' => array(
+                    'site.ini/Session/CookieTimeout' => false,
+                    'site.ini/Session/CookiePath' => false,
+                    'site.ini/Session/CookieDomain' => false,
+                    'site.ini/Session/CookieSecure' => false,
+                    'site.ini/Session/CookieHttponly' => false,
                 )
             ),
             $event->getParameters()->all()
@@ -106,6 +113,13 @@ class SessionTest extends PHPUnit_Framework_TestCase
                     'namespace' => $storageKey,
                     'has_previous' => $hasPreviousSession,
                     'storage' => $this->sessionStorage
+                ),
+                'injected-settings' => array(
+                    'site.ini/Session/CookieTimeout' => false,
+                    'site.ini/Session/CookiePath' => false,
+                    'site.ini/Session/CookieDomain' => false,
+                    'site.ini/Session/CookieSecure' => false,
+                    'site.ini/Session/CookieHttponly' => false,
                 )
             ),
             $event->getParameters()->all()

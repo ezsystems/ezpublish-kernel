@@ -30,16 +30,22 @@ class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
      */
     private $session;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionStorage;
+
     protected function setUp()
     {
         parent::setUp();
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->session = $this->getMock( 'Symfony\Component\HttpFoundation\Session\SessionInterface' );
+        $this->sessionStorage = $this->getMock( 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage' );
     }
 
     public function testGetSubscribedEvents()
     {
-        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session, $this->sessionStorage );
         $this->assertSame(
             array(
                 MVCEvents::SITEACCESS => array( 'onSiteAccessMatch', 250 )
@@ -50,47 +56,113 @@ class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
 
     public function testOnSiteAccessMatchNoSession()
     {
-        $listener = new SessionSetDynamicNameListener( $this->configResolver, null );
+        $this->sessionStorage
+            ->expects( $this->never() )
+            ->method( 'setOptions' );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, null, $this->sessionStorage );
         $listener->onSiteAccessMatch( new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST ) );
     }
 
     public function testOnSiteAccessMatchSubRequest()
     {
-        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session );
+        $this->sessionStorage
+            ->expects( $this->never() )
+            ->method( 'setOptions' );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session, $this->sessionStorage );
+        $listener->onSiteAccessMatch( new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST ) );
+    }
+
+    public function testOnSiteAccessMatchNonNativeSessionStorage()
+    {
+        $this->configResolver
+            ->expects( $this->never() )
+            ->method( 'getParameter' );
+        $listener = new SessionSetDynamicNameListener(
+            $this->configResolver,
+            $this->session,
+            $this->getMock( 'Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface' )
+        );
         $listener->onSiteAccessMatch( new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST ) );
     }
 
     /**
      * @dataProvider onSiteAccessMatchProvider
      */
-    public function testOnSiteAccessMatch( SiteAccess $siteAccess, $configuredSessionName, $expectedSessionName )
+    public function testOnSiteAccessMatch( SiteAccess $siteAccess, $configuredSessionStorageOptions, array $expectedSessionStorageOptions )
     {
         $this->session
             ->expects( $this->once() )
             ->method( 'isStarted' )
             ->will( $this->returnValue( false ) );
-        $this->session
+        $this->sessionStorage
             ->expects( $this->once() )
-            ->method( 'setName' )
-            ->with( $expectedSessionName );
+            ->method( 'setOptions' )
+            ->with( $expectedSessionStorageOptions );
         $this->configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )
-            ->with( 'session_name' )
-            ->will( $this->returnValue( $configuredSessionName ) );
+            ->with( 'session' )
+            ->will( $this->returnValue( $configuredSessionStorageOptions ) );
 
-        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session );
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session, $this->sessionStorage );
         $listener->onSiteAccessMatch( new PostSiteAccessMatchEvent( $siteAccess, new Request(), HttpKernelInterface::MASTER_REQUEST ) );
     }
 
     public function onSiteAccessMatchProvider()
     {
         return array(
-            array( new SiteAccess( 'foo' ), 'eZSESSID', 'eZSESSID' ),
-            array( new SiteAccess( 'foo' ), 'eZSESSID{siteaccess_hash}', 'eZSESSID' . md5( 'foo' ) ),
-            array( new SiteAccess( 'foo' ), 'this_is_a_session_name', 'eZSESSID_this_is_a_session_name' ),
-            array( new SiteAccess( 'foo' ), 'something{siteaccess_hash}', 'eZSESSID_something' . md5( 'foo' ) ),
-            array( new SiteAccess( 'bar_baz' ), '{siteaccess_hash}something', 'eZSESSID_' . md5( 'bar_baz' ) . 'something' ),
+            array( new SiteAccess( 'foo' ), array( 'name' => 'eZSESSID' ), array( 'name' => 'eZSESSID' ) ),
+            array( new SiteAccess( 'foo' ), array( 'name' => 'eZSESSID{siteaccess_hash}' ), array( 'name' => 'eZSESSID' . md5( 'foo' ) ) ),
+            array( new SiteAccess( 'foo' ), array( 'name' => 'this_is_a_session_name' ), array( 'name' => 'eZSESSID_this_is_a_session_name' ) ),
+            array( new SiteAccess( 'foo' ), array( 'name' => 'something{siteaccess_hash}' ), array( 'name' => 'eZSESSID_something' . md5( 'foo' ) ) ),
+            array( new SiteAccess( 'bar_baz' ), array( 'name' => '{siteaccess_hash}something' ), array( 'name' => 'eZSESSID_' . md5( 'bar_baz' ) . 'something' ) ),
+            array(
+                new SiteAccess( 'foo' ),
+                array(
+                    'name' => 'this_is_a_session_name',
+                    'cookie_path' => '/foo',
+                    'cookie_domain' => 'foo.com',
+                    'cookie_lifetime' => 86400,
+                    'cookie_secure' => false,
+                    'cookie_httponly' => true
+                ),
+                array(
+                    'name' => 'eZSESSID_this_is_a_session_name',
+                    'cookie_path' => '/foo',
+                    'cookie_domain' => 'foo.com',
+                    'cookie_lifetime' => 86400,
+                    'cookie_secure' => false,
+                    'cookie_httponly' => true
+                )
+            ),
         );
+    }
+
+    public function testOnSiteAccessMatchNoConfiguredSessionName()
+    {
+        $configuredSessionStorageOptions = array( 'cookie_path' => '/bar' );
+        $sessionName = 'some_default_name';
+        $sessionOptions = $configuredSessionStorageOptions + array( 'name' => "eZSESSID_$sessionName" );
+
+        $this->session
+            ->expects( $this->once() )
+            ->method( 'isStarted' )
+            ->will( $this->returnValue( false ) );
+        $this->session
+            ->expects( $this->once() )
+            ->method( 'getName' )
+            ->will( $this->returnValue( 'some_default_name' ) );
+        $this->sessionStorage
+            ->expects( $this->once() )
+            ->method( 'setOptions' )
+            ->with( $sessionOptions );
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'session' )
+            ->will( $this->returnValue( $configuredSessionStorageOptions ) );
+
+        $listener = new SessionSetDynamicNameListener( $this->configResolver, $this->session, $this->sessionStorage );
+        $listener->onSiteAccessMatch( new PostSiteAccessMatchEvent( new SiteAccess(), new Request(), HttpKernelInterface::MASTER_REQUEST ) );
     }
 }
