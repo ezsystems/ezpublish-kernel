@@ -1,0 +1,80 @@
+--TEST--
+"ez_is_field_empty" function
+--TEMPLATE--
+{% if ez_is_field_empty( content, field ) %}
+    empty
+{% else %}
+    not empty
+{% endif %}
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'data',
+        array(
+            'ezdata' => array(
+                'id' => 5,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            )
+        )
+    ),
+    'field' => $this->getField( false )->fieldDefIdentifier
+)
+--EXPECT--
+not empty
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'data',
+        array(
+            'ezdata' => array(
+                'id' => 5,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            )
+        )
+    ),
+    'field' => $this->getField( true )->fieldDefIdentifier
+)
+--EXPECT--
+empty
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'data',
+        array(
+            'ezdata' => array(
+                'id' => 5,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            )
+        )
+    ),
+    'field' => $this->getField( false )
+)
+--EXPECT--
+not empty
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'data',
+        array(
+            'ezdata' => array(
+                'id' => 5,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR'
+            )
+        )
+    ),
+    'field' => $this->getField( true )
+)
+--EXPECT--
+empty
