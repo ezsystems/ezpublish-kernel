@@ -6,6 +6,7 @@ php:
   - 5.3
   - 5.4
   - 5.5
+  - hhvm
 
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
@@ -21,6 +22,11 @@ env:
     - SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
 
 matrix:
+  allow_failures:
+    - php: hhvm
+      env: TEST_CONFIG="phpunit.xml"
+    - php: hhvm
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
   exclude:
 # 5.3.3 run: mysql integration test
     - php: 5.3.3
@@ -56,6 +62,15 @@ matrix:
       env: TEST_CONFIG="phpunit.xml"
     - php: 5.5
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+# hhvm run: unit test + sqlite integration test
+    - php: hhvm
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
+    - php: hhvm
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+    - php: hhvm
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+    - php: hhvm
+      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
 
 # test only master (+ Pull requests)
 branches:
