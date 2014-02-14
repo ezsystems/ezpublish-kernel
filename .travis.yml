@@ -6,6 +6,7 @@ php:
   - 5.3
   - 5.4
   - 5.5
+  - hhvm
 
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
@@ -25,6 +26,10 @@ matrix:
   allow_failures:
     - php: 5.3.3
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
+    - php: hhvm
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+    - php: hhvm
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
   exclude:
 # 5.3.3 run: unit test + mysql integration test
     - php: 5.3.3
@@ -64,6 +69,17 @@ matrix:
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
     - php: 5.5
       env: SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+# hhvm run: unit test + sqlite integration test
+    - php: hhvm
+      env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
+    - php: hhvm
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta" SYMFONY_VERSION="2.3.*"
+    - php: hhvm
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+    - php: hhvm
+      env: SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+    - php: hhvm
+      env: SOLR_VERSION="4.6.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
 
 # test only master (+ Pull requests)
 branches:
