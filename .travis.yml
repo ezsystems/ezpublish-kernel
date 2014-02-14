@@ -81,7 +81,6 @@ branches:
 before_script:
   - if [ $DB == "mysql" ]; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" -uroot ; fi
   - if [ $DB == "postgresql" ]; then psql -c "CREATE DATABASE $DB_NAME;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres $DB_NAME ; fi
-  - cp config.php-DEVELOPMENT config.php
   - ./composer_install_github_key.sh
   - if [ $SYMFONY_VERSION != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;
   - composer install --dev --prefer-source
