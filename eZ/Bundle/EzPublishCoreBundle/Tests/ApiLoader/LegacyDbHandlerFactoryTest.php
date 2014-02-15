@@ -15,21 +15,39 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testBuildLegacyDbHandler()
     {
+        $doctrineConnection = 'my_doctrine_connection';
+        $repositoryAlias = 'my_repository';
+        $repositories = array(
+            $repositoryAlias => array(
+                'engine' => 'legacy',
+                'connection' => $doctrineConnection
+            )
+        );
+
         $configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )
-            ->with( 'database.params' )
-            ->will( $this->returnValue( 'sqlite://:memory:' ) );
+            ->with( 'repository' )
+            ->will( $this->returnValue( $repositoryAlias ) );
 
-        $factory = new LegacyDbHandlerFactory( $configResolver );
+        $container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
+        $container
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'ezpublish.api.storage_engine.legacy.dbhandler.class' )
+            ->will( $this->returnValue( 'eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler' ) );
+        $container
+            ->expects( $this->any() )
+            ->method( 'get' )
+            ->with( "doctrine.dbal.{$doctrineConnection}_connection" )
+            ->will( $this->returnValue( $this->getMock( 'Doctrine\DBAL\Driver\Connection' ) ) );
+
+        $factory = new LegacyDbHandlerFactory( $configResolver, $repositories );
+        $factory->setContainer( $container );
         $handler = $factory->buildLegacyDbHandler();
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler',
-            $handler
-        );
-        $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Doctrine\\ConnectionHandler\\SqliteConnectionHandler',
+            'eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler',
             $handler
         );
     }
