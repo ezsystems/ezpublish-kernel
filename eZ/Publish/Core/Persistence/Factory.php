@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence;
 
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
-use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
  * A reusable factory for all the "storage engine" handlers
@@ -21,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  *
  * Tests? See Cache\Tests\FactoryTests.php
  */
-class Factory extends ContainerAware
+class Factory
 {
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler
@@ -38,7 +37,7 @@ class Factory extends ContainerAware
      */
     public function getPersistenceHandler()
     {
-        return $this->container->get( $this->persistenceId );
+        return $this->persistenceHandler;
     }
 
     /**

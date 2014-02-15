@@ -15,31 +15,6 @@ namespace eZ\Publish\Core\Persistence\Cache\Tests;
 class PersistenceHandlerTest extends HandlerTest
 {
     /**
-     * @param array|null $persistenceFactoryMockMethod
-     */
-    protected $persistenceFactoryMockMethods = array( 'getPersistenceHandler' );
-
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $innerPersistenceHandlerMock;
-
-    /**
-     * Setup the PersistenceHandlerTest.
-     */
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->innerPersistenceHandlerMock = $this->getMock( "eZ\\Publish\\SPI\\Persistence\\Handler" );
-
-        $this->persistenceFactoryMock
-            ->expects( $this->any() )
-            ->method( 'getPersistenceHandler' )
-            ->will( $this->returnValue( $this->innerPersistenceHandlerMock ) );
-    }
-
-    /**
      * Test that instance is of correct type
      *
      * @covers eZ\Publish\Core\Persistence\Cache\Handler::__construct

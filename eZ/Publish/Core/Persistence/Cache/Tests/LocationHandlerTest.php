@@ -42,9 +42,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -85,9 +85,9 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
-            ->method( 'getLocationHandler' );
+            ->method( 'locationHandler' );
 
         $cacheItemMock
             ->expects( $this->never() )
@@ -121,9 +121,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -148,7 +148,7 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -223,9 +223,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -250,7 +250,7 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -325,9 +325,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -352,7 +352,7 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -414,9 +414,9 @@ class LocationHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -440,9 +440,9 @@ class LocationHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -474,9 +474,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -500,9 +500,9 @@ class LocationHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -527,9 +527,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -555,9 +555,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -607,9 +607,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -640,9 +640,9 @@ class LocationHandlerTest extends HandlerTest
             ->with( 'location', 'subtree' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -673,9 +673,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -746,9 +746,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -773,9 +773,9 @@ class LocationHandlerTest extends HandlerTest
             ->with( 'content' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -808,9 +808,9 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getLocationHandler' )
+            ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock

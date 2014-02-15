@@ -63,9 +63,9 @@ class UserHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $expects = $innerHandler
@@ -93,9 +93,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -124,9 +124,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -155,9 +155,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -215,9 +215,9 @@ class UserHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -261,7 +261,7 @@ class UserHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything()  );
 
@@ -298,9 +298,9 @@ class UserHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -354,7 +354,7 @@ class UserHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything()  );
 
@@ -395,9 +395,9 @@ class UserHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -447,7 +447,7 @@ class UserHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything()  );
 
@@ -471,9 +471,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -516,9 +516,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -551,9 +551,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -588,9 +588,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -619,9 +619,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -650,9 +650,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -681,9 +681,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -724,9 +724,9 @@ class UserHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\User\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUserHandler' )
+            ->method( 'userHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock

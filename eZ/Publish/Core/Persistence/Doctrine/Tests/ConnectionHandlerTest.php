@@ -23,7 +23,7 @@ class ConnectionHandlerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'driver'   => 'pdo_pgsql',
-                    'username' => 'postgres',
+                    'user' => 'postgres',
                     'host'     => 'localhost',
                     'dbname'   => 'eztest',
                 ),
@@ -32,7 +32,7 @@ class ConnectionHandlerTest extends \PHPUnit_Framework_TestCase
             array(
                 array(
                     'driver'   => 'pdo_mysql',
-                    'username' => 'root',
+                    'user' => 'root',
                     'host'     => 'localhost',
                     'dbname'   => 'eztest',
                 ),

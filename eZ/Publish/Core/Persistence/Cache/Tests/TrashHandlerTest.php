@@ -28,9 +28,9 @@ class TrashHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getTrashHandler' )
+            ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $trashed = new SPITrashed(
@@ -59,9 +59,9 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getTrashHandler' )
+            ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $trashed = new SPITrashed(
@@ -106,9 +106,9 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getTrashHandler' )
+            ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -143,9 +143,9 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getTrashHandler' )
+            ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $criterion = new Criterion\ContentId( 33 );
@@ -174,9 +174,9 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getTrashHandler' )
+            ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock
@@ -200,9 +200,9 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getTrashHandler' )
+            ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $innerHandlerMock

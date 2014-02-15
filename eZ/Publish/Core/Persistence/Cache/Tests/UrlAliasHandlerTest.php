@@ -48,9 +48,9 @@ class UrlAliasHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $expects = $innerHandler
@@ -82,9 +82,9 @@ class UrlAliasHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -112,9 +112,9 @@ class UrlAliasHandlerTest extends HandlerTest
 
         $urlAlias = new UrlAlias( array( 'id' => 55, 'destination' => 44 ) );
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -173,9 +173,9 @@ class UrlAliasHandlerTest extends HandlerTest
 
         $urlAlias = new UrlAlias( array( 'id' => 55, 'destination' => 44 ) );
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -233,9 +233,9 @@ class UrlAliasHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -289,9 +289,9 @@ class UrlAliasHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -342,9 +342,9 @@ class UrlAliasHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -394,7 +394,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -474,7 +474,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -538,9 +538,9 @@ class UrlAliasHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -601,9 +601,9 @@ class UrlAliasHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -628,7 +628,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( 'logCall' );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -703,9 +703,9 @@ class UrlAliasHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -730,7 +730,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( 'logCall' );
 
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -767,9 +767,9 @@ class UrlAliasHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler
@@ -795,9 +795,9 @@ class UrlAliasHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler' );
-        $this->persistenceFactoryMock
+        $this->innerPersistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getUrlAliasHandler' )
+            ->method( 'urlAliasHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $innerHandler

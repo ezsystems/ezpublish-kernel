@@ -18,11 +18,6 @@ use PHPUnit_Framework_TestCase;
 class FactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $containerMock;
-
-    /**
      * @var \eZ\Publish\Core\Persistence\Factory
      */
     protected $persistenceFactory;
@@ -39,15 +34,8 @@ class FactoryTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->containerMock = $this->getMock( "Symfony\\Component\\DependencyInjection\\ContainerInterface" );
-        $this->persistenceFactory = new Factory( 'persistence_mock' );
-        $this->persistenceFactory->setContainer( $this->containerMock );
-
         $this->persistenceMock = $this->getMock( "eZ\\Publish\\SPI\\Persistence\\Handler" );
-        $this->containerMock->expects( $this->once() )
-            ->method( 'get' )
-            ->with( 'persistence_mock' )
-            ->will(  $this->returnValue( $this->persistenceMock ) );
+        $this->persistenceFactory = new Factory( $this->persistenceMock );
     }
 
     /**
@@ -55,7 +43,6 @@ class FactoryTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        unset( $this->containerMock );
         unset( $this->persistenceFactory );
         unset( $this->persistenceMock );
         parent::tearDown();

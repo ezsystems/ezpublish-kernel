@@ -12,6 +12,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEn
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
 class RegisterStorageEnginePassTest extends AbstractCompilerPassTest
 {
@@ -65,10 +66,8 @@ class RegisterStorageEnginePassTest extends AbstractCompilerPassTest
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.api.storage_engine.factory',
             'registerStorageEngine',
-            array( $serviceId, $storageEngineIdentifier )
+            array( new Reference( $serviceId ), $storageEngineIdentifier )
         );
-        $this->assertTrue( $this->container->hasParameter( 'ezpublish.spi.persistence.default_id' ) );
-        $this->assertSame( $serviceId, $this->container->getParameter( 'ezpublish.spi.persistence.default_id' ) );
     }
 
     /**
