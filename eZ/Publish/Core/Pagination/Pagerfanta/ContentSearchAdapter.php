@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the CriterionAdapter class.
+ * File containing the ContentSearchAdapter class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -21,7 +21,7 @@ class ContentSearchAdapter extends ContentSearchHitAdapter
      * @param integer $offset The offset.
      * @param integer $length The length.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content The slice.
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[]
      */
     public function getSlice( $offset, $length )
     {

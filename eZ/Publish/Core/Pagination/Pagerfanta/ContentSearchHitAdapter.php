@@ -58,12 +58,12 @@ class ContentSearchHitAdapter implements AdapterInterface
     }
 
     /**
-     * Returns as slice of the results, as SearchHit objects.
+     * Returns a slice of the results, as SearchHit objects.
      *
      * @param integer $offset The offset.
      * @param integer $length The length.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchHit The slice.
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchHit[]
      */
     public function getSlice( $offset, $length )
     {
