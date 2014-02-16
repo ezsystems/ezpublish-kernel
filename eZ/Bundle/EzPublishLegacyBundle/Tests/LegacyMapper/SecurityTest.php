@@ -187,7 +187,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
             array(
                 array(),
                 array(
-                    'injected-settings' => array(
+                    'injected-merge-settings' => array(
                         'site.ini/SiteAccessRules/Rules' => array(
                             'access;disable',
                             'module;user/login',
@@ -204,7 +204,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
                 array(
                     'foo' => 'bar',
                     'some' => array( 'thing' ),
-                    'injected-settings' => array(
+                    'injected-merge-settings' => array(
                         'site.ini/SiteAccessRules/Rules' => array(
                             'access;disable',
                             'module;user/login',
@@ -217,7 +217,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
                 array(
                     'foo' => 'bar',
                     'some' => array( 'thing' ),
-                    'injected-settings' => array(
+                    'injected-merge-settings' => array(
                         'Empire' => array( 'Darth Vader', 'Emperor', 'Moff Tarkin' ),
                         'Rebellion' => array( 'Luke Skywalker', 'Leïa Organa', 'Obi-Wan Kenobi', 'Han Solo' ),
                         'Chewbacca' => 'Arrrrrhhhhhh!'
@@ -226,7 +226,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
                 array(
                     'foo' => 'bar',
                     'some' => array( 'thing' ),
-                    'injected-settings' => array(
+                    'injected-merge-settings' => array(
                         'Empire' => array( 'Darth Vader', 'Emperor', 'Moff Tarkin' ),
                         'Rebellion' => array( 'Luke Skywalker', 'Leïa Organa', 'Obi-Wan Kenobi', 'Han Solo' ),
                         'Chewbacca' => 'Arrrrrhhhhhh!',
@@ -242,7 +242,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
                 array(
                     'foo' => 'bar',
                     'some' => array( 'thing' ),
-                    'injected-settings' => array(
+                    'injected-merge-settings' => array(
                         'site.ini/SiteAccessRules/Rules' => array(
                             'access;disable',
                             'module;ezinfo/about',
@@ -254,7 +254,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
                 array(
                     'foo' => 'bar',
                     'some' => array( 'thing' ),
-                    'injected-settings' => array(
+                    'injected-merge-settings' => array(
                         'site.ini/SiteAccessRules/Rules' => array(
                             'access;disable',
                             'module;ezinfo/about',
@@ -271,7 +271,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
                 array(
                     'foo' => 'bar',
                     'some' => array( 'thing' ),
-                    'injected-settings' => array(
+                    'injected-merge-settings' => array(
                         'site.ini/SiteAccessRules/Rules' => array(
                             'access;disable',
                             'module;ezinfo/about',
@@ -283,7 +283,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
                 array(
                     'foo' => 'bar',
                     'some' => array( 'thing' ),
-                    'injected-settings' => array(
+                    'injected-merge-settings' => array(
                         'site.ini/SiteAccessRules/Rules' => array(
                             'access;disable',
                             'module;ezinfo/about',
