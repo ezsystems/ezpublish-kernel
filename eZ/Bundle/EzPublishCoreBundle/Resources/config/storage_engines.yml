@@ -15,7 +15,6 @@ parameters:
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     # Make sure logging is only enabled for debug by default
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: %kernel.debug%
-    ezpublish.spi.persistence.default_id: synthetical-parameter-set-in-RegisterStorageEnginePass
 
     # storage engines
     ezpublish.api.storage_engine.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
