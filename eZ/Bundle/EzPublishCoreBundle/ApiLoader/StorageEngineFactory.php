@@ -31,9 +31,9 @@ class StorageEngineFactory
 
     /**
      * Hash of registered storage engines.
-     * Key is the storage engine identifier, value is its corresponding service Id
+     * Key is the storage engine identifier, value persistence handler itself.
      *
-     * @var array
+     * @var \eZ\Publish\SPI\Persistence\Handler[]
      */
     protected $storageEngines = array();
 
@@ -46,12 +46,22 @@ class StorageEngineFactory
     /**
      * Registers $persistenceHandler as a valid storage engine, with identifier $storageEngineIdentifier.
      *
+     * @note It is strongly recommenced to register a lazy persistent handler.
+     *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param string $storageEngineIdentifier
      */
     public function registerStorageEngine( PersistenceHandler $persistenceHandler, $storageEngineIdentifier )
     {
         $this->storageEngines[$storageEngineIdentifier] = $persistenceHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Handler[]
+     */
+    public function getStorageEngines()
+    {
+        return $this->storageEngines;
     }
 
     /**
@@ -73,7 +83,6 @@ class StorageEngineFactory
         }
 
         $repositoryConfig = $this->repositories[$repositoryAlias];
-
         if (
             !(
                 isset( $repositoryConfig['engine'] )
