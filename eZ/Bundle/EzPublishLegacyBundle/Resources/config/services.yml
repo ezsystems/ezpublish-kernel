@@ -192,8 +192,6 @@ services:
         arguments:
             - @ezpublish.config.resolver.core
             - { extensions: %ezpublish_legacy.legacy_bundles_extensions% }
-        calls:
-            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 

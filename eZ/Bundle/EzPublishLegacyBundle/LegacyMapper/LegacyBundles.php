@@ -18,7 +18,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * Enables extensions from LegacyBundle in the Legacy Kernel
  */
-class LegacyBundles extends ContainerAware implements EventSubscriberInterface
+class LegacyBundles implements EventSubscriberInterface
 {
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface

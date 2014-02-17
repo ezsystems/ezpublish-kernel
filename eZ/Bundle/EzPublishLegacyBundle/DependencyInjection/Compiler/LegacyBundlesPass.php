@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LegacyPass class.
+ * File containing the LegacyBundlesPass class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,6 +14,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+/**
+ * Iterates over bundles, and uses the extension_locator to store the list of extra legacy extensions in the
+ * ezpublish_legacy.legacy_bundles_extensions container parameter.
+ */
 class LegacyBundlesPass implements CompilerPassInterface
 {
     /** @var \Symfony\Component\HttpKernel\KernelInterface */

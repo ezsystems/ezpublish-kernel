@@ -16,6 +16,7 @@ interface LegacyBundleInterface
 {
     /**
      * Returns a list of legacy extension names
+     *
      * @return array List of legacy extension names to inject to ActiveExtensions
      */
     public function getLegacyExtensionsNames();
