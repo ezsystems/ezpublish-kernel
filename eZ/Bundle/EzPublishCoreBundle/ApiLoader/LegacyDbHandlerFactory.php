@@ -45,7 +45,6 @@ class LegacyDbHandlerFactory extends ContainerAware
     public function buildLegacyDbHandler()
     {
         $repositoryAlias = $this->configResolver->getParameter( 'repository' );
-        $repositoryConfig = $this->repositories[$repositoryAlias];
         if ( !isset( $this->repositories[$repositoryAlias] ) )
         {
             throw new InvalidRepositoryException(
@@ -53,6 +52,7 @@ class LegacyDbHandlerFactory extends ContainerAware
             );
         }
 
+        $repositoryConfig = $this->repositories[$repositoryAlias];
         $connectionHandlerClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.dbhandler.class' );
         return new $connectionHandlerClass( $this->container->get( sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['connection'] ) ) );
     }

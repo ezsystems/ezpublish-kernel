@@ -13,10 +13,11 @@ use eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyDbHandlerFactory;
 
 class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testBuildLegacyDbHandler()
+    /**
+     * @dataProvider buildLegacyDbHandlerProvider
+     */
+    public function testBuildLegacyDbHandler( $repositoryAlias, $doctrineConnection )
     {
-        $doctrineConnection = 'my_doctrine_connection';
-        $repositoryAlias = 'my_repository';
         $repositories = array(
             $repositoryAlias => array(
                 'engine' => 'legacy',
@@ -50,5 +51,38 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             'eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler',
             $handler
         );
+    }
+
+    public function buildLegacyDbHandlerProvider()
+    {
+        return array(
+            array( 'my_repository', 'my_doctrine_connection' ),
+            array( 'foo', 'default' ),
+            array( 'répository_de_dédé', 'la_connexion_de_bébêrt' ),
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
+     */
+    public function testBuildLegacyDbHandlerInvalidRepository()
+    {
+        $repositories = array(
+            'foo' => array(
+                'engine' => 'legacy',
+                'connection' => 'my_doctrine_connection'
+            )
+        );
+
+        $configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( 'inexistent_repository' ) );
+
+        $factory = new LegacyDbHandlerFactory( $configResolver, $repositories );
+        $factory->setContainer( $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' ) );
+        $handler = $factory->buildLegacyDbHandler();
     }
 }
