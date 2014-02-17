@@ -99,18 +99,18 @@ class Security implements EventSubscriberInterface
             return;
         }
 
-        $injectedSettings = $event->getParameters()->get( 'injected-settings', array() );
+        $injectedMergeSettings = $event->getParameters()->get( 'injected-merge-settings', array() );
         $accessRules = array(
             'access;disable',
             'module;user/login',
             'module;user/logout',
         );
         // Merge existing settings with the new ones if needed.
-        if ( isset( $injectedSettings['site.ini/SiteAccessRules/Rules'] ) )
+        if ( isset( $injectedMergeSettings['site.ini/SiteAccessRules/Rules'] ) )
         {
-            $accessRules = array_merge( $injectedSettings['site.ini/SiteAccessRules/Rules'], $accessRules );
+            $accessRules = array_merge( $injectedMergeSettings['site.ini/SiteAccessRules/Rules'], $accessRules );
         }
-        $injectedSettings['site.ini/SiteAccessRules/Rules'] = $accessRules;
-        $event->getParameters()->set( 'injected-settings', $injectedSettings );
+        $injectedMergeSettings['site.ini/SiteAccessRules/Rules'] = $accessRules;
+        $event->getParameters()->set( 'injected-merge-settings', $injectedMergeSettings );
     }
 }
