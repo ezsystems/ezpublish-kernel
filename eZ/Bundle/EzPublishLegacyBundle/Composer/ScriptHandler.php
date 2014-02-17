@@ -56,4 +56,24 @@ class ScriptHandler extends DistributionBundleScriptHandler
 
         static::executeCommand( $event, $appDir, 'ezpublish:legacy:assets_install ' . $symlink . escapeshellarg( $webDir ) );
     }
+
+    public static function installLegacyBundlesExtensions( CommandEvent $event )
+    {
+        $options = self::getOptions( $event );
+        $appDir = $options['symfony-app-dir'];
+
+        $symlink = '';
+        if ( $options['symfony-assets-install'] === 'relative' )
+        {
+            $symlink = '--relative ';
+        }
+
+        if ( !is_dir( $appDir ) )
+        {
+            echo 'The symfony-app-dir (' . $appDir . ') specified in composer.json was not found in ' . getcwd() . ', can not install assets.' . PHP_EOL;
+            return;
+        }
+
+        static::executeCommand( $event, $appDir, 'ezpublish:legacybundles:install_extensions ' . $symlink );
+    }
 }
