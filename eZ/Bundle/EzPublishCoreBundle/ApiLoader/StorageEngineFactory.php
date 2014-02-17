@@ -65,24 +65,16 @@ class StorageEngineFactory
     }
 
     /**
-     * Builds storage engine identified by $storageEngineIdentifier (the "alias" attribute in the service tag)
+     * Builds storage engine identified by $storageEngineIdentifier (the "alias" attribute in the service tag).
      *
-     * @throws Exception\InvalidStorageEngine
-     * @throws Exception\InvalidRepositoryException
+     * @throws \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine
      *
      * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function buildStorageEngine()
     {
-        $repositoryAlias = $this->configResolver->getParameter( 'repository' );
-        if ( !isset( $this->repositories[$repositoryAlias] ) )
-        {
-            throw new InvalidRepositoryException(
-                "Undefined repository '$repositoryAlias'. Did you forget to configure it in ezpublish_*.yml?"
-            );
-        }
+        $repositoryConfig = $this->getRepositoryConfig();
 
-        $repositoryConfig = $this->repositories[$repositoryAlias];
         if (
             !(
                 isset( $repositoryConfig['engine'] )
@@ -96,5 +88,34 @@ class StorageEngineFactory
         }
 
         return $this->storageEngines[$repositoryConfig['engine']];
+    }
+
+    /**
+     * @return array
+     *
+     * @throws \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
+     */
+    public function getRepositoryConfig()
+    {
+        // Takes configured repository as the reference, if it exists.
+        // If not, the first configured repository is considered instead.
+        if ( $this->configResolver->hasParameter( 'repository' ) )
+        {
+            $repositoryAlias = $this->configResolver->getParameter( 'repository' );
+        }
+        else
+        {
+            $aliases = array_keys( $this->repositories );
+            $repositoryAlias = array_shift( $aliases );
+        }
+
+        if ( empty( $repositoryAlias ) || !isset( $this->repositories[$repositoryAlias] ) )
+        {
+            throw new InvalidRepositoryException(
+                "Undefined repository '$repositoryAlias'. Did you forget to configure it in ezpublish_*.yml?"
+            );
+        }
+
+        return array( 'alias' => $repositoryAlias ) + $this->repositories[$repositoryAlias];
     }
 }

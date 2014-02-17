@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyDbHandlerFactory;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory;
 
 class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,6 +29,11 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $configResolver
             ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( true ) );
+        $configResolver
+            ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'repository' )
             ->will( $this->returnValue( $repositoryAlias ) );
@@ -39,12 +45,18 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             ->with( 'ezpublish.api.storage_engine.legacy.dbhandler.class' )
             ->will( $this->returnValue( 'eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler' ) );
         $container
-            ->expects( $this->any() )
+            ->expects( $this->once() )
+            ->method( 'has' )
+            ->with( "doctrine.dbal.{$doctrineConnection}_connection" )
+            ->will( $this->returnValue( true ) );
+        $container
+            ->expects( $this->once() )
             ->method( 'get' )
             ->with( "doctrine.dbal.{$doctrineConnection}_connection" )
             ->will( $this->returnValue( $this->getMock( 'Doctrine\DBAL\Driver\Connection' ) ) );
 
-        $factory = new LegacyDbHandlerFactory( $configResolver, $repositories );
+        $storageEngineFactory = new StorageEngineFactory( $configResolver, $repositories );
+        $factory = new LegacyDbHandlerFactory( $storageEngineFactory );
         $factory->setContainer( $container );
         $handler = $factory->buildLegacyDbHandler();
         $this->assertInstanceOf(
@@ -77,12 +89,52 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $configResolver
             ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( true ) );
+        $configResolver
+            ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'repository' )
             ->will( $this->returnValue( 'inexistent_repository' ) );
 
-        $factory = new LegacyDbHandlerFactory( $configResolver, $repositories );
+        $storageEngineFactory = new StorageEngineFactory( $configResolver, $repositories );
+        $factory = new LegacyDbHandlerFactory( $storageEngineFactory );
         $factory->setContainer( $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' ) );
-        $handler = $factory->buildLegacyDbHandler();
+        $factory->buildLegacyDbHandler();
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testBuildLegacyDbHandlerInvalidConnection()
+    {
+        $storageEngineFactoryMock = $this->getMockBuilder( 'eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory' )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $repositoryConfig = array(
+            'alias' => 'foo',
+            'engine' => 'legacy',
+            'connection' => 'my_doctrine_connection'
+        );
+        $storageEngineFactoryMock
+            ->expects( $this->once() )
+            ->method( 'getRepositoryConfig' )
+            ->will( $this->returnValue( $repositoryConfig ) );
+
+        $container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
+        $container
+            ->expects( $this->once() )
+            ->method( 'has' )
+            ->with( "doctrine.dbal.my_doctrine_connection_connection" )
+            ->will( $this->returnValue( false ) );
+        $container
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'doctrine.connections' )
+            ->will( $this->returnValue( array() ) );
+        $factory = new LegacyDbHandlerFactory( $storageEngineFactoryMock );
+        $factory->setContainer( $container );
+        $factory->buildLegacyDbHandler();
     }
 }

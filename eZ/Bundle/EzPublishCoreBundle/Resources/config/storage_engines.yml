@@ -190,7 +190,7 @@ services:
 
     ezpublish.api.storage_engine.legacy.dbhandler.factory:
         class: %ezpublish.api.storage_engine.legacy.dbhandler.factory.class%
-        arguments: [@ezpublish.config.resolver, %ezpublish.repositories%]
+        arguments: [@ezpublish.api.storage_engine.factory]
         calls:
             - [setContainer, [@service_container]]
 

@@ -58,36 +58,16 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
 
         $configResolver
             ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( true ) );
+        $configResolver
+            ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'repository' )
             ->will( $this->returnValue( $repositoryAlias ) );
 
         $this->assertSame( $expectedStorageEngine, $factory->buildStorageEngine() );
-    }
-
-    /**
-     * @expectedException \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
-     */
-    public function testBuildStorageEngineUndefinedRepository()
-    {
-        $repositories = array(
-            'main' => array(
-                'engine' => 'foo'
-            ),
-            'another' => array(
-                'engine' => 'bar'
-            )
-        );
-        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-        $factory = new StorageEngineFactory( $configResolver, $repositories );
-
-        $configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( 'undefined_repository' ) );
-
-        $this->assertSame( $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' ), $factory->buildStorageEngine() );
     }
 
     /**
@@ -120,10 +100,100 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
 
         $configResolver
             ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( true ) );
+        $configResolver
+            ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'repository' )
             ->will( $this->returnValue( $repositoryAlias ) );
 
         $this->assertSame( $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' ), $factory->buildStorageEngine() );
+    }
+
+    public function testGetRepositoryConfigSpecifiedRepository()
+    {
+        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $repositoryAlias = 'main';
+        $repositoryConfig = array(
+            'engine' => 'foo',
+            'connection' => 'some_connection'
+        );
+        $repositories = array(
+            $repositoryAlias => $repositoryConfig,
+            'another' => array(
+                'engine' => 'bar'
+            )
+        );
+        $factory = new StorageEngineFactory( $configResolver, $repositories );
+
+        $configResolver
+            ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( true ) );
+        $configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( $repositoryAlias ) );
+
+        $this->assertSame( array( 'alias' => $repositoryAlias ) + $repositoryConfig, $factory->getRepositoryConfig() );
+    }
+
+    public function testGetRepositoryConfigNotSpecifiedRepository()
+    {
+        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $repositoryAlias = 'main';
+        $repositoryConfig = array(
+            'engine' => 'foo',
+            'connection' => 'some_connection'
+        );
+        $repositories = array(
+            $repositoryAlias => $repositoryConfig,
+            'another' => array(
+                'engine' => 'bar'
+            )
+        );
+        $factory = new StorageEngineFactory( $configResolver, $repositories );
+
+        $configResolver
+            ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( false ) );
+
+        $this->assertSame( array( 'alias' => $repositoryAlias ) + $repositoryConfig, $factory->getRepositoryConfig() );
+    }
+
+    /**
+     * @expectedException \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
+     */
+    public function testGetRepositoryConfigUndefinedRepository()
+    {
+        $repositories = array(
+            'main' => array(
+                'engine' => 'foo'
+            ),
+            'another' => array(
+                'engine' => 'bar'
+            )
+        );
+        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+
+        $configResolver
+            ->expects( $this->once() )
+            ->method( 'hasParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( true ) );
+        $configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'repository' )
+            ->will( $this->returnValue( 'undefined_repository' ) );
+
+        $factory = new StorageEngineFactory( $configResolver, $repositories );
+        $factory->getRepositoryConfig();
     }
 }

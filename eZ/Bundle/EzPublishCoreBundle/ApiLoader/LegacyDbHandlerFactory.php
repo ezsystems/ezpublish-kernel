@@ -9,51 +9,42 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException;
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use InvalidArgumentException;
 
 class LegacyDbHandlerFactory extends ContainerAware
 {
     /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
      */
-    protected $configResolver;
+    protected $storageEngineFactory;
 
-    /**
-     * Hash of registered storage engines.
-     * Key is the storage engine identifier, value is its corresponding service Id
-     *
-     * @var array
-     */
-    protected $storageEngines = array();
-
-    public function __construct( ConfigResolverInterface $configResolver, array $repositories )
+    public function __construct( StorageEngineFactory $storageEngineFactory )
     {
-        $this->configResolver = $configResolver;
-        $this->repositories = $repositories;
+        $this->storageEngineFactory = $storageEngineFactory;
     }
 
     /**
      * Builds the DB handler used by the legacy storage engine.
      *
-     * @throws Exception\InvalidRepositoryException
+     * @throws \InvalidArgumentException
      *
      * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
     public function buildLegacyDbHandler()
     {
-        $repositoryAlias = $this->configResolver->getParameter( 'repository' );
-        if ( !isset( $this->repositories[$repositoryAlias] ) )
+        $repositoryConfig = $this->storageEngineFactory->getRepositoryConfig();
+        $doctrineConnectionId = sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['connection'] );
+        if ( !$this->container->has( $doctrineConnectionId ) )
         {
-            throw new InvalidRepositoryException(
-                "Undefined repository '$repositoryAlias'. Did you forget to configure it in ezpublish_*.yml?"
+            throw new InvalidArgumentException(
+                "Invalid Doctrine connection '{$repositoryConfig['connection']}' for repository '{$repositoryConfig['alias']}'." .
+                "Valid connections are " . implode( ', ', array_keys( $this->container->getParameter( 'doctrine.connections' ) ) )
             );
         }
 
-        $repositoryConfig = $this->repositories[$repositoryAlias];
         $connectionHandlerClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.dbhandler.class' );
-        return new $connectionHandlerClass( $this->container->get( sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['connection'] ) ) );
+        return new $connectionHandlerClass( $this->container->get( $doctrineConnectionId ) );
     }
 }
