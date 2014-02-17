@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root( 'ezpublish' );
 
+        $this->addRepositoriesSection( $rootNode );
         $this->addSiteaccessSection( $rootNode );
         $this->addImageMagickSection( $rootNode );
         $this->addHttpCacheSection( $rootNode );
@@ -43,6 +44,50 @@ class Configuration implements ConfigurationInterface
         $this->addRouterSection( $rootNode );
 
         return $treeBuilder;
+    }
+
+    public function addRepositoriesSection( ArrayNodeDefinition $rootNode )
+    {
+        $rootNode
+            ->children()
+                ->arrayNode( 'repositories' )
+                    ->info( 'Content repositories configuration' )
+                    ->example(
+                        array(
+                            'main' => array(
+                                'engine' => 'legacy',
+                                'connection' => 'my_doctrine_connection_name'
+                            )
+                        )
+                    )
+                    ->useAttributeAsKey( 'alias' )
+                    ->prototype( 'array' )
+                        ->beforeNormalization()
+                            // If set to null, use default values.
+                            // %ezpublish.api.storage_engine.default% as engine, and default connection (if applicable).
+                            ->ifNull()
+                            ->then(
+                                function ()
+                                {
+                                    return array( 'engine' => '%ezpublish.api.storage_engine.default%', 'connection' => 'default' );
+                                }
+                            )
+                        ->end()
+                        ->children()
+                            ->scalarNode( 'engine' )->isRequired()->info( 'The storage engine to use' )->end()
+                            ->scalarNode( 'connection' )
+                                ->defaultValue( 'default' )
+                                ->info( 'The connection name, if applicable (e.g. Doctrine connection name). Defaults to "default"' )
+                            ->end()
+                            ->arrayNode( 'config' )
+                                ->info( 'Arbitrary configuration options, supported by your storage engine' )
+                                ->useAttributeAsKey( 'key' )
+                                ->prototype( 'variable' )->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
     }
 
     public function addSiteaccessSection( ArrayNodeDefinition $rootNode )

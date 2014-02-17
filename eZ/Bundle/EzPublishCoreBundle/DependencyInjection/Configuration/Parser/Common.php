@@ -34,7 +34,11 @@ class Common extends AbstractParser
                 ->example( array( 'fre-FR', 'eng-GB' ) )
                 ->prototype( 'scalar' )->end()
             ->end()
+            ->scalarNode( 'repository' )->info( 'The repository to use. Choose among ezpublish.repositories.' )->end()
+            // @deprecated
+            // Use ezpublish.repositories / repository settings instead.
             ->arrayNode( 'database' )
+                ->info( 'DEPRECATED. Use ezpublish.repositories / repository settings instead.' )
                 ->children()
                     ->enumNode( 'type' )->values( array( 'mysql', 'pgsql', 'sqlite' ) )->info( 'The database driver. Can be mysql, pgsql or sqlite.' )->end()
                     ->scalarNode( 'server' )->end()
@@ -187,6 +191,8 @@ class Common extends AbstractParser
         }
         foreach ( $config[$this->baseKey] as $sa => $settings )
         {
+            if ( isset( $settings['repository'] ) )
+                $container->setParameter( "ezsettings.$sa.repository", $settings['repository'] );
             if ( isset( $settings['legacy_mode'] ) )
             {
                 $container->setParameter( "ezsettings.$sa.legacy_mode", $settings['legacy_mode'] );

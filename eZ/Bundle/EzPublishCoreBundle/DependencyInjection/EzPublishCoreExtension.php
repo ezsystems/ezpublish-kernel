@@ -60,6 +60,7 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'security.yml' );
         // Default settings
         $loader->load( 'default_settings.yml' );
+        $this->registerRepositoriesConfiguration( $config, $container );
         $this->registerSiteAccessConfiguration( $config, $container );
         $this->registerImageMagickConfiguration( $config, $container );
         $this->registerPageConfiguration( $config, $container );
@@ -90,6 +91,16 @@ class EzPublishCoreExtension extends Extension
     public function getConfiguration( array $config, ContainerBuilder $container )
     {
         return new Configuration( $this->configParsers );
+    }
+
+    private function registerRepositoriesConfiguration( array $config, ContainerBuilder $container )
+    {
+        if ( !isset( $config['repositories'] ) )
+        {
+            $config['repositories'] = array();
+        }
+
+        $container->setParameter( 'ezpublish.repositories', $config['repositories'] );
     }
 
     private function registerSiteAccessConfiguration( array $config, ContainerBuilder $container )

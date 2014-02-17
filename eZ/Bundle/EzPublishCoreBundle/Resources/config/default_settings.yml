@@ -12,6 +12,7 @@ parameters:
     ezsettings.default.block_view: {}
 
     # Common settings
+    ezpublish.repositories: {}
     ezsettings.default.repository: ~
     ezsettings.default.database.params: ~
     ezsettings.default.session_name: "eZSESSID{siteaccess_hash}"    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess

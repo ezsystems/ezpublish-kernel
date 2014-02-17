@@ -3,7 +3,6 @@ parameters:
     ezpublish.api.repository.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryFactory
     ezpublish.api.repository.lazy_factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory
     ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
-    ezpublish.repositories: {}
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
 
