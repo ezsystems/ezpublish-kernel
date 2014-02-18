@@ -273,6 +273,14 @@ class ConnectionHandler implements DatabaseHandler
     }
 
     /**
+     * @return \Doctrine\DBAL\Driver\Connection
+     */
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    /**
      * @return string
      */
     public function getName()
