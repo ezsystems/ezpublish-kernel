@@ -20,6 +20,11 @@ class CommonTest extends AbstractExtensionTestCase
     private $minimalConfig;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $suggestionCollector;
+
+    /**
      * Return an array of container extensions you need to be registered for each test (usually just the container
      * extension you are testing.
      *
@@ -27,6 +32,7 @@ class CommonTest extends AbstractExtensionTestCase
      */
     protected function getContainerExtensions()
     {
+        $this->suggestionCollector = $this->getMock( 'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion\SuggestionCollectorInterface' );
         return array( new EzPublishCoreExtension( array( new Common() ) ) );
     }
 
@@ -97,189 +103,46 @@ class CommonTest extends AbstractExtensionTestCase
     }
 
     /**
-     * @dataProvider databaseParamsProvider
+     * @expectedException \InvalidArgumentException
      */
-    public function testDatabaseSingleSiteaccess( array $inputParams, $expected )
+    public function testDatabaseSingleSiteaccess()
     {
         $this->load(
             array(
                 'system' => array(
-                    'ezdemo_site' => $inputParams
+                    'ezdemo_site' => array(
+                        'database' => array(
+                            'type' => 'sqlite',
+                            'server' => 'localhost',
+                            'user' => 'root',
+                            'password' => 'root',
+                            'database_name' => 'ezdemo',
+                        )
+                    )
                 )
             )
         );
-
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.database' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.database.params' ) );
-        $this->assertEquals( $expected['database'], $this->container->getParameter( 'ezsettings.ezdemo_site.database' ) );
-        $this->assertEquals( $expected['database.params'], $this->container->getParameter( 'ezsettings.ezdemo_site.database.params' ) );
     }
 
     /**
-     * @dataProvider databaseParamsProvider
+     * @expectedException \InvalidArgumentException
      */
-    public function testDatabaseSiteaccessGroup( array $inputParams, $expected )
+    public function testDatabaseSiteaccessGroup()
     {
         $this->load(
             array(
                 'system' => array(
-                    'ezdemo_group' => $inputParams
+                    'ezdemo_group' => array(
+                        'database' => array(
+                            'type' => 'sqlite',
+                            'server' => 'localhost',
+                            'user' => 'root',
+                            'password' => 'root',
+                            'database_name' => 'ezdemo',
+                        )
+                    )
                 )
             )
-        );
-
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.database' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.fre.database' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.database' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.database.params' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.fre.database.params' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.database.params' ) );
-        $this->assertEquals( $expected['database'], $this->container->getParameter( 'ezsettings.ezdemo_site.database' ) );
-        $this->assertEquals( $expected['database'], $this->container->getParameter( 'ezsettings.fre.database' ) );
-        $this->assertEquals( $expected['database'], $this->container->getParameter( 'ezsettings.ezdemo_site_admin.database' ) );
-        $this->assertEquals( $expected['database.params'], $this->container->getParameter( 'ezsettings.ezdemo_site.database.params' ) );
-        $this->assertEquals( $expected['database.params'], $this->container->getParameter( 'ezsettings.fre.database.params' ) );
-        $this->assertEquals( $expected['database.params'], $this->container->getParameter( 'ezsettings.ezdemo_site_admin.database.params' ) );
-    }
-
-    public function databaseParamsProvider()
-    {
-        return array(
-            array(
-                array(
-                    'database' => array(
-                        'type' => 'sqlite',
-                        'server' => 'localhost',
-                        'user' => 'root',
-                        'password' => 'root',
-                        'database_name' => 'ezdemo',
-                    )
-                ),
-                array(
-                    'database' => array(
-                        'type' => 'sqlite',
-                        'server' => 'localhost',
-                        'user' => 'root',
-                        'password' => 'root',
-                        'database_name' => 'ezdemo',
-                        'charset' => 'utf8',
-                        'options' => array()
-                    ),
-                    'database.params' => array(
-                        'host' => 'localhost',
-                        'dbname' => 'ezdemo',
-                        'driver' => 'pdo_sqlite',
-                        'user' => 'root',
-                        'password' => 'root',
-                        'charset' => 'utf8',
-                        'driverOptions' => array()
-                    )
-                )
-            ),
-            array(
-                array(
-                    'database' => array(
-                        'type' => 'mysql',
-                        'server' => 'some.server',
-                        'user' => 'foo_bar_baz',
-                        'password' => '123abc456@woot%$&#',
-                        'database_name' => 'my_database',
-                        'options' => array( 'foo' => 'bar', 'some_param' => '123bzz;!' )
-                    )
-                ),
-                array(
-                    'database' => array(
-                        'type' => 'mysql',
-                        'server' => 'some.server',
-                        'user' => 'foo_bar_baz',
-                        'password' => '123abc456@woot%$&#',
-                        'database_name' => 'my_database',
-                        'options' => array( 'foo' => 'bar', 'some_param' => '123bzz;!' ),
-                        'charset' => 'utf8',
-                    ),
-                    'database.params' => array(
-                        'host' => 'some.server',
-                        'dbname' => 'my_database',
-                        'driver' => 'pdo_mysql',
-                        'user' => 'foo_bar_baz',
-                        'password' => '123abc456@woot%$&#',
-                        'charset' => 'utf8',
-                        'driverOptions' => array( 'foo' => 'bar', 'some_param' => '123bzz;!' )
-                    )
-                )
-            ),
-            array(
-                array(
-                    'database' => array(
-                        'type' => 'pgsql',
-                        'server' => 'localhost',
-                        'user' => 'root',
-                        'password' => '$!root123',
-                        'database_name' => 'ezdemo',
-                        'charset' => 'utf16'
-                    )
-                ),
-                array(
-                    'database' => array(
-                        'type' => 'pgsql',
-                        'server' => 'localhost',
-                        'user' => 'root',
-                        'password' => '$!root123',
-                        'database_name' => 'ezdemo',
-                        'charset' => 'utf16',
-                        'options' => array()
-                    ),
-                    'database.params' => array(
-                        'host' => 'localhost',
-                        'dbname' => 'ezdemo',
-                        'driver' => 'pdo_pgsql',
-                        'user' => 'root',
-                        'password' => '$!root123',
-                        'charset' => 'utf16',
-                        'driverOptions' => array()
-                    )
-                )
-            ),
-            array(
-                array(
-                    'database' => array(
-                        'dsn' => 'mysql://root:root@localhost/ezdemo',
-                    )
-                ),
-                array(
-                    'database' => array(
-                        'charset' => 'utf8',
-                        'dsn' => 'mysql://root:root@localhost/ezdemo',
-                        'options' => array()
-                    ),
-                    'database.params' => 'mysql://root:root@localhost/ezdemo'
-                )
-            ),
-            array(
-                array(
-                    'database' => array(
-                        'type' => 'sqlite',
-                        'server' => 'localhost',
-                        'user' => 'root',
-                        'password' => 'root',
-                        'database_name' => 'ezdemo',
-                        'dsn' => 'mysql://root:root@localhost/ezdemo',
-                    )
-                ),
-                array(
-                    'database' => array(
-                        'type' => 'sqlite',
-                        'server' => 'localhost',
-                        'user' => 'root',
-                        'password' => 'root',
-                        'database_name' => 'ezdemo',
-                        'dsn' => 'mysql://root:root@localhost/ezdemo',
-                        'charset' => 'utf8',
-                        'options' => array()
-                    ),
-                    'database.params' => 'mysql://root:root@localhost/ezdemo'
-                )
-            ),
         );
     }
 

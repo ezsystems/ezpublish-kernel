@@ -9,6 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\SuggestionCollectorAwareInterface;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -20,8 +22,14 @@ class Configuration implements ConfigurationInterface
      */
     private $configParsers;
 
-    public function __construct( array $configParsers )
+    /**
+     * @var Configuration\Suggestion\Collector\SuggestionCollectorInterface
+     */
+    private $suggestionCollector;
+
+    public function __construct( array $configParsers, SuggestionCollectorInterface $suggestionCollector )
     {
+        $this->suggestionCollector = $suggestionCollector;
         $this->configParsers = $configParsers;
     }
 

@@ -9,14 +9,23 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Formatter\YamlSuggestionFormatter;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Loader\FileLoader;
 use Symfony\Component\Config\FileLocator;
+use InvalidArgumentException;
 
 class EzPublishCoreExtension extends Extension
 {
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector
+     */
+    private $suggestionCollector;
+
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
      */
@@ -24,7 +33,15 @@ class EzPublishCoreExtension extends Extension
 
     public function __construct( array $configParsers = array() )
     {
+        $this->suggestionCollector = new SuggestionCollector();
         $this->configParsers = $configParsers;
+        foreach ( $this->configParsers as $parser )
+        {
+            if ( $parser instanceof SuggestionCollectorAwareInterface )
+            {
+                $parser->setSuggestionCollector( $this->suggestionCollector );
+            }
+        }
     }
 
     public function getAlias()
@@ -80,6 +97,17 @@ class EzPublishCoreExtension extends Extension
         {
             $configParser->registerInternalConfig( $config, $container );
         }
+
+        if ( $this->suggestionCollector->hasSuggestions() )
+        {
+            $message = '';
+            $suggestionFormatter = new YamlSuggestionFormatter();
+            foreach ( $this->suggestionCollector->getSuggestions() as $suggestion )
+            {
+                $message .= $suggestionFormatter->format( $suggestion ) . "\n\n";
+                throw new InvalidArgumentException( $message );
+            }
+        }
     }
 
     /**
@@ -90,7 +118,7 @@ class EzPublishCoreExtension extends Extension
      */
     public function getConfiguration( array $config, ContainerBuilder $container )
     {
-        return new Configuration( $this->configParsers );
+        return new Configuration( $this->configParsers, $this->suggestionCollector );
     }
 
     private function registerRepositoriesConfiguration( array $config, ContainerBuilder $container )
