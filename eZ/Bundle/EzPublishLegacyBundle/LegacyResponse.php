@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishLegacyBundle;
 
 use Symfony\Component\HttpFoundation\Response;
+use DateTime;
 
 /**
  * Class LegacyResponse
@@ -26,6 +27,53 @@ class LegacyResponse extends Response
      * @var array
      */
     protected $moduleResult = null;
+
+    /**
+     * Sets headers sent by the legacy stack to $response.
+     *
+     * The array of headers is as follow: array('X-Foo: Bar', ...)
+     *
+     * @param array $headers Array headers.
+     */
+    public function setHeaders( array $headers )
+    {
+        foreach ( $headers as $header )
+        {
+            $headerArray = explode( ': ', $header, 2 );
+            $headerName = strtolower( $headerArray[0] );
+            $headerValue = $headerArray[1];
+            // Removing existing header to avoid duplicate values
+            $this->removeHeader( $headerName );
+
+            switch ( $headerName )
+            {
+                // max-age and s-maxage are skipped because they are values of the cache-control header
+                case 'etag':
+                    $this->setEtag( $headerValue );
+                    break;
+                case 'last-modified':
+                    $this->setLastModified( new DateTime( $headerValue ) );
+                    break;
+                case 'expires':
+                    $this->setExpires( new DateTime( $headerValue ) );
+                    break;
+                default;
+                    $this->headers->set( $headerName, $headerValue, true );
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Wraps header_remove() function.
+     * This is mainly to isolate it and become testable.
+     *
+     * @param string $headerName
+     */
+    protected function removeHeader( $headerName )
+    {
+        header_remove( $headerName );
+    }
 
     /*
      * Sets the module result in the response.

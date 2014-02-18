@@ -171,29 +171,4 @@ class LegacyResponseManagerTest extends PHPUnit_Framework_TestCase
             array( 'custom.twig', 'אני אוהב את ניהול תוכן.' ),
         );
     }
-
-    public function testMapHeaders()
-    {
-        $etag = '86fb269d190d2c85f6e0468ceca42a20';
-        $date = new DateTime();
-        $dateForCache = $date->format( 'D, d M Y H:i:s' ).' GMT';
-        $headers = array( 'X-Foo: Bar', "Etag: $etag", "Last-Modified: $dateForCache", "Expires: $dateForCache" );
-
-        // Partially mock the manager to simulate calls to header_remove()
-        $manager = $this->getMockBuilder( 'eZ\Bundle\EzPublishLegacyBundle\LegacyResponse\LegacyResponseManager' )
-            ->setConstructorArgs( array( $this->templateEngine, $this->configResolver ) )
-            ->setMethods( array( 'removeHeader' ) )
-            ->getMock();
-        $manager
-            ->expects( $this->exactly( count( $headers ) ) )
-            ->method( 'removeHeader' );
-        /** @var \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse\LegacyResponseManager|\PHPUnit_Framework_MockObject_MockObject $manager */
-        $response = new LegacyResponse();
-        $responseMappedHeaders = $manager->mapHeaders( $headers, $response );
-        $this->assertSame( spl_object_hash( $response ), spl_object_hash( $responseMappedHeaders ) );
-        $this->assertSame( 'Bar', $responseMappedHeaders->headers->get( 'X-Foo' ) );
-        $this->assertSame( '"' . $etag . '"', $responseMappedHeaders->getEtag() );
-        $this->assertEquals( new DateTime( $dateForCache ), $responseMappedHeaders->getLastModified() );
-        $this->assertEquals( new DateTime( $dateForCache ), $responseMappedHeaders->getExpires() );
-    }
 }
