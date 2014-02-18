@@ -4,7 +4,8 @@ Changes affecting version compatibility with former or future versions.
 
 ## Changes
 
-* Semantic configuration for database settings has changed.
+* Doctrine is now used instead of Zeta Database for legacy storage engine.
+  **Semantic configuration for database settings has changed.**
   It is now mandatory to configure a Doctrine connection (see DoctrineBundle configuration), and a repository:
 
   ```yaml
