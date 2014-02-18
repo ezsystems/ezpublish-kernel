@@ -505,6 +505,25 @@
     </define>
   </div>
 
+  <div>
+    <a:documentation>
+      Adding optional ezxhtml:level attribute to the "title" element.
+    </a:documentation>
+    <define name="db.title.attlist" combine="interleave"><ref name="ez.xhtml.title.level"/></define>
+    <define name="ez.xhtml.title.level">
+      <optional>
+        <attribute name="ezxhtml:level">
+          <choice>
+            <a:documentation>
+              Levels 1-6 are allowed, mapping to HTML H{level} tags.
+            </a:documentation>
+            <data type="string"><param name="pattern">[1-6]+</param></data>
+          </choice>
+        </attribute>
+      </optional>
+    </define>
+  </div>
+
   <define name="db.extension.inlines" combine="choice">
     <a:documentation>
       eZ Publish custom inline tags extension.
