@@ -105,8 +105,9 @@ class EzPublishCoreExtension extends Extension
             foreach ( $this->suggestionCollector->getSuggestions() as $suggestion )
             {
                 $message .= $suggestionFormatter->format( $suggestion ) . "\n\n";
-                throw new InvalidArgumentException( $message );
             }
+
+            throw new InvalidArgumentException( $message );
         }
     }
 
