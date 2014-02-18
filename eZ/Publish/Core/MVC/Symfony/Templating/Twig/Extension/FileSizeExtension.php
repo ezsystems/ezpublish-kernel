@@ -89,6 +89,6 @@ class FileSizeExtension extends Twig_Extension
      */
     public function getName()
     {
-        return 'twig_file_size_extension';
+        return 'ezpublish.fileSize';
     }
 }
