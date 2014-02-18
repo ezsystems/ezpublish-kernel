@@ -52,7 +52,9 @@ Covers cases:
       <section>
         <section>
           <section>
-            <header>This is a seventh level heading.</header>
+            <section>
+              <header>This is a seventh level heading.</header>
+            </section>
           </section>
         </section>
       </section>
