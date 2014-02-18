@@ -55,6 +55,15 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $map[] = array( $inputFile, $outputFile );
         }
 
+        $lossySubdirectory = "_fixtures/{$fixtureSubdirectories["input"]}/lossy/";
+        foreach ( glob( __DIR__ . "/{$lossySubdirectory}/*.{$fixtureSubdirectories["input"]}.xml" ) as $inputFile )
+        {
+            $basename = basename( basename( $inputFile, ".xml" ), ".{$fixtureSubdirectories["input"]}" );
+            $outputFile = __DIR__ . "/{$lossySubdirectory}/{$basename}.{$fixtureSubdirectories["output"]}.xml";
+
+            $map[] = array( $inputFile, $outputFile );
+        }
+
         return $map;
     }
 
@@ -83,6 +92,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped( "Skipped lossy conversion." );
         }
 
+        if ( !file_exists( $outputFile ) )
+        {
+            $this->markTestIncomplete( "Test is not complete: missing output fixture: " . $outputFile );
+        }
+
         $inputDocument = $this->createDocument( $inputFile );
         $outputDocument = $this->createDocument( $outputFile );
 
@@ -92,10 +106,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         $converter = $this->getConverter();
         $convertedDocument = $converter->convert( $inputDocument );
 
-        $this->assertEquals(
-            $outputDocument->saveXML(),
-            $convertedDocument->saveXML()
-        );
+        // Needed by some disabled output escaping (eg. legacy ezxml paragraph <line/> elements)
+        $convertedDocumentNormalized = new DOMDocument();
+        $convertedDocumentNormalized->loadXML( $convertedDocument->saveXML() );
+
+        $this->assertEquals( $outputDocument, $convertedDocumentNormalized );
 
         $validator = $this->getConversionValidator();
         if ( isset( $validator ) )
@@ -103,8 +118,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $errors = $validator->validate( $convertedDocument );
             $this->assertTrue(
                 empty( $errors ),
-                "Conversion result did not validate against the configured schema:" .
-                $this->formatValidationErrors( $errors )
+                "Conversion result did not validate against the configured schemas:" .
+                $this->formatValidationErrors( $outputFile, $errors )
             );
         }
     }
@@ -126,13 +141,19 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         return $document;
     }
 
-    protected function formatValidationErrors( array $errors )
+    protected function formatValidationErrors( $outputFile, array $errors )
     {
         $output = "\n";
         foreach ( $errors as $error )
         {
             $output .= " - " . $error . "\n";
         }
+        $output .= "Configured schemas:\n";
+        foreach ( $this->getConversionValidationSchema() as $schemaPath )
+        {
+            $output .= " - " . $schemaPath . "\n";
+        }
+        $output .= "Validated XML:\n" . file_get_contents( $outputFile );
         return $output;
     }
 
@@ -173,13 +194,39 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * the file of the same name in the output directory.
      *
      * It is possible to test lossy conversion as well (say legacy ezxml).
-     * To use this file name of the fixture that is converted with data loss
+     * To use this filename of the fixture that is converted with data loss
      * needs to end with `.lossy.xml`. As input test with this fixture will
      * be skipped, but as output fixture it will be matched to the input
      * fixture file of the same name but without `.lossy` part.
      *
+     * If input file could not be matched with output file, test will be
+     * marked as incomplete, meaning pairing of fixtures is expected.
+     *
+     * To implement additional tests for  lossy conversion put the test
+     * fixtures inside "lossy" subdirectory in the input directory. This
+     * directory needs to contain both source and destination fixtures, matched
+     * by the filename and part of the filename directly before the file extension.
+     * This part of the filename will be matched from the name of fixture
+     * subdirectories.
+     *
+     * Example for conversion from ezxml to docbook:
+     *
+     *      .../_fixtures/ezxml/lossy/001-sectionNested.ezxml.xml
+     *
+     * will be converted to with:
+     *
+     *      .../_fixtures/ezxml/lossy/001-sectionNested.docbook.xml
+     *
      * Comments in fixtures are removed before conversion, so be free to use
      * comments inside fixtures for documentation as needed.
+     *
+     * Example:
+     * <code>
+     *  return array(
+     *      "input" => "docbook",
+     *      "output" => "ezxml"
+     *  );
+     * </code>
      *
      * @return array
      */
