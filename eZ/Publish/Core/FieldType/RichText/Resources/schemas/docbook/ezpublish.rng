@@ -16,6 +16,12 @@
     <define name="db.section">
       <ref name="ez.db.section"/>
     </define>
+    <define name="db._title.req" combine="choice">
+      <a:documentation>
+        Needed by the LIBXML engine to allow for multiple title elements on the same level
+      </a:documentation>
+      <ref name="db.title"/>
+    </define>
     <define name="db.orderedlist">
       <element name="orderedlist">
         <a:documentation>A list in which each entry is marked with a sequentially incremented label</a:documentation>
