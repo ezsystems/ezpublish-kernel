@@ -20,10 +20,11 @@
     </section>
   </xsl:template>
 
+  <!-- unwrap sections as in legacy ezxml they are used for heading levels only -->
   <xsl:template match="docbook:section">
-    <section>
+    <!--section-->
       <xsl:apply-templates/>
-    </section>
+    <!--/section-->
   </xsl:template>
 
   <xsl:template match="docbook:para">
@@ -190,15 +191,43 @@
   </xsl:template>
 
   <xsl:template match="docbook:title">
-    <header>
-      <xsl:call-template name="addAttributeClassEzxhtml"/>
-      <xsl:if test="@ezxhtml:textalign">
-        <xsl:attribute name="align">
-          <xsl:value-of select="@ezxhtml:textalign"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:apply-templates/>
-    </header>
+    <xsl:variable name="headingLevel">
+      <xsl:choose>
+        <xsl:when test="@ezxhtml:level">
+          <xsl:variable name="levelAttribute">
+            <xsl:value-of select="@ezxhtml:level - 1"/>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="$levelAttribute = 0">
+              <xsl:value-of select="1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$levelAttribute"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:variable name="levelAttribute">
+            <xsl:value-of select="count( ancestor::docbook:section )"/>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="$levelAttribute &gt; 5">
+              <xsl:value-of select="5"/>
+            </xsl:when>
+            <xsl:when test="$levelAttribute &gt; 1">
+              <xsl:value-of select="$levelAttribute - 1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$levelAttribute"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="recursiveWrapHeadingInSection">
+      <xsl:with-param name="node" select="node()"/>
+      <xsl:with-param name="level" select="$headingLevel"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="docbook:orderedlist">
@@ -391,6 +420,32 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:apply-templates select="$node"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="recursiveWrapHeadingInSection">
+    <xsl:param name="node"/>
+    <xsl:param name="level"/>
+    <xsl:choose>
+      <xsl:when test="$level &gt; 0">
+        <section>
+          <xsl:call-template name="recursiveWrapHeadingInSection">
+            <xsl:with-param name="node" select="$node"/>
+            <xsl:with-param name="level" select="$level - 1"/>
+          </xsl:call-template>
+        </section>
+      </xsl:when>
+      <xsl:otherwise>
+        <header>
+          <xsl:call-template name="addAttributeClassEzxhtml"/>
+          <xsl:if test="@ezxhtml:textalign">
+            <xsl:attribute name="align">
+              <xsl:value-of select="@ezxhtml:textalign"/>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:apply-templates/>
+        </header>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
