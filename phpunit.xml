@@ -29,6 +29,9 @@
     <testsuite name="eZ\Publish\Core\Persistence\Legacy">
       <directory>eZ/Publish/Core/Persistence/Legacy/Tests</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\Persistence\Doctrine">
+      <directory>eZ/Publish/Core/Persistence/Doctrine/Tests</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\Persistence\Solr">
       <directory>eZ/Publish/Core/Persistence/Solr/Tests</directory>
     </testsuite>
