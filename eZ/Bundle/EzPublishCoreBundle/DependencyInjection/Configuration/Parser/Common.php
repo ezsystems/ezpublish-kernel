@@ -252,7 +252,7 @@ EOT
             {
                 $suggestionArray['unix_socket'] = $databaseConfig['socket'];
             }
-            $suggestionArray['driverOptions'] = $databaseConfig['options'];
+            $suggestionArray['options'] = $databaseConfig['options'];
             $suggestionArray['user'] = $databaseConfig['user'];
             $suggestionArray['password'] = $databaseConfig['password'];
         }
