@@ -13,8 +13,6 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 
-use eZ\Publish\Core\REST\Server\Values;
-
 /**
  * CountryList value object visitor
  */

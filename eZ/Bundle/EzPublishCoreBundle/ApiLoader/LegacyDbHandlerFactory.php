@@ -9,7 +9,6 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use InvalidArgumentException;
 
