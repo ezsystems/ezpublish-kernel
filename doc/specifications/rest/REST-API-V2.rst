@@ -6101,6 +6101,89 @@ JSON Example
       }
     }
 
+Get session information
+``````````````````````
+
+:Resource:    /user/sessions/{sessionId}
+:Method:      GET
+:Description:
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.Session+xml: (see Session_)
+        :application/vnd.ez.api.Session+json:  (see Session_)
+:Response:
+
+.. code:: http
+
+        HTTP/1.1 200 OK
+        Location: /user/sessions/<sessionID>
+        Content-Type: <depending on accept header>
+        Content-Length: <length>
+        Set-Cookie: <sessionName> : <sessionID>  A unique session id
+.. parsed-literal::
+   Session_
+
+
+:Error codes:
+    :401: If the authorization failed (user not logged in, or session ID mismatch)
+
+
+XML Example
+'''''''''''
+
+.. code:: http
+
+    GET /user/sessions/bdcd6639f32fdaf21c66b3e3e614fe83 HTTP/1.1
+    Host: www.example.net
+    Accept: application/vnd.ez.api.Session+xml
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.Session+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Session href="/user/sessions/bdcd6639f32fdaf21c66b3e3e614fe83" media-type="application/vnd.ez.api.Session+xml">
+      <name>eZSSID</name>
+      <identifier>bdcd6639f32fdaf21c66b3e3e614fe83</identifier>
+      <csrfToken>23lkneri34ijajedfw39orj3j93</csrfToken>
+      <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
+    </Session>
+
+
+JSON Example
+''''''''''''
+
+.. code:: http
+
+    GET /user/sessions/bdcd6639f32fdaf21c66b3e3e614fe83 HTTP/1.1
+    Host: www.example.net
+    Accept: application/vnd.ez.api.Session+json
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.Session+json
+    Content-Length: xxx
+
+.. code:: json
+
+    {
+      "Session": {
+        "_href": "/user/sessions/bdcd6639f32fdaf21c66b3e3e614fe83",
+        "_media-type": "application/vnd.ez.api.Session+xml"
+        "name": "eZSSID",
+        "identifier": "bdcd6639f32fdaf21c66b3e3e614fe83s",
+        "csrfToken": "23lkneri34ijajedfw39orj3j93",
+        "User": {
+          "_href": "/user/users/14",
+          "_media-type": "application/vnd.ez.api.User+json"
+        }
+      }
+    }
 
 Delete session (logout a User):
 ```````````````````````````````
