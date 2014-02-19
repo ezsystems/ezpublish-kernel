@@ -88,7 +88,7 @@ class LegacyKernelController
         $this->kernel->setUseExceptions( true );
 
         $response = $this->legacyResponseManager->generateResponseFromModuleResult( $result );
-        $response->setHeaders( headers_list() );
+        $response->setLegacyHeaders( headers_list() );
 
         return $response;
     }
