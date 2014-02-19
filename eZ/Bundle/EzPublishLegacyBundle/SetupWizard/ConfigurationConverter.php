@@ -9,6 +9,8 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
+use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration;
+use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Security;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZINI;
 use eZSiteAccess;
@@ -72,32 +74,26 @@ class ConfigurationConverter
         $groupName = $sitePackage . '_group';
         $settings['ezpublish']['siteaccess']['groups'][$groupName] = $siteList;
         $settings['ezpublish']['siteaccess']['match'] = $this->resolveMatching();
-
-        $databaseMapping = array(
-            'ezmysqli' => 'mysql',
-            'eZMySQLiDB' => 'mysql',
-            'ezmysql' => 'mysql',
-            'eZMySQLDB' => 'mysql',
-        );
-
-        $databaseSettings = $this->getGroup( 'DatabaseSettings', 'site.ini', $defaultSiteaccess );
-
-        $databaseType = $databaseSettings['DatabaseImplementation'];
-        if ( isset( $databaseMapping[$databaseType] ) )
-            $databaseType = $databaseMapping[$databaseType];
-
         $settings['ezpublish']['system'] = array();
         $settings['ezpublish']['system'][$groupName] = array();
-        $databasePassword = $databaseSettings['Password'] != '' ? $databaseSettings['Password'] : null;
-        $settings['ezpublish']['system'][$groupName]['database'] = array(
-            'type' => $this->mapDatabaseType( $databaseType ),
-            'user' => $databaseSettings['User'],
-            'password' => $databasePassword,
-            'server' => $databaseSettings['Server'],
-            'database_name' => $databaseSettings['Database'],
-        );
+
         $settings['ezpublish']['system'][$defaultSiteaccess] = array();
         $settings['ezpublish']['system'][$adminSiteaccess] = array();
+
+        // Database settings
+        $databaseSettings = $this->getGroup( 'DatabaseSettings', 'site.ini', $defaultSiteaccess );
+        $repositoryName = "{$defaultSiteaccess}_repository";
+        $settings['doctrine'] = array(
+            'dbal' => array(
+                'connections' => array(
+                    "{$repositoryName}_connection" => $this->getDoctrineSettings( $databaseSettings )
+                )
+            )
+        );
+        $settings['ezpublish']['repositories'] = array(
+            $repositoryName => array( 'engine' => 'legacy', 'connection' => "{$repositoryName}_connection" )
+        );
+        $settings['ezpublish']['system'][$groupName]['repository'] = $repositoryName;
 
         // If package is not supported, all siteaccesses will have individually legacy_mode to true, forcing legacy fallback
         if ( !isset( $this->supportedPackages[$sitePackage] ) )
@@ -165,7 +161,45 @@ class ConfigurationConverter
 
         $settings['stash'] = $this->getStashCacheSettings( $databaseSettings['Database'] );
 
+        ksort( $settings );
+        ksort( $settings['ezpublish'] );
         return $settings;
+    }
+
+    protected function getDoctrineSettings( array $databaseSettings )
+    {
+        $databaseMapping = array(
+            'ezmysqli' => 'pdo_mysql',
+            'eZMySQLiDB' => 'pdo_mysql',
+            'ezmysql' => 'pdo_mysql',
+            'eZMySQLDB' => 'pdo_mysql',
+            'ezpostgresql' => 'pdo_pgsql',
+            'eZPostgreSQL' => 'pdo_pgsql',
+            'postgresql' => 'pdo_pgsql',
+            'pgsql' => 'pdo_pgsql',
+            'oracle' => 'oci8',
+            'ezoracle' => 'oci8'
+        );
+
+        $databaseType = $databaseSettings['DatabaseImplementation'];
+        if ( isset( $databaseMapping[$databaseType] ) )
+            $databaseType = $databaseMapping[$databaseType];
+
+        $databasePassword = $databaseSettings['Password'] != '' ? $databaseSettings['Password'] : null;
+        $doctrineSettings = array(
+            'driver' => $databaseType,
+            'host' => $databaseSettings['Server'],
+            'user' => $databaseSettings['User'],
+            'password' => $databasePassword,
+            'dbname' => $databaseSettings['Database'],
+            'charset' => 'UTF8'
+        );
+        if ( isset( $databaseSettings['Port'] ) && !empty( $databaseSettings['Port'] ) )
+            $doctrineSettings['port'] = $databaseSettings['Port'];
+        if ( isset( $databaseSettings['Socket'] ) && $databaseSettings['Socket'] !== 'disabled' )
+            $doctrineSettings['unix_socket'] = $databaseSettings['Socket'];
+
+        return $doctrineSettings;
     }
 
     /**
@@ -381,22 +415,12 @@ class ConfigurationConverter
         return $filters;
     }
 
-    protected function mapDatabaseType( $databaseType )
-    {
-        $map = array(
-            'ezpostgresql' => 'pgsql',
-            'postgresql' => 'pgsql'
-        );
-
-        return isset( $map[$databaseType] ) ? $map[$databaseType] : $databaseType;
-    }
-
     /**
      * Returns the contents of the legacy group $groupName. If $file and
      * $siteaccess are null, the global value is fetched with the legacy resolver.
      *
      * @param string $groupName
-     * @param string|null $namespace
+     * @param string|null $file
      * @param string|null $siteaccess
      *
      * @return array
@@ -468,7 +492,6 @@ class ConfigurationConverter
                     $match = $this->resolveHostMatching( $siteaccessSettings );
                     break;
                 case 'host_uri':
-                    // @todo Not implemented yet
                     $match = false;
                     break;
                 case 'port':

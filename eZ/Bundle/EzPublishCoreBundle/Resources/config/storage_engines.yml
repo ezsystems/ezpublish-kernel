@@ -193,6 +193,7 @@ services:
         class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
         factory_service: ezpublish.api.storage_engine.legacy.dbhandler.factory
         factory_method: buildLegacyDbHandler
+        lazy: true
 
     # Alias for backend connection used by eZ Publish storage engine
     # Useful if you need to reuse it in order to access resources not related to eZ Publish, but stored in your backend (e.g. foreign DB tables)

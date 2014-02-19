@@ -44,6 +44,7 @@ EOT
     {
         $package = $input->getArgument( 'package' );
         $adminSiteaccess = $input->getArgument( 'adminsiteaccess' );
+        $this->getContainer()->get( 'ezpublish_legacy.kernel.lazy_loader' )->setBuildEventsEnabled( false );
         $kernel = $this->getContainer()->get( 'kernel' );
 
         /** @var $configurationConverter \eZ\Bundle\EzPublishLegacyBundle\SetupWizard\ConfigurationConverter */
