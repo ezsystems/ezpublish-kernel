@@ -13,10 +13,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaCon
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use PDO;
 
 /**

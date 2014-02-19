@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as LocationSearchHandlerInterface;
 
 /**

@@ -10,7 +10,6 @@
 namespace eZ\Publish\SPI\Persistence\Content\Location\Search;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * The Location Search Handler interface defines search operations on Location elements in the storage engine.
