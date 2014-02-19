@@ -4,6 +4,6 @@
          xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
          xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
          version="5.0-variant ezpublish-1.0">
-  <title>This is a heading.</title>
+  <title ezxhtml:level="2">This is a heading.</title>
   <para>This is a paragraph with <emphasis role="underlined">underlined</emphasis> text.</para>
 </section>

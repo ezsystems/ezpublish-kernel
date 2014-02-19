@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
-  <h2>This is a heading.</h2>
+  <h1>This is a heading.</h1>
   <p>This is a paragraph.</p>
   <section>
     <h3>This is a second heading.</h3>

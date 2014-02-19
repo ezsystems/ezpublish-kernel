@@ -13,9 +13,9 @@
   <xsl:template match="section">
     <xsl:choose>
       <xsl:when test="count(ancestor-or-self::section) &gt; 1">
-        <xsl:element name="section" namespace="http://docbook.org/ns/docbook">
+        <!--xsl:element name="section" namespace="http://docbook.org/ns/docbook"-->
           <xsl:apply-templates/>
-        </xsl:element>
+        <!--/xsl:element-->
       </xsl:when>
       <xsl:otherwise>
         <section xmlns="http://docbook.org/ns/docbook"
@@ -200,7 +200,23 @@
   </xsl:template>
 
   <xsl:template match="header">
+    <xsl:variable name="headingLevel">
+      <xsl:value-of select="count( ancestor-or-self::section )"/>
+    </xsl:variable>
     <xsl:element name="title" namespace="http://docbook.org/ns/docbook">
+      <xsl:attribute name="ezxhtml:level">
+        <xsl:choose>
+          <xsl:when test="$headingLevel = 1">
+            <xsl:value-of select="2"/>
+          </xsl:when>
+          <xsl:when test="$headingLevel &gt; 6">
+            <xsl:value-of select="6"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$headingLevel"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
       <xsl:if test="@class">
         <xsl:attribute name="ezxhtml:class">
           <xsl:value-of select="@class"/>

@@ -4,17 +4,9 @@
          xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
          xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
          version="5.0-variant ezpublish-1.0">
-  <title ezxhtml:class="titleClass">This is a heading.</title>
-  <section>
-    <title ezxhtml:class="titleClass2" ezxhtml:textalign="left">This is a left aligned heading.</title>
-  </section>
-  <section>
-    <title ezxhtml:textalign="center">This is a centered heading.</title>
-  </section>
-  <section>
-    <title ezxhtml:textalign="right">This is a right aligned heading.</title>
-  </section>
-  <section>
-    <title ezxhtml:textalign="justify">This is a justified heading.</title>
-  </section>
+  <title ezxhtml:level="1" ezxhtml:class="titleClass">This is a heading.</title>
+  <title ezxhtml:level="2" ezxhtml:class="titleClass2" ezxhtml:textalign="left">This is a left aligned heading.</title>
+  <title ezxhtml:level="3" ezxhtml:textalign="center">This is a centered heading.</title>
+  <title ezxhtml:level="3" ezxhtml:textalign="right">This is a right aligned heading.</title>
+  <title ezxhtml:level="3" ezxhtml:textalign="justify">This is a justified heading.</title>
 </section>

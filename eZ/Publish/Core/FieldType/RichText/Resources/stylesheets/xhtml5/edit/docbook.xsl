@@ -182,6 +182,9 @@
 
   <xsl:template match="ezxhtml5:h1 | ezxhtml5:h2 | ezxhtml5:h3 | ezxhtml5:h4 | ezxhtml5:h5 | ezxhtml5:h6">
     <title>
+      <xsl:attribute name="ezxhtml:level">
+        <xsl:value-of select="substring-after( local-name(), 'h' )"/>
+      </xsl:attribute>
       <xsl:if test="@class">
         <xsl:attribute name="ezxhtml:class">
           <xsl:value-of select="@class"/>

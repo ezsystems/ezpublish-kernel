@@ -16,6 +16,12 @@
     <define name="db.section">
       <ref name="ez.db.section"/>
     </define>
+    <define name="db._title.req" combine="choice">
+      <a:documentation>
+        Needed by the LIBXML engine to allow for multiple title elements on the same level
+      </a:documentation>
+      <ref name="db.title"/>
+    </define>
     <define name="db.orderedlist">
       <element name="orderedlist">
         <a:documentation>A list in which each entry is marked with a sequentially incremented label</a:documentation>
@@ -493,6 +499,25 @@
             <value>center</value>
             <value>right</value>
             <value>justify</value>
+          </choice>
+        </attribute>
+      </optional>
+    </define>
+  </div>
+
+  <div>
+    <a:documentation>
+      Adding optional ezxhtml:level attribute to the "title" element.
+    </a:documentation>
+    <define name="db.title.attlist" combine="interleave"><ref name="ez.xhtml.title.level"/></define>
+    <define name="ez.xhtml.title.level">
+      <optional>
+        <attribute name="ezxhtml:level">
+          <choice>
+            <a:documentation>
+              Levels 1-6 are allowed, mapping to HTML H{level} tags.
+            </a:documentation>
+            <data type="string"><param name="pattern">[1-6]+</param></data>
           </choice>
         </attribute>
       </optional>

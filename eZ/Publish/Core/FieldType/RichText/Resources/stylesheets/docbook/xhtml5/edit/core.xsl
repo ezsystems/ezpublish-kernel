@@ -175,14 +175,23 @@
   </xsl:template>
 
   <xsl:template match="docbook:title">
-    <xsl:variable name="level" select="count(ancestor-or-self::docbook:section) + 1"/>
+    <xsl:variable name="headingLevel">
+      <xsl:choose>
+        <xsl:when test="@ezxhtml:level">
+          <xsl:value-of select="@ezxhtml:level"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="count( ancestor-or-self::docbook:section )"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:variable name="headingTag">
       <xsl:choose>
-        <xsl:when test="$level &gt; 6">
+        <xsl:when test="$headingLevel &gt; 6">
           <xsl:value-of select="'h6'"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat( 'h', $level )"/>
+          <xsl:value-of select="concat( 'h', $headingLevel )"/>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>

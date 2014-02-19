@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Conversion data loss explanation:
+
+This test case covers docbook format feature where <title> levels are determined
+from the depth of nesting inside <section> elements. That is a native docbook
+behaviour kept for compatibility reasons. In conversion back from XHTML edit format
+to docbook explicit level attributes will be generated, which are not present in
+the corresponding docbook fixture.
+
+Since HTML supports headings up to level 6 only, <title> with implicit level greater
+than 6 would be converted back to docbook as explicit level 6.
+
+No special test case for conversion to docbook is needed as this is already
+covered by:
+
+ 004-sectionNested.xml
+
+-->
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
+  <h1>This is a first level heading.</h1>
+  <section>
+    <h2>This is a second level heading.</h2>
+  </section>
+  <section>
+    <section>
+      <h3>This is a third level heading.</h3>
+    </section>
+  </section>
+  <section>
+    <section>
+      <section>
+        <h4>This is a fourth level heading.</h4>
+      </section>
+    </section>
+  </section>
+  <section>
+    <section>
+      <section>
+        <section>
+          <h5>This is a fifth level heading.</h5>
+        </section>
+      </section>
+    </section>
+  </section>
+  <section>
+    <section>
+      <section>
+        <section>
+          <section>
+            <h6>This is a sixth level heading.</h6>
+          </section>
+        </section>
+      </section>
+    </section>
+  </section>
+  <section>
+    <section>
+      <section>
+        <section>
+          <section>
+            <section>
+              <h6>This is a seventh level heading.</h6>
+            </section>
+          </section>
+        </section>
+      </section>
+    </section>
+  </section>
+</section>

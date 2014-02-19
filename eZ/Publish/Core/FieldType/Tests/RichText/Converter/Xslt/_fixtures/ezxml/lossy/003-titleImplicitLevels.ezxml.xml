@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Covers cases:
+
+ 021-titleImplicitLevels.lossy.xml
+
+-->
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <section>
+    <header>This is a first level heading.</header>
+  </section>
+  <section>
+    <header>This is a second level heading.</header>
+  </section>
+  <section>
+    <section>
+      <header>This is a third level heading.</header>
+    </section>
+  </section>
+  <section>
+    <section>
+      <section>
+        <header>This is a fourth level heading.</header>
+      </section>
+    </section>
+  </section>
+  <section>
+    <section>
+      <section>
+        <section>
+          <header>This is a fifth level heading.</header>
+        </section>
+      </section>
+    </section>
+  </section>
+  <section>
+    <section>
+      <section>
+        <section>
+          <section>
+            <header>This is a sixth level heading.</header>
+          </section>
+        </section>
+      </section>
+    </section>
+  </section>
+  <section>
+    <section>
+      <section>
+        <section>
+          <section>
+            <section>
+              <header>This is a seventh level heading.</header>
+            </section>
+          </section>
+        </section>
+      </section>
+    </section>
+  </section>
+</section>
