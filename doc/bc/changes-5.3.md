@@ -4,6 +4,34 @@ Changes affecting version compatibility with former or future versions.
 
 ## Changes
 
+* Doctrine is now used instead of Zeta Database for legacy storage engine.
+  **Semantic configuration for database settings has changed.**
+  It is now mandatory to configure a Doctrine connection (see DoctrineBundle configuration), and a repository:
+
+  ```yaml
+  doctrine:
+      dbal:
+          default_connection:       default
+          connections:
+              default:
+                  dbname:           Symfony2
+                  user:             root
+                  password:         null
+                  host:             localhost
+              my_connection:
+                  dbname:           customer
+                  user:             root
+                  password:         null
+                  host:             localhost
+
+  ezpublish:
+      repositories:
+          main:
+              # legacy => Legacy storage engine
+              engine: legacy
+              connection: my_connection
+  ```
+
 * New method `eZ\Publish\API\Repository\RoleService::deletePolicy` is introduced.
 
 * Method `eZ\Publish\API\Repository\RoleService::removePolicy` will throw

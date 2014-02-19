@@ -9,52 +9,113 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 
 /**
  * The storage engine factory.
  */
-class StorageEngineFactory extends ContainerAware
+class StorageEngineFactory
 {
     /**
-     * Hash of registered storage engines.
-     * Key is the storage engine identifier, value is its corresponding service Id
-     *
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    private $configResolver;
+
+    /**
      * @var array
+     */
+    private $repositories;
+
+    /**
+     * Hash of registered storage engines.
+     * Key is the storage engine identifier, value persistence handler itself.
+     *
+     * @var \eZ\Publish\SPI\Persistence\Handler[]
      */
     protected $storageEngines = array();
 
-    /**
-     * Registers $storageEngineServiceId as a service Id to be used as a valid storage engine, with identifier $storageEngineIdentifier
-     *
-     * @param string $storageEngineServiceId
-     * @param string $storageEngineIdentifier
-     */
-    public function registerStorageEngine( $storageEngineServiceId, $storageEngineIdentifier )
+    public function __construct( ConfigResolverInterface $configResolver, array $repositories )
     {
-        $this->storageEngines[$storageEngineIdentifier] = $storageEngineServiceId;
+        $this->configResolver = $configResolver;
+        $this->repositories = $repositories;
     }
 
     /**
-     * Builds storage engine identified by $storageEngineIdentifier (the "alias" attribute in the service tag)
+     * Registers $persistenceHandler as a valid storage engine, with identifier $storageEngineIdentifier.
      *
-     * @param string $storageEngineIdentifier The storage engine identifier
+     * @note It is strongly recommenced to register a lazy persistent handler.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
+     * @param string $storageEngineIdentifier
+     */
+    public function registerStorageEngine( PersistenceHandler $persistenceHandler, $storageEngineIdentifier )
+    {
+        $this->storageEngines[$storageEngineIdentifier] = $persistenceHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Handler[]
+     */
+    public function getStorageEngines()
+    {
+        return $this->storageEngines;
+    }
+
+    /**
+     * Builds storage engine identified by $storageEngineIdentifier (the "alias" attribute in the service tag).
      *
      * @throws \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine
      *
      * @return \eZ\Publish\SPI\Persistence\Handler
      */
-    public function buildStorageEngine( $storageEngineIdentifier )
+    public function buildStorageEngine()
     {
-        if ( !isset( $this->storageEngines[$storageEngineIdentifier] ) )
+        $repositoryConfig = $this->getRepositoryConfig();
+
+        if (
+            !(
+                isset( $repositoryConfig['engine'] )
+                && isset( $this->storageEngines[$repositoryConfig['engine']] )
+            )
+        )
         {
             throw new InvalidStorageEngine(
-                "Invalid storage engine '$storageEngineIdentifier'. Could not find any service tagged as ezpublish.storageEngine with alias $storageEngineIdentifier."
+                "Invalid storage engine '{$repositoryConfig['engine']}'. Could not find any service tagged as ezpublish.storageEngine with alias {$repositoryConfig['engine']}."
             );
         }
 
-        $serviceId = $this->storageEngines[$storageEngineIdentifier];
-        return $this->container->get( $serviceId );
+        return $this->storageEngines[$repositoryConfig['engine']];
+    }
+
+    /**
+     * @return array
+     *
+     * @throws \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
+     */
+    public function getRepositoryConfig()
+    {
+        // Takes configured repository as the reference, if it exists.
+        // If not, the first configured repository is considered instead.
+        if ( $this->configResolver->hasParameter( 'repository' ) )
+        {
+            $repositoryAlias = $this->configResolver->getParameter( 'repository' );
+        }
+        else
+        {
+            $aliases = array_keys( $this->repositories );
+            $repositoryAlias = array_shift( $aliases );
+        }
+
+        if ( empty( $repositoryAlias ) || !isset( $this->repositories[$repositoryAlias] ) )
+        {
+            throw new InvalidRepositoryException(
+                "Undefined repository '$repositoryAlias'. Did you forget to configure it in ezpublish_*.yml?"
+            );
+        }
+
+        return array( 'alias' => $repositoryAlias ) + $this->repositories[$repositoryAlias];
     }
 }

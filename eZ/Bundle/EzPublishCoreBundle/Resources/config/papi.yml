@@ -4,6 +4,7 @@ parameters:
     ezpublish.api.repository.lazy_factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory
     ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
+    ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
 
     # API services
     ezpublish.api.service.content.class: eZ\Publish\Core\Repository\ContentService
@@ -63,18 +64,16 @@ services:
 
     ezpublish.api.storage_engine.factory:
         class: %ezpublish.api.storage_engine.factory.class%
-        calls:
-            - [setContainer, [@service_container]]
+        arguments: [@ezpublish.config.resolver, %ezpublish.repositories%]
 
     ezpublish.api.persistence_handler:
         #To disable cache, switch alias to ezpublish.api.storage_engine
         alias: ezpublish.spi.persistence.cache
 
     ezpublish.api.storage_engine:
-        class: eZ\Publish\SPI\Persistence\Handler
+        class: %ezpublish.api.storage_engine.class%
         factory_service: ezpublish.api.storage_engine.factory
         factory_method: buildStorageEngine
-        arguments: [%ezpublish.api.storage_engine.default%]
         public: false
 
     ezpublish.api.service.content:

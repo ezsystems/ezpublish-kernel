@@ -10,14 +10,22 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Configuration parser handling all basic configuration (aka "common")
  */
-class Common extends AbstractParser
+class Common extends AbstractParser implements SuggestionCollectorAwareInterface
 {
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\SuggestionCollectorInterface
+     */
+    private $suggestionCollector;
+
     /**
      * Adds semantic configuration definition.
      *
@@ -34,7 +42,11 @@ class Common extends AbstractParser
                 ->example( array( 'fre-FR', 'eng-GB' ) )
                 ->prototype( 'scalar' )->end()
             ->end()
+            ->scalarNode( 'repository' )->info( 'The repository to use. Choose among ezpublish.repositories.' )->end()
+            // @deprecated
+            // Use ezpublish.repositories / repository settings instead.
             ->arrayNode( 'database' )
+                ->info( 'DEPRECATED. Use ezpublish.repositories / repository settings instead.' )
                 ->children()
                     ->enumNode( 'type' )->values( array( 'mysql', 'pgsql', 'sqlite' ) )->info( 'The database driver. Can be mysql, pgsql or sqlite.' )->end()
                     ->scalarNode( 'server' )->end()
@@ -139,54 +151,13 @@ class Common extends AbstractParser
         $this->registerInternalConfigArray(
             'languages', $config, $container, self::UNIQUE
         );
-        $this->registerInternalConfigArray( 'database', $config, $container );
-        foreach ( $config['siteaccess']['list'] as $sa )
-        {
-            $database = $container->getParameter( "ezsettings.$sa.database" );
-            if ( !empty( $database ) )
-            {
-                // DSN has priority over any other setting
-                if ( isset( $database['dsn'] ) )
-                {
-                    $container->setParameter( "ezsettings.$sa.database.params", $database['dsn'] );
-                }
-                else
-                {
-                    // Renaming dbParams to parameters supported by Doctrine.
-                    $database['dbname'] = $database['database_name'];
-                    $database['host'] = $database['server'];
-                    $driverMap = array(
-                        'mysql' => 'pdo_mysql',
-                        'pgsql' => 'pdo_pgsql',
-                        'sqlite' => 'pdo_sqlite',
-                    );
-                    if ( isset( $driverMap[$database['type']] ) )
-                    {
-                        $database['driver'] = $driverMap[$database['type']];
-                    }
-                    else
-                    {
-                        $database['driver'] = $database['type'];
-                    }
-                    if ( isset( $database['socket'] ) )
-                    {
-                        $database['unix_socket'] = $database['socket'];
-                    }
-                    $database['driverOptions'] = $database['options'];
-                    unset(
-                        $database['database_name'],
-                        $database['server'],
-                        $database['type'],
-                        $database['options'],
-                        $database['socket'],
-                        $database['server']
-                    );
-                    $container->setParameter( "ezsettings.$sa.database.params", $database );
-                }
-            }
-        }
+
         foreach ( $config[$this->baseKey] as $sa => $settings )
         {
+            if ( isset( $settings['database'] ) )
+                $this->addDatabaseConfigSuggestion( $sa, $settings['database'] );
+            if ( isset( $settings['repository'] ) )
+                $container->setParameter( "ezsettings.$sa.repository", $settings['repository'] );
             if ( isset( $settings['legacy_mode'] ) )
             {
                 $container->setParameter( "ezsettings.$sa.legacy_mode", $settings['legacy_mode'] );
@@ -227,5 +198,86 @@ class Common extends AbstractParser
             if ( isset( $settings['index_page'] ) )
                 $container->setParameter( "ezsettings.$sa.index_page", $settings['index_page'] );
         }
+    }
+
+    /**
+     * Injects SuggestionCollector.
+     *
+     * @param SuggestionCollectorInterface $suggestionCollector
+     */
+    public function setSuggestionCollector( SuggestionCollectorInterface $suggestionCollector )
+    {
+        $this->suggestionCollector = $suggestionCollector;
+    }
+
+    private function addDatabaseConfigSuggestion( $sa, array $databaseConfig )
+    {
+        $suggestion = new ConfigSuggestion(
+<<<EOT
+Database configuration has changed for eZ Content repository.
+Please define:
+ - An entry in ezpublish.repositories
+ - A Doctrine connection (You may check configuration reference for Doctrine "config:dump-reference doctrine" console command.)
+ - A reference to configured repository in ezpublish.system.$sa.repository
+EOT
+        );
+        $suggestion->setMandatory( true );
+        $suggestionArray = array(
+            'driver' => 'pdo_mysql',
+            'host' => 'localhost',
+            'dbname' => 'my_database',
+            'user' => 'my_user',
+            'password' => 'some_password',
+            'charset' => 'UTF8'
+        );
+
+        if ( !empty( $databaseConfig ) )
+        {
+            $suggestionArray['dbname'] = $databaseConfig['database_name'];
+            $suggestionArray['host'] = $databaseConfig['server'];
+            $driverMap = array(
+                'mysql' => 'pdo_mysql',
+                'pgsql' => 'pdo_pgsql',
+                'sqlite' => 'pdo_sqlite',
+            );
+            if ( isset( $driverMap[$databaseConfig['type']] ) )
+            {
+                $suggestionArray['driver'] = $driverMap[$databaseConfig['type']];
+            }
+            else
+            {
+                $suggestionArray['driver'] = $databaseConfig['type'];
+            }
+            if ( isset( $databaseConfig['socket'] ) )
+            {
+                $suggestionArray['unix_socket'] = $databaseConfig['socket'];
+            }
+            $suggestionArray['driverOptions'] = $databaseConfig['options'];
+            $suggestionArray['user'] = $databaseConfig['user'];
+            $suggestionArray['password'] = $databaseConfig['password'];
+        }
+        $suggestion->setSuggestion(
+            array(
+                'doctrine' => array(
+                    'dbal' => array(
+                        'connections' => array(
+                            'default' => $suggestionArray
+                        )
+                    )
+                ),
+                'ezpublish' => array(
+                    'repositories' => array(
+                        'my_repository' => array( 'engine' => 'legacy', 'connection' => 'default' )
+                    ),
+                    'system' => array(
+                        $sa => array(
+                            'repository' => 'my_repository'
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->suggestionCollector->addSuggestion( $suggestion );
     }
 }

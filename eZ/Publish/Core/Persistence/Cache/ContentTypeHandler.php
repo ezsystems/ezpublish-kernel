@@ -32,7 +32,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function createGroup( GroupCreateStruct $struct )
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $struct ) );
-        $group = $this->persistenceFactory->getContentTypeHandler()->createGroup( $struct );
+        $group = $this->persistenceHandler->contentTypeHandler()->createGroup( $struct );
 
         $this->cache->getItem( 'contentTypeGroup', $group->id )->set( $group );
 
@@ -48,7 +48,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
 
         $this->cache
             ->getItem( 'contentTypeGroup', $struct->id )
-            ->set( $group = $this->persistenceFactory->getContentTypeHandler()->updateGroup( $struct ) );
+            ->set( $group = $this->persistenceHandler->contentTypeHandler()->updateGroup( $struct ) );
 
         return $group;
     }
@@ -59,7 +59,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function deleteGroup( $groupId )
     {
         $this->logger->logCall( __METHOD__, array( 'group' => $groupId ) );
-        $return = $this->persistenceFactory->getContentTypeHandler()->deleteGroup( $groupId );
+        $return = $this->persistenceHandler->contentTypeHandler()->deleteGroup( $groupId );
 
         $this->cache->clear( 'contentTypeGroup', $groupId );
         return $return;
@@ -75,7 +75,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         if ( $cache->isMiss() )
         {
             $this->logger->logCall( __METHOD__, array( 'group' => $groupId ) );
-            $cache->set( $group = $this->persistenceFactory->getContentTypeHandler()->loadGroup( $groupId ) );
+            $cache->set( $group = $this->persistenceHandler->contentTypeHandler()->loadGroup( $groupId ) );
         }
 
         return $group;
@@ -87,7 +87,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function loadGroupByIdentifier( $identifier )
     {
         $this->logger->logCall( __METHOD__, array( 'group' => $identifier ) );
-        return $this->persistenceFactory->getContentTypeHandler()->loadGroupByIdentifier( $identifier );
+        return $this->persistenceHandler->contentTypeHandler()->loadGroupByIdentifier( $identifier );
     }
 
     /**
@@ -96,7 +96,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function loadAllGroups()
     {
         $this->logger->logCall( __METHOD__ );
-        return $this->persistenceFactory->getContentTypeHandler()->loadAllGroups();
+        return $this->persistenceHandler->contentTypeHandler()->loadAllGroups();
     }
 
     /**
@@ -105,7 +105,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED )
     {
         $this->logger->logCall( __METHOD__, array( 'group' => $groupId, 'status' => $status ) );
-        return $this->persistenceFactory->getContentTypeHandler()->loadContentTypes( $groupId, $status );
+        return $this->persistenceHandler->contentTypeHandler()->loadContentTypes( $groupId, $status );
     }
 
     /**
@@ -116,7 +116,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         if ( $status !== Type::STATUS_DEFINED )
         {
             $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status ) );
-            return $this->persistenceFactory->getContentTypeHandler()->load( $typeId, $status );
+            return $this->persistenceHandler->contentTypeHandler()->load( $typeId, $status );
         }
 
         // Get cache for published content types
@@ -125,7 +125,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         if ( $cache->isMiss() )
         {
             $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status ) );
-            $cache->set( $type = $this->persistenceFactory->getContentTypeHandler()->load( $typeId, $status ) );
+            $cache->set( $type = $this->persistenceHandler->contentTypeHandler()->load( $typeId, $status ) );
         }
 
         return $type;
@@ -142,7 +142,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         if ( $cache->isMiss() )
         {
             $this->logger->logCall( __METHOD__, array( 'type' => $identifier ) );
-            $type = $this->persistenceFactory->getContentTypeHandler()->loadByIdentifier( $identifier );
+            $type = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier( $identifier );
             $cache->set( $type->id );
             // Warm contentType cache in case it's not set
             $this->cache->getItem( 'contentType', $type->id )->set( $type );
@@ -162,7 +162,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function loadByRemoteId( $remoteId )
     {
         $this->logger->logCall( __METHOD__, array( 'type' => $remoteId ) );
-        return $this->persistenceFactory->getContentTypeHandler()->loadByRemoteId( $remoteId );
+        return $this->persistenceHandler->contentTypeHandler()->loadByRemoteId( $remoteId );
     }
 
     /**
@@ -171,7 +171,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function create( CreateStruct $contentType )
     {
         $this->logger->logCall( __METHOD__, array( 'struct' => $contentType ) );
-        $type = $this->persistenceFactory->getContentTypeHandler()->create( $contentType );
+        $type = $this->persistenceHandler->contentTypeHandler()->create( $contentType );
 
         if ( $type->status === Type::STATUS_DEFINED )
         {
@@ -191,13 +191,13 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status, 'struct' => $struct ) );
         if ( $status !== Type::STATUS_DEFINED )
         {
-            return $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $struct );
+            return $this->persistenceHandler->contentTypeHandler()->update( $typeId, $status, $struct );
         }
 
         // Warm cache
         $this->cache
             ->getItem( 'contentType', $typeId )
-            ->set( $type = $this->persistenceFactory->getContentTypeHandler()->update( $typeId, $status, $struct ) );
+            ->set( $type = $this->persistenceHandler->contentTypeHandler()->update( $typeId, $status, $struct ) );
 
         // Clear identifier cache in case it was changed before warming the new one
         $this->cache->clear( 'contentType', 'identifier' );
@@ -212,7 +212,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function delete( $typeId, $status )
     {
         $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status ) );
-        $return = $this->persistenceFactory->getContentTypeHandler()->delete( $typeId, $status );
+        $return = $this->persistenceHandler->contentTypeHandler()->delete( $typeId, $status );
 
         if ( $status === Type::STATUS_DEFINED )
         {
@@ -230,7 +230,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function createDraft( $modifierId, $typeId )
     {
         $this->logger->logCall( __METHOD__, array( 'modifier' => $modifierId, 'type' => $typeId ) );
-        return $this->persistenceFactory->getContentTypeHandler()->createDraft( $modifierId, $typeId );
+        return $this->persistenceHandler->contentTypeHandler()->createDraft( $modifierId, $typeId );
     }
 
     /**
@@ -239,7 +239,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function copy( $userId, $typeId, $status )
     {
         $this->logger->logCall( __METHOD__, array( 'user' => $userId, 'type' => $typeId, 'status' => $status ) );
-        return $this->persistenceFactory->getContentTypeHandler()->copy( $userId, $typeId, $status );
+        return $this->persistenceHandler->contentTypeHandler()->copy( $userId, $typeId, $status );
     }
 
     /**
@@ -248,7 +248,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function unlink( $groupId, $typeId, $status )
     {
         $this->logger->logCall( __METHOD__, array( 'group' => $groupId, 'type' => $typeId, 'status' => $status ) );
-        $return = $this->persistenceFactory->getContentTypeHandler()->unlink( $groupId, $typeId, $status );
+        $return = $this->persistenceHandler->contentTypeHandler()->unlink( $groupId, $typeId, $status );
 
         if ( $status === Type::STATUS_DEFINED )
             $this->cache->clear( 'contentType', $typeId );
@@ -262,7 +262,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function link( $groupId, $typeId, $status )
     {
         $this->logger->logCall( __METHOD__, array( 'group' => $groupId, 'type' => $typeId, 'status' => $status ) );
-        $return = $this->persistenceFactory->getContentTypeHandler()->link( $groupId, $typeId, $status );
+        $return = $this->persistenceHandler->contentTypeHandler()->link( $groupId, $typeId, $status );
 
         if ( $status === Type::STATUS_DEFINED )
             $this->cache->clear( 'contentType', $typeId );
@@ -276,7 +276,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function getFieldDefinition( $id, $status )
     {
         $this->logger->logCall( __METHOD__, array( 'field' => $id, 'status' => $status ) );
-        return $this->persistenceFactory->getContentTypeHandler()->getFieldDefinition( $id, $status );
+        return $this->persistenceHandler->contentTypeHandler()->getFieldDefinition( $id, $status );
     }
 
     /**
@@ -285,7 +285,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function getContentCount( $contentTypeId )
     {
         $this->logger->logCall( __METHOD__, array( 'contentTypeId' => $contentTypeId ) );
-        return $this->persistenceFactory->getContentTypeHandler()->getContentCount( $contentTypeId );
+        return $this->persistenceHandler->contentTypeHandler()->getContentCount( $contentTypeId );
     }
 
     /**
@@ -294,7 +294,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function addFieldDefinition( $typeId, $status, FieldDefinition $struct )
     {
         $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status, 'struct' => $struct ) );
-        $return = $this->persistenceFactory->getContentTypeHandler()->addFieldDefinition(
+        $return = $this->persistenceHandler->contentTypeHandler()->addFieldDefinition(
             $typeId,
             $status,
             $struct
@@ -312,7 +312,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function removeFieldDefinition( $typeId, $status, $fieldDefinitionId )
     {
         $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status, 'field' => $fieldDefinitionId ) );
-        $this->persistenceFactory->getContentTypeHandler()->removeFieldDefinition(
+        $this->persistenceHandler->contentTypeHandler()->removeFieldDefinition(
             $typeId,
             $status,
             $fieldDefinitionId
@@ -328,7 +328,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function updateFieldDefinition( $typeId, $status, FieldDefinition $struct )
     {
         $this->logger->logCall( __METHOD__, array( 'type' => $typeId, 'status' => $status, 'struct' => $struct ) );
-        $this->persistenceFactory->getContentTypeHandler()->updateFieldDefinition(
+        $this->persistenceHandler->contentTypeHandler()->updateFieldDefinition(
             $typeId,
             $status,
             $struct
@@ -344,7 +344,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function publish( $typeId )
     {
         $this->logger->logCall( __METHOD__, array( 'type' => $typeId ) );
-        $this->persistenceFactory->getContentTypeHandler()->publish( $typeId );
+        $this->persistenceHandler->contentTypeHandler()->publish( $typeId );
 
         // Clear type cache and all identifier cache (as we don't know the identifier)
         $this->cache->clear( 'contentType', $typeId );

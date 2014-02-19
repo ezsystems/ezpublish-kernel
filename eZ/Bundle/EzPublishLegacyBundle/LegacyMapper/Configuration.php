@@ -15,6 +15,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
 use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use ezpEvent;
 use ezxFormToken;
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -46,6 +47,11 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
     private $urlAliasGenerator;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     */
+    private $legacyDbHandler;
+
+    /**
      * @var array
      */
     private $options;
@@ -62,6 +68,7 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
         GatewayCachePurger $gatewayCachePurger,
         PersistenceCachePurger $persistenceCachePurger,
         UrlAliasGenerator $urlAliasGenerator,
+        DatabaseHandler $legacyDbHandler,
         array $options = array()
     )
     {
@@ -69,6 +76,7 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
         $this->gatewayCachePurger = $gatewayCachePurger;
         $this->persistenceCachePurger = $persistenceCachePurger;
         $this->urlAliasGenerator = $urlAliasGenerator;
+        $this->legacyDbHandler = $legacyDbHandler;
         $this->options = $options;
     }
 
@@ -93,8 +101,6 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
      * Adds settings to the parameters that will be injected into the legacy kernel
      *
      * @param \eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent $event
-     *
-     * @todo Cache computed settings somehow
      */
     public function onBuildKernel( PreBuildKernelEvent $event )
     {
@@ -103,17 +109,16 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
             return;
         }
 
-        $databaseSettings = $this->configResolver->getParameter( "database" );
+        $databaseSettings = $this->legacyDbHandler->getConnection()->getParams();
         $settings = array();
         foreach (
             array(
-                "server" => "Server",
+                "host" => "Server",
                 "port" => "Port",
                 "user" => "User",
                 "password" => "Password",
-                "database_name" => "Database",
-                "type" => "DatabaseImplementation",
-                "socket" => "Socket"
+                "dbname" => "Database",
+                "unix_socket" => "Socket"
             ) as $key => $iniKey
         )
         {
@@ -126,8 +131,17 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
             {
                 switch ( $key )
                 {
-                    case "socket":
+                    case "unix_socket":
                         $settings["site.ini/DatabaseSettings/$iniKey"] = "disabled";
+                        break;
+                    case "driver":
+                        $driverMap = array(
+                            'pdo_mysql' => 'mysqli',
+                            'pdo_pgsql' => 'pgsql',
+                            'oci8' => 'oracle'
+                        );
+                        if ( isset( $driverMap[$databaseSettings[$key]] ) )
+                            $settings["site.ini/DatabaseSettings/DatabaseImplementation"] = $driverMap[$databaseSettings[$key]];
                         break;
                 }
             }

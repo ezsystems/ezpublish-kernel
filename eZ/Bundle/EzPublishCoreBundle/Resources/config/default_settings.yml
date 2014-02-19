@@ -12,7 +12,8 @@ parameters:
     ezsettings.default.block_view: {}
 
     # Common settings
-    ezsettings.default.database.params: ~
+    ezpublish.repositories: {}
+    ezsettings.default.repository: ~
     ezsettings.default.session_name: "eZSESSID{siteaccess_hash}"    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
     ezsettings.default.session: { name: %ezsettings.default.session_name% } # Session options that will override options from framework
     ezsettings.default.legacy_mode: false

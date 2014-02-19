@@ -1,6 +1,5 @@
 parameters:
     ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
-    ezpublish.spi.persistence.lazy_factory.class: eZ\Publish\Core\Persistence\Factory
     ezpublish.spi.persistence.cache.abstractHandler.class: eZ\Publish\Core\Persistence\Cache\AbstractHandler
     ezpublish.spi.persistence.cache.sectionHandler.class: eZ\Publish\Core\Persistence\Cache\SectionHandler
     ezpublish.spi.persistence.cache.locationHandler.class: eZ\Publish\Core\Persistence\Cache\LocationHandler
@@ -15,7 +14,6 @@ parameters:
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     # Make sure logging is only enabled for debug by default
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: %kernel.debug%
-    ezpublish.spi.persistence.default_id: synthetical-parameter-set-in-RegisterStorageEnginePass
 
     # storage engines
     ezpublish.api.storage_engine.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
@@ -112,7 +110,7 @@ services:
     ezpublish.spi.persistence.cache:
         class: %ezpublish.spi.persistence.cache.class%
         arguments:
-            - @ezpublish.spi.persistence.lazy_factory
+            - @ezpublish.api.storage_engine
             - @ezpublish.spi.persistence.cache.sectionHandler
             - @ezpublish.spi.persistence.cache.locationHandler
             - @ezpublish.spi.persistence.cache.contentHandler
@@ -126,12 +124,6 @@ services:
             - @ezpublish.spi.persistence.cache.persistenceLogger
             - @ezpublish.cache_pool.spi.cache.decorator
 
-    ezpublish.spi.persistence.lazy_factory:
-        class: %ezpublish.spi.persistence.lazy_factory.class%
-        arguments: [%ezpublish.spi.persistence.default_id%]
-        calls:
-            - [setContainer, [@service_container]]
-
     ezpublish.spi.persistence.cache.persistenceLogger:
         class: %ezpublish.spi.persistence.cache.persistenceLogger.class%
         arguments:
@@ -142,7 +134,7 @@ services:
         abstract:  true
         arguments:
             - @ezpublish.cache_pool.spi.cache.decorator
-            - @ezpublish.spi.persistence.lazy_factory
+            - @ezpublish.api.storage_engine
             - @ezpublish.spi.persistence.cache.persistenceLogger
 
     ezpublish.spi.persistence.cache.sectionHandler:
@@ -193,7 +185,9 @@ services:
 
     ezpublish.api.storage_engine.legacy.dbhandler.factory:
         class: %ezpublish.api.storage_engine.legacy.dbhandler.factory.class%
-        arguments: [@ezpublish.config.resolver]
+        arguments: [@ezpublish.api.storage_engine.factory]
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.api.storage_engine.legacy.dbhandler:
         class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
@@ -214,6 +208,7 @@ services:
             - %ezpublish.api.storage_engine.legacy.defer_type_update%
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
+        lazy: true
 
     ezpublish.api.storage_engine.transformation_parser:
         class: %ezpublish.api.storage_engine.transformation_parser.class%

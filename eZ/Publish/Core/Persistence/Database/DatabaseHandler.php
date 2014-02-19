@@ -182,4 +182,11 @@ interface DatabaseHandler extends EzcDbHandler
      * @return string
      */
     public function getSequenceName( $table, $column );
+
+    /**
+     * Returns underlying connection (e.g. Doctrine connection object).
+     *
+     * @return mixed
+     */
+    public function getConnection();
 }

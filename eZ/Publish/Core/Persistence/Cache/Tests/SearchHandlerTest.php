@@ -23,7 +23,7 @@ class SearchHandlerTest extends HandlerTest
     /**
      * @return array
      */
-    function providerForUnCachedMethods()
+    public function providerForUnCachedMethods()
     {
         return array(
             array( 'findContent', array( new Query, array( 42 ) ) ),
@@ -48,7 +48,6 @@ class SearchHandlerTest extends HandlerTest
 
     /**
      * @dataProvider providerForUnCachedMethods
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler
      */
     public function testUnCachedMethods( $method, array $arguments )
     {
@@ -58,9 +57,9 @@ class SearchHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler' );
-        $this->persistenceFactoryMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
-            ->method( 'getSearchHandler' )
+            ->method( 'searchHandler' )
             ->will( $this->returnValue( $innerHandler ) );
 
         $expects = $innerHandler
@@ -76,7 +75,7 @@ class SearchHandlerTest extends HandlerTest
 
         $expects->will( $this->returnValue( null ) );
 
-        $handler = $this->persistenceHandler->searchHandler();
+        $handler = $this->persistenceCacheHandler->searchHandler();
         call_user_func_array( array( $handler, $method ), $arguments );
     }
 }

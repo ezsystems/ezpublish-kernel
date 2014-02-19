@@ -266,4 +266,20 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->assertArrayHasKey( 'foo', $conversionMap );
         $this->assertSame( 'bar', $conversionMap['foo'] );
     }
+
+    public function testRepositoriesConfiguration()
+    {
+        $repositories = array(
+            'main' => array( 'engine' => 'legacy', 'connection' => 'default' ),
+            'foo' => array( 'engine' => 'bar', 'connection' => 'blabla' ),
+        );
+        $this->load( array( 'repositories' => $repositories ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezpublish.repositories' ) );
+
+        foreach ( $repositories as &$repositoryConfig )
+        {
+            $repositoryConfig['config'] = array();
+        }
+        $this->assertSame( $repositories, $this->container->getParameter( 'ezpublish.repositories' ) );
+    }
 }
