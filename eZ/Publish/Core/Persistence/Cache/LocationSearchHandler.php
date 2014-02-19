@@ -26,7 +26,7 @@ class LocationSearchHandler extends AbstractHandler implements LocationSearchHan
     public function findLocations( Query $query )
     {
         $this->logger->logCall( __METHOD__, array( 'query' => $query ) );
-        return $this->persistenceFactory->getLocationSearchHandler()->findLocations( $query );
+        return $this->persistenceHandler->locationSearchHandler()->findLocations( $query );
     }
 
     /**
@@ -39,6 +39,6 @@ class LocationSearchHandler extends AbstractHandler implements LocationSearchHan
     public function getLocationCount( Criterion $criterion )
     {
         $this->logger->logCall( __METHOD__, array( 'criterion' => $criterion ) );
-        return $this->persistenceFactory->getLocationSearchHandler()->getLocationCount( $criterion );
+        return $this->persistenceHandler->locationSearchHandler()->getLocationCount( $criterion );
     }
 }

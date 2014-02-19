@@ -25,7 +25,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function create( $name, $identifier )
     {
         $this->logger->logCall( __METHOD__, array( 'name' => $name, 'identifier' => $identifier ) );
-        $section = $this->persistenceFactory->getSectionHandler()->create( $name, $identifier );
+        $section = $this->persistenceHandler->sectionHandler()->create( $name, $identifier );
         $this->cache->getItem( 'section', $section->id )->set( $section );
         return $section;
     }
@@ -38,7 +38,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $this->logger->logCall( __METHOD__, array( 'section' => $id, 'name' => $name, 'identifier' => $identifier ) );
         $this->cache
             ->getItem( 'section', $id )
-            ->set( $section = $this->persistenceFactory->getSectionHandler()->update( $id, $name, $identifier ) );
+            ->set( $section = $this->persistenceHandler->sectionHandler()->update( $id, $name, $identifier ) );
         return $section;
     }
 
@@ -52,7 +52,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         if ( $cache->isMiss() )
         {
             $this->logger->logCall( __METHOD__, array( 'section' => $id ) );
-            $cache->set( $section = $this->persistenceFactory->getSectionHandler()->load( $id ) );
+            $cache->set( $section = $this->persistenceHandler->sectionHandler()->load( $id ) );
         }
 
         return $section;
@@ -66,7 +66,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function loadAll()
     {
         $this->logger->logCall( __METHOD__ );
-        return $this->persistenceFactory->getSectionHandler()->loadAll();
+        return $this->persistenceHandler->sectionHandler()->loadAll();
     }
 
     /**
@@ -81,7 +81,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function loadByIdentifier( $identifier )
     {
         $this->logger->logCall( __METHOD__, array( 'section' => $identifier ) );
-        return $this->persistenceFactory->getSectionHandler()->loadByIdentifier( $identifier );
+        return $this->persistenceHandler->sectionHandler()->loadByIdentifier( $identifier );
     }
 
     /**
@@ -90,7 +90,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function delete( $id )
     {
         $this->logger->logCall( __METHOD__, array( 'section' => $id ) );
-        $return = $this->persistenceFactory->getSectionHandler()->delete( $id );
+        $return = $this->persistenceHandler->sectionHandler()->delete( $id );
 
         $this->cache->clear( 'section', $id );
         return $return;
@@ -102,7 +102,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function assign( $sectionId, $contentId )
     {
         $this->logger->logCall( __METHOD__, array( 'section' => $sectionId, 'content' => $contentId ) );
-        $return = $this->persistenceFactory->getSectionHandler()->assign( $sectionId, $contentId );
+        $return = $this->persistenceHandler->sectionHandler()->assign( $sectionId, $contentId );
 
         $this->cache->clear( 'content', $contentId );
         $this->cache->clear( 'content', 'info', $contentId );
@@ -121,6 +121,6 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
     public function assignmentsCount( $sectionId )
     {
         $this->logger->logCall( __METHOD__, array( 'section' => $sectionId ) );
-        return $this->persistenceFactory->getSectionHandler()->assignmentsCount( $sectionId );
+        return $this->persistenceHandler->sectionHandler()->assignmentsCount( $sectionId );
     }
 }

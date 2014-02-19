@@ -36,7 +36,7 @@ class SectionHandlerTest extends HandlerTest
             ->will( $this->returnValue( null ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'sectionHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -47,7 +47,7 @@ class SectionHandlerTest extends HandlerTest
             ->with( 33, 44 )
             ->will( $this->returnValue( null ) );
 
-        $handler = $this->persistenceHandler->sectionHandler();
+        $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->assign( 33, 44 );
     }
 
@@ -62,7 +62,7 @@ class SectionHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'sectionHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -73,7 +73,7 @@ class SectionHandlerTest extends HandlerTest
             ->with( 33 )
             ->will( $this->returnValue( null ) );
 
-        $handler = $this->persistenceHandler->sectionHandler();
+        $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->assignmentsCount( 33 );
     }
 
@@ -85,7 +85,7 @@ class SectionHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'sectionHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -118,7 +118,7 @@ class SectionHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'get' );
 
-        $handler = $this->persistenceHandler->sectionHandler();
+        $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->create( 'Intranet', 'intranet' );
     }
 
@@ -130,7 +130,7 @@ class SectionHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'sectionHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -149,7 +149,7 @@ class SectionHandlerTest extends HandlerTest
             ->with( 'section', 33 )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->sectionHandler();
+        $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->delete( 33 );
     }
 
@@ -172,7 +172,7 @@ class SectionHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'sectionHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -199,7 +199,7 @@ class SectionHandlerTest extends HandlerTest
             ->method( 'get' )
             ->will( $this->returnValue( null ) );
 
-        $handler = $this->persistenceHandler->sectionHandler();
+        $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->load( 33 );
     }
 
@@ -221,7 +221,7 @@ class SectionHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->never() )
             ->method( 'sectionHandler' );
 
@@ -240,7 +240,7 @@ class SectionHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'set' );
 
-        $handler = $this->persistenceHandler->sectionHandler();
+        $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->load( 33 );
     }
 
@@ -255,7 +255,7 @@ class SectionHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'sectionHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -265,7 +265,7 @@ class SectionHandlerTest extends HandlerTest
             ->method( 'loadAll' )
             ->will( $this->returnValue( array() ) );
 
-        $handler = $this->persistenceHandler->sectionHandler();
+        $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->loadAll();
     }
 
@@ -280,7 +280,7 @@ class SectionHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'sectionHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -297,7 +297,7 @@ class SectionHandlerTest extends HandlerTest
                 )
             );
 
-        $handler = $this->persistenceHandler->sectionHandler();
+        $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->loadByIdentifier( 'intranet' );
     }
 
@@ -309,7 +309,7 @@ class SectionHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'sectionHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -342,7 +342,7 @@ class SectionHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'get' );
 
-        $handler = $this->persistenceHandler->sectionHandler();
+        $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->update( 33, 'Old Intranet', 'old_intranet' );
     }
 }

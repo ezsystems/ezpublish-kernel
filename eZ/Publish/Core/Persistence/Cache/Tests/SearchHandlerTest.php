@@ -57,7 +57,7 @@ class SearchHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'searchHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -75,7 +75,7 @@ class SearchHandlerTest extends HandlerTest
 
         $expects->will( $this->returnValue( null ) );
 
-        $handler = $this->persistenceHandler->searchHandler();
+        $handler = $this->persistenceCacheHandler->searchHandler();
         call_user_func_array( array( $handler, $method ), $arguments );
     }
 }

@@ -25,7 +25,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     function findContent( Query $query, array $fieldFilters = array() )
     {
         $this->logger->logCall( __METHOD__, array( 'query' => get_class( $query ), 'fieldFilters' => $fieldFilters ) );
-        return $this->persistenceFactory->getSearchHandler()->findContent( $query, $fieldFilters );
+        return $this->persistenceHandler->searchHandler()->findContent( $query, $fieldFilters );
     }
 
     /**
@@ -34,7 +34,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     public function findSingle( Criterion $filter, array $fieldFilters = array() )
     {
         $this->logger->logCall( __METHOD__, array( 'filter' => get_class( $filter ), 'fieldFilters' => $fieldFilters ) );
-        return $this->persistenceFactory->getSearchHandler()->findSingle( $filter, $fieldFilters );
+        return $this->persistenceHandler->searchHandler()->findSingle( $filter, $fieldFilters );
     }
 
     /**
@@ -52,7 +52,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
             )
         );
 
-        return $this->persistenceFactory->getSearchHandler()->suggest( $prefix, $fieldPaths, $limit, $filter );
+        return $this->persistenceHandler->searchHandler()->suggest( $prefix, $fieldPaths, $limit, $filter );
     }
 
     /**
@@ -61,7 +61,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     public function indexContent( Content $content )
     {
         $this->logger->logCall( __METHOD__, array( 'content' => $content->versionInfo->contentInfo->id ) );
-        $this->persistenceFactory->getSearchHandler()->indexContent( $content );
+        $this->persistenceHandler->searchHandler()->indexContent( $content );
     }
 
     /**
@@ -70,7 +70,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     public function deleteContent( $contentID, $versionID = null )
     {
         $this->logger->logCall( __METHOD__, array( 'content' => $contentID, 'version' => $versionID ) );
-        $this->persistenceFactory->getSearchHandler()->deleteContent( $contentID, $versionID );
+        $this->persistenceHandler->searchHandler()->deleteContent( $contentID, $versionID );
     }
 
     /**
@@ -79,7 +79,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     public function deleteLocation( $locationId )
     {
         $this->logger->logCall( __METHOD__, array( 'location' => $locationId ) );
-        $this->persistenceFactory->getSearchHandler()->deleteLocation( $locationId );
+        $this->persistenceHandler->searchHandler()->deleteLocation( $locationId );
     }
 
     /**
@@ -95,7 +95,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
      */
     public function bulkIndexContent( array $contentObjects )
     {
-        $this->persistenceFactory->getSearchHandler()->bulkIndexContent( $contentObjects );
+        $this->persistenceHandler->searchHandler()->bulkIndexContent( $contentObjects );
     }
 
     /**
@@ -107,6 +107,6 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
      */
     public function setCommit( $commit )
     {
-       $this->persistenceFactory->getSearchHandler()->setCommit( $commit );
+       $this->persistenceHandler->searchHandler()->setCommit( $commit );
     }
 }

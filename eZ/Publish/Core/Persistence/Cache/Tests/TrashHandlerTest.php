@@ -28,7 +28,7 @@ class TrashHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -47,7 +47,7 @@ class TrashHandlerTest extends HandlerTest
                 )
             );
 
-        $handler = $this->persistenceHandler->trashHandler();
+        $handler = $this->persistenceCacheHandler->trashHandler();
         $this->assertSame( $trashed, $handler->loadTrashItem( 33 ) );
     }
 
@@ -59,7 +59,7 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -94,7 +94,7 @@ class TrashHandlerTest extends HandlerTest
             ->with( 'user', 'role', 'assignments', 'byGroup' )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->trashHandler();
+        $handler = $this->persistenceCacheHandler->trashHandler();
         $this->assertSame( $trashed, $handler->trashSubtree( 33 ) );
     }
 
@@ -106,7 +106,7 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -131,7 +131,7 @@ class TrashHandlerTest extends HandlerTest
             ->with( 'user', 'role', 'assignments', 'byGroup' )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->trashHandler();
+        $handler = $this->persistenceCacheHandler->trashHandler();
         $this->assertEquals( 99, $handler->recover( 33, 66 ) );
     }
 
@@ -143,7 +143,7 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -162,7 +162,7 @@ class TrashHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $handler = $this->persistenceHandler->trashHandler();
+        $handler = $this->persistenceCacheHandler->trashHandler();
         $this->assertEquals( array(), $handler->findTrashItems( $criterion, 10, 11, array() ) );
     }
 
@@ -174,7 +174,7 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -188,7 +188,7 @@ class TrashHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $handler = $this->persistenceHandler->trashHandler();
+        $handler = $this->persistenceCacheHandler->trashHandler();
         $handler->emptyTrash();
     }
 
@@ -200,7 +200,7 @@ class TrashHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'trashHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -214,7 +214,7 @@ class TrashHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $handler = $this->persistenceHandler->trashHandler();
+        $handler = $this->persistenceCacheHandler->trashHandler();
         $handler->deleteTrashItem( 33 );
     }
 }

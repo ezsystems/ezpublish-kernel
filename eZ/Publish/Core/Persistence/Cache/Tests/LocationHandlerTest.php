@@ -42,7 +42,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -58,7 +58,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'set' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location' ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->load( 33 );
     }
 
@@ -85,7 +85,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->never() )
             ->method( 'locationHandler' );
 
@@ -93,7 +93,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'set' );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->load( 33 );
     }
 
@@ -121,7 +121,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -137,7 +137,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'set' )
             ->with( array( 33 ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadLocationsByContent( 44 );
     }
 
@@ -148,7 +148,7 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
 
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -195,7 +195,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'set' );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadLocationsByContent( 44 );
     }
 
@@ -223,7 +223,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -239,7 +239,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'set' )
             ->with( array( 33 ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadParentLocationsForDraftContent( 44 );
     }
 
@@ -250,7 +250,7 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
 
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -297,7 +297,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'set' );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadParentLocationsForDraftContent( 44 );
     }
 
@@ -325,7 +325,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -341,7 +341,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'set' )
             ->with( array( 33 ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadLocationsByContent( 44, 2 );
     }
 
@@ -352,7 +352,7 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
 
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->never() )
             ->method( $this->anything() );
 
@@ -399,7 +399,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'set' );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadLocationsByContent( 44, 2 );
     }
 
@@ -414,7 +414,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -425,7 +425,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 'sve45gdy4e' )
             ->will( $this->returnValue( new Location(  array( 'id' => 33  ) ) ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadByRemoteId( 'sve45gdy4e' );
     }
 
@@ -440,7 +440,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -451,7 +451,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 55, 66 )
             ->will( $this->returnValue( null ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->copySubtree( 55, 66 );
     }
 
@@ -474,7 +474,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -485,7 +485,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 33, 66 )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->move( 33, 66 );
     }
 
@@ -500,7 +500,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -511,7 +511,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 55 )
             ->will( $this->returnValue( null ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->markSubtreeModified( 55 );
     }
     /**
@@ -527,7 +527,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -538,7 +538,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 33 )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->hide( 33 );
     }
 
@@ -555,7 +555,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -566,7 +566,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 33 )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->unhide( 33 );
     }
 
@@ -607,7 +607,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -618,7 +618,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 33, 66 )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->swap( 33, 66 );
     }
 
@@ -640,7 +640,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 'location', 'subtree' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -655,7 +655,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'get' );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->update( new UpdateStruct, 33  );
     }
 
@@ -673,7 +673,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -717,7 +717,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 'user', 'role', 'assignments', 'byGroup', 'inherited', 2 )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->create( new CreateStruct );
     }
 
@@ -746,7 +746,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -757,7 +757,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 33 )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->removeSubtree( 33 );
     }
 
@@ -773,7 +773,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 'content' );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -784,7 +784,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 33, 2 )
             ->will( $this->returnValue( null ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->setSectionForSubtree( 33, 2 );
     }
 
@@ -808,7 +808,7 @@ class LocationHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'locationHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -819,7 +819,7 @@ class LocationHandlerTest extends HandlerTest
             ->with( 30, 33 )
             ->will( $this->returnValue( true ) );
 
-        $handler = $this->persistenceHandler->locationHandler();
+        $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->changeMainLocation( 30, 33 );
     }
 }

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 
 /**
  * Class AbstractHandler
@@ -24,9 +24,9 @@ abstract class AbstractHandler
     protected $cache;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Factory
+     * @var \eZ\Publish\SPI\Persistence\Handler
      */
-    protected $persistenceFactory;
+    protected $persistenceHandler;
 
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
@@ -37,16 +37,17 @@ abstract class AbstractHandler
      * Setups current handler with everything needed
      *
      * @param \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator $cache
-     * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory
+     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
         CacheServiceDecorator $cache,
-        PersistenceFactory $persistenceFactory,
-        PersistenceLogger $logger )
+        PersistenceHandler $persistenceHandler,
+        PersistenceLogger $logger
+    )
     {
         $this->cache = $cache;
-        $this->persistenceFactory = $persistenceFactory;
+        $this->persistenceHandler = $persistenceHandler;
         $this->logger = $logger;
     }
 }

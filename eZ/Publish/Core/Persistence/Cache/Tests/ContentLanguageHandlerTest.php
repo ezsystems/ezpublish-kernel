@@ -31,7 +31,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'contentLanguageHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -57,7 +57,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'get' );
 
-        $handler = $this->persistenceHandler->contentLanguageHandler();
+        $handler = $this->persistenceCacheHandler->contentLanguageHandler();
         $handler->create( new SPILanguageCreateStruct );
     }
 
@@ -74,7 +74,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'contentLanguageHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -87,7 +87,7 @@ class ContentLanguageHandlerTest extends HandlerTest
                 $this->returnValue( true )
             );
 
-        $handler = $this->persistenceHandler->contentLanguageHandler();
+        $handler = $this->persistenceCacheHandler->contentLanguageHandler();
         $handler->delete( 2 );
     }
 
@@ -115,7 +115,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'contentLanguageHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
@@ -137,7 +137,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->method( 'set' )
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language' ) );
 
-        $handler = $this->persistenceHandler->contentLanguageHandler();
+        $handler = $this->persistenceCacheHandler->contentLanguageHandler();
         $handler->load( 2 );
     }
 
@@ -170,7 +170,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->method( 'isMiss' )
             ->will( $this->returnValue( false ) );
 
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->never() )
             ->method( 'contentLanguageHandler' );
 
@@ -178,7 +178,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'set' );
 
-        $handler = $this->persistenceHandler->contentLanguageHandler();
+        $handler = $this->persistenceCacheHandler->contentLanguageHandler();
         $handler->load( 2 );
     }
 
@@ -193,7 +193,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'contentLanguageHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -203,7 +203,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->method( 'loadAll' )
             ->will( $this->returnValue( array() ) );
 
-        $handler = $this->persistenceHandler->contentLanguageHandler();
+        $handler = $this->persistenceCacheHandler->contentLanguageHandler();
         $handler->loadAll();
     }
 
@@ -218,7 +218,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->method( $this->anything() );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'contentLanguageHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -235,7 +235,7 @@ class ContentLanguageHandlerTest extends HandlerTest
                 )
             );
 
-        $handler = $this->persistenceHandler->contentLanguageHandler();
+        $handler = $this->persistenceCacheHandler->contentLanguageHandler();
         $handler->loadByLanguageCode( 'eng-GB' );
     }
 
@@ -252,7 +252,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->will( $this->returnValue( true ) );
 
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler' );
-        $this->innerPersistenceHandlerMock
+        $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'contentLanguageHandler' )
             ->will( $this->returnValue( $innerHandler ) );
@@ -269,7 +269,7 @@ class ContentLanguageHandlerTest extends HandlerTest
                 )
             );
 
-        $handler = $this->persistenceHandler->contentLanguageHandler();
+        $handler = $this->persistenceCacheHandler->contentLanguageHandler();
         $handler->update( new SPILanguage( array( 'id' => 2 ) ) );
     }
 }

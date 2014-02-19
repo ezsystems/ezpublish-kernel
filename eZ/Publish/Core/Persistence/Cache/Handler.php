@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandlerInterface;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
 use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
@@ -28,9 +27,9 @@ use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 class Handler implements PersistenceHandlerInterface
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Factory
+     * @var \eZ\Publish\SPI\Persistence\Handler
      */
-    protected $persistenceFactory;
+    protected $persistenceHandler;
 
     /**
      * @var SectionHandler
@@ -95,7 +94,7 @@ class Handler implements PersistenceHandlerInterface
     /**
      * Construct the class
      *
-     * @param \eZ\Publish\Core\Persistence\Factory $persistenceFactory Must be factory for inner persistence, ie: legacy
+     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler Must be factory for inner persistence, ie: legacy
      * @param \eZ\Publish\Core\Persistence\Cache\SectionHandler $sectionHandler
      * @param \eZ\Publish\Core\Persistence\Cache\LocationHandler $locationHandler
      * @param \eZ\Publish\Core\Persistence\Cache\ContentHandler $contentHandler
@@ -110,7 +109,7 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator $cache
      */
     public function __construct(
-        PersistenceFactory $persistenceFactory,
+        PersistenceHandlerInterface $persistenceHandler,
         CacheSectionHandler $sectionHandler,
         CacheLocationHandler $locationHandler,
         CacheContentHandler $contentHandler,
@@ -125,7 +124,7 @@ class Handler implements PersistenceHandlerInterface
         CacheServiceDecorator $cache
     )
     {
-        $this->persistenceFactory = $persistenceFactory;
+        $this->persistenceHandler = $persistenceHandler;
         $this->sectionHandler = $sectionHandler;
         $this->locationHandler = $locationHandler;
         $this->contentHandler = $contentHandler;
@@ -194,7 +193,7 @@ class Handler implements PersistenceHandlerInterface
     public function objectStateHandler()
     {
         $this->logger->logUnCachedHandler( __METHOD__ );
-        return $this->persistenceFactory->getObjectStateHandler();
+        return $this->persistenceHandler->objectStateHandler();
     }
 
     /**
@@ -235,7 +234,7 @@ class Handler implements PersistenceHandlerInterface
     public function urlWildcardHandler()
     {
         $this->logger->logUnCachedHandler( __METHOD__ );
-        return $this->persistenceFactory->getUrlWildcardHandler();
+        return $this->persistenceHandler->urlWildcardHandler();
     }
 
     /**
@@ -248,7 +247,7 @@ class Handler implements PersistenceHandlerInterface
     public function beginTransaction()
     {
         $this->logger->logCall( __METHOD__ );
-        $this->persistenceFactory->getPersistenceHandler()->beginTransaction();
+        $this->persistenceHandler->beginTransaction();
     }
 
     /**
@@ -261,7 +260,7 @@ class Handler implements PersistenceHandlerInterface
     public function commit()
     {
         $this->logger->logCall( __METHOD__ );
-        $this->persistenceFactory->getPersistenceHandler()->commit();
+        $this->persistenceHandler->commit();
     }
 
     /**
@@ -275,6 +274,6 @@ class Handler implements PersistenceHandlerInterface
     {
         $this->logger->logCall( __METHOD__ );
         $this->cache->clear();
-        $this->persistenceFactory->getPersistenceHandler()->rollback();
+        $this->persistenceHandler->rollback();
     }
 }
