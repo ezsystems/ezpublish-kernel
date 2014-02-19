@@ -1080,3 +1080,13 @@ ezpublish_rest_deleteURLAlias:
     defaults:
         _controller: ezpublish_rest.controller.url_alias:deleteURLAlias
     methods: [DELETE]
+
+
+# Services
+
+
+ezpublish_rest_loadCountryList:
+    path: /services/countries
+    defaults:
+        _controller: ezpublish_rest.controller.services:loadCountryList
+    methods: [GET]
