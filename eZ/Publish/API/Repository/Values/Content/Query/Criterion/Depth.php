@@ -17,6 +17,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * The Depth Criterion class.
  *
  * Provides content filtering based on Location depth
+ *
+ * @deprecated Since 5.3, use Location search instead
  */
 class Depth extends Criterion implements CriterionInterface
 {
@@ -28,6 +30,8 @@ class Depth extends Criterion implements CriterionInterface
      *
      * @param string $operator One of the Operator constants
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator
+     *
+     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $operator, $value )
     {

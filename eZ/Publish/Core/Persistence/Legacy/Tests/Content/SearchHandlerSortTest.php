@@ -71,24 +71,24 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         return new Content\Search\Handler(
             new Content\Search\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
-                new Content\Search\Gateway\CriteriaConverter(
+                new Content\Search\Common\Gateway\CriteriaConverter(
                     array(
-                        new Content\Search\Gateway\CriterionHandler\MatchAll( $db ),
-                        new Content\Search\Gateway\CriterionHandler\LogicalAnd( $db ),
-                        new Content\Search\Gateway\CriterionHandler\SectionId( $db ),
+                        new Content\Search\Common\Gateway\CriterionHandler\MatchAll( $db ),
+                        new Content\Search\Common\Gateway\CriterionHandler\LogicalAnd( $db ),
+                        new Content\Search\Common\Gateway\CriterionHandler\SectionId( $db ),
                     )
                 ),
-                new Content\Search\Gateway\SortClauseConverter(
+                new Content\Search\Common\Gateway\SortClauseConverter(
                     array(
                         new Content\Search\Gateway\SortClauseHandler\LocationPathString( $db ),
                         new Content\Search\Gateway\SortClauseHandler\LocationDepth( $db ),
                         new Content\Search\Gateway\SortClauseHandler\LocationPriority( $db ),
-                        new Content\Search\Gateway\SortClauseHandler\DateModified( $db ),
-                        new Content\Search\Gateway\SortClauseHandler\DatePublished( $db ),
-                        new Content\Search\Gateway\SortClauseHandler\SectionIdentifier( $db ),
-                        new Content\Search\Gateway\SortClauseHandler\SectionName( $db ),
-                        new Content\Search\Gateway\SortClauseHandler\ContentName( $db ),
-                        new Content\Search\Gateway\SortClauseHandler\Field( $db, $this->getLanguageHandler() ),
+                        new Content\Search\Common\Gateway\SortClauseHandler\DateModified( $db ),
+                        new Content\Search\Common\Gateway\SortClauseHandler\DatePublished( $db ),
+                        new Content\Search\Common\Gateway\SortClauseHandler\SectionIdentifier( $db ),
+                        new Content\Search\Common\Gateway\SortClauseHandler\SectionName( $db ),
+                        new Content\Search\Common\Gateway\SortClauseHandler\ContentName( $db ),
+                        new Content\Search\Common\Gateway\SortClauseHandler\Field( $db, $this->getLanguageHandler() ),
                     )
                 ),
                 new QueryBuilder( $this->getDatabaseHandler() ),

@@ -104,21 +104,21 @@ class SearchHandlerTest extends LanguageAwareTestCase
             ),
             $rules
         );
-        $commaSeparatedCollectionValueHandler = new Content\Search\Gateway\CriterionHandler\FieldValue\Handler\Collection(
+        $commaSeparatedCollectionValueHandler = new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
             $this->getDatabaseHandler(),
             $transformationProcessor,
             ","
         );
-        $hyphenSeparatedCollectionValueHandler = new Content\Search\Gateway\CriterionHandler\FieldValue\Handler\Collection(
+        $hyphenSeparatedCollectionValueHandler = new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
             $this->getDatabaseHandler(),
             $transformationProcessor,
             "-"
         );
-        $simpleValueHandler = new Content\Search\Gateway\CriterionHandler\FieldValue\Handler\Simple(
+        $simpleValueHandler = new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Simple(
             $this->getDatabaseHandler(),
             $transformationProcessor
         );
-        $compositeValueHandler = new Content\Search\Gateway\CriterionHandler\FieldValue\Handler\Composite(
+        $compositeValueHandler = new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite(
             $this->getDatabaseHandler(),
             $transformationProcessor
         );
@@ -126,33 +126,33 @@ class SearchHandlerTest extends LanguageAwareTestCase
         return new Content\Search\Handler(
             new Content\Search\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
-                new Content\Search\Gateway\CriteriaConverter(
+                new Content\Search\Common\Gateway\CriteriaConverter(
                     array(
-                        new Content\Search\Gateway\CriterionHandler\ContentId(
+                        new Content\Search\Common\Gateway\CriterionHandler\ContentId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\LogicalNot(
+                        new Content\Search\Common\Gateway\CriterionHandler\LogicalNot(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\LogicalAnd(
+                        new Content\Search\Common\Gateway\CriterionHandler\LogicalAnd(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\LogicalOr(
+                        new Content\Search\Common\Gateway\CriterionHandler\LogicalOr(
                             $this->getDatabaseHandler()
                         ),
                         new Content\Search\Gateway\CriterionHandler\Subtree(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\ContentTypeId(
+                        new Content\Search\Common\Gateway\CriterionHandler\ContentTypeId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\ContentTypeIdentifier(
+                        new Content\Search\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
+                        new Content\Search\Common\Gateway\CriterionHandler\ContentTypeGroupId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\DateMetadata(
+                        new Content\Search\Common\Gateway\CriterionHandler\DateMetadata(
                             $this->getDatabaseHandler()
                         ),
                         new Content\Search\Gateway\CriterionHandler\LocationId(
@@ -164,21 +164,21 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Gateway\CriterionHandler\ParentLocationId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\RemoteId(
+                        new Content\Search\Common\Gateway\CriterionHandler\RemoteId(
                             $this->getDatabaseHandler()
                         ),
                         new Content\Search\Gateway\CriterionHandler\LocationRemoteId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\SectionId(
+                        new Content\Search\Common\Gateway\CriterionHandler\SectionId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\FullText(
+                        new Content\Search\Common\Gateway\CriterionHandler\FullText(
                             $this->getDatabaseHandler(),
                             $transformationProcessor,
                             $fullTextSearchConfiguration
                         ),
-                        new Content\Search\Gateway\CriterionHandler\Field(
+                        new Content\Search\Common\Gateway\CriterionHandler\Field(
                             $this->getDatabaseHandler(),
                             $this->fieldRegistry = new ConverterRegistry(
                                 array(
@@ -189,8 +189,8 @@ class SearchHandlerTest extends LanguageAwareTestCase
                                     'ezurl' => new Url()
                                 )
                             ),
-                            new Content\Search\Gateway\CriterionHandler\FieldValue\Converter(
-                                new Content\Search\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
+                            new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Converter(
+                                new Content\Search\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
                                     array(
                                         "ezboolean" => $simpleValueHandler,
                                         "ezcountry" => $commaSeparatedCollectionValueHandler,
@@ -208,23 +208,23 @@ class SearchHandlerTest extends LanguageAwareTestCase
                             ),
                             $transformationProcessor
                         ),
-                        new Content\Search\Gateway\CriterionHandler\ObjectStateId(
+                        new Content\Search\Common\Gateway\CriterionHandler\ObjectStateId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\LanguageCode(
+                        new Content\Search\Common\Gateway\CriterionHandler\LanguageCode(
                             $this->getDatabaseHandler(),
                             $this->getLanguageMaskGenerator()
                         ),
                         new Content\Search\Gateway\CriterionHandler\Visibility(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\MatchAll(
+                        new Content\Search\Common\Gateway\CriterionHandler\MatchAll(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\UserMetadata(
+                        new Content\Search\Common\Gateway\CriterionHandler\UserMetadata(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\RelationList(
+                        new Content\Search\Common\Gateway\CriterionHandler\RelationList(
                             $this->getDatabaseHandler()
                         ),
                         new Content\Search\Gateway\CriterionHandler\Depth(
@@ -232,9 +232,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         ),
                     )
                 ),
-                new Content\Search\Gateway\SortClauseConverter(
+                new Content\Search\Common\Gateway\SortClauseConverter(
                     array(
-                        new Content\Search\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
+                        new Content\Search\Common\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                     )
                 ),
                 new QueryBuilder( $this->getDatabaseHandler() ),

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\SPI\Persistence\Content\Location\Search;
 
-use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -20,16 +20,7 @@ interface Handler
     /**
      * Finds locations for the given $query
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
      */
-    public function findLocations( Query $query );
-
-    /**
-     * Counts all locations given some $criterion.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     *
-     * @return int
-     */
-    public function getLocationCount( Criterion $criterion );
+    public function findLocations( LocationQuery $query );
 }

@@ -14,12 +14,16 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Sets sort direction on the location priority date for a content query
+ *
+ * @deprecated Since 5.3, use Location search instead
  */
 class LocationPriority extends SortClause
 {
     /**
      * Constructs a new LocationPriority SortClause
      * @param string $sortDirection
+     *
+     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $sortDirection = Query::SORT_ASC )
     {

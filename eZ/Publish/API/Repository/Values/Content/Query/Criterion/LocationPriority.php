@@ -20,6 +20,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - BETWEEN: matches content whose location priority is between (included) the TWO given priorities
  * - GT, GTE: matches content whose location priority is greater than/greater than or equals the given priority
  * - LT, LTE: matches content whose location priority is lower than/lower than or equals the given priority
+ *
+ * @deprecated Since 5.3, use Location search instead
  */
 class LocationPriority extends Criterion implements CriterionInterface
 {
@@ -29,6 +31,8 @@ class LocationPriority extends Criterion implements CriterionInterface
      *
      * @param string $operator One of the Operator constants
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator
+     *
+     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $operator, $value )
     {

@@ -16,6 +16,8 @@ use InvalidArgumentException;
 
 /**
  * A criterion that matches content based on its visibility
+ *
+ * @deprecated Since 5.3, use Location search instead
  */
 class Visibility extends Criterion implements CriterionInterface
 {
@@ -35,6 +37,8 @@ class Visibility extends Criterion implements CriterionInterface
      * @param int $value Visibility: self::VISIBLE, self::HIDDEN
      *
      * @throws \InvalidArgumentException
+     *
+     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $value )
     {

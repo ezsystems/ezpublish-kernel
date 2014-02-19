@@ -13,7 +13,6 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
@@ -22,6 +21,8 @@ use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
@@ -191,7 +192,7 @@ class LocationService implements LocationServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainLocationObject( $newLocation );
+        return $this->domainMapper->buildLocationDomainObject( $newLocation );
     }
 
     /**
@@ -207,7 +208,7 @@ class LocationService implements LocationServiceInterface
     public function loadLocation( $locationId )
     {
         $spiLocation = $this->persistenceHandler->locationHandler()->load( $locationId );
-        $location = $this->buildDomainLocationObject( $spiLocation );
+        $location = $this->domainMapper->buildLocationDomainObject( $spiLocation );
         if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
             throw new UnauthorizedException( 'content', 'read' );
 
@@ -231,7 +232,7 @@ class LocationService implements LocationServiceInterface
             throw new InvalidArgumentValue( "remoteId", $remoteId );
 
         $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId( $remoteId );
-        $location = $this->buildDomainLocationObject( $spiLocation );
+        $location = $this->domainMapper->buildLocationDomainObject( $spiLocation );
         if ( !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location ) )
             throw new UnauthorizedException( 'content', 'read' );
 
@@ -268,7 +269,7 @@ class LocationService implements LocationServiceInterface
         $locations = array();
         foreach ( $spiLocations as $spiLocation )
         {
-            $locations[] = $this->buildDomainLocationObject( $spiLocation );
+            $locations[] = $this->domainMapper->buildLocationDomainObject( $spiLocation );
         }
 
         return $locations;
@@ -299,27 +300,22 @@ class LocationService implements LocationServiceInterface
             throw new InvalidArgumentValue( "limit", $limit );
 
         $childLocations = array();
-        foreach (
-            $this->searchChildrenLocations(
-                $location->id,
-                $location->sortField,
-                $location->sortOrder,
-                $offset,
-                $limit
-            ) as $spiLocation
-        )
+        $searchResult = $this->searchChildrenLocations(
+            $location->id,
+            $location->sortField,
+            $location->sortOrder,
+            $offset,
+            $limit
+        );
+        foreach ( $searchResult->searchHits as $searchHit )
         {
-            $childLocation = $this->buildDomainLocationObject( $spiLocation );
-            if ( $this->repository->canUser( 'content', 'read', $childLocation->getContentInfo(), $childLocation ) )
-            {
-                $childLocations[] = $childLocation;
-            }
+            $childLocations[] = $searchHit->valueObject;
         }
 
         return new LocationList(
             array(
                 "locations" => $childLocations,
-                "totalCount" => $this->getLocationChildCount( $location )
+                "totalCount" => $searchResult->totalCount
             )
         );
     }
@@ -333,14 +329,15 @@ class LocationService implements LocationServiceInterface
      */
     public function getLocationChildCount( APILocation $location )
     {
-        $criterion = new CriterionParentLocationId( $location->id );
+        $searchResult = $this->searchChildrenLocations(
+            $location->id,
+            $location->sortField,
+            $location->sortOrder,
+            0,
+            0
+        );
 
-        if ( !$this->permissionsCriterionHandler->addPermissionsCriterion( $criterion ) )
-        {
-            return array();
-        }
-
-        return $this->persistenceHandler->locationSearchHandler()->getLocationCount( $criterion );
+        return $searchResult->totalCount;
     }
 
     /**
@@ -362,16 +359,9 @@ class LocationService implements LocationServiceInterface
         $limit = -1
     )
     {
-        $filter = new CriterionParentLocationId( $parentLocationId );
-
-        if ( !$this->permissionsCriterionHandler->addPermissionsCriterion( $filter ) )
-        {
-            return array();
-        }
-
-        $query = new Query(
+        $query = new LocationQuery(
             array(
-                "filter" => $filter,
+                "filter" => new Criterion\Location\ParentLocationId( $parentLocationId ),
                 "offset" => $offset >= 0 ? (int)$offset : 0,
                 "limit" => $limit >= 0 ? (int)$limit : null
             )
@@ -382,7 +372,7 @@ class LocationService implements LocationServiceInterface
             $query->sortClauses = array( $this->getSortClauseBySortField( $sortField, $sortOrder ) );
         }
 
-        return $this->persistenceHandler->locationSearchHandler()->findLocations( $query );
+        return $this->repository->getSearchService()->findLocations( $query );
     }
 
     /**
@@ -469,7 +459,7 @@ class LocationService implements LocationServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainLocationObject( $newLocation );
+        return $this->domainMapper->buildLocationDomainObject( $newLocation );
     }
 
     /**
@@ -804,46 +794,6 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * Builds domain location object from provided persistence location
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
-     */
-    protected function buildDomainLocationObject( SPILocation $spiLocation )
-    {
-        // TODO: this is hardcoded workaround for missing ContentInfo on root location
-        if ( $spiLocation->id == 1 )
-            $contentInfo = new ContentInfo(
-                array(
-                    'id' => 0,
-                    'name' => 'Top Level Nodes',
-                    'sectionId' => 1,
-                    'mainLocationId' => 1,
-                    'contentTypeId' => 1,
-                )
-            );
-        else
-            $contentInfo = $this->repository->getContentService()->internalLoadContentInfo( $spiLocation->contentId );
-
-        return new Location(
-            array(
-                'contentInfo' => $contentInfo,
-                'id' => $spiLocation->id,
-                'priority' => $spiLocation->priority,
-                'hidden' => $spiLocation->hidden,
-                'invisible' => $spiLocation->invisible,
-                'remoteId' => $spiLocation->remoteId,
-                'parentLocationId' => $spiLocation->parentId,
-                'pathString' => $spiLocation->pathString,
-                'depth' => $spiLocation->depth,
-                'sortField' => $spiLocation->sortField,
-                'sortOrder' => $spiLocation->sortOrder,
-            )
-        );
-    }
-
-    /**
      * Instantiates a correct sort clause object based on provided location sort field and sort order
      *
      * @param int $sortField
@@ -857,7 +807,7 @@ class LocationService implements LocationServiceInterface
         switch ( $sortField )
         {
             case APILocation::SORT_FIELD_PATH:
-                return new SortClause\LocationPathString( $sortOrder );
+                return new SortClause\Location\Path( $sortOrder );
 
             case APILocation::SORT_FIELD_PUBLISHED:
                 return new SortClause\DatePublished( $sortOrder );
@@ -869,31 +819,31 @@ class LocationService implements LocationServiceInterface
                 return new SortClause\SectionIdentifier( $sortOrder );
 
             case APILocation::SORT_FIELD_DEPTH:
-                return new SortClause\LocationDepth( $sortOrder );
+                return new SortClause\Location\Depth( $sortOrder );
 
-            //@todo: enable
+            //@todo: sort clause not yet implemented
             // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
 
-            //@todo: enable
+            //@todo: sort clause not yet implemented
             // case APILocation::SORT_FIELD_CLASS_NAME:
 
             case APILocation::SORT_FIELD_PRIORITY:
-                return new SortClause\LocationPriority( $sortOrder );
+                return new SortClause\Location\Priority( $sortOrder );
 
             case APILocation::SORT_FIELD_NAME:
                 return new SortClause\ContentName( $sortOrder );
 
-            //@todo: enable
+            //@todo: sort clause not yet implemented
             // case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
 
-            //@todo: enable
-            // case APILocation::SORT_FIELD_NODE_ID:
+            case APILocation::SORT_FIELD_NODE_ID:
+                return new SortClause\Location\Id( $sortOrder );
 
             case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
                 return new SortClause\ContentId( $sortOrder );
 
             default:
-                return new SortClause\LocationPathString( $sortOrder );
+                return new SortClause\Location\Path( $sortOrder );
         }
     }
 }

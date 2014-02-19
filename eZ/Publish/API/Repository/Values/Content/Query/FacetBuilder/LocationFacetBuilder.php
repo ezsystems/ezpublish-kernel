@@ -22,6 +22,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
  * @todo: check hierarchical facets
  *
  * @package eZ\Publish\API\Repository\Values\Content\Query
+ *
+ * @deprecated Since 5.3, use Location search instead
  */
 class LocationFacetBuilder extends FacetBuilder
 {

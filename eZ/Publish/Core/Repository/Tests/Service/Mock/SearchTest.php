@@ -12,11 +12,13 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
@@ -43,6 +45,8 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $settings = array( "teh setting" );
@@ -50,6 +54,7 @@ class SearchTest extends BaseServiceMockTest
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
             $settings
@@ -86,6 +91,123 @@ class SearchTest extends BaseServiceMockTest
         );
     }
 
+    public function providerForFindContentValidatesLocationCriteriaAndSortClauses()
+    {
+        return array(
+            array(
+                new Query( array( "filter" => new Criterion\Location\Id( 42 ) ) ),
+                "Argument '\$query' is invalid: Location criterions cannot be used in Content search"
+            ),
+            array(
+                new Query( array( "query" => new Criterion\Location\Id( 42 ) ) ),
+                "Argument '\$query' is invalid: Location criterions cannot be used in Content search"
+            ),
+            array(
+                new Query(
+                    array(
+                        "query" => new Criterion\LogicalAnd(
+                            array(
+                                new Criterion\Location\Id( 42 )
+                            )
+                        )
+                    )
+                ),
+                "Argument '\$query' is invalid: Location criterions cannot be used in Content search"
+            ),
+            array(
+                new Query( array( "sortClauses" => array( new SortClause\Location\Id() ) ) ),
+                "Argument '\$query' is invalid: Location sort clauses cannot be used in Content search"
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider providerForFindContentValidatesLocationCriteriaAndSortClauses
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFindContentValidatesLocationCriteriaAndSortClauses( $query, $exceptionMessage )
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
+        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $locationSearchHandlerMock,
+            $this->getDomainMapperMock(),
+            $permissionsCriterionHandlerMock,
+            array()
+        );
+
+        try
+        {
+            $service->findContent( $query );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            $this->assertEquals( $exceptionMessage, $e->getMessage() );
+            throw $e;
+        }
+
+        $this->fail( "Expected exception was not thrown" );
+    }
+
+    public function providerForFindSingleValidatesLocationCriteria()
+    {
+        return array(
+            array(
+                new Criterion\Location\Id( 42 ),
+                "Argument '\$filter' is invalid: Location criterions cannot be used in Content search"
+            ),
+            array(
+                new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\Location\Id( 42 )
+                    )
+                ),
+                "Argument '\$filter' is invalid: Location criterions cannot be used in Content search"
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider providerForFindSingleValidatesLocationCriteria
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFindSingleValidatesLocationCriteria( $criterion, $exceptionMessage )
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
+        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $locationSearchHandlerMock,
+            $this->getDomainMapperMock(),
+            $permissionsCriterionHandlerMock,
+            array()
+        );
+
+        try
+        {
+            $service->findSingle( $criterion );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            $this->assertEquals( $exceptionMessage, $e->getMessage() );
+            throw $e;
+        }
+
+        $this->fail( "Expected exception was not thrown" );
+    }
+
     /**
      * Test for the findContent() method.
      *
@@ -100,11 +222,14 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
 
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
             array()
@@ -137,11 +262,14 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
             array()
@@ -200,11 +328,14 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
             array()
@@ -269,10 +400,13 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
             array()
@@ -355,9 +489,12 @@ class SearchTest extends BaseServiceMockTest
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
             array()
@@ -419,10 +556,13 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $domainMapperMock,
             $this->getPermissionsCriterionHandlerMock(),
             array()
@@ -486,9 +626,12 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $this->getDomainMapperMock(),
             $this->getPermissionsCriterionHandlerMock(),
             array()
@@ -517,10 +660,13 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $this->getDomainMapperMock(),
             $permissionsCriterionHandlerMock,
             array()
@@ -552,11 +698,14 @@ class SearchTest extends BaseServiceMockTest
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
         $domainMapperMock = $this->getDomainMapperMock();
         $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
         $service = new SearchService(
             $repositoryMock,
             $searchHandlerMock,
+            $locationSearchHandlerMock,
             $domainMapperMock,
             $permissionsCriterionHandlerMock,
             array()
@@ -591,6 +740,312 @@ class SearchTest extends BaseServiceMockTest
         $result = $service->findSingle( $criterionMock, $fieldFilters, true );
 
         $this->assertEquals( $contentMock, $result );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     */
+    public function functionFindLocationsWithPermission()
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
+        $domainMapperMock = $this->getDomainMapperMock();
+        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $locationSearchHandlerMock,
+            $domainMapperMock,
+            $permissionsCriterionHandlerMock,
+            array()
+        );
+
+        $criterionMock = $this
+            ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $query = new LocationQuery( array( "filter" => $criterionMock, "limit" => 10 ) );
+        $spiLocation = new SPILocation;
+        $locationMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Location" );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $locationSearchHandlerMock */
+        $locationSearchHandlerMock->expects( $this->once() )
+            ->method( "findLocations" )
+            ->with( $this->equalTo( $query ) )
+            ->will(
+                $this->returnValue(
+                    new SearchResult(
+                        array(
+                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiLocation ) ) ),
+                            "totalCount" => 1
+                        )
+                    )
+                )
+            );
+
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildLocationDomainObject" )
+            ->with( $this->equalTo( $spiLocation ) )
+            ->will( $this->returnValue( $locationMock ) );
+
+        $permissionsCriterionHandlerMock->expects( $this->once() )
+            ->method( "addPermissionsCriterion" )
+            ->with( $criterionMock )
+            ->will( $this->returnValue( true ) );
+
+        $result = $service->findLocations( $query, true );
+
+        $this->assertEquals(
+            new SearchResult(
+                array(
+                    "searchHits" => array( new SearchHit( array( "valueObject" => $locationMock ) ) ),
+                    "totalCount" => 1
+                )
+            ),
+            $result
+        );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     */
+    public function testFindLocationsWithNoPermissionsFilter()
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
+        $domainMapperMock = $this->getDomainMapperMock();
+        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $locationSearchHandlerMock,
+            $domainMapperMock,
+            $permissionsCriterionHandlerMock,
+            array()
+        );
+
+        $repositoryMock->expects( $this->never() )->method( "hasAccess" );
+
+        $serviceQuery = new LocationQuery;
+        $handlerQuery = new LocationQuery( array( "filter" => new Criterion\MatchAll(), "limit" => SearchService::MAX_LIMIT ) );
+        $spiLocation = new SPILocation;
+        $locationMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Location" );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $locationSearchHandlerMock */
+        $locationSearchHandlerMock->expects( $this->once() )
+            ->method( "findLocations" )
+            ->with( $this->equalTo( $handlerQuery ) )
+            ->will(
+                $this->returnValue(
+                    new SearchResult(
+                        array(
+                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiLocation ) ) ),
+                            "totalCount" => 1
+                        )
+                    )
+                )
+            );
+
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildLocationDomainObject" )
+            ->with( $this->equalTo( $spiLocation ) )
+            ->will( $this->returnValue( $locationMock ) );
+
+        $result = $service->findLocations( $serviceQuery, false );
+
+        $this->assertEquals(
+            new SearchResult(
+                array(
+                    "searchHits" => array( new SearchHit( array( "valueObject" => $locationMock ) ) ),
+                    "totalCount" => 1
+                )
+            ),
+            $result
+        );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @dataProvider providerForTestFindContentValidatesFieldSortClauses
+     */
+    public function testFindLocationsValidatesFieldSortClauses( $sortClauses, $isTranslatable, $isValid, $message = null )
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        $contentTypeServiceMock = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentTypeService" );
+        $contentTypeMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" );
+        $fieldDefinitionMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition" );
+        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $locationSearchHandlerMock,
+            $this->getDomainMapperMock(),
+            $permissionsCriterionHandlerMock,
+            array()
+        );
+
+        $permissionsCriterionHandlerMock
+            ->expects( $this->any() )
+            ->method( "addPermissionsCriterion" )
+            ->will( $this->returnValue( false ) );
+
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "getContentTypeService" )
+            ->will( $this->returnValue( $contentTypeServiceMock ) );
+
+        $contentTypeServiceMock
+            ->expects( $this->once() )
+            ->method( "loadContentTypeByIdentifier" )
+            ->with( "testContentTypeIdentifier" )
+            ->will( $this->returnValue( $contentTypeMock ) );
+
+        $contentTypeMock
+            ->expects( $this->once() )
+            ->method( "getFieldDefinition" )
+            ->with( "testFieldDefinitionIdentifier" )
+            ->will( $this->returnValue( $fieldDefinitionMock ) );
+
+        $fieldDefinitionMock
+            ->expects( $this->once() )
+            ->method( "__get" )
+            ->with( "isTranslatable" )
+            ->will( $this->returnValue( $isTranslatable ) );
+
+        try
+        {
+            $result = $service->findLocations(
+                new LocationQuery( array( "sortClauses" => $sortClauses ) ),
+                true
+            );
+        }
+        catch ( InvalidArgumentException $e )
+        {
+            $this->assertFalse( $isValid, "Invalid sort clause expected" );
+            $this->assertEquals( $message, $e->getMessage() );
+        }
+
+        if ( $isValid )
+        {
+            $this->assertTrue( isset( $result ) );
+        }
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Handler threw an exception
+     */
+    public function testFindLocationsThrowsHandlerException()
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
+        $permissionsCriterionHandlerMock = $this->getPermissionsCriterionHandlerMock();
+
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $locationSearchHandlerMock,
+            $this->getDomainMapperMock(),
+            $permissionsCriterionHandlerMock,
+            array()
+        );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
+        $criterionMock = $this
+            ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $query = new LocationQuery( array( "filter" => $criterionMock ) );
+
+        $permissionsCriterionHandlerMock->expects( $this->once() )
+            ->method( "addPermissionsCriterion" )
+            ->with( $criterionMock )
+            ->will( $this->throwException( new Exception( "Handler threw an exception" ) ) );
+
+        $service->findLocations( $query, true );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     */
+
+    /**
+     * Test for the findContent() method.
+     */
+    public function testFindLocationsWithDefaultQueryValues()
+    {
+        $repositoryMock = $this->getRepositoryMock();
+        /** @var \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandlerMock */
+        $searchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Search\\Handler' );
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandlerMock */
+        $locationSearchHandlerMock = $this->getPersistenceMockHandler( 'Content\\Location\\Search\\Handler' );
+        $domainMapperMock = $this->getDomainMapperMock();
+        $service = new SearchService(
+            $repositoryMock,
+            $searchHandlerMock,
+            $locationSearchHandlerMock,
+            $domainMapperMock,
+            $this->getPermissionsCriterionHandlerMock(),
+            array()
+        );
+
+        $spiLocation = new SPILocation;
+        $locationMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Location" );
+        $domainMapperMock->expects( $this->once() )
+            ->method( "buildLocationDomainObject" )
+            ->with( $this->equalTo( $spiLocation ) )
+            ->will( $this->returnValue( $locationMock ) );
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject $locationSearchHandlerMock */
+        $locationSearchHandlerMock
+            ->expects( $this->once() )
+            ->method( "findLocations" )
+            ->with(
+                new LocationQuery(
+                    array(
+                        "filter" => new Criterion\MatchAll(),
+                        "limit" => 1073741824
+                    )
+                )
+            )
+            ->will(
+                $this->returnValue(
+                    new SearchResult(
+                        array(
+                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiLocation ) ) ),
+                            "totalCount" => 1
+                        )
+                    )
+                )
+            );
+
+        $result = $service->findLocations( new LocationQuery(), false );
+
+        $this->assertEquals(
+            new SearchResult(
+                array(
+                    "searchHits" => array( new SearchHit( array( "valueObject" => $locationMock ) ) ),
+                    "totalCount" => 1
+                )
+            ),
+            $result
+        );
     }
 
     /**
