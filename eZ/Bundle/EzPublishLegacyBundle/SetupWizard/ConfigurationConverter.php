@@ -226,14 +226,13 @@ class ConfigurationConverter
         {
             $handlers[] = 'FileSystem';
             $inMemory = true;
-        }
-        else if ( APCDriver::isAvailable() )
-        {
-            $handlers[] = 'Apc';
-            $handlerSetting['Apc'] = array(
-                'ttl' => 500,
-                'namespace' => $databaseName
-            );
+            // If running on Windows, use "crc32" keyHashFunction
+            if ( stripos( php_uname(), 'win' ) === 0 )
+            {
+                $handlerSetting['FileSystem'] = array(
+                    'keyHashFunction' => 'crc32'
+                );
+            }
         }
         /* Disabled for installer, as this should be manually configured
         else if ( \Stash\Driver\Memcache::isAvailable() )
