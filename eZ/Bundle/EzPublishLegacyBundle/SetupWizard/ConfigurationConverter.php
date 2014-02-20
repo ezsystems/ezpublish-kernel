@@ -166,6 +166,13 @@ class ConfigurationConverter
         return $settings;
     }
 
+    /**
+     * Returns settings for Doctrine in respect to database settings coming from legacy.
+     *
+     * @param array $databaseSettings
+     *
+     * @return array
+     */
     protected function getDoctrineSettings( array $databaseSettings )
     {
         $databaseMapping = array(

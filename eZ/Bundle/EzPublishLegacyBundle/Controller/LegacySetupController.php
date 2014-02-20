@@ -45,6 +45,9 @@ class LegacySetupController extends ContainerAware
      */
     protected $container;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\Legacy\Kernel\Loader
+     */
     protected $kernelFactory;
 
     /**
