@@ -29,11 +29,6 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $configResolver
             ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( true ) );
-        $configResolver
-            ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'repository' )
             ->will( $this->returnValue( $repositoryAlias ) );
@@ -87,11 +82,6 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
-        $configResolver
-            ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( true ) );
         $configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )
