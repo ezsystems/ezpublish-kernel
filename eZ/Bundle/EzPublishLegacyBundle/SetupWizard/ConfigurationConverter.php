@@ -155,7 +155,7 @@ class ConfigurationConverter
                 $this->getParameter( "Session", "SessionNamePerSiteAccess", "site.ini", $siteaccess ) !== "enabled"
             )
             {
-                $settings['ezpublish']['system'][$siteaccess]['session_name'] = $this->getParameter( "Session", "SessionNamePrefix", "site.ini" );
+                $settings['ezpublish']['system'][$siteaccess]['session'] = array( 'name' => $this->getParameter( "Session", "SessionNamePrefix", "site.ini" ) );
             }
         }
 
