@@ -130,8 +130,7 @@ services:
             - @ezpublish_legacy.kernel
             - @ezpublish_legacy.config.resolver
             - @ezpublish_legacy.persistence_cache_purger
-            - @ezpublish_legacy.configuration_mapper
-            - @ezpublish_legacy.security_mapper
+            - @ezpublish_legacy.kernel.lazy_loader
 
     ezpublish_legacy.preview.controller:
         class: %ezpublish_legacy.preview.controller.class%
@@ -201,6 +200,7 @@ services:
         arguments: [@ezpublish.cache_pool.spi.cache.decorator, @ezpublish.spi.persistence.cache.locationHandler, @logger]
         tags:
             - { name: kernel.cache_clearer }
+        lazy: true
 
     ezpublish_legacy.legacy_cache_purger:
         class: %ezpublish_legacy.legacy_cache_purger.class%

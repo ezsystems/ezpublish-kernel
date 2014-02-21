@@ -35,9 +35,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
      *
      * @throws \Exception
      *
-     * @return void
-     * @internal param $mockParameter
-     *
      * @dataProvider providerForTestFromLegacy
      */
     public function testFromLegacy( $package, $adminSiteaccess, $mockParameters, $expectedResult, $exception = null )
@@ -75,6 +72,9 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 throw $e;
             }
         }
+
+        ksort( $expectedResult );
+        ksort( $expectedResult['ezpublish'] );
         self::assertEquals(
             $expectedResult,
             $result
@@ -120,7 +120,24 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         define( 'IDX_EXCEPTION', 4 );
 
         $commonResult = array(
+            'doctrine' => array(
+                'dbal' => array(
+                    'connections' => array(
+                        "eng_repository_connection" => array(
+                            'driver' => 'pdo_mysql',
+                            'user' => 'root',
+                            'password' => null,
+                            'host' => 'localhost',
+                            'dbname' => 'ezdemo',
+                            'charset' => 'UTF8'
+                        )
+                    )
+                )
+            ),
             'ezpublish' => array(
+                'repositories' => array(
+                    'eng_repository' => array( 'engine' => 'legacy', 'connection' => 'eng_repository_connection' )
+                ),
                 'siteaccess' => array(
                     'default_siteaccess' => 'eng',
                     'list' => array(
@@ -139,13 +156,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 ),
                 'system' => array(
                     'ezdemo_group' => array(
-                        'database' => array(
-                            'type' => 'mysql',
-                            'user' => 'root',
-                            'password' => null,
-                            'server' => 'localhost',
-                            'database_name' => 'ezdemo',
-                        ),
+                        'repository' => 'eng_repository',
                         'var_dir' => 'var/ezdemo_site',
                         'image_variations' => array(
                             'large' => array(
@@ -190,11 +201,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         );
 
         $exceptionType = 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException';
-
-//        $parameterNotFoundException = function ()
-//        {
-//            throw new \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException( 'Test', 'test' );
-//        };
 
         $commonMockParameters = array(
             'getParameter' => array(
@@ -287,7 +293,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         // postgresql
         $element = $baseData;
         $element[IDX_MOCK_PARAMETERS]['getGroup']['DatabaseSettings'][3]['DatabaseImplementation'] = 'ezpostgresql';
-        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['database']['type'] = 'pgsql';
+        $element[IDX_EXPECTED_RESULT]['doctrine']['dbal']['connections']['eng_repository_connection']['driver'] = 'pdo_pgsql';
         $data[] = $element;
 
         // host match, with map
@@ -410,7 +416,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNameHandler_demo'] = array( 'Session', 'SessionNameHandler', 'site.ini', 'ezdemo_site', 'custom' );
         $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNamePerSiteAccess_eng'] = array( 'Session', 'SessionNamePerSiteAccess', 'site.ini', 'eng', 'enabled' );
         $element[IDX_MOCK_PARAMETERS]['getParameter']['SessionNamePerSiteAccess_demo'] = array( 'Session', 'SessionNamePerSiteAccess', 'site.ini', 'ezdemo_site', 'disabled' );
-        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['session_name'] = 'eZSESSID';
+        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['session'] = array( 'name' => 'eZSESSID' );
         $data[] = $element;
 
         return $data;
@@ -430,46 +436,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             ->getMock();
 
         return $mock;
-    }
-
-    protected function getExpectedResultForTestFromLegacy()
-    {
-        return array(
-            'ezpublish' => array(
-                'siteaccess' => array(
-                    'default_siteaccess' => 'eng',
-                    'list' => array(
-                        0 => 'eng',
-                        1 => 'ezdemo_site',
-                        2 => 'ezdemo_site_admin',
-                    ),
-                    'groups' => array(
-                        'ezdemo_site_group' => array(
-                            0 => 'eng',
-                            1 => 'ezdemo_site',
-                            2 => 'ezdemo_site_admin',
-                        ),
-                    ),
-                    'match' => array(
-                        'URIElement' => 1,
-                    ),
-                ),
-                'system' => array(
-                    'ezdemo_site_group' => array(
-                        'database' => array(
-                            'type' => 'mysql',
-                            'user' => 'root',
-                            'password' => null,
-                            'server' => 'localhost',
-                            'database_name' => 'ezdemo',
-                        ),
-                    ),
-                    'ezdemo_site_admin' => array(
-                        'legacy_mode' => true,
-                    )
-                ),
-            ),
-        );
     }
 
     /**

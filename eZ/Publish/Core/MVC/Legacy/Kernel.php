@@ -119,7 +119,7 @@ class Kernel extends ezpKernel
     /**
      * Runs current request through legacy kernel.
      *
-     * @return array
+     * @return \ezpKernelResult
      */
     public function run()
     {

@@ -99,11 +99,8 @@ class StorageEngineFactory
     {
         // Takes configured repository as the reference, if it exists.
         // If not, the first configured repository is considered instead.
-        if ( $this->configResolver->hasParameter( 'repository' ) )
-        {
-            $repositoryAlias = $this->configResolver->getParameter( 'repository' );
-        }
-        else
+        $repositoryAlias = $this->configResolver->getParameter( 'repository' );
+        if ( $repositoryAlias === null )
         {
             $aliases = array_keys( $this->repositories );
             $repositoryAlias = array_shift( $aliases );

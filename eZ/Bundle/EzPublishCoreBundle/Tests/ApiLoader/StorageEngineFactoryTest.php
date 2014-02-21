@@ -58,11 +58,6 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
 
         $configResolver
             ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( true ) );
-        $configResolver
-            ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'repository' )
             ->will( $this->returnValue( $repositoryAlias ) );
@@ -100,11 +95,6 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
 
         $configResolver
             ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( true ) );
-        $configResolver
-            ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'repository' )
             ->will( $this->returnValue( $repositoryAlias ) );
@@ -128,11 +118,6 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
         );
         $factory = new StorageEngineFactory( $configResolver, $repositories );
 
-        $configResolver
-            ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( true ) );
         $configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )
@@ -160,9 +145,9 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
 
         $configResolver
             ->expects( $this->once() )
-            ->method( 'hasParameter' )
+            ->method( 'getParameter' )
             ->with( 'repository' )
-            ->will( $this->returnValue( false ) );
+            ->will( $this->returnValue( null ) );
 
         $this->assertSame( array( 'alias' => $repositoryAlias ) + $repositoryConfig, $factory->getRepositoryConfig() );
     }
@@ -182,11 +167,6 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
         );
         $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
 
-        $configResolver
-            ->expects( $this->once() )
-            ->method( 'hasParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( true ) );
         $configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )

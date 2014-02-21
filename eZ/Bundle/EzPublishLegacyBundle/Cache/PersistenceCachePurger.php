@@ -46,7 +46,7 @@ class PersistenceCachePurger implements CacheClearerInterface
     protected $enabled = true;
 
     /**
-     * @var Psr\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
