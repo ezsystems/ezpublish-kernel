@@ -5993,7 +5993,7 @@ Create session (login a User):
 
 :Resource:    /user/sessions
 :Method:      POST
-:Description: Performs a login for the user and returns the session and session cookie. The client will need to remember both session name/id and CSRF token as this is for security reasons not exposed via GET.
+:Description: Performs a login for the user or check if session exists and returns the session and session cookie. The client will need to remember both session name/id and CSRF token as this is for security reasons not exposed via GET.
 :Headers:
     :Accept:
          :application/vnd.ez.api.Session+xml: (see Session_)
@@ -6001,16 +6001,28 @@ Create session (login a User):
     :Content-Type:
          :application/vnd.ez.api.SessionInput+xml: the SessionInput_ schema encoded in json
          :application/vnd.ez.api.SessionInput+json: the SessionInput_ schema encoded in json
+    :Cookie: (only needed for session's checking)
+        <sessionName>=<sessionID>
+    :X-CSRF-Token: (only needed for session's checking)
+        <csrfToken> The <csrfToken> needed on all unsafe http methods with session.
 :Response:
 
-
+If session is created
+'''''''''''''''''''''
 .. code:: http
 
           HTTP/1.1 201 Created
-          Location: /user/sessions/<sessionID>
           Content-Type: <depending on accept header>
-          Content-Length: <length>
           Set-Cookie: <sessionName> : <sessionID>  A unique session id
+.. parsed-literal::
+          Session_
+
+If session already exists
+'''''''''''''''''''''''''
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Content-Type: <depending on accept header>
 .. parsed-literal::
           Session_
 
@@ -6018,12 +6030,11 @@ Create session (login a User):
 :Error codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the authorization failed
-    :303: If header contained a session cookie and same user was authorized, like 201 Created it will include a Location header
     :409: If header contained a session cookie but different user was authorized
 
 
-XML Example
-'''''''''''
+XML Example (session's creation)
+''''''''''''''''''''''''''''''''
 
 .. code:: http
 
@@ -6031,7 +6042,6 @@ XML Example
     Host: www.example.net
     Accept: application/vnd.ez.api.Session+xml
     Content-Type: application/vnd.ez.api.SessionInput+xml
-    Content-Length: xxx
 
 .. code:: xml
 
@@ -6047,7 +6057,6 @@ XML Example
     Location: /user/sessions/go327ij2cirpo59pb6rrv2a4el2
     Set-Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2; domain=.example.net; path=/; expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
     Content-Type: application/vnd.ez.api.Session+xml
-    Content-Length: xxx
 
 .. code:: xml
 
@@ -6060,8 +6069,8 @@ XML Example
     </Session>
 
 
-JSON Example
-''''''''''''
+JSON Example (session's creation)
+'''''''''''''''''''''''''''''''''
 
 .. code:: http
 
@@ -6069,7 +6078,6 @@ JSON Example
     Host: www.example.net
     Accept: application/vnd.ez.api.Session+json
     Content-Type: application/vnd.ez.api.SessionInput+json
-    Content-Length: xxx
 
 .. code:: json
 
@@ -6086,7 +6094,6 @@ JSON Example
     Location: /user/sessions/go327ij2cirpo59pb6rrv2a4el2
     Set-Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2; domain=.example.net; path=/; expires=Wed, 13-Jan-2021 22:23:01 GMT; HttpOnly
     Content-Type: application/vnd.ez.api.Session+json
-    Content-Length: xxx
 
 .. code:: json
 
@@ -6102,6 +6109,156 @@ JSON Example
       }
     }
 
+XML Example (log in with active session)
+''''''''''''''''''''''''''''''''''''''''''''
+
+.. code:: http
+
+    POST /user/sessions HTTP/1.1
+    Host: www.example.net
+    Accept: application/vnd.ez.api.Session+xml
+    Content-Type: application/vnd.ez.api.SessionInput+xml
+    Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2
+    X-CSRF-Token: 23lkneri34ijajedfw39orj3j93
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <SessionInput>
+      <login>admin</login>
+      <password>secret</password>
+    </SessionInput>
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.Session+xml
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Session href="user/sessions/go327ij2cirpo59pb6rrv2a4el2/refresh" media-type="application/vnd.ez.api.Session+xml">
+      <name>eZSSID</name>
+      <identifier>go327ij2cirpo59pb6rrv2a4el2</identifier>
+      <csrfToken>23lkneri34ijajedfw39orj3j93</csrfToken>
+      <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
+    </Session>
+
+JSON Example (log in with active session)
+'''''''''''''''''''''''''''''''''''''''''''''
+
+.. code:: http
+
+    POST /user/sessions HTTP/1.1
+    Host: www.example.net
+    Accept: application/vnd.ez.api.Session+json
+    Content-Type: application/vnd.ez.api.SessionInput+json
+    Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2
+    X-CSRF-Token: 23lkneri34ijajedfw39orj3j93
+
+.. code:: json
+
+    {
+      "SessionInput": {
+        "login": "admin",
+        "password": "secret"
+      }
+    }
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.Session+json
+
+.. code:: json
+
+    {
+      "Session": {
+        "name": "eZSSID",
+        "identifier": "go327ij2cirpo59pb6rrv2a4el2",
+        "csrfToken": "23lkneri34ijajedfw39orj3j93",
+        "User": {
+          "_href": "/user/users/14",
+          "_media-type": "application/vnd.ez.api.User+json"
+        }
+      }
+    }
+
+
+Refresh session (get session's User information):
+`````````````````````````````````````````````````
+
+:Resource: /user/sessions/<sessionID>/refresh
+:Method: POST
+:Description: Give the session's User information
+:Headers:
+        :Cookie:
+            <sessionName>=<sessionID>
+        :X-CSRF-Token:
+            <csrfToken> The <csrfToken> needed on all unsafe http methods with session.
+:Response: 200
+:Error Codes:
+        :404: If the session does not exist
+
+
+XML Example
+'''''''''''
+
+.. code:: http
+
+    POST /user/sessions/go327ij2cirpo59pb6rrv2a4el2/refresh HTTP/1.1
+    Host: www.example.net
+    Accept: application/vnd.ez.api.Session+xml
+    Content-Type: application/vnd.ez.api.SessionInput+xml
+    Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2
+    X-CSRF-Token: 23lkneri34ijajedfw39orj3j93
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.Session+xml
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Session href="user/sessions/go327ij2cirpo59pb6rrv2a4el2/refresh" media-type="application/vnd.ez.api.Session+xml">
+      <name>eZSSID</name>
+      <identifier>go327ij2cirpo59pb6rrv2a4el2</identifier>
+      <csrfToken>23lkneri34ijajedfw39orj3j93</csrfToken>
+      <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
+    </Session>
+
+
+JSON Example
+''''''''''''
+
+.. code:: http
+
+    POST /user/sessions/go327ij2cirpo59pb6rrv2a4el2/refresh HTTP/1.1
+    Host: www.example.net
+    Accept: application/vnd.ez.api.Session+json
+    Content-Type: application/vnd.ez.api.SessionInput+json
+    Cookie: eZSSID=go327ij2cirpo59pb6rrv2a4el2
+    X-CSRF-Token: 23lkneri34ijajedfw39orj3j93
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/vnd.ez.api.Session+json
+
+.. code:: json
+
+    {
+      "Session": {
+        "name": "eZSSID",
+        "identifier": "go327ij2cirpo59pb6rrv2a4el2",
+        "csrfToken": "23lkneri34ijajedfw39orj3j93",
+        "User": {
+          "_href": "/user/users/14",
+          "_media-type": "application/vnd.ez.api.User+json"
+        }
+      }
+    }
 
 Delete session (logout a User):
 ```````````````````````````````

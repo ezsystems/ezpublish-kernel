@@ -33,20 +33,17 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
             $this->getUserMock(),
             "sessionName",
             "sessionId",
-            "csrfToken"
+            "csrfToken",
+            false
         );
 
         $this->getVisitorMock()->expects( $this->at( 0 ) )
             ->method( 'setStatus' )
-            ->with( $this->equalTo( 201 ) );
+            ->with( $this->equalTo( 200  ) );
 
         $this->getVisitorMock()->expects( $this->at( 1 ) )
             ->method( 'setHeader' )
             ->with( $this->equalTo( 'Content-Type' ), $this->equalTo( 'application/vnd.ez.api.Session+xml' ) );
-
-        $this->getVisitorMock()->expects( $this->at( 2 ) )
-            ->method( 'setHeader' )
-            ->with( $this->equalTo( 'Location' ), $this->matchesRegularExpression( '#/user/sessions/[a-z0-9]+#i' ) );
 
         $this->addRouteExpectation(
             'ezpublish_rest_deleteSession',

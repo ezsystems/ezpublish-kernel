@@ -27,12 +27,12 @@ class UserSession extends ValueObjectVisitor
      */
     public function visit( Visitor $visitor, Generator $generator, $data )
     {
-        $visitor->setStatus( 201 );
+        $status = $data->created ? 201 : 200;
+        $visitor->setStatus( $status );
 
         $visitor->setHeader( 'Content-Type', $generator->getMediaType( 'Session' ) );
 
         $sessionHref = $this->router->generate( 'ezpublish_rest_deleteSession', array( 'sessionId' => $data->sessionId ) );
-        $visitor->setHeader( 'Location', $sessionHref );
 
         //@todo Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader( 'Accept-Patch', false );
