@@ -17,57 +17,32 @@ use Exception;
 
 class TestInitDbCommand extends ContainerAwareCommand
 {
-    const DEFAULT_FIXTURE = "demoempty";
+    const DEFAULT_FIXTURE = "demoempty.php";
     const DEFAULT_FIXTURE_FOLDER = "/../../../../data/";
-
-    /**
-     * Defined fixtures is a dictionary for the possible initial data files
-     * For each entry the 'file' MUST be defined and it's possilbe to add some
-     * 'description' for the --help option
-     *
-     * The array is should look like:
-     * $definedFixtures = array(
-     * 	    "<first key>" => array(
-     * 		"file" => "<first key filename>",
-     * 		"file" => "<first key description>",
-     * 	    ),
-     * 	    "<second key>" => array(
-     * 		"file" => "<second key filename>",
-     * 		"file" => "<second key description>",
-     * 	    ),
-     * 	    ...
-     * );
-     *
-     * @var array
-     */
-    protected $definedFixtures = array(
-        "democontent" => array(
-            "file" => "democontent_data.php",
-            "details" => "eZ Demo with demo content (5.2)",
-        ),
-        "demoempty" => array(
-            "file" => "demo_data.php",
-            "details" => "Required data for minimal functional installation (eZ Demo 5.2)",
-        ),
-    );
 
     protected function configure()
     {
-        // make defined fixtures help
+        // present the existing fixtures on the default location
         $fixturesHelp = "";
-        foreach ( $this->definedFixtures as $key => $settings )
+        foreach ( $this->getDefaultDirectoryFixtures() as $key )
         {
-            $fixturesHelp.= "  - $key    {$settings['details']}\n";
+            $fixturesHelp .= "  - $key\n";
         }
 
         // command configurations
         $this
             ->setName( 'ezpublish:test:init_db' )
             ->addOption(
-                'no-database', null, InputOption::VALUE_NONE, 'Do not init the database'
+                'no-database',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not init the database'
             )
             ->addOption(
-                'fixture', null, InputOption::VALUE_REQUIRED, 'Choose what fixture to add to database'
+                'fixture',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Choose what fixture to add to database'
             )
             ->setDescription( 'Inits the configured database for test use based on existing fixtures' )
             ->setHelp(
@@ -81,7 +56,7 @@ $fixturesHelp
   This command will delete all data in the configured database before filling it
   with fixture data.
 EOT
-        );
+            );
     }
 
     protected function execute( InputInterface $input, OutputInterface $output )
@@ -131,13 +106,13 @@ EOT
         }
 
         // get fixture name or set default one
-        $aux = $input->getOption( 'fixture' );
-        $fixture = ( empty( $aux ) ) ?
+        $fixtureOptionValue = $input->getOption( 'fixture' );
+        $fixture = ( empty( $fixtureOptionValue ) ) ?
             self::DEFAULT_FIXTURE :
-            $aux;
+            $fixtureOptionValue;
 
         // take care of initial data for the database
-        $output->write( "<info>Fixture: </info>$fixture " );
+        $output->write( "<info>Fixture: </info>'$fixture' " );
         $this->insertData( $dbType, $fixture );
         $output->writeln( "done!" );
     }
@@ -241,31 +216,29 @@ EOT
      */
     protected function getInitialData( $fixture )
     {
-        // check if $fixture is a pre-set value on dictionary
-        $file = false;
-        if ( !empty( $this->definedFixtures[$fixture] ) )
-        {
-            $fileName = $this->definedFixtures[$fixture]['file'];
-        }
-        else
-        {
-            $fileName = $fixture;
-            // verify if $fixture is a complete path to a file
-            $file = ( file_exists( $fileName ) ) ? $fileName : $file;
-        }
+        // verify if $fixture is a complete path to a file
+        $file = ( file_exists( $fixture ) ) ? $fixture : false;
 
         // this is needed since it's possible to pass a complete path to a file
         if ( !$file )
         {
-            $file = __DIR__ . self::DEFAULT_FIXTURE_FOLDER . $fileName;
+            $file = __DIR__ . self::DEFAULT_FIXTURE_FOLDER . $fixture;
         }
 
-        if ( !file_exists( $file ) )
+        // if file doesn't exist throw invalid argument exception
+        if ( !file_exists( $file ) || !is_readable( $file ) || is_dir( $file ) )
         {
-            throw new \InvalidArgumentException( "Fixture '$fixture' is invalid" );
+            throw new \InvalidArgumentException( "Fixture '$fixture' wasn't be found" );
         }
 
-        return include $file;
+        // include file and verify if it is an array
+        $fixtureData = include $file;
+        if ( !is_array( $fixtureData ) )
+        {
+            throw new \InvalidArgumentException( "Fixture file '$fixture' is invalid" );
+        }
+
+        return $fixtureData;
     }
 
     /**
@@ -304,5 +277,27 @@ EOT
     protected function getDatabaseHandler()
     {
         return $this->getContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
+    }
+
+    /**
+     * Reads files in the default directory and return a filtered list with them
+     * excluding all non PHP (.php) files
+     *
+     * @return array
+     */
+    protected function getDefaultDirectoryFixtures()
+    {
+        $files = scandir( __DIR__ . self::DEFAULT_FIXTURE_FOLDER );
+        $return = array();
+        for ( $i = 0; !empty( $files[$i] ); $i++ )
+        {
+            // check if the file has php extension
+            if ( strpos( $files[$i], ".php" ) === strlen( $files[$i] ) - 4 )
+            {
+                $return[] = $files[$i];
+            }
+        }
+
+        return $return;
     }
 }
