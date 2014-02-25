@@ -20,12 +20,6 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class CreateStruct extends ValueObject
 {
     /**
-     * the id of the asset asset this variant belongs to
-     * @var int|string
-     */
-    public $assetId;
-
-    /**
      * the identifier of the variant e.g. "thumb"
      *
      * @var string

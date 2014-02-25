@@ -9,41 +9,36 @@
 
 namespace eZ\Publish\API\Repository\Values\Asset;
 
-use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class represents an asset value
  *
- * @property-read \eZ\Publish\API\Repository\Values\Asset\Variant[] $variants
+ * @property_read int|string $id
+ * @property_read string $assetTypeIdentifier
+ * @property_read \eZ\Publish\API\Repository\Values\Asset\Variant[] $variants
+ *
  */
-abstract class Asset extends Content
+class Asset extends ValueObject
 {
     /**
-     * Variant names supported by this asset
+     * the unique id of the asset
      *
-     * @var string[]
+     * @var int|string
      */
-    protected $supportedVariants;
+    protected $id;
 
     /**
-     * Asset type (see SPI configuration)
+     * the asset type identifier
      *
      * @var string
      */
-    protected $type;
+    protected $assetTypeIdentifier;
 
     /**
-     * Returns all supported variant identifiers.
+     * the list of already generated variants
      *
-     * @return string[]
+     * @var \eZ\Publish\API\Repository\Values\Asset\Variant[]
      */
-    abstract public function getSupportedVariants();
-
-    /**
-     * Returns if variant $identifier is supported by the asset.
-     *
-     * @param string $identifier
-     * @return bool
-     */
-    abstract public function isVariantSupported( $identifier );
+    protected $variants;
 }

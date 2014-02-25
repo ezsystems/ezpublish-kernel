@@ -5,12 +5,13 @@ namespace eZ\Publish\API\Repository\Values\Asset;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * this class represents a content object in a specific version
+ * this class represents a generated variant of an asset
  *
- * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo convenience getter for getVersionInfo()->getContentInfo()
- * @property-read mixed $id convenience getter for retrieving the contentId: $versionInfo->contentInfo->id
- * @property-read \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo calls getVersionInfo()
- * @property-read array $fields access fields, calls getFields()
+ * @property_read string $identifier the variant identifier
+ * @property_read string $mimeType
+ * @proeprty_read string $storageUri
+ * @property_read string $webUri
+ * @property_read array $metaData;
  */
 abstract class Variant extends ValueObject
 {

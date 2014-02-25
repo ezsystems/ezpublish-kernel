@@ -26,13 +26,6 @@ class Asset extends ValueObject
     public $id;
 
     /**
-     * the content id of the asset
-     *
-     * @var int|string
-     */
-    public $contentId;
-
-    /**
      * the generated variants of the asset. The keys of the array are variant identifiers
      *
      * @var \eZ\Publish\SPI\Persistence\Asset\Variant[]

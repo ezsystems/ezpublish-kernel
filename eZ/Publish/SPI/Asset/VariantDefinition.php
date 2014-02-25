@@ -2,6 +2,13 @@
 
 namespace eZ\Publish\SPI\Asset;
 
+/**
+ * This class represents a definition for an asset variant.
+ *
+ * It contains a list of filters which are applied to the $source variant.
+ *
+ * @package eZ\Publish\SPI\Asset
+ */
 class VariantDefinition
 {
     /**
