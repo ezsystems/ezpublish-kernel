@@ -33,12 +33,12 @@ class TransformationProcessorDefinitionBasedParserTest extends TestCase
      */
     public function testParse( $file )
     {
-        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() );
+        $parser = new Persistence\TransformationProcessor\DefinitionBased\Parser();
 
         $fixture = include $file . '.result';
         $this->assertEquals(
             $fixture,
-            $parser->parse( str_replace( self::getInstallationDir(), '', $file ) )
+            $parser->parse( $file )
         );
     }
 }

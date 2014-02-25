@@ -20,16 +20,10 @@ class TransformationProcessorDefinitionBasedTest extends TestCase
 {
     public function getProcessor()
     {
-        $rules = array();
-        foreach ( glob( __DIR__ . '/_fixtures/transformations/*.tr' ) as $file )
-        {
-            $rules[] = str_replace( self::getInstallationDir(), '', $file );
-        }
-
         return new DefinitionBased(
-            new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
+            new Persistence\TransformationProcessor\DefinitionBased\Parser(),
             new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() ),
-            $rules
+            glob( __DIR__ . '/_fixtures/transformations/*.tr' )
         );
     }
 

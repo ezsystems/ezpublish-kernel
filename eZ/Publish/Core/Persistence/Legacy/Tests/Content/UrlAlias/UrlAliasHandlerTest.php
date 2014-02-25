@@ -3026,16 +3026,10 @@ class UrlAliasHandlerTest extends TestCase
      */
     public function getProcessor()
     {
-        $rules = array();
-        foreach ( glob( __DIR__ . '/../../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
-        {
-            $rules[] = str_replace( self::getInstallationDir(), '', $file );
-        }
-
         return new DefinitionBased(
-            new Parser( self::getInstallationDir() ),
+            new Parser(),
             new PcreCompiler( new Utf8Converter() ),
-            $rules
+            glob( __DIR__ . '/../../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
         );
     }
 }

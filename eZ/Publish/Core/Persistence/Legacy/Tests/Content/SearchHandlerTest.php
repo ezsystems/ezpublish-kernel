@@ -91,18 +91,12 @@ class SearchHandlerTest extends LanguageAwareTestCase
      */
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
-        $rules = array();
-        foreach ( glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
-        {
-            $rules[] = str_replace( self::getInstallationDir(), '', $file );
-        }
-
         $transformationProcessor = new Persistence\TransformationProcessor\DefinitionBased(
-            new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
+            new Persistence\TransformationProcessor\DefinitionBased\Parser(),
             new Persistence\TransformationProcessor\PcreCompiler(
                 new Persistence\Utf8Converter()
             ),
-            $rules
+            glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
         );
         $commaSeparatedCollectionValueHandler = new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
             $this->getDatabaseHandler(),

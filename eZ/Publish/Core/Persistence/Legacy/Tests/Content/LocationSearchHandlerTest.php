@@ -87,18 +87,12 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
      */
     protected function getLocationSearchHandler( array $fullTextSearchConfiguration = array() )
     {
-        $rules = array();
-        foreach ( glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
-        {
-            $rules[] = str_replace( self::getInstallationDir(), '', $file );
-        }
-
         $transformationProcessor = new Persistence\TransformationProcessor\DefinitionBased(
-            new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
+            new Persistence\TransformationProcessor\DefinitionBased\Parser(),
             new Persistence\TransformationProcessor\PcreCompiler(
                 new Persistence\Utf8Converter()
             ),
-            $rules
+            glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
         );
         $commaSeparatedCollectionValueHandler = new CommonCriterionHandler\FieldValue\Handler\Collection(
             $this->getDatabaseHandler(),

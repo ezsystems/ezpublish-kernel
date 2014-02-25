@@ -17,23 +17,15 @@ use eZ\Publish\Core\Persistence\TransformationProcessor;
 class PreprocessedBased extends TransformationProcessor
 {
     /**
-     * Directory to load rules relative from.
-     *
-     * @var string
-     */
-    protected $installDir;
-
-    /**
      * Constructor
      *
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler $compiler
      * @param string $installDir Base dir for rule loading
      * @param array $ruleFiles
      */
-    public function __construct( PcreCompiler $compiler, $installDir, array $ruleFiles = array() )
+    public function __construct( PcreCompiler $compiler, array $ruleFiles = array() )
     {
         parent::__construct( $compiler, $ruleFiles );
-        $this->installDir = $installDir;
     }
 
     /**
@@ -49,7 +41,7 @@ class PreprocessedBased extends TransformationProcessor
 
             foreach ( $this->ruleFiles as $file )
             {
-                $rules += require $this->installDir . "/" . $file;
+                $rules += require $file;
             }
 
             $this->compiledRules = $this->compiler->compile( $rules );

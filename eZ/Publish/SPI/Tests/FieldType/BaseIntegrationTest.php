@@ -82,16 +82,10 @@ abstract class BaseIntegrationTest extends TestCase
     {
         if ( !isset( $this->transformationProcessor ) )
         {
-            $rules = array();
-            foreach ( glob( __DIR__ . '/../../../Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
-            {
-                $rules[] = str_replace( self::getInstallationDir(), '', $file );
-            }
-
             $this->transformationProcessor = new DefinitionBased(
                 new Persistence\TransformationProcessor\DefinitionBased\Parser( self::getInstallationDir() ),
                 new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() ),
-                $rules
+                glob( __DIR__ . '/../../../Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
             );
         }
 
