@@ -213,7 +213,6 @@ services:
 
     ezpublish.api.storage_engine.transformation_parser:
         class: %ezpublish.api.storage_engine.transformation_parser.class%
-        arguments: [%kernel.root_dir%]
 
     ezpublish.api.storage_engine.pcre_compiler:
         class: %ezpublish.api.storage_engine.pcre_compiler.class%
@@ -233,7 +232,6 @@ services:
 
             # Using preprocessed files:
             - @ezpublish.api.storage_engine.pcre_compiler
-            - %kernel.root_dir%
             - %ezpublish.api.storage_engine.preprocessed_transformation_rules.resources%
 
     # Field type converters for legacy

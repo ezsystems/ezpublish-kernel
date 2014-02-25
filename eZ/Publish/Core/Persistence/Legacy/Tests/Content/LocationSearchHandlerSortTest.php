@@ -83,12 +83,6 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
      */
     protected function getLocationSearchHandler()
     {
-        $rules = array();
-        foreach ( glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' ) as $file )
-        {
-            $rules[] = str_replace( self::getInstallationDir(), '', $file );
-        }
-
         return new Search\Location\Handler(
             new Search\Location\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),

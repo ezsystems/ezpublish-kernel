@@ -20,17 +20,9 @@ class TransformationProcessorPreprocessedBasedTest extends TestCase
 {
     public function getProcessor()
     {
-        $installDir = self::getInstallationDir();
-        $rules = array();
-        foreach ( glob( __DIR__ . '/_fixtures/transformations/*.tr.result' ) as $file )
-        {
-            $rules[] = str_replace( $installDir, '', $file );
-        }
-
         return new PreprocessedBased(
             new Persistence\TransformationProcessor\PcreCompiler( new Persistence\Utf8Converter() ),
-            $installDir,
-            $rules
+            glob( __DIR__ . '/_fixtures/transformations/*.tr.result' )
         );
     }
 
