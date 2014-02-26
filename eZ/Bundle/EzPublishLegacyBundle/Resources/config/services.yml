@@ -14,6 +14,7 @@ parameters:
     ezpublish_legacy.treemenu.controller.options: {}
     ezpublish_legacy.setup.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacySetupController
     ezpublish_legacy.preview.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\PreviewController
+    ezpublish_legacy.website_toolbar.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\WebsiteToolbarController
 
     ezpublish_legacy.kernel_handler.cli.class: eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler
     ezpublish_legacy.kernel_handler.cli.options: {}
@@ -140,6 +141,13 @@ services:
 
     ezpublish.controller.content.preview:
         alias: ezpublish_legacy.preview.controller
+
+    ezpublish_legacy.website_toolbar.controller:
+        class: %ezpublish_legacy.website_toolbar.controller.class%
+        parent: ezpublish.controller.base
+        arguments:
+            - @form.csrf_provider
+            - @templating.engine.eztpl
 
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
