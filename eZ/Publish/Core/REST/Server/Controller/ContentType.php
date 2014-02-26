@@ -122,7 +122,7 @@ class ContentType extends RestController
             $this->contentTypeService->loadContentTypeGroup( $contentTypeGroupId )
         );
 
-        if ( $this->getMediaType() == 'application/vnd.ez.api.contenttypelist' )
+        if ( $this->getMediaType() === 'application/vnd.ez.api.contenttypelist' )
         {
             return new Values\ContentTypeList( $contentTypes, $this->request->getPathInfo() );
         }
@@ -217,27 +217,48 @@ class ContentType extends RestController
      */
     public function listContentTypes()
     {
-        $contentTypes = array();
+        if ( $this->getMediaType() === 'application/vnd.ez.api.contenttypelist' )
+        {
+            $return = new Values\ContentTypeList( array(), $this->request->getPathInfo() );
+        }
+        else
+        {
+            $return = new Values\ContentTypeInfoList( array(), $this->request->getPathInfo() );
+        }
 
         if ( $this->request->query->has( 'identifier' ) )
         {
-            $contentTypes = array(
-                $this->loadContentTypeByIdentifier()
-            );
+            $return->contentTypes = array( $this->loadContentTypeByIdentifier() );
+            return $return;
         }
-        else if ( $this->request->query->has( 'remoteId' ) )
+
+        if ( $this->request->query->has( 'remoteId' ) )
         {
-            $contentTypes = array(
+            $return->contentTypes = array(
                 $this->loadContentTypeByRemoteId()
             );
+            return $return;
         }
 
-        if ( $this->getMediaType() == 'application/vnd.ez.api.contenttypelist' )
+        $limit = null;
+        if ( $this->request->query->has( 'limit' ) )
         {
-            return new Values\ContentTypeList( $contentTypes, $this->request->getPathInfo() );
+            $limit = (int)$this->request->query->get( 'limit', null );
+            if ( $limit <= 0 )
+            {
+                throw new BadRequestException( 'wrong value for limit parameter' );
+            }
         }
-
-        return new Values\ContentTypeInfoList( $contentTypes, $this->request->getPathInfo() );
+        $contentTypes = $this->getContentTypeList();
+        $sort = $this->request->query->get( 'sort' );
+        if ( $this->request->query->has( 'orderby' ) )
+        {
+            $orderby = $this->request->query->get( 'orderby' );
+            $this->sortContentTypeList( $contentTypes, $orderby, $sort );
+        }
+        $offset = $this->request->query->get( 'offset', 0 );
+        $return->contentTypes = array_slice( $contentTypes, $offset, $limit );
+        return $return;
     }
 
     /**
@@ -921,5 +942,89 @@ class ContentType extends RestController
                 'modificationDate' => $createStruct->creationDate,
             )
         );
+    }
+
+    /**
+     * @param array &$contentTypes
+     * @param string $orderby
+     * @return mixed
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
+     */
+    protected function sortContentTypeList( array &$contentTypes, $orderby, $sort = "asc" )
+    {
+        Switch ( $orderby )
+        {
+            case 'name':
+                if ( $sort === 'asc' || $sort === null )
+                {
+                    usort(
+                        $contentTypes, function ($contentType1, $contentType2)
+                        {
+                            return strcasecmp( $contentType1->identifier, $contentType2->identifier );
+                        }
+                    );
+                }
+                else if ( $sort === 'desc' )
+                {
+                    usort(
+                        $contentTypes, function ($contentType1, $contentType2)
+                        {
+                            return strcasecmp( $contentType1->identifier, $contentType2->identifier ) * - 1;
+                        }
+                    );
+                }
+                else
+                {
+                    throw new BadRequestException( 'wrong value for sort parameter' );
+                }
+                break;
+            case 'lastmodified':
+                if ( $sort === 'asc' || $sort === null )
+                {
+                    usort(
+                        $contentTypes, function ($timeObj3, $timeObj4)
+                        {
+                            $timeObj3 = strtotime( $timeObj3->modificationDate->format( "Y-m-d H:i:s" ) );
+                            $timeObj4 = strtotime( $timeObj4->modificationDate->format( "Y-m-d H:i:s" ) );
+                            return $timeObj3 > $timeObj4;
+                        }
+                    );
+                }
+                else if ( $sort === 'desc' )
+                {
+                    usort(
+                        $contentTypes, function ($timeObj3, $timeObj4)
+                        {
+                            $timeObj3 = strtotime( $timeObj3->modificationDate->format( "Y-m-d H:i:s" ) );
+                            $timeObj4 = strtotime( $timeObj4->modificationDate->format( "Y-m-d H:i:s" ) );
+                            return $timeObj3 < $timeObj4;
+                        }
+                    );
+                }
+                else
+                {
+                    throw new BadRequestException( 'wrong value for sort parameter' );
+                }
+                break;
+            default:
+                throw new BadRequestException( 'wrong value for orderby parameter' );
+                break;
+        }
+    }
+
+    /**
+     * @return ContentType[]
+     */
+    protected function getContentTypeList()
+    {
+        $contentTypes = array();
+        foreach ( $this->contentTypeService->loadContentTypeGroups() as $contentTypeGroup )
+        {
+            $contentTypes = array_merge(
+                $contentTypes,
+                $this->contentTypeService->loadContentTypes( $contentTypeGroup )
+            );
+        }
+        return $contentTypes;
     }
 }
