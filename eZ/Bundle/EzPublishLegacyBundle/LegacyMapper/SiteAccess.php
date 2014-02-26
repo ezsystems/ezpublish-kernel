@@ -20,11 +20,18 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class SiteAccess extends ContainerAware implements EventSubscriberInterface
 {
+    protected $options = array();
+
     public static function getSubscribedEvents()
     {
         return array(
             LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB => array( 'onBuildKernelWebHandler', 128 )
         );
+    }
+
+    public function setOptions( array $options = array() )
+    {
+        $this->options = $options;
     }
 
     /**
@@ -80,7 +87,7 @@ class SiteAccess extends ContainerAware implements EventSubscriberInterface
         {
             $aPathinfo = explode( '/', substr( $pathinfo, 1 ) );
             $aSemanticPathinfo = explode( '/', substr( $semanticPathinfo, 1 ) );
-            $uriPart = array_diff( $aPathinfo, $aSemanticPathinfo );
+            $uriPart = array_diff( $aPathinfo, $aSemanticPathinfo, $this->getFragmentPathItems() );
         }
 
         $event->getParameters()->set(
@@ -91,5 +98,18 @@ class SiteAccess extends ContainerAware implements EventSubscriberInterface
                 'uri_part' => $uriPart
             )
         );
+    }
+
+    /**
+     * Returns an array with all the components of the fragment_path option
+     * @return array
+     */
+    protected function getFragmentPathItems()
+    {
+        if ( isset( $this->options['fragment_path'] ) )
+        {
+            return explode( '/', trim( $this->options['fragment_path'], '/' ) );
+        }
+        return array( '_fragment' );
     }
 }

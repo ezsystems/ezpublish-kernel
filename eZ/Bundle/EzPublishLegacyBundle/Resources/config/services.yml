@@ -172,6 +172,7 @@ services:
         class: %ezpublish_legacy.siteaccess_mapper.class%
         calls:
             - [setContainer, [@service_container]]
+            - [setOptions, [{fragment_path: %fragment.path%}] ]
         tags:
             - { name: kernel.event_subscriber }
 
