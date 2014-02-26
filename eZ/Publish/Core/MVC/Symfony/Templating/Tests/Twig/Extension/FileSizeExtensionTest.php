@@ -12,6 +12,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 use Twig_Test_IntegrationTestCase;
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FileSizeExtension;
 use Symfony\Component\Translation\TranslatorInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
 
 /**
  * Class FileSizeExtensionTest
@@ -36,11 +38,22 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     protected $translatorMock;
 
     /**
-     * @param string $locale
+     * @param ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function setDefaultLocale( $locale )
+    protected $configResolverInterfaceMock;
+
+    /**
+     * @param LocaleConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeConverterInterfaceMock;
+
+    /**
+     * @param string $locale
+     * @param string $defaultLocale
+     */
+    protected function setConfigurationLocale( $locale, $defaultLocale )
     {
-        locale_set_default( $locale );
+        locale_set_default( $defaultLocale );
         $this->locale = $locale;
     }
 
@@ -49,7 +62,7 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
      */
     public function getLocale()
     {
-        return $this->locale;
+        return array( $this->locale );
     }
 
     /**
@@ -58,7 +71,7 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     protected function getExtensions()
     {
         return array(
-            new FileSizeExtension( $this->getTranslatorInterfaceMock(), $this->suffixes )
+            new FileSizeExtension( $this->getTranslatorInterfaceMock(), $this->suffixes, $this->getConfigResolverInterfaceMock(), $this->getLocaleConverterInterfaceMock() )
         );
     }
 
@@ -68,6 +81,40 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     protected function getFixturesDir()
     {
         return __DIR__ . '/_fixtures/functions/';
+    }
+
+    /**
+     * @return ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getConfigResolverInterfaceMock()
+    {
+        $configResolverInterfaceMock = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $configResolverInterfaceMock->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->with( 'languages' )
+            ->will( $this->returnValue( $this->getLocale() ) );
+
+        return $configResolverInterfaceMock;
+    }
+
+    /**
+     * @return LocaleConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getLocaleConverterInterfaceMock()
+    {
+        $this->localeConverterInterfaceMock = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface' );
+        $this->localeConverterInterfaceMock->expects( $this->any() )
+        ->method( 'convertToPOSIX' )
+        ->will(
+            $this->returnValueMap(
+                array(
+                    array( 'fre-FR', 'fr-FR' ),
+                    array( 'eng-GB', 'en-GB' )
+                )
+            )
+        );
+
+        return $this->localeConverterInterfaceMock;
     }
 
     /**
@@ -82,17 +129,20 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
                 $this->returnCallback(
                     function ( $suffixes ) use ( $that )
                     {
-                        if ( $that->getLocale() == 'fr-FR' )
+                        foreach ( $that->getLocale() as $value )
                         {
-                            return $suffixes . ' French version';
-                        }
-                        else if ( $that->getLocale() == 'en-GB' )
-                        {
-                            return $suffixes . ' English version';
-                        }
-                        else
-                        {
-                            return $suffixes;
+                            if ( $value == 'fre-FR' )
+                            {
+                                return $suffixes . ' French version';
+                            }
+                            else if ( $value == 'eng-GB' )
+                            {
+                                return $suffixes . ' English version';
+                            }
+                            else
+                            {
+                                return $suffixes . ' wrong local so we take the default one which is en-GB here';
+                            }
                         }
                     }
                 )

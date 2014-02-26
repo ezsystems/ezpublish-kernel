@@ -108,7 +108,7 @@ services:
 
     ezpublish.twig.extension.filesize:
         class: %ezpublish.twig.extension.filesize.class%
-        arguments: [@translator, %ezpublish.twig.extension.filesize.suffixes%]
+        arguments: [@translator, %ezpublish.twig.extension.filesize.suffixes%, @ezpublish.config.resolver, @ezpublish.locale.converter ]
         tags:
             - {name: twig.extension}
 
