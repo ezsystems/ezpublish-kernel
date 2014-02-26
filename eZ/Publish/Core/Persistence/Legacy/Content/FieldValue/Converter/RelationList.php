@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\Type as ContentType;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -261,6 +262,10 @@ class RelationList implements Converter
                     $q->expr->eq(
                         $this->db->quoteColumn( 'id', 'ezcontentclass' ),
                         $this->db->quoteColumn( 'contentclass_id', 'ezcontentobject' )
+                    ),
+                    $q->expr->eq(
+                        $this->db->quoteColumn( 'version', 'ezcontentclass' ),
+                        $q->bindValue( ContentType::STATUS_DEFINED, null, \PDO::PARAM_INT )
                     )
                 )
             )
