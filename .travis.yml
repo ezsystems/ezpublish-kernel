@@ -25,40 +25,44 @@ matrix:
     - php: 5.3.3
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
   exclude:
+# 5.3.3 run: unit test + mysql integration test
     - php: 5.3.3
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
+    - php: 5.3.3
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
+    - php: 5.3.3
+      env: SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+    - php: 5.3.3
+      env: SOLR_VERSION="4.6.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+# 5.3 run: unit test + sqlite integration test
     - php: 5.3
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
     - php: 5.3
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
     - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
-    - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Asia/Calcutta"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
     - php: 5.3
       env: SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
     - php: 5.3
-      env: SOLR_VERSION="4.6.0" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
-    - php: 5.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
-    - php: 5.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
+      env: SOLR_VERSION="4.6.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+# 5.4 run: unit test + solr 3.6 integration test
     - php: 5.4
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York"
     - php: 5.4
-      env: SOLR_VERSION="4.6.0" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
+    - php: 5.4
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
+    - php: 5.4
+      env: SOLR_VERSION="4.6.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
+# 5.5 run: unit test + sqlite integration test + postgres integration test + mysql integration test + solr 4.x integration test
     - php: 5.5
       env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
     - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
-    - php: 5.5
       env: SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
-    - php: 5.5
-      env: SOLR_VERSION="4.6.0" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York"
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta"
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York"
 
 # test only master (+ Pull requests)
 branches:
