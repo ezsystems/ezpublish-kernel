@@ -38,6 +38,13 @@ class WebsiteToolbarController extends Controller
         $this->securityContext = $securityContext;
     }
 
+    /**
+     * Renders the legacy website toolbar template.
+     *
+     * If the logged in user doesn't have the required permission, an empty response is returned
+     *
+     * @param mixed $locationId
+     */
     public function websiteToolbarAction( $locationId )
     {
         $response = new Response();
