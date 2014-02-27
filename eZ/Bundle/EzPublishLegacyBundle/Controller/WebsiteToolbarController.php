@@ -8,10 +8,13 @@
  */
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
-use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
+use eZ\Publish\API\Repository\Repository;
+use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Templating\EngineInterface;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 
 class WebsiteToolbarController extends Controller
 {
@@ -21,15 +24,37 @@ class WebsiteToolbarController extends Controller
     /** @var \Symfony\Component\Templating\EngineInterface */
     private $legacyTemplateEngine;
 
-    public function __construct( CsrfProviderInterface $csrfProvider, EngineInterface $engine )
+    /** @var \eZ\Publish\API\Repository\Repository */
+    private $repository;
+
+    /** @var \Symfony\Component\Security\Core\SecurityContextInterface */
+    private $securityContext;
+
+    public function __construct( CsrfProviderInterface $csrfProvider, EngineInterface $engine, Repository $repository, SecurityContextInterface $securityContext )
     {
         $this->csrfProvider = $csrfProvider;
         $this->legacyTemplateEngine = $engine;
+        $this->repository = $repository;
+        $this->securityContext = $securityContext;
     }
 
     public function websiteToolbarAction( $locationId )
     {
-        return new Response(
+        $response = new Response();
+
+        $contentId = $this->repository->getLocationService()->loadLocation( $locationId )->contentId;
+        $authorizationAttribute = new AuthorizationAttribute(
+            'websitetoolbar',
+            'use',
+            array( 'valueObject' => $this->repository->getContentService()->loadContent( $contentId ) )
+        );
+
+        if ( !$this->securityContext->isGranted( $authorizationAttribute ) )
+        {
+            return $response;
+        }
+
+        $response->setContent(
             $this->legacyTemplateEngine->render(
                 'design:parts/website_toolbar.tpl',
                 array(
@@ -38,6 +63,8 @@ class WebsiteToolbarController extends Controller
                 )
             )
         );
+
+        return $response;
     }
 }
  
