@@ -204,7 +204,12 @@ services:
 
     ezpublish_legacy.legacy_cache_purger:
         class: %ezpublish_legacy.legacy_cache_purger.class%
-        arguments: [@ezpublish_legacy.kernel, @ezpublish_legacy.configuration_mapper, @filesystem, %ezpublish_legacy.root_dir%]
+        arguments:
+            - @ezpublish_legacy.kernel
+            - @ezpublish_legacy.configuration_mapper
+            - @filesystem
+            - %ezpublish_legacy.root_dir%
+            - @ezpublish.siteaccess
         tags:
             - { name: kernel.cache_clearer }
 
