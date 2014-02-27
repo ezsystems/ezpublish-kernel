@@ -75,8 +75,12 @@ class LegacyStorage extends Gateway
         $dbHandler = $this->getConnection();
         $q = $dbHandler->createSelectQuery();
         $q
-            ->select( 'object_id, node_id, priority, ts_publication, ts_visible, rotation_until, moved_to' )
+            ->select( 'object_id, ezm_pool.node_id, ezm_pool.priority, ts_publication, ts_visible, rotation_until, moved_to' )
             ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
+            ->innerJoin(
+                $dbHandler->quoteTable( 'ezcontentobject_tree' ),
+                $q->expr->eq( 'ezcontentobject_tree.node_id', 'ezm_pool.node_id' )
+            )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
                 $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
