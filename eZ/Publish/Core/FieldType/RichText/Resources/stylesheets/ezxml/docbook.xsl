@@ -412,4 +412,70 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="embed | embed-inline">
+    <xsl:variable name="embedname">
+      <xsl:choose>
+        <xsl:when test="local-name() = 'embed-inline'">
+          <xsl:value-of select="'ezembedinline'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'ezembed'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:element name="{$embedname}" namespace="http://docbook.org/ns/docbook">
+      <xsl:choose>
+        <xsl:when test="@node_id">
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="concat( 'ezlocation://', @node_id )"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:when test="@object_id">
+          <xsl:attribute name="xlink:href">
+            <xsl:value-of select="concat( 'ezcontent://', @object_id )"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:message terminate="yes">
+            Unhandled link type
+          </xsl:message>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:if test="@view">
+        <xsl:attribute name="view">
+          <xsl:value-of select="@view"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@align">
+        <xsl:attribute name="ezxhtml:align">
+          <xsl:value-of select="@align"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@size or @*[namespace-uri() = 'http://ez.no/namespaces/ezpublish3/custom/']">
+        <xsl:element name="ezconfig" namespace="http://docbook.org/ns/docbook">
+          <xsl:for-each select="@size | @*[namespace-uri() = 'http://ez.no/namespaces/ezpublish3/custom/']">
+            <xsl:call-template name="addHashValue">
+              <xsl:with-param name="attribute" select="current()"/>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:element>
+      </xsl:if>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="addHashValue">
+    <xsl:param name="attribute"/>
+    <xsl:element name="ezvalue" namespace="http://docbook.org/ns/docbook">
+      <xsl:attribute name="key">
+        <xsl:value-of select="local-name( $attribute )"/>
+      </xsl:attribute>
+      <xsl:value-of select="$attribute"/>
+    </xsl:element>
+  </xsl:template>
+
 </xsl:stylesheet>
