@@ -101,7 +101,7 @@ class TwigContentViewLayoutDecorator implements ContentViewInterface
 EOT;
             return $twig->render(
                 $twigContentTemplate,
-                array(
+                $params + array(
                     'viewResult' => $contentViewClosure( $params )
                 )
             );
