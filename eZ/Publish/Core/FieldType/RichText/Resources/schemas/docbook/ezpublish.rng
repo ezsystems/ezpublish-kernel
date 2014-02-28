@@ -427,6 +427,63 @@
     </element>
   </define>
 
+  <define name="ez.embed">
+    <element name="ezembed">
+      <ref name="ez.embed.content"/>
+    </element>
+  </define>
+
+  <define name="ez.embedinline">
+    <element name="ezembedinline">
+      <ref name="ez.embed.content"/>
+    </element>
+  </define>
+
+  <define name="ez.embed.content">
+    <a:documentation>
+      content eZ Publish embed elements.
+    </a:documentation>
+    <ref name="ez.embed.attlist"/>
+    <optional>
+      <element name="ezconfig">
+        <ref name="ez.config.hash"/>
+      </element>
+    </optional>
+  </define>
+
+  <define name="ez.embed.attributes">
+    <ref name="db.xlink.href.attribute"/>
+    <optional>
+      <attribute name="view">
+        <data type="string"><param name="pattern">[A-Za-z][A-Za-z0-9_\-]*</param></data>
+      </attribute>
+    </optional>
+    <optional>
+      <ref name="ez.xhtml.align"/>
+    </optional>
+    <optional>
+      <ref name="ez.xhtml.class.attribute"/>
+    </optional>
+  </define>
+
+  <define name="ez.embed.attlist">
+    <ref name="ez.embed.attributes"/>
+  </define>
+
+  <define name="ez.config.hash">
+    <oneOrMore>
+      <element name="ezvalue">
+        <attribute name="key">
+          <text/>
+        </attribute>
+        <choice>
+          <ref name="ez.config.hash"/>
+          <text/>
+        </choice>
+      </element>
+    </oneOrMore>
+  </define>
+
   <!--define name="ez.elements.all">
     <interleave>
       <zeroOrMore>
@@ -439,17 +496,17 @@
     <a:documentation>
       Adding ezxhtml:class attribute to the selected elements.
     </a:documentation>
-    <define name="db.para.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
-    <define name="db.title.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
-    <!--define name="db.html.th.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define-->
-    <!--define name="db.html.td.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define-->
-    <define name="db.itemizedlist.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
-    <define name="db.orderedlist.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
-    <define name="db.listitem.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
-    <define name="db.emphasis.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
-    <!--define name="db.html.table.attributes" combine="interleave"><ref name="ez.xhtml.class"/></define-->
-    <define name="db.link.attlist" combine="interleave"><ref name="ez.xhtml.class"/></define>
-    <define name="ez.xhtml.class">
+    <define name="db.para.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
+    <define name="db.title.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
+    <!--define name="db.html.th.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define-->
+    <!--define name="db.html.td.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define-->
+    <define name="db.itemizedlist.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
+    <define name="db.orderedlist.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
+    <define name="db.listitem.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
+    <define name="db.emphasis.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
+    <!--define name="db.html.table.attributes" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define-->
+    <define name="db.link.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
+    <define name="ez.xhtml.class.attribute">
       <optional>
         <attribute name="ezxhtml:class">
           <data type="string"><param name="pattern">[A-Za-z][A-Za-z0-9_\-]*</param></data>
@@ -487,23 +544,54 @@
     <a:documentation>
       Adding ezxhtml:textalign attribute to the selected elements.
     </a:documentation>
-    <define name="db.para.attlist" combine="interleave"><ref name="ez.xhtml.textalign"/></define>
-    <define name="db.title.attlist" combine="interleave"><ref name="ez.xhtml.textalign"/></define>
-    <define name="db.html.th.attlist" combine="interleave"><ref name="ez.xhtml.textalign"/></define>
-    <define name="db.html.td.attlist" combine="interleave"><ref name="ez.xhtml.textalign"/></define>
-    <define name="ez.xhtml.textalign">
+    <define name="db.para.attlist" combine="interleave">
       <optional>
-        <attribute name="ezxhtml:textalign">
-          <choice>
-            <value>left</value>
-            <value>center</value>
-            <value>right</value>
-            <value>justify</value>
-          </choice>
-        </attribute>
+        <ref name="ez.xhtml.textalign"/>
+      </optional>
+    </define>
+    <define name="db.title.attlist" combine="interleave">
+      <optional>
+        <ref name="ez.xhtml.textalign"/>
+      </optional>
+    </define>
+    <define name="db.html.th.attlist" combine="interleave">
+      <optional>
+        <ref name="ez.xhtml.textalign"/>
+      </optional>
+    </define>
+    <define name="db.html.td.attlist" combine="interleave">
+      <optional>
+        <ref name="ez.xhtml.textalign"/>
       </optional>
     </define>
   </div>
+
+  <define name="ez.xhtml.textalign">
+    <a:documentation>
+      ezxhtml:textalign attribute.
+    </a:documentation>
+    <attribute name="ezxhtml:textalign">
+      <choice>
+        <value>left</value>
+        <value>center</value>
+        <value>right</value>
+        <value>justify</value>
+      </choice>
+    </attribute>
+  </define>
+
+  <define name="ez.xhtml.align">
+    <a:documentation>
+      ezxhtml:align attribute.
+    </a:documentation>
+    <attribute name="ezxhtml:align">
+      <choice>
+        <value>left</value>
+        <value>center</value>
+        <value>right</value>
+      </choice>
+    </attribute>
+  </define>
 
   <div>
     <a:documentation>
@@ -517,7 +605,7 @@
             <a:documentation>
               Levels 1-6 are allowed, mapping to HTML H{level} tags.
             </a:documentation>
-            <data type="string"><param name="pattern">[1-6]+</param></data>
+            <data type="string"><param name="pattern">[1-6]</param></data>
           </choice>
         </attribute>
       </optional>
@@ -525,12 +613,9 @@
   </div>
 
   <define name="db.extension.inlines" combine="choice">
-    <a:documentation>
-      eZ Publish custom inline tags extension.
-      By default nothing is allowed, only an extension pattern is defined.
-    </a:documentation>
     <zeroOrMore>
       <choice>
+        <ref name="ez.embedinline"/>
         <ref name="ez.extension.inlines"/>
       </choice>
     </zeroOrMore>
@@ -538,18 +623,16 @@
 
   <define name="ez.extension.inlines">
     <a:documentation>
-      Extension pattern for additional custom markup, to be combined with combine='choice'.
+      eZ Publish custom inline tags extension point.
+      By default nothing is allowed, only an extension pattern is defined.
     </a:documentation>
     <notAllowed/>
   </define>
 
   <define name="db.extension.blocks" combine="choice">
-    <a:documentation>
-      eZ Publish custom block tags extension.
-      By default nothing is allowed, only an extension pattern is defined.
-    </a:documentation>
     <zeroOrMore>
       <choice>
+        <ref name="ez.embed"/>
         <ref name="ez.extension.blocks"/>
       </choice>
     </zeroOrMore>
@@ -557,7 +640,8 @@
 
   <define name="ez.extension.blocks">
     <a:documentation>
-      Extension pattern for additional custom markup, to be combined with combine='choice'.
+      eZ Publish custom block tags extension point.
+      By default nothing is allowed, only an extension pattern is defined.
     </a:documentation>
     <notAllowed/>
   </define>
