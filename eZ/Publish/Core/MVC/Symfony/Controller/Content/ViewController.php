@@ -143,6 +143,80 @@ class ViewController extends Controller
     }
 
     /**
+     * Main action for viewing embedded location.
+     * Response will be cached with HttpCache validation model (Etag)
+     *
+     * @param int $locationId
+     * @param string $viewType
+     * @param boolean $layout
+     * @param array $params
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Exception
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function embedLocation( $locationId, $viewType, $layout = false, array $params = array() )
+    {
+        $this->performAccessChecks();
+        $response = $this->buildResponse();
+
+        try
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
+            $location = $this->getRepository()->sudo(
+                function ( $repository ) use ( $locationId )
+                {
+                    return $repository->getLocationService()->loadLocation( $locationId );
+                }
+            );
+
+            if ( $location->invisible )
+            {
+                throw new NotFoundHttpException( "Location #{$locationId} cannot be displayed as it is flagged as invisible." );
+            }
+
+            // Check both 'content/read' and 'content/view_embed'.
+            if (
+                !$this->getRepository()->canUser( 'content', 'read', $location->contentInfo, $location )
+                && !$this->getRepository()->canUser( 'content', 'view_embed', $location->contentInfo, $location )
+            )
+            {
+                throw new UnauthorizedException( 'content', 'read' );
+            }
+
+            if ( $response->isNotModified( $this->getRequest() ) )
+            {
+                return $response;
+            }
+
+            $response->headers->set( 'X-Location-Id', $locationId );
+            $response->setContent(
+                $this->renderLocation(
+                    $location,
+                    $viewType,
+                    $layout,
+                    $params
+                )
+            );
+
+            return $response;
+        }
+        catch ( UnauthorizedException $e )
+        {
+            throw new AccessDeniedException();
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new NotFoundHttpException( $e->getMessage(), $e );
+        }
+        catch ( Exception $e )
+        {
+            return $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
+        }
+    }
+
+    /**
      * Main action for viewing content.
      * Response will be cached with HttpCache validation model (Etag)
      *
@@ -158,42 +232,89 @@ class ViewController extends Controller
      */
     public function viewContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
+        // @todo: remove fallback to self::embedContent(), kept for BC (5.2)
+        if ( $viewType === "embed" )
+        {
+            return $this->embedContent( $contentId, $viewType, $layout, $params );
+        }
+
         $this->performAccessChecks();
         $response = $this->buildResponse();
 
         try
         {
-            switch ( $viewType )
+            $content = $this->getRepository()->getContentService()->loadContent( $contentId );
+
+            if ( $response->isNotModified( $this->getRequest() ) )
             {
-                // If a 'view_embed' permission exists, do not rely on the repository's 'content/read' check.
-                case 'embed':
-                    {
-                        $content = $this->getRepository()->sudo(
-                            function ( $repository ) use ( $contentId )
-                            {
-                                return $repository->getContentService()->loadContent( $contentId );
-                            }
-                        );
+                return $response;
+            }
 
-                        if (
-                            !$this->getRepository()->canUser( 'content', 'read', $content )
-                            && !$this->getRepository()->canUser( 'content', 'view_embed', $content )
-                        )
-                            throw new UnauthorizedException( 'content', 'read' );
+            $response->setContent(
+                $this->renderContent( $content, $viewType, $layout, $params )
+            );
 
-                        // also check of content publish status, since sudo allows loading unpublished content.
-                        if (
-                            $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
-                            && !$this->getRepository()->canUser( 'content', 'versionread', $content )
-                        )
-                            throw new UnauthorizedException( 'content', 'versionread' );
-                        break;
-                    }
-                default:
-                    {
-                        $content = $this->getRepository()->getContentService()->loadContent( $contentId );
-                        break;
-                    }
+            return $response;
+        }
+        catch ( UnauthorizedException $e )
+        {
+            throw new AccessDeniedException();
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new NotFoundHttpException( $e->getMessage(), $e );
+        }
+        catch ( Exception $e )
+        {
+            return $this->handleViewException( $response, $params, $e, $viewType, $contentId );
+        }
+    }
+
+    /**
+     * Main action for viewing embedded content.
+     * Response will be cached with HttpCache validation model (Etag)
+     *
+     * @param int $contentId
+     * @param string $viewType
+     * @param boolean $layout
+     * @param array $params
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Exception
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function embedContent( $contentId, $viewType, $layout = false, array $params = array() )
+    {
+        $this->performAccessChecks();
+        $response = $this->buildResponse();
+
+        try
+        {
+            /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+            $content = $this->getRepository()->sudo(
+                function ( $repository ) use ( $contentId )
+                {
+                    return $repository->getContentService()->loadContent( $contentId );
+                }
+            );
+
+            // Check both 'content/read' and 'content/view_embed'.
+            if (
+                !$this->getRepository()->canUser( 'content', 'read', $content )
+                && !$this->getRepository()->canUser( 'content', 'view_embed', $content )
+            )
+            {
+                throw new UnauthorizedException( 'content', 'read' );
+            }
+
+            // Check that Content is published, since sudo allows loading unpublished content.
+            if (
+                $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+                && !$this->getRepository()->canUser( 'content', 'versionread', $content )
+            )
+            {
+                throw new UnauthorizedException( 'content', 'versionread' );
             }
 
             if ( $response->isNotModified( $this->getRequest() ) )
