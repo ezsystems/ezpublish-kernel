@@ -32,7 +32,7 @@ EOT
 
     protected function execute( InputInterface $input, OutputInterface $output )
     {
-        $database = $this->getContainer()->get( 'ezpublish.config.resolver' )->getParameter( 'database.params' );
+        $database = $this->getContainer()->get( 'ezpublish.connection' )->getConnection()->getParams();
         if ( is_array( $database ) )
         {
             $driverMap = array(
