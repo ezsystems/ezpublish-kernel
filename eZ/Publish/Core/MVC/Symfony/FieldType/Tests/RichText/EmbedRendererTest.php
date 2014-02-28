@@ -55,7 +55,9 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             ->with( $controllerReferenceMock, $renderingStrategy, $parameters )
             ->will( $this->returnValue( $rendered ) );
 
-        $renderedContent = $this->getEmbedRenderer()->renderContent( $contentId, $viewType, $parameters );
+        $renderedContent = $this
+            ->getEmbedRenderer( $renderingStrategy )
+            ->renderContent( $contentId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -91,7 +93,9 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             )
             ->will( $this->returnValue( $rendered ) );
 
-        $renderedContent = $this->getEmbedRenderer()->renderContent( $contentId, $viewType, $parameters );
+        $renderedContent = $this
+            ->getEmbedRenderer( $renderingStrategy )
+            ->renderContent( $contentId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -132,7 +136,9 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             ->method( "error" )
             ->with( "Could not render embedded resource: access denied to embed Content #{$contentId}" );
 
-        $renderedContent = $this->getEmbedRenderer()->renderContent( $contentId, $viewType, $parameters );
+        $renderedContent = $this
+            ->getEmbedRenderer( $renderingStrategy )
+            ->renderContent( $contentId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -173,7 +179,9 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             ->method( "error" )
             ->with( "Could not render embedded resource: Content #{$contentId} not found" );
 
-        $renderedContent = $this->getEmbedRenderer()->renderContent( $contentId, $viewType, $parameters );
+        $renderedContent = $this
+            ->getEmbedRenderer( $renderingStrategy )
+            ->renderContent( $contentId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -204,7 +212,7 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             ->method( "error" )
             ->with( "Could not render embedded resource: Content #{$contentId} not found" );
 
-        $renderedContent = $this->getEmbedRenderer()->renderContent( $contentId, $viewType, $parameters );
+        $renderedContent = $this->getEmbedRenderer( "esi" )->renderContent( $contentId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -244,7 +252,7 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             )
             ->will( $this->throwException( new Exception( "Rendering threw an exception" ) ) );
 
-        $this->getEmbedRenderer()->renderContent( $contentId, $viewType, $parameters );
+        $this->getEmbedRenderer( $renderingStrategy )->renderContent( $contentId, $viewType, $parameters );
     }
 
     public function testRenderLocation()
@@ -275,7 +283,9 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             ->with( $controllerReferenceMock, $renderingStrategy, $parameters )
             ->will( $this->returnValue( $rendered ) );
 
-        $renderedContent = $this->getEmbedRenderer()->renderLocation( $locationId, $viewType, $parameters );
+        $renderedContent = $this
+            ->getEmbedRenderer( $renderingStrategy )
+            ->renderLocation( $locationId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -311,7 +321,9 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             )
             ->will( $this->returnValue( $rendered ) );
 
-        $renderedContent = $this->getEmbedRenderer()->renderContent( $locationId, $viewType, $parameters );
+        $renderedContent = $this
+            ->getEmbedRenderer( $renderingStrategy )
+            ->renderContent( $locationId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -352,7 +364,9 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             ->method( "error" )
             ->with( "Could not render embedded resource: access denied to embed Location #{$locationId}" );
 
-        $renderedContent = $this->getEmbedRenderer()->renderLocation( $locationId, $viewType, $parameters );
+        $renderedContent = $this
+            ->getEmbedRenderer( $renderingStrategy )
+            ->renderLocation( $locationId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -393,7 +407,9 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             ->method( "error" )
             ->with( "Could not render embedded resource: Location #{$locationId} not found" );
 
-        $renderedContent = $this->getEmbedRenderer()->renderLocation( $locationId, $viewType, $parameters );
+        $renderedContent = $this
+            ->getEmbedRenderer( $renderingStrategy )
+            ->renderLocation( $locationId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -424,7 +440,7 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             ->method( "error" )
             ->with( "Could not render embedded resource: Location #{$locationId} not found" );
 
-        $renderedContent = $this->getEmbedRenderer()->renderLocation( $locationId, $viewType, $parameters );
+        $renderedContent = $this->getEmbedRenderer( "esi" )->renderLocation( $locationId, $viewType, $parameters );
 
         $this->assertSame( $rendered, $renderedContent );
     }
@@ -464,15 +480,16 @@ class EmbedRendererTest extends PHPUnit_Framework_TestCase
             )
             ->will( $this->throwException( new Exception( "Rendering threw an exception" ) ) );
 
-        $this->getEmbedRenderer()->renderLocation( $locationId, $viewType, $parameters );
+        $this->getEmbedRenderer( $renderingStrategy )->renderLocation( $locationId, $viewType, $parameters );
     }
 
-    protected function getEmbedRenderer()
+    protected function getEmbedRenderer( $renderingStrategy )
     {
         return new EmbedRenderer(
             $this->repositoryMock,
             $this->controllerManagerMock,
             $this->fragmentHandlerMock,
+            $renderingStrategy,
             $this->loggerMock
         );
     }

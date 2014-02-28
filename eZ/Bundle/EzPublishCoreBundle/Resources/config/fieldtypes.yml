@@ -311,6 +311,8 @@ parameters:
     ezpublish.fieldType.ezrichtext.converter.ezLinkToHtml5.class: eZ\Publish\Core\FieldType\RichText\Converter\EzLinkToHtml5
     ezpublish.fieldType.ezrichtext.converter.embed.class: eZ\Publish\Core\FieldType\RichText\Converter\Embed
     ezpublish.fieldType.ezrichtext.embed_renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\EmbedRenderer
+    # Note: 'esi' rendering strategy will fall back to 'inline' if reverse proxy is not available
+    ezpublish.fieldType.ezrichtext.embed.rendering_strategy: esi
     ezpublish.fieldType.ezrichtext.converter.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
     ezpublish.fieldType.ezrichtext.validator.xml.class: eZ\Publish\Core\FieldType\RichText\Validator
     ezpublish.fieldType.ezrichtext.validator.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
@@ -360,6 +362,7 @@ services:
             - @ezpublish.api.repository
             - @ezpublish.controller_manager
             - @fragment.handler
+            - %ezpublish.fieldType.ezrichtext.embed.rendering_strategy%
             - @?logger
 
     ezpublish.fieldType.ezrichtext.converter.embed:

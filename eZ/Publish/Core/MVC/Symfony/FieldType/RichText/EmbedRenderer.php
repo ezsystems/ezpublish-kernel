@@ -25,8 +25,6 @@ use Exception;
  */
 class EmbedRenderer implements EmbedRendererInterface
 {
-    const RENDERING_STRATEGY = "esi";
-
     /**
      * @var \eZ\Publish\Core\Repository\Repository
      */
@@ -43,6 +41,11 @@ class EmbedRenderer implements EmbedRendererInterface
     protected $fragmentHandler;
 
     /**
+     * @var string
+     */
+    protected $renderingStrategy;
+
+    /**
      * @var null|\Psr\Log\LoggerInterface
      */
     protected $logger;
@@ -51,12 +54,14 @@ class EmbedRenderer implements EmbedRendererInterface
         Repository $repository,
         ControllerManagerInterface $controllerManager,
         FragmentHandler $fragmentHandler,
+        $renderingStrategy,
         LoggerInterface $logger = null
     )
     {
         $this->repository = $repository;
         $this->controllerManager = $controllerManager;
         $this->fragmentHandler = $fragmentHandler;
+        $this->renderingStrategy = $renderingStrategy;
         $this->logger = $logger;
     }
 
@@ -97,7 +102,7 @@ class EmbedRenderer implements EmbedRendererInterface
 
             $rendered = $this->fragmentHandler->render(
                 $controllerReference,
-                self::RENDERING_STRATEGY,
+                $this->renderingStrategy,
                 $parameters
             );
         }
@@ -171,7 +176,7 @@ class EmbedRenderer implements EmbedRendererInterface
 
             $rendered = $this->fragmentHandler->render(
                 $controllerReference,
-                self::RENDERING_STRATEGY,
+                $this->renderingStrategy,
                 $parameters
             );
         }
