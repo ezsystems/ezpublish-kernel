@@ -27,11 +27,11 @@ class Embed implements Converter
     protected $embedRenderer;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var null|\Psr\Log\LoggerInterface
      */
     protected $logger;
 
-    public function __construct( EmbedRendererInterface $embedRenderer, LoggerInterface $logger )
+    public function __construct( EmbedRendererInterface $embedRenderer, LoggerInterface $logger = null )
     {
         $this->embedRenderer = $embedRenderer;
         $this->logger = $logger;
