@@ -43,8 +43,16 @@ class Content extends Provider implements ContentViewProviderInterface
                      */
                     $funcObject = $tpl->fetchFunctionObject( 'content_view_gui' );
 
+                    // Used by XmlText field type
                     if ( isset( $params['objectParameters'] ) )
+                    {
                         $tpl->setVariable( 'object_parameters', $params["objectParameters"], 'ContentView' );
+                    }
+                    // Used by RichText field type
+                    else if ( isset( $params['embedParams'] ) )
+                    {
+                        $tpl->setVariable( 'object_parameters', $params["embedParams"], 'ContentView' );
+                    }
 
                     $children = array();
                     $funcObject->process(
