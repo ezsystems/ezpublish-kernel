@@ -135,7 +135,7 @@ class Embed implements Converter
             /** @var \DOMText|\DOMElement $node */
             if ( $node->nodeType === XML_ELEMENT_NODE )
             {
-                $hash[$node->getAttribute("key")] = $this->extractHash( $node );
+                $hash[$node->getAttribute( "key" )] = $this->extractHash( $node );
             }
             else if ( $node->nodeType === XML_TEXT_NODE && !$node->isWhitespaceInElementContent() )
             {
