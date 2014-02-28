@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use DateTime;
 use Exception;
@@ -31,9 +32,15 @@ class ViewController extends Controller
      */
     protected $viewManager;
 
-    public function __construct( ViewManagerInterface $viewManager )
+    /**
+     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     */
+    private $securityContext;
+
+    public function __construct( ViewManagerInterface $viewManager, SecurityContextInterface $securityContext )
     {
         $this->viewManager = $viewManager;
+        $this->securityContext = $securityContext;
     }
 
     /**
@@ -178,11 +185,23 @@ class ViewController extends Controller
 
             // Check both 'content/read' and 'content/view_embed'.
             if (
-                !$this->getRepository()->canUser( 'content', 'read', $location->contentInfo, $location )
-                && !$this->getRepository()->canUser( 'content', 'view_embed', $location->contentInfo, $location )
+                !$this->securityContext->isGranted(
+                    new AuthorizationAttribute(
+                        'content',
+                        'read',
+                        array( 'valueObject' => $location->contentInfo, 'targets' => $location )
+                    )
+                )
+                && !$this->securityContext->isGranted(
+                    new AuthorizationAttribute(
+                        'content',
+                        'view_embed',
+                        array( 'valueObject' => $location->contentInfo, 'targets' => $location )
+                    )
+                )
             )
             {
-                throw new UnauthorizedException( 'content', 'read' );
+                throw new AccessDeniedException();
             }
 
             if ( $response->isNotModified( $this->getRequest() ) )
@@ -300,20 +319,26 @@ class ViewController extends Controller
 
             // Check both 'content/read' and 'content/view_embed'.
             if (
-                !$this->getRepository()->canUser( 'content', 'read', $content )
-                && !$this->getRepository()->canUser( 'content', 'view_embed', $content )
+                !$this->securityContext->isGranted(
+                    new AuthorizationAttribute( 'content', 'read', array( 'valueObject' => $content ) )
+                )
+                && !$this->securityContext->isGranted(
+                    new AuthorizationAttribute( 'content', 'view_embed', array( 'valueObject' => $content ) )
+                )
             )
             {
-                throw new UnauthorizedException( 'content', 'read' );
+                throw new AccessDeniedException();
             }
 
             // Check that Content is published, since sudo allows loading unpublished content.
             if (
                 $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
-                && !$this->getRepository()->canUser( 'content', 'versionread', $content )
+                && !$this->securityContext->isGranted(
+                    new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) )
+                )
             )
             {
-                throw new UnauthorizedException( 'content', 'versionread' );
+                throw new AccessDeniedException();
             }
 
             if ( $response->isNotModified( $this->getRequest() ) )

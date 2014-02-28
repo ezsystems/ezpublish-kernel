@@ -49,7 +49,9 @@ services:
 
     ezpublish.controller.content.view:
         class: %ezpublish.controller.content.view.class%
-        arguments: [@ezpublish.view_manager]
+        arguments:
+            - @ezpublish.view_manager
+            - @security.context
         parent: ezpublish.controller.base
 
     ezpublish.controller.content.preview.core:
