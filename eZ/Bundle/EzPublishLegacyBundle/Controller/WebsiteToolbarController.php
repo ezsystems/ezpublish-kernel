@@ -49,11 +49,10 @@ class WebsiteToolbarController extends Controller
     {
         $response = new Response();
 
-        $contentId = $this->repository->getLocationService()->loadLocation( $locationId )->contentId;
         $authorizationAttribute = new AuthorizationAttribute(
             'websitetoolbar',
             'use',
-            array( 'valueObject' => $this->repository->getContentService()->loadContent( $contentId ) )
+            array( 'valueObject' => $this->loadContentByLocationId( $locationId ) )
         );
 
         if ( !$this->securityContext->isGranted( $authorizationAttribute ) )
@@ -72,6 +71,16 @@ class WebsiteToolbarController extends Controller
         );
 
         return $response;
+    }
+
+    /**
+     * @return Content
+     */
+    protected function loadContentByLocationId( $locationId )
+    {
+        return $this->repository->getContentService()->loadContent(
+            $this->repository->getLocationService()->loadLocation( $locationId )->contentId
+        );
     }
 }
 
