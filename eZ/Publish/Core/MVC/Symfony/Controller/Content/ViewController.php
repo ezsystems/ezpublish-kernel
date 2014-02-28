@@ -232,7 +232,6 @@ class ViewController extends Controller
      */
     public function viewContent( $contentId, $viewType, $layout = false, array $params = array() )
     {
-        // @todo: remove fallback to self::embedContent(), kept for BC (5.2)
         if ( $viewType === "embed" )
         {
             return $this->embedContent( $contentId, $viewType, $layout, $params );
