@@ -31,6 +31,16 @@ class Embed implements Converter
      */
     protected $logger;
 
+    /**
+     * Maps embed tag names to their default views
+     *
+     * @var array
+     */
+    protected $tagDefaultViewMap = array(
+        "ezembed" => "embed",
+        "ezembedinline" => "embed-inline"
+    );
+
     public function __construct( EmbedRendererInterface $embedRenderer, LoggerInterface $logger = null )
     {
         $this->embedRenderer = $embedRenderer;
@@ -50,13 +60,7 @@ class Embed implements Converter
         {
             if ( !$viewType = $embed->getAttribute( "view" ) )
             {
-                // Mapping default view names
-                $map = array(
-                    "ezembed" => "embed",
-                    "ezembedinline" => "embed-inline"
-                );
-
-                $viewType = $map[$tagName];
+                $viewType = $this->tagDefaultViewMap[$tagName];
             }
 
             $embedContent = null;
