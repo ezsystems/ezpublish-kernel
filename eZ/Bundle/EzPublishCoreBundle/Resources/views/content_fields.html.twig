@@ -292,8 +292,8 @@
 <div {{ block( 'field_attributes' ) }}>
     {% set defaultWidth = '500px' %}
     {% set defaultHeight = '200px' %}
-    {% set defautShowMap = true %}
-    {% set defautShowInfo = true %}
+    {% set defaultShowMap = true %}
+    {% set defaultShowInfo = true %}
     {% set defaultZoom = 13 %}
     {% set defaultMapType = 'ROADMAP' %}
 
@@ -315,12 +315,12 @@
         {% set mapHeight = parameters.height %}
     {% endif %}
 
-    {% set showMap = defautShowMap %}
+    {% set showMap = defaultShowMap %}
     {% if parameters.showMap is defined and not parameters.showMap %}
         {% set showMap = false %}
     {% endif %}
 
-    {% set showInfo = defautShowInfo %}
+    {% set showInfo = defaultShowInfo %}
     {% if parameters.showInfo is defined and not parameters.showInfo %}
         {% set showInfo = false %}
     {% endif %}
