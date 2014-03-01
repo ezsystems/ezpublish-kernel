@@ -283,6 +283,7 @@
  # - boolean showMap whether to show the Google map or not, default is true
  # - boolean showInfo whether to show the latitude, longitude and address or not, default is true
  # - integer zoom the default zoom level, default is 13
+ # - boolean draggable whether to enable or not draggable map (useful on mobile / responsive layout), default is true
  # - string|false width the width of the rendered map with its unit (ie "500px" or "50em"),
  #                      set to false to not set any width style inline, default is 500px
  # - string|boolean height the height of the rendered map with its unit (ie "200px" or "20em"),
@@ -296,6 +297,7 @@
     {% set defautShowInfo = true %}
     {% set defaultZoom = 13 %}
     {% set defaultMapType = 'ROADMAP' %}
+    {% set defaultDraggable = 'true' %}
 
     {% set hasContent = field.value is not null %}
     {% set latitude = field.value.latitude|default( 0 ) %}
@@ -324,6 +326,11 @@
     {% if parameters.showInfo is defined and not parameters.showInfo %}
         {% set showInfo = false %}
     {% endif %}
+    
+    {% set draggable = defaultDraggable %}
+    {% if parameters.draggable is defined and not parameters.draggable %}
+        {% set draggable = 'false' %}
+    {% endif %}
 
     {% if showInfo %}
     <dl>
@@ -345,12 +352,14 @@
             var mapView = function (mapId, latitude, longitude) {
                 var mapElt = doc.getElementById("{{ mapId }}"),
                     startPoint = new google.maps.LatLng(latitude, longitude),
-                    zoom = {{ zoom }};
+                    zoom = {{ zoom }},
+                    draggable = {{ draggable }};
 
                 new google.maps.Marker({
                     map: new google.maps.Map(mapElt, {
                         center: startPoint,
                         zoom: zoom,
+                        draggable: draggable,
                         mapTypeId: google.maps.MapTypeId.{{ mapType }}
                     }),
                     position: startPoint
