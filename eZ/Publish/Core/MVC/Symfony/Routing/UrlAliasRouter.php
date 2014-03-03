@@ -113,7 +113,10 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                     $request->attributes->set( 'locationId', $urlAlias->destination );
 
-                    if ( $urlAlias->isHistory === true )
+                    // For Location alias setup 301 redirect to Location's current URL when:
+                    // 1. alias is history
+                    // 2. alias is custom with forward flag true
+                    if ( $urlAlias->isHistory === true || ( $urlAlias->isCustom === true && $urlAlias->forward === true ) )
                     {
                         $request->attributes->set(
                             'semanticPathinfo',
