@@ -8,11 +8,9 @@
  */
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
-use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Security;
 use eZ\Publish\Core\MVC\Legacy\Kernel\Loader;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Response;
-use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration;
 use eZ\Publish\Core\MVC\Symfony\ConfigDumperInterface;
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
 use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;

@@ -9,12 +9,9 @@
 namespace eZ\Bundle\EzPublishLegacyBundle\SetupWizard;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Configuration\LegacyConfigResolver;
-use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration;
-use eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Security;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZINI;
 use eZSiteAccess;
-use Stash\Driver\Apc as APCDriver;
 use Stash\Driver\FileSystem as FileSystemDriver;
 
 /**
