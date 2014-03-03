@@ -108,7 +108,7 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
 
         if ( count( $this->where ) === 0 )
         {
-            throw new QueryException( 'Executing update with where clause not allowed' );
+            throw new QueryException( 'Executing update without where clause is not allowed' );
         }
 
         $set = array();
