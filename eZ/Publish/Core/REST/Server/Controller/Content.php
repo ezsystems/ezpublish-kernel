@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
@@ -28,6 +29,13 @@ use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
  */
 class Content extends RestController
 {
+
+    private static $publicVersionStatuses = array(
+        VersionInfo::STATUS_DRAFT,
+        VersionInfo::STATUS_PUBLISHED,
+        VersionInfo::STATUS_ARCHIVED
+    );
+
     /**
      * Loads a content info by remote ID
      *
@@ -67,7 +75,13 @@ class Content extends RestController
     public function loadContent( $contentId )
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
-        $mainLocation = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+
+        $mainLocation = null;
+        if ( !empty( $contentInfo->mainLocationId ) )
+        {
+            $mainLocation = $this->repository->getLocationService()->loadLocation( $contentInfo->mainLocationId );
+        }
+
         $contentType = $this->repository->getContentTypeService()->loadContentType( $contentInfo->contentTypeId );
 
         $contentVersion = null;
@@ -338,7 +352,7 @@ class Content extends RestController
         $contentInfo = $this->repository->getContentService()->loadContentInfo( $contentId );
 
         $versionList = new Values\VersionList(
-            $this->repository->getContentService()->loadVersions( $contentInfo ),
+            $this->loadPublicContentVersions( $contentInfo ),
             $this->request->getPathInfo()
         );
 
@@ -351,6 +365,29 @@ class Content extends RestController
             $versionList,
             array( 'locationId' => $contentInfo->mainLocationId )
         );
+    }
+
+    /**
+     * Loads a list of all content versions and filters them to the
+     * public ones to be exposed.
+     *
+     * @param ContentInfo $contentInfo
+     *
+     * @return array
+     */
+    private function loadPublicContentVersions( $contentInfo )
+    {
+        $contentVersions = $this->repository->getContentService()->loadVersions( $contentInfo );
+
+        $result = array();
+        foreach ( $contentVersions as $contentVersion )
+        {
+            if ( in_array( $contentVersion->status, self::$publicVersionStatuses ) )
+            {
+                $result[] = $contentVersion;
+            }
+        }
+        return $result;
     }
 
     /**
