@@ -82,8 +82,14 @@ class Json extends Generator
     {
         $this->checkEndDocument( $data );
 
+        $jsonEncodeOptions = 0;
+        if ( $this->formatOutput && defined( 'JSON_PRETTY_PRINT' ) )
+        {
+            $jsonEncodeOptions = JSON_PRETTY_PRINT;
+        }
+
         $this->json = $this->convertArrayObjects( $this->json );
-        return json_encode( $this->json );
+        return json_encode( $this->json, $jsonEncodeOptions );
     }
 
     /**

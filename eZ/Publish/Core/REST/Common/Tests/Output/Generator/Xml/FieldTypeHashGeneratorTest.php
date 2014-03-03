@@ -31,8 +31,10 @@ class FieldTypeHashGeneratorTest extends FieldTypeHashGeneratorBaseTest
      */
     protected function initializeGenerator()
     {
-        return new Common\Output\Generator\Xml(
+        $generator = new Common\Output\Generator\Xml(
             $this->getFieldTypeHashGenerator()
         );
+        $generator->setFormatOutput( true );
+        return $generator;
     }
 }

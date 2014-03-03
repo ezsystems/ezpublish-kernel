@@ -339,6 +339,8 @@ services:
         class: %ezpublish_rest.output.generator.xml.class%
         arguments:
             - @ezpublish_rest.output.generator.xml.field_type_hash_generator
+        calls:
+            - [ setFormatOutput, [ %kernel.debug% ] ]
 
     ezpublish_rest.output.generator.xml.field_type_hash_generator:
         class: %ezpublish_rest.output.generator.xml.field_type_hash_generator.class%
@@ -347,6 +349,8 @@ services:
         class: %ezpublish_rest.output.generator.json.class%
         arguments:
             - @ezpublish_rest.output.generator.json.field_type_hash_generator
+        calls:
+            - [ setFormatOutput, [ %kernel.debug% ] ]
 
     ezpublish_rest.output.generator.json.field_type_hash_generator:
         class: %ezpublish_rest.output.generator.json.field_type_hash_generator.class%

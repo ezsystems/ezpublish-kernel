@@ -58,7 +58,7 @@ class Xml extends Generator
 
         $this->xmlWriter = new \XMLWriter();
         $this->xmlWriter->openMemory();
-        $this->xmlWriter->setIndent( true );
+        $this->xmlWriter->setIndent( $this->formatOutput );
         $this->xmlWriter->startDocument( '1.0', 'UTF-8' );
     }
 
