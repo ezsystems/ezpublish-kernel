@@ -156,7 +156,7 @@ class ConfigurationConverter
             }
         }
 
-        $settings['stash'] = $this->getStashCacheSettings( $databaseSettings['Database'] );
+        $settings['stash'] = $this->getStashCacheSettings();
 
         ksort( $settings );
         ksort( $settings['ezpublish'] );
@@ -216,11 +216,9 @@ class ConfigurationConverter
      * - Xcache  [DISABLED, SEE INLINE]
      * - variable instance cache  [DISABLED, SEE INLINE]
      *
-     * @param string $databaseName
-     *
      * @return array
      */
-    protected function getStashCacheSettings( $databaseName )
+    protected function getStashCacheSettings()
     {
         // Should only contain one out of the box
         $handlers = array();
@@ -238,23 +236,6 @@ class ConfigurationConverter
                 );
             }
         }
-        /* Disabled for installer, as this should be manually configured
-        else if ( \Stash\Driver\Memcache::isAvailable() )
-        {
-            $handlers[] = 'Memcache';
-            $handlerSetting['Memcache'] = array(
-                'prefix_key' => $databaseName,
-                'servers' => array(
-                    array( 'server' => '127.0.0.1', 'port' => '11211' )
-                )
-            );
-            $inMemory = true;
-        }*/
-        /* Disabled for installer, not tested, and stash-bundle does not provide a way to set settings
-        else if ( \Stash\Driver\Xcache::isAvailable() )
-        {
-            $handlers[] = 'Xcache';
-        }*/
         else
         {
             // '/dev/null' fallback driver, no cache at all
