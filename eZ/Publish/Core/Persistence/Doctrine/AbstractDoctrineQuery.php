@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Doctrine;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Mysqli\MysqliConnection;
 use Doctrine\DBAL\Statement;
 use eZ\Publish\Core\Persistence\Database\QueryException;
 use PDO;
@@ -84,9 +85,20 @@ abstract class AbstractDoctrineQuery
      */
     public function prepare()
     {
-        $stmt = $this->connection->prepare( $this->getQuery() );
+        $query = $this->getQuery();
 
-        $this->doBind( $stmt );
+        if ( $this->connection->getWrappedConnection() instanceof MysqliConnection )
+        {
+            $pattern = "/:placeholder\\d+/";
+            $stmt = $this->connection->prepare( preg_replace( $pattern, "?", $query ) );
+            preg_match_all( $pattern, $query, $matches );
+            $this->doMysqliBind( $stmt, array_flip( $matches[0] ) );
+        }
+        else
+        {
+            $stmt = $this->connection->prepare( $query );
+            $this->doBind( $stmt, $query );
+        }
 
         return $stmt;
     }
@@ -109,6 +121,31 @@ abstract class AbstractDoctrineQuery
         foreach ( $this->boundParameters as $key => &$value )
         {
             $stmt->bindParam( $key, $value, $this->boundParametersType[$key] );
+        }
+    }
+
+    /**
+     * Performs binding of variables bound with bindValue and bindParam on the statement $stmt
+     * for mysqli connection.
+     *
+     * This method must be called if you have used the bind methods
+     * in your query and you build the method yourself using build.
+     *
+     * @param \Doctrine\DBAL\Statement $stmt
+     * @param array $placeholderIndexes zero based array with placeholder names as keys
+     *                                  and their respective index in query as value
+     *
+     * @return void
+     */
+    private function doMysqliBind( Statement $stmt, $placeholderIndexes )
+    {
+        foreach ( $this->boundValues as $key => $value )
+        {
+            $stmt->bindValue( ( $placeholderIndexes[$key] + 1 ), $value, $this->boundValuesType[$key] );
+        }
+        foreach ( $this->boundParameters as $key => &$value )
+        {
+            $stmt->bindParam( ( $placeholderIndexes[$key] + 1 ), $value, $this->boundParametersType[$key] );
         }
     }
 
