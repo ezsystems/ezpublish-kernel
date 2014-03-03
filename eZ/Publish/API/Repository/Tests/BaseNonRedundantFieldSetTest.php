@@ -15,7 +15,7 @@ use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
  * Base class for for create and update Content operations in the ContentService with regard to
  * non-redundant set of fields being passed to the storage.
  */
-class BaseNonRedundantFieldSetTest extends BaseTest
+abstract class BaseNonRedundantFieldSetTest extends BaseTest
 {
     /**
      * Creates a fully functional ContentType and returns it.
