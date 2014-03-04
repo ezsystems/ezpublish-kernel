@@ -123,20 +123,14 @@ class Page implements Converter
                 case 'attributes':
                     foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
                     {
-                        $tmp = $dom->createElement( $arrayItemKey );
-                        $tmpValue = $dom->createTextNode( $arrayItemValue );
-                        $tmp->appendChild( $tmpValue );
-                        $pageNode->appendChild( $tmp );
+                        $this->addNewXmlElement( $dom, $pageNode, $arrayItemKey, $arrayItemValue );
                     }
                     break;
                 case 'zonesById':
                     // Do not store
                     break;
                 default:
-                    $node = $dom->createElement( $attrName );
-                    $nodeValue = $dom->createTextNode( $attrValue );
-                    $node->appendChild( $nodeValue );
-                    $pageNode->appendChild( $node );
+                    $this->addNewNotEmptyXmlElement( $dom, $pageNode, $attrName, $attrValue );
                     break;
             }
         }
@@ -169,9 +163,7 @@ class Page implements Converter
                     }
                     break;
                 case 'identifier':
-                    $node = $dom->createElement( 'zone_identifier' );
-                    $node->appendChild( $dom->createTextNode( $attrValue ) );
-                    $zoneNode->appendChild( $node );
+                    $this->addNewXmlElement( $dom, $zoneNode, 'zone_identifier', $attrValue );
                     break;
                 case 'blocks':
                     foreach ( $zone->{$attrName} as $block )
@@ -182,20 +174,14 @@ class Page implements Converter
                 case 'attributes':
                     foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
                     {
-                        $tmp = $dom->createElement( $arrayItemKey );
-                        $tmpValue = $dom->createTextNode( $arrayItemValue );
-                        $tmp->appendChild( $tmpValue );
-                        $zoneNode->appendChild( $tmp );
+                        $this->addNewXmlElement( $dom, $zoneNode, $arrayItemKey, $arrayItemValue );
                     }
                     break;
                 case 'blocksById':
                     // Do not store
                     break;
                 default:
-                    $node = $dom->createElement( $attrName );
-                    $nodeValue = $dom->createTextNode( $attrValue );
-                    $node->appendChild( $nodeValue );
-                    $zoneNode->appendChild( $node );
+                    $this->addNewNotEmptyXmlElement( $dom, $zoneNode, $attrName, $attrValue );
                     break;
             }
         }
@@ -230,6 +216,7 @@ class Page implements Converter
                     {
                         $blockNode->setAttribute( 'action', $attrValue );
                     }
+                    break;
                 case 'items':
                     foreach ( $block->items as $item )
                     {
@@ -239,6 +226,9 @@ class Page implements Converter
                             $blockNode->appendChild( $itemNode );
                         }
                     }
+                    break;
+                case 'overflowId':
+                    $this->addNewXmlElement( $dom, $blockNode, 'overflow_id', $attrValue );
                     break;
                 case 'rotation':
                 case 'customAttributes':
@@ -252,26 +242,17 @@ class Page implements Converter
 
                     foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
                     {
-                        $tmp = $dom->createElement( $arrayItemKey );
-                        $tmpValue = $dom->createTextNode( $arrayItemValue );
-                        $tmp->appendChild( $tmpValue );
-                        $node->appendChild( $tmp );
+                        $this->addNewXmlElement( $dom, $blockNode, $arrayItemKey, $arrayItemValue );
                     }
                     break;
                 case 'attributes':
                     foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
                     {
-                        $tmp = $dom->createElement( $arrayItemKey );
-                        $tmpValue = $dom->createTextNode( $arrayItemValue );
-                        $tmp->appendChild( $tmpValue );
-                        $blockNode->appendChild( $tmp );
+                        $this->addNewXmlElement( $dom, $blockNode, $arrayItemKey, $arrayItemValue );
                     }
                     break;
                 default:
-                    $node = $dom->createElement( $attrName );
-                    $nodeValue = $dom->createTextNode( $attrValue );
-                    $node->appendChild( $nodeValue );
-                    $blockNode->appendChild( $node );
+                    $this->addNewNotEmptyXmlElement( $dom, $blockNode, $attrName, $attrValue );
                     break;
             }
         }
@@ -289,35 +270,83 @@ class Page implements Converter
      */
     protected function generateItemXmlString( Parts\Item $item, DOMDocument $dom )
     {
-        if ( !$item->XMLStorable )
-        {
-            return false;
-        }
-
         $itemNode = $dom->createElement( 'item' );
 
         foreach ( $item->getState() as $attrName => $attrValue )
         {
             switch ( $attrName )
             {
-                case 'id':
-                    $itemNode->setAttribute( 'id', $attrValue );
-                    break;
                 case 'action':
                     if ( $attrValue !== null )
                     {
                         $itemNode->setAttribute( 'action', $attrValue );
                     }
-                default:
-                    $node = $dom->createElement( $attrName );
-                    $nodeValue = $dom->createTextNode( $attrValue );
-                    $node->appendChild( $nodeValue );
-                    $itemNode->appendChild( $node );
+                    break;
+                case 'contentId':
+                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'object_id', $attrValue );
+                    break;
+                case 'locationId':
+                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'node_id', $attrValue );
+                    break;
+                case 'priority':
+                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'priority', $attrValue );
+                    break;
+                case 'publicationDate':
+                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'ts_publication', $attrValue );
+                    break;
+                case 'visibilityDate':
+                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'ts_visible', $attrValue );
+                    break;
+                case 'hiddenDate':
+                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'ts_hidden', $attrValue );
+                    break;
+                case 'rotationUntilDate':
+                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'rotation_until', $attrValue );
+                    break;
+                case 'movedTo':
+                    $this->addNewNotEmptyXmlElement( $dom, $itemNode, 'moved_to', $attrValue );
+                    break;
+                case 'attributes':
+                    foreach ( $attrValue as $arrayItemKey => $arrayItemValue )
+                    {
+                        $this->addNewNotEmptyXmlElement( $dom, $itemNode, $arrayItemKey, $arrayItemValue );
+                    }
                     break;
             }
         }
 
         return $itemNode;
+    }
+
+    /**
+     * Utility method to add new elements to an xml node if their value is not empty
+     *
+     * @param \DOMDocument $dom xml document
+     * @param \DOMElement $node where to add the new element
+     * @param string $name of the new element
+     * @param string $value of the new element
+     */
+    private function addNewNotEmptyXmlElement( DOMDocument $dom, DOMElement $node, $name, $value)
+    {
+        if ( !empty( $value ) )
+        {
+            $this->addNewXmlElement( $dom, $node, $name, $value );
+        }
+    }
+
+    /**
+     * Utility method to add new elements to an xml node
+     *
+     * @param \DOMDocument $dom xml document
+     * @param \DOMElement $node where to add the new element
+     * @param string $name of the new element
+     * @param string $value of the new element
+     */
+    private function addNewXmlElement( DOMDocument $dom, DOMElement $node, $name, $value)
+    {
+        $new = $dom->createElement( $name );
+        $new->appendChild( $dom->createTextNode( $value ) );
+        $node->appendChild( $new );
     }
 
     /**
@@ -565,9 +594,7 @@ class Page implements Converter
      */
     protected function restoreItemFromXml( DOMElement $node )
     {
-        $itemId = null;
-        $action = null;
-        $attributes = array();
+        $item = array( 'attributes' => array() );
 
         if ( $node->hasAttributes() )
         {
@@ -575,14 +602,11 @@ class Page implements Converter
             {
                 switch ( $attr->name )
                 {
-                    case 'id':
-                        $itemId = $attr->value;
-                        break;
                     case 'action':
-                        $action = $attr->value;
+                        $item['action'] = $attr->value;
                         break;
                     default:
-                        $attributes[$attr->name] = $attr->value;
+                        $item['attributes'][$attr->name] = $attr->value;
                 }
             }
         }
@@ -592,15 +616,35 @@ class Page implements Converter
             if ( $node->nodeType !== XML_ELEMENT_NODE )
                 continue;
 
-            $item[$node->nodeName] = $node->nodeValue;
+            switch ( $node->nodeName )
+            {
+                case 'object_id':
+                    $item['contentId'] = $node->nodeValue;
+                    break;
+                case 'node_id':
+                    $item['locationId'] = $node->nodeValue;
+                    break;
+                case 'priority':
+                    $item[$node->nodeName] = $node->nodeValue;
+                    break;
+                case 'ts_publication':
+                    $item['publicationDate'] = $node->nodeValue;
+                    break;
+                case 'ts_visible':
+                    $item['visibilityDate'] = $node->nodeValue;
+                    break;
+                case 'ts_hidden':
+                    $item['hiddenDate'] = $node->nodeValue;
+                    break;
+                case 'rotation_until':
+                    $item['rotationUntilDate'] = $node->nodeValue;
+                    break;
+                case 'moved_to':
+                    $item['movedTo'] = $node->nodeValue;
+                    break;
+            }
         }
 
-        return new Parts\Item(
-            array(
-                'id'            => $itemId,
-                'action'        => $action,
-                'attributes'    => $attributes
-            )
-        );
+        return new Parts\Item( $item );
     }
 }
