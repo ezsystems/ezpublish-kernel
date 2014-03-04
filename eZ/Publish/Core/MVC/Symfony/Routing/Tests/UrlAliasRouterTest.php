@@ -260,6 +260,86 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
         $this->assertFalse( $request->attributes->get( 'prependSiteaccessOnRedirect' ) );
     }
 
+    public function testMatchRequestLocationCustom()
+    {
+        $pathInfo = '/foo/bar';
+        $destinationId = 123;
+        $urlAlias = new URLAlias(
+            array(
+                'path' => $pathInfo,
+                'type' => UrlAlias::LOCATION,
+                'destination' => $destinationId,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => false
+            )
+        );
+        $request = $this->getRequestByPathInfo( $pathInfo );
+        $this->urlAliasService
+            ->expects( $this->once() )
+            ->method( 'lookup' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( $urlAlias ) );
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            'locationId' => $destinationId,
+            'viewType' => ViewManager::VIEW_TYPE_FULL,
+            'layout' => true
+        );
+        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
+        $this->assertSame( $destinationId, $request->attributes->get( 'locationId' ) );
+    }
+
+    public function testMatchRequestLocationCustomForward()
+    {
+        $pathInfo = '/foo/bar';
+        $newPathInfo = '/foo/bar-new';
+        $destinationId = 123;
+        $destinationLocation = new Location( array( 'id' => $destinationId ) );
+        $urlAlias = new URLAlias(
+            array(
+                'path' => $pathInfo,
+                'type' => UrlAlias::LOCATION,
+                'destination' => $destinationId,
+                'isHistory' => false,
+                'isCustom' => true,
+                'forward' => true
+            )
+        );
+        $request = $this->getRequestByPathInfo( $pathInfo );
+        $this->urlAliasService
+            ->expects( $this->once() )
+            ->method( 'lookup' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( $urlAlias ) );
+        $this->urlALiasGenerator
+            ->expects( $this->once() )
+            ->method( 'loadLocation' )
+            ->with( $destinationId )
+            ->will(
+                $this->returnValue( $destinationLocation )
+            );
+        $this->urlALiasGenerator
+            ->expects( $this->once() )
+            ->method( 'generate' )
+            ->with( $destinationLocation )
+            ->will( $this->returnValue( $newPathInfo ) );
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            'locationId' => $destinationId,
+            'viewType' => ViewManager::VIEW_TYPE_FULL,
+            'layout' => true
+        );
+        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
+        $this->assertSame( $newPathInfo, $request->attributes->get( 'semanticPathinfo' ) );
+        $this->assertTrue( $request->attributes->get( 'needsRedirect' ) );
+        $this->assertFalse( $request->attributes->get( 'prependSiteaccessOnRedirect' ) );
+    }
+
     /**
      * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
      *
