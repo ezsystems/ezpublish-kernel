@@ -299,9 +299,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * Bug #80
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
      */
     public function testFindWithoutOffsetLimit()
     {
@@ -323,9 +320,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * Bug #81, bug #82
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
      */
     public function testFindWithZeroLimit()
     {
@@ -353,10 +347,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * Issue with PHP_MAX_INT limit overflow in databases
-     *
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
      */
     public function testFindWithNullLimit()
     {
@@ -384,10 +374,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * Issue with offsetting to the nonexistent results produces \ezcQueryInvalidParameterException exception.
-     *
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
      */
     public function testFindWithOffsetToNonexistent()
     {
@@ -413,11 +399,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
-     */
     public function testFindWithExistingLanguageFields()
     {
         $this->markTestSkipped( "Translation filters are currently not supported by new search API." );
@@ -441,11 +422,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase::find
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findContent
-     */
     public function testFindWithMissingLanguageFields()
     {
         $this->markTestSkipped( "Translation filters are currently not supported by new search API." );
@@ -469,12 +445,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler
-     */
     public function testFindSingle()
     {
         $locator = $this->getContentSearchHandler();
@@ -486,7 +456,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
      */
     public function testFindSingleWithNonSearchableField()
     {
@@ -502,7 +471,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
      */
     public function testFindContentWithNonSearchableField()
     {
@@ -523,7 +491,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
      */
     public function testFindSingleTooMany()
     {
@@ -533,7 +500,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
      */
     public function testFindSingleZero()
     {
@@ -541,11 +507,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $locator->findSingle( new Criterion\ContentId( 0 ) );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentIdFilter()
     {
         $this->assertSearchResults(
@@ -563,11 +524,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentIdFilterCount()
     {
         $locator = $this->getContentSearchHandler();
@@ -586,11 +542,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $this->assertSame( 2, $result->totalCount );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LogicalAnd
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentAndCombinatorFilter()
     {
         $this->assertSearchResults(
@@ -615,11 +566,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LogicalOr
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentOrCombinatorFilter()
     {
         $locator = $this->getContentSearchHandler();
@@ -657,11 +603,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         }
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LogicalNot
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentNotCombinatorFilter()
     {
         $this->assertSearchResults(
@@ -688,11 +629,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Subtree
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentSubtreeFilterIn()
     {
         $this->assertSearchResults(
@@ -710,11 +646,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Subtree
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentSubtreeFilterEq()
     {
         $this->assertSearchResults(
@@ -730,11 +661,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentDepthFilterEq()
     {
         $this->assertSearchResults(
@@ -750,11 +676,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentDepthFilterIn()
     {
         $this->assertSearchResults(
@@ -769,11 +690,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentDepthFilterBetween()
     {
         $this->assertSearchResults(
@@ -788,11 +704,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentDepthFilterGreaterThan()
     {
         $this->assertSearchResults(
@@ -807,11 +718,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentDepthFilterGreaterThanOrEqual()
     {
         $this->assertSearchResults(
@@ -826,11 +732,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentDepthFilterLessThan()
     {
         $this->assertSearchResults(
@@ -846,11 +747,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Depth
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentDepthFilterLessThanOrEqual()
     {
         $this->assertSearchResults(
@@ -865,11 +761,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentTypeIdFilter()
     {
         $this->assertSearchResults(
@@ -885,11 +776,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeIdentifier
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentTypeIdentifierFilter()
     {
         $this->assertSearchResults(
@@ -906,11 +792,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeGroupId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testContentTypeGroupFilter()
     {
         $this->assertSearchResults(
@@ -926,11 +807,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testDateMetadataFilterModifiedGreater()
     {
         $this->assertSearchResults(
@@ -950,11 +826,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testDateMetadataFilterModifiedGreaterOrEqual()
     {
         $this->assertSearchResults(
@@ -974,11 +845,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testDateMetadataFilterModifiedIn()
     {
         $this->assertSearchResults(
@@ -998,11 +864,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testDateMetadataFilterModifiedBetween()
     {
         $this->assertSearchResults(
@@ -1022,11 +883,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testDateMetadataFilterCreatedBetween()
     {
         $this->assertSearchResults(
@@ -1046,11 +902,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LocationId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testLocationIdFilter()
     {
         $this->assertSearchResults(
@@ -1066,11 +917,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LocationPriority
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testLocationPriorityFilter()
     {
         $this->assertSearchResults(
@@ -1089,11 +935,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ParentLocationId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testParentLocationIdFilter()
     {
         $this->assertSearchResults(
@@ -1109,11 +950,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RemoteId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testRemoteIdFilter()
     {
         $this->assertSearchResults(
@@ -1131,11 +967,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LocationRemoteId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testLocationRemoteIdFilter()
     {
         $this->assertSearchResults(
@@ -1153,11 +984,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\SectionId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testSectionFilter()
     {
         $this->assertSearchResults(
@@ -1173,11 +999,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LogicalNot
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testStatusFilter()
     {
         $this->assertSearchResults(
@@ -1198,11 +1019,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFieldFilter()
     {
         $this->assertSearchResults(
@@ -1222,11 +1038,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFieldFilterIn()
     {
         $this->assertSearchResults(
@@ -1246,11 +1057,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFieldFilterContainsPartial()
     {
         $this->assertSearchResults(
@@ -1270,11 +1076,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFieldFilterContainsSimple()
     {
         $this->assertSearchResults(
@@ -1294,11 +1095,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFieldFilterContainsSimpleNoMatch()
     {
         $this->assertSearchResults(
@@ -1318,11 +1114,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFieldFilterBetween()
     {
         $this->assertSearchResults(
@@ -1342,12 +1133,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LogicalOr
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFieldFilterOr()
     {
         $this->assertSearchResults(
@@ -1376,11 +1161,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFullTextFilter()
     {
         $this->assertSearchResults(
@@ -1396,11 +1176,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFullTextWildcardFilter()
     {
         $this->assertSearchResults(
@@ -1416,11 +1191,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFullTextDisabledWildcardFilter()
     {
         $this->assertSearchResults(
@@ -1438,11 +1208,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFullTextFilterStopwordRemoval()
     {
         $this->assertSearchResults(
@@ -1458,11 +1223,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testFullTextFilterNoStopwordRemoval()
     {
         $locator = $this->getContentSearchHandler(
@@ -1496,11 +1256,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ObjectStateId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testObjectStateIdFilter()
     {
         $this->assertSearchResults(
@@ -1517,11 +1272,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ObjectStateId
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testObjectStateIdFilterIn()
     {
         $this->assertSearchResults(
@@ -1538,11 +1288,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageCode
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testLanguageCodeFilter()
     {
         $this->assertSearchResults(
@@ -1559,11 +1304,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageCode
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testLanguageCodeFilterIn()
     {
         $this->assertSearchResults(
@@ -1580,11 +1320,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LanguageCode
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testLanguageCodeFilterWithAlwaysAvailable()
     {
         $this->assertSearchResults(
@@ -1601,11 +1336,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Visibility
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testVisibilityFilter()
     {
         $this->assertSearchResults(
@@ -1624,11 +1354,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterOwnerWrongUserId()
     {
         $this->assertSearchResults(
@@ -1647,11 +1372,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterOwnerAdministrator()
     {
         $this->assertSearchResults(
@@ -1672,11 +1392,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterOwnerEqAMember()
     {
         $this->assertSearchResults(
@@ -1695,11 +1410,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterOwnerInAMember()
     {
         $this->assertSearchResults(
@@ -1718,11 +1428,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterCreatorEqAMember()
     {
         $this->assertSearchResults(
@@ -1741,11 +1446,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterCreatorInAMember()
     {
         $this->assertSearchResults(
@@ -1764,11 +1464,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterEqGroupMember()
     {
         $this->assertSearchResults(
@@ -1787,11 +1482,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterInGroupMember()
     {
         $this->assertSearchResults(
@@ -1810,11 +1500,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterEqGroupMemberNoMatch()
     {
         $this->assertSearchResults(
@@ -1833,11 +1518,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @return void
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\UserMetadata
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testUserMetadataFilterInGroupMemberNoMatch()
     {
         $this->assertSearchResults(
@@ -1856,10 +1536,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testRelationListFilterContainsSingle()
     {
         $this->assertSearchResults(
@@ -1878,10 +1554,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testRelationListFilterContainsSingleNoMatch()
     {
         $this->assertSearchResults(
@@ -1900,10 +1572,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testRelationListFilterContainsArray()
     {
         $this->assertSearchResults(
@@ -1922,10 +1590,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testRelationListFilterContainsArrayNotMatch()
     {
         $this->assertSearchResults(
@@ -1944,10 +1608,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testRelationListFilterInArray()
     {
         $this->assertSearchResults(
@@ -1966,10 +1626,6 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RelationList
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\DoctrineDatabase
-     */
     public function testRelationListFilterInArrayNotMatch()
     {
         $this->assertSearchResults(
