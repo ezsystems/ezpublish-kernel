@@ -37,7 +37,7 @@ class Relation implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = isset( $value->data['destinationContentId'] )
+        $storageFieldValue->dataInt = !empty( $value->data['destinationContentId'] )
             ? $value->data['destinationContentId']
             : null;
     }
@@ -51,7 +51,7 @@ class Relation implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $fieldValue->data = array(
-            "destinationContentId" => $value->dataInt,
+            "destinationContentId" => $value->dataInt ?: null,
         );
         $fieldValue->sortKey = false;
     }

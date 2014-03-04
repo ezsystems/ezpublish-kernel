@@ -72,7 +72,6 @@ class RelationTest extends FieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        // @todo FIXME: Is this correct?
         return new Value();
     }
 
