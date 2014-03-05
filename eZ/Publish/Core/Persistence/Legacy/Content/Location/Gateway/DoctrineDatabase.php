@@ -746,11 +746,15 @@ class DoctrineDatabase extends Gateway
                 $this->handler->quoteColumn( 'parent_node' ),
                 $query->bindValue( $parentNodeId, null, \PDO::PARAM_INT )
             )->set(
+                // parent_remote_id column should contain the remote id of the corresponding Location
                 $this->handler->quoteColumn( 'parent_remote_id' ),
-                $query->bindValue( '' )
-            )->set(
-                $this->handler->quoteColumn( 'remote_id' ),
                 $query->bindValue( $createStruct->remoteId, null, \PDO::PARAM_STR )
+            )->set(
+                // remote_id column should contain the remote id of the node assignment itself,
+                // however this was never implemented completely in Legacy Stack, so we just set
+                // it to default value '0'
+                $this->handler->quoteColumn( 'remote_id' ),
+                $query->bindValue( '0', null, \PDO::PARAM_STR )
             )->set(
                 $this->handler->quoteColumn( 'sort_field' ),
                 $query->bindValue( $createStruct->sortField, null, \PDO::PARAM_INT )
@@ -895,7 +899,7 @@ class DoctrineDatabase extends Gateway
                         'contentId' => $row['contentobject_id'],
                         'contentVersion' => $row['contentobject_version'],
                         'mainLocationId' => $mainLocationId,
-                        'remoteId' => $row['remote_id'],
+                        'remoteId' => $row['parent_remote_id'],
                         'sortField' => $row['sort_field'],
                         'sortOrder' => $row['sort_order'],
                         'priority' => $row['priority'],
