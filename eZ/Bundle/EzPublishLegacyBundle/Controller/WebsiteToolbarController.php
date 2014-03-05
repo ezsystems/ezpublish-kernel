@@ -8,8 +8,9 @@
  */
 namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
-use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -24,17 +25,27 @@ class WebsiteToolbarController extends Controller
     /** @var \Symfony\Component\Templating\EngineInterface */
     private $legacyTemplateEngine;
 
-    /** @var \eZ\Publish\API\Repository\Repository */
-    private $repository;
-
     /** @var \Symfony\Component\Security\Core\SecurityContextInterface */
     private $securityContext;
 
-    public function __construct( CsrfProviderInterface $csrfProvider, EngineInterface $engine, Repository $repository, SecurityContextInterface $securityContext )
+    /** @var \eZ\Publish\API\Repository\LocationService */
+    private $locationService;
+
+    /** @var \eZ\Publish\API\Repository\ContentService */
+    private $contentService;
+
+    public function __construct(
+        CsrfProviderInterface $csrfProvider,
+        EngineInterface $engine,
+        ContentService $contentService,
+        LocationService $locationService,
+        SecurityContextInterface $securityContext
+    )
     {
         $this->csrfProvider = $csrfProvider;
         $this->legacyTemplateEngine = $engine;
-        $this->repository = $repository;
+        $this->contentService = $contentService;
+        $this->locationService = $locationService;
         $this->securityContext = $securityContext;
     }
 
@@ -74,12 +85,12 @@ class WebsiteToolbarController extends Controller
     }
 
     /**
-     * @return Content
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
     protected function loadContentByLocationId( $locationId )
     {
-        return $this->repository->getContentService()->loadContent(
-            $this->repository->getLocationService()->loadLocation( $locationId )->contentId
+        return $this->contentService->loadContent(
+            $this->locationService->loadLocation( $locationId )->contentId
         );
     }
 }

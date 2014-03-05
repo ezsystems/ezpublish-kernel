@@ -148,7 +148,8 @@ services:
         arguments:
             - @form.csrf_provider
             - @templating.engine.eztpl
-            - @ezpublish.api.repository
+            - @ezpublish.api.service.content
+            - @ezpublish.api.service.location
             - @security.context
 
     ezpublish_legacy.router:
