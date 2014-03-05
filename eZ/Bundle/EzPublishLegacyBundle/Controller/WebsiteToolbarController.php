@@ -60,14 +60,14 @@ class WebsiteToolbarController extends Controller
             return $response;
         }
 
+        $parameters = array( 'current_node_id' => $locationId );
+        if ( isset( $this->csrfProvider ) )
+        {
+            $parameters['form_token'] = $this->csrfProvider->generateCsrfToken( 'legacy' );
+        }
+
         $response->setContent(
-            $this->legacyTemplateEngine->render(
-                'design:parts/website_toolbar.tpl',
-                array(
-                    'current_node_id' => $locationId,
-                    'form_token' => $this->csrfProvider->generateCsrfToken( 'legacy' )
-                )
-            )
+            $this->legacyTemplateEngine->render( 'design:parts/website_toolbar.tpl', $parameters )
         );
 
         return $response;
