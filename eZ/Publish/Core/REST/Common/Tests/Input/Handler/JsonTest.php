@@ -18,6 +18,15 @@ use PHPUnit_Framework_TestCase;
 class JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     */
+    public function testConvertInvalidJson()
+    {
+        $handler = $this->getHandler();
+        $handler->convert( '{text:"Hello world!"}' );
+    }
+
+    /**
      * Tests conversion of array to JSON
      */
     public function testConvertJson()
