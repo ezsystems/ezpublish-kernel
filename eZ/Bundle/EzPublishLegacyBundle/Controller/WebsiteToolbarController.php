@@ -35,18 +35,18 @@ class WebsiteToolbarController extends Controller
     private $contentService;
 
     public function __construct(
-        CsrfProviderInterface $csrfProvider,
         EngineInterface $engine,
         ContentService $contentService,
         LocationService $locationService,
-        SecurityContextInterface $securityContext
+        SecurityContextInterface $securityContext,
+        CsrfProviderInterface $csrfProvider = null
     )
     {
-        $this->csrfProvider = $csrfProvider;
         $this->legacyTemplateEngine = $engine;
         $this->contentService = $contentService;
         $this->locationService = $locationService;
         $this->securityContext = $securityContext;
+        $this->csrfProvider = $csrfProvider;
     }
 
     /**

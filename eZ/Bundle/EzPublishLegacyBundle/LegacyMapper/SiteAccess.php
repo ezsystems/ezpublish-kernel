@@ -22,16 +22,16 @@ class SiteAccess extends ContainerAware implements EventSubscriberInterface
 {
     protected $options = array();
 
+    public function __construct( array $options = array() )
+    {
+        $this->options = $options;
+    }
+
     public static function getSubscribedEvents()
     {
         return array(
             LegacyEvents::PRE_BUILD_LEGACY_KERNEL_WEB => array( 'onBuildKernelWebHandler', 128 )
         );
-    }
-
-    public function setOptions( array $options = array() )
-    {
-        $this->options = $options;
     }
 
     /**
