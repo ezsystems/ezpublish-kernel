@@ -1894,6 +1894,7 @@ XML Example
       <Content href="/content/objects/23" media-type="application/vnd.ez.api.Content+xml"/>
       <sortField>PATH</sortField>
       <sortOrder>ASC</sortOrder>
+      <UrlAliases media-type="application/vnd.ez.api.UrlAliasRefList+xml" href="/api/ezp/v2/content/locations/1/4/73/133/urlaliases"/>
     </Location>
 
 
