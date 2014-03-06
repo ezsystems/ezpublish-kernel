@@ -59,16 +59,19 @@ class RestLocation extends ValueObjectVisitor
         $generator->endValueElement( 'invisible' );
 
         $generator->startObjectElement( 'ParentLocation', 'Location' );
-        $generator->startAttribute(
-            'href',
-            $this->router->generate(
-                'ezpublish_rest_loadLocation',
-                array(
-                    'locationPath' => implode( '/', array_slice( $data->location->path, 0, count( $data->location->path ) - 1 ) )
+        if ( trim( $data->location->pathString, "/" ) !== '1' )
+        {
+            $generator->startAttribute(
+                'href',
+                $this->router->generate(
+                    'ezpublish_rest_loadLocation',
+                    array(
+                        'locationPath' => implode( '/', array_slice( $data->location->path, 0, count( $data->location->path ) - 1 ) )
+                    )
                 )
-            )
-        );
-        $generator->endAttribute( 'href' );
+            );
+            $generator->endAttribute( 'href' );
+        }
         $generator->endObjectElement( 'ParentLocation' );
 
         $generator->startValueElement( 'pathString', $data->location->pathString );
