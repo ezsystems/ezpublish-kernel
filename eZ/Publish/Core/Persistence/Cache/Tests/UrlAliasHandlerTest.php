@@ -123,7 +123,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->with( 44, '/path', true, 'eng-GB', true )
             ->will( $this->returnValue( $urlAlias ) );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
@@ -138,7 +138,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->method( 'set' )
             ->with( $urlAlias );
 
-        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'getItem' )
@@ -184,7 +184,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->with( 44, '/path', true, 'eng-GB', true )
             ->will( $this->returnValue( $urlAlias ) );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
@@ -199,7 +199,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->method( 'set' )
             ->with( $urlAlias );
 
-        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'getItem' )
@@ -244,7 +244,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->with( '/old', '/path', true, 'eng-GB', true )
             ->will( $this->returnValue( new UrlAlias( array( 'id' => 55 ) ) ) );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -271,7 +271,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -324,7 +324,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -377,7 +377,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
@@ -403,7 +403,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->method( 'set' );
 
         // inline calls to loadUrlAlias() using the cache
-        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'getItem' )
@@ -457,7 +457,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
@@ -483,7 +483,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->method( 'set' );
 
                 // inline calls to loadUrlAlias() using the cache
-        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'getItem' )
@@ -583,7 +583,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -632,7 +632,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
@@ -653,7 +653,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( 'set' );
 
-        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'getItem' )
@@ -685,7 +685,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -734,7 +734,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )

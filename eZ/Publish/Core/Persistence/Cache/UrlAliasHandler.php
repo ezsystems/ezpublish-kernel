@@ -185,7 +185,9 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     public function lookup( $url )
     {
         // Look for url to url alias id cache
-        $cache = $this->cache->getItem( 'urlAlias', 'url', $url );
+        // Replace slashes by "|" to be sure not to mix cache key combinations in underlying lib.
+        $cacheKey = $url ?: '/';
+        $cache = $this->cache->getItem( 'urlAlias', 'url', $cacheKey );
         $urlAliasId = $cache->get();
         if ( $cache->isMiss() )
         {

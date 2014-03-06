@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use Tedivm\StashBundle\Service\CacheService;
+use Stash\Interfaces\PoolInterface;
 
 /**
  * Class CacheServiceDecorator
@@ -21,26 +21,26 @@ class CacheServiceDecorator
     const SPI_CACHE_KEY_PREFIX = 'ez_spi';
 
     /**
-     * @var \Tedivm\StashBundle\Service\CacheService
+     * @var \Stash\Interfaces\PoolInterface
      */
-    protected $cacheService;
+    protected $cachePool;
 
     /**
      * Constructs the cache service decorator
      *
-     * @param \Tedivm\StashBundle\Service\CacheService $cacheService
+     * @param \Stash\Interfaces\PoolInterface $cachePool
      */
-    public function __construct( CacheService $cacheService )
+    public function __construct( PoolInterface $cachePool )
     {
-        $this->cacheService = $cacheService;
+        $this->cachePool = $cachePool;
     }
 
     /**
      * Returns a Cache item for the specified key. The key can be either a series of string arguments,
      * or an array.
      *
-     * @param string|array $key, $key, $key...
-     * @return \Stash\Item
+     * @internal param array|string $key , $key, $key...
+     * @return \Stash\Interfaces\ItemInterface
      */
     public function getItem()
     {
@@ -54,14 +54,14 @@ class CacheServiceDecorator
 
         array_unshift( $args, self::SPI_CACHE_KEY_PREFIX );
 
-        return $this->cacheService->getItem( $args );
+        return $this->cachePool->getItem( $args );
     }
 
     /**
      * Clears the cache for the key, or if none is specified clears the entire cache. The key can be either
      * a series of string arguments, or an array.
      *
-     * @param null|string|array $key, $key, $key...
+     * @internal param array|null|string $key , $key, $key...
      */
     public function clear()
     {

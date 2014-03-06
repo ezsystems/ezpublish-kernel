@@ -65,10 +65,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         // Set expectations for cache.
         // Note that we will call generateUserHash() twice.
         // The first time, cache is being generated, the second time hash is stored in memory.
-        $cacheItem = $this
-            ->getMockBuilder( 'Stash\\Item' )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $cacheItem = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $cacheItem
             ->expects( $this->once() )
             ->method( 'isMiss' )
@@ -79,7 +76,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'set' )
             ->with( $hash, 600 );
-        $cachePool = $this->getMock( 'Stash\\Pool' );
+        $cachePool = $this->getMock( 'Stash\Interfaces\PoolInterface' );
         $cachePool
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -124,10 +121,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         // Set expectactions for cache.
-        $cacheItem = $this
-            ->getMockBuilder( 'Stash\\Item' )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $cacheItem = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $cacheItem
             ->expects( $this->once() )
             ->method( 'isMiss' )
@@ -141,7 +135,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'get' )
             ->will( $this->returnValue( $hash ) );
-        $cachePool = $this->getMock( 'Stash\\Pool' );
+        $cachePool = $this->getMock( 'Stash\Interfaces\PoolInterface' );
         $cachePool
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -176,10 +170,10 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel
             ->expects( $this->once() )
             ->method( 'getCacheDriver' )
-            ->will( $this->returnValue( $this->getMock( 'Stash\\Driver\\DriverInterface' ) ) );
+            ->will( $this->returnValue( $this->getMock( 'Stash\\Interfaces\\DriverInterface' ) ) );
 
         $cachePool = $kernel->getCachePool();
-        $this->assertInstanceOf( 'Stash\\Pool', $cachePool );
+        $this->assertInstanceOf( 'Stash\Interfaces\PoolInterface', $cachePool );
         $this->assertSame( $cachePool, $kernel->getCachePool() );
     }
 
