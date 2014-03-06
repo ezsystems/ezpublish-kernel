@@ -156,6 +156,7 @@ class Filesystem implements IOHandlerInterface
 
         if ( !isset( $updateFileStruct->id ) || $updateFileStruct->id == $spiBinaryFileId )
         {
+            $returnSpiBinaryFileId = $spiBinaryFileId;
             $destinationStoragePath = $this->getStoragePath( $spiBinaryFileId );
         }
         else
@@ -168,7 +169,16 @@ class Filesystem implements IOHandlerInterface
                 );
             }
 
-            $destinationStoragePath = $this->getStoragePath( $updateFileStruct->id );
+            $returnSpiBinaryFileId = $updateFileStruct->id;
+            $destinationStoragePath = $this->getStoragePath( $returnSpiBinaryFileId );
+        }
+
+        // contents
+        if ( $updateFileStruct->getInputStream() !== null )
+        {
+            $outputStream = fopen( $sourceStoragePath, 'wb' );
+            stream_copy_to_stream( $updateFileStruct->getInputStream(), $outputStream );
+            fclose( $outputStream );
         }
 
         // path
@@ -182,14 +192,10 @@ class Filesystem implements IOHandlerInterface
             rename( $sourceStoragePath, $destinationStoragePath );
         }
 
-        if ( $updateFileStruct->getInputStream() !== null )
-        {
-            $outputStream = fopen( $sourceStoragePath, 'wb' );
-            stream_copy_to_stream( $updateFileStruct->getInputStream(), $outputStream );
-            fclose( $outputStream );
-        }
+        clearstatcache( true, $sourceStoragePath );
+        clearstatcache( true, $destinationStoragePath );
 
-        return $this->load( $sourceStoragePath );
+        return $this->load( $returnSpiBinaryFileId );
     }
 
     /**
