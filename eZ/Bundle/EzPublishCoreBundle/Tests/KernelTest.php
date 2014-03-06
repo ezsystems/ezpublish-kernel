@@ -15,9 +15,6 @@ use eZ\Bundle\EzPublishCoreBundle\Kernel;
 
 class KernelTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::generateUserHash
-     */
     public function testGenerateUserHashAnonymous()
     {
         $request = new Request();
@@ -39,9 +36,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse( $request->headers->has( 'X-User-Hash' ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::generateUserHash
-     */
     public function testGenerateUserHashNoCache()
     {
         $request = new Request();
@@ -97,9 +91,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( $hash, $kernel->generateUserHash( $request ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::generateUserHash
-     */
     public function testGenerateUserHashCacheFresh()
     {
         $request = new Request();
@@ -154,10 +145,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( $hash, $kernel->generateUserHash( $request ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::getCachePool
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::getCacheDriver
-     */
     public function testGetCachePool()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|Kernel $kernel */
@@ -177,11 +164,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( $cachePool, $kernel->getCachePool() );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::handle
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::isUserHashRequest
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::canGenerateUserHash
-     */
     public function testHandleAuthenticateNotAllowed()
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|Kernel $kernel */
@@ -203,11 +185,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( 405, $response->getStatusCode() );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::handle
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::isUserHashRequest
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::canGenerateUserHash
-     */
     public function testHandleAuthenticate()
     {
         $hash = '123abc';
@@ -238,11 +215,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( $hash, $response->headers->get( 'X-User-Hash' ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::handle
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::isUserHashRequest
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::canGenerateUserHash
-     */
     public function testHandleAuthenticateWithTrustedProxy()
     {
         Request::setTrustedProxies( array( '10.11.12.13' ) );
@@ -275,10 +247,6 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $this->assertSame( $hash, $response->headers->get( 'X-User-Hash' ) );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::handle
-     * @covers eZ\Bundle\EzPublishCoreBundle\Kernel::isUserHashRequest
-     */
     public function testHandleRegular()
     {
         $request = new Request();
