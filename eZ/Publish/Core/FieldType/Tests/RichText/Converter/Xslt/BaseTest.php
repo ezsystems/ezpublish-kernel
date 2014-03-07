@@ -49,17 +49,24 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
             if ( !file_exists( $outputFile ) && file_exists( $outputFileLossy ) )
             {
-                $outputFile = $outputFileLossy;;
+                $outputFile = $outputFileLossy;
             }
 
             $map[] = array( $inputFile, $outputFile );
         }
 
-        $lossySubdirectory = "_fixtures/{$fixtureSubdirectories["input"]}/lossy/";
+        $lossySubdirectory = "_fixtures/{$fixtureSubdirectories["input"]}/lossy";
+        $inputDirNormalized = str_replace( "/", ".", $fixtureSubdirectories["input"] );
+        $outputDirNormalized = str_replace( "/", ".", $fixtureSubdirectories["output"] );
         foreach ( glob( __DIR__ . "/{$lossySubdirectory}/*.{$fixtureSubdirectories["input"]}.xml" ) as $inputFile )
         {
-            $basename = basename( basename( $inputFile, ".xml" ), ".{$fixtureSubdirectories["input"]}" );
-            $outputFile = __DIR__ . "/{$lossySubdirectory}/{$basename}.{$fixtureSubdirectories["output"]}.xml";
+            $basename = basename( basename( $inputFile, ".xml" ), ".{$inputDirNormalized}" );
+            $outputFile = __DIR__ . "/{$lossySubdirectory}/{$basename}.{$outputDirNormalized}.xml";
+
+            if ( !file_exists( $outputFile ) )
+            {
+                continue;
+            }
 
             $map[] = array( $inputFile, $outputFile );
         }

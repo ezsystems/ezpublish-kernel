@@ -442,6 +442,42 @@
     </td>
   </xsl:template>
 
+  <xsl:template match="ezxhtml5:ezembed | ezxhtml5:ezembedinline">
+    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="@href">
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="@href"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@data-ezview">
+        <xsl:attribute name="view">
+          <xsl:value-of select="@data-ezview"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@data-ezalign">
+        <xsl:attribute name="ezxhtml:align">
+          <xsl:value-of select="@data-ezalign"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:ezembed//* | ezxhtml5:ezembedinline//*">
+    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates select="node()|@*"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:ezembed//@* | ezxhtml5:ezembedinline//@*">
+    <xsl:copy/>
+  </xsl:template>
+
   <xsl:template name="extractStyleValue">
     <xsl:param name="style"/>
     <xsl:param name="property"/>

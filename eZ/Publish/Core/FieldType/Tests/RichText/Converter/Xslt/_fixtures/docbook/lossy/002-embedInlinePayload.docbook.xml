@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <para>Some <ezembedinline xlink:href="ezcontent://601" view="embed-inline-custom" ezxhtml:class="embedClass" ezxhtml:align="left">
+    <ezpayload xmlns=""><![CDATA[<a href="http://www.youtube.com/watch?v=pDxn0Xfqkgw" title="You did not make it Viktor">160 Greatest Arnold Schwarzenegger Quotes</a>]]></ezpayload>
+  </ezembedinline> for the otherwise unremarkable paragraph.</para>
+  <para>This paragraph is just showing off its <ezembedinline xlink:href="ezcontent://106" view="embed-inline" ezxhtml:class="embedClass2" ezxhtml:align="right">
+    <ezpayload xmlns=""><![CDATA[<a href="https://github.com/lhartikk/ArnoldC/" title="LISTEN TO ME VERY CAREFULLY">Arnold C</a>]]></ezpayload>
+    <ezconfig>
+      <ezvalue key="title">LISTEN TO ME VERY CAREFULLY</ezvalue>
+    </ezconfig>
+  </ezembedinline> content.</para>
+</section>

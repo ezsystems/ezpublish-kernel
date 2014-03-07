@@ -39,6 +39,12 @@ Removed elements
 * <textarea>
 * <title>
 
+Added elements
+==============
+
+* <ezembed>
+* <ezembedinline>
+
 Commented out elements we might support later:
 ==============================================
 

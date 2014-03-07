@@ -151,14 +151,14 @@
           </xsl:attribute>
         </xsl:when>
         <xsl:when test="starts-with( @xlink:href, 'ezcontent://' )">
-          <xsl:attribute name="object_id">
-            <xsl:value-of select="substring-before( concat( substring-after( @xlink:href, 'ezcontent://' ), '#' ), '#' )"/>
-          </xsl:attribute>
+          <xsl:call-template name="addAttributeObjectId">
+            <xsl:with-param name="href" select="@xlink:href"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:when test="starts-with( @xlink:href, 'ezlocation://' )">
-          <xsl:attribute name="node_id">
-            <xsl:value-of select="substring-before( concat( substring-after( @xlink:href, 'ezlocation://' ), '#' ), '#' )"/>
-          </xsl:attribute>
+          <xsl:call-template name="addAttributeNodeId">
+            <xsl:with-param name="href" select="@xlink:href"/>
+          </xsl:call-template>
         </xsl:when>
         <xsl:when test="starts-with( @xlink:href, '#' )"/>
         <xsl:otherwise>
@@ -381,6 +381,77 @@
         </xsl:call-template>
       </xsl:for-each>
     </td>
+  </xsl:template>
+
+  <xsl:template match="docbook:ezembed | docbook:ezembedinline">
+    <xsl:choose>
+      <xsl:when test="local-name() = 'ezembed'">
+        <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+          <xsl:element name="embed">
+            <xsl:call-template name="embed"/>
+          </xsl:element>
+        </paragraph>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:element name="embed-inline">
+          <xsl:call-template name="embed"/>
+        </xsl:element>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="embed">
+    <xsl:choose>
+      <xsl:when test="starts-with( @xlink:href, 'ezcontent://' )">
+        <xsl:call-template name="addAttributeObjectId">
+          <xsl:with-param name="href" select="@xlink:href"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="starts-with( @xlink:href, 'ezlocation://' )">
+        <xsl:call-template name="addAttributeNodeId">
+          <xsl:with-param name="href" select="@xlink:href"/>
+        </xsl:call-template>
+      </xsl:when>
+    </xsl:choose>
+    <xsl:if test="@view">
+      <xsl:attribute name="view">
+        <xsl:value-of select="@view"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:call-template name="addAttributeClassEzxhtml"/>
+    <xsl:if test="@ezxhtml:align">
+      <xsl:attribute name="align">
+        <xsl:value-of select="@ezxhtml:align"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:for-each select="./docbook:ezconfig/docbook:ezvalue">
+      <xsl:choose>
+        <xsl:when test="@key = 'size'">
+          <xsl:attribute name="{@key}">
+            <xsl:value-of select="current()"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="custom:{@key}">
+            <xsl:value-of select="current()"/>
+          </xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="addAttributeNodeId">
+    <xsl:param name="href"/>
+    <xsl:attribute name="node_id">
+      <xsl:value-of select="substring-before( concat( substring-after( $href, 'ezlocation://' ), '#' ), '#' )"/>
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template name="addAttributeObjectId">
+    <xsl:param name="href"/>
+    <xsl:attribute name="object_id">
+      <xsl:value-of select="substring-before( concat( substring-after( $href, 'ezcontent://' ), '#' ), '#' )"/>
+    </xsl:attribute>
   </xsl:template>
 
   <xsl:template name="addAttributeClassEzxhtml">

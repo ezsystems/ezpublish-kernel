@@ -973,6 +973,36 @@
     <!--xs:attribute name="dir" type="dir" /-->
   </xs:attributeGroup>
 
+  <!-- eZ Publish embeds ================================================= -->
+
+  <xs:complexType name="ezpublishEmbed">
+    <xs:sequence>
+      <xs:element name="ezconfig" type="ezconfig" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="ezembedAttributeGroup"/>
+  </xs:complexType>
+
+  <xs:complexType name="ezconfig" mixed="false">
+    <xs:sequence>
+      <xs:element name="ezvalue" type="ezvalue" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="key" type="token"/>
+  </xs:complexType>
+
+  <xs:complexType name="ezvalue" mixed="true">
+    <xs:sequence>
+      <xs:element name="ezvalue" type="ezvalue" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="key" type="token"/>
+  </xs:complexType>
+
+  <xs:attributeGroup name="ezembedAttributeGroup">
+    <xs:attribute name="href" type="uri" use="required"/>
+    <xs:attribute name="data-ezview" type="token" use="required"/>
+    <xs:attribute name="data-ezalign" type="token"/>
+    <xs:attribute name="class" type="tokens"/>
+  </xs:attributeGroup>
+
   <!-- Common content models ============================================= -->
 
   <xs:group name="flowContent">
@@ -1015,6 +1045,7 @@
       <xs:element ref="table"/>
       <!--xs:element name="canvas" type="canvasFlow"/-->
       <!--xs:element ref="details"/-->
+      <xs:element name="ezembed" type="ezpublishEmbed"/>
     </xs:choice>
   </xs:group>
 
@@ -1053,6 +1084,7 @@
               processContents="skip"/-->
       <!--xs:any namespace="http://www.w3.org/1998/Math/MathML"
               processContents="skip"/-->
+      <xs:element name="ezembedinline" type="ezpublishEmbed"/>
     </xs:choice>
   </xs:group>
 

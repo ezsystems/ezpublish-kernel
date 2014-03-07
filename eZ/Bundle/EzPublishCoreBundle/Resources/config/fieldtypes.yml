@@ -309,6 +309,10 @@ parameters:
     ezpublish.fieldType.ezrichtext.converter.edit.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Edit
     ezpublish.fieldType.ezrichtext.converter.input.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Input
     ezpublish.fieldType.ezrichtext.converter.ezLinkToHtml5.class: eZ\Publish\Core\FieldType\RichText\Converter\EzLinkToHtml5
+    ezpublish.fieldType.ezrichtext.converter.embed.class: eZ\Publish\Core\FieldType\RichText\Converter\Embed
+    ezpublish.fieldType.ezrichtext.embed_renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\EmbedRenderer
+    # Note: 'esi' rendering strategy will fall back to 'inline' if reverse proxy is not available
+    ezpublish.fieldType.ezrichtext.embed.rendering_strategy: esi
     ezpublish.fieldType.ezrichtext.converter.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
     ezpublish.fieldType.ezrichtext.validator.xml.class: eZ\Publish\Core\FieldType\RichText\Validator
     ezpublish.fieldType.ezrichtext.validator.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
@@ -316,7 +320,8 @@ parameters:
 
     ezpublish.fieldType.ezrichtext.converter.input.ezxml.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/ezxml/docbook.xsl
     ezpublish.fieldType.ezrichtext.converter.input.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/xhtml5/edit/docbook.xsl
-    ezpublish.fieldType.ezrichtext.converter.output.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/docbook/xhtml5/output/fragment.xsl
+    ezpublish.fieldType.ezrichtext.converter.output.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/docbook/xhtml5/output/xhtml5.xsl
+    ezpublish.fieldType.ezrichtext.converter.output.xhtml5.fragment.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/xhtml5/output/fragment.xsl
 
     ezpublish.fieldType.ezrichtext.validator.docbook.resources:
         - %ezpublish.fieldType.ezrichtext.resources%/schemas/docbook/ezpublish.rng
@@ -349,17 +354,24 @@ services:
         class: %ezpublish.fieldType.ezrichtext.converter.ezLinkToHtml5.class%
         arguments: [@ezpublish.api.service.location, @ezpublish.api.service.content, @ezpublish.urlalias_router, @?logger]
         tags:
-            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: -200}
+            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
 
-    # @todo implement
-    #ezpublish.fieldType.ezrichtext.converter.embedToHtml5:
-    #    class: %ezpublish.fieldType.ezrichtext.converter.embedToHtml5.class%
-    #    arguments:
-    #        - @ezpublish.view_manager
-    #        - @ezpublish.api.repository
-    #        - %ezpublish.fieldType.ezrichtext.converter.embedToHtml5.excludedAttributes%
-    #    tags:
-    #        - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: -100}
+    ezpublish.fieldType.ezrichtext.embed_renderer:
+        class: %ezpublish.fieldType.ezrichtext.embed_renderer.class%
+        arguments:
+            - @ezpublish.api.repository
+            - @ezpublish.controller_manager
+            - @fragment.handler
+            - %ezpublish.fieldType.ezrichtext.embed.rendering_strategy%
+            - @?logger
+
+    ezpublish.fieldType.ezrichtext.converter.embed:
+        class: %ezpublish.fieldType.ezrichtext.converter.embed.class%
+        arguments:
+            - @ezpublish.fieldType.ezrichtext.embed_renderer
+            - @?logger
+        tags:
+            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
 
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5.core:
         class: %ezpublish.fieldType.ezrichtext.converter.output.html5.class%
@@ -367,7 +379,14 @@ services:
             - %ezpublish.fieldType.ezrichtext.converter.output.xhtml5.resources%
             - @ezpublish.config.resolver
         tags:
-            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
+            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 50}
+
+    # Note: should typically be the last one as it produces embeddable fragment
+    ezpublish.fieldType.ezrichtext.converter.output.xhtml5.fragment:
+        class: %ezpublish.fieldType.ezrichtext.converter.xslt.class%
+        arguments: [%ezpublish.fieldType.ezrichtext.converter.output.xhtml5.fragment.resources%]
+        tags:
+            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 100}
 
     # Aggregate converter for XHTML5 output that other converters register to
     # through service tags.

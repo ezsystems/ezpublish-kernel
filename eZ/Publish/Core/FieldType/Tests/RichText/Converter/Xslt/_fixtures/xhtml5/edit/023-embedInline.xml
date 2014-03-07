@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
+  <p>Some <ezembedinline href="ezcontent://601" data-ezview="embed-inline-custom" class="embedClass" data-ezalign="left"/> for the otherwise unremarkable paragraph.</p>
+  <p>This paragraph is just showing off its <ezembedinline href="ezcontent://106" data-ezview="embed-inline" class="embedClass2" data-ezalign="right">
+    <ezconfig>
+      <ezvalue key="size">medium</ezvalue>
+    </ezconfig>
+  </ezembedinline> content.</p>
+</section>
