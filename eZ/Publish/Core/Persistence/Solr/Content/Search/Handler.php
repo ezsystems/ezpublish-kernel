@@ -413,6 +413,11 @@ class Handler implements SearchHandlerInterface
                 ),
                 new FieldType\MultipleBooleanField()
             ),
+            new Field(
+                'always_available',
+                $content->versionInfo->contentInfo->alwaysAvailable,
+                new FieldType\BooleanField()
+            ),
         );
 
         if ( $mainLocation !== null )
