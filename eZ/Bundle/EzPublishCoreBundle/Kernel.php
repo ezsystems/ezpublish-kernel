@@ -41,7 +41,7 @@ abstract class Kernel extends BaseKernel
     private $userHash;
 
     /**
-     * @var \Stash\Pool
+     * @var \Stash\Interfaces\PoolInterface
      */
     private $cachePool;
 
@@ -178,7 +178,7 @@ abstract class Kernel extends BaseKernel
     /**
      * Returns the Stash cache pool (for early requests like user hash generation).
      *
-     * @return \Stash\Pool
+     * @return \Stash\Interfaces\PoolInterface
      */
     public function getCachePool()
     {
@@ -196,7 +196,7 @@ abstract class Kernel extends BaseKernel
      *
      * @see getCachePool
      *
-     * @return \Stash\Driver\DriverInterface
+     * @return \Stash\Interfaces\DriverInterface
      */
     protected function getCacheDriver()
     {

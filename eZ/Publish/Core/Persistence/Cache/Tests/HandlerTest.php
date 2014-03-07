@@ -29,7 +29,7 @@ use PHPUnit_Framework_TestCase;
 abstract class HandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Tedivm\StashBundle\Service\CacheService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Stash\Interfaces\PoolInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $cacheMock;
 

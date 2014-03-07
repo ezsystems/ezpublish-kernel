@@ -25,7 +25,7 @@ class IntegrationTestCacheServiceDecorator extends CacheServiceDecorator
      */
     public function __construct()
     {
-        $this->cacheService = new Pool( new Ephemeral() );
+        $this->cachePool = new Pool( new Ephemeral() );
     }
 
     /**
@@ -33,6 +33,6 @@ class IntegrationTestCacheServiceDecorator extends CacheServiceDecorator
      */
     public function clearAllTestData()
     {
-        $this->cacheService->flush();
+        $this->cachePool->flush();
     }
 }

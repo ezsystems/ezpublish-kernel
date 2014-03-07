@@ -21,7 +21,7 @@ class CacheFactory extends ContainerAware
     /**
      * @param ConfigResolverInterface $configResolver
      *
-     * @return \Stash\Pool
+     * @return \Stash\Interfaces\PoolInterface
      */
     public function getCachePool( ConfigResolverInterface $configResolver )
     {

@@ -24,7 +24,7 @@ class LocationHandlerTest extends HandlerTest
     public function testLoadCacheIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -68,7 +68,7 @@ class LocationHandlerTest extends HandlerTest
     public function testLoadHasCache()
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -103,7 +103,7 @@ class LocationHandlerTest extends HandlerTest
     public function testLoadLocationsByContentIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -152,7 +152,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
@@ -174,7 +174,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'set' );
 
         // inline call to load()
-        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'getItem' )
@@ -205,7 +205,7 @@ class LocationHandlerTest extends HandlerTest
     public function testLoadParentLocationsForDraftContentIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -254,7 +254,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
@@ -276,7 +276,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'set' );
 
         // inline call to load()
-        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'getItem' )
@@ -307,7 +307,7 @@ class LocationHandlerTest extends HandlerTest
     public function testLoadLocationsByContentWithRootIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
@@ -356,7 +356,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
@@ -378,7 +378,7 @@ class LocationHandlerTest extends HandlerTest
             ->method( 'set' );
 
         // inline call to load()
-        $cacheItemMock2 = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock2 = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'getItem' )
@@ -628,7 +628,7 @@ class LocationHandlerTest extends HandlerTest
     public function testUpdate()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'clear' )
@@ -665,7 +665,7 @@ class LocationHandlerTest extends HandlerTest
     public function testCreate()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
-        $cacheItemMock = $this->getMock( 'Stash\\Item', array(), array(), '', false );
+        $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
