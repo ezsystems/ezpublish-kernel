@@ -2122,7 +2122,8 @@ Create View
     :Content-Type:
         :application/vnd.ez.api.ViewInput+xml: the view input in xml format (see View_)
         :application/vnd.ez.api.ViewInput+json: the view input in json format (see View_)
-:Response:
+:Response: 200 OK
+           Note : when persistence will be implemented, it will change to 201 Created
 
 .. code:: http
 
@@ -2173,7 +2174,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
 
 .. code:: http
 
-    HTTP/1.1 201 Created
+    HTTP/1.1 200 OK
     Location: /content/views/view1234
     Content-Type: application/vnd.ez.api.View+xml
     Content-Length: xxx
