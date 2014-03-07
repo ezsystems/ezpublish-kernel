@@ -155,7 +155,7 @@ class Embed implements Converter
      *
      * @param \DOMDocument $document
      *
-     * @return null
+     * @return \DOMDocument
      */
     public function convert( DOMDocument $document )
     {
