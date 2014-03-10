@@ -14,6 +14,7 @@ parameters:
     ezpublish_legacy.treemenu.controller.options: {}
     ezpublish_legacy.setup.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\LegacySetupController
     ezpublish_legacy.preview.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\PreviewController
+    ezpublish_legacy.website_toolbar.controller.class: eZ\Bundle\EzPublishLegacyBundle\Controller\WebsiteToolbarController
 
     ezpublish_legacy.kernel_handler.cli.class: eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler
     ezpublish_legacy.kernel_handler.cli.options: {}
@@ -26,6 +27,7 @@ parameters:
     ezpublish_legacy.uri_helper.class: eZ\Publish\Core\MVC\Legacy\Kernel\URIHelper
     ezpublish_legacy.url_generator.class: eZ\Bundle\EzPublishLegacyBundle\Routing\UrlGenerator
     ezpublish_legacy.siteaccess_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\SiteAccess
+    ezpublish_legacy.siteaccess_mapper.options: { fragment_path: %fragment.path% }
     ezpublish_legacy.session_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Session
     ezpublish_legacy.configuration_mapper.class: eZ\Bundle\EzPublishLegacyBundle\LegacyMapper\Configuration
     ezpublish_legacy.configuration_mapper.options:
@@ -141,6 +143,16 @@ services:
     ezpublish.controller.content.preview:
         alias: ezpublish_legacy.preview.controller
 
+    ezpublish_legacy.website_toolbar.controller:
+        class: %ezpublish_legacy.website_toolbar.controller.class%
+        parent: ezpublish.controller.base
+        arguments:
+            - @templating.engine.eztpl
+            - @ezpublish.api.service.content
+            - @ezpublish.api.service.location
+            - @security.context
+            - @?form.csrf_provider
+
     ezpublish_legacy.router:
         class: %ezpublish_legacy.router.class%
         arguments: [@ezpublish_legacy.url_generator, @?request_context, @?logger]
@@ -160,6 +172,8 @@ services:
 
     ezpublish_legacy.siteaccess_mapper:
         class: %ezpublish_legacy.siteaccess_mapper.class%
+        arguments:
+            - %ezpublish_legacy.siteaccess_mapper.options%
         calls:
             - [setContainer, [@service_container]]
         tags:
