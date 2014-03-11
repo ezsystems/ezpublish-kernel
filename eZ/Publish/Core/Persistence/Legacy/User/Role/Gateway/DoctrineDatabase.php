@@ -29,11 +29,6 @@ class DoctrineDatabase extends Gateway
     protected $handler;
 
     /**
-     * Internal type ID for user groups
-     */
-    const GROUP_TYPE_ID = 3;
-
-    /**
      * Construct from database handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
@@ -395,6 +390,10 @@ class DoctrineDatabase extends Gateway
     /**
      * Fetch all group IDs the user belongs to
      *
+     * This method will return Content ids of all ancestor Locations for the given $userId.
+     * Note that not all of these might be used as user groups,
+     * but we will need to check all of them.
+     *
      * @param int $userId
      *
      * @return array
@@ -434,7 +433,6 @@ class DoctrineDatabase extends Gateway
         if ( empty( $nodeIDs ) )
             return array();
 
-        // Limit nodes to groups only
         $query = $this->handler->createSelectQuery();
         $query->select(
             $this->handler->quoteColumn( 'id', 'ezcontentobject' )
@@ -447,18 +445,9 @@ class DoctrineDatabase extends Gateway
                 $this->handler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' )
             )
         )->where(
-            $query->expr->lAnd(
-                $query->expr->in(
-                    $this->handler->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
-                    $nodeIDs
-                ),
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'contentclass_id', 'ezcontentobject' ),
-                    // We use the integer type ID here, to minimize joins and
-                    // make use of existing keys. One might want to make this
-                    // "injectable".
-                    $query->bindValue( self::GROUP_TYPE_ID, null, \PDO::PARAM_INT )// @todo: Can not hard code group type id!
-                )
+            $query->expr->in(
+                $this->handler->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
+                $nodeIDs
             )
         );
 
