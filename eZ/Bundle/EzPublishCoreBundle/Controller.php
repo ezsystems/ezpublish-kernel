@@ -88,13 +88,12 @@ class Controller extends BaseController
     /**
      * {@inheritDoc}
      */
-    public function render($view, array $parameters = array(), Response $response = null)
+    public function render( $view, array $parameters = array(), Response $response = null )
     {
-        if (null === $response) {
+        if ( null === $response )
             $response = new Response();
-        }
 
-        $response->setContent($this->renderView($view, $parameters));
+        $response->setContent( $this->renderView( $view, $parameters ) );
 
         return $response;
     }
@@ -104,10 +103,10 @@ class Controller extends BaseController
      *
      * {@inheritDoc}
      */
-    public function renderView($view, array $parameters = array())
+    public function renderView( $view, array $parameters = array() )
     {
-        $viewManager = $this->container->get('ezpublish.view_manager');
+        $viewManager = $this->container->get( 'ezpublish.view_manager' );
 
-        return $viewManager->renderContentView(new ContentView($view), $parameters);
+        return $viewManager->renderContentView( new ContentView( $view ), $parameters );
     }
 }
