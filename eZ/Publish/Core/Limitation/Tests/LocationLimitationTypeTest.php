@@ -57,7 +57,6 @@ class LocationLimitationTypeTest extends Base
     }
 
     /**
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::__construct
      *
      * @return \eZ\Publish\Core\Limitation\LocationLimitationType
      */
@@ -81,7 +80,6 @@ class LocationLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValue
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::acceptValue
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation $limitation
      * @param \eZ\Publish\Core\Limitation\LocationLimitationType $limitationType
@@ -105,7 +103,6 @@ class LocationLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValueException
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
@@ -130,7 +127,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestValidatePass
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation $limitation
      */
@@ -173,7 +169,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestValidateError
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation $limitation
      * @param int $errorCount
@@ -212,7 +207,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::buildValue
      *
      * @param \eZ\Publish\Core\Limitation\LocationLimitationType $limitationType
      */
@@ -373,8 +367,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluate
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::evaluate
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::evaluateForContentCreateStruct
      */
     public function testEvaluate(
         LocationLimitation $limitation,
@@ -463,7 +455,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::evaluate
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
@@ -497,7 +488,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::getCriterion
      * @expectedException \RuntimeException
      *
      * @param \eZ\Publish\Core\Limitation\LocationLimitationType $limitationType
@@ -512,7 +502,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::getCriterion
      *
      * @param \eZ\Publish\Core\Limitation\LocationLimitationType $limitationType
      */
@@ -532,7 +521,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::getCriterion
      *
      * @param \eZ\Publish\Core\Limitation\LocationLimitationType $limitationType
      */
@@ -552,7 +540,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\LocationLimitationType::valueSchema
      *
      * @param \eZ\Publish\Core\Limitation\LocationLimitationType $limitationType
      */

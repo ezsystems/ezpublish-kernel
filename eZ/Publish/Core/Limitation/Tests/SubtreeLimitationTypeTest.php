@@ -58,7 +58,6 @@ class SubtreeLimitationTypeTest extends Base
     }
 
     /**
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::__construct
      *
      * @return \eZ\Publish\Core\Limitation\SubtreeLimitationType
      */
@@ -82,7 +81,6 @@ class SubtreeLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValue
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::acceptValue
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation $limitation
      * @param \eZ\Publish\Core\Limitation\SubtreeLimitationType $limitationType
@@ -108,7 +106,6 @@ class SubtreeLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValueException
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
@@ -133,7 +130,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestValidatePass
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation $limitation
      */
@@ -182,7 +178,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestValidateError
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation $limitation
      * @param int $errorCount
@@ -221,7 +216,6 @@ class SubtreeLimitationTypeTest extends Base
     }
 
     /**
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::validate
      */
     public function testValidateErrorWrongPath()
     {
@@ -255,7 +249,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::buildValue
      *
      * @param \eZ\Publish\Core\Limitation\SubtreeLimitationType $limitationType
      */
@@ -424,7 +417,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluate
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::evaluate
      */
     public function testEvaluate(
         SubtreeLimitation $limitation,
@@ -522,7 +514,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::evaluate
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
@@ -556,7 +547,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::getCriterion
      * @expectedException \RuntimeException
      *
      * @param \eZ\Publish\Core\Limitation\SubtreeLimitationType $limitationType
@@ -571,7 +561,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::getCriterion
      *
      * @param \eZ\Publish\Core\Limitation\SubtreeLimitationType $limitationType
      */
@@ -591,7 +580,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::getCriterion
      *
      * @param \eZ\Publish\Core\Limitation\SubtreeLimitationType $limitationType
      */
@@ -611,7 +599,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::valueSchema
      *
      * @param \eZ\Publish\Core\Limitation\SubtreeLimitationType $limitationType
      */

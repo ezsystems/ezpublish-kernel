@@ -54,7 +54,6 @@ class SiteAccessLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestAcceptValue
-     * @covers \eZ\Publish\Core\Limitation\SiteAccessLimitationType::acceptValue
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation $limitation
      * @param \eZ\Publish\Core\Limitation\SiteAccessLimitationType $limitationType
@@ -78,7 +77,6 @@ class SiteAccessLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestAcceptValueException
-     * @covers \eZ\Publish\Core\Limitation\SiteAccessLimitationType::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
@@ -146,7 +144,6 @@ class SiteAccessLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestValidateError
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SiteAccessLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation $limitation
      * @param int $errorCount
@@ -161,7 +158,6 @@ class SiteAccessLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SiteAccessLimitationType::buildValue
      *
      * @param \eZ\Publish\Core\Limitation\SiteAccessLimitationType $limitationType
      */
@@ -205,7 +201,6 @@ class SiteAccessLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestEvaluate
-     * @covers \eZ\Publish\Core\Limitation\SiteAccessLimitationType::evaluate
      */
     public function testEvaluate(
         SiteAccessLimitation $limitation,
@@ -249,7 +244,6 @@ class SiteAccessLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @covers \eZ\Publish\Core\Limitation\SiteAccessLimitationType::evaluate
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
@@ -270,7 +264,6 @@ class SiteAccessLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SiteAccessLimitationType::getCriterion
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\Core\Limitation\SiteAccessLimitationType $limitationType
@@ -282,7 +275,6 @@ class SiteAccessLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\SiteAccessLimitationType::valueSchema
      *
      * @param \eZ\Publish\Core\Limitation\SiteAccessLimitationType $limitationType
      */
