@@ -56,7 +56,6 @@ class ContentTypeLimitationTypeTest extends Base
     }
 
     /**
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::__construct
      *
      * @return \eZ\Publish\Core\Limitation\ContentTypeLimitationType
      */
@@ -80,7 +79,6 @@ class ContentTypeLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValue
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::acceptValue
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation $limitation
      * @param \eZ\Publish\Core\Limitation\ContentTypeLimitationType $limitationType
@@ -104,7 +102,6 @@ class ContentTypeLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValueException
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
@@ -129,7 +126,6 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestValidatePass
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation $limitation
      */
@@ -172,7 +168,6 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestValidateError
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation $limitation
      * @param int $errorCount
@@ -211,7 +206,6 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::buildValue
      *
      * @param \eZ\Publish\Core\Limitation\ContentTypeLimitationType $limitationType
      */
@@ -325,7 +319,6 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluate
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::evaluate
      */
     public function testEvaluate(
         ContentTypeLimitation $limitation,
@@ -381,7 +374,6 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::evaluate
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
@@ -414,7 +406,6 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::getCriterion
      * @expectedException \RuntimeException
      *
      * @param \eZ\Publish\Core\Limitation\ContentTypeLimitationType $limitationType
@@ -429,7 +420,6 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::getCriterion
      *
      * @param \eZ\Publish\Core\Limitation\ContentTypeLimitationType $limitationType
      */
@@ -449,7 +439,6 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::getCriterion
      *
      * @param \eZ\Publish\Core\Limitation\ContentTypeLimitationType $limitationType
      */
@@ -469,7 +458,6 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ContentTypeLimitationType::valueSchema
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\Core\Limitation\ContentTypeLimitationType $limitationType

@@ -11,13 +11,11 @@ namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation as APISiteAccessLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 
 /**
@@ -85,6 +83,9 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
     /**
      * Evaluate permission against content & target(placement/parent/assignment)
      *
+     * SiteAccess limitation takes a SiteAccess as ValueObject, and is hence like in legacy only suitable for user/login
+     * and similar policies.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
@@ -104,9 +105,9 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
             throw new InvalidArgumentException( '$value', 'Must be of type: APISiteAccessLimitation' );
         }
 
-        if ( !$object instanceof ContentInfo && !$object instanceof Content && !$object instanceof VersionInfo )
+        if ( !$object instanceof SiteAccess )
         {
-            throw new InvalidArgumentException( '$object', 'Must be of type: Content, VersionInfo or ContentInfo' );
+            throw new InvalidArgumentException( '$object', 'Must be of type: SiteAccess' );
         }
 
         if ( empty( $value->limitationValues ) )
@@ -114,11 +115,13 @@ class SiteAccessLimitationType implements SPILimitationTypeInterface
             return false;
         }
 
-        /**
-         * @todo Use current siteaccess as dependency in constructor, or define a way it can be injected in this function
-         * 4.x limitationValues in default 64bit mode is: sprintf( '%u', crc32( $siteAccessName ) )
-         */
-        return false;
+        if ( empty( $object->name ) )
+        {
+            return false;
+        }
+
+        $currentSiteAccessHash = sprintf( '%u', crc32( $object->name ) );
+        return in_array( $currentSiteAccessHash, $value->limitationValues );
     }
 
     /**

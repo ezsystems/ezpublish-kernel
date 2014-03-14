@@ -38,7 +38,12 @@ services:
 
     ezpublish.security.login_listener:
         class: %ezpublish.security.login_listener.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.config.resolver, @event_dispatcher, @security.context]
+        arguments:
+            - @ezpublish.api.repository
+            - @ezpublish.config.resolver
+            - @event_dispatcher
+            - @security.context
+            - %fragment.path%
         tags:
             - { name: kernel.event_subscriber }
 

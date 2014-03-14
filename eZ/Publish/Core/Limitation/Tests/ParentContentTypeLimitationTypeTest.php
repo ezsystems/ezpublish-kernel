@@ -86,7 +86,6 @@ class ParentContentTypeLimitationTest extends Base
     }
 
     /**
-     * @covers \eZ\Publish\Core\Limitation\SubtreeLimitationType::__construct
      *
      * @return \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType
      */
@@ -110,7 +109,6 @@ class ParentContentTypeLimitationTest extends Base
     /**
      * @dataProvider providerForTestAcceptValue
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType::acceptValue
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation $limitation
      * @param \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType $limitationType
@@ -135,7 +133,6 @@ class ParentContentTypeLimitationTest extends Base
     /**
      * @dataProvider providerForTestAcceptValueException
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
@@ -160,7 +157,6 @@ class ParentContentTypeLimitationTest extends Base
 
     /**
      * @dataProvider providerForTestValidatePass
-     * @covers \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation $limitation
      */
@@ -204,7 +200,6 @@ class ParentContentTypeLimitationTest extends Base
 
     /**
      * @dataProvider providerForTestValidateError
-     * @covers \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\ParentContentTypeLimitation $limitation
      * @param int $errorCount
@@ -243,7 +238,6 @@ class ParentContentTypeLimitationTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType::buildValue
      *
      * @param \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType $limitationType
      */
@@ -504,7 +498,6 @@ class ParentContentTypeLimitationTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluate
-     * @covers \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType::evaluate
      */
     public function testEvaluate(
         ParentContentTypeLimitation $limitation,
@@ -645,7 +638,6 @@ class ParentContentTypeLimitationTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @covers \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType::evaluate
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument( Limitation $limitation, ValueObject $object, $targets )
@@ -673,7 +665,6 @@ class ParentContentTypeLimitationTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType::getCriterion
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType $limitationType
@@ -688,7 +679,6 @@ class ParentContentTypeLimitationTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType::valueSchema
      *
      * @param \eZ\Publish\Core\Limitation\ParentContentTypeLimitationType $limitationType
      */

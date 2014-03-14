@@ -56,7 +56,6 @@ class StatusLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestAcceptValue
-     * @covers \eZ\Publish\Core\Limitation\StatusLimitationType::acceptValue
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\StatusLimitation $limitation
      * @param \eZ\Publish\Core\Limitation\StatusLimitationType $limitationType
@@ -80,7 +79,6 @@ class StatusLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestAcceptValueException
-     * @covers \eZ\Publish\Core\Limitation\StatusLimitationType::acceptValue
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
@@ -148,7 +146,6 @@ class StatusLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestValidateError
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\StatusLimitationType::validate
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\StatusLimitation $limitation
      * @param int $errorCount
@@ -162,7 +159,6 @@ class StatusLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\StatusLimitationType::buildValue
      *
      * @param \eZ\Publish\Core\Limitation\StatusLimitationType $limitationType
      */
@@ -259,7 +255,6 @@ class StatusLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestEvaluate
-     * @covers \eZ\Publish\Core\Limitation\StatusLimitationType::evaluate
      */
     public function testEvaluate(
         StatusLimitation $limitation,
@@ -310,7 +305,6 @@ class StatusLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @covers \eZ\Publish\Core\Limitation\StatusLimitationType::evaluate
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
@@ -331,7 +325,6 @@ class StatusLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\StatusLimitationType::getCriterion
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\Core\Limitation\StatusLimitationType $limitationType
@@ -343,7 +336,6 @@ class StatusLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\Limitation\StatusLimitationType::valueSchema
      *
      * @param \eZ\Publish\Core\Limitation\StatusLimitationType $limitationType
      */

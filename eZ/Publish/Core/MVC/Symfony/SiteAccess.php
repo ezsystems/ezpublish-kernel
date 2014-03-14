@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Symfony;
 
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * Base struct for a siteaccess representation
  */
-class SiteAccess
+class SiteAccess extends ValueObject
 {
     /**
      * Name of the siteaccess
