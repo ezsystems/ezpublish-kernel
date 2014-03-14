@@ -41,7 +41,7 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
         return array(
             array( 'foo', false ),
             array( new Attribute( 'foo', 'bar' ), true ),
-            array( new Attribute( 'foo', 'bar', array( 'some' => 'thing' ) ), true ),
+            array( new Attribute( 'foo', 'bar', array( 'some' => 'thing' ) ), false ),
             array( new \stdClass(), false ),
             array( array( 'foo' ), false ),
             array(
@@ -50,7 +50,7 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
                     'bar',
                     array( 'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) )
                 ),
-                true
+                false
             ),
         );
     }
@@ -97,6 +97,16 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
             array( array( 'foo' ) ),
             array( array( 'foo', 'bar', array( 'some' => 'thing' ) ) ),
             array( array( new \stdClass ) ),
+            array(
+                array(
+                    new Attribute(
+                        'foo',
+                        'bar',
+                        array( 'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) )
+                    )
+                ),
+                false
+            ),
         );
     }
 
@@ -106,11 +116,20 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
     public function testVote( Attribute $attribute, $repositoryCanUser, $expectedResult )
     {
         $voter = new CoreVoter( $this->repository );
-        $this->repository
-            ->expects( $this->once() )
-            ->method( 'hasAccess' )
-            ->with( $attribute->module, $attribute->function )
-            ->will( $this->returnValue( $repositoryCanUser ) );
+        if ( $repositoryCanUser !== null )
+        {
+            $this->repository
+                ->expects( $this->once() )
+                ->method( 'hasAccess' )
+                ->with( $attribute->module, $attribute->function )
+                ->will( $this->returnValue( $repositoryCanUser ) );
+        }
+        else
+        {
+            $this->repository
+                ->expects( $this->never() )
+                ->method( 'hasAccess' );
+        }
 
         $this->assertSame(
             $expectedResult,
@@ -126,12 +145,22 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                new Attribute( 'content', 'read', array( 'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) ) ),
+                new Attribute( 'content', 'read' ),
                 true,
                 VoterInterface::ACCESS_GRANTED
             ),
             array(
-                new Attribute( 'content', 'read', array( 'valueObject' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) ) ),
+                new Attribute( 'foo', 'bar' ),
+                true,
+                VoterInterface::ACCESS_GRANTED
+            ),
+            array(
+                new Attribute( 'content', 'read' ),
+                false,
+                VoterInterface::ACCESS_DENIED
+            ),
+            array(
+                new Attribute( 'some', 'thing' ),
                 false,
                 VoterInterface::ACCESS_DENIED
             ),
@@ -144,8 +173,8 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
                         'targets' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' )
                     )
                 ),
-                true,
-                VoterInterface::ACCESS_GRANTED
+                null,
+                VoterInterface::ACCESS_ABSTAIN
             ),
             array(
                 new Attribute(
@@ -156,8 +185,8 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
                         'targets' => array( $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) )
                     )
                 ),
-                true,
-                VoterInterface::ACCESS_GRANTED
+                null,
+                VoterInterface::ACCESS_ABSTAIN
             ),
             array(
                 new Attribute(
@@ -168,8 +197,8 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
                         'targets' => $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' )
                     )
                 ),
-                false,
-                VoterInterface::ACCESS_DENIED
+                null,
+                VoterInterface::ACCESS_ABSTAIN
             ),
             array(
                 new Attribute(
@@ -180,8 +209,8 @@ class CoreVoterTest extends PHPUnit_Framework_TestCase
                         'targets' => array( $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\ValueObject' ) )
                     )
                 ),
-                false,
-                VoterInterface::ACCESS_DENIED
+                null,
+                VoterInterface::ACCESS_ABSTAIN
             ),
         );
     }

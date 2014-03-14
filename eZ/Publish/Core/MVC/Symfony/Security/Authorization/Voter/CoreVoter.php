@@ -35,7 +35,7 @@ class CoreVoter implements VoterInterface
      */
     public function supportsAttribute( $attribute )
     {
-        return $attribute instanceof AuthorizationAttribute;
+        return $attribute instanceof AuthorizationAttribute && empty( $attribute->limitations );
     }
 
     /**
