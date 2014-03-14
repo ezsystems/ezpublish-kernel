@@ -115,7 +115,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $this->securityContext
             ->expects( $this->once() )
             ->method( 'isGranted' )
-            ->with( $this->equalTo( new AuthorizationAttribute( 'content', 'versionview', array( 'valueObject' => $content ) ) ) )
+            ->with( $this->equalTo( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
             ->will( $this->returnValue( false ) );
 
         $controller->previewContentAction( $contentId, $versionNo, $lang, 'test' );
@@ -146,7 +146,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $this->securityContext
             ->expects( $this->once() )
             ->method( 'isGranted' )
-            ->with( $this->equalTo( new AuthorizationAttribute( 'content', 'versionview', array( 'valueObject' => $content ) ) ) )
+            ->with( $this->equalTo( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
             ->will( $this->returnValue( true ) );
 
         $previewSiteAccessName = 'test';

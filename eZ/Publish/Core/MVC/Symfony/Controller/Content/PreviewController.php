@@ -79,7 +79,7 @@ class PreviewController
             throw new AccessDeniedException();
         }
 
-        if ( !$this->securityContext->isGranted( new AuthorizationAttribute( 'content', 'versionview', array( 'valueObject' => $content ) ) ) )
+        if ( !$this->securityContext->isGranted( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
         {
             throw new AccessDeniedException();
         }
