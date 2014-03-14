@@ -418,7 +418,7 @@ class ContentService implements ContentServiceInterface
 
         if ( $contentCreateStruct->alwaysAvailable === null )
         {
-            throw new InvalidArgumentException( "\$contentCreateStruct", "'alwaysAvailable' property must be set" );
+            $contentCreateStruct->alwaysAvailable = false;
         }
 
         // @todo Ok to remove?

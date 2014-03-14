@@ -299,11 +299,6 @@ class ContentService implements ContentServiceInterface
             $contentCreateStruct->ownerId = $this->permissionsService->getCurrentUser()->id;
         }
 
-        if ( $contentCreateStruct->alwaysAvailable === null )
-        {
-            $contentCreateStruct->alwaysAvailable = false;
-        }
-
         if ( empty( $contentCreateStruct->sectionId ) )
         {
             /*

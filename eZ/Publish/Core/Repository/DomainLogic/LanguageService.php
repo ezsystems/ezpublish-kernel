@@ -84,9 +84,6 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_bool( $languageCreateStruct->enabled ) )
             throw new InvalidArgumentValue( "enabled", $languageCreateStruct->enabled, "LanguageCreateStruct" );
 
-        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
-            throw new UnauthorizedException( 'content', 'translations' );
-
         try
         {
             if ( $this->loadLanguage( $languageCreateStruct->languageCode ) !== null )
@@ -137,9 +134,6 @@ class LanguageService implements LanguageServiceInterface
         if ( !is_string( $newName ) || empty( $newName ) )
             throw new InvalidArgumentValue( "newName", $newName );
 
-        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
-            throw new UnauthorizedException( 'content', 'translations' );
-
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
         $updateLanguageStruct = new SPILanguage(
@@ -177,9 +171,6 @@ class LanguageService implements LanguageServiceInterface
      */
     public function enableLanguage( Language $language )
     {
-        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
-            throw new UnauthorizedException( 'content', 'translations' );
-
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
         $updateLanguageStruct = new SPILanguage(
@@ -217,9 +208,6 @@ class LanguageService implements LanguageServiceInterface
      */
     public function disableLanguage( Language $language )
     {
-        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
-            throw new UnauthorizedException( 'content', 'translations' );
-
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
         $updateLanguageStruct = new SPILanguage(
@@ -312,9 +300,6 @@ class LanguageService implements LanguageServiceInterface
      */
     public function deleteLanguage( Language $language )
     {
-        if ( $this->repository->hasAccess( 'content', 'translations' ) !== true )
-            throw new UnauthorizedException( 'content', 'translations' );
-
         $loadedLanguage = $this->loadLanguageById( $language->id );
 
         $this->repository->beginTransaction();

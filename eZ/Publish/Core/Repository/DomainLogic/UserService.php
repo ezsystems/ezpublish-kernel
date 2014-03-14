@@ -38,7 +38,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use ezcMailTools;
 use Exception;
 
@@ -110,6 +109,16 @@ class UserService implements UserServiceInterface
         $locationService = $this->repository->getLocationService();
         $contentTypeService = $this->repository->getContentTypeService();
 
+        if ( $userGroupCreateStruct->sectionId === null )
+        {
+            $userGroupCreateStruct->sectionId = $parentGroup->contentInfo->sectionId;
+        }
+
+        if ( $userGroupCreateStruct->alwaysAvailable === null )
+        {
+            $userGroupCreateStruct->alwaysAvailable = false;
+        }
+
         if ( $userGroupCreateStruct->contentType === null )
         {
             $userGroupContentType = $contentTypeService->loadContentType( $this->settings['userGroupClassID'] );
@@ -170,11 +179,7 @@ class UserService implements UserServiceInterface
     public function loadSubUserGroups( APIUserGroup $userGroup )
     {
         $locationService = $this->repository->getLocationService();
-
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
-        if ( !$this->repository->canUser( 'content', 'read', $loadedUserGroup ) )
-            throw new UnauthorizedException( 'content', 'read' );
-
         if ( $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
             return array();
 
@@ -333,7 +338,11 @@ class UserService implements UserServiceInterface
             $publishedContent = $loadedUserGroup;
             if ( $userGroupUpdateStruct->contentUpdateStruct !== null )
             {
-                $contentDraft = $contentService->createContentDraft( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+                $contentDraft = $contentService->createContentDraft(
+                    $loadedUserGroup->getVersionInfo()->getContentInfo(),
+                    null,
+                    $this->loadUser( $userGroupUpdateStruct->contentUpdateStruct->creatorId )
+                );
 
                 $contentDraft = $contentService->updateContent(
                     $contentDraft->getVersionInfo(),
@@ -409,15 +418,11 @@ class UserService implements UserServiceInterface
         $locationService = $this->repository->getLocationService();
         $contentTypeService = $this->repository->getContentTypeService();
 
-        // @TODO: Fix when moving to Repo/Permission
-        if ( $userCreateStruct->ownerId === null )
-        {
-            $userCreateStruct->ownerId = 14;
-        }
         if ( $userCreateStruct->sectionId === null )
         {
-            $userCreateStruct->sectionId = 1;
+            $userCreateStruct->sectionId = $parentGroups[0]->contentInfo->sectionId;
         }
+
         if ( $userCreateStruct->alwaysAvailable === null )
         {
             $userCreateStruct->alwaysAvailable = false;
@@ -742,16 +747,17 @@ class UserService implements UserServiceInterface
 
         $contentService = $this->repository->getContentService();
 
-        if ( !$this->repository->canUser( 'content', 'edit', $loadedUser ) )
-            throw new UnauthorizedException( 'content', 'edit' );
-
         $this->repository->beginTransaction();
         try
         {
             $publishedContent = $loadedUser;
             if ( $userUpdateStruct->contentUpdateStruct !== null )
             {
-                $contentDraft = $contentService->createContentDraft( $loadedUser->getVersionInfo()->getContentInfo() );
+                $contentDraft = $contentService->createContentDraft(
+                    $loadedUser->getVersionInfo()->getContentInfo(),
+                    null,
+                    $this->loadUser( $userUpdateStruct->contentUpdateStruct->creatorId )
+                );
                 $contentDraft = $contentService->updateContent(
                     $contentDraft->getVersionInfo(),
                     $userUpdateStruct->contentUpdateStruct
@@ -913,10 +919,6 @@ class UserService implements UserServiceInterface
     public function loadUserGroupsOfUser( APIUser $user )
     {
         $locationService = $this->repository->getLocationService();
-
-        if ( !$this->repository->canUser( 'content', 'edit', $user ) )
-            throw new UnauthorizedException( 'content', 'edit' );
-
         $userLocations = $locationService->loadLocations(
             $user->getVersionInfo()->getContentInfo()
         );

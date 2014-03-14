@@ -47,7 +47,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\ContentTypeValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentTypeFieldDefinitionValidationException;
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\ValidationError;
 use DateTime;
 use Exception;
@@ -115,9 +114,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
     {
-        if ( $this->repository->hasAccess( 'class', 'create' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'create' );
-
         try
         {
             $this->loadContentTypeGroupByIdentifier( $contentTypeGroupCreateStruct->identifier );
@@ -141,22 +137,13 @@ class ContentTypeService implements ContentTypeServiceInterface
             $timestamp = $contentTypeGroupCreateStruct->creationDate->getTimestamp();
         }
 
-        if ( $contentTypeGroupCreateStruct->creatorId === null )
-        {
-            $userId = $this->repository->getCurrentUser()->id;
-        }
-        else
-        {
-            $userId = $contentTypeGroupCreateStruct->creatorId;
-        }
-
         $spiGroupCreateStruct = new SPIContentTypeGroupCreateStruct(
             array(
                 "identifier" => $contentTypeGroupCreateStruct->identifier,
                 "created" => $timestamp,
                 "modified" => $timestamp,
-                "creatorId" => $userId,
-                "modifierId" => $userId
+                "creatorId" => $contentTypeGroupCreateStruct->creatorId,
+                "modifierId" => $contentTypeGroupCreateStruct->creatorId
             )
         );
 
@@ -248,9 +235,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateContentTypeGroup( APIContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
     {
-        if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'update' );
-
         $loadedContentTypeGroup = $this->loadContentTypeGroup( $contentTypeGroup->id );
 
         if ( $contentTypeGroupUpdateStruct->identifier !== null
@@ -287,9 +271,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                     $loadedContentTypeGroup->identifier :
                     $contentTypeGroupUpdateStruct->identifier,
                 "modified" => $modifiedTimestamp,
-                "modifierId" => $contentTypeGroupUpdateStruct->modifierId === null ?
-                    $this->repository->getCurrentUser()->id :
-                    $contentTypeGroupUpdateStruct->modifierId
+                "modifierId" => $contentTypeGroupUpdateStruct->modifierId
             )
         );
 
@@ -320,9 +302,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function deleteContentTypeGroup( APIContentTypeGroup $contentTypeGroup )
     {
-        if ( $this->repository->hasAccess( 'class', 'delete' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'delete' );
-
         $loadedContentTypeGroup = $this->loadContentTypeGroup( $contentTypeGroup->id );
 
         $this->repository->beginTransaction();
@@ -487,9 +466,13 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        if ( $contentTypeCreateStruct->creatorId !== null )
+        if ( $contentTypeCreateStruct->creatorId === null )
         {
-            $this->repository->getUserService()->loadUser( $contentTypeCreateStruct->creatorId );
+            throw new InvalidArgumentType(
+                "\$contentTypeCreateStruct->creatorId",
+                "int|string",
+                $contentTypeCreateStruct->creatorId
+            );
         }
 
         if ( $contentTypeCreateStruct->creationDate !== null && !$contentTypeCreateStruct->creationDate instanceof DateTime )
@@ -893,11 +876,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             },
             $contentTypeGroups
         );
-
-        if ( $contentTypeCreateStruct->creatorId === null )
-        {
-            $contentTypeCreateStruct->creatorId = $this->repository->getCurrentUser()->id;
-        }
 
         if ( $contentTypeCreateStruct->creationDate === null )
         {
@@ -1318,11 +1296,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             SPIContentType::STATUS_DRAFT
         );
 
-        if ( $spiContentType->modifierId != $this->repository->getCurrentUser()->id )
-        {
-            throw new NotFoundException( "ContentType owned by someone else", $contentTypeId );
-        }
-
         return $this->buildContentTypeDraftDomainObject(
             $spiContentType
         );
@@ -1361,13 +1334,19 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there is already a draft assigned to another user
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\API\Repository\Values\User\User $modifier If null the current-user is used instead
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentTypeDraft( APIContentType $contentType )
+    public function createContentTypeDraft( APIContentType $contentType, User $modifier = null )
     {
-        if ( $this->repository->hasAccess( 'class', 'create' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'create' );
+        if ( !$modifier instanceof User )
+        {
+            throw new InvalidArgumentException(
+                "\$modifier",
+                "When using the DomainLogic layer you have to provide user"
+            );
+        }
 
         try
         {
@@ -1387,7 +1366,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             try
             {
                 $spiContentType = $this->contentTypeHandler->createDraft(
-                    $this->repository->getCurrentUser()->id,
+                    $modifier->id,
                     $contentType->id
                 );
                 $this->repository->commit();
@@ -1418,11 +1397,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateContentTypeDraft( APIContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
     {
-        if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
-        {
-            throw new UnauthorizedException( 'ContentType', 'update' );
-        }
-
         try
         {
             $loadedContentTypeDraft = $this->loadContentTypeDraft( $contentTypeDraft->id );
@@ -1521,9 +1495,10 @@ class ContentTypeService implements ContentTypeServiceInterface
         $updateStruct->modified = $contentTypeUpdateStruct->modificationDate !== null ?
             $contentTypeUpdateStruct->modificationDate->getTimestamp() :
             time();
+
         $updateStruct->modifierId = $contentTypeUpdateStruct->modifierId !== null ?
             $contentTypeUpdateStruct->modifierId :
-            $this->repository->getCurrentUser()->id;
+            $contentTypeDraft->modifierId;
 
         $updateStruct->urlAliasSchema = $contentTypeUpdateStruct->urlAliasSchema !== null ?
             $contentTypeUpdateStruct->urlAliasSchema :
@@ -1566,9 +1541,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function deleteContentType( APIContentType $contentType )
     {
-        if ( $this->repository->hasAccess( 'class', 'delete' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'delete' );
-
         $this->repository->beginTransaction();
         try
         {
@@ -1600,12 +1572,12 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function copyContentType( APIContentType $contentType, User $creator = null )
     {
-        if ( $this->repository->hasAccess( 'class', 'create' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'create' );
-
-        if ( empty( $creator ) )
+        if ( !$creator instanceof User )
         {
-            $creator = $this->repository->getCurrentUser();
+            throw new InvalidArgumentException(
+                "\$creator",
+                "When using the DomainLogic layer you have to provide user"
+            );
         }
 
         $this->repository->beginTransaction();
@@ -1638,9 +1610,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function assignContentTypeGroup( APIContentType $contentType, APIContentTypeGroup $contentTypeGroup )
     {
-        if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'update' );
-
         $spiContentType = $this->contentTypeHandler->load(
             $contentType->id,
             $contentType->status
@@ -1683,9 +1652,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function unassignContentTypeGroup( APIContentType $contentType, APIContentTypeGroup $contentTypeGroup )
     {
-        if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'update' );
-
         $spiContentType = $this->contentTypeHandler->load(
             $contentType->id,
             $contentType->status
@@ -1744,9 +1710,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function addFieldDefinition( APIContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
     {
-        if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'update' );
-
         $this->validateInputFieldDefinitionCreateStruct( $fieldDefinitionCreateStruct );
         $loadedContentTypeDraft = $this->loadContentTypeDraft( $contentTypeDraft->id );
 
@@ -1825,9 +1788,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function removeFieldDefinition( APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition )
     {
-        if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'update' );
-
         $loadedFieldDefinition = $this->loadContentTypeDraft(
             $contentTypeDraft->id
         )->getFieldDefinition(
@@ -1872,9 +1832,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateFieldDefinition( APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
     {
-        if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
-            throw new UnauthorizedException( 'ContentType', 'update' );
-
         $loadedContentTypeDraft = $this->loadContentTypeDraft( $contentTypeDraft->id );
         $foundFieldId = false;
         foreach ( $loadedContentTypeDraft->fieldDefinitions as $existingFieldDefinition )
@@ -1934,11 +1891,6 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function publishContentTypeDraft( APIContentTypeDraft $contentTypeDraft )
     {
-        if ( $this->repository->hasAccess( 'class', 'update' ) !== true )
-        {
-            throw new UnauthorizedException( 'ContentType', 'update' );
-        }
-
         try
         {
             $loadedContentTypeDraft = $this->loadContentTypeDraft( $contentTypeDraft->id );

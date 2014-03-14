@@ -1,34 +1,63 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\ContentTypeService class.
+ * File containing the eZ\Publish\Core\Repository\Permission\ContentTypeService class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package eZ\Publish\API\Repository
+ * @package eZ\Publish\Core\Repository\Permission
  */
 
-namespace eZ\Publish\API\Repository;
+namespace eZ\Publish\Core\Repository\Permission;
 
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft as APIContentTypeDraft;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct as APIContentTypeCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Repository\Permission\PermissionsService;
 
 /**
  * @example Examples/contenttype.php
  *
- * @package eZ\Publish\API\Repository
+ * @package eZ\Publish\Core\Repository\Permission
  */
-interface ContentTypeService
+class ContentTypeService implements ContentTypeServiceInterface
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    protected $permissionsService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected $innerContentTypeService;
+
+    /**
+     * Setups service with reference to repository object that created it & corresponding handler
+     *
+     * @param \eZ\Publish\API\Repository\ContentTypeService $innerContentTypeService
+     * @param PermissionsService $permissionsService
+     */
+    public function __construct(
+        ContentTypeServiceInterface $innerContentTypeService,
+        PermissionsService $permissionsService
+    )
+    {
+        $this->innerContentTypeService = $innerContentTypeService;
+        $this->permissionsService = $permissionsService;
+    }
+
     /**
      * Create a Content Type Group object
      *
@@ -39,7 +68,18 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct );
+    public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'create' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'create' );
+
+        if ( $contentTypeGroupCreateStruct->creatorId === null )
+        {
+            $contentTypeGroupCreateStruct->creatorId = $this->permissionsService->getCurrentUser()->id;
+        }
+
+        return $this->innerContentTypeService->createContentTypeGroup( $contentTypeGroupCreateStruct );
+    }
 
     /**
      * Get a Content Type Group object by id
@@ -50,7 +90,12 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroup( $contentTypeGroupId );
+    public function loadContentTypeGroup( $contentTypeGroupId )
+    {
+        return $this->innerContentTypeService->loadContentTypeGroup(
+            $contentTypeGroupId
+        );
+    }
 
     /**
      * Get a Content Type Group object by identifier
@@ -61,14 +106,22 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier );
+    public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier )
+    {
+        return $this->innerContentTypeService->loadContentTypeGroupByIdentifier(
+            $contentTypeGroupIdentifier
+        );
+    }
 
     /**
      * Get all Content Type Groups
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
-    public function loadContentTypeGroups();
+    public function loadContentTypeGroups()
+    {
+        return $this->innerContentTypeService->loadContentTypeGroups();
+    }
 
     /**
      * Update a Content Type Group object
@@ -79,7 +132,21 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup the content type group to be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
      */
-    public function updateContentTypeGroup( ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct );
+    public function updateContentTypeGroup( APIContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'update' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'update' );
+
+        if ( $contentTypeGroupUpdateStruct->modifierId === null )
+        {
+            $contentTypeGroupUpdateStruct->modifierId = $this->permissionsService->getCurrentUser()->id;
+        }
+
+        return $this->innerContentTypeService->updateContentTypeGroup(
+            $contentTypeGroup,
+            $contentTypeGroupUpdateStruct
+        );
+    }
 
     /**
      * Delete a Content Type Group.
@@ -89,9 +156,17 @@ interface ContentTypeService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If  a to be deleted content type has instances
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $ContentTypeGroup
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup );
+    public function deleteContentTypeGroup( APIContentTypeGroup $contentTypeGroup )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'delete' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'delete' );
+
+        return $this->innerContentTypeService->deleteContentTypeGroup(
+            $contentTypeGroup
+        );
+    }
 
     /**
      * Create a Content Type object.
@@ -105,14 +180,34 @@ interface ContentTypeService
      *         - content type create struct does not contain at least one field definition create struct
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      *         if a field definition in the $contentTypeCreateStruct is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeValidationException
+     *         if a multiple field definitions of a same singular type are given
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of
-     *        {@link ContentTypeGroup} to link type with (must contain one)
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[] $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups );
+    public function createContentType( APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'create' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'create' );
+
+        if ( $contentTypeCreateStruct->creatorId === null )
+        {
+            $contentTypeCreateStruct->creatorId = $this->permissionsService->getCurrentUser()->id;
+        }
+        else if ( $contentTypeCreateStruct->creatorId !== $this->permissionsService->getCurrentUser()->id )
+        {
+            // Check that current user has read access to user set as creator
+            $this->userService->loadUser( $contentTypeCreateStruct->creatorId );
+        }
+
+        return $this->innerContentTypeService->createContentType(
+            $contentTypeCreateStruct,
+            $contentTypeGroups
+        );
+    }
 
     /**
      * Get a Content Type object by id
@@ -123,7 +218,12 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentType( $contentTypeId );
+    public function loadContentType( $contentTypeId )
+    {
+        return $this->innerContentTypeService->loadContentType(
+            $contentTypeId
+        );
+    }
 
     /**
      * Get a Content Type object by identifier
@@ -134,7 +234,12 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByIdentifier( $identifier );
+    public function loadContentTypeByIdentifier( $identifier )
+    {
+        return $this->innerContentTypeService->loadContentTypeByIdentifier(
+            $identifier
+        );
+    }
 
     /**
      * Get a Content Type object by id
@@ -145,7 +250,12 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByRemoteId( $remoteId );
+    public function loadContentTypeByRemoteId( $remoteId )
+    {
+        return $this->innerContentTypeService->loadContentTypeByRemoteId(
+            $remoteId
+        );
+    }
 
     /**
      * Get a Content Type object draft by id
@@ -154,18 +264,37 @@ interface ContentTypeService
      *
      * @param mixed $contentTypeId
      *
+     * @todo Use another exception when user of draft is someone else
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function loadContentTypeDraft( $contentTypeId );
+    public function loadContentTypeDraft( $contentTypeId )
+    {
+        $contentTypeDraft = $this->innerContentTypeService->loadContentTypeDraft(
+            $contentTypeId
+        );
+
+        if ( $contentTypeDraft->modifierId != $this->permissionsService->getCurrentUser()->id )
+        {
+            throw new NotFoundException( "ContentType owned by someone else", $contentTypeId );
+        }
+
+        return $contentTypeDraft;
+    }
 
     /**
      * Get Content Type objects which belong to the given content type group
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] Which have status DEFINED
      */
-    public function loadContentTypes( ContentTypeGroup $contentTypeGroup );
+    public function loadContentTypes( APIContentTypeGroup $contentTypeGroup )
+    {
+        return $this->innerContentTypeService->loadContentTypes(
+            $contentTypeGroup
+        );
+    }
 
     /**
      * Creates a draft from an existing content type.
@@ -181,7 +310,21 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentTypeDraft( ContentType $contentType, User $modifier = null );
+    public function createContentTypeDraft( APIContentType $contentType, User $modifier = null )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'create' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'create' );
+
+        if ( $modifier === null )
+        {
+            $modifier = $this->permissionsService->getCurrentUser();
+        }
+
+        return $this->innerContentTypeService->createContentTypeDraft(
+            $contentType,
+            $modifier
+        );
+    }
 
     /**
      * Update a Content Type object
@@ -189,12 +332,29 @@ interface ContentTypeService
      * Does not update fields (fieldDefinitions), use {@link updateFieldDefinition()} to update them.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update a content type
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given identifier or remoteId already exists.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the given identifier or remoteId already exists
+     *         or there is no draft assigned to the authenticated user
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
      */
-    public function updateContentTypeDraft( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct );
+    public function updateContentTypeDraft( APIContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'update' ) !== true )
+        {
+            throw new UnauthorizedException( 'ContentType', 'update' );
+        }
+
+        if ( $contentTypeUpdateStruct->modifierId === null )
+        {
+            $contentTypeUpdateStruct->modifierId = $this->permissionsService->getCurrentUser()->id;
+        }
+
+        return $this->innerContentTypeService->updateContentTypeDraft(
+            $contentTypeDraft,
+            $contentTypeUpdateStruct
+        );
+    }
 
     /**
      * Delete a Content Type object.
@@ -206,7 +366,15 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      */
-    public function deleteContentType( ContentType $contentType );
+    public function deleteContentType( APIContentType $contentType )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'delete' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'delete' );
+
+        return $this->innerContentTypeService->deleteContentType(
+            $contentType
+        );
+    }
 
     /**
      * Copy Type incl fields and groupIds to a new Type object
@@ -217,11 +385,25 @@ interface ContentTypeService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to copy a content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param \eZ\Publish\API\Repository\Values\User\User $creator If null the current-user is used instead
+     * @param \eZ\Publish\API\Repository\Values\User\User $creator if null the current-user is used
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function copyContentType( ContentType $contentType, User $creator = null );
+    public function copyContentType( APIContentType $contentType, User $creator = null )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'create' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'create' );
+
+        if ( empty( $creator ) )
+        {
+            $creator = $this->permissionsService->getCurrentUser();
+        }
+
+        return $this->innerContentTypeService->copyContentType(
+            $contentType,
+            $creator
+        );
+    }
 
     /**
      * Assigns a content type to a content type group.
@@ -232,7 +414,16 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function assignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup );
+    public function assignContentTypeGroup( APIContentType $contentType, APIContentTypeGroup $contentTypeGroup )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'update' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'update' );
+
+        return $this->innerContentTypeService->assignContentTypeGroup(
+            $contentType,
+            $contentTypeGroup
+        );
+    }
 
     /**
      * Unassign a content type from a group.
@@ -244,7 +435,16 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup );
+    public function unassignContentTypeGroup( APIContentType $contentType, APIContentTypeGroup $contentTypeGroup )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'update' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'update' );
+
+        return $this->innerContentTypeService->unassignContentTypeGroup(
+            $contentType,
+            $contentTypeGroup
+        );
+    }
 
     /**
      * Adds a new field definition to an existing content type.
@@ -263,7 +463,17 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      */
-    public function addFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct );
+    public function addFieldDefinition( APIContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'update' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'update' );
+
+        return $this->innerContentTypeService->addFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinitionCreateStruct
+        );
+
+    }
 
     /**
      * Remove a field definition from an existing Type.
@@ -274,12 +484,21 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      */
-    public function removeFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition );
+    public function removeFieldDefinition( APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'update' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'update' );
+
+        return $this->innerContentTypeService->removeFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition
+        );
+    }
 
     /**
      * Update a field definition
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the field id in the update struct is not found or does not belong to the content type of
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the field id in the update struct is not found or does not belong to the content type
      *                                                                        If the given identifier is used in an existing field of the given content type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      *
@@ -287,7 +506,17 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      */
-    public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct );
+    public function updateFieldDefinition( APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'update' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'update' );
+
+        return $this->innerContentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition,
+            $fieldDefinitionUpdateStruct
+        );
+    }
 
     /**
      * Publish the content type and update content objects.
@@ -300,7 +529,17 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      */
-    public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft );
+    public function publishContentTypeDraft( APIContentTypeDraft $contentTypeDraft )
+    {
+        if ( $this->permissionsService->hasAccess( 'class', 'update' ) !== true )
+        {
+            throw new UnauthorizedException( 'ContentType', 'update' );
+        }
+
+        return $this->innerContentTypeService->publishContentTypeDraft(
+            $contentTypeDraft
+        );
+    }
 
     /**
      * Instantiates a new content type group create class
@@ -309,7 +548,12 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
      */
-    public function newContentTypeGroupCreateStruct( $identifier );
+    public function newContentTypeGroupCreateStruct( $identifier )
+    {
+        return $this->innerContentTypeService->newContentTypeGroupCreateStruct(
+            $identifier
+        );
+    }
 
     /**
      * Instantiates a new content type create class
@@ -318,21 +562,32 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
      */
-    public function newContentTypeCreateStruct( $identifier );
+    public function newContentTypeCreateStruct( $identifier )
+    {
+        return $this->innerContentTypeService->newContentTypeCreateStruct(
+            $identifier
+        );
+    }
 
     /**
      * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
-    public function newContentTypeUpdateStruct();
+    public function newContentTypeUpdateStruct()
+    {
+        return $this->innerContentTypeService->newContentTypeUpdateStruct();
+    }
 
     /**
      * Instantiates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
-    public function newContentTypeGroupUpdateStruct();
+    public function newContentTypeGroupUpdateStruct()
+    {
+        return $this->innerContentTypeService->newContentTypeGroupUpdateStruct();
+    }
 
     /**
      * Instantiates a field definition create struct
@@ -342,12 +597,21 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
      */
-    public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier );
+    public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier )
+    {
+        return $this->innerContentTypeService->newFieldDefinitionCreateStruct(
+            $identifier,
+            $fieldTypeIdentifier
+        );
+    }
 
     /**
      * Instantiates a field definition update class
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
-    public function newFieldDefinitionUpdateStruct();
+    public function newFieldDefinitionUpdateStruct()
+    {
+        return $this->innerContentTypeService->newFieldDefinitionUpdateStruct();
+    }
 }

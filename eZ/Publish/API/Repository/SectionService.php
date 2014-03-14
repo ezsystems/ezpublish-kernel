@@ -83,6 +83,8 @@ interface SectionService
     /**
      * Counts the contents which $section is assigned to
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      *
      * @return int

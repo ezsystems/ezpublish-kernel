@@ -255,11 +255,10 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getContentLanguageService()
     {
-        return $this->innerRepository->getContentLanguageService();
         if ( $this->languageService !== null )
             return $this->languageService;
 
-        $this->languageService = new LanguageService( $this->innerRepository->getContentLanguageService(), $this->signalDispatcher );
+        $this->languageService = new LanguageService( $this->innerRepository->getContentLanguageService(), $this->permissionsService );
         return $this->languageService;
     }
 
@@ -273,11 +272,10 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getContentTypeService()
     {
-        return $this->innerRepository->getContentTypeService();
         if ( $this->contentTypeService !== null )
             return $this->contentTypeService;
 
-        $this->contentTypeService = new ContentTypeService( $this->innerRepository->getContentTypeService(), $this->signalDispatcher );
+        $this->contentTypeService = new ContentTypeService( $this->innerRepository->getContentTypeService(), $this->permissionsService );
         return $this->contentTypeService;
     }
 
@@ -325,11 +323,10 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getSectionService()
     {
-        return $this->innerRepository->getSectionService();
         if ( $this->sectionService !== null )
             return $this->sectionService;
 
-        $this->sectionService = new SectionService( $this->innerRepository->getSectionService(), $this->signalDispatcher );
+        $this->sectionService = new SectionService( $this->innerRepository->getSectionService(), $this->permissionsService );
         return $this->sectionService;
     }
 
@@ -342,11 +339,10 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getUserService()
     {
-        return $this->innerRepository->getUserService();
         if ( $this->userService !== null )
             return $this->userService;
 
-        $this->userService = new UserService( $this->innerRepository->getUserService(), $this->signalDispatcher );
+        $this->userService = new UserService( $this->innerRepository->getUserService(), $this->permissionsService );
         return $this->userService;
     }
 
@@ -417,11 +413,10 @@ class Repository implements PermissionRepositoryInterface
      */
     public function getSearchService()
     {
-        return $this->innerRepository->getSearchService();
         if ( $this->searchService !== null )
             return $this->searchService;
 
-        $this->searchService = new SearchService( $this->innerRepository->getSearchService(), $this->signalDispatcher );
+        $this->searchService = new SearchService( $this->innerRepository->getSearchService(), $this->permissionsService );
         return $this->searchService;
     }
 
@@ -433,11 +428,6 @@ class Repository implements PermissionRepositoryInterface
     public function getFieldTypeService()
     {
         return $this->innerRepository->getFieldTypeService();
-        if ( $this->fieldTypeService !== null )
-            return $this->fieldTypeService;
-
-        $this->fieldTypeService = new FieldTypeService( $this->innerRepository->getFieldTypeService(), $this->signalDispatcher );
-        return $this->fieldTypeService;
     }
 
     /**

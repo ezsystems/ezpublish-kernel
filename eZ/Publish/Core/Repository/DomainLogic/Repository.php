@@ -539,7 +539,6 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->searchHandler(),
             $this->persistenceHandler->locationSearchHandler(),
             $this->getDomainMapper(),
-            $this->getPermissionsCriterionHandler(),
             $this->serviceSettings['search']
         );
         return $this->searchService;
