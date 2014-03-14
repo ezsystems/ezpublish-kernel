@@ -31,6 +31,14 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent as BaseInteracti
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * This security listener listens to security.interactive_login event to:
+ *  - Give a chance to retrieve an eZ user when using multiple user providers
+ *  - Check if user can actually login to the current SiteAccess
+ *
+ * Also listens to kernel.request to:
+ *  - Check if current user (authenticated or not) can access to current SiteAccess
+ */
 class SecurityListener implements EventSubscriberInterface
 {
     /**
@@ -53,6 +61,11 @@ class SecurityListener implements EventSubscriberInterface
      */
     private $securityContext;
 
+    /**
+     * The fragment path (for ESI/Hinclude...).
+     *
+     * @var string
+     */
     private $fragmentPath;
 
     public function __construct(
