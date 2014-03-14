@@ -22,6 +22,7 @@ use eZ\Publish\Core\MVC\Symfony\Security\UserWrapped;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -52,12 +53,21 @@ class SecurityListener implements EventSubscriberInterface
      */
     private $securityContext;
 
-    public function __construct( Repository $repository, ConfigResolverInterface $configResolver, EventDispatcherInterface $eventDispatcher, SecurityContextInterface $securityContext )
+    private $fragmentPath;
+
+    public function __construct(
+        Repository $repository,
+        ConfigResolverInterface $configResolver,
+        EventDispatcherInterface $eventDispatcher,
+        SecurityContextInterface $securityContext,
+        $fragmentPath = '/_fragment'
+    )
     {
         $this->repository = $repository;
         $this->configResolver = $configResolver;
         $this->eventDispatcher = $eventDispatcher;
         $this->securityContext = $securityContext;
+        $this->fragmentPath = $fragmentPath;
     }
 
     public static function getSubscribedEvents()
@@ -171,9 +181,11 @@ class SecurityListener implements EventSubscriberInterface
      */
     public function onKernelRequest( GetResponseEvent $event )
     {
+        $request = $event->getRequest();
         if (
             !(
-                $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST
+                // Ignore sub-requests, including fragments.
+                $this->isMasterRequest( $request, $event->getRequestType() )
                 // In legacy_mode, roles and policies must be delegated to legacy kernel.
                 && !$this->configResolver->getParameter( 'legacy_mode' )
             )
@@ -182,7 +194,6 @@ class SecurityListener implements EventSubscriberInterface
             return;
         }
 
-        $request = $event->getRequest();
         $siteAccess = $request->attributes->get( 'siteaccess' );
         if ( !$siteAccess instanceof SiteAccess )
         {
@@ -203,6 +214,28 @@ class SecurityListener implements EventSubscriberInterface
         {
             throw new UnauthorizedSiteAccessException( $siteAccess, $token->getUsername() );
         }
+    }
+
+    /**
+     * Returns true if given request is considered as a master request.
+     * Fragments are considered as sub-requests (i.e. ESI, Hinclude...)
+     *
+     * @param Request $request
+     * @param $requestType
+     *
+     * @return bool
+     */
+    private function isMasterRequest( Request $request, $requestType )
+    {
+        if (
+            $requestType !== HttpKernelInterface::MASTER_REQUEST
+            || substr( $request->getPathInfo(), -strlen( $this->fragmentPath ) ) === $this->fragmentPath
+        )
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**

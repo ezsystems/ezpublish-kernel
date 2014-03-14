@@ -258,6 +258,27 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $this->listener->onKernelRequest( $event );
     }
 
+    public function testOnKernelRequestSubRequestFragment()
+    {
+        $event = new GetResponseEvent(
+            $this->getMock( 'Symfony\Component\HttpKernel\HttpKernelInterface' ),
+            Request::create( '/_fragment' ),
+            HttpKernelInterface::MASTER_REQUEST
+        );
+        $this->configResolver
+            ->expects( $this->never() )
+            ->method( 'getParameter' );
+
+        $this->securityContext
+            ->expects( $this->never() )
+            ->method( 'getToken' );
+        $this->securityContext
+            ->expects( $this->never() )
+            ->method( 'isGranted' );
+
+        $this->listener->onKernelRequest( $event );
+    }
+
     public function testOnKernelRequestLegacyMode()
     {
         $event = new GetResponseEvent(
