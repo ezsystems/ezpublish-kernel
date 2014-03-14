@@ -12,13 +12,19 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\EventListener;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
+use eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException;
 use eZ\Publish\Core\MVC\Symfony\Security\InteractiveLoginToken;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface as eZUser;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent;
 use eZ\Publish\Core\MVC\Symfony\Security\UserWrapped;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent as BaseInteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -57,7 +63,12 @@ class SecurityListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin'
+            SecurityEvents::INTERACTIVE_LOGIN => array(
+                array( 'onInteractiveLogin', 10 ),
+                array( 'checkSiteAccessPermission', 9 ),
+            ),
+            // Priority 7, so that it occurs just after firewall (priority 8)
+            KernelEvents::REQUEST => array( 'onKernelRequest', 7 )
         );
     }
 
@@ -125,5 +136,78 @@ class SecurityListener implements EventSubscriberInterface
     protected function getUser( UserInterface $originalUser, APIUser $apiUser )
     {
         return new UserWrapped( $originalUser, $apiUser );
+    }
+
+    /**
+     * Throws an UnauthorizedSiteAccessException if current user doesn't have permission to current SiteAccess.
+     *
+     * @param BaseInteractiveLoginEvent $event
+     *
+     * @throws \eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException
+     */
+    public function checkSiteAccessPermission( BaseInteractiveLoginEvent $event )
+    {
+        $token = $event->getAuthenticationToken();
+        $originalUser = $token->getUser();
+        $request = $event->getRequest();
+        $siteAccess = $request->attributes->get( 'siteaccess' );
+        if ( !( $originalUser instanceof eZUser && $siteAccess instanceof SiteAccess ) )
+        {
+            return;
+        }
+
+        if ( !$this->hasAccess( $siteAccess, $originalUser->getUsername() ) )
+        {
+            throw new UnauthorizedSiteAccessException( $siteAccess, $originalUser->getUsername() );
+        }
+    }
+
+    /**
+     * Throws an UnauthorizedSiteAccessException if current user doesn't have access to current SiteAccess.
+     *
+     * @param GetResponseEvent $event
+     *
+     * @throws \eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException
+     */
+    public function onKernelRequest( GetResponseEvent $event )
+    {
+        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
+        {
+            return;
+        }
+
+        $request = $event->getRequest();
+        $siteAccess = $request->attributes->get( 'siteaccess' );
+        if ( !$siteAccess instanceof SiteAccess )
+        {
+            return;
+        }
+
+        $token = $this->securityContext->getToken();
+        if ( $token === null )
+        {
+            return;
+        }
+
+        if (
+            // Leave access to login route, so that user can attempt re-authentication.
+            $request->attributes->get( '_route' ) !== 'login'
+            && !$this->hasAccess( $siteAccess, $token->getUsername() )
+        )
+        {
+            throw new UnauthorizedSiteAccessException( $siteAccess, $token->getUsername() );
+        }
+    }
+
+    /**
+     * Returns true if current user has access to given SiteAccess.
+     *
+     * @param SiteAccess $siteAccess
+     *
+     * @return bool
+     */
+    protected function hasAccess( SiteAccess $siteAccess )
+    {
+        return $this->securityContext->isGranted( new Attribute( 'user', 'login', array( 'valueObject' => $siteAccess ) ) );
     }
 }

@@ -13,6 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener;
 use eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent as BaseInteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
@@ -56,7 +57,13 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array( SecurityEvents::INTERACTIVE_LOGIN => 'onInteractiveLogin' ),
+            array(
+                SecurityEvents::INTERACTIVE_LOGIN => array(
+                    array( 'onInteractiveLogin', 10 ),
+                    array( 'checkSiteAccessPermission', 9 ),
+                ),
+                KernelEvents::REQUEST => array( 'onKernelRequest', 7 )
+            ),
             SecurityListener::getSubscribedEvents()
         );
     }
