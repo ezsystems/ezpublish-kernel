@@ -171,7 +171,13 @@ class SecurityListener implements EventSubscriberInterface
      */
     public function onKernelRequest( GetResponseEvent $event )
     {
-        if ( $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST )
+        if (
+            !(
+                $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST
+                // In legacy_mode, roles and policies must be delegated to legacy kernel.
+                && !$this->configResolver->getParameter( 'legacy_mode' )
+            )
+        )
         {
             return;
         }
