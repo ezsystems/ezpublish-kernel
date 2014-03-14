@@ -190,7 +190,7 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
 
     public function getFixturesDir()
     {
-        return dirname( __FILE__ ) . '/_fixtures/';
+        return dirname( __FILE__ ) . '/_fixtures/content_functions/';
     }
 
     public function getFieldDefinition( $typeIdentifier, $id = null, $settings = array() )
