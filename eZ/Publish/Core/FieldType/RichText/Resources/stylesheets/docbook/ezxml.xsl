@@ -440,6 +440,60 @@
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template match="docbook:eztemplate">
+    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+      <xsl:element name="custom">
+        <xsl:attribute name="name">
+          <xsl:value-of select="@name"/>
+        </xsl:attribute>
+        <xsl:if test="@ezxhtml:class">
+          <xsl:attribute name="custom:class">
+            <xsl:value-of select="@ezxhtml:class"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:if test="@ezxhtml:align">
+          <xsl:attribute name="custom:align">
+            <xsl:value-of select="@ezxhtml:align"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:for-each select="./docbook:ezconfig/docbook:ezvalue">
+          <xsl:attribute name="custom:{@key}">
+            <xsl:value-of select="current()"/>
+          </xsl:attribute>
+        </xsl:for-each>
+        <xsl:apply-templates select="./docbook:ezcontent"/>
+      </xsl:element>
+    </paragraph>
+  </xsl:template>
+
+  <xsl:template match="docbook:eztemplateinline">
+    <xsl:element name="custom">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="custom:class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@ezxhtml:align">
+        <xsl:attribute name="custom:align">
+          <xsl:value-of select="@ezxhtml:align"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:for-each select="./docbook:ezconfig/docbook:ezvalue">
+        <xsl:attribute name="custom:{@key}">
+          <xsl:value-of select="current()"/>
+        </xsl:attribute>
+      </xsl:for-each>
+      <xsl:apply-templates select="./docbook:ezcontent"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="docbook:eztemplate/docbook:ezcontent">
+    <xsl:apply-templates/>
+  </xsl:template>
+
   <xsl:template name="addAttributeNodeId">
     <xsl:param name="href"/>
     <xsl:attribute name="node_id">

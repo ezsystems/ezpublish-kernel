@@ -478,6 +478,49 @@
     <xsl:copy/>
   </xsl:template>
 
+  <xsl:template match="ezxhtml5:eztemplate | ezxhtml5:eztemplateinline">
+    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="@data-ezname">
+        <xsl:attribute name="name">
+          <xsl:value-of select="@data-ezname"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@data-ezalign">
+        <xsl:attribute name="ezxhtml:align">
+          <xsl:value-of select="@data-ezalign"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:eztemplate/ezxhtml5:ezcontent | ezxhtml5:eztemplateinline/ezxhtml5:ezcontent">
+    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates select="node()|@*"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:eztemplate/ezxhtml5:ezconfig | ezxhtml5:eztemplateinline/ezxhtml5:ezconfig">
+    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates select="node()|@*"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:eztemplate/ezxhtml5:ezconfig//* | ezxhtml5:eztemplateinline/ezxhtml5:ezconfig//*">
+    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates select="node()|@*"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:eztemplate/ezxhtml5:ezconfig//@* | ezxhtml5:eztemplateinline/ezxhtml5:ezconfig//@*">
+    <xsl:copy/>
+  </xsl:template>
+
   <xsl:template name="extractStyleValue">
     <xsl:param name="style"/>
     <xsl:param name="property"/>

@@ -451,6 +451,8 @@
 
   <xsl:template match="docbook:ezembed | docbook:ezembedinline"/>
 
+  <xsl:template match="docbook:eztemplate | docbook:eztemplateinline"/>
+
   <xsl:template name="extractStyleValue">
     <xsl:param name="style"/>
     <xsl:param name="property"/>

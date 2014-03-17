@@ -10,6 +10,70 @@
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
 
+  <xsl:template match="custom">
+    <xsl:element name="eztemplateinline" namespace="http://docbook.org/ns/docbook">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <xsl:if test="@custom:class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@custom:class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@custom:align">
+        <xsl:attribute name="ezxhtml:align">
+          <xsl:value-of select="@custom:align"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="./text()">
+        <xsl:element name="ezcontent" namespace="http://docbook.org/ns/docbook">
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:if>
+      <xsl:if test="@*[namespace-uri() = 'http://ez.no/namespaces/ezpublish3/custom/' and not( local-name() = 'class' )]">
+        <xsl:element name="ezconfig" namespace="http://docbook.org/ns/docbook">
+          <xsl:for-each select="@*[namespace-uri() = 'http://ez.no/namespaces/ezpublish3/custom/' and not( local-name() = 'class' )]">
+            <xsl:call-template name="addHashValue">
+              <xsl:with-param name="attribute" select="current()"/>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:element>
+      </xsl:if>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="paragraph[self::*[namespace::*[name() = 'tmp']]]/custom">
+    <xsl:element name="eztemplate" namespace="http://docbook.org/ns/docbook">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <xsl:if test="@custom:class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@custom:class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@custom:align">
+        <xsl:attribute name="ezxhtml:align">
+          <xsl:value-of select="@custom:align"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="./* | ./text()">
+        <xsl:element name="ezcontent" namespace="http://docbook.org/ns/docbook">
+          <xsl:apply-templates/>
+        </xsl:element>
+      </xsl:if>
+      <xsl:if test="@*[namespace-uri() = 'http://ez.no/namespaces/ezpublish3/custom/' and not( local-name() = 'class' ) and not( local-name() = 'align' )]">
+        <xsl:element name="ezconfig" namespace="http://docbook.org/ns/docbook">
+          <xsl:for-each select="@*[namespace-uri() = 'http://ez.no/namespaces/ezpublish3/custom/' and not( local-name() = 'class' ) and not( local-name() = 'align' )]">
+            <xsl:call-template name="addHashValue">
+              <xsl:with-param name="attribute" select="current()"/>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:element>
+      </xsl:if>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="section">
     <xsl:choose>
       <xsl:when test="count(ancestor-or-self::section) &gt; 1">
