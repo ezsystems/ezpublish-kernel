@@ -446,6 +446,83 @@
     </optional>
   </define>
 
+  <div>
+    <a:documentation>
+      eZ Publish template tags
+    </a:documentation>
+    <define name="ez.template">
+      <element name="eztemplate">
+        <ref name="ez.template.contentmodel"/>
+      </element>
+    </define>
+    <define name="ez.templateinline">
+      <element name="eztemplateinline">
+        <ref name="ez.template.contentmodel.inline"/>
+      </element>
+    </define>
+    <define name="ez.template.contentmodel">
+      <ref name="ez.template.attlist"/>
+      <optional>
+        <ref name="ez.template.content"/>
+      </optional>
+      <optional>
+        <element name="ezconfig">
+          <ref name="ez.config.hash"/>
+        </element>
+      </optional>
+    </define>
+    <define name="ez.template.contentmodel.inline">
+      <ref name="ez.template.attlist.inline"/>
+      <optional>
+        <ref name="ez.template.content.inline"/>
+      </optional>
+      <optional>
+        <element name="ezconfig">
+          <ref name="ez.config.hash"/>
+        </element>
+      </optional>
+    </define>
+    <define name="ez.template.content">
+      <element name="ezcontent">
+        <zeroOrMore>
+          <choice>
+            <text/>
+            <ref name="db.recursive.blocks.or.sections"/>
+          </choice>
+        </zeroOrMore>
+      </element>
+    </define>
+    <define name="ez.template.content.inline">
+      <element name="ezcontent">
+        <zeroOrMore>
+          <ref name="db.all.inlines"/>
+        </zeroOrMore>
+      </element>
+    </define>
+    <define name="ez.template.attlist.inline">
+      <ref name="ez.template.attributes.inline"/>
+    </define>
+    <define name="ez.template.attributes.inline">
+      <attribute name="name">
+        <data type="string">
+          <param name="pattern">[A-Za-z][A-Za-z0-9_\-]*</param>
+        </data>
+      </attribute>
+      <optional>
+        <ref name="ez.xhtml.class.attribute"/>
+      </optional>
+    </define>
+    <define name="ez.template.attlist">
+      <ref name="ez.template.attributes"/>
+    </define>
+    <define name="ez.template.attributes">
+      <optional>
+        <ref name="ez.xhtml.align"/>
+      </optional>
+      <ref name="ez.template.attributes.inline"/>
+    </define>
+  </div>
+
   <define name="ez.embed.attributes">
     <ref name="db.xlink.href.attribute"/>
     <optional>
@@ -611,6 +688,7 @@
     <zeroOrMore>
       <choice>
         <ref name="ez.embedinline"/>
+        <ref name="ez.templateinline"/>
         <ref name="ez.extension.inlines"/>
       </choice>
     </zeroOrMore>
@@ -627,7 +705,9 @@
   <define name="db.extension.blocks" combine="choice">
     <zeroOrMore>
       <choice>
+        <ref name="db.title"/>
         <ref name="ez.embed"/>
+        <ref name="ez.template"/>
         <ref name="ez.extension.blocks"/>
       </choice>
     </zeroOrMore>
