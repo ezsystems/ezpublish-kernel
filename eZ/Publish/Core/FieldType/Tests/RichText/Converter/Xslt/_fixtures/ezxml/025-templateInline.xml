@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <paragraph>Some <custom name="emojicake"/> for the otherwise unremarkable paragraph.</paragraph>
+  <paragraph>This paragraph is just showing off its <custom name="emojicrocodile" custom:size="large"/>.</paragraph>
+  <paragraph>The equation <custom name="tex" custom:class="templateClass" custom:color="red">e^{\pi i}+1=0</custom> ties together five of the most important mathematical constants.</paragraph>
+  <paragraph>This paragraph contains some <custom name="bold">styled <custom name="strikedthrough">text</custom></custom>.</paragraph>
+</section>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <para>Some <eztemplateinline name="emojicake"/> for the otherwise unremarkable paragraph.</para>
+  <para>This paragraph is just showing off its <eztemplateinline name="emojicrocodile">
+    <ezconfig>
+      <ezvalue key="size">large</ezvalue>
+    </ezconfig>
+  </eztemplateinline>.</para>
+  <para>The equation <eztemplateinline name="tex" ezxhtml:class="templateClass">
+    <ezcontent>e^{\pi i}+1=0</ezcontent>
+    <ezconfig>
+      <ezvalue key="color">red</ezvalue>
+    </ezconfig>
+  </eztemplateinline> ties together five of the most important mathematical constants.</para>
+  <para>This paragraph contains some <eztemplateinline name="bold">
+    <ezcontent>styled <eztemplateinline name="strikedthrough">
+      <ezcontent>text</ezcontent>
+    </eztemplateinline></ezcontent>
+  </eztemplateinline>.</para>
+</section>

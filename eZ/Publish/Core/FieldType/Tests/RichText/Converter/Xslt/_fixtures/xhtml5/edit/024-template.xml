@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
+  <eztemplate data-ezname="factbox" class="templateClass" data-ezalign="left">
+    <ezcontent>
+      <table title="tableTitle">
+        <caption>About factoids</caption>
+        <tr>
+          <th>
+            <h3 style="text-align:center;">Some facts about factoids</h3>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <p>A factoid is a questionable or spurious (unverified, false, or fabricated) statement presented as a fact, but without supporting evidence.</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>Factoids may give rise to, or arise from, common misconceptions and urban legends.</p>
+          </td>
+        </tr>
+      </table>
+    </ezcontent>
+    <ezconfig>
+      <ezvalue key="title">Factoids</ezvalue>
+    </ezconfig>
+  </eztemplate>
+  <eztemplate data-ezname="externalimage" class="templateClass2" data-ezalign="right">
+    <ezconfig>
+      <ezvalue key="src">http://upload.wikimedia.org/wikipedia/commons/c/c6/R-S_mk2.gif</ezvalue>
+      <ezvalue key="height">365</ezvalue>
+      <ezvalue key="width">500</ezvalue>
+      <ezvalue key="alt">flip-flop</ezvalue>
+      <ezvalue key="caption">bistable multivibrator</ezvalue>
+    </ezconfig>
+  </eztemplate>
+  <eztemplate data-ezname="factoidbox" class="templateClass3" data-ezalign="center">
+    <ezcontent>It is widely known that the bistable multivibrator hums z's in the middle octave key of E.</ezcontent>
+  </eztemplate>
+  <eztemplate data-ezname="factoidbox" class="templateClass4" data-ezalign="center"/>
+</section>
