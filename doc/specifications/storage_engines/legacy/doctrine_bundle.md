@@ -10,8 +10,8 @@ For further information, see [DoctrineBundle configuration](https://github.com/d
 ```yaml
 doctrine:
     dbal:
+        default_connection: my_connection_name
         connections:
-            default_connection: my_connection_name
             my_connection_name:
                 driver:   pdo_mysql
                 host:     localhost
