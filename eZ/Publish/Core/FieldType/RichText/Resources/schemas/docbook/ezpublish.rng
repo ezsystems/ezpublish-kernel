@@ -412,18 +412,13 @@
         eZ Publish customized recursive section.
       </a:documentation>
       <ref name="db.section.attlist"/>
-      <interleave>
-        <!--ref name="ez.elements.all"/-->
-        <zeroOrMore>
+      <zeroOrMore>
+        <choice>
           <ref name="db.section.info"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="db.recursive.blocks.or.sections"/>
-        </zeroOrMore>
-        <zeroOrMore>
           <ref name="db.navigation.components"/>
-        </zeroOrMore>
-      </interleave>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
 
