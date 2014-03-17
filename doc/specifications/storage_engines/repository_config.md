@@ -28,8 +28,8 @@ ezpublish:
 ```yaml
 doctrine:
     dbal:
+        default_connection: my_connection_name
         connections:
-            default_connection: my_connection_name
             my_connection_name:
                 driver:   pdo_mysql
                 host:     localhost
