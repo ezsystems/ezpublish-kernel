@@ -76,15 +76,14 @@ class Configuration implements ConfigurationInterface
                             ->then(
                                 function ()
                                 {
-                                    return array( 'engine' => '%ezpublish.api.storage_engine.default%', 'connection' => 'default' );
+                                    return array( 'engine' => '%ezpublish.api.storage_engine.default%', 'connection' => null );
                                 }
                             )
                         ->end()
                         ->children()
                             ->scalarNode( 'engine' )->isRequired()->info( 'The storage engine to use' )->end()
                             ->scalarNode( 'connection' )
-                                ->defaultValue( 'default' )
-                                ->info( 'The connection name, if applicable (e.g. Doctrine connection name). Defaults to "default"' )
+                                ->info( 'The connection name, if applicable (e.g. Doctrine connection name). If not set, the default connection will be used.' )
                             ->end()
                             ->arrayNode( 'config' )
                                 ->info( 'Arbitrary configuration options, supported by your storage engine' )

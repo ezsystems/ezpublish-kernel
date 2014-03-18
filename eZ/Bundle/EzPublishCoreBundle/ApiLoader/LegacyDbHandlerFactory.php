@@ -34,7 +34,18 @@ class LegacyDbHandlerFactory extends ContainerAware
     public function buildLegacyDbHandler()
     {
         $repositoryConfig = $this->storageEngineFactory->getRepositoryConfig();
-        $doctrineConnectionId = sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['connection'] );
+        // Taking provided connection name if any.
+        // Otherwise, just fallback to the default connection.
+        if ( isset( $repositoryConfig['connection'] ) )
+        {
+            $doctrineConnectionId = sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['connection'] );
+        }
+        else
+        {
+            // "database_connection" is an alias to the default connection, set up by DoctrineBundle.
+            $doctrineConnectionId = 'database_connection';
+        }
+
         if ( !$this->container->has( $doctrineConnectionId ) )
         {
             throw new InvalidArgumentException(
