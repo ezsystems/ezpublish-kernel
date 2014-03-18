@@ -2,7 +2,7 @@
 
 ## Description
 
-Symfony provides native support for [multiple user providers](https://github.com/ezsystems/ezpublish-kernel/pull/symfony.com/doc/2.3/book/security.html#using-multiple-user-providers).
+Symfony provides native support for [multiple user providers](http://symfony.com/doc/2.3/book/security.html#using-multiple-user-providers).
 This makes it easy to integrate any kind of login handlers, including SSO and existing 3rd party bundles
 (e.g. [FR3DLdapBundle](https://github.com/Maks3w/FR3DLdapBundle), [HWIOauthBundle](https://github.com/hwi/HWIOAuthBundle),
 [FOSUserBundle](https://github.com/FriendsOfSymfony/FOSUserBundle), [BeSimpleSsoAuthBundle](http://github.com/BeSimple/BeSimpleSsoAuthBundle)...).
