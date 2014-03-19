@@ -99,6 +99,14 @@ class EmbedRenderer implements EmbedRendererInterface
                     $parameters
                 );
             }
+            else
+            {
+                $controllerReference->attributes = array(
+                    "contentId" => $contentId,
+                    "viewType" => $viewType,
+                    "params" => $parameters
+                );
+            }
 
             $rendered = $this->fragmentHandler->render(
                 $controllerReference,
@@ -171,6 +179,14 @@ class EmbedRenderer implements EmbedRendererInterface
                     $locationId,
                     $viewType,
                     $parameters
+                );
+            }
+            else
+            {
+                $controllerReference->attributes = array(
+                    "locationId" => $locationId,
+                    "viewType" => $viewType,
+                    "params" => $parameters
                 );
             }
 
