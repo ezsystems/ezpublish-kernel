@@ -308,8 +308,12 @@ parameters:
     ezpublish.fieldType.ezrichtext.converter.edit.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Edit
     ezpublish.fieldType.ezrichtext.converter.input.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Input
     ezpublish.fieldType.ezrichtext.converter.ezLinkToHtml5.class: eZ\Publish\Core\FieldType\RichText\Converter\EzLinkToHtml5
-    ezpublish.fieldType.ezrichtext.converter.embed.class: eZ\Publish\Core\FieldType\RichText\Converter\Embed
+    ezpublish.fieldType.ezrichtext.converter.embed.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed
+    ezpublish.fieldType.ezrichtext.converter.template.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Template
     ezpublish.fieldType.ezrichtext.embed_renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\EmbedRenderer
+    ezpublish.fieldType.ezrichtext.renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\Renderer
+    ezpublish.fieldType.ezrichtext.tag.namespace: fieldtypes.ezrichtext.tag
+    ezpublish.fieldType.ezrichtext.embed.namespace: fieldtypes.ezrichtext.embed
     # Note: 'esi' rendering strategy will fall back to 'inline' if reverse proxy is not available
     ezpublish.fieldType.ezrichtext.embed.rendering_strategy: esi
     ezpublish.fieldType.ezrichtext.converter.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
@@ -355,19 +359,28 @@ services:
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
 
-    ezpublish.fieldType.ezrichtext.embed_renderer:
-        class: %ezpublish.fieldType.ezrichtext.embed_renderer.class%
+    ezpublish.fieldType.ezrichtext.renderer:
+        class: %ezpublish.fieldType.ezrichtext.renderer.class%
         arguments:
             - @ezpublish.api.repository
-            - @ezpublish.controller_manager
-            - @fragment.handler
-            - %ezpublish.fieldType.ezrichtext.embed.rendering_strategy%
+            - @security.context
+            - @ezpublish.config.resolver
+            - @templating
+            - %ezpublish.fieldType.ezrichtext.tag.namespace%
+            - %ezpublish.fieldType.ezrichtext.embed.namespace%
             - @?logger
+
+    ezpublish.fieldType.ezrichtext.converter.template:
+        class: %ezpublish.fieldType.ezrichtext.converter.template.class%
+        arguments:
+            - @ezpublish.fieldType.ezrichtext.renderer
+        tags:
+            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
 
     ezpublish.fieldType.ezrichtext.converter.embed:
         class: %ezpublish.fieldType.ezrichtext.converter.embed.class%
         arguments:
-            - @ezpublish.fieldType.ezrichtext.embed_renderer
+            - @ezpublish.fieldType.ezrichtext.renderer
             - @?logger
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
