@@ -59,6 +59,32 @@ parameters:
 
     ezsettings.default.fieldtypes.ezrichtext.input_custom_xsl: []
 
+    # RichText field type template tag settings
+    ezsettings.default.fieldtypes.ezrichtext.tag.default:
+        template: EzPublishCoreBundle:FieldType/RichText/tag:default.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.tag.inline.default:
+        template: EzPublishCoreBundle:FieldType/RichText/tag:default_inline.html.twig
+
+    # RichText field type embed settings
+    ezsettings.default.fieldtypes.ezrichtext.embed.default:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:default.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.content:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:content.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.content.denied:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:content_denied.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.content.inline:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:content_inline.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.content.inline.denied:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:content_inline_denied.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.location:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:location.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.location.denied:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:location_denied.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.location.inline:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:location_inline.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.location.inline.denied:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:location_inline_denied.html.twig
+
     # Cache settings
     ezsettings.default.http_cache.purge_servers: ["http://localhost/"]   # Server(s) URL(s) that will be used for purging HTTP cache with PURGE requests.
 
