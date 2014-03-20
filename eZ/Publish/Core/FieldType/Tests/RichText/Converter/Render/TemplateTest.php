@@ -38,6 +38,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                 array(
                     array(
                         "name" => "template1",
+                        "is_inline" => false,
                         "params" => array(
                             "name" => "template1",
                             "params" => array(),
@@ -90,6 +91,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                 array(
                     array(
                         "name" => "template2",
+                        "is_inline" => false,
                         "params" => array(
                             "name" => "template2",
                             "content" => "content2",
@@ -129,6 +131,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                 array(
                     array(
                         "name" => "template3",
+                        "is_inline" => false,
                         "params" => array(
                             "name" => "template3",
                             "params" => array()
@@ -136,6 +139,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                     ),
                     array(
                         "name" => "template4",
+                        "is_inline" => true,
                         "params" => array(
                             "name" => "template4",
                             "params" => array()
@@ -157,6 +161,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                 array(
                     array(
                         "name" => "template5",
+                        "is_inline" => false,
                         "params" => array(
                             "name" => "template5",
                             "params" => array()
@@ -178,6 +183,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                 array(
                     array(
                         "name" => "template6",
+                        "is_inline" => true,
                         "params" => array(
                             "name" => "template6",
                             "params" => array()
@@ -205,7 +211,8 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                     ->method( "renderTag" )
                     ->with(
                         $params["name"],
-                        $params["params"]
+                        $params["params"],
+                        $params["is_inline"]
                     )
                     ->will( $this->returnValue( $params["name"] ) );
             }

@@ -96,9 +96,9 @@ class Renderer implements RendererInterface
     /**
      * {@inheritDoc}
      */
-    public function renderTag( $name, array $parameters )
+    public function renderTag( $name, array $parameters, $isInline )
     {
-        $templateName = $this->getTagTemplateName( $name );
+        $templateName = $this->getTagTemplateName( $name, $isInline );
 
         if ( $templateName === null )
         {
@@ -301,10 +301,11 @@ class Renderer implements RendererInterface
      * Returns configured template name for the given template tag identifier
      *
      * @param string $identifier
+     * @param boolean $isInline
      *
      * @return null|string
      */
-    protected function getTagTemplateName( $identifier )
+    protected function getTagTemplateName( $identifier, $isInline )
     {
         $configurationReference = $this->tagConfigurationNamespace . "." . $identifier;
 
@@ -321,7 +322,14 @@ class Renderer implements RendererInterface
             );
         }
 
-        $configurationReference = $this->tagConfigurationNamespace . ".default";
+        if ( $isInline )
+        {
+            $configurationReference = $this->tagConfigurationNamespace . ".inline.default";
+        }
+        else
+        {
+            $configurationReference = $this->tagConfigurationNamespace . ".default";
+        }
 
         if ( $this->configResolver->hasParameter( $configurationReference ) )
         {

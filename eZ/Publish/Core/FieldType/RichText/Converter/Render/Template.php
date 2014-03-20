@@ -24,8 +24,9 @@ class Template extends Render implements Converter
      *
      * @param \DOMDocument $document
      * @param $tagName string name of the tag to extract
+     * @param boolean $isInline
      */
-    protected function processTag( DOMDocument $document, $tagName )
+    protected function processTag( DOMDocument $document, $tagName, $isInline )
     {
         /** @var $template \DOMElement */
         foreach ( $document->getElementsByTagName( $tagName ) as $template )
@@ -36,7 +37,7 @@ class Template extends Render implements Converter
                 "name" => $tagName,
                 "params" => $this->extractConfiguration( $template ),
             );
-            if ( $template->getElementsByTagName( "ezcontent" )->length === 1 )
+            if ( $template->getElementsByTagName( "ezcontent" )->length > 0 )
             {
                 $parameters["content"] = $this->saveNodeXML(
                     $template->getElementsByTagName( "ezcontent" )->item( 0 )
@@ -47,7 +48,7 @@ class Template extends Render implements Converter
                 $parameters["align"] = $template->getAttribute( "xlink:align" );
             }
 
-            $content = $this->renderer->renderTag( $tagName, $parameters );
+            $content = $this->renderer->renderTag( $tagName, $parameters, $isInline );
 
             if ( isset( $content ) )
             {
@@ -67,8 +68,8 @@ class Template extends Render implements Converter
      */
     public function convert( DOMDocument $document )
     {
-        $this->processTag( $document, 'eztemplate' );
-        $this->processTag( $document, 'eztemplateinline' );
+        $this->processTag( $document, 'eztemplate', false );
+        $this->processTag( $document, 'eztemplateinline', true );
 
         return $document;
     }

@@ -19,10 +19,11 @@ interface RendererInterface
      *
      * @param string $name
      * @param array $parameters
+     * @param boolean $isInline
      *
      * @return string
      */
-    public function renderTag( $name, array $parameters );
+    public function renderTag( $name, array $parameters, $isInline );
 
     /**
      * Renders Content embed
