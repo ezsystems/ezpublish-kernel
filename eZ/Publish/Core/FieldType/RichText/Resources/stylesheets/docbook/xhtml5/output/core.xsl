@@ -436,20 +436,15 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="docbook:ezembed[@ezxhtml:align and ezpayload]">
-    <xsl:element name="div" namespace="{$outputNamespace}">
-      <xsl:if test="@ezxhtml:align">
-        <xsl:attribute name="class"><xsl:value-of select="concat( 'object-', @ezxhtml:align )"/></xsl:attribute>
-      </xsl:if>
-      <xsl:value-of select="ezpayload/text()" disable-output-escaping="yes"/>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="docbook:ezembed[not( @ezxhtml:align ) and ezpayload] | docbook:ezembedinline[ezpayload]">
+  <xsl:template match="docbook:ezembed[ezpayload] | docbook:ezembedinline[ezpayload]">
     <xsl:value-of select="ezpayload/text()" disable-output-escaping="yes"/>
   </xsl:template>
 
   <xsl:template match="docbook:ezembed | docbook:ezembedinline"/>
+
+  <xsl:template match="docbook:eztemplate[ezpayload] | docbook:eztemplateinline[ezpayload]">
+    <xsl:value-of select="ezpayload/text()" disable-output-escaping="yes"/>
+  </xsl:template>
 
   <xsl:template match="docbook:eztemplate | docbook:eztemplateinline"/>
 
