@@ -41,7 +41,6 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                         "params" => array(
                             "name" => "template1",
                             "params" => array(),
-                            "content" => null,
                         ),
                     )
                 )
@@ -132,7 +131,6 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                         "name" => "template3",
                         "params" => array(
                             "name" => "template3",
-                            "content" => null,
                             "params" => array()
                         ),
                     ),
@@ -140,7 +138,6 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                         "name" => "template4",
                         "params" => array(
                             "name" => "template4",
-                            "content" => null,
                             "params" => array()
                         ),
                     )
@@ -162,7 +159,6 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                         "name" => "template5",
                         "params" => array(
                             "name" => "template5",
-                            "content" => null,
                             "params" => array()
                         ),
                     )
@@ -184,7 +180,6 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                         "name" => "template6",
                         "params" => array(
                             "name" => "template6",
-                            "content" => null,
                             "params" => array()
                         ),
                     )

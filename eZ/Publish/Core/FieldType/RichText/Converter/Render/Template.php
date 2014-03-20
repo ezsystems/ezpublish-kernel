@@ -35,10 +35,13 @@ class Template extends Render implements Converter
             $parameters = array(
                 "name" => $tagName,
                 "params" => $this->extractConfiguration( $template ),
-                "content" => $template->getElementsByTagName( "ezcontent" )->length ?
-                    $this->saveNodeXML( $template->getElementsByTagName( "ezcontent" )->item( 0 ) ) :
-                    null
             );
+            if ( $template->getElementsByTagName( "ezcontent" )->length === 1 )
+            {
+                $parameters["content"] = $this->saveNodeXML(
+                    $template->getElementsByTagName( "ezcontent" )->item( 0 )
+                );
+            }
             if ( $template->hasAttribute( "xlink:align" ) )
             {
                 $parameters["align"] = $template->getAttribute( "xlink:align" );
