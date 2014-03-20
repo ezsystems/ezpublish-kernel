@@ -18,14 +18,14 @@ use DOMDocument;
 class Aggregate implements Converter
 {
     /**
-     * An array of arrays of converters, indexed by priority.
+     * An array of converters, sorted by priority.
      *
      * @var \eZ\Publish\Core\FieldType\RichText\Converter[]
      */
     protected $converters = array();
 
     /**
-     * @param mixed $converters An array of Converters with priorities
+     * @param mixed $converters An array of Converters, sorted by priority
      */
     public function __construct( array $converters = array() )
     {
