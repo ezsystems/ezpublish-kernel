@@ -269,7 +269,6 @@ class EmbedTest extends PHPUnit_Framework_TestCase
         {
             foreach ( $renderParams as $index => $params )
             {
-                $isInline = $params["is_inline"];
                 $this->rendererMock
                     ->expects( $this->at( $index ) )
                     ->method( $params["method"] )
@@ -277,7 +276,7 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                         $params["id"],
                         $params["view"],
                         $params["params"],
-                        $isInline
+                        $params["is_inline"]
                     )
                     ->will( $this->returnValue( $params["id"] ) );
             }
