@@ -263,6 +263,8 @@ class EmbedTest extends PHPUnit_Framework_TestCase
             $this->loggerMock->expects( $this->never() )->method( "error" );
         }
 
+        $this->rendererMock->expects( $this->never() )->method( "renderTag" );
+
         if ( !empty( $renderParams ) )
         {
             foreach ( $renderParams as $index => $params )
