@@ -119,8 +119,12 @@ class Type extends FieldType
 
         $validationErrors = array();
 
+        // 0 and False are unlimited value for maxIntegerValue
         if ( isset( $constraints['maxIntegerValue'] ) &&
-            $constraints['maxIntegerValue'] !== false && $fieldValue->value > $constraints['maxIntegerValue'] )
+            $constraints['maxIntegerValue'] !== 0 &&
+            $constraints['maxIntegerValue'] !== false &&
+            $fieldValue->value > $constraints['maxIntegerValue']
+        )
         {
             $validationErrors[] = new ValidationError(
                 "The value can not be higher than %size%.",
