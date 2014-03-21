@@ -167,4 +167,42 @@ abstract class Criterion
     {
         return new static( $target, $operator, $value );
     }
+
+    public function __toString()
+    {
+        return sprintf(
+            "%s %s %s", lcfirst( $this->getTargetString() ), $this->getOperatorString(), $this->getValueString()
+        );
+    }
+
+    protected function getTargetString()
+    {
+        if ( isset( $this->target ) )
+        {
+            return $this->target;
+        }
+
+        $classParts = explode( '\\', get_class( $this ) );
+        return array_pop( $classParts );
+    }
+
+    protected function getOperatorString()
+    {
+        return strtoupper( $this->operator ) ?: ( is_array( $value ) ? 'IN' : 'EQ' );
+    }
+
+    protected function getValueString()
+    {
+        if ( is_array( $this->value ) )
+        {
+            if ( count( $this->value ) == 1 )
+                return $this->value[0];
+
+            return '(' . implode( ', ', $this->value ) . ')';
+        }
+        else
+        {
+            return $this->value;
+        }
+    }
 }

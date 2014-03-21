@@ -137,4 +137,13 @@ class Query extends ValueObject
 
         return parent::__isset( $property );
     }
+
+    public function __toString()
+    {
+        if ( $this->filter === null )
+        {
+            return '';
+        }
+        return (string)$this->filter;
+    }
 }

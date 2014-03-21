@@ -54,4 +54,17 @@ abstract class LogicalOperator extends Criterion
             $this->criteria[] = $criterion;
         }
     }
+
+    public function __toString()
+    {
+        $string = strtolower( parent::getTargetString() );
+        $string = str_replace( 'logical', '', $string );
+        $logicalOperatorString = strtoupper( $string );
+
+        // join all stringified criteria with the logical operator
+        return implode(
+            " $logicalOperatorString ",
+            array_map( function ( $criterion ) { return (string)$criterion; }, $this->criteria )
+        );
+    }
 }

@@ -29,4 +29,9 @@ class LogicalNot extends LogicalOperator
     {
         parent::__construct( array( $criterion ) );
     }
+
+    public function __toString()
+    {
+        return "NOT {$this->criteria[0]}";
+    }
 }
