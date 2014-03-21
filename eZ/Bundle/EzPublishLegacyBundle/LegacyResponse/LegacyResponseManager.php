@@ -11,9 +11,11 @@ namespace eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 use ezpKernelResult;
+use ezpKernelRedirect;
 
 /**
  * Utility class to manage Response from legacy controllers, map headers...
@@ -98,12 +100,24 @@ class LegacyResponseManager
     }
 
     /**
+     * Generates proper RedirectResponse from $redirectResult.
+     *
+     * @param \ezpKernelRedirect $redirectResult
+     *
+     * @return RedirectResponse
+     */
+    public function generateRedirectResponse( ezpKernelRedirect $redirectResult )
+    {
+        return new RedirectResponse( $redirectResult->getTargetUrl(), $redirectResult->getStatusCode() );
+    }
+
+    /**
      * Renders a view and returns a Response.
      *
      * @param string $view The view name
      * @param array $parameters An array of parameters to pass to the view
      *
-     * @return \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse\LegacyResponseManager A LegacyResponse instance
+     * @return \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse A LegacyResponse instance
      */
     private function render( $view, array $parameters = array() )
     {

@@ -14,6 +14,7 @@ use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse\LegacyResponseManager;
 use eZ\Publish\Core\MVC\Legacy\Kernel\URIHelper;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use ezpKernelRedirect;
 
 /**
  * Controller embedding legacy kernel.
@@ -86,6 +87,11 @@ class LegacyKernelController
 
         $result = $this->kernel->run();
         $this->kernel->setUseExceptions( true );
+
+        if ( $result instanceof ezpKernelRedirect )
+        {
+            return $this->legacyResponseManager->generateRedirectResponse( $result );
+        }
 
         $response = $this->legacyResponseManager->generateResponseFromModuleResult( $result );
         $response->setLegacyHeaders( headers_list() );
