@@ -105,7 +105,7 @@ class Renderer implements RendererInterface
             if ( isset( $this->logger ) )
             {
                 $this->logger->error(
-                    "Could not render template tag: no template found"
+                    "Could not render template tag '{$name}': no template configured"
                 );
             }
 
@@ -117,7 +117,7 @@ class Renderer implements RendererInterface
             if ( isset( $this->logger ) )
             {
                 $this->logger->error(
-                    "Could not render template tag: template '{$templateName}' does not exists"
+                    "Could not render template tag '{$name}': template '{$templateName}' does not exists"
                 );
             }
 
@@ -177,7 +177,7 @@ class Renderer implements RendererInterface
         if ( $templateName === null )
         {
             $this->logger->error(
-                "Could not render embedded resource: no template found"
+                "Could not render embedded resource: no template configured"
             );
 
             return null;
@@ -260,7 +260,7 @@ class Renderer implements RendererInterface
         if ( $templateName === null )
         {
             $this->logger->error(
-                "Could not render embedded resource: no template found"
+                "Could not render embedded resource: no template configured"
             );
 
             return null;
