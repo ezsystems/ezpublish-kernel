@@ -13,6 +13,9 @@ use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use DOMElement;
 use DOMNode;
 
+/**
+ * Base class for Render converters.
+ */
 abstract class Render
 {
     /**
@@ -26,7 +29,7 @@ abstract class Render
     }
 
     /**
-     * Extracts configuration hash from embed element
+     * Extracts configuration hash from embed element.
      *
      * @param \DOMElement $embed
      *
@@ -46,7 +49,7 @@ abstract class Render
     }
 
     /**
-     * Recursively extracts data from XML hash structure
+     * Recursively extracts data from XML hash structure.
      *
      * @param \DOMNode $configHash
      *
@@ -70,25 +73,5 @@ abstract class Render
         }
 
         return $hash;
-    }
-
-    /**
-     * Returns XML fragment string for given $node
-     *
-     * @param \DOMNode $node
-     *
-     * @return string
-     */
-    protected function saveNodeXML( DOMNode $node )
-    {
-        $xmlString = "";
-        $document = $node->ownerDocument;
-
-        foreach ( $node->childNodes as $child )
-        {
-            $xmlString .= $document->saveXML( $child );
-        }
-
-        return $xmlString;
     }
 }

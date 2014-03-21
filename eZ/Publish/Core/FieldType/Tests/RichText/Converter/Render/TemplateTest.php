@@ -26,11 +26,11 @@ class TemplateTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template1"/>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template1">
     <ezpayload><![CDATA[template1]]></ezpayload>
   </eztemplate>
@@ -43,12 +43,12 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                             "name" => "template1",
                             "params" => array(),
                         ),
-                    )
+                    ),
                 )
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template2">
     <ezcontent>content2</ezcontent>
     <ezconfig>
@@ -68,7 +68,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase
   </eztemplate>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template2">
     <ezcontent>content2</ezcontent>
     <ezconfig>
@@ -110,17 +110,17 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                                 )
                             )
                         ),
-                    )
+                    ),
                 )
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template3"/>
   <eztemplateinline name="template4"/>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template3">
     <ezpayload><![CDATA[template3]]></ezpayload>
   </eztemplate>
@@ -144,16 +144,16 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                             "name" => "template4",
                             "params" => array()
                         ),
-                    )
+                    ),
                 )
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template5"/>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template5">
     <ezpayload><![CDATA[template5]]></ezpayload>
   </eztemplate>
@@ -166,16 +166,16 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                             "name" => "template5",
                             "params" => array()
                         ),
-                    )
+                    ),
                 )
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplateinline name="template6"/>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
-<section>
+<section xmlns="http://docbook.org/ns/docbook">
   <eztemplateinline name="template6">
     <ezpayload><![CDATA[template6]]></ezpayload>
   </eztemplateinline>
@@ -188,7 +188,44 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                             "name" => "template6",
                             "params" => array()
                         ),
-                    )
+                    ),
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook">
+  <eztemplate name="template7">
+    <ezcontent>content7<eztemplate name="template8">
+    <ezcontent>content8</ezcontent>
+  </eztemplate></ezcontent>
+  </eztemplate>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook">
+  <eztemplate name="template7">
+    <ezcontent>content7template8</ezcontent>
+    <ezpayload><![CDATA[template7]]></ezpayload>
+  </eztemplate>
+</section>',
+                array(
+                    array(
+                        "name" => "template8",
+                        "is_inline" => false,
+                        "params" => array(
+                            "name" => "template8",
+                            "content" => "content8",
+                            "params" => array()
+                        ),
+                    ),
+                    array(
+                        "name" => "template7",
+                        "is_inline" => false,
+                        "params" => array(
+                            "name" => "template7",
+                            "content" => "content7template8",
+                            "params" => array()
+                        ),
+                    ),
                 )
             ),
         );
