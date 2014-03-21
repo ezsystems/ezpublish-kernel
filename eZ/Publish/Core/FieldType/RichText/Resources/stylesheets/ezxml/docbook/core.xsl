@@ -78,7 +78,7 @@
     <xsl:choose>
       <xsl:when test="count(ancestor-or-self::section) &gt; 1">
         <!--xsl:element name="section" namespace="http://docbook.org/ns/docbook"-->
-          <xsl:apply-templates/>
+        <xsl:apply-templates/>
         <!--/xsl:element-->
       </xsl:when>
       <xsl:otherwise>
