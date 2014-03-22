@@ -299,7 +299,6 @@ parameters:
         ZW: {Name: "Zimbabwe", Alpha2: "ZW", Alpha3: "ZWE", IDC: "263"}
 
     ezpublish.fieldType.eznull.class: eZ\Publish\Core\FieldType\Null\Type
-    ezpublish.fieldType.ezrecommendation.class: %ezpublish.fieldType.eznull.class%
 
     ezpublish.fieldType.ezrichtext.class: eZ\Publish\Core\FieldType\RichText\Type
     ezpublish.fieldType.ezrichtext.externalStorage.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage
@@ -874,7 +873,7 @@ services:
             - {name: ezpublish.fieldType, alias: eztags}
 
     ezpublish.fieldType.ezrecommendation:
-        class: %ezpublish.fieldType.ezrecommendation.class%
+        class: %ezpublish.fieldType.eznull.class%
         parent: ezpublish.fieldType
         arguments: [ "ezrecommendation" ]
         tags:
