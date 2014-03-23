@@ -68,6 +68,8 @@ parameters:
     # RichText field type embed settings
     ezsettings.default.fieldtypes.ezrichtext.embed.default:
         template: EzPublishCoreBundle:FieldType/RichText/embed:default.html.twig
+    ezsettings.default.fieldtypes.ezrichtext.embed.inline.default:
+        template: EzPublishCoreBundle:FieldType/RichText/embed:default_inline.html.twig
     ezsettings.default.fieldtypes.ezrichtext.embed.content:
         template: EzPublishCoreBundle:FieldType/RichText/embed:content.html.twig
     ezsettings.default.fieldtypes.ezrichtext.embed.content.denied:

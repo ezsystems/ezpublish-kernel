@@ -392,7 +392,14 @@ class Renderer implements RendererInterface
             );
         }
 
-        $configurationReference = $this->embedConfigurationNamespace . ".default";
+        $configurationReference = $this->embedConfigurationNamespace;
+
+        if ( $isInline )
+        {
+            $configurationReference .= ".inline";
+        }
+
+        $configurationReference .= ".default";
 
         if ( $this->configResolver->hasParameter( $configurationReference ) )
         {
