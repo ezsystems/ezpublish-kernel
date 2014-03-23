@@ -307,7 +307,7 @@ parameters:
     ezpublish.fieldType.ezrichtext.converter.output.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5
     ezpublish.fieldType.ezrichtext.converter.edit.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Edit
     ezpublish.fieldType.ezrichtext.converter.input.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Input
-    ezpublish.fieldType.ezrichtext.converter.ezLinkToHtml5.class: eZ\Publish\Core\FieldType\RichText\Converter\EzLinkToHtml5
+    ezpublish.fieldType.ezrichtext.converter.link.class: eZ\Publish\Core\FieldType\RichText\Converter\Link
     ezpublish.fieldType.ezrichtext.converter.embed.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed
     ezpublish.fieldType.ezrichtext.converter.template.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Template
     ezpublish.fieldType.ezrichtext.embed_renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\EmbedRenderer
@@ -353,8 +353,8 @@ services:
                 http://ez.no/namespaces/ezpublish3/xhtml/: @ezpublish.fieldType.ezrichtext.converter.input.ezxml
                 http://ez.no/namespaces/ezpublish5/xhtml5/edit: @ezpublish.fieldType.ezrichtext.converter.input.xhtml5
 
-    ezpublish.fieldType.ezrichtext.converter.ezLinkToHtml5:
-        class: %ezpublish.fieldType.ezrichtext.converter.ezLinkToHtml5.class%
+    ezpublish.fieldType.ezrichtext.converter.link:
+        class: %ezpublish.fieldType.ezrichtext.converter.link.class%
         arguments: [@ezpublish.api.service.location, @ezpublish.api.service.content, @ezpublish.urlalias_router, @?logger]
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
