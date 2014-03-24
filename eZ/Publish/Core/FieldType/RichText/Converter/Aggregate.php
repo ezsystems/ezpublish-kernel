@@ -25,7 +25,7 @@ class Aggregate implements Converter
     protected $converters = array();
 
     /**
-     * @param mixed $converters An array of Converters, sorted by priority
+     * @param \eZ\Publish\Core\FieldType\RichText\Converter[] $converters An array of Converters, sorted by priority
      */
     public function __construct( array $converters = array() )
     {
