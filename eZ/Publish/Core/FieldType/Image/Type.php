@@ -163,6 +163,11 @@ class Type extends FieldType
             return $errors;
         }
 
+        if ( !getimagesize( $fieldValue->id ) )
+        {
+            $errors[] = new ValidationError( "A valid image file is required." );
+        }
+
         foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
         {
             switch ( $validatorIdentifier )
