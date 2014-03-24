@@ -93,9 +93,6 @@ class Renderer implements RendererInterface
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function renderTag( $name, array $parameters, $isInline )
     {
         $templateName = $this->getTagTemplateName( $name, $isInline );
@@ -127,9 +124,6 @@ class Renderer implements RendererInterface
         return $this->render( $templateName, $parameters );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function renderContentEmbed( $contentId, $viewType, array $parameters, $isInline )
     {
         $isDenied = false;
@@ -198,9 +192,6 @@ class Renderer implements RendererInterface
         return $this->render( $templateName, $parameters );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function renderLocationEmbed( $locationId, $viewType, array $parameters, $isInline )
     {
         $isDenied = false;
