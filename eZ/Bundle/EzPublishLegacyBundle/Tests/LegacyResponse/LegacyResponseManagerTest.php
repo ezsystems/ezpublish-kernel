@@ -15,7 +15,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\Templating\EngineInterface;
 use ezpKernelResult;
-use DateTime;
+use ezpKernelRedirect;
 
 class LegacyResponseManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -169,6 +169,46 @@ class LegacyResponseManagerTest extends PHPUnit_Framework_TestCase
             array( 'custom.twig', 'I love content management.' ),
             array( 'custom.twig', '私は、コンテンツ管理が大好きです。' ),
             array( 'custom.twig', 'אני אוהב את ניהול תוכן.' ),
+        );
+    }
+
+    /**
+     * @dataProvider generateRedirectResponseProvider
+     */
+    public function testGenerateRedirectResponse( $uri, $redirectStatus, $expectedStatusCode, $content )
+    {
+        $kernelRedirect = new ezpKernelRedirect( $uri, $redirectStatus, $content );
+        $manager = new LegacyResponseManager( $this->templateEngine, $this->configResolver );
+        $response = $manager->generateRedirectResponse( $kernelRedirect );
+        $uriInContent = htmlspecialchars( $uri );
+        $expectedContent = <<<EOT
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="refresh" content="1;url=$uriInContent" />
+
+        <title>Redirecting to $uriInContent</title>
+    </head>
+    <body>
+        Redirecting to <a href="$uriInContent">$uriInContent</a>.
+    </body>
+</html>
+EOT;
+
+        $this->assertInstanceOf( 'Symfony\Component\HttpFoundation\RedirectResponse', $response );
+        $this->assertSame( $uri, $response->getTargetUrl() );
+        $this->assertSame( $expectedStatusCode, $response->getStatusCode() );
+        $this->assertSame( $expectedContent, $response->getContent() );
+    }
+
+    public function generateRedirectResponseProvider()
+    {
+        return array(
+            array( '/foo', null, 302, null ),
+            array( '/foo', '302', 302, 'bar' ),
+            array( '/foo/bar', '301: blablabla', 301, 'Hello world!' ),
+            array( '/foo/bar?some=thing&toto=titi', '303: See other', 303, 'こんにちは、世界!' ),
         );
     }
 }
