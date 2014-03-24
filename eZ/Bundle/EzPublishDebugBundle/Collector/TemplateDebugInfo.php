@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZTemplate;
+use ezxFormToken;
 use RuntimeException;
 
 /**
@@ -80,6 +81,9 @@ class TemplateDebugInfo
 
         try
         {
+            // Deactivate ezxFormToken to avoid double checks on it.
+            // At this point (kernel.response), token checks have been already done anyway.
+            ezxFormToken::setIsEnabled( false );
             $templateStats = $legacyKernel()->runCallback(
                 function ()
                 {
