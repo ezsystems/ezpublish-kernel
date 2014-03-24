@@ -382,6 +382,136 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Provides data sets with validator configuration and/or field settings and
+     * field value which are considered valid by the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten if
+     * a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "StringLengthValidator" => array(
+     *                      "minStringLength" => 2,
+     *                      "maxStringLength" => 10,
+     *                  ),
+     *              ),
+     *          ),
+     *          new TextLineValue( "lalalala" ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  'isMultiple' => true
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              array(
+     *                  "BE" => array(
+     *                      "Name" => "Belgium",
+     *                      "Alpha2" => "BE",
+     *                      "Alpha3" => "BEL",
+     *                      "IDC" => 32,
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidDataForValidate()
+    {
+        return array(
+            array(
+                array(),
+                $this->getMock( "eZ\\Publish\\SPI\\FieldType\\Value" ),
+            )
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings,
+     * field value and corresponding validation errors returned by
+     * the {@link validate()} method.
+     *
+     * ATTENTION: This is a default implementation, which must be overwritten
+     * if a FieldType supports validation!
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(
+     *              "validatorConfiguration" => array(
+     *                  "IntegerValueValidator" => array(
+     *                      "minIntegerValue" => 5,
+     *                      "maxIntegerValue" => 10
+     *                  ),
+     *              ),
+     *          ),
+     *          new IntegerValue( 3 ),
+     *          array(
+     *              new ValidationError(
+     *                  "The value can not be lower than %size%.",
+     *                  null,
+     *                  array(
+     *                      "size" => 5
+     *                  ),
+     *              ),
+     *          ),
+     *      ),
+     *      array(
+     *          array(
+     *              "fieldSettings" => array(
+     *                  "isMultiple" => false
+     *              ),
+     *          ),
+     *          new CountryValue(
+     *              "BE" => array(
+     *                  "Name" => "Belgium",
+     *                  "Alpha2" => "BE",
+     *                  "Alpha3" => "BEL",
+     *                  "IDC" => 32,
+     *              ),
+     *              "FR" => array(
+     *                  "Name" => "France",
+     *                  "Alpha2" => "FR",
+     *                  "Alpha3" => "FRA",
+     *                  "IDC" => 33,
+     *              ),
+     *          )
+     *      ),
+     *      array(
+     *          new ValidationError(
+     *              "Field definition does not allow multiple countries to be selected."
+     *          ),
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInvalidDataForValidate()
+    {
+        return array(
+            array(
+                array(),
+                $this->getMock( "eZ\\Publish\\SPI\\FieldType\\Value" ),
+                array(),
+            )
+        );
+    }
+
+    /**
      * Retrieves a test wide cached version of the field type under test.
      *
      * Uses {@link createFieldTypeUnderTest()} to create the instance
@@ -801,6 +931,61 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
                     )
                 );
         }
+    }
+
+    /**
+     * @dataProvider provideValidDataForValidate
+     */
+    public function testValidateValid( $fieldDefinitionData, $value )
+    {
+        $validationErrors = $this->doValidate( $fieldDefinitionData, $value );
+
+        $this->assertInternalType( "array", $validationErrors );
+        $this->assertEmpty( $validationErrors );
+    }
+
+    /**
+     * @dataProvider provideInvalidDataForValidate
+     */
+    public function testValidateInvalid( $fieldDefinitionData, $value, $errors )
+    {
+        $validationErrors = $this->doValidate( $fieldDefinitionData, $value );
+
+        $this->assertInternalType( "array", $validationErrors );
+        $this->assertEquals( $errors, $validationErrors );
+    }
+
+    protected function doValidate( $fieldDefinitionData, $value )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit_Framework_MockObject_MockObject $fieldDefinitionMock */
+        $fieldDefinitionMock = $this->getMock(
+            "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition"
+        );
+
+        foreach ( $fieldDefinitionData as $method => $data )
+        {
+            if ( $method === "validatorConfiguration" )
+            {
+                $fieldDefinitionMock
+                    ->expects( $this->any() )
+                    ->method( "getValidatorConfiguration" )
+                    ->will( $this->returnValue( $data ) );
+            }
+
+            if ( $method === "fieldSettings" )
+            {
+                $fieldDefinitionMock
+                    ->expects( $this->any() )
+                    ->method( "getFieldSettings" )
+                    ->will( $this->returnValue( $data ) );
+            }
+        }
+
+        $validationErrors = $fieldType->validate( $fieldDefinitionMock, $value );
+
+        return $validationErrors;
     }
 
     // @todo: More test methods …
