@@ -64,14 +64,17 @@ class Embed extends Render implements Converter
                 "params" => $this->extractConfiguration( $embed ),
                 "view" => $viewType,
             );
+
             if ( $embed->hasAttribute( "ezxhtml:class" ) )
             {
                 $parameters["class"] = $embed->getAttribute( "ezxhtml:class" );
             }
+
             if ( $embed->hasAttribute( "ezxhtml:align" ) )
             {
                 $parameters["align"] = $embed->getAttribute( "ezxhtml:align" );
             }
+
             $resourceReference = $embed->getAttribute( "xlink:href" );
 
             if ( empty( $resourceReference ) )

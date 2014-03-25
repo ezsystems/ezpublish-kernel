@@ -76,12 +76,14 @@ class Template extends Render implements Converter
             "name" => $tagName,
             "params" => $this->extractConfiguration( $tag ),
         );
+
         if ( $tag->getElementsByTagName( "ezcontent" )->length > 0 )
         {
             $parameters["content"] = $this->saveNodeXML(
                 $tag->getElementsByTagName( "ezcontent" )->item( 0 )
             );
         }
+
         if ( $tag->hasAttribute( "xlink:align" ) )
         {
             $parameters["align"] = $tag->getAttribute( "xlink:align" );
