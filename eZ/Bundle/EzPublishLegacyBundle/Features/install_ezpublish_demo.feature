@@ -27,7 +27,6 @@ Feature: Install eZ Publish Demo with/withoutout content
             | Port       |           |
             | Username   | root      |
             | Password   |           |
-            | Socket     |           |
         And I click at "Next" button
         Then I see "Language support" step
 
