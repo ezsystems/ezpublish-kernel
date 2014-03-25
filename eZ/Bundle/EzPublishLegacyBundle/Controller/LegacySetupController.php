@@ -132,6 +132,13 @@ class LegacySetupController extends ContainerAware
         // Check that eZ Publish Legacy was actually installed, since one step can run several steps
         if ( $this->legacyConfigResolver->getParameter( 'SiteAccessSettings.CheckValidity' ) == 'false' )
         {
+            // If using kickstart.ini, legacy wizard will artificially create entries in $_POST
+            // and in this case Symfony Request is not aware of them.
+            // We then add them manually to the ParameterBag.
+            if ( !$request->has( 'P_chosen_site_package-0' ) )
+            {
+                $request->add( $_POST );
+            }
             $chosenSitePackage = $request->get( 'P_chosen_site_package-0' );
 
             // match mode (host, url or port)
