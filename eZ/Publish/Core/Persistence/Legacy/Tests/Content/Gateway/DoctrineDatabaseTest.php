@@ -1637,6 +1637,29 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
     }
 
+    public function testLoadVersionInfo()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $resFirst = $gateway->loadVersionInfo( 11, 1 );
+        $resSecond = $gateway->loadVersionInfo( 11, 2 );
+
+        $res = array_merge( $resFirst, $resSecond );
+
+        $orig = include __DIR__ . '/../_fixtures/extract_version_info_from_rows_multiple_versions.php';
+
+        /*$this->storeFixture(
+            __DIR__ . '/../_fixtures/extract_version_info_from_rows_multiple_versions.php',
+            $res
+        );*/
+
+        $this->assertEquals( $orig, $res, "Fixtures differ between what was previously stored(expected) and what it now generates(actual), this hints either some mistake in impl or that the fixture (../_fixtures/extract_content_from_rows_multiple_versions.php) and tests needs to be adapted." );
+    }
+
     /**
      * Counts the number of relations in the database.
      *

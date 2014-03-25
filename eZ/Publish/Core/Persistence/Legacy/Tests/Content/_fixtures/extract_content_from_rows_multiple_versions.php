@@ -37,7 +37,7 @@ return array (
     'ezcontentobject_attribute_data_text' => 'Guest accounts',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_tree_main_node_id' => NULL,
+    'ezcontentobject_tree_main_node_id' => '12',
   ),
   1 =>
   array (
@@ -75,7 +75,7 @@ return array (
     'ezcontentobject_attribute_data_text' => '',
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
-    'ezcontentobject_tree_main_node_id' => NULL,
+    'ezcontentobject_tree_main_node_id' => '12',
   ),
   2 =>
   array (
