@@ -1,5 +1,5 @@
 Feature: Install eZ Publish Demo with/withoutout content
-    In order to insall eZ Publish Demo
+    In order to install eZ Publish Demo
     As an anonymous user
     I need to be able to install eZ Publish Demo through Setup Wizard
 
@@ -46,6 +46,17 @@ Feature: Install eZ Publish Demo with/withoutout content
         And I click at "Next" button
         Then I see "Site package" step
         And I see "eZ Publish Demo Site" package version "5.3-0-alpha1" imported
+        And I see following packages for version "5.3.0-alpha1" imported:
+            | package                   |
+            | ezwt_extension            |
+            | ezstarrating_extension    |
+            | ezgmaplocation_extension  |
+            | ezdemo_extension          |
+            | ezflow_extension          |
+            | ezcomments_extension      |
+            | ezdemo_classes            |
+            | ezdemo_democontent        |
+        And I don't see "Not Imported" message
 
     @javascript @democlean_install
     Scenario: Choose Demo Site (with content) for installation
@@ -54,6 +65,16 @@ Feature: Install eZ Publish Demo with/withoutout content
         And I click at "Next" button
         Then I see "Site package" step
         And I see "eZ Publish Demo Site (without demo content)" package version "5.3-0-alpha1" imported
+        And I see following packages for version "5.3.0-alpha1" imported:
+            | package                   |
+            | ezwt_extension            |
+            | ezstarrating_extension    |
+            | ezgmaplocation_extension  |
+            | ezdemo_extension          |
+            | ezflow_extension          |
+            | ezcomments_extension      |
+            | ezdemo_classes            |
+            | ezdemo_democontent_clean  |
         And I don't see "Not Imported" message
 
     @javascript @democontent_install @democlean_install

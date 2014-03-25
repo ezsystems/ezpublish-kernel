@@ -14,6 +14,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context;
 use EzSystems\BehatBundle\Features\Context\BrowserContext;
 use PHPUnit_Framework_Assert as Assertion;
 use Behat\Behat\Context\Step;
+use Behat\Gherkin\Node\TableNode;
 
 /**
  * Setup Wizard context.
@@ -77,7 +78,7 @@ class FeatureContext extends BrowserContext
     }
 
     /**
-     * @Given /^I see "([^"]*)" package version "([^"]*)" imported$/
+     * @Then /^I see "([^"]*)" package version "([^"]*)" imported$/
      */
     public function iSeeImported( $packageName, $version )
     {
@@ -97,5 +98,37 @@ class FeatureContext extends BrowserContext
         );
 
         Assertion::assertNotNull( $importElement, "Couldn't find 'Imported' for '$versionLabel' package" );
+    }
+
+    /**
+     * @Then /^I see following packages for version "([^"]*)" imported(?:|\:)$/
+     */
+    public function iSeeFollowingPackagesForVersionImported( $version, TableNode $packagesTable )
+    {
+        $packages = $this->convertTableToArrayOfData( $packagesTable );
+
+        foreach ( $packages as $packageName )
+        {
+            // this can't use the self::iSeeImported() since the versions don't
+            // have a space between "ver." and the actual version
+            $versionLabel = "$packageName (ver.{$version})";
+
+            // notice this xpath uses contains instead of the "=" because the
+            // text as an <enter> and trailling spaces, so it fails
+            $el = $this->getSession()->getPage()->find(
+                "xpath",
+                "//*[contains( text(), '$versionLabel' )]"
+            );
+
+            Assertion::assertNotNull( $el, "Couldn't find '$versionLabel' package" );
+
+            $importElement = $this->findElmentAfterElement(
+                $this->findRow( $el )->findAll( "xpath", "td" ),
+                "../*[contains( text(), '$versionLabel' )]",
+                "//*[text() = 'Imported']"
+            );
+
+            Assertion::assertNotNull( $importElement, "Couldn't find 'Imported' for '$versionLabel' package" );
+        }
     }
 }
