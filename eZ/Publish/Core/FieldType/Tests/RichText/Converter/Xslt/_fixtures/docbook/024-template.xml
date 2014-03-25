@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <eztemplate name="factbox" ezxhtml:class="templateClass" ezxhtml:align="left">
+    <ezcontent>
+      <table title="tableTitle">
+        <caption>About factoids</caption>
+        <tbody>
+          <tr>
+            <th>
+              <title ezxhtml:level="3" ezxhtml:textalign="center">Some facts about factoids</title>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <para>A factoid is a questionable or spurious (unverified, false, or fabricated) statement presented as a fact, but without supporting evidence.</para>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <para>Factoids may give rise to, or arise from, common misconceptions and urban legends.</para>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ezcontent>
+    <ezconfig>
+      <ezvalue key="title">Factoids</ezvalue>
+    </ezconfig>
+  </eztemplate>
+  <eztemplate name="externalimage" ezxhtml:class="templateClass2" ezxhtml:align="right">
+    <ezconfig>
+      <ezvalue key="src">http://upload.wikimedia.org/wikipedia/commons/c/c6/R-S_mk2.gif</ezvalue>
+      <ezvalue key="height">365</ezvalue>
+      <ezvalue key="width">500</ezvalue>
+      <ezvalue key="alt">flip-flop</ezvalue>
+      <ezvalue key="caption">bistable multivibrator</ezvalue>
+    </ezconfig>
+  </eztemplate>
+  <eztemplate name="factoidbox" ezxhtml:class="templateClass3" ezxhtml:align="center">
+    <ezcontent>It is widely known that the bistable multivibrator hums z's in the middle octave key of E.</ezcontent>
+  </eztemplate>
+  <eztemplate name="factoidbox" ezxhtml:class="templateClass4" ezxhtml:align="center"/>
+</section>

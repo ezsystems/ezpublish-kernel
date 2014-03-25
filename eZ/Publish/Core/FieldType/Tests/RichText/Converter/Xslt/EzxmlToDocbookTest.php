@@ -46,7 +46,7 @@ class EzxmlToDocbookTest extends BaseTest
      */
     protected function getConversionTransformationStylesheet()
     {
-        return __DIR__ . "/../../../../RichText/Resources/stylesheets/ezxml/docbook.xsl";
+        return __DIR__ . "/../../../../RichText/Resources/stylesheets/ezxml/docbook/docbook.xsl";
     }
 
     /**
@@ -74,6 +74,10 @@ class EzxmlToDocbookTest extends BaseTest
     protected function getCustomConversionTransformationStylesheets()
     {
         return array(
+            array(
+                "path" => __DIR__ . "/../../../../RichText/Resources/stylesheets/ezxml/docbook/core.xsl",
+                "priority" => 99
+            ),
             array(
                 "path" => __DIR__ . "/_fixtures/ezxml/custom_stylesheets/youtube_docbook.xsl",
                 "priority" => 100

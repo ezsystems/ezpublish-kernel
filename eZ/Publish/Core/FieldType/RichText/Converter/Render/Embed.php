@@ -1,31 +1,26 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\FieldType\RichText\Converter\Embed class.
+ * File containing the eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\RichText\Converter;
+namespace eZ\Publish\Core\FieldType\RichText\Converter\Render;
 
+use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use eZ\Publish\Core\FieldType\RichText\Converter;
-use eZ\Publish\Core\FieldType\RichText\EmbedRendererInterface;
+use eZ\Publish\Core\FieldType\RichText\Converter\Render;
 use Psr\Log\LoggerInterface;
 use DOMDocument;
 use DOMElement;
-use DOMNode;
 
 /**
- * RichText Embed converter injects rendered embed payloads into embed elements.
+ * RichText Template converter injects rendered template payloads into template elements.
  */
-class Embed implements Converter
+class Embed extends Render implements Converter
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\EmbedRendererInterface
-     */
-    protected $embedRenderer;
-
     /**
      * @var null|\Psr\Log\LoggerInterface
      */
@@ -41,9 +36,9 @@ class Embed implements Converter
         "ezembedinline" => "embed-inline"
     );
 
-    public function __construct( EmbedRendererInterface $embedRenderer, LoggerInterface $logger = null )
+    public function __construct( RendererInterface $renderer, LoggerInterface $logger = null )
     {
-        $this->embedRenderer = $embedRenderer;
+        parent::__construct( $renderer );
         $this->logger = $logger;
     }
 
@@ -52,8 +47,9 @@ class Embed implements Converter
      *
      * @param \DOMDocument $document
      * @param $tagName string name of the tag to extract
+     * @param boolean $isInline
      */
-    protected function processTag( DOMDocument $document, $tagName )
+    protected function processTag( DOMDocument $document, $tagName, $isInline )
     {
         /** @var $embed \DOMElement */
         foreach ( $document->getElementsByTagName( $tagName ) as $embed )
@@ -65,8 +61,20 @@ class Embed implements Converter
 
             $embedContent = null;
             $parameters = array(
-                "embedParams" => $this->extractConfiguration( $embed )
+                "params" => $this->extractConfiguration( $embed ),
+                "view" => $viewType,
             );
+
+            if ( $embed->hasAttribute( "ezxhtml:class" ) )
+            {
+                $parameters["class"] = $embed->getAttribute( "ezxhtml:class" );
+            }
+
+            if ( $embed->hasAttribute( "ezxhtml:align" ) )
+            {
+                $parameters["align"] = $embed->getAttribute( "ezxhtml:align" );
+            }
+
             $resourceReference = $embed->getAttribute( "xlink:href" );
 
             if ( empty( $resourceReference ) )
@@ -87,11 +95,23 @@ class Embed implements Converter
             }
             else if ( $matches[1] === "ezcontent" )
             {
-                $embedContent = $this->embedRenderer->renderContent( $matches[2], $viewType, $parameters );
+                $parameters["id"] = $matches[2];
+                $embedContent = $this->renderer->renderContentEmbed(
+                    $matches[2],
+                    $viewType,
+                    $parameters,
+                    $isInline
+                );
             }
             else if ( $matches[1] === "ezlocation" )
             {
-                $embedContent = $this->embedRenderer->renderLocation( $matches[2], $viewType, $parameters );
+                $parameters["id"] = $matches[2];
+                $embedContent = $this->renderer->renderLocationEmbed(
+                    $matches[2],
+                    $viewType,
+                    $parameters,
+                    $isInline
+                );
             }
 
             if ( isset( $embedContent ) )
@@ -104,53 +124,6 @@ class Embed implements Converter
     }
 
     /**
-     * Extracts configuration hash from embed element
-     *
-     * @param \DOMElement $embed
-     *
-     * @return array
-     */
-    protected function extractConfiguration( DOMElement $embed )
-    {
-        $hash = array();
-        $configElements = $embed->getElementsByTagName( "ezconfig" );
-
-        if ( $configElements->length )
-        {
-            $hash = $this->extractHash( $configElements->item( 0 ) );
-        }
-
-        return $hash;
-    }
-
-    /**
-     * Recursively extracts data from XML hash structure
-     *
-     * @param \DOMNode $configHash
-     *
-     * @return array
-     */
-    protected function extractHash( DOMNode $configHash )
-    {
-        $hash = array();
-
-        foreach ( $configHash->childNodes as $node )
-        {
-            /** @var \DOMText|\DOMElement $node */
-            if ( $node->nodeType === XML_ELEMENT_NODE )
-            {
-                $hash[$node->getAttribute( "key" )] = $this->extractHash( $node );
-            }
-            else if ( $node->nodeType === XML_TEXT_NODE && !$node->isWhitespaceInElementContent() )
-            {
-                return $node->wholeText;
-            }
-        }
-
-        return $hash;
-    }
-
-    /**
      * Injects rendered payloads into embed elements
      *
      * @param \DOMDocument $document
@@ -159,8 +132,8 @@ class Embed implements Converter
      */
     public function convert( DOMDocument $document )
     {
-        $this->processTag( $document, 'ezembed' );
-        $this->processTag( $document, 'ezembedinline' );
+        $this->processTag( $document, 'ezembed', false );
+        $this->processTag( $document, 'ezembedinline', true );
 
         return $document;
     }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
+  <p>Some <eztemplateinline data-ezname="emojicake"/> for the otherwise unremarkable paragraph.</p>
+  <p>This paragraph is just showing off its <eztemplateinline data-ezname="emojicrocodile">
+    <ezconfig>
+      <ezvalue key="size">large</ezvalue>
+    </ezconfig>
+  </eztemplateinline>.</p>
+  <p>The equation <eztemplateinline data-ezname="tex" class="templateClass">
+    <ezcontent>e^{\pi i}+1=0</ezcontent>
+    <ezconfig>
+      <ezvalue key="color">red</ezvalue>
+    </ezconfig>
+  </eztemplateinline> ties together five of the most important mathematical constants.</p>
+  <p>This paragraph contains some <eztemplateinline data-ezname="bold">
+    <ezcontent>styled <eztemplateinline data-ezname="strikedthrough">
+      <ezcontent>text</ezcontent>
+    </eztemplateinline></ezcontent>
+  </eztemplateinline>.</p>
+</section>

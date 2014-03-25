@@ -982,6 +982,56 @@
     <xs:attributeGroup ref="ezembedAttributeGroup"/>
   </xs:complexType>
 
+  <xs:attributeGroup name="ezembedAttributeGroup">
+    <xs:attribute name="href" type="uri" use="required"/>
+    <xs:attribute name="data-ezview" type="token" use="required"/>
+    <xs:attribute name="data-ezalign" type="token"/>
+    <xs:attribute name="class" type="tokens"/>
+  </xs:attributeGroup>
+
+  <!-- eZ Publish template elements ================================================= -->
+
+  <xs:complexType name="ezpublishTemplate">
+    <xs:sequence>
+      <xs:element name="ezcontent" type="ezcontent" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ezconfig" type="ezconfig" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="eztemplateAttributeGroup"/>
+  </xs:complexType>
+
+  <xs:complexType name="ezpublishTemplateInline">
+    <xs:sequence>
+      <xs:element name="ezcontent" type="ezcontentinline" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="ezconfig" type="ezconfig" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attributeGroup ref="eztemplateInlineAttributeGroup"/>
+  </xs:complexType>
+
+  <xs:complexType name="ezcontent" mixed="true">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="flowContent"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ezcontentinline" mixed="true">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:group ref="phrasingContent"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:attributeGroup name="eztemplateAttributeGroup">
+    <xs:attribute name="data-ezname" type="token" use="required"/>
+    <xs:attribute name="data-ezalign" type="token"/>
+    <xs:attribute name="class" type="tokens"/>
+  </xs:attributeGroup>
+
+  <xs:attributeGroup name="eztemplateInlineAttributeGroup">
+    <xs:attribute name="data-ezname" type="token" use="required"/>
+    <xs:attribute name="class" type="tokens"/>
+  </xs:attributeGroup>
+
+  <!-- eZ Publish embed and template configuration elements ================================================= -->
+
   <xs:complexType name="ezconfig" mixed="false">
     <xs:sequence>
       <xs:element name="ezvalue" type="ezvalue" minOccurs="0" maxOccurs="unbounded"/>
@@ -995,13 +1045,6 @@
     </xs:sequence>
     <xs:attribute name="key" type="token"/>
   </xs:complexType>
-
-  <xs:attributeGroup name="ezembedAttributeGroup">
-    <xs:attribute name="href" type="uri" use="required"/>
-    <xs:attribute name="data-ezview" type="token" use="required"/>
-    <xs:attribute name="data-ezalign" type="token"/>
-    <xs:attribute name="class" type="tokens"/>
-  </xs:attributeGroup>
 
   <!-- Common content models ============================================= -->
 
@@ -1046,6 +1089,7 @@
       <!--xs:element name="canvas" type="canvasFlow"/-->
       <!--xs:element ref="details"/-->
       <xs:element name="ezembed" type="ezpublishEmbed"/>
+      <xs:element name="eztemplate" type="ezpublishTemplate"/>
     </xs:choice>
   </xs:group>
 
@@ -1085,6 +1129,7 @@
       <!--xs:any namespace="http://www.w3.org/1998/Math/MathML"
               processContents="skip"/-->
       <xs:element name="ezembedinline" type="ezpublishEmbed"/>
+      <xs:element name="eztemplateinline" type="ezpublishTemplateInline"/>
     </xs:choice>
   </xs:group>
 

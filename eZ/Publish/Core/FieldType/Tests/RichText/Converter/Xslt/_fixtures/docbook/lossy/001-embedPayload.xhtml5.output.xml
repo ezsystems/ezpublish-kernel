@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
   <h1>SEO Impact 2</h1>
-  <div class="object-left">
-    <p>Give these people air.</p>
-  </div>
-  <div class="object-right">
-    <script>alert( "GET TO THE CHOPPER" ); window.close();</script>
-  </div>
+  <p>Give these people air.</p>
+  <script>alert( "GET TO THE CHOPPER" ); window.close();</script>
 </section>

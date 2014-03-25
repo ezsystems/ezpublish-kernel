@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzLinkToHtml5 EzXml test
+ * File containing the RichText Link converter test
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,17 +9,17 @@
 
 namespace eZ\Publish\Core\Repository\Tests\FieldType\RichText\Converter;
 
-use eZ\Publish\Core\FieldType\RichText\Converter\EzLinkToHtml5;
+use eZ\Publish\Core\FieldType\RichText\Converter\Link;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException as APIUnauthorizedException;
 
 /**
- * Tests the EzLinkToHtml5 Preconverter
- * Class EmbedToHtml5Test
+ * Tests the Link converter
+ * Class LinkTest
  * @package eZ\Publish\Core\Repository\Tests\FieldType\RichText\Converter
  */
-class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
+class LinkTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
@@ -104,7 +104,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         $urlAliasRouter->expects( $this->never() )
             ->method( $this->anything() );
 
-        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter );
+        $converter = new Link( $locationService, $contentService, $urlAliasRouter );
 
         $xmlDoc = $converter->convert( $xmlDoc );
 
@@ -173,7 +173,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $location ) )
             ->will( $this->returnValue( $rawUrl ) );
 
-        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter );
+        $converter = new Link( $locationService, $contentService, $urlAliasRouter );
 
         $xmlDoc = $converter->convert( $xmlDoc );
 
@@ -243,7 +243,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $locationId ) )
             ->will( $this->throwException( $exception ) );
 
-        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter, $logger );
+        $converter = new Link( $locationService, $contentService, $urlAliasRouter, $logger );
 
         $converter->convert( $xmlDoc );
     }
@@ -320,7 +320,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $location ) )
             ->will( $this->returnValue( $rawUrl ) );
 
-        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter );
+        $converter = new Link( $locationService, $contentService, $urlAliasRouter );
 
         $xmlDoc = $converter->convert( $xmlDoc );
 
@@ -390,7 +390,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $contentId ) )
             ->will( $this->throwException( $exception ) );
 
-        $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter, $logger );
+        $converter = new Link( $locationService, $contentService, $urlAliasRouter, $logger );
 
         $converter->convert( $xmlDoc );
     }

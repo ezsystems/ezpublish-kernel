@@ -1,0 +1,14 @@
+<div class="{% if align is defined %}align-{{ align }}{% endif %}{% if class is defined %} {{ class }}{% endif %}">
+{{
+    render(
+        controller(
+            "ez_content:embedContent",
+            {
+                "contentId": id,
+                "viewType": view,
+                "params": params
+            }
+        )
+    )
+}}
+</div>
