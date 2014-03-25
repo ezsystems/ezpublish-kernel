@@ -110,15 +110,9 @@ class QueryBuilder
             )
         )->leftJoin(
             $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
-                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'contentobject_version', 'ezcontentobject_tree' ),
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
-                )
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
+                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
             )
         )
         // @todo: Joining with ezcontentobject_name is probably a VERY bad way to gather that information
@@ -231,10 +225,6 @@ class QueryBuilder
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'contentobject_version', 'ezcontentobject_tree' ),
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
                 ),
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'main_node_id', 'ezcontentobject_tree' ),
