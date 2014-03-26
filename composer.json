@@ -60,6 +60,9 @@
         "ezsystems/ezpublish-api": "self.version",
         "ezsystems/ezpublish-spi": "self.version"
     },
+    "conflict": {
+        "zendframework/zend-stdlib": ">=2.3"
+    },
     "autoload": {
         "psr-0": {
             "eZ": ""
