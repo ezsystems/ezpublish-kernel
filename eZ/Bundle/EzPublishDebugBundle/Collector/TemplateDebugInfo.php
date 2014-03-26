@@ -83,7 +83,13 @@ class TemplateDebugInfo
         {
             // Deactivate ezxFormToken to avoid double checks on it.
             // At this point (kernel.response), token checks have been already done anyway.
-            ezxFormToken::setIsEnabled( false );
+            // Checking on ezxFormToken existence since might not be loadable if eZ is not yet installed
+            // (ezp_extension.php not yet generated in legacy).
+            if ( class_exists( 'ezxFormToken' ) )
+            {
+                ezxFormToken::setIsEnabled( false );
+            }
+
             $templateStats = $legacyKernel()->runCallback(
                 function ()
                 {
