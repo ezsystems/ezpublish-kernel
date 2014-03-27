@@ -25,8 +25,8 @@ Feature: Install eZ Publish Demo with/withoutout content
             | field      | value     |
             | Servername | localhost |
             | Port       |           |
-            | Username   | root      |
-            | Password   |           |
+            | Username   | ezp       |
+            | Password   | ezp       |
         And I click at "Next" button
         Then I see "Language support" step
 
