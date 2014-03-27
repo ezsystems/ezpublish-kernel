@@ -139,7 +139,7 @@ class Type extends FieldType
             return $validationErrors;
         }
 
-        $fieldSettings = $fieldDefinition->fieldSettings;
+        $fieldSettings = $fieldDefinition->getFieldSettings();
 
         if ( ( !isset( $fieldSettings["isMultiple"] ) || $fieldSettings["isMultiple"] === false )
             && count( $fieldValue->countries ) > 1 )
