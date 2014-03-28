@@ -13,7 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
-class Port extends Map implements Matcher
+class Port extends Map
 {
     public function getName()
     {
@@ -48,5 +48,17 @@ class Port extends Map implements Matcher
         }
 
         $this->setMapKey( $key );
+        parent::setRequest( $request );
+    }
+
+    public function reverseMatch( $siteAccessName )
+    {
+        $matcher = parent::reverseMatch( $siteAccessName );
+        if ( $matcher instanceof Port )
+        {
+            $matcher->getRequest()->setPort( $matcher->getMapKey() );
+        }
+
+        return $matcher;
     }
 }

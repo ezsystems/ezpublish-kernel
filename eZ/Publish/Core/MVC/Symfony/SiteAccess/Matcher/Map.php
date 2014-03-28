@@ -9,9 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
 
-abstract class Map implements Matcher
+abstract class Map implements VersatileMatcher
 {
     /**
      * String that will be looked up in the map.
@@ -28,13 +29,45 @@ abstract class Map implements Matcher
     protected $map;
 
     /**
+     * Map used for reverse matching.
+     *
+     * @var array
+     */
+    protected $reverseMap;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
+     */
+    protected $request;
+
+    /**
      * Constructor.
      *
      * @param array $map Map used for matching.
      */
     public function __construct( array $map )
     {
+        foreach ( $map as $mapKey => &$value )
+        {
+            // $value can be true in the case of the use of a Compound matcher
+            if ( $value === true )
+            {
+                $value = $mapKey;
+            }
+        }
+
         $this->map = $map;
+        $this->reverseMap = array_flip( $map );
+    }
+
+    public function setRequest( SimplifiedRequest $request )
+    {
+        $this->request = $request;
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     /**
@@ -48,6 +81,14 @@ abstract class Map implements Matcher
     }
 
     /**
+     * @return string
+     */
+    public function getMapKey()
+    {
+        return $this->key;
+    }
+
+    /**
      * Returns matching Siteaccess.
      *
      * @return string|false Siteaccess matched or false.
@@ -57,5 +98,28 @@ abstract class Map implements Matcher
         return isset( $this->map[$this->key] )
             ? $this->map[$this->key]
             : false;
+    }
+
+    /**
+     * @param string $siteAccessName
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher|Map|null
+     */
+    public function reverseMatch( $siteAccessName )
+    {
+        if ( !isset( $this->reverseMap[$siteAccessName] ) )
+        {
+            return null;
+        }
+
+        $mapKey = $this->reverseMap[$siteAccessName];
+        $matcher = clone $this;
+        $matcher->setMapKey( $mapKey );
+        return $matcher;
+    }
+
+    public function __clone()
+    {
+        $this->request = clone $this->request;
     }
 }

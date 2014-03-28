@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
@@ -60,7 +62,7 @@ class RouterHostPortURITest extends PHPUnit_Framework_TestCase
      * @depends testConstruct
      * @dataProvider matchProvider
      */
-    public function testMatch( $request, $siteAccess, $router )
+    public function testMatch( SimplifiedRequest $request, $siteAccess, Router $router )
     {
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
@@ -134,5 +136,78 @@ class RouterHostPortURITest extends PHPUnit_Framework_TestCase
             array( SimplifiedRequest::fromUrl( "https://example.com:82/" ), "fourth_sa" ),
             array( SimplifiedRequest::fromUrl( "https://example.com:82/foo" ), "fourth_sa" ),
         );
+    }
+
+    public function testSetGetRequestMapHost()
+    {
+        $mapKey = 'phoenix-rises.fm';
+        $request = new SimplifiedRequest( array( 'host' => $mapKey ) );
+        $matcher = new Host( array( 'foo' => $mapKey ) );
+        $matcher->setRequest( $request );
+        $this->assertSame( $request, $matcher->getRequest() );
+        $this->assertSame( $mapKey, $matcher->getMapKey() );
+    }
+
+    public function testReverseHostMatchFail()
+    {
+        $config = array( 'foo' => 'bar' );
+        $matcher = new Host( $config );
+        $this->assertNull( $matcher->reverseMatch( 'non_existent' ) );
+    }
+
+    public function testReverseMatchHost()
+    {
+        $config = array(
+            'ez.no' => 'some_siteaccess',
+            'something_else' => 'another_siteaccess',
+            'phoenix-rises.fm' => 'ezdemo_site',
+        );
+        $request = new SimplifiedRequest( array( 'host' => 'ez.no' ) );
+        $matcher = new Host( $config );
+        $matcher->setRequest( $request );
+        $this->assertSame( 'ez.no', $matcher->getMapKey() );
+
+        $result = $matcher->reverseMatch( 'ezdemo_site' );
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host', $result );
+        $this->assertSame( $request, $matcher->getRequest() );
+        $this->assertSame( 'phoenix-rises.fm', $result->getMapKey() );
+        $this->assertSame( 'phoenix-rises.fm', $result->getRequest()->host );
+    }
+
+    public function testSetGetRequestMapPort()
+    {
+        $mapKey = '8000';
+        $request = new SimplifiedRequest( array( 'port' => $mapKey ) );
+        $matcher = new Port( array( 'foo' => $mapKey ) );
+        $matcher->setRequest( $request );
+        $this->assertSame( $request, $matcher->getRequest() );
+        $this->assertSame( $mapKey, $matcher->getMapKey() );
+    }
+
+    public function testReversePortMatchFail()
+    {
+        $config = array( 'foo' => '8080' );
+        $matcher = new Port( $config );
+        $this->assertNull( $matcher->reverseMatch( 'non_existent' ) );
+    }
+
+    public function testReverseMatchPort()
+    {
+        $config = array(
+            '80' => 'some_siteaccess',
+            '443' => 'another_siteaccess',
+            8000 => 'ezdemo_site',
+        );
+        $request = new SimplifiedRequest( array( 'scheme' => 'http', 'host' => 'ez.no' ) );
+        $matcher = new Port( $config );
+        $matcher->setRequest( $request );
+        $this->assertSame( 80, $matcher->getMapKey() );
+
+        $result = $matcher->reverseMatch( 'ezdemo_site' );
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port', $result );
+        $this->assertSame( $request, $matcher->getRequest() );
+        $this->assertSame( 8000, $result->getMapKey() );
+        $this->assertSame( 8000, $result->getRequest()->port );
+        $this->assertSame( 'http', $result->getRequest()->scheme );
     }
 }

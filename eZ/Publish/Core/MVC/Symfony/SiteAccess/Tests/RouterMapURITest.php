@@ -15,6 +15,16 @@ use PHPUnit_Framework_TestCase;
 
 class RouterMapURITest extends PHPUnit_Framework_TestCase
 {
+    public function testSetGetRequest()
+    {
+        $request = new SimplifiedRequest( array( 'pathinfo' => '/bar/baz' ) );
+        $mapKey = 'bar';
+        $matcher = new URIMapMatcher( array( 'foo' => $mapKey ) );
+        $matcher->setRequest( $request );
+        $this->assertSame( $request, $matcher->getRequest() );
+        $this->assertSame( $mapKey, $matcher->getMapKey() );
+    }
+
     /**
      * @param string $uri
      * @param string $expectedFixedUpURI
@@ -54,5 +64,31 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
             array( '/vive/le/sucre', '/le/sucre' ),
             array( '/ezdemo_site/some/thing?foo=ezdemo_site&bar=toto', '/some/thing?foo=ezdemo_site&bar=toto' )
         );
+    }
+
+    public function testReverseMatchFail()
+    {
+        $config = array( 'foo' => 'bar' );
+        $matcher = new URIMapMatcher( $config );
+        $this->assertNull( $matcher->reverseMatch( 'non_existent' ) );
+    }
+
+    public function testReverseMatch()
+    {
+        $config = array(
+            'some_uri' => 'some_siteaccess',
+            'something_else' => 'another_siteaccess',
+            'toutouyoutou' => 'ezdemo_site',
+        );
+        $request = new SimplifiedRequest( array( 'pathinfo' => '/some_uri/foo' ) );
+        $matcher = new URIMapMatcher( $config );
+        $matcher->setRequest( $request );
+        $this->assertSame( 'some_uri', $matcher->getMapKey() );
+
+        $result = $matcher->reverseMatch( 'ezdemo_site' );
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI', $result );
+        $this->assertSame( $request, $matcher->getRequest() );
+        $this->assertSame( 'toutouyoutou', $result->getMapKey() );
+        $this->assertSame( '/toutouyoutou/foo', $result->getRequest()->pathinfo );
     }
 }

@@ -9,12 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
-class URI extends Map implements Matcher, URILexer
+class URI extends Map implements URILexer
 {
     /**
      * Injects the request object to match against.
@@ -27,6 +26,7 @@ class URI extends Map implements Matcher, URILexer
     {
         sscanf( $request->pathinfo, "/%[^/]", $key );
         $this->setMapKey( $key );
+        parent::setRequest( $request );
     }
 
     public function getName()
@@ -70,4 +70,17 @@ class URI extends Map implements Matcher, URILexer
         return "/{$this->key}{$joiningSlash}{$linkUri}{$queryString}";
     }
 
+    public function reverseMatch( $siteAccessName )
+    {
+        $matcher = parent::reverseMatch( $siteAccessName );
+        if ( $matcher instanceof URI )
+        {
+            $request = $matcher->getRequest();
+            // Clean up "old" siteaccess prefix and add the new prefix.
+            $cleanedUpPathinfo = $this->analyseURI( $request->pathinfo );
+            $request->setPathinfo( $matcher->analyseLink( $cleanedUpPathinfo ) );
+        }
+
+        return $matcher;
+    }
 }
