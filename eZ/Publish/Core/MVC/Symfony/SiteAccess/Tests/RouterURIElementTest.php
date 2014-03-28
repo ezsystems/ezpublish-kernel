@@ -53,7 +53,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
      * @depends testConstruct
      * @dataProvider matchProvider
      */
-    public function testMatch( $request, $siteAccess, $router )
+    public function testMatch( SimplifiedRequest $request, $siteAccess, Router $router )
     {
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
@@ -153,6 +153,31 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
         return array(
             array( '/my_siteaccess/foo/bar', '/foo/bar' ),
             array( '/vive/le/sucre', '/le/sucre' )
+        );
+    }
+
+    /**
+     * @dataProvider reverseMatchProvider
+     */
+    public function testReverseMatch( $siteAccessName, $originalPathinfo )
+    {
+        $matcher = new URIElementMatcher( 1 );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => "/my_siteaccess{$originalPathinfo}" ) ) );
+        $result = $matcher->reverseMatch( $siteAccessName );
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement', $result );
+        $this->assertSame( "/{$siteAccessName}{$originalPathinfo}", $result->getRequest()->pathinfo );
+        $this->assertSame( "/$siteAccessName/some/linked/uri", $result->analyseLink( '/some/linked/uri' ) );
+        $this->assertSame( "/foo/bar/baz", $result->analyseURI( "/$siteAccessName/foo/bar/baz" ) );
+    }
+
+    public function reverseMatchProvider()
+    {
+        return array(
+            array( 'something', '/foo/bar' ),
+            array( 'something', '/' ),
+            array( 'some_thing', '/foo/bar' ),
+            array( 'another_siteaccess', '/foo/bar' ),
+            array( 'another_siteaccess_again_dont_tell_me', '/foo/bar' ),
         );
     }
 }

@@ -9,12 +9,12 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
 use LogicException;
 
-class URIElement implements Matcher, URILexer
+class URIElement implements VersatileMatcher, URILexer
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
@@ -91,12 +91,18 @@ class URIElement implements Matcher, URILexer
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
-     *
-     * @return void
      */
     public function setRequest( SimplifiedRequest $request )
     {
         $this->request = $request;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     /**
@@ -134,5 +140,37 @@ class URIElement implements Matcher, URILexer
         $linkUri = ltrim( $linkUri, '/' );
         $uriElements = implode( '/', $this->getURIElements() );
         return "/{$uriElements}{$joiningSlash}{$linkUri}";
+    }
+
+    /**
+     * Returns matcher object corresponding to $siteAccessName or null if non applicable.
+     *
+     * Limitation: If the element number is > 1, we cannot predict how URI segments are expected to be built.
+     * So we expect "_" will be reversed to "/"
+     * e.g. foo_bar => foo/bar with elementNumber == 2
+     * Hence if number of elements is different than the element number, we report as non matched.
+     *
+     * @param string $siteAccessName
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement|null
+     */
+    public function reverseMatch( $siteAccessName )
+    {
+        $elements = $this->elementNumber > 1 ? explode( '_', $siteAccessName ) : array( $siteAccessName );
+        if ( count( $elements ) !== $this->elementNumber )
+        {
+            return null;
+        }
+
+        $matcher = clone $this;
+        $request = $matcher->getRequest();
+        $pathinfo = '/' . implode( '/', $elements ) . '/' . ltrim( $this->analyseURI( $request->pathinfo ), '/' );
+        $request->setPathinfo( $pathinfo );
+        return $matcher;
+    }
+
+    public function __clone()
+    {
+        $this->request = clone $this->request;
     }
 }

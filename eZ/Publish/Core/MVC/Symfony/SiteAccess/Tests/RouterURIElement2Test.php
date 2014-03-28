@@ -53,7 +53,7 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
      * @depends testConstruct
      * @dataProvider matchProvider
      */
-    public function testMatch( $request, $siteAccess, $router )
+    public function testMatch( SimplifiedRequest $request, $siteAccess, Router $router )
     {
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
@@ -160,5 +160,36 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
             array( 2, '/prefix/siteaccess', '' ),
             array( 2, '/prefix/siteaccess/', '/' ),
         );
+    }
+
+    /**
+     * @dataProvider reverseMatchProvider
+     */
+    public function testReverseMatch( $siteAccessName, $originalPathinfo )
+    {
+        $expectedSiteAccessPath = implode( '/', explode( '_', $siteAccessName ) );
+        $matcher = new URIElementMatcher( 2 );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => "/my/siteaccess{$originalPathinfo}" ) ) );
+
+        $result = $matcher->reverseMatch( $siteAccessName );
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement', $result );
+        $this->assertSame( "/{$expectedSiteAccessPath}{$originalPathinfo}", $result->getRequest()->pathinfo );
+        $this->assertSame( "/$expectedSiteAccessPath/some/linked/uri", $result->analyseLink( '/some/linked/uri' ) );
+        $this->assertSame( "/foo/bar/baz", $result->analyseURI( "/$expectedSiteAccessPath/foo/bar/baz" ) );
+    }
+
+    public function reverseMatchProvider()
+    {
+        return array(
+            array( 'some_thing', '/foo/bar' ),
+            array( 'another_siteaccess', '/foo/bar' ),
+        );
+    }
+
+    public function testReverseMatchFail()
+    {
+        $matcher = new URIElementMatcher( 2 );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => "/my/siteaccess/foo/bar" ) ) );
+        $this->assertNull( $matcher->reverseMatch( 'another_siteaccess_again_dont_tell_me' ) );
     }
 }
