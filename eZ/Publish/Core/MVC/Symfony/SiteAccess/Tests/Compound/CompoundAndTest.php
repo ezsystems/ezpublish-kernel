@@ -29,7 +29,6 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound::__construct
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalAnd
      */
     public function testConstruct()
@@ -71,8 +70,6 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound::setMatcherBuilder
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound::getSubMatchers
      */
     public function testSetMatcherBuilder( Compound $compoundMatcher )
     {
@@ -94,7 +91,6 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider matchProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalAnd::match
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
      * @param $expectedMatch

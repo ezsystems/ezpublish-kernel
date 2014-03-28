@@ -28,9 +28,6 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
         $this->matcherBuilder = new MatcherBuilder;
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::__construct
-     */
     public function testConstruct()
     {
         return new Router(
@@ -55,15 +52,6 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     /**
      * @depends testConstruct
      * @dataProvider matchProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::setRequest
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::getURIElements
      */
     public function testMatch( $request, $siteAccess, $router )
     {
@@ -130,9 +118,6 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
      * @param string $expectedFixedUpURI
      *
      * @dataProvider analyseProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseURI
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::setRequest
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::getURIElements
      */
     public function testAnalyseURI( $level, $uri, $expectedFixedUpURI )
     {
@@ -149,7 +134,6 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
      * @param string $linkUri
      *
      * @dataProvider analyseProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseLink
      */
     public function testAnalyseLink( $level, $fullUri, $linkUri )
     {

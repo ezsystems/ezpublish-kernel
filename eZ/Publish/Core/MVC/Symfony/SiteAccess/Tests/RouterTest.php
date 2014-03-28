@@ -34,9 +34,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::__construct
-     */
     public function testConstruct()
     {
         return new Router(
@@ -83,12 +80,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
     /**
      * @depends testConstruct
      * @dataProvider matchProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port::__construct
      */
     public function testMatch( $request, $siteAccess, $router )
     {
@@ -103,7 +94,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
      * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
      */
     public function testMatchWithEnvFail( $router )
@@ -115,7 +105,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
      */
     public function testMatchWithEnv( $router )
     {
@@ -132,7 +121,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router $router
      *
      * @depends testConstruct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
      */
     public function testMatchWithRequestHeader( $router )
     {

@@ -27,9 +27,6 @@ class RouterHostPortURITest extends PHPUnit_Framework_TestCase
         $this->matcherBuilder = new MatcherBuilder;
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::__construct
-     */
     public function testConstruct()
     {
         return new Router(
@@ -62,12 +59,6 @@ class RouterHostPortURITest extends PHPUnit_Framework_TestCase
     /**
      * @depends testConstruct
      * @dataProvider matchProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Port::__construct
      */
     public function testMatch( $request, $siteAccess, $router )
     {

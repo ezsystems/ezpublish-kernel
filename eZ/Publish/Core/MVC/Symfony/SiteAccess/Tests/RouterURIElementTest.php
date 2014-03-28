@@ -28,9 +28,6 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
         $this->matcherBuilder = new MatcherBuilder;
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::__construct
-     */
     public function testConstruct()
     {
         return new Router(
@@ -55,13 +52,6 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
     /**
      * @depends testConstruct
      * @dataProvider matchProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::match
      */
     public function testMatch( $request, $siteAccess, $router )
     {
@@ -122,9 +112,6 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::getName
-     */
     public function testGetName()
     {
         $matcher = new URIElementMatcher( array(), array() );
@@ -136,7 +123,6 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
      * @param string $expectedFixedUpURI
      *
      * @dataProvider analyseProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseURI
      */
     public function testAnalyseURI( $uri, $expectedFixedUpURI )
     {
@@ -152,7 +138,6 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
      * @param string $linkUri
      *
      * @dataProvider analyseProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement::analyseLink
      */
     public function testAnalyseLink( $fullUri, $linkUri )
     {

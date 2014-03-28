@@ -20,7 +20,6 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
      * @param string $expectedFixedUpURI
      *
      * @dataProvider fixupURIProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::analyseURI
      */
     public function testAnalyseURI( $uri, $expectedFixedUpURI )
     {
@@ -36,7 +35,6 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
      * @param string $linkUri
      *
      * @dataProvider fixupURIProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::analyseLink
      */
     public function testAnalyseLink( $fullUri, $linkUri )
     {
