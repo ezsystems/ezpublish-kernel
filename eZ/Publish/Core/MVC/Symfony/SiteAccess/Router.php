@@ -14,8 +14,9 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
 use Psr\Log\LoggerInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\CompoundInterface;
+use InvalidArgumentException;
 
-class Router
+class Router implements SiteAccessRouterInterface, SiteAccessAware
 {
     /**
      * Name of the default siteaccess
@@ -95,7 +96,7 @@ class Router
         $this->defaultSiteAccess = $defaultSiteAccess;
         $this->siteAccessesConfiguration = $siteAccessesConfiguration;
         $this->siteAccessList = array_fill_keys( $siteAccessList, true );
-        $this->siteAccessClass = $siteAccessClass;
+        $this->siteAccessClass = $siteAccessClass ?: 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess';
     }
 
     /**
@@ -112,7 +113,7 @@ class Router
         if ( isset( $this->siteAccess ) )
             return $this->siteAccess;
 
-        $siteAccessClass = $this->siteAccessClass ?: 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess';
+        $siteAccessClass = $this->siteAccessClass;
         $this->siteAccess = new $siteAccessClass();
 
         // Request header always have precedence
