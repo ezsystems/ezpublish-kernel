@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\HostElement;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host as HostMapMatcher;
@@ -54,7 +55,7 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
      * @depends testConstruct
      * @dataProvider matchProvider
      */
-    public function testMatch( $request, $siteAccess, $router )
+    public function testMatch( SimplifiedRequest $request, $siteAccess, Router $router )
     {
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
@@ -123,5 +124,37 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
     {
         $matcher = new HostMapMatcher( array( 'host' => 'foo' ), array() );
         $this->assertSame( 'host:map', $matcher->getName() );
+
+        $matcherHostElement = new HostElement( 1 );
+        $this->assertSame( 'host:element', $matcherHostElement->getName() );
+    }
+
+    /**
+     * @dataProvider reverseMatchProvider
+     */
+    public function testReverseMatch( $siteAccessName, $elementNumber, SimplifiedRequest $request, $expectedHost )
+    {
+        $matcher = new HostElement( $elementNumber );
+        $matcher->setRequest( $request );
+        $result = $matcher->reverseMatch( $siteAccessName );
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\HostElement', $result );
+        $this->assertSame( $expectedHost, $result->getRequest()->host );
+    }
+
+    public function reverseMatchProvider()
+    {
+        return array(
+            array( 'foo', 1, SimplifiedRequest::fromUrl( 'http://bar.example.com/' ), 'foo.example.com' ),
+            array( 'ezdemo_site', 1, SimplifiedRequest::fromUrl( 'http://ezflow_site.ez.no/' ), 'ezdemo_site.ez.no' ),
+            array( 'metalfrance', 2, SimplifiedRequest::fromUrl( 'http://www.lolart.net/' ), 'www.metalfrance.net' ),
+            array( 'fm', 3, SimplifiedRequest::fromUrl( 'http://www.phoenix-rises.fr/' ), 'www.phoenix-rises.fm' ),
+        );
+    }
+
+    public function testReverseMatchFail()
+    {
+        $matcher = new HostElement( 3 );
+        $matcher->setRequest( new SimplifiedRequest( array( 'host' => 'ez.no' ) ) );
+        $this->assertNull( $matcher->reverseMatch( 'foo' ) );
     }
 }
