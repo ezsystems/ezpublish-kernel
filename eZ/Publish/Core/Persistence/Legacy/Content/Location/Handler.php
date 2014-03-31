@@ -16,7 +16,6 @@ use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as BaseLocationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
@@ -48,13 +47,6 @@ class Handler implements BaseLocationHandler
     protected $contentHandler;
 
     /**
-     * Content locationMapper
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
-     */
-    protected $contentMapper;
-
-    /**
      * Object state handler
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler
@@ -67,7 +59,6 @@ class Handler implements BaseLocationHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Handler $contentHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler $objectStateHandler
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
@@ -76,14 +67,12 @@ class Handler implements BaseLocationHandler
         LocationGateway $locationGateway,
         LocationMapper $locationMapper,
         ContentHandler $contentHandler,
-        ContentMapper $contentMapper,
         ObjectStateHandler $objectStateHandler
     )
     {
         $this->locationGateway = $locationGateway;
         $this->locationMapper = $locationMapper;
         $this->contentHandler = $contentHandler;
-        $this->contentMapper = $contentMapper;
         $this->objectStateHandler = $objectStateHandler;
     }
 

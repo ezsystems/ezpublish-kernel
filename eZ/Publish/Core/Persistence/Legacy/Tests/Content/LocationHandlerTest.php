@@ -69,7 +69,6 @@ class LocationHandlerTest extends TestCase
             $this->locationGateway,
             $this->locationMapper,
             $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false ),
-            $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false ),
             $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler', array(), array(), '', false )
         );
     }
@@ -417,7 +416,6 @@ class LocationHandlerTest extends TestCase
                 $locationGatewayMock,
                 $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper" ),
                 $contentHandlerMock,
-                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper", array(), array(), "", false ),
                 $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler", array(), array(), "", false )
             )
         );
@@ -840,7 +838,6 @@ class LocationHandlerTest extends TestCase
                 $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway', array(), array(), '', false ),
                 $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper', array(), array(), '', false ),
                 $this->contentHandler = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false ),
-                $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false ),
                 $this->objectStateHandler = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler', array(), array(), '', false ),
             )
         );

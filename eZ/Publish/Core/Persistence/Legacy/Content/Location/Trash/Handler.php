@@ -245,4 +245,3 @@ class Handler implements BaseTrashHandler
             $this->contentHandler->deleteContent( $trashItem->contentId );
     }
 }
-
