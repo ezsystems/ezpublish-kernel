@@ -47,11 +47,17 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
      */
     private $urlAliasGenerator;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $siteAccessRouter;
+
     protected function setUp()
     {
         parent::setUp();
         $this->router = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
         $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
+        $this->siteAccessRouter = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface' );
         $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
         $this->repository = $repository = $this
             ->getMockBuilder( $repositoryClass )

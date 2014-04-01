@@ -81,7 +81,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
      * @depends testConstruct
      * @dataProvider matchProvider
      */
-    public function testMatch( $request, $siteAccess, $router )
+    public function testMatch( SimplifiedRequest $request, $siteAccess, Router $router )
     {
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
@@ -96,7 +96,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
      * @depends testConstruct
      * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
      */
-    public function testMatchWithEnvFail( $router )
+    public function testMatchWithEnvFail( Router $router )
     {
         $saName = 'foobar_sa';
         putenv( "EZPUBLISH_SITEACCESS=$saName" );
@@ -106,7 +106,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
     /**
      * @depends testConstruct
      */
-    public function testMatchWithEnv( $router )
+    public function testMatchWithEnv( Router $router )
     {
         $saName = 'first_sa';
         putenv( "EZPUBLISH_SITEACCESS=$saName" );
@@ -122,7 +122,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
      *
      * @depends testConstruct
      */
-    public function testMatchWithRequestHeader( $router )
+    public function testMatchWithRequestHeader( Router $router )
     {
         $saName = 'headerbased_sa';
         $request = Request::create( '/foo/bar' );
@@ -202,5 +202,85 @@ class RouterTest extends PHPUnit_Framework_TestCase
             array( SimplifiedRequest::fromUrl( 'http://fr.ezpublish.dev/eng' ), 'fr_eng' ),
             array( SimplifiedRequest::fromUrl( 'http://us.ezpublish.dev/fre' ), 'fr_us' ),
         );
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testMatchByNameInvalidSiteAccess()
+    {
+        $matcherBuilder = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface' );
+        $logger = $this->getMock( 'Psr\Log\LoggerInterface' );
+        $router = new Router( $matcherBuilder, $logger, 'default_sa', array(), array( 'foo', 'default_sa' ) );
+        $router->matchByName( 'bar' );
+    }
+
+    public function testMatchByName()
+    {
+        $matcherBuilder = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface' );
+        $logger = $this->getMock( 'Psr\Log\LoggerInterface' );
+        $matcherClass = 'Map\Host';
+        $matchedSiteAccess = 'foo';
+        $matcherConfig = array(
+            'phoenix-rises.fm' => $matchedSiteAccess,
+        );
+        $config = array(
+            $matcherClass => $matcherConfig,
+            'Map\URI' => array( 'default' => 'default_sa' )
+        );
+
+        $router = new Router( $matcherBuilder, $logger, 'default_sa', $config, array( $matchedSiteAccess, 'default_sa' ) );
+        $request = $router->getRequest();
+        $matcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher' );
+        $matcherBuilder
+            ->expects( $this->once() )
+            ->method( 'buildMatcher' )
+            ->with( $matcherClass, $matcherConfig, $request )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'Map\URI', array( 'default' => 'default_sa' ), $request, $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher' ) ),
+                        array( $matcherClass, $matcherConfig, $request, $matcher ),
+                    )
+                )
+            );
+
+        $reverseMatchedMatcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher' );
+        $matcher
+            ->expects( $this->once() )
+            ->method( 'reverseMatch' )
+            ->with( $matchedSiteAccess )
+            ->will( $this->returnValue( $reverseMatchedMatcher ) );
+
+        $siteAccess = $router->matchByName( $matchedSiteAccess );
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess', $siteAccess );
+        $this->assertSame( $reverseMatchedMatcher, $siteAccess->matcher );
+        $this->assertSame( $matchedSiteAccess, $siteAccess->name );
+    }
+
+    public function testMatchByNameNoVersatileMatcher()
+    {
+        $matcherBuilder = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface' );
+        $logger = $this->getMock( 'Psr\Log\LoggerInterface' );
+        $matcherClass = 'Map\Host';
+        $matchedSiteAccess = 'foo';
+        $matcherConfig = array(
+            'phoenix-rises.fm' => $matchedSiteAccess,
+            'ez.no' => 'default_sa',
+        );
+        $config = array( $matcherClass => $matcherConfig );
+
+        $router = new Router( $matcherBuilder, $logger, 'default_sa', $config, array( $matchedSiteAccess, 'default_sa' ) );
+        $request = $router->getRequest();
+        $matcherBuilder
+            ->expects( $this->once() )
+            ->method( 'buildMatcher' )
+            ->with( $matcherClass, $matcherConfig, $request )
+            ->will( $this->returnValue( $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher' ) ) );
+
+        $logger
+            ->expects( $this->once() )
+            ->method( 'notice' );
+        $this->assertNull( $router->matchByName( $matchedSiteAccess ) );
     }
 }
