@@ -9,32 +9,19 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use eZModule;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
-class UrlGenerator extends Generator implements SiteAccessAware
+class UrlGenerator extends Generator
 {
     /**
      * @var \Closure
      */
     private $legacyKernelClosure;
 
-    /**
-     * @var SiteAccess
-     */
-    private $siteAccess;
-
     public function __construct( \Closure $legacyKernelClosure )
     {
         $this->legacyKernelClosure = $legacyKernelClosure;
-    }
-
-    public function setSiteAccess( SiteAccess $siteAccess = null )
-    {
-        $this->siteAccess = $siteAccess;
     }
 
     /**
@@ -86,11 +73,6 @@ class UrlGenerator extends Generator implements SiteAccessAware
                         continue;
 
                     $unorderedParams .= "/($paramName)/$paramValue";
-                }
-
-                if ( isset( $siteAccess ) && $siteAccess->matcher instanceof URILexer )
-                {
-                    $legacyModuleUri = trim( $siteAccess->matcher->analyseLink( "/$legacyModuleUri" ), '/' );
                 }
 
                 return "/$legacyModuleUri$unorderedParams";

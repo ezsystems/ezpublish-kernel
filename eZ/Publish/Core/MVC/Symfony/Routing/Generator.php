@@ -9,12 +9,15 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\RequestContext;
 
 /**
  * Base class for eZ Publish Url generation.
  */
-abstract class Generator
+abstract class Generator implements SiteAccessAware
 {
     /**
      * @var \Symfony\Component\Routing\RequestContext
@@ -22,11 +25,39 @@ abstract class Generator
     protected $requestContext;
 
     /**
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    protected $siteAccess;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param \Symfony\Component\Routing\RequestContext $requestContext
      */
     public function setRequestContext( RequestContext $requestContext )
     {
         $this->requestContext = $requestContext;
+    }
+
+    /**
+    /**
+     * @param SiteAccess $siteAccess
+     */
+    public function setSiteAccess( SiteAccess $siteAccess = null )
+    {
+        $this->siteAccess = $siteAccess;
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     */
+    public function setLogger( LoggerInterface $logger = null )
+    {
+        $this->logger = $logger;
     }
 
     /**

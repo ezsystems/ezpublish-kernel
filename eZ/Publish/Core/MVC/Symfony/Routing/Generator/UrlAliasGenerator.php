@@ -10,19 +10,15 @@
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
 use eZ\Publish\API\Repository\Repository;
-use Psr\Log\LoggerInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\Routing\RouterInterface;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 /**
  * URL generator for UrlAlias based links
  *
  * @see \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
  */
-class UrlAliasGenerator extends Generator implements SiteAccessAware
+class UrlAliasGenerator extends Generator
 {
     const INTERNAL_LOCATION_ROUTE = '_ezpublishLocation';
 
@@ -39,11 +35,6 @@ class UrlAliasGenerator extends Generator implements SiteAccessAware
     private $defaultRouter;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var int
      */
     private $rootLocationId;
@@ -58,24 +49,10 @@ class UrlAliasGenerator extends Generator implements SiteAccessAware
      */
     private $pathPrefixMap = array();
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
-    private $siteAccess;
-
-    public function __construct( Repository $repository, RouterInterface $defaultRouter, LoggerInterface $logger = null )
+    public function __construct( Repository $repository, RouterInterface $defaultRouter )
     {
         $this->repository = $repository;
         $this->defaultRouter = $defaultRouter;
-        $this->logger = $logger;
-    }
-
-    /**
-     * @param SiteAccess $siteAccess
-     */
-    public function setSiteAccess( SiteAccess $siteAccess = null )
-    {
-        $this->siteAccess = $siteAccess;
     }
 
     /**
@@ -123,11 +100,6 @@ class UrlAliasGenerator extends Generator implements SiteAccessAware
                 self::INTERNAL_LOCATION_ROUTE,
                 array( 'locationId' => $location->id )
             );
-        }
-
-        if ( isset( $this->siteAccess ) && $this->siteAccess->matcher instanceof URILexer )
-        {
-            $path = $this->siteAccess->matcher->analyseLink( $path );
         }
 
         $path = $path ?: '/';

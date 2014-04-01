@@ -33,6 +33,8 @@ services:
         abstract: true
         calls:
             - [setRequestContext, [@router.request_context]]
+            - [setSiteAccess, [@?ezpublish.siteaccess=]]
+            - [setLogger, [@?logger]]
 
     ezpublish.urlalias_router:
         class: %ezpublish.urlalias_router.class%
@@ -49,10 +51,8 @@ services:
 
     ezpublish.urlalias_generator:
         class: %ezpublish.urlalias_generator.class%
-        arguments: [@ezpublish.api.repository, @router.default, @?logger]
+        arguments: [@ezpublish.api.repository, @router.default]
         parent: ezpublish.url_generator.base
-        calls:
-            - [setSiteAccess, [@ezpublish.siteaccess]]
 
     ezpublish.siteaccess.matcher_builder:
         class: %ezpublish.siteaccess.matcher_builder.class%
