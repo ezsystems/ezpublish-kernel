@@ -33,13 +33,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
     protected $contentGatewayMock;
 
     /**
-     * Type gateway mock
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
-     */
-    protected $typeGatewayMock;
-
-    /**
      * Mapper mock
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
@@ -74,15 +67,9 @@ class FieldHandlerTest extends LanguageAwareTestCase
      */
     protected function assertCreateNewFields( $storageHandlerUpdatesFields = false )
     {
-        $typeHandlerMock = $this->getTypeHandlerMock();
         $contentGatewayMock = $this->getContentGatewayMock();
         $fieldTypeMock = $this->getFieldTypeMock();
         $storageHandlerMock = $this->getStorageHandlerMock();
-
-        $typeHandlerMock->expects( $this->once() )
-            ->method( "load" )
-            ->with( $this->equalTo( 1 ) )
-            ->will( $this->returnValue( $this->getContentTypeFixture() ) );
 
         $fieldTypeMock->expects( $this->exactly( 3 ) )
             ->method( "getEmptyValue" )
@@ -157,7 +144,10 @@ class FieldHandlerTest extends LanguageAwareTestCase
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
             ->will( $this->returnValue( new StorageFieldValue() ) );
 
-        $fieldHandler->createNewFields( $this->getContentPartialFieldsFixture() );
+        $fieldHandler->createNewFields(
+            $this->getContentPartialFieldsFixture(),
+            $this->getContentTypeFixture()
+        );
     }
 
     /**
@@ -185,7 +175,10 @@ class FieldHandlerTest extends LanguageAwareTestCase
                 $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
             );
 
-        $fieldHandler->createNewFields( $this->getContentPartialFieldsFixture() );
+        $fieldHandler->createNewFields(
+            $this->getContentPartialFieldsFixture(),
+            $this->getContentTypeFixture()
+        );
     }
 
     /**
@@ -195,15 +188,9 @@ class FieldHandlerTest extends LanguageAwareTestCase
      */
     protected function assertCreateNewFieldsForMainLanguage( $storageHandlerUpdatesFields = false )
     {
-        $typeHandlerMock = $this->getTypeHandlerMock();
         $contentGatewayMock = $this->getContentGatewayMock();
         $fieldTypeMock = $this->getFieldTypeMock();
         $storageHandlerMock = $this->getStorageHandlerMock();
-
-        $typeHandlerMock->expects( $this->once() )
-            ->method( "load" )
-            ->with( $this->equalTo( 1 ) )
-            ->will( $this->returnValue( $this->getContentTypeFixture() ) );
 
         $fieldTypeMock->expects( $this->exactly( 3 ) )
             ->method( "getEmptyValue" )
@@ -257,7 +244,10 @@ class FieldHandlerTest extends LanguageAwareTestCase
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
             ->will( $this->returnValue( new StorageFieldValue() ) );
 
-        $fieldHandler->createNewFields( $this->getContentNoFieldsFixture() );
+        $fieldHandler->createNewFields(
+            $this->getContentNoFieldsFixture(),
+            $this->getContentTypeFixture()
+        );
     }
 
     /**
@@ -285,7 +275,10 @@ class FieldHandlerTest extends LanguageAwareTestCase
                 $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
             );
 
-        $fieldHandler->createNewFields( $this->getContentNoFieldsFixture() );
+        $fieldHandler->createNewFields(
+            $this->getContentNoFieldsFixture(),
+            $this->getContentTypeFixture()
+        );
     }
 
     /**
@@ -410,15 +403,9 @@ class FieldHandlerTest extends LanguageAwareTestCase
      */
     public function assertUpdateFieldsWithNewLanguage( $storageHandlerUpdatesFields = false )
     {
-        $typeHandlerMock = $this->getTypeHandlerMock();
         $contentGatewayMock = $this->getContentGatewayMock();
         $fieldTypeMock = $this->getFieldTypeMock();
         $storageHandlerMock = $this->getStorageHandlerMock();
-
-        $typeHandlerMock->expects( $this->once() )
-            ->method( "load" )
-            ->with( $this->equalTo( 1 ) )
-            ->will( $this->returnValue( $this->getContentTypeFixture( true ) ) );
 
         $fieldTypeMock->expects( $this->exactly( 1 ) )
             ->method( "getEmptyValue" )
@@ -505,7 +492,8 @@ class FieldHandlerTest extends LanguageAwareTestCase
                     "initialLanguageId" => 8,
                     "fields" => array( $field ),
                 )
-            )
+            ),
+            $this->getContentTypeFixture()
         );
     }
 
@@ -549,7 +537,8 @@ class FieldHandlerTest extends LanguageAwareTestCase
                     "initialLanguageId" => 8,
                     "fields" => array( $field ),
                 )
-            )
+            ),
+            $this->getContentTypeFixture()
         );
     }
 
@@ -561,12 +550,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
     public function assertUpdateFieldsExistingLanguages( $storageHandlerUpdatesFields = false )
     {
         $storageHandlerMock = $this->getStorageHandlerMock();
-        $typeHandlerMock = $this->getTypeHandlerMock();
-
-        $typeHandlerMock->expects( $this->once() )
-            ->method( "load" )
-            ->with( $this->equalTo( 1 ) )
-            ->will( $this->returnValue( $this->getContentTypeFixture() ) );
 
         $callNo = 0;
         $fieldValue = new FieldValue();
@@ -647,7 +630,8 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $fieldHandler->updateFields(
             $this->getContentFixture(),
-            $this->getUpdateStructFixture()
+            $this->getUpdateStructFixture(),
+            $this->getContentTypeFixture()
         );
     }
 
@@ -678,7 +662,8 @@ class FieldHandlerTest extends LanguageAwareTestCase
 
         $fieldHandler->updateFields(
             $this->getContentFixture(),
-            $this->getUpdateStructFixture()
+            $this->getUpdateStructFixture(),
+            $this->getContentTypeFixture()
         );
     }
 
@@ -690,12 +675,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
     public function assertUpdateFieldsForInitialLanguage( $storageHandlerUpdatesFields = false )
     {
         $storageHandlerMock = $this->getStorageHandlerMock();
-        $typeHandlerMock = $this->getTypeHandlerMock();
-
-        $typeHandlerMock->expects( $this->once() )
-            ->method( "load" )
-            ->with( $this->equalTo( 1 ) )
-            ->will( $this->returnValue( $this->getContentTypeFixture() ) );
 
         $callNo = 0;
         $fieldValue = new FieldValue();
@@ -764,7 +743,11 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $struct = new UpdateStruct();
         // Language with id=2 is eng-US
         $struct->initialLanguageId = 2;
-        $fieldHandler->updateFields( $this->getContentSingleLanguageFixture(), $struct );
+        $fieldHandler->updateFields(
+            $this->getContentSingleLanguageFixture(),
+            $struct,
+            $this->getContentTypeFixture()
+        );
     }
 
     /**
@@ -795,7 +778,11 @@ class FieldHandlerTest extends LanguageAwareTestCase
         $struct = new UpdateStruct();
         // Language with id=2 is eng-US
         $struct->initialLanguageId = 2;
-        $fieldHandler->updateFields( $this->getContentSingleLanguageFixture(), $struct );
+        $fieldHandler->updateFields(
+            $this->getContentSingleLanguageFixture(),
+            $struct,
+            $this->getContentTypeFixture()
+        );
     }
 
     /**
@@ -1055,7 +1042,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
             $this->getLanguageHandler(),
             $this->getFieldTypeRegistryMock()
         );
-        $mock->typeHandler = $this->getTypeHandlerMock();
 
         return $mock;
     }
@@ -1098,26 +1084,6 @@ class FieldHandlerTest extends LanguageAwareTestCase
             );
         }
         return $this->mapperMock;
-    }
-
-    /**
-     * Returns a Content Type gateway mock
-     *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getTypeHandlerMock()
-    {
-        if ( !isset( $this->typeGatewayMock ) )
-        {
-            $this->typeGatewayMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->typeGatewayMock;
     }
 
     /**

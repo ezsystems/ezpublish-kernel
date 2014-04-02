@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
 use eZ\Publish\SPI\Persistence\Content;
@@ -76,6 +77,13 @@ class Handler implements BaseContentHandler
     protected $urlAliasGateway;
 
     /**
+     * ContentType handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
@@ -84,6 +92,7 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter $slugConverter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $urlAliasGateway
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      */
     public function __construct(
         Gateway $contentGateway,
@@ -91,7 +100,8 @@ class Handler implements BaseContentHandler
         Mapper $mapper,
         FieldHandler $fieldHandler,
         SlugConverter $slugConverter,
-        UrlAliasGateway $urlAliasGateway
+        UrlAliasGateway $urlAliasGateway,
+        ContentTypeHandler $contentTypeHandler
     )
     {
         $this->contentGateway = $contentGateway;
@@ -100,6 +110,7 @@ class Handler implements BaseContentHandler
         $this->fieldHandler = $fieldHandler;
         $this->slugConverter = $slugConverter;
         $this->urlAliasGateway = $urlAliasGateway;
+        $this->contentTypeHandler = $contentTypeHandler;
     }
 
     /**
@@ -145,7 +156,8 @@ class Handler implements BaseContentHandler
             $struct->fields
         );
 
-        $this->fieldHandler->createNewFields( $content );
+        $contentType = $this->contentTypeHandler->load( $struct->typeId );
+        $this->fieldHandler->createNewFields( $content, $contentType );
 
         // Create node assignments
         foreach ( $struct->locations as $location )
@@ -469,7 +481,8 @@ class Handler implements BaseContentHandler
     {
         $content = $this->load( $contentId, $versionNo );
         $this->contentGateway->updateVersion( $contentId, $versionNo, $updateStruct );
-        $this->fieldHandler->updateFields( $content, $updateStruct );
+        $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
+        $this->fieldHandler->updateFields( $content, $updateStruct, $contentType );
         foreach ( $updateStruct->name as $language => $name )
         {
             $this->contentGateway->setName(
@@ -593,6 +606,7 @@ class Handler implements BaseContentHandler
             $this->load( $contentId, $currentVersionNo )
         );
         $content = $this->internalCreate( $createStruct, $currentVersionNo );
+        $contentType = $this->contentTypeHandler->load( $createStruct->typeId );
 
         // If version was not passed also copy other versions
         if ( !isset( $versionNo ) )
@@ -614,7 +628,7 @@ class Handler implements BaseContentHandler
                     $versionContent->fields
                 );
 
-                $this->fieldHandler->createNewFields( $versionContent );
+                $this->fieldHandler->createNewFields( $versionContent, $contentType );
 
                 // Create names
                 foreach ( $versionContent->versionInfo->names as $language => $name )

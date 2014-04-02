@@ -355,7 +355,8 @@ class Handler implements HandlerInterface
                 $this->getContentMapper(),
                 $this->getFieldHandler(),
                 $this->getSlugConverter(),
-                $this->getUrlAliasGateway()
+                $this->getUrlAliasGateway(),
+                $this->contentTypeHandler()
             );
             $this->contentHandler->locationHandler = $this->locationHandler();
         }
@@ -403,8 +404,6 @@ class Handler implements HandlerInterface
     /**
      * Returns a field handler
      *
-     * @todo remove circular dependency with ContentTypeHandler
-     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected function getFieldHandler()
@@ -418,7 +417,6 @@ class Handler implements HandlerInterface
                 $this->contentLanguageHandler(),
                 $this->getFieldTypeRegistry()
             );
-            $this->fieldHandler->typeHandler = $this->contentTypeHandler();
         }
         return $this->fieldHandler;
     }
@@ -605,12 +603,10 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @todo remove circular dependency with FieldHandler
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler()
     {
-        $this->getFieldHandler();
         if ( !isset( $this->contentTypeHandler ) )
         {
             $this->contentTypeHandler = new Content\Type\MemoryCachingHandler(
