@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as BaseLocationHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
@@ -54,12 +55,20 @@ class Handler implements BaseLocationHandler
     protected $objectStateHandler;
 
     /**
+     * Tree handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler
+     */
+    protected $treeHandler;
+
+    /**
      * Construct from userGateway
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Handler $contentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler $objectStateHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler $treeHandler
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
      */
@@ -67,13 +76,15 @@ class Handler implements BaseLocationHandler
         LocationGateway $locationGateway,
         LocationMapper $locationMapper,
         ContentHandler $contentHandler,
-        ObjectStateHandler $objectStateHandler
+        ObjectStateHandler $objectStateHandler,
+        TreeHandler $treeHandler
     )
     {
         $this->locationGateway = $locationGateway;
         $this->locationMapper = $locationMapper;
         $this->contentHandler = $contentHandler;
         $this->objectStateHandler = $objectStateHandler;
+        $this->treeHandler = $treeHandler;
     }
 
     /**
@@ -97,8 +108,7 @@ class Handler implements BaseLocationHandler
      */
     public function load( $locationId )
     {
-        $data = $this->locationGateway->getBasicNodeData( $locationId );
-        return $this->locationMapper->createLocationFromRow( $data );
+        return $this->treeHandler->loadLocation( $locationId );
     }
 
     /**
@@ -461,40 +471,7 @@ class Handler implements BaseLocationHandler
      */
     public function removeSubtree( $locationId )
     {
-        $locationRow = $this->locationGateway->getBasicNodeData( $locationId );
-        $contentId = $locationRow["contentobject_id"];
-        $mainLocationId = $locationRow["main_node_id"];
-
-        $subLocations = $this->locationGateway->getChildren( $locationId );
-        foreach ( $subLocations as $subLocation )
-        {
-            $this->removeSubtree( $subLocation["node_id"] );
-        }
-
-        if ( $locationId == $mainLocationId )
-        {
-            if ( 1 == $this->locationGateway->countLocationsByContentId( $contentId ) )
-            {
-                $this->contentHandler->removeRawContent( $contentId );
-            }
-            else
-            {
-                $newMainLocationRow = $this->locationGateway->getFallbackMainNodeData(
-                    $contentId,
-                    $locationId
-                );
-
-                $this->changeMainLocation(
-                    $contentId,
-                    $newMainLocationRow["node_id"],
-                    $newMainLocationRow["contentobject_version"],
-                    $newMainLocationRow["parent_node_id"]
-                );
-            }
-        }
-
-        $this->locationGateway->removeLocation( $locationId );
-        $this->locationGateway->deleteNodeAssignment( $contentId );
+        $this->treeHandler->removeSubtree( $locationId );
     }
 
     /**
@@ -507,9 +484,7 @@ class Handler implements BaseLocationHandler
      */
     public function setSectionForSubtree( $locationId, $sectionId )
     {
-        $nodeData = $this->locationGateway->getBasicNodeData( $locationId );
-
-        $this->locationGateway->setSectionForSubtree( $nodeData['path_string'], $sectionId );
+        $this->treeHandler->setSectionForSubtree( $locationId, $sectionId );
     }
 
     /**
@@ -524,20 +499,6 @@ class Handler implements BaseLocationHandler
      */
     public function changeMainLocation( $contentId, $locationId )
     {
-        $parentLocationId = $this->load( $locationId )->parentId;
-
-        // Update ezcontentobject_tree and eznode_assignment tables
-        $this->locationGateway->changeMainLocation(
-            $contentId,
-            $locationId,
-            $this->contentHandler->loadContentInfo( $contentId )->currentVersionNo,
-            $parentLocationId
-        );
-
-        // Update subtree section to the one of the new main location parent location content
-        $this->setSectionForSubtree(
-            $locationId,
-            $this->contentHandler->loadContentInfo( $this->load( $parentLocationId )->contentId )->sectionId
-        );
+        $this->treeHandler->changeMainLocation( $contentId, $locationId );
     }
 }

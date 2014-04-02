@@ -42,13 +42,6 @@ class Handler implements BaseContentHandler
     protected $locationGateway;
 
     /**
-     * Location handler.
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
-     */
-    public $locationHandler;
-
-    /**
      * Mapper.
      *
      * @var Mapper
@@ -84,6 +77,13 @@ class Handler implements BaseContentHandler
     protected $contentTypeHandler;
 
     /**
+     * Tree handler
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler
+     */
+    protected $treeHandler;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
@@ -93,6 +93,7 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter $slugConverter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $urlAliasGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler $treeHandler
      */
     public function __construct(
         Gateway $contentGateway,
@@ -101,7 +102,8 @@ class Handler implements BaseContentHandler
         FieldHandler $fieldHandler,
         SlugConverter $slugConverter,
         UrlAliasGateway $urlAliasGateway,
-        ContentTypeHandler $contentTypeHandler
+        ContentTypeHandler $contentTypeHandler,
+        TreeHandler $treeHandler
     )
     {
         $this->contentGateway = $contentGateway;
@@ -111,6 +113,7 @@ class Handler implements BaseContentHandler
         $this->slugConverter = $slugConverter;
         $this->urlAliasGateway = $urlAliasGateway;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->treeHandler = $treeHandler;
     }
 
     /**
@@ -338,9 +341,7 @@ class Handler implements BaseContentHandler
      */
     public function loadContentInfo( $contentId )
     {
-        return $this->mapper->extractContentInfoFromRow(
-            $this->contentGateway->loadContentInfo( $contentId )
-        );
+        return $this->treeHandler->loadContentInfo( $contentId );
     }
 
     /**
@@ -517,7 +518,7 @@ class Handler implements BaseContentHandler
         {
             foreach ( $contentLocations as $locationId )
             {
-                $this->locationHandler->removeSubtree( $locationId );
+                $this->treeHandler->removeSubtree( $locationId );
             }
         }
     }
@@ -529,18 +530,7 @@ class Handler implements BaseContentHandler
      */
     public function removeRawContent( $contentId )
     {
-        $this->locationGateway->removeElementFromTrash(
-            $this->loadContentInfo( $contentId )->mainLocationId
-        );
-
-        foreach ( $this->listVersions( $contentId ) as $versionInfo )
-        {
-            $this->fieldHandler->deleteFields( $contentId, $versionInfo );
-        }
-        $this->contentGateway->deleteRelations( $contentId );
-        $this->contentGateway->deleteVersions( $contentId );
-        $this->contentGateway->deleteNames( $contentId );
-        $this->contentGateway->deleteContent( $contentId );
+        $this->treeHandler->removeRawContent( $contentId );
     }
 
     /**
@@ -575,9 +565,7 @@ class Handler implements BaseContentHandler
      */
     public function listVersions( $contentId )
     {
-        return $this->mapper->extractVersionInfoListFromRows(
-            $this->contentGateway->listVersions( $contentId )
-        );
+        return $this->treeHandler->listVersions( $contentId );
     }
 
     /**
