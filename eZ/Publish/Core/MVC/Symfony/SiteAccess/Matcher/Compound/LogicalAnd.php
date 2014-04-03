@@ -10,11 +10,12 @@
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
 
 /**
  * Siteaccess matcher that allows a combination of matchers, with a logical AND
  */
-class LogicalAnd extends Compound
+class LogicalAnd extends Compound implements VersatileMatcher
 {
     const NAME = 'logicalAnd';
 
@@ -36,5 +37,36 @@ class LogicalAnd extends Compound
         }
 
         return false;
+    }
+
+    public function reverseMatch( $siteAccessName )
+    {
+        foreach ( $this->config as $i => $rule )
+        {
+            if ( $rule['match'] === $siteAccessName )
+            {
+                $matcher = clone $this;
+                $subMatchers = array();
+                foreach ( $this->matchersMap[$i] as $subMatcher )
+                {
+                    if ( !$subMatcher instanceof VersatileMatcher )
+                    {
+                        return null;
+                    }
+
+                    $subMatcher->setRequest( $matcher->getRequest() );
+                    $reverseMatcher = $subMatcher->reverseMatch( $siteAccessName );
+                    if ( !$reverseMatcher )
+                    {
+                        return null;
+                    }
+
+                    $subMatchers[] = $subMatcher;
+                }
+
+                $matcher->setSubMatchers( $subMatchers );
+                return $matcher;
+            }
+        }
     }
 }

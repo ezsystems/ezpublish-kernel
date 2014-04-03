@@ -11,8 +11,9 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
 
-interface CompoundInterface extends Matcher
+interface CompoundInterface extends VersatileMatcher
 {
     /**
      * Injects the matcher builder, to allow the Compound matcher to properly build the underlying matchers.
@@ -27,4 +28,11 @@ interface CompoundInterface extends Matcher
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
      */
     public function getSubMatchers();
+
+    /**
+     * Replaces sub-matchers
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[] $subMatchers
+     */
+    public function setSubMatchers( array $subMatchers );
 }

@@ -69,6 +69,18 @@ abstract class Compound implements CompoundInterface, URILexer
     public function setRequest( SimplifiedRequest $request )
     {
         $this->request = $request;
+        foreach ( $this->matchersMap as $ruleset )
+        {
+            foreach ( $ruleset as $matcher )
+            {
+                $matcher->setRequest( $request );
+            }
+        }
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     public function analyseURI( $uri )
@@ -102,6 +114,11 @@ abstract class Compound implements CompoundInterface, URILexer
         return $this->subMatchers;
     }
 
+    public function setSubMatchers( array $subMatchers )
+    {
+        $this->subMatchers = $subMatchers;
+    }
+
     /**
      * Returns the matcher's name.
      * This information will be stored in the SiteAccess object itself to quickly be able to identify the matcher type.
@@ -128,5 +145,20 @@ abstract class Compound implements CompoundInterface, URILexer
     {
         // We don't need the whole matcher map and the matcher builder once serialized.
         return array( 'config', 'subMatchers', 'request' );
+    }
+
+    public function __clone()
+    {
+        $this->request = clone $this->request;
+        if ( $this->subMatchers )
+        {
+            $clonedSubMatchers = array();
+            foreach ( $this->subMatchers as $matcher )
+            {
+                $clonedSubMatchers[] = clone $matcher;
+            }
+
+            $this->subMatchers = $clonedSubMatchers;
+        }
     }
 }
