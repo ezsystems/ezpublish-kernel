@@ -98,6 +98,7 @@ parameters:
 
     # Content Type Group
     ezpublish_rest.output.value_object_visitor.ContentTypeGroupList.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentTypeGroupList
+    ezpublish_rest.output.value_object_visitor.ContentTypeGroupCreateStruct.class: eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\ContentTypeGroupCreateStruct
     ezpublish_rest.output.value_object_visitor.CreatedContentTypeGroup.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\CreatedContentTypeGroup
     ezpublish_rest.output.value_object_visitor.ContentTypeGroup.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentTypeGroup
     ezpublish_rest.output.value_object_visitor.ContentTypeInfoList.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\ContentTypeInfoList
@@ -399,6 +400,12 @@ services:
         class: %ezpublish_rest.output.value_object_visitor.ContentTypeGroupList.class%
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\ContentTypeGroupList }
+
+    ezpublish_rest.output.value_object_visitor.ContentTypeGroupCreateStruct:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.contenttypegroupcreatestruct.class%
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct }
 
     ezpublish_rest.output.value_object_visitor.ContentTypeGroupRefList:
         parent: ezpublish_rest.output.value_object_visitor.base
