@@ -94,7 +94,7 @@ class Visitor
      *
      * @param mixed $data
      *
-     * @return \eZ\Publish\Core\REST\Common\Message
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function visit( $data )
     {
