@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
 abstract class Regex implements Matcher
@@ -18,21 +19,26 @@ abstract class Regex implements Matcher
      *
      * @var string
      */
-    private $element;
+    protected $element;
 
     /**
      * Regular expression used for matching.
      *
      * @var string
      */
-    private $regex;
+    protected $regex;
 
     /**
      * Item number to pick in regex.
      *
      * @var string
      */
-    private $itemNumber;
+    protected $itemNumber;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
+     */
+    protected $request;
 
     /**
      * Constructor.
@@ -60,6 +66,16 @@ abstract class Regex implements Matcher
         );
 
         return isset( $match[$this->itemNumber] ) ? $match[$this->itemNumber] : false;
+    }
+
+    /**
+     * Injects the request object to match against.
+     *
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
+     */
+    public function setRequest( SimplifiedRequest $request )
+    {
+        $this->request = $request;
     }
 
     /**

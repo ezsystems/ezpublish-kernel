@@ -42,6 +42,11 @@ class URIText extends Regex implements Matcher
      */
     public function setRequest( SimplifiedRequest $request )
     {
-        $this->setMatchElement( $request->pathinfo );
+        if ( !$this->element )
+        {
+            $this->setMatchElement( $request->pathinfo );
+        }
+
+        parent::setRequest( $request );
     }
 }

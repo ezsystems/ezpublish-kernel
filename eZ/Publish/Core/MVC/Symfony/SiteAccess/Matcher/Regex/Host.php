@@ -40,6 +40,11 @@ class Host extends Regex implements Matcher
      */
     public function setRequest( SimplifiedRequest $request )
     {
-        $this->setMatchElement( $request->host );
+        if ( !$this->element )
+        {
+            $this->setMatchElement( $request->host );
+        }
+
+        parent::setRequest( $request );
     }
 }

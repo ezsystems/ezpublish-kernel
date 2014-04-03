@@ -22,8 +22,12 @@ class URI extends Map implements URILexer
      */
     public function setRequest( SimplifiedRequest $request )
     {
-        sscanf( $request->pathinfo, "/%[^/]", $key );
-        $this->setMapKey( $key );
+        if ( !$this->key )
+        {
+            sscanf( $request->pathinfo, "/%[^/]", $key );
+            $this->setMapKey( $key );
+        }
+
         parent::setRequest( $request );
     }
 

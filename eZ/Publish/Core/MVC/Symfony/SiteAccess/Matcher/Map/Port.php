@@ -27,25 +27,29 @@ class Port extends Map
      */
     public function setRequest( SimplifiedRequest $request )
     {
-        if ( !empty( $request->port ) )
+        if ( !$this->key )
         {
-            $key = $request->port;
-        }
-        else
-        {
-            switch ( $request->scheme )
+            if ( !empty( $request->port ) )
             {
-                case "https":
-                    $key = 443;
-                    break;
-
-                case "http":
-                default:
-                    $key = 80;
+                $key = $request->port;
             }
+            else
+            {
+                switch ( $request->scheme )
+                {
+                    case "https":
+                        $key = 443;
+                        break;
+
+                    case "http":
+                    default:
+                        $key = 80;
+                }
+            }
+
+            $this->setMapKey( $key );
         }
 
-        $this->setMapKey( $key );
         parent::setRequest( $request );
     }
 
