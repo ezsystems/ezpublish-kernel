@@ -26,7 +26,10 @@ abstract class Compound implements CompoundInterface, URILexer
     protected $config;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
+     * Matchers map.
+     * Consists of an array of matchers, grouped by ruleset (so array of array of matchers).
+     *
+     * @var array
      */
     protected $matchersMap = array();
 
@@ -94,11 +97,6 @@ abstract class Compound implements CompoundInterface, URILexer
         return $linkUri;
     }
 
-    /**
-     * Returns all used sub-matchers.
-     *
-     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
-     */
     public function getSubMatchers()
     {
         return $this->subMatchers;
