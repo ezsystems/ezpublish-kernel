@@ -40,8 +40,6 @@ class HostText extends Regex implements Matcher
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
-     *
-     * @return void
      */
     public function setRequest( SimplifiedRequest $request )
     {
