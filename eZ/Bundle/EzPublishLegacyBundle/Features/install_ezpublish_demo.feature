@@ -9,6 +9,15 @@ Feature: Install eZ Publish Demo with/withoutout content
         And I am on "Welcome to eZ Publish Community Project 5.3.0alpha1" step
         When I select "English (United Kingdom)"
         And I click at "Next" button
+        Then I see "System check" step
+        And I see "AcceptPathInfo disabled or running in CGI mode" message
+
+    # Since travis run on a FastCGI mode the system check will popup
+    @javascript @democontent_install @democlean_install
+    Scenario: Bypass system check for FastCGI
+        Given I am on "System check" step
+        When I check "Ignore this test" checkbox
+        And I click at "Next" button
         Then I see "Outgoing Email" step
 
     @javascript @democontent_install @democlean_install
