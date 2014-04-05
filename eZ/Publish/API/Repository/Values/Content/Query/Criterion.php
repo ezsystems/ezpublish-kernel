@@ -188,7 +188,7 @@ abstract class Criterion
 
     protected function getOperatorString()
     {
-        return strtoupper( $this->operator ) ?: ( is_array( $value ) ? 'IN' : 'EQ' );
+        return strtoupper( $this->operator ) ?: ( is_array( $this->value ) ? 'IN' : 'EQ' );
     }
 
     protected function getValueString()

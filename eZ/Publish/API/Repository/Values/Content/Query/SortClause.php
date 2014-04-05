@@ -62,4 +62,17 @@ abstract class SortClause
             $this->targetData = $targetData;
         }
     }
+
+    public function __toString()
+    {
+        return sprintf(
+            "%s %s", lcfirst( $this->getClassName() ), $this->direction
+        );
+    }
+
+    protected function getClassName()
+    {
+        $classParts = explode( '\\', get_class( $this ) );
+        return array_pop( $classParts );
+    }
 }

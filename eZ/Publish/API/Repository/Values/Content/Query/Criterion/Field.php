@@ -77,4 +77,9 @@ class Field extends Criterion implements CriterionInterface, CustomFieldInterfac
 
         return $this->customFields[$type][$field];
     }
+
+    protected function getTargetString()
+    {
+        return "field." . $this->target;
+    }
 }
