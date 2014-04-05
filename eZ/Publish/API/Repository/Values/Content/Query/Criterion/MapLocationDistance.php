@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationVa
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
+use SplStack;
 
 /**
  * The MapLocationDistance Criterion class.
@@ -96,5 +97,20 @@ class MapLocationDistance extends Criterion implements CriterionInterface, Custo
         }
 
         return $this->customFields[$type][$field];
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        // The stack comes from the QueryBuilder ChainWorker
+        // We expect latitude, longitude, then distance
+        if ( $value instanceof SplStack )
+        {
+            $value = array(
+                'latitude' => $value->shift(),
+                'longitude' => $value->shift(),
+                'distance' => $value->shift()
+            );
+        }
+        return new self( $target, $operator, $value['distance'], $value['latitude'], $value['longitude'] );
     }
 }
