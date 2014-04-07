@@ -9,12 +9,13 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeRepositoryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitationTypePass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorage;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocalePass;
@@ -38,10 +39,10 @@ class EzPublishCoreBundle extends Bundle
         parent::build( $container );
         $container->addCompilerPass( new ChainRoutingPass );
         $container->addCompilerPass( new ChainConfigResolverPass );
-        $container->addCompilerPass( new AddFieldTypePass );
+        $container->addCompilerPass( new FieldTypeParameterProviderRegistryPass );
+        $container->addCompilerPass( new FieldTypeRepositoryPass );
         $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new RegisterStorageEnginePass );
-        $container->addCompilerPass( new LegacyStorageEnginePass );
         $container->addCompilerPass( new LocalePass );
         $container->addCompilerPass( new ContentViewPass );
         $container->addCompilerPass( new LocationViewPass );
@@ -52,6 +53,13 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new SecurityPass );
         $container->addCompilerPass( new RichTextHtml5ConverterPass );
         $container->addCompilerPass( new FragmentPass );
+
+        $container->addCompilerPass( new LegacyStorage\FieldTypeRegistryPass() );
+        $container->addCompilerPass( new LegacyStorage\FieldValueConverterRegistryPass );
+        $container->addCompilerPass( new LegacyStorage\CriterionFieldValueHandlerRegistryPass );
+        $container->addCompilerPass( new LegacyStorage\CriteriaConverterPass );
+        $container->addCompilerPass( new LegacyStorage\SortClauseConverterPass );
+        $container->addCompilerPass( new LegacyStorage\RoleLimitationConverterPass );
 
         $securityExtension = $container->getExtension( 'security' );
         $securityExtension->addSecurityListenerFactory( new HttpBasicFactory );
