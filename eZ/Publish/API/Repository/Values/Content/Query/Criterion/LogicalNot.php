@@ -30,6 +30,11 @@ class LogicalNot extends LogicalOperator
         parent::__construct( array( $criterion ) );
     }
 
+    /**
+     * String export of a NOT criterion. NOT is prepended to the embedded criterion's string export
+     * Example: `NOT contentId = 58`
+     * @return string
+     */
     public function __toString()
     {
         return "NOT {$this->criteria[0]}";

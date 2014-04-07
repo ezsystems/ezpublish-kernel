@@ -63,6 +63,11 @@ abstract class SortClause
         }
     }
 
+    /**
+     * Returns a string export of the SortClause object, by concatenating the sort clause target and the direction.
+     * Example: `datePublished DESCENDING`, `contentName ASCENDING`
+     * @return string
+     */
     public function __toString()
     {
         return sprintf(
@@ -70,6 +75,10 @@ abstract class SortClause
         );
     }
 
+    /**
+     * Extracts the classname (without the namespace) from the current SortClause class
+     * @return string
+     */
     protected function getClassName()
     {
         $classParts = explode( '\\', get_class( $this ) );

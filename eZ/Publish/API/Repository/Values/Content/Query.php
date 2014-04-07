@@ -138,6 +138,16 @@ class Query extends ValueObject
         return parent::__isset( $property );
     }
 
+    /**
+     * Returns a human readable, query language like version of the query:
+     *
+     * Example:
+     * ```
+     * contentTypeIdentifier = 'article' AND sectionId = 1 SORT BY dateModified DESCENDING
+     * ```
+     *
+     * @return string
+     */
     public function __toString()
     {
         $stringArray = array();

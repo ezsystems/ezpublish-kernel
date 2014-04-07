@@ -55,6 +55,17 @@ abstract class LogicalOperator extends Criterion
         }
     }
 
+    /**
+     * Exports a Logical Criterion to a string. Done by joining  all criteria the logical one embeds with the logical
+     * operator.
+     *
+     * Example:
+     * ```
+     * criterion1 = value 1 AND criterion2 in (value2A, value2b)
+     * ```
+     *
+     * @return string
+     */
     public function __toString()
     {
         $string = strtolower( parent::getTargetString() );
@@ -64,7 +75,13 @@ abstract class LogicalOperator extends Criterion
         // join all stringified criteria with the logical operator
         return implode(
             " $logicalOperatorString ",
-            array_map( function ( $criterion ) { return (string)$criterion; }, $this->criteria )
+            array_map(
+                function ( $criterion )
+                {
+                    return (string)$criterion;
+                },
+                $this->criteria
+            )
         );
     }
 }

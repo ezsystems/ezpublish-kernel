@@ -78,6 +78,12 @@ class Field extends Criterion implements CriterionInterface, CustomFieldInterfac
         return $this->customFields[$type][$field];
     }
 
+    /**
+     * Override of the method used by {@see Criterion::__fromString} to get the target of a criterion.
+     * For a field, we return field.{field identifier}: `field.title`, `field.body`...
+     *
+     * @return string
+     */
     protected function getTargetString()
     {
         return "field." . $this->target;

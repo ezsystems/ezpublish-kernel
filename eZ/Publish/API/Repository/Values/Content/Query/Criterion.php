@@ -168,6 +168,12 @@ abstract class Criterion
         return new static( $target, $operator, $value );
     }
 
+    /**
+     * Exports a criterion to a human readable string, similar to a Query Language
+     * using a simple "{target} {operator} {value}" format.
+     *
+     * @return string
+     */
     public function __toString()
     {
         return sprintf(
@@ -175,6 +181,13 @@ abstract class Criterion
         );
     }
 
+    /**
+     * Returns the criterion's target as a string.
+     *
+     * Unless a target is specified (like in a Field Criterion), the string is the criterion's class name (without the NS)
+     *
+     * @return string
+     */
     protected function getTargetString()
     {
         if ( isset( $this->target ) )
@@ -186,11 +199,23 @@ abstract class Criterion
         return array_pop( $classParts );
     }
 
+    /**
+     * Returns the criterion's operator as a string
+     * @return string
+     */
     protected function getOperatorString()
     {
         return strtoupper( $this->operator ) ?: ( is_array( $this->value ) ? 'IN' : 'EQ' );
     }
 
+    /**
+     * Returns the criterion's value as a string.
+     *
+     * If the Criterion has multiple values, they are joined with ", " and nested within parenthesis.
+     * Example: `(value1, value2, value3)`
+     *
+     * @return string
+     */
     protected function getValueString()
     {
         if ( is_array( $this->value ) )
