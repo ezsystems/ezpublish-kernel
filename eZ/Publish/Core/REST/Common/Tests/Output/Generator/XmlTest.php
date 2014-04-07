@@ -244,6 +244,7 @@ class XmlTest extends GeneratorTest
                 )
             );
         }
+        $this->generator->setFormatOutput( true );
         return $this->generator;
     }
 }

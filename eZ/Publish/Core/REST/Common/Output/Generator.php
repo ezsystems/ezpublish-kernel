@@ -25,6 +25,17 @@ abstract class Generator
     protected $stack = array();
 
     /**
+     * If set to true, output will be formatted and indented
+     * @var bool
+     */
+    protected $formatOutput = false;
+
+    public function setFormatOutput( $formatOutput )
+    {
+        $this->formatOutput = (bool)$formatOutput;
+    }
+
+    /**
      * Reset output visitor to a virgin state
      */
     public function reset()
