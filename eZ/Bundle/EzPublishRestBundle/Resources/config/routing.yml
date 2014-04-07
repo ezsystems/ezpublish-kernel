@@ -1044,6 +1044,11 @@ ezpublish_rest_deleteSession:
         _controller: ezpublish_rest.controller.user:deleteSession
     methods: [DELETE]
 
+ezpublish_rest_refreshSession:
+    path: /user/sessions/{sessionId}/refresh
+    defaults:
+        _controller: ezpublish_rest.controller.user:refreshSession
+    methods: [POST]
 
 
 # URL aliases

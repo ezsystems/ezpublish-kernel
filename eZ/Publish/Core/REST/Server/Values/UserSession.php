@@ -44,16 +44,22 @@ class UserSession extends RestValue
     public $csrfToken;
 
     /**
+     * True if session exists
+     * @var boolean
+     */
+    public $exists;
+    /**
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param string $sessionName
      * @param string $sessionId
      * @param string $csrfToken
      */
-    public function __construct( User $user, $sessionName, $sessionId, $csrfToken )
+    public function __construct( User $user, $sessionName, $sessionId, $csrfToken, $created )
     {
         $this->user = $user;
         $this->sessionName = $sessionName;
         $this->sessionId = $sessionId;
         $this->csrfToken = $csrfToken;
+        $this->created = $created;
     }
 }
