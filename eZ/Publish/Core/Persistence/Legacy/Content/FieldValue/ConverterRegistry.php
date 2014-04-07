@@ -35,7 +35,7 @@ class ConverterRegistry
      * @param array $converterMap A map where key is field type name, and value
      *              is a callable factory to get Converter OR Converter object
      */
-    public function __construct( array $converterMap )
+    public function __construct( array $converterMap = array() )
     {
         $this->converterMap = $converterMap;
     }

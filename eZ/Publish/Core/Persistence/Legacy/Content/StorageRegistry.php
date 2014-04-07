@@ -36,7 +36,7 @@ class StorageRegistry
      * @param array $storageMap A map where key is field type name, and value is
      *              a callable factory to get FieldStorage OR FieldStorage object
      */
-    public function __construct( array $storageMap )
+    public function __construct( array $storageMap = array() )
     {
         foreach ( $storageMap as $typeName => $storage )
         {
