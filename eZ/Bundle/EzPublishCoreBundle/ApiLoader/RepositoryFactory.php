@@ -36,13 +36,6 @@ class RepositoryFactory extends ContainerAware
     protected $fieldTypes;
 
     /**
-     * Collection of external storage handlers for field types that need them
-     *
-     * @var \Closure[]
-     */
-    protected $externalStorages = array();
-
-    /**
      * Collection of limitation types for the RoleService.
      *
      * @var \eZ\Publish\SPI\Limitation\Type[]
@@ -104,22 +97,6 @@ class RepositoryFactory extends ContainerAware
     }
 
     /**
-     * Registers an external storage handler for a field type, identified by $fieldTypeAlias.
-     * They are being registered as closures so that they will be lazy loaded.
-     *
-     * @param string $serviceId The external storage handler service Id
-     * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
-     */
-    public function registerExternalStorageHandler( $serviceId, $fieldTypeAlias )
-    {
-        $container = $this->container;
-        $this->externalStorages[$fieldTypeAlias] = function () use ( $container, $serviceId )
-        {
-            return $container->get( $serviceId );
-        };
-    }
-
-    /**
      * Registers a limitation type for the RoleService.
      *
      * @param string $limitationName
@@ -128,16 +105,6 @@ class RepositoryFactory extends ContainerAware
     public function registerLimitationType( $limitationName, SPILimitationType $limitationType )
     {
         $this->roleLimitations[$limitationName] = $limitationType;
-    }
-
-    /**
-     * Returns registered external storage handlers for field types (as closures to be lazy loaded in the public API)
-     *
-     * @return \Closure[]
-     */
-    public function getExternalStorageHandlers()
-    {
-        return $this->externalStorages;
     }
 
     /**
