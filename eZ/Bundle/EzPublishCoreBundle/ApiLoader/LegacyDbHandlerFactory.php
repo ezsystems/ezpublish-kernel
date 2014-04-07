@@ -15,13 +15,13 @@ use InvalidArgumentException;
 class LegacyDbHandlerFactory extends ContainerAware
 {
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
      */
-    protected $storageEngineFactory;
+    protected $storageRepositoryProvider;
 
-    public function __construct( StorageEngineFactory $storageEngineFactory )
+    public function __construct( $storageRepositoryProvider )
     {
-        $this->storageEngineFactory = $storageEngineFactory;
+        $this->storageRepositoryProvider = $storageRepositoryProvider;
     }
 
     /**
@@ -33,7 +33,7 @@ class LegacyDbHandlerFactory extends ContainerAware
      */
     public function buildLegacyDbHandler()
     {
-        $repositoryConfig = $this->storageEngineFactory->getRepositoryConfig();
+        $repositoryConfig = $this->storageRepositoryProvider->getRepositoryConfig();
         // Taking provided connection name if any.
         // Otherwise, just fallback to the default connection.
         if ( isset( $repositoryConfig['connection'] ) )
