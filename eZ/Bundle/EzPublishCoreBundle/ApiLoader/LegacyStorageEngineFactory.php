@@ -10,9 +10,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
-use eZ\Publish\Core\Persistence\FieldTypeRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 class LegacyStorageEngineFactory extends ContainerAware
@@ -64,23 +61,37 @@ class LegacyStorageEngineFactory extends ContainerAware
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Handler
      */
-    public function buildLegacyEngine( ConnectionHandler $dbhandler, $deferTypeUpdate )
+    public function buildLegacyEngine(
+        ConnectionHandler $dbhandler,
+        $contentHandler,
+        $contentSearchHandler,
+        $contentTypeHandler,
+        $languageHandler,
+        $locationHandler,
+        $locationSearchHandler,
+        $objectStateHandler,
+        $sectionHandler,
+        $urlAliasHandler,
+        $urlWildcardHandler,
+        $userHandler,
+        $trashHandler
+    )
     {
         $legacyEngineClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.class' );
         return new $legacyEngineClass(
             $dbhandler,
-            new FieldTypeRegistry(
-                $this->container->get( 'ezpublish.api.repository.factory' )->getFieldTypes()
-            ),
-            new ConverterRegistry( $this->converters ),
-            new StorageRegistry(
-                $this->container->get( 'ezpublish.api.repository.factory' )->getExternalStorageHandlers()
-            ),
-            $this->container->get( 'ezpublish.api.storage_engine.transformation_processor' ),
-            array(
-                'defer_type_update' => (bool)$deferTypeUpdate,
-                'field_type' => $this->fieldTypes,
-            )
+            $contentHandler,
+            $contentSearchHandler,
+            $contentTypeHandler,
+            $languageHandler,
+            $locationHandler,
+            $locationSearchHandler,
+            $objectStateHandler,
+            $sectionHandler,
+            $urlAliasHandler,
+            $urlWildcardHandler,
+            $userHandler,
+            $trashHandler
         );
     }
 }
