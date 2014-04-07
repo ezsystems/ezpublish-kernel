@@ -97,7 +97,7 @@ services:
         class: %ezpublish.api.role.limitation_type.user_group.class%
         arguments: [@ezpublish.api.persistence_handler]
         tags:
-            - {name: ezpublish.limitationType, alias: UserGroup}
+            - {name: ezpublish.limitationType, alias: Group}
 
     ezpublish.api.role.limitation_type.status:
         class: %ezpublish.api.role.limitation_type.status.class%
