@@ -3,6 +3,7 @@ namespace eZ\Bundle\EzPublishRestBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -31,8 +32,10 @@ class EzPublishRestExtension extends Extension implements PrependExtensionInterf
     {
         if ( $container->hasExtension( 'nelmio_cors' ) )
         {
-            $config = Yaml::parse( __DIR__ . '/../Resources/config/nelmio_cors.yml' );
+            $file = __DIR__ . '/../Resources/config/nelmio_cors.yml':
+            $config = Yaml::parse( $file );
             $container->prependExtensionConfig( 'nelmio_cors', $config );
+            $container->addResource( new FileResource( $file ) )
         }
     }
 }
