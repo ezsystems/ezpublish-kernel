@@ -65,7 +65,7 @@ abstract class SortClause
 
     /**
      * Returns a string export of the SortClause object, by concatenating the sort clause target and the direction.
-     * Example: `datePublished DESCENDING`, `contentName ASCENDING`
+     * Example: `datePublished descending`, `contentName ascending`
      * @return string
      */
     public function __toString()
