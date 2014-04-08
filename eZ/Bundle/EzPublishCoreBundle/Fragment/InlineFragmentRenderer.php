@@ -9,31 +9,61 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Fragment;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface;
 use Symfony\Component\HttpKernel\Fragment\InlineFragmentRenderer as BaseRenderer;
+use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
-class InlineFragmentRenderer extends BaseRenderer
+class InlineFragmentRenderer extends BaseRenderer implements SiteAccessAware
 {
     /**
-     * @var FragmentUriGenerator
+     * @var \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface
      */
-    private $fragmentUriGenerator;
+    private $innerRenderer;
 
-    protected function generateFragmentUri( ControllerReference $reference, Request $request, $absolute = false )
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    private $siteAccess;
+
+    public function __construct( FragmentRendererInterface $innerRenderer )
     {
-        if ( !isset( $this->fragmentUriGenerator ) )
+        $this->innerRenderer = $innerRenderer;
+    }
+
+    public function setFragmentPath( $path )
+    {
+        if ( $this->innerRenderer instanceof RoutableFragmentRenderer )
         {
-            $this->fragmentUriGenerator = new FragmentUriGenerator;
+            $this->innerRenderer->setFragmentPath( $path );
+        }
+    }
+
+    public function setSiteAccess( SiteAccess $siteAccess = null )
+    {
+        $this->siteAccess = $siteAccess;
+    }
+
+    public function render( $uri, Request $request, array $options = array() )
+    {
+        if ( $uri instanceof ControllerReference )
+        {
+            if ( $request->attributes->has( 'siteaccess' ) )
+                $uri->attributes['serialized_siteaccess'] = serialize( $request->attributes->get( 'siteaccess' ) );
+            if ( $request->attributes->has( 'semanticPathinfo' ) )
+                $uri->attributes['semanticPathinfo'] = $request->attributes->get( 'semanticPathinfo' );
+            if ( $request->attributes->has( 'viewParametersString' ) )
+                $uri->attributes['viewParametersString'] = $request->attributes->get( 'viewParametersString' );
         }
 
-        // Generate base fragment URI and add other needed attributes
-        $this->fragmentUriGenerator->generateFragmentUri( $reference, $request, $absolute );
-        if ( $request->attributes->has( 'semanticPathinfo' ) )
-            $reference->attributes['semanticPathinfo'] = $request->attributes->get( 'semanticPathinfo' );
-        if ( $request->attributes->has( 'viewParametersString' ) )
-            $reference->attributes['viewParametersString'] = $request->attributes->get( 'viewParametersString' );
+        return $this->innerRenderer->render( $uri, $request, $options );
+    }
 
-        return parent::generateFragmentUri( $reference, $request, $absolute );
+    public function getName()
+    {
+        return $this->innerRenderer->getName();
     }
 }
