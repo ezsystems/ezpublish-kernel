@@ -158,12 +158,20 @@ class Query extends ValueObject
 
         if ( $sortClauseString = $this->sortClauseToString() )
         {
-            $stringArray[] = $sortClauseString;
+            $stringArray[] = "SORT BY " . $sortClauseString;
         }
 
         return implode( ' ', $stringArray );
     }
 
+    /**
+     * Converts the query's SortClause objects to a string.
+     *
+     * Joins all SortClause objects with ", ".
+     * Example: `sortClauseA ASCENDING, sortClauseB DESCENDING`
+     *
+     * @return string
+     */
     private function sortClauseToString()
     {
         if ( count( $this->sortClauses ) == 0 )
@@ -177,6 +185,6 @@ class Query extends ValueObject
             $sortClauseStringArray[] = (string)$sortClause;
         }
 
-        return "SORT BY " . implode( ', ', $sortClauseStringArray );
+        return implode( ', ', $sortClauseStringArray );
     }
 }
