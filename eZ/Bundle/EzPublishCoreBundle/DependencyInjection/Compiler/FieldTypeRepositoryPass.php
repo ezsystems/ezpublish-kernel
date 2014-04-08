@@ -26,7 +26,9 @@ class FieldTypeRepositoryPass implements CompilerPassInterface
     public function process( ContainerBuilder $container )
     {
         if ( !$container->hasDefinition( 'ezpublish.api.repository.factory' ) )
+        {
             return;
+        }
 
         $repositoryFactoryDef = $container->getDefinition( 'ezpublish.api.repository.factory' );
 
@@ -37,7 +39,11 @@ class FieldTypeRepositoryPass implements CompilerPassInterface
             foreach ( $attributes as $attribute )
             {
                 if ( !isset( $attribute['alias'] ) )
-                    throw new \LogicException( 'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.' );
+                {
+                    throw new \LogicException(
+                        'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.'
+                    );
+                }
 
                 $repositoryFactoryDef->addMethodCall(
                     'registerFieldType',

@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This compiler pass will register eZ Publish field types.
+ * This compiler pass will register eZ Publish field type parameter providers.
  */
 class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
 {
@@ -26,7 +26,9 @@ class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
     public function process( ContainerBuilder $container )
     {
         if ( !$container->hasDefinition( 'ezpublish.fieldType.parameterProviderRegistry' ) )
+        {
             return;
+        }
 
         $parameterProviderRegistryDef = $container->getDefinition( 'ezpublish.fieldType.parameterProviderRegistry' );
 
@@ -35,7 +37,12 @@ class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
             foreach ( $attributes as $attribute )
             {
                 if ( !isset( $attribute['alias'] ) )
-                    throw new \LogicException( 'ezpublish.fieldType.parameterProvider service tag needs an "alias" attribute to identify the field type. None given.' );
+                {
+                    throw new \LogicException(
+                        'ezpublish.fieldType.parameterProvider service tag needs an "alias" ' .
+                        'attribute to identify the field type. None given.'
+                    );
+                }
 
                 $parameterProviderRegistryDef->addMethodCall(
                     'setParameterProvider',

@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyDbHandlerFactory;
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider;
 
 class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,8 +50,8 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             ->with( "doctrine.dbal.{$doctrineConnection}_connection" )
             ->will( $this->returnValue( $this->getMock( 'Doctrine\DBAL\Driver\Connection' ) ) );
 
-        $storageEngineFactory = new StorageEngineFactory( $configResolver, $repositories );
-        $factory = new LegacyDbHandlerFactory( $storageEngineFactory );
+        $storageRepositoryProvider = new StorageRepositoryProvider( $configResolver, $repositories );
+        $factory = new LegacyDbHandlerFactory( $storageRepositoryProvider );
         $factory->setContainer( $container );
         $handler = $factory->buildLegacyDbHandler();
         $this->assertInstanceOf(
@@ -88,8 +88,8 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             ->with( 'repository' )
             ->will( $this->returnValue( 'inexistent_repository' ) );
 
-        $storageEngineFactory = new StorageEngineFactory( $configResolver, $repositories );
-        $factory = new LegacyDbHandlerFactory( $storageEngineFactory );
+        $storageRepositoryProvider = new StorageRepositoryProvider( $configResolver, $repositories );
+        $factory = new LegacyDbHandlerFactory( $storageRepositoryProvider );
         $factory->setContainer( $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' ) );
         $factory->buildLegacyDbHandler();
     }
@@ -99,7 +99,7 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildLegacyDbHandlerInvalidConnection()
     {
-        $storageEngineFactoryMock = $this->getMockBuilder( 'eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory' )
+        $storageRepositoryProviderMock = $this->getMockBuilder( 'eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider' )
             ->disableOriginalConstructor()
             ->getMock();
         $repositoryConfig = array(
@@ -107,7 +107,7 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             'engine' => 'legacy',
             'connection' => 'my_doctrine_connection'
         );
-        $storageEngineFactoryMock
+        $storageRepositoryProviderMock
             ->expects( $this->once() )
             ->method( 'getRepositoryConfig' )
             ->will( $this->returnValue( $repositoryConfig ) );
@@ -123,7 +123,7 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             ->method( 'getParameter' )
             ->with( 'doctrine.connections' )
             ->will( $this->returnValue( array() ) );
-        $factory = new LegacyDbHandlerFactory( $storageEngineFactoryMock );
+        $factory = new LegacyDbHandlerFactory( $storageRepositoryProviderMock );
         $factory->setContainer( $container );
         $factory->buildLegacyDbHandler();
     }
