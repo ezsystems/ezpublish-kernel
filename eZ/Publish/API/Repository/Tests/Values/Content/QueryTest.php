@@ -1,6 +1,4 @@
 <?php
-use eZ\Publish\API\Repository\Values\Content\Query;
-
 /**
  * File containing the QueryTest class.
  *
@@ -8,6 +6,10 @@ use eZ\Publish\API\Repository\Values\Content\Query;
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
+namespace eZ\Publish\API\Repository\Tests\Values\Content;
+
+use eZ\Publish\API\Repository\Values\Content\Query;
+use PHPUnit_Framework_TestCase;
 
 class QueryTest extends PHPUnit_Framework_TestCase
 {
@@ -40,34 +42,33 @@ class QueryTest extends PHPUnit_Framework_TestCase
             array(
                 'criterion = value AND otherCriterion in (value1, value2)',
                 array( 'sortClause1 ascending', 'sortClause2 descending' ),
-                'criterion = value AND otherCriterion in (value1, value2) SORT BY sortClause1 ascending, sortClause2 descending',
+                'criterion = value AND otherCriterion in (value1, value2) SORT BY sortClause1 ascending, sortClause2 descending'
             ),
             // no filter
             array(
                 false,
                 array( 'sortClause1 ascending', 'sortClause2 descending' ),
-                'SORT BY sortClause1 ascending, sortClause2 descending',
+                'SORT BY sortClause1 ascending, sortClause2 descending'
             ),
             // no sortClause
             array(
                 'criterion = value AND otherCriterion in (value1, value2)',
                 false,
-                'criterion = value AND otherCriterion in (value1, value2)',
+                'criterion = value AND otherCriterion in (value1, value2)'
             ),
             // nothing
             array(
                 false,
                 false,
-                '',
-            ),
-
+                ''
+            )
         );
     }
 
     /**
      * Returns a SortClause object that expects __fromString() to be called once and return $toStringExpectation.
      * @param string $toStringExpectation The string the method is expected to return on __fromString.
-     * @return Query\Criterion|PHPUnit_Framework_MockObject_MockObject
+     * @return Query\Criterion|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createCriterionMock( $toStringExpectation )
     {
@@ -77,7 +78,7 @@ class QueryTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a SortClause object that expects __fromString() to be called once and return $toStringExpectation.
      * @param string $toStringExpectation The string the method is expected to return on __fromString.
-     * @return Query\SortClause|PHPUnit_Framework_MockObject_MockObject
+     * @return Query\SortClause|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function createSortClauseMock( $toStringExpectation )
     {
@@ -87,7 +88,7 @@ class QueryTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a mock of $class that expects __fromString() to be called once and return $toStringExpectation.
      * @param string $toStringExpectation The string the method is expected to return on __fromString.
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function createMock( $class, $toStringExpectation )
     {
