@@ -166,7 +166,7 @@ class Query extends ValueObject
 
     private function sortClauseToString()
     {
-        if ( count( $this->sortClauses ) == 0)
+        if ( count( $this->sortClauses ) == 0 )
         {
             return '';
         }
