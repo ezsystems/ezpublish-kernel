@@ -23,7 +23,6 @@ parameters:
     # Signal Slot API wrapper
     ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
     ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
-    ezpublish.signalslot.event_converter_slot.class: eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot
 
     # Using legacy storage engine for data compatibility with 4.x
     ezpublish.api.storage_engine.default: legacy
@@ -168,9 +167,3 @@ services:
 
     ezpublish.signalslot.signal_dispatcher:
         class: %ezpublish.signalslot.signal_dispatcher.class%
-
-    ezpublish.signalslot.event_converter_slot:
-        class: %ezpublish.signalslot.event_converter_slot.class%
-        arguments: [@event_dispatcher]
-        tags:
-            - { name: ezpublish.api.slot, signal: * }
