@@ -11,19 +11,56 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 
 class QueryTest extends PHPUnit_Framework_TestCase
 {
-    public function testToString()
+    /**
+     * @dataProvider providerForTestToString
+     */
+    public function testToString( $criterionString, $sortClauseStringArray, $expectedQueryString )
     {
-        $criterion = $this->createCriterionMock( 'criterion = value AND otherCriterion in (value1, value2)' );
-
-        $sortClause = $this->createSortClauseMock( 'sortClause ASCENDING, otherSortClauseDescending' );
-
         $query = new Query();
-        $query->filter = $criterion;
-        $query->sortClauses = array( $sortClause );
+        if ( $criterionString !== false )
+        {
+            $query->filter = $this->createCriterionMock( $criterionString );
+        }
 
-        self::assertEquals(
-            'criterion = value AND otherCriterion in (value1, value2) SORT BY sortClause ASCENDING, otherSortClauseDescending',
-            (string)$query
+        if ( $sortClauseStringArray !== false )
+        {
+            foreach ( $sortClauseStringArray as $sortClauseString )
+            {
+                $query->sortClauses[] = $this->createSortClauseMock( $sortClauseString );
+            }
+        }
+
+        self::assertEquals( $expectedQueryString, (string)$query );
+    }
+
+    public function providerForTestToString()
+    {
+        return array(
+            // both sortClause and filter
+            array(
+                'criterion = value AND otherCriterion in (value1, value2)',
+                array( 'sortClause1 ascending', 'sortClause2 descending' ),
+                'criterion = value AND otherCriterion in (value1, value2) SORT BY sortClause1 ascending, sortClause2 descending',
+            ),
+            // no filter
+            array(
+                false,
+                array( 'sortClause1 ascending', 'sortClause2 descending' ),
+                'SORT BY sortClause1 ascending, sortClause2 descending',
+            ),
+            // no sortClause
+            array(
+                'criterion = value AND otherCriterion in (value1, value2)',
+                false,
+                'criterion = value AND otherCriterion in (value1, value2)',
+            ),
+            // nothing
+            array(
+                false,
+                false,
+                '',
+            ),
+
         );
     }
 
