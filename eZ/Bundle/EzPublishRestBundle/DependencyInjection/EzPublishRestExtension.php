@@ -32,10 +32,10 @@ class EzPublishRestExtension extends Extension implements PrependExtensionInterf
     {
         if ( $container->hasExtension( 'nelmio_cors' ) )
         {
-            $file = __DIR__ . '/../Resources/config/nelmio_cors.yml':
-            $config = Yaml::parse( $file );
+            $file = __DIR__ . '/../Resources/config/nelmio_cors.yml';
+            $config = Yaml::parse( file_get_contents( $file ) );
             $container->prependExtensionConfig( 'nelmio_cors', $config );
-            $container->addResource( new FileResource( $file ) )
+            $container->addResource( new FileResource( $file ) );
         }
     }
 }
