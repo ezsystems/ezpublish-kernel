@@ -63,7 +63,7 @@ services:
 
     ezpublish.api.storage_engine.factory:
         class: %ezpublish.api.storage_engine.factory.class%
-        arguments: [@ezpublish.config.resolver, %ezpublish.repositories%]
+        arguments: [@ezpublish.api.storage_repository_provider]
 
     ezpublish.api.persistence_handler:
         #To disable cache, switch alias to ezpublish.api.storage_engine
