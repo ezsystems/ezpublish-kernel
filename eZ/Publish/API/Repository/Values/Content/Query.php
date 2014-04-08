@@ -119,7 +119,7 @@ class Query extends ValueObject
             return;
         }
 
-        return parent::__set( $property, $value );
+        parent::__set( $property, $value );
     }
 
     /**
