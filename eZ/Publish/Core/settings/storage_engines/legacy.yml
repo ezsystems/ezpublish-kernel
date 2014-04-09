@@ -5,7 +5,6 @@ imports:
     - {resource: storage_engines/legacy/field_value_converters.yml}
     - {resource: storage_engines/legacy/language.yml}
     - {resource: storage_engines/legacy/location.yml}
-    - {resource: storage_engines/legacy/misc.yml}
     - {resource: storage_engines/legacy/object_state.yml}
     - {resource: storage_engines/legacy/search.yml}
     - {resource: storage_engines/legacy/search_query_handlers.yml}
@@ -17,6 +16,7 @@ imports:
 
 parameters:
     ezpublish.spi.persistence.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
+    ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
 
 services:
     ezpublish.spi.persistence.legacy:
@@ -38,3 +38,17 @@ services:
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
         lazy: true
+
+    ezpublish.api.storage_engine.legacy.dbhandler:
+        class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_method: createFromDSN
+        arguments:
+            - %legacy_dsn%
+        lazy: true
+
+    # Alias for backend connection used by eZ Publish storage engine
+    # Useful if you need to reuse it in order to access resources not related to eZ Publish,
+    # but stored in your backend (e.g. foreign DB tables)
+    ezpublish.connection:
+        alias: ezpublish.api.storage_engine.legacy.dbhandler
