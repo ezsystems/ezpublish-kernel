@@ -21,6 +21,12 @@ use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Publish\Core\Base\Container\Compiler;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+
 /**
  * Integration test for the legacy storage
  *
@@ -55,6 +61,11 @@ abstract class BaseIntegrationTest extends TestCase
      * @var string
      */
     protected static $contentVersion;
+
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
+     */
+    protected static $container;
 
     /**
      * @return string
@@ -221,6 +232,9 @@ abstract class BaseIntegrationTest extends TestCase
     {
         if ( !self::$setUp )
         {
+            self::$container = $this->getContainer();
+            $this->handler = self::$container->get( "ezpublish.api.storage_engine.legacy.dbhandler" );
+            $this->db = $this->handler->getName();
             parent::setUp();
             $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
             self::$setUp = $this->handler;
@@ -564,31 +578,74 @@ abstract class BaseIntegrationTest extends TestCase
         );
     }
 
+    protected function getContainer()
+    {
+        $settings = include __DIR__ . "/../../../../../config.php";
+        $installDir = $settings["service"]["parameters"]["install_dir"];
+
+        $containerBuilder = new ContainerBuilder();
+        $settingsPath = $installDir . "/eZ/Publish/Core/settings/";
+        $loader = new YamlFileLoader( $containerBuilder, new FileLocator( $settingsPath ) );
+
+        $loader->load( 'fieldtypes.yml' );
+        $loader->load( 'io.yml' );
+        $loader->load( 'papi.yml' );
+        $loader->load( 'roles.yml' );
+        $loader->load( 'fieldtype_external_storages.yml' );
+        $loader->load( 'storage_engines/common.yml' );
+        $loader->load( 'storage_engines/legacy.yml' );
+        $loader->load( 'storage_engines/cache.yml' );
+        $loader->load( 'settings.yml' );
+        $loader->load( 'fieldtype_services.yml' );
+
+        $containerBuilder->setParameter( "ezpublish.kernel.root_dir", $installDir );
+
+        //$containerBuilder->addCompilerPass( new Compiler\FieldTypeRepositoryPass() );
+        //$containerBuilder->addCompilerPass( new Compiler\RegisterLimitationTypePass() );
+        //$containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\FieldTypeRegistryPass() );
+        $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\CriteriaConverterPass() );
+        $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\CriterionFieldValueHandlerRegistryPass() );
+        //$containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\ExternalStorageRegistryPass() );
+        //$containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\FieldValueConverterRegistryPass() );
+        $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\RoleLimitationConverterPass() );
+        $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\SortClauseConverterPass() );
+
+        $containerBuilder->setParameter(
+            "legacy_dsn",
+            $this->getDsn()
+        );
+
+        $containerBuilder->compile();
+
+        return $containerBuilder;
+    }
+
+
     /**
      * Returns the Handler
      *
      * @return Handler
      */
-    protected function getHandler()
+    protected function getHandler( $identifier, $fieldType, $fieldValueConverter, $externalStorage )
     {
+        /** @var \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry */
+        $fieldTypeRegistry = self::$container->get( "ezpublish.persistence.field_type_registry" );
+        /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry */
+        $converterRegistry = self::$container->get( "ezpublish.persistence.legacy.field_value_converter.registry" );
+        /** @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry $storageRegistry */
+        $storageRegistry = self::$container->get( "ezpublish.persistence.legacy.external_storage_registry" );
+
         $textLineFieldType = new \eZ\Publish\Core\FieldType\TextLine\Type();
         $textLineFieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        return new Legacy\Handler(
-            self::$setUp,
-            new FieldTypeRegistry(
-                array(
-                    'ezstring' => $textLineFieldType,
-                )
-            ),
-            new ConverterRegistry(
-                array(
-                    'ezstring' => new Legacy\Content\FieldValue\Converter\TextLine(),
-                )
-            ),
-            new StorageRegistry(
-                array()
-            ),
-            $this->getTransformationProcessor()
-        );
+        $textLineFieldValueConverter = new Legacy\Content\FieldValue\Converter\TextLine();
+
+        $fieldTypeRegistry->register( "ezstring", $textLineFieldType );
+        $converterRegistry->register( "ezstring", $textLineFieldValueConverter );
+
+        $fieldTypeRegistry->register( $identifier, $fieldType );
+        $converterRegistry->register( $identifier, $fieldValueConverter );
+        $storageRegistry->register( $identifier, $externalStorage );
+
+        return self::$container->get( "ezpublish.spi.persistence.legacy" );
     }
 }

@@ -52,8 +52,6 @@ class CountryIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\Country\Type(
             array(
                 "BE" => array(
@@ -71,17 +69,13 @@ class CountryIntegrationTest extends BaseIntegrationTest
             )
         );
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezcountry', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezcountry',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Country(),
             new FieldType\NullStorage()
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezcountry',
-            new Legacy\Content\FieldValue\Converter\Country()
-        );
-
-        return $handler;
     }
 
     /**

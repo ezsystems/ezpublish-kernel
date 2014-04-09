@@ -52,21 +52,15 @@ class TextLineIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\TextLine\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezstring', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezstring',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\TextLine(),
             new FieldType\NullStorage()
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezstring',
-            new Legacy\Content\FieldValue\Converter\TextLine()
-        );
-
-        return $handler;
     }
 
     /**

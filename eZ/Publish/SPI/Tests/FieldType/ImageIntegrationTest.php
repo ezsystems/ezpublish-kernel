@@ -77,13 +77,13 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\Image\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezimage', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezimage',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Image(),
             new FieldType\Image\ImageStorage(
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
@@ -93,12 +93,6 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 new IO\MetadataHandler\ImageSize()
             )
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezimage',
-            new Legacy\Content\FieldValue\Converter\Image()
-        );
-
-        return $handler;
     }
 
     /**
