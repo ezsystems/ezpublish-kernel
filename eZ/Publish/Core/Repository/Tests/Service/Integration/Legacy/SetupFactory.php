@@ -12,6 +12,11 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy;
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as APILegacySetupFactory;
 use eZ\Publish\Core\Base\ServiceContainer;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
  * specific repository implementation to test.
@@ -34,6 +39,24 @@ class SetupFactory extends APILegacySetupFactory
      */
     protected function getServiceContainer()
     {
+        if ( !isset( self::$legacyServiceContainer ) )
+        {
+            // TODO include container instead of bootstrap, provide settings
+            $bootstrapPath = __DIR__ . '/../../../../../../../../bootstrap.php';
+            /** @var \eZ\Publish\Core\Base\WrappedServiceContainer $container */
+            $container = include $bootstrapPath;
+
+            // disable cache - TODO fix bug with trash recover
+            $container->getInnerContainer()->setAlias(
+                "ezpublish.api.persistence_handler",
+                "ezpublish.api.storage_engine"
+            );
+
+            self::$legacyServiceContainer = $container;
+        }
+
+        return self::$legacyServiceContainer;
+
         if ( !isset( static::$legacyServiceContainer ) )
         {
             $configManager = $this->getConfigurationManager();
