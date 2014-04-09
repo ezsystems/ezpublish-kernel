@@ -9,13 +9,13 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
+use eZ\Publish\Core\Base\Container\Compiler\FieldTypeRepositoryPass;
+use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy as LegacyStorage;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeRepositoryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitationTypePass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorage;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocalePass;
