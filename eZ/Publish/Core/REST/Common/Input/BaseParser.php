@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Input\Parser;
+namespace eZ\Publish\Core\REST\Common\Input;
 
 use eZ\Publish\Core\REST\Common\Input\Parser;
 use eZ\Publish\Core\REST\Common\RequestParser;
 
-abstract class Base extends Parser
+abstract class BaseParser extends Parser
 {
     /**
      * URL handler

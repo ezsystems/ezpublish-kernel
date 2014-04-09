@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\Base;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 /**
  * Parser for ViewInput Criterion
  */
-class DateMetadata extends Base
+class DateMetadata extends BaseParser
 {
     /**
      * Parses input structure to a Criterion object

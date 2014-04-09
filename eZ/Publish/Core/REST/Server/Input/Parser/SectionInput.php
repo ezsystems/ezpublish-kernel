@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\API\Repository\SectionService;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -16,7 +17,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 /**
  * Parser for SectionInput
  */
-class SectionInput extends Base
+class SectionInput extends BaseParser
 {
     /**
      * Section service

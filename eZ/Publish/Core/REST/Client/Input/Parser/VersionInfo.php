@@ -9,17 +9,16 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-
 use eZ\Publish\Core\REST\Client\Values;
 use eZ\Publish\Core\REST\Client\ContentService;
 
 /**
  * Parser for VersionInfo
  */
-class VersionInfo extends Parser
+class VersionInfo extends BaseParser
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools

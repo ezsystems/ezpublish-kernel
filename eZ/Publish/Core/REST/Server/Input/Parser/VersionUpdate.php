@@ -13,11 +13,12 @@ use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 
 /**
  * Parser for VersionUpdate
  */
-class VersionUpdate extends Base
+class VersionUpdate extends BaseParser
 {
     /**
      * Content service

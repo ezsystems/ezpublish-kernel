@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -18,7 +19,7 @@ use eZ\Publish\Core\REST\Server\Values\RoleAssignment;
 /**
  * Parser for RoleAssignInput
  */
-class RoleAssignInput extends Base
+class RoleAssignInput extends BaseParser
 {
     /**
      * Parser tools

@@ -11,16 +11,14 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
-
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-
 use eZ\Publish\Core\REST\Client\Values;
 
 /**
  * Parser for FieldDefinitionList
  */
-class FieldDefinitionList extends Parser
+class FieldDefinitionList extends BaseParser
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools

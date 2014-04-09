@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -17,7 +18,7 @@ use eZ\Publish\API\Repository\RoleService;
 /**
  * Parser for PolicyUpdate
  */
-class PolicyUpdate extends Base
+class PolicyUpdate extends BaseParser
 {
     /**
      * Role service

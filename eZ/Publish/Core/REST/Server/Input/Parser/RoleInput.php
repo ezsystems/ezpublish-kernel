@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\RoleService;
@@ -16,7 +17,7 @@ use eZ\Publish\API\Repository\RoleService;
 /**
  * Parser for RoleInput
  */
-class RoleInput extends Base
+class RoleInput extends BaseParser
 {
     /**
      * Role service

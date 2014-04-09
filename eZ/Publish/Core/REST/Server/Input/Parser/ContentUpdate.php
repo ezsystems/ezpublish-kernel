@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
@@ -17,7 +18,7 @@ use Exception;
 /**
  * Parser for ContentUpdate
  */
-class ContentUpdate extends Base
+class ContentUpdate extends BaseParser
 {
     /**
      * Parse input structure

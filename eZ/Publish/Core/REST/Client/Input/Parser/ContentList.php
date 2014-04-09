@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 /**
  * Parser for ContentList
  */
-class ContentList extends Parser
+class ContentList extends BaseParser
 {
     /**
      * Parse input structure

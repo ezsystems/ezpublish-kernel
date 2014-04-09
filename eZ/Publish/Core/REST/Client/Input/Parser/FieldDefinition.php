@@ -10,11 +10,9 @@
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-
 use eZ\Publish\Core\REST\Client\Values;
 
 /**
@@ -22,7 +20,7 @@ use eZ\Publish\Core\REST\Client\Values;
  *
  * @todo Caching for extracted embedded objects
  */
-class FieldDefinition extends Parser
+class FieldDefinition extends BaseParser
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
