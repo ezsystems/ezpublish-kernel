@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorage;
+namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,19 +17,19 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * This compiler pass will register eZ Publish field types.
  */
-class FieldValueConverterRegistryPass implements CompilerPassInterface
+class CriterionFieldValueHandlerRegistryPass implements CompilerPassInterface
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.legacy.field_value_converter.registry' ) )
+        if ( !$container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.registry' ) )
             return;
 
-        $registry = $container->getDefinition( 'ezpublish.persistence.legacy.field_value_converter.registry' );
+        $registry = $container->getDefinition( 'ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.registry' );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.storageEngine.legacy.converter' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler' ) as $id => $attributes )
         {
             foreach ( $attributes as $attribute )
             {

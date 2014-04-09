@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the RegisterLimitationTypePass class.
+ * File containing the FieldTypeRegistryPass class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
+namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * This compiler pass will register eZ Publish field types.
  */
-class RegisterLimitationTypePass implements CompilerPassInterface
+class FieldTypeRegistryPass implements CompilerPassInterface
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
@@ -25,25 +25,29 @@ class RegisterLimitationTypePass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.api.repository.factory' ) )
+        if ( !$container->hasDefinition( 'ezpublish.persistence.field_type_registry' ) )
+        {
             return;
+        }
 
-        $repositoryFactoryDef = $container->getDefinition( 'ezpublish.api.repository.factory' );
+        $repositoryFactoryDef = $container->getDefinition( 'ezpublish.persistence.field_type_registry' );
 
-        // Limitation types.
-        // Alias attribute is the limitation type name.
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.limitationType' ) as $id => $attributes )
+        // Field types.
+        // Alias attribute is the field type string.
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType' ) as $id => $attributes )
         {
             foreach ( $attributes as $attribute )
             {
                 if ( !isset( $attribute['alias'] ) )
-                    throw new \LogicException( 'ezpublish.limitationType service tag needs an "alias" attribute to identify the limitation type. None given.' );
+                {
+                    throw new \LogicException( 'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.' );
+                }
 
                 $repositoryFactoryDef->addMethodCall(
-                    'registerLimitationType',
+                    'register',
                     array(
                         $attribute['alias'],
-                        new Reference( $id )
+                        new Reference( $id ),
                     )
                 );
             }
