@@ -9,9 +9,6 @@ parameters:
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
 
-    # Symfony event converter Slot
-    ezpublish.signalslot.event_converter_slot.class: eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot
-
     # FragmentRenderer overrides
     ezpublish.decorated_fragment_renderer.inline.class: eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer
     ezpublish.decorated_fragment_renderer.class: eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer
