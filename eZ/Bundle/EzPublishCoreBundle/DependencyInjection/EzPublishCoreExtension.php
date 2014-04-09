@@ -257,20 +257,26 @@ class EzPublishCoreExtension extends Extension
      */
     private function handleApiLoading( ContainerBuilder $container, FileLoader $loader )
     {
-        // Public API services
+        // Load Core Public API
+        $coreLoader = new Loader\YamlFileLoader(
+            $container,
+            new FileLocator( __DIR__ . '/../../../Publish/Core/settings' )
+        );
+        $coreLoader->load( 'papi.yml' );
+        //$coreLoader->load( 'io.yml' );
+        $coreLoader->load( 'fieldtypes.yml' );
+        $coreLoader->load( 'fieldtype_external_storages.yml' );
+        $coreLoader->load( 'storage_engines/common.yml' );
+        $coreLoader->load( 'storage_engines/legacy.yml' );
+        $coreLoader->load( 'storage_engines/cache.yml' );
+        $coreLoader->load( 'roles.yml' );
+
+        // Load Public API MVC configuration
         $loader->load( 'papi.yml' );
-        // IO Services
         $loader->load( 'io.yml' );
-        // Built-in field types
-        $loader->load( 'fieldtypes.yml' );
-        // Built-in storage engines
         $loader->load( 'storage_engines.yml' );
-        $loader->load( 'fieldtype_external_storages.yml' );
         $loader->load( 'fieldtype_services.yml' );
-        $loader->load( 'storage_engines/legacy.yml' );
         $loader->load( 'storage_engines/cache.yml' );
-        // Roles and limitations
-        $loader->load( 'roles.yml' );
     }
 
     /**
