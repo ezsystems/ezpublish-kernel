@@ -200,15 +200,16 @@ class Type extends FieldType
         return new Value( $hash );
     }
 
-    /*!
-     \private
-     Validates the ISBN number \a $isbnNr.
-     All characters should be numeric except the last digit that may be the character X,
-     which should be calculated as 10.
-     \param $isbnNr A string containing the number without any dashes.
-     \return \c true if it is valid.
-    */
-    function validateISBNChecksum ( $isbnNr )
+    /**
+     * Validates the ISBN number.
+     * All characters should be numeric except the last digit that may be the character X,
+     * which should be calculated as 10.
+     * 
+     * @param string $isbnNr A string containing the number without any dashes.
+     * 
+     * @return boolean
+     */
+    private function validateISBNChecksum ( $isbnNr )
     {
         $result = 0;
         $isbnNr = strtoupper( $isbnNr );
@@ -240,15 +241,16 @@ class Type extends FieldType
     const PREFIX_978 = 978;
     const PREFIX_979 = 979;
     
-    /*!
-     \private
-     Validates the ISBN-13 number \a $isbnNr.
-     \param $isbnNr A string containing the number without any dashes.
-     \param $error is used to send back an error message that will be shown to the user if the
-                   ISBN number validated.
-     \return \c true if it is valid.
-    */
-    function validateISBN13Checksum ( $isbnNr, &$error )
+    /**
+     *  Validates the ISBN-13 number.
+     * 
+     * @param string $isbnNr A string containing the number without any dashes.
+     * @param string $error is used to send back an error message that will be shown to the user if the
+     *                      ISBN number validated.
+     * 
+     * @return boolean
+     */
+    private function validateISBN13Checksum ( $isbnNr, &$error )
     {
         if ( !$isbnNr )
             return false;
