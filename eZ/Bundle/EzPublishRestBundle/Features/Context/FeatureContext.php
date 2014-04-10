@@ -12,16 +12,19 @@
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
 use EzSystems\BehatBundle\Features\Context\FeatureContext as BaseContext;
+use eZ\Bundle\EzPublishRestBundle\Features\Context\RestInternalSentences;
 use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\REST\Common\Message;
 use Behat\Behat\Exception\PendingException;
+use Behat\Gherkin\Node\TableNode;
+use PHPUnit_Framework_Assert as Assertion;
 
 /**
  * Feature context.
  */
-class FeatureContext extends BaseContext
+class FeatureContext extends BaseContext implements RestInternalSentences
 {
     /**
      * Rest client for all requests and responses
@@ -251,5 +254,290 @@ class FeatureContext extends BaseContext
         {
             $this->setProperty( $object, $property, $value );
         }
+    }
+
+    /**
+     * After this comment are the REST internal sentences implementation
+     */
+
+    public function iAddRequestedObjectToObjectMap( $identifier, $objectStep )
+    {
+        $this->setObjectToObjectMap( $identifier, $objectStep, $this->requestObject );
+    }
+
+    public function iCreateRequest( $resourceUrl, $requestType )
+    {
+        $this->restclient->setResourceUrl( $resourceUrl );
+        $this->restclient->setRequestType( $requestType );
+    }
+
+    public function iAddHeaderToObjectAction( $header, $action, $object )
+    {
+        $this->restclient->addSpecialHeader( $header, $object, $action );
+    }
+
+    public function iAddHeaderForObject( $header, $object )
+    {
+        $this->iAddHeaderToObjectAction( $header, null, $object );
+    }
+
+    public function iMakeAnObject( $objectType )
+    {
+        $this->createAnObject( $objectType );
+    }
+
+    public function iAddValueToField( $value, $field )
+    {
+        // normaly fields are defined in lower camelCase
+        $field = lcfirst( $field );
+
+        $this->setProperty( $this->requestObject, $field, $value );
+    }
+
+    public function iSendRequest()
+    {
+        if (
+            empty( $this->restclient->body )
+            && !empty( $this->requestObject )
+            && !empty( $this->restclient->headers['content-type'] )
+        )
+        {
+            $this->addObjectToRequestBody();
+        }
+        $this->restclient->sendRequest();
+    }
+
+    public function iAddHeaderWithValue( $header, $value )
+    {
+        $this->restclient->setHeader( $header, $value );
+    }
+
+    public function iAddHeaders( TableNode $table )
+    {
+        $headers = $this->convertTableToArrayOfData( $table );
+
+        foreach ( $headers as $header => $value )
+        {
+            $this->iAddHeaderWithValue( $header, $value );
+        }
+    }
+
+    public function iSeeResponseHeader( $header )
+    {
+        Assertion::assertNotNull(
+            $this->restclient->getResponseHeader( $header ),
+            "Expected '$header' header not found"
+        );
+    }
+
+    public function iDonTSeeResponseHeader( $header )
+    {
+        Assertion::assertNull(
+            $this->restclient->getResponseHeader( $header ),
+            "Unexpected '$header' header found with '{$this->restclient->getResponseHeader( $header )}' value"
+        );
+    }
+
+    public function iSeeResponseHeaderWithValue( $header, $value )
+    {
+        Assertion::assertEquals(
+            $value,
+            $this->restclient->getResponseHeader( $header ),
+            "Expected '$header' header with '$value' found it with '{$this->restclient->getResponseHeader( $header )}' value"
+        );
+    }
+
+    public function iDonTSeeResponseHeaderWithValue( $header, $value )
+    {
+        Assertion::assertNotEquals(
+            $value,
+            $this->restclient->getResponseHeader( $header ),
+            "Unexpected '$header' header found with '{$this->restclient->getResponseHeader( $header )}' value"
+        );
+    }
+
+    public function iOnlySeeResponseHeaders( TableNode $table )
+    {
+        $expectHeaders = $this->convertTableToArrayOfData( $table );
+        $actualHeaders = $this->restclient->getResponseHeaders();
+
+        foreach ( $expectHeaders as $header => $value )
+        {
+            if ( is_int( $header ) )
+            {
+                $header = $value;
+            }
+
+            Assertion::assertTrue(
+                array_key_exists( $header, $actualHeaders ),
+                "Expected '$header' header not found"
+            );
+
+            if ( $header !== $value )
+            {
+                Assertion::assertEquals(
+                    $value,
+                    $actualHeaders[$header],
+                    "Found '$header' header with '{$actualHeaders[$header]}' value but expected '$value' value"
+                );
+            }
+
+            unset( $actualHeaders[$header] );
+        }
+
+        Assertion::assertEmpty(
+            $actualHeaders,
+            "Unexpected headers found: " . print_r( $actualHeaders, true )
+        );
+    }
+
+    public function iSeeResponseHeaders( TableNode $table )
+    {
+        $expectHeaders = $this->convertTableToArrayOfData( $table );
+        $actualHeaders = $this->restclient->getResponseHeaders();
+
+        foreach ( $expectHeaders as $header => $value )
+        {
+            if ( is_int( $header ) )
+            {
+                $header = $value;
+            }
+
+            Assertion::assertTrue(
+                array_key_exists( $header, $actualHeaders ),
+                "Expected '$header' header not found"
+            );
+
+            if ( $header !== $value )
+            {
+                Assertion::assertEquals(
+                    $value,
+                    $actualHeaders[$header],
+                    "Found '$header' header with '{$actualHeaders[$header]}' value but expected '$value' value"
+                );
+            }
+
+            unset( $actualHeaders[$header] );
+        }
+    }
+
+    /**
+     * @todo Implementation
+     */
+    public function iSeeResponseBodyWith( PyStringNode $body )
+    {
+        throw new PendingException( "Need to be implemented: iSeeBodyWith" );
+    }
+
+    public function iSeeResponseBodyWithObject( $object )
+    {
+        $responseObject = $this->getResponseObject();
+
+        Assertion::assertTrue(
+            $responseObject instanceof $object,
+            "Expect body object to be an instance of '$object' but got a '". get_class( $responseObject ) . "'"
+        );
+    }
+
+    public function iSeeResponseObjectWithFieldValue( $field, $value )
+    {
+        $responseObject = $this->getResponseObject();
+        $actualValue = $this->getProperty( $responseObject, $field );
+
+        Assertion::assertEquals(
+            $this->getProperty( $responseObject, $field ),
+            $value,
+            "Expected '$field' property to have '$value' value but found '$actualValue' value"
+        );
+    }
+
+    public function iSeeResponseBodyWithValue( $value )
+    {
+        Assertion::assertEquals(
+            $value,
+            $this->restclient->getResponseBody(),
+            "Expected body isn't equal to the actual one."
+            . "\nExpected: "
+            . print_r( $value, true )
+            . "\nActual: "
+            . print_r( $this->restclient->getResponseBody(), true )
+        );
+    }
+
+    public function iSeeResponseHeaderForObject( $header, $object )
+    {
+        $this->iSeeResponseHeaderToObjectAction( $header, null, $object );
+    }
+
+    public function iSeeResponseHeaderToObjectAction( $header, $action, $object )
+    {
+        $expected = $this->restclient->constructSpecialHeader( $object, $action );
+        $expected = substr( $expected, 0, strpos( $expected, '+' ) );
+        $actual = $this->restclient->getResponseHeader( $header );
+        $actual = substr( $actual, 0, strpos( $actual, '+' ) );
+        Assertion::assertEquals(
+            $expected,
+            $actual,
+            "Expected '$header' header with '$expected' value found it with '$actual' value "
+        );
+    }
+
+    public function iSeeResponseStatusCode( $satusCode )
+    {
+        Assertion::assertEquals(
+            $satusCode,
+            $this->restclient->getResponseStatusCode(),
+            "Wrong status code found '{$this->restclient->getResponseStatusCode()}' expected '$satusCode'"
+        );
+    }
+
+    public function iSeeResponseStatusMessage( $statusMessage )
+    {
+        Assertion::assertEquals(
+            strtolower( $statusMessage ),
+            strtolower( $this->restclient->getResponseStatusMessage() ),
+            "Wrong status message found '{$this->restclient->getResponseStatusMessage()}' expected '$statusMessage'"
+        );
+    }
+
+    protected function getResponseError( $property )
+    {
+        $exception = $this->getResponseObject();
+
+        if ( !$exception instanceof \Exception )
+        {
+            throw new InvalidArgumentException( 'response object', 'is not an exception' );
+        }
+
+        switch ( $property ) {
+        case 'code':
+            return $exception->getCode();
+
+        case 'description':
+        case 'message':
+            return $exception->getMessage();
+        }
+    }
+
+    public function iSeeResponseErrorWithDescription( $errorDescriptionRegEx )
+    {
+        $errorDescription = $this->getResponseError( 'description' );
+
+        Assertion::assertEquals(
+            preg_match( $errorDescriptionRegEx, $errorDescription ),
+            1,
+            "Expected to find a description that matched '$errorDescriptionRegEx' RegEx but found '$errorDescription'"
+        );
+    }
+
+    public function iSeeResponseErrorStatusCode( $statusCode )
+    {
+        $errorStatusCode = $this->getResponseError( 'code' );
+
+        Assertion::assertEquals(
+            $statusCode,
+            $errorStatusCode,
+            "Expected '$statusCode' status code found '$errorStatusCode'"
+        );
     }
 }
