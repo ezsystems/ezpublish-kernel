@@ -197,11 +197,6 @@ class Type extends FieldType
                 throw new InvalidValue( $hash, $error );
             }
         }
-        
-//        if ( true )
-//        {
-//            throw new InvalidValue( $hash );
-//        }
         return new Value( $hash );
     }
 

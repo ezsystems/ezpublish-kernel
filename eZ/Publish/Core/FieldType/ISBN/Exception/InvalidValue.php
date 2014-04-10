@@ -20,6 +20,7 @@ class InvalidValue extends InvalidArgumentException
      * Creates a new exception when $value is invalid.
      *
      * @param mixed $value
+     * @param mixed $message
      */
     public function __construct( $value, $message = "is not a valid ISBN" )
     {
