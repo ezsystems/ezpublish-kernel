@@ -24,6 +24,12 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class Type extends FieldType
 {
+    const PREFIX_LENGTH = 3;
+    const CHECK_LENGTH = 1;
+    const LENGTH = 13;
+    const PREFIX_978 = 978;
+    const PREFIX_979 = 979;
+    
     protected $settingsSchema = array(
         "isISBN13" => array(
             "type" => "boolean",
@@ -233,13 +239,6 @@ class Type extends FieldType
         }
         return ( $result % 11 == 0 );
     }
-    
-    
-    const PREFIX_LENGTH = 3;
-    const CHECK_LENGTH = 1;
-    const LENGTH = 13;
-    const PREFIX_978 = 978;
-    const PREFIX_979 = 979;
     
     /**
      *  Validates the ISBN-13 number.
