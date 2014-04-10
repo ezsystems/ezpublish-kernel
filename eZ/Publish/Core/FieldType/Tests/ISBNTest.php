@@ -258,4 +258,16 @@ class ISBNTest extends FieldTypeTest
         );
     }
     
+    protected function provideFieldTypeIdentifier()
+    {
+        return 'ezisbn';
+    }
+
+    public function provideDataForGetName()
+    {
+        return array(
+            array( $this->getEmptyValueExpectation(), "" ),
+            array( new IntegerValue( "9789722514095" ), "978-972-25-1409-5" )
+        );
+    }
 }
