@@ -218,9 +218,10 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
             throw new InvalidArgumentException( "Invalid SiteAccess name provided for reverse matching: $siteAccessName" );
         }
 
+        $request = clone $this->request;
         foreach ( $this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration )
         {
-            $matcher = $this->matcherBuilder->buildMatcher( $matchingClass, $matchingConfiguration, $this->request );
+            $matcher = $this->matcherBuilder->buildMatcher( $matchingClass, $matchingConfiguration, $request );
             if ( !$matcher instanceof VersatileMatcher )
             {
                 continue;

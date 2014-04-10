@@ -162,15 +162,8 @@ class URIElement implements VersatileMatcher, URILexer
             return null;
         }
 
-        $matcher = clone $this;
-        $request = $matcher->getRequest();
-        $pathinfo = '/' . implode( '/', $elements ) . '/' . ltrim( $this->analyseURI( $request->pathinfo ), '/' );
-        $request->setPathinfo( $pathinfo );
-        return $matcher;
-    }
-
-    public function __clone()
-    {
-        $this->request = clone $this->request;
+        $pathinfo = '/' . implode( '/', $elements ) . '/' . ltrim( $this->analyseURI( $this->request->pathinfo ), '/' );
+        $this->request->setPathinfo( $pathinfo );
+        return $this;
     }
 }

@@ -42,7 +42,6 @@ class LogicalOr extends Compound
         {
             if ( $rule['match'] === $siteAccessName )
             {
-                $matcher = clone $this;
                 foreach ( $this->matchersMap[$i] as $subMatcher )
                 {
                     if ( !$subMatcher instanceof VersatileMatcher )
@@ -50,15 +49,14 @@ class LogicalOr extends Compound
                         continue;
                     }
 
-                    $subMatcher->setRequest( $matcher->getRequest() );
                     $reverseMatcher = $subMatcher->reverseMatch( $siteAccessName );
                     if ( !$reverseMatcher )
                     {
                         continue;
                     }
 
-                    $matcher->setSubMatchers( array( $subMatcher ) );
-                    return $matcher;
+                    $this->setSubMatchers( array( $subMatcher ) );
+                    return $this;
                 }
             }
         }

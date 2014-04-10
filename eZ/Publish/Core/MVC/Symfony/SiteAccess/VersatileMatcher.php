@@ -22,7 +22,7 @@ interface VersatileMatcher extends Matcher
      *
      * @param string $siteAccessName
      *
-     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher|null Typically a clone of current matcher, with appropriate config.
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher|null Typically the current matcher, with updated request.
      */
     public function reverseMatch( $siteAccessName );
 

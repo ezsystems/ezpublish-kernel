@@ -63,27 +63,14 @@ class HostElement implements VersatileMatcher
         $this->request = $request;
     }
 
-    /**
-     * @return \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
-     */
     public function getRequest()
     {
         return $this->request;
     }
 
-    /**
-     * Returns matcher object corresponding to $siteAccessName or null if non applicable.
-     *
-     * @note Limitation: Will only work correctly if HostElement is used for all siteaccesses, as host cannot be guessed.
-     *
-     * @param string $siteAccessName
-     *
-     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\HostElement|null Typically a clone of current matcher, with appropriate config.
-     */
     public function reverseMatch( $siteAccessName )
     {
-        $request = clone $this->request;
-        $hostElements = explode( '.', $request->host );
+        $hostElements = explode( '.', $this->request->host );
         $elementNumber = $this->elementNumber - 1;
         if ( !isset( $hostElements[$elementNumber] ) )
         {
@@ -91,14 +78,7 @@ class HostElement implements VersatileMatcher
         }
 
         $hostElements[$elementNumber] = $siteAccessName;
-        $matcher = clone $this;
-        $matcher->getRequest()->setHost( implode( '.', $hostElements ) );
-
-        return $matcher;
-    }
-
-    public function __clone()
-    {
-        $this->request = clone $this->request;
+        $this->request->setHost( implode( '.', $hostElements ) );
+        return $this;
     }
 }

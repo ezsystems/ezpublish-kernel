@@ -158,13 +158,7 @@ class CompoundOrTest extends PHPUnit_Framework_TestCase
 
         $matcher1
             ->expects( $this->never() )
-            ->method( 'setRequest' );
-        $matcher1
-            ->expects( $this->never() )
             ->method( 'reverseMatch' );
-        $matcher2
-            ->expects( $this->never() )
-            ->method( 'setRequest' );
         $matcher2
             ->expects( $this->never() )
             ->method( 'reverseMatch' );
@@ -208,17 +202,9 @@ class CompoundOrTest extends PHPUnit_Framework_TestCase
 
         $matcher1
             ->expects( $this->once() )
-            ->method( 'setRequest' )
-            ->with( $request );
-        $matcher1
-            ->expects( $this->once() )
             ->method( 'reverseMatch' )
             ->with( $siteAccessName )
             ->will( $this->returnValue( null ) );
-        $matcher2
-            ->expects( $this->once() )
-            ->method( 'setRequest' )
-            ->with( $request );
         $matcher2
             ->expects( $this->once() )
             ->method( 'reverseMatch' )
@@ -262,19 +248,12 @@ class CompoundOrTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $matcher1
-            ->expects( $this->once() )
-            ->method( 'setRequest' )
-            ->with( $request );
         $reverseMatchedMatcher1 = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher' );
         $matcher1
             ->expects( $this->once() )
             ->method( 'reverseMatch' )
             ->with( $siteAccessName )
             ->will( $this->returnValue( $reverseMatchedMatcher1 ) );
-        $matcher2
-            ->expects( $this->never() )
-            ->method( 'setRequest' );
         $matcher2
             ->expects( $this->never() )
             ->method( 'reverseMatch' );
@@ -323,17 +302,9 @@ class CompoundOrTest extends PHPUnit_Framework_TestCase
 
         $matcher1
             ->expects( $this->once() )
-            ->method( 'setRequest' )
-            ->with( $request );
-        $matcher1
-            ->expects( $this->once() )
             ->method( 'reverseMatch' )
             ->with( $siteAccessName )
             ->will( $this->returnValue( null ) );
-        $matcher2
-            ->expects( $this->once() )
-            ->method( 'setRequest' )
-            ->with( $request );
         $reverseMatchedMatcher2 = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher' );
         $matcher2
             ->expects( $this->once() )

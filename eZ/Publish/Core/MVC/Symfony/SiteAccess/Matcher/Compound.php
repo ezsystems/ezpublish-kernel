@@ -146,19 +146,4 @@ abstract class Compound implements CompoundInterface, URILexer
         // We don't need the whole matcher map and the matcher builder once serialized.
         return array( 'config', 'subMatchers', 'request' );
     }
-
-    public function __clone()
-    {
-        $this->request = clone $this->request;
-        if ( $this->subMatchers )
-        {
-            $clonedSubMatchers = array();
-            foreach ( $this->subMatchers as $matcher )
-            {
-                $clonedSubMatchers[] = clone $matcher;
-            }
-
-            $this->subMatchers = $clonedSubMatchers;
-        }
-    }
 }

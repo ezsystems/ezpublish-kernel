@@ -74,13 +74,13 @@ class URI extends Map implements URILexer
 
     public function reverseMatch( $siteAccessName )
     {
+        $mapKey = $this->getMapKey();
         $matcher = parent::reverseMatch( $siteAccessName );
         if ( $matcher instanceof URI )
         {
             $request = $matcher->getRequest();
             // Clean up "old" siteaccess prefix and add the new prefix.
-            $cleanedUpPathinfo = $this->analyseURI( $request->pathinfo );
-            $request->setPathinfo( $matcher->analyseLink( $cleanedUpPathinfo ) );
+            $request->setPathinfo( str_replace( $mapKey, $this->reverseMap[$siteAccessName], $request->pathinfo ) );
         }
 
         return $matcher;

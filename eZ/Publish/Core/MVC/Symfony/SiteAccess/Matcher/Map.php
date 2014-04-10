@@ -112,14 +112,7 @@ abstract class Map implements VersatileMatcher
             return null;
         }
 
-        $mapKey = $this->reverseMap[$siteAccessName];
-        $matcher = clone $this;
-        $matcher->setMapKey( $mapKey );
-        return $matcher;
-    }
-
-    public function __clone()
-    {
-        $this->request = clone $this->request;
+        $this->setMapKey( $this->reverseMap[$siteAccessName] );
+        return $this;
     }
 }

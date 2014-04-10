@@ -45,7 +45,6 @@ class LogicalAnd extends Compound implements VersatileMatcher
         {
             if ( $rule['match'] === $siteAccessName )
             {
-                $matcher = clone $this;
                 $subMatchers = array();
                 foreach ( $this->matchersMap[$i] as $subMatcher )
                 {
@@ -54,7 +53,6 @@ class LogicalAnd extends Compound implements VersatileMatcher
                         return null;
                     }
 
-                    $subMatcher->setRequest( $matcher->getRequest() );
                     $reverseMatcher = $subMatcher->reverseMatch( $siteAccessName );
                     if ( !$reverseMatcher )
                     {
@@ -64,8 +62,8 @@ class LogicalAnd extends Compound implements VersatileMatcher
                     $subMatchers[] = $subMatcher;
                 }
 
-                $matcher->setSubMatchers( $subMatchers );
-                return $matcher;
+                $this->setSubMatchers( $subMatchers );
+                return $this;
             }
         }
     }

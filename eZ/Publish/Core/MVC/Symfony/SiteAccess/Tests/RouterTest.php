@@ -225,23 +225,19 @@ class RouterTest extends PHPUnit_Framework_TestCase
             'phoenix-rises.fm' => $matchedSiteAccess,
         );
         $config = array(
+            'Map\URI' => array( 'default' => 'default_sa' ),
             $matcherClass => $matcherConfig,
-            'Map\URI' => array( 'default' => 'default_sa' )
         );
 
         $router = new Router( $matcherBuilder, $logger, 'default_sa', $config, array( $matchedSiteAccess, 'default_sa' ) );
-        $request = $router->getRequest();
         $matcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher' );
         $matcherBuilder
-            ->expects( $this->once() )
+            ->expects( $this->exactly( 2 ) )
             ->method( 'buildMatcher' )
-            ->with( $matcherClass, $matcherConfig, $request )
             ->will(
-                $this->returnValueMap(
-                    array(
-                        array( 'Map\URI', array( 'default' => 'default_sa' ), $request, $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher' ) ),
-                        array( $matcherClass, $matcherConfig, $request, $matcher ),
-                    )
+                $this->onConsecutiveCalls(
+                    $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher' ),
+                    $matcher
                 )
             );
 
