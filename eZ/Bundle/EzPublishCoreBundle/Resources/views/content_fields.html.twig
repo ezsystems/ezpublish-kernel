@@ -148,6 +148,13 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezisbn_field %}
+{% spaceless %}
+    {% set field_value = field.value.isbn %}
+    {{ block( 'simple_inline_field' ) }}
+{% endspaceless %}
+{% endblock %}
+
 {% block ezkeyword_field %}
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
