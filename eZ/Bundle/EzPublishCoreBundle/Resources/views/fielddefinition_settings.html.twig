@@ -264,6 +264,15 @@
 
 {% block ezurl_settings %}{% endblock %}
 
+{% block ezisbn_settings %}
+<ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">
+    {% set defaultValue = '' %}
+    {{ block( 'settings_defaultvalue' ) }}
+    {% set isISBN13 = settings.isISBN13 %}
+    {{ block( 'settings_allowisbn13' ) }}
+</ul>
+{% endblock %}
+
 {% block ezkeyword_settings %}{% endblock %}
 
 {% block ezuser_settings %}{% endblock %}
