@@ -46,9 +46,9 @@ class LegacySolr extends Legacy
 
         // @TODO @HACK: This is a hack to inject a different search handler -- is
         // there a well supported way to do this? I don't think so.
-        $persistenceHandler = $this->getServiceContainer()->get( 'persistence_handler' );
-        $legacyPersistenceHandler = $this->getServiceContainer()->get( 'persistence_handler_legacy' );
-        $searchProperty = new \ReflectionProperty( $legacyPersistenceHandler, 'searchHandler' );
+        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.api.persistence_handler' );
+        $legacyPersistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
+        $searchProperty = new \ReflectionProperty( $legacyPersistenceHandler, 'contentSearchHandler' );
         $searchProperty->setAccessible( true );
         $searchProperty->setValue(
             $legacyPersistenceHandler,
@@ -225,7 +225,11 @@ class LegacySolr extends Legacy
      * @param CachePersistenceHandler $cachePersistenceHandler
      * @param SolrSearchHandler $searchHandler
      */
-    protected function indexAll( LegacyPersistenceHandler $legacyPersistenceHandler, CachePersistenceHandler $cachePersistenceHandler, SolrSearchHandler $searchHandler )
+    protected function indexAll(
+        LegacyPersistenceHandler $legacyPersistenceHandler,
+        CachePersistenceHandler $cachePersistenceHandler,
+        SolrSearchHandler $searchHandler
+    )
     {
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
