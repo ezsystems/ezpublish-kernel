@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\FieldType\ISBN\Exception;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
- * Exception thrown if an invalid identifier is used for a country
+ * Exception thrown if an invalid ISBN value is used
  */
 class InvalidValue extends InvalidArgumentException
 {
