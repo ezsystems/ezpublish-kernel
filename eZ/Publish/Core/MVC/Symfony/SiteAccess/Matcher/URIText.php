@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
-class URIText extends Regex implements Matcher, URILexer
+class URIText extends Regex implements VersatileMatcher, URILexer
 {
     /**
      * @var string
@@ -86,5 +86,16 @@ class URIText extends Regex implements Matcher, URILexer
         $linkUri = '/' . ltrim( $linkUri, '/' );
         $siteAccessUri = "/$this->prefix" . $this->match() . $this->suffix;
         return $siteAccessUri . $linkUri;
+    }
+
+    public function reverseMatch( $siteAccessName )
+    {
+        $this->request->setPathinfo( "/{$this->prefix}{$siteAccessName}{$this->suffix}{$this->request->pathinfo}" );
+        return $this;
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
     }
 }

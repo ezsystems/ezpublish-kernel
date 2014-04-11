@@ -157,4 +157,22 @@ class RouterURITextTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame( $siteAccessURI . $semanticURI, $matcher->analyseLink( $semanticURI ) );
     }
+
+    public function testReverseMatch()
+    {
+        $semanticURI = "/hihi/hoho";
+        $matcher = new URITextMatcher(
+            array(
+                "prefix" => "foo",
+                "suffix" => "bar",
+            )
+        );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => $semanticURI ) ) );
+
+        $result = $matcher->reverseMatch( 'something' );
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText', $result );
+        $request = $result->getRequest();
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest', $request );
+        $this->assertSame( "/foosomethingbar{$semanticURI}", $request->pathinfo );
+    }
 }
