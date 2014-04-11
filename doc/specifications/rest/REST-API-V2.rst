@@ -4264,7 +4264,7 @@ Resource                                      POST                  GET         
 /user/groups/<path>/roles                     assign role to group  load roles of group   .                     .
 /user/groups/<path>/roles/<ID>                .                     .                     .                     unassign role from group
 /user/users                                   create user           list users            .                     .
-/user/users/<ID>                              .                     load user             update user           delete user
+/user/users/<ID>                              update user           load user             .                     delete user
 /user/users/<ID>/groups                       .                     load groups of user   add to group          .
 /user/users/<ID>/drafts                       .                     list all drafts owned .                     .
                                                                     by the user
