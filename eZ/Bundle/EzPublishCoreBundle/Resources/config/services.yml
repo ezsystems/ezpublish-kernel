@@ -10,9 +10,8 @@ parameters:
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
 
     # FragmentRenderer overrides
-    fragment.renderer.esi.class: eZ\Bundle\EzPublishCoreBundle\Fragment\EsiFragmentRenderer
-    fragment.renderer.inline.class: eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer
-    fragment.renderer.hinclude.class: eZ\Bundle\EzPublishCoreBundle\Fragment\HincludeFragmentRenderer
+    ezpublish.decorated_fragment_renderer.inline.class: eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer
+    ezpublish.decorated_fragment_renderer.class: eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer
     ezpublish.fragment_listener.factory.class: eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentListenerFactory
 
     ezpublish.controller_manager.class: eZ\Publish\Core\MVC\Symfony\Controller\Manager
@@ -98,3 +97,12 @@ services:
         arguments: [%fragment.path%]
         calls:
             - [setRequest, [@?request=]]
+
+    ezpublish.decorated_fragment_renderer:
+        class: %ezpublish.decorated_fragment_renderer.class%
+        # Arguments replaced at compile time
+        arguments: []
+        calls:
+            - [setFragmentPath, [%fragment.path%]]
+            - [setSiteAccess, [@ezpublish.siteaccess]]
+        abstract: true

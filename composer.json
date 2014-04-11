@@ -36,7 +36,7 @@
         "zetacomponents/signal-slot": "dev-master#74deb41",
         "zetacomponents/system-information": "dev-master#6743362",
         "zetacomponents/webdav": "1.1.*",
-        "symfony/symfony": "2.3.*",
+        "symfony/symfony": "~2.3",
         "symfony-cmf/routing": "1.1.*",
         "qafoo/rmf": "1.0.*",
         "kriswallsmith/buzz": ">=0.9",
