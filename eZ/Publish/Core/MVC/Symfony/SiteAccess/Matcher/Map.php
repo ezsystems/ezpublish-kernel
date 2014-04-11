@@ -47,17 +47,7 @@ abstract class Map implements VersatileMatcher
      */
     public function __construct( array $map )
     {
-        foreach ( $map as $mapKey => &$value )
-        {
-            // $value can be true in the case of the use of a Compound matcher
-            if ( $value === true )
-            {
-                $value = $mapKey;
-            }
-        }
-
         $this->map = $map;
-        $this->reverseMap = array_flip( $map );
     }
 
     public function setRequest( SimplifiedRequest $request )
@@ -107,12 +97,34 @@ abstract class Map implements VersatileMatcher
      */
     public function reverseMatch( $siteAccessName )
     {
-        if ( !isset( $this->reverseMap[$siteAccessName] ) )
+        $reverseMap = $this->getReverseMap( $siteAccessName );
+
+        if ( !isset( $reverseMap[$siteAccessName] ) )
         {
             return null;
         }
 
-        $this->setMapKey( $this->reverseMap[$siteAccessName] );
+        $this->setMapKey( $reverseMap[$siteAccessName] );
         return $this;
+    }
+
+    private function getReverseMap( $defaultSiteAccess )
+    {
+        if ( !empty( $this->reverseMap ) )
+        {
+            return $this->reverseMap;
+        }
+
+        $map = $this->map;
+        foreach ( $map as &$value )
+        {
+            // $value can be true in the case of the use of a Compound matcher
+            if ( $value === true )
+            {
+                $value = $defaultSiteAccess;
+            }
+        }
+
+        return $this->reverseMap = array_flip( $map );
     }
 }

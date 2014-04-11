@@ -162,7 +162,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
     public function testReverseMatch( $siteAccessName, $originalPathinfo )
     {
         $matcher = new URIElementMatcher( 1 );
-        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => "/my_siteaccess{$originalPathinfo}" ) ) );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => $originalPathinfo ) ) );
         $result = $matcher->reverseMatch( $siteAccessName );
         $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement', $result );
         $this->assertSame( "/{$siteAccessName}{$originalPathinfo}", $result->getRequest()->pathinfo );

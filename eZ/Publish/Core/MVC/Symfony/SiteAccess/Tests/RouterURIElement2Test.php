@@ -169,7 +169,7 @@ class RouterURIElement2Test extends PHPUnit_Framework_TestCase
     {
         $expectedSiteAccessPath = implode( '/', explode( '_', $siteAccessName ) );
         $matcher = new URIElementMatcher( 2 );
-        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => "/my/siteaccess{$originalPathinfo}" ) ) );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => $originalPathinfo ) ) );
 
         $result = $matcher->reverseMatch( $siteAccessName );
         $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement', $result );

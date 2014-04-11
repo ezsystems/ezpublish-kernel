@@ -80,10 +80,9 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
             'something_else' => 'another_siteaccess',
             'toutouyoutou' => 'ezdemo_site',
         );
-        $request = new SimplifiedRequest( array( 'pathinfo' => '/some_uri/foo' ) );
+        $request = new SimplifiedRequest( array( 'pathinfo' => '/foo' ) );
         $matcher = new URIMapMatcher( $config );
         $matcher->setRequest( $request );
-        $this->assertSame( 'some_uri', $matcher->getMapKey() );
 
         $result = $matcher->reverseMatch( 'ezdemo_site' );
         $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI', $result );

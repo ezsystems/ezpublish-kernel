@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
@@ -230,6 +231,12 @@ class RouterTest extends PHPUnit_Framework_TestCase
         );
 
         $router = new Router( $matcherBuilder, $logger, 'default_sa', $config, array( $matchedSiteAccess, 'default_sa' ) );
+        $matcherInitialSA = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer' );
+        $router->setSiteAccess( new SiteAccess( 'test', 'test', $matcherInitialSA ) );
+        $matcherInitialSA
+            ->expects( $this->once() )
+            ->method( 'analyseURI' );
+
         $matcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher' );
         $matcherBuilder
             ->expects( $this->exactly( 2 ) )
@@ -267,6 +274,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
         $config = array( $matcherClass => $matcherConfig );
 
         $router = new Router( $matcherBuilder, $logger, 'default_sa', $config, array( $matchedSiteAccess, 'default_sa' ) );
+        $router->setSiteAccess( new SiteAccess( 'test', 'test' ) );
         $request = $router->getRequest();
         $matcherBuilder
             ->expects( $this->once() )

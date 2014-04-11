@@ -162,7 +162,7 @@ class URIElement implements VersatileMatcher, URILexer
             return null;
         }
 
-        $pathinfo = '/' . implode( '/', $elements ) . '/' . ltrim( $this->analyseURI( $this->request->pathinfo ), '/' );
+        $pathinfo = '/' . implode( '/', $elements ) . '/' . ltrim( $this->request->pathinfo, '/' );
         $this->request->setPathinfo( $pathinfo );
         return $this;
     }

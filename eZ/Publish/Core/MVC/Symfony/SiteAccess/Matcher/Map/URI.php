@@ -80,7 +80,7 @@ class URI extends Map implements URILexer
         {
             $request = $matcher->getRequest();
             // Clean up "old" siteaccess prefix and add the new prefix.
-            $request->setPathinfo( str_replace( $mapKey, $this->reverseMap[$siteAccessName], $request->pathinfo ) );
+            $request->setPathinfo( $this->analyseLink( $request->pathinfo ) );
         }
 
         return $matcher;
