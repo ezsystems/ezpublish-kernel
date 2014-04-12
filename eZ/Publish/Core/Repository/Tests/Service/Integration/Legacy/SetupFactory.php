@@ -10,12 +10,6 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as APILegacySetupFactory;
-use eZ\Publish\Core\Base\ServiceContainer;
-
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -24,55 +18,33 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class SetupFactory extends APILegacySetupFactory
 {
     /**
-     * Service container
-     *
-     * @var \eZ\Publish\Core\Base\ServiceContainer
+     * @var string
      */
-    protected static $legacyServiceContainer;
+    protected $repositoryReference = "ezpublish.api.inner_repository";
 
     /**
      * Returns the service container used for initialization of the repository
-     *
-     * @todo Getting service container statically, too, would be nice
      *
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
     protected function getServiceContainer()
     {
-        if ( !isset( self::$legacyServiceContainer ) )
+        if ( !isset( self::$serviceContainer ) )
         {
-            // TODO include container instead of bootstrap, provide settings
-            $bootstrapPath = __DIR__ . '/../../../../../../../../bootstrap.php';
-            /** @var \eZ\Publish\Core\Base\WrappedServiceContainer $container */
-            $container = include $bootstrapPath;
+            $container = parent::getServiceContainer()->getInnerContainer();
 
             // disable cache - TODO fix bug with trash recover
-            $container->getInnerContainer()->setAlias(
+            $container->setAlias(
                 "ezpublish.api.persistence_handler",
                 "ezpublish.api.storage_engine"
             );
-
-            self::$legacyServiceContainer = $container;
-        }
-
-        return self::$legacyServiceContainer;
-
-        if ( !isset( static::$legacyServiceContainer ) )
-        {
-            $configManager = $this->getConfigurationManager();
-
-            $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
-
-            $serviceSettings['persistence_handler']['alias'] = 'persistence_handler_legacy';
-            $serviceSettings['io_handler']['alias'] = 'io_handler_legacy';
-            $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
-
-            static::$legacyServiceContainer = new ServiceContainer(
-                $serviceSettings,
-                $this->getDependencyConfiguration()
+            // Reset changed language settings from parent factory
+            $container->setParameter(
+                "languages",
+                array()
             );
         }
 
-        return static::$legacyServiceContainer;
+        return static::$serviceContainer;
     }
 }

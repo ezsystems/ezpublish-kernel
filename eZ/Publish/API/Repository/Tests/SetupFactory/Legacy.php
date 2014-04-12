@@ -70,6 +70,8 @@ class Legacy extends SetupFactory
      */
     protected static $initialData;
 
+    protected $repositoryReference = "ezpublish.api.repository";
+
     /**
      * Creates a new setup factory
      */
@@ -98,7 +100,7 @@ class Legacy extends SetupFactory
         }
 
         $this->clearInternalCaches();
-        $repository = $this->getServiceContainer()->get( 'ezpublish.api.inner_repository' );
+        $repository = $this->getServiceContainer()->get( $this->repositoryReference );
 
         $repository->setCurrentUser(
             $repository->getUserService()->loadUser( 14 )
@@ -213,7 +215,7 @@ class Legacy extends SetupFactory
     protected function clearInternalCaches()
     {
         /** @var $handler \eZ\Publish\Core\Persistence\Legacy\Handler */
-        $handler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
+        $handler = $this->getServiceContainer()->get( 'ezpublish.api.storage_engine' );
 
         $contentLanguageHandler = $handler->contentLanguageHandler();
         if ( $contentLanguageHandler instanceof CachingLanguageHandler )
