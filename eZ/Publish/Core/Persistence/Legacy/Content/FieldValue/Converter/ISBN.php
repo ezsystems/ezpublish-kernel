@@ -50,7 +50,7 @@ class ISBN implements Converter
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
-    { 
+    {
         $fieldValue->data = $value->dataText;
         $fieldValue->sortKey = $value->sortKeyString;
     }

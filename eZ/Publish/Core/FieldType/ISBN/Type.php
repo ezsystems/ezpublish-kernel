@@ -29,7 +29,7 @@ class Type extends FieldType
     const LENGTH = 13;
     const PREFIX_978 = 978;
     const PREFIX_979 = 979;
-    
+
     protected $settingsSchema = array(
         "isISBN13" => array(
             "type" => "boolean",
@@ -182,9 +182,9 @@ class Type extends FieldType
         {
             return $this->getEmptyValue();
         }
-        
+
         $isbn = $hash;
-        
+
         $isbnTestNumber = preg_replace( "/[\s|\-]/", "", trim( $isbn ) );
         if ( strlen( $isbnTestNumber ) == 10 )
         {
@@ -193,7 +193,6 @@ class Type extends FieldType
             {
                 throw new InvalidValue( $hash );
             }
-            
         }
         else
         {
@@ -221,7 +220,7 @@ class Type extends FieldType
         $isbnNr = strtoupper( $isbnNr );
         for ( $i = 10; $i > 0; $i-- )
         {
-            if ( is_numeric( $isbnNr{$i-1} ) or ( $i == 10  and $isbnNr{$i-1} == 'X' ) )
+            if ( is_numeric( $isbnNr{$i - 1} ) or ( $i == 10 and $isbnNr{$i - 1} == 'X' ) )
             {
                 if ( ( $i == 1 ) and ( $isbnNr{9} == 'X' ) )
                 {
@@ -229,7 +228,7 @@ class Type extends FieldType
                 }
                 else
                 {
-                    $result += $isbnNr{10-$i} * $i;
+                    $result += $isbnNr{10 - $i} * $i;
                 }
             }
             else
@@ -239,7 +238,7 @@ class Type extends FieldType
         }
         return ( $result % 11 == 0 );
     }
-    
+
     /**
      *  Validates the ISBN-13 number.
      * 
@@ -293,7 +292,7 @@ class Type extends FieldType
 
         return true;
     }
-    
+
     /**
      * Converts a $Value to a hash
      *
