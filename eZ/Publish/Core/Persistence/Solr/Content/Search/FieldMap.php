@@ -82,8 +82,9 @@ class FieldMap
     {
         if ( $this->fieldTypes !== null )
         {
-            return $this->fieldTypes;
+            //return $this->fieldTypes;
         }
+        $this->fieldTypes = array();
 
         foreach ( $this->contentTypeHandler->loadAllGroups() as $group )
         {
