@@ -220,7 +220,7 @@ class Type extends FieldType
         $isbnNr = strtoupper( $isbnNr );
         for ( $i = 10; $i > 0; $i-- )
         {
-            if ( is_numeric( $isbnNr{$i -1} ) or ( $i == 10 and $isbnNr{$i -1} == 'X' ) )
+            if ( is_numeric( $isbnNr{$i - 1} ) or ( $i == 10 and $isbnNr{$i - 1} == 'X' ) )
             {
                 if ( ( $i == 1 ) and ( $isbnNr{9} == 'X' ) )
                 {
@@ -228,7 +228,7 @@ class Type extends FieldType
                 }
                 else
                 {
-                    $result += $isbnNr{10 -$i} * $i;
+                    $result += $isbnNr{10 - $i} * $i;
                 }
             }
             else
