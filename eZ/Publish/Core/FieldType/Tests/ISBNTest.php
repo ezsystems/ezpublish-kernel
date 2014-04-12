@@ -31,7 +31,7 @@ class ISBNTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new ISBN("9789722514095");
+        $fieldType = new ISBN( "9789722514095" );
         $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
 
         return $fieldType;
@@ -155,15 +155,15 @@ class ISBNTest extends FieldTypeTest
         return array(
             array(
                 "9789722514095",
-                new ISBNValue("9789722514095")
+                new ISBNValue( "9789722514095" )
             ),
             array(
                 "978-972-25-1409-5",
-                new ISBNValue("978-972-25-1409-5")
+                new ISBNValue( "978-972-25-1409-5" )
             ),
             array(
                 "0-9752298-0-X",
-                new ISBNValue("0-9752298-0-X")
+                new ISBNValue( "0-9752298-0-X" )
             ),
         );
     }
@@ -207,7 +207,7 @@ class ISBNTest extends FieldTypeTest
     {
         return array(
             array(
-                new ISBNValue("9789722514095"),
+                new ISBNValue( "9789722514095" ),
                 "9789722514095"
             ),
         );
@@ -253,11 +253,11 @@ class ISBNTest extends FieldTypeTest
         return array(
             array(
                 "9789722514095",
-                new ISBNValue("9789722514095")
+                new ISBNValue( "9789722514095" )
             ),
         );
     }
-    
+
     protected function provideFieldTypeIdentifier()
     {
         return 'ezisbn';

@@ -29,7 +29,7 @@ class Value extends BaseValue
      * @param string $isbn
      */
     public function __construct( $isbn = '' )
-    { 
+    {
         $this->isbn = $isbn;
     }
 
@@ -37,7 +37,7 @@ class Value extends BaseValue
      * @see \eZ\Publish\Core\FieldType\Value
      */
     public function __toString()
-    { 
+    {
         return (string)$this->isbn;
     }
 }

@@ -55,7 +55,7 @@ class ISBNIntegrationTest extends BaseIntegrationTest
     {
         $handler = $this->getHandler();
 
-        $fieldType = new FieldType\ISBN\Type("978-972-25-1409-5");
+        $fieldType = new FieldType\ISBN\Type( "978-972-25-1409-5" );
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
         $handler->getFieldTypeRegistry()->register( 'ezisbn', $fieldType );
         $handler->getStorageRegistry()->register(
