@@ -36,6 +36,7 @@ $settingsPath = $installDir . "/eZ/Publish/Core/settings/";
 $loader = new YamlFileLoader( $containerBuilder, new FileLocator( $settingsPath ) );
 
 $loader->load( 'fieldtypes.yml' );
+$loader->load( 'indexable_fieldtypes.yml' );
 $loader->load( 'io.yml' );
 $loader->load( 'papi.yml' );
 $loader->load( 'roles.yml' );
@@ -50,6 +51,7 @@ $containerBuilder->setParameter( "ezpublish.kernel.root_dir", $installDir );
 
 $containerBuilder->addCompilerPass( new Compiler\FieldTypeRepositoryPass() );
 $containerBuilder->addCompilerPass( new Compiler\RegisterLimitationTypePass() );
+
 $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\FieldTypeRegistryPass() );
 $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\CriteriaConverterPass() );
 $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\CriterionFieldValueHandlerRegistryPass() );
