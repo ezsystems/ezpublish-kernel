@@ -17,11 +17,6 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
-use eZ\Publish\Core\Persistence\FieldTypeRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
-
-
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\Core\Base\Container\Compiler;
 use Symfony\Component\Config\FileLocator;
@@ -619,7 +614,6 @@ abstract class BaseIntegrationTest extends TestCase
 
         return $containerBuilder;
     }
-
 
     /**
      * Returns the Handler
