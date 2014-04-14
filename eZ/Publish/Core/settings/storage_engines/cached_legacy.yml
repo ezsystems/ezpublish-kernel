@@ -48,11 +48,6 @@ services:
         class: %ezpublish.spi.persistence.cache.urlAliasHandler.class%
         parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
 
-    ezpublish.spi.persistence.cached_legacy.persistenceLogger:
-        class: %ezpublish.spi.persistence.cache.persistenceLogger.class%
-        arguments:
-            - %ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging%
-
     ezpublish.spi.persistence.cached_legacy:
         class: %ezpublish.spi.persistence.cache.class%
         arguments:
@@ -67,7 +62,7 @@ services:
             - @ezpublish.spi.persistence.cached_legacy.trashHandler
             - @ezpublish.spi.persistence.cached_legacy.locationSearchHandler
             - @ezpublish.spi.persistence.cached_legacy.urlAliasHandler
-            - @ezpublish.spi.persistence.cached_legacy.persistenceLogger
+            - @ezpublish.spi.persistence.cache.persistenceLogger
             - @ezpublish.cache_pool.spi.cache.decorator
         tags:
             - {name: ezpublish.storageEngine, alias: cached_legacy}
