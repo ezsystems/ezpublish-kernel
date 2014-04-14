@@ -45,12 +45,6 @@ class LegacySolr extends Legacy
         if ( !isset( self::$serviceContainer ) )
         {
             $container = parent::getServiceContainer()->getInnerContainer();
-            $settings = include __DIR__ . "/../../../../../../config.php";
-            $installDir = $settings["service"]["parameters"]["install_dir"];
-
-            $settingsPath = $installDir . "/eZ/Publish/Core/settings/";
-            $loader = new YamlFileLoader( $container, new FileLocator( $settingsPath ) );
-            $loader->load( 'storage_engines/legacy_solr.yml' );
 
             $container->addCompilerPass( new Compiler\Storage\Solr\AggregateCriterionVisitorPass() );
             $container->addCompilerPass( new Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass() );
@@ -61,11 +55,7 @@ class LegacySolr extends Legacy
 
             $container->setAlias(
                 "ezpublish.api.persistence_handler",
-                "ezpublish.spi.persistence.solr"
-            );
-            $container->setAlias(
-                "ezpublish.api.storage_engine",
-                "ezpublish.spi.persistence.solr"
+                "ezpublish.spi.persistence.cached_legacy_solr"
             );
         }
 
@@ -80,7 +70,7 @@ class LegacySolr extends Legacy
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
-        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.solr' );
+        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy_solr' );
         $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
         $dbHandlerProperty->setAccessible( true );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db */

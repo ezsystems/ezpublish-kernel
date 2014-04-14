@@ -36,7 +36,7 @@ class SetupFactory extends APILegacySetupFactory
             // disable cache - TODO fix bug with trash recover
             $container->setAlias(
                 "ezpublish.api.persistence_handler",
-                "ezpublish.api.storage_engine"
+                "ezpublish.spi.persistence.legacy"
             );
             // Reset changed language settings from parent factory
             $container->setParameter(

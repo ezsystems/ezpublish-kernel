@@ -215,7 +215,7 @@ class Legacy extends SetupFactory
     protected function clearInternalCaches()
     {
         /** @var $handler \eZ\Publish\Core\Persistence\Legacy\Handler */
-        $handler = $this->getServiceContainer()->get( 'ezpublish.api.storage_engine' );
+        $handler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
 
         $contentLanguageHandler = $handler->contentLanguageHandler();
         if ( $contentLanguageHandler instanceof CachingLanguageHandler )
