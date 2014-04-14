@@ -17,6 +17,7 @@ imports:
 parameters:
     ezpublish.spi.persistence.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
     ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+    ezpublish.persistence.connection.class: Doctrine\DBAL\Driver\Connection
 
 services:
     ezpublish.spi.persistence.legacy:
@@ -42,13 +43,20 @@ services:
     ezpublish.api.storage_engine.legacy.dbhandler:
         class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
         factory_class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
-        factory_method: createFromDSN
+        factory_method: createFromConnection
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.connection
+        lazy: true
+
+    ezpublish.api.storage_engine.legacy.connection:
+        class: %ezpublish.persistence.connection.class%
+        factory_class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_method: createConnectionFromDSN
         arguments:
             - %legacy_dsn%
-        lazy: true
 
     # Alias for backend connection used by eZ Publish storage engine
     # Useful if you need to reuse it in order to access resources not related to eZ Publish,
     # but stored in your backend (e.g. foreign DB tables)
-    ezpublish.connection:
-        alias: ezpublish.api.storage_engine.legacy.dbhandler
+    #ezpublish.connection:
+    #    alias: ezpublish.api.storage_engine.legacy.dbhandler
