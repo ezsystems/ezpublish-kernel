@@ -35,17 +35,20 @@ $containerBuilder = new ContainerBuilder();
 $settingsPath = $installDir . "/eZ/Publish/Core/settings/";
 $loader = new YamlFileLoader( $containerBuilder, new FileLocator( $settingsPath ) );
 
-$loader->load( 'fieldtypes.yml' );
-$loader->load( 'indexable_fieldtypes.yml' );
 $loader->load( 'io.yml' );
-$loader->load( 'papi.yml' );
 $loader->load( 'roles.yml' );
 $loader->load( 'fieldtype_external_storages.yml' );
-$loader->load( 'storage_engines/common.yml' );
-$loader->load( 'storage_engines/legacy.yml' );
-$loader->load( 'storage_engines/cache.yml' );
-$loader->load( 'settings.yml' );
 $loader->load( 'fieldtype_services.yml' );
+$loader->load( 'indexable_fieldtypes.yml' );
+$loader->load( 'fieldtypes.yml' );
+$loader->load( 'papi.yml' );
+$loader->load( 'storage_engines/common.yml' );
+$loader->load( 'storage_engines/cache.yml' );
+$loader->load( 'storage_engines/legacy.yml' );
+$loader->load( 'storage_engines/cached_legacy.yml' );
+$loader->load( 'storage_engines/legacy_solr.yml' );
+$loader->load( 'storage_engines/cached_legacy_solr.yml' );
+$loader->load( 'settings.yml' );
 
 $containerBuilder->setParameter( "ezpublish.kernel.root_dir", $installDir );
 
