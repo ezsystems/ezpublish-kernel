@@ -94,7 +94,7 @@ class LegacyKernelController
         }
 
         $response = $this->legacyResponseManager->generateResponseFromModuleResult( $result );
-        $response->setHeaders( headers_list() );
+        $this->legacyResponseManager->mapHeaders( headers_list(), $response );
 
         return $response;
     }
