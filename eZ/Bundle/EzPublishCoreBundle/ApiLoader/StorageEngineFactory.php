@@ -30,7 +30,7 @@ class StorageEngineFactory
      */
     protected $storageEngines = array();
 
-    public function __construct( $storageRepositoryProvider )
+    public function __construct( StorageRepositoryProvider $storageRepositoryProvider )
     {
         $this->storageRepositoryProvider = $storageRepositoryProvider;
     }
