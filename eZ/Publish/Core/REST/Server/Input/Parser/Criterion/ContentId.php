@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\Base;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId as ContentIdCriterion;
@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentId as Conten
 /**
  * Parser for ViewInput
  */
-class ContentId extends Base
+class ContentId extends BaseParser
 {
     /**
      * Parses input structure to a Criterion object

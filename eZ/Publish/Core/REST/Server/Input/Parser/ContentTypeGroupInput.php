@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -18,7 +19,7 @@ use DateTime;
 /**
  * Parser for ContentTypeGroupInput
  */
-class ContentTypeGroupInput extends Base
+class ContentTypeGroupInput extends BaseParser
 {
     /**
      * ContentType service

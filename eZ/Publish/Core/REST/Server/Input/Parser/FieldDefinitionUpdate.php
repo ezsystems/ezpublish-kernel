@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -18,7 +19,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 /**
  * Parser for FieldDefinitionUpdate
  */
-class FieldDefinitionUpdate extends Base
+class FieldDefinitionUpdate extends BaseParser
 {
     /**
      * ContentType service

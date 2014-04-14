@@ -9,16 +9,16 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-
 use eZ\Publish\Core\REST\Common\Values\RestObjectState;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 
 /**
  * Parser for ContentObjectStates
  */
-class ContentObjectStates extends Base
+class ContentObjectStates extends BaseParser
 {
     /**
      * Parse input structure

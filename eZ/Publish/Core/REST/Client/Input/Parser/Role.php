@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 use eZ\Publish\Core\REST\Client;
@@ -17,7 +17,7 @@ use eZ\Publish\Core\REST\Client;
 /**
  * Parser for Role
  */
-class Role extends Parser
+class Role extends BaseParser
 {
     /**
      * Parse input structure

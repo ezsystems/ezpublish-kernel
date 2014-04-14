@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\Base;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId as LocationRemoteIdCriterion;
@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationRemoteId as
 /**
  * Parser for LocationRemoteId Criterion
  */
-class LocationRemoteId extends Base
+class LocationRemoteId extends BaseParser
 {
     /**
      * Parses input structure to a Criterion object

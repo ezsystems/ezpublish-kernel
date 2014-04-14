@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 use eZ\Publish\API\Repository\Values;
@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values;
 /**
  * Parser for Section
  */
-class Section extends Parser
+class Section extends BaseParser
 {
     /**
      * Parse input structure

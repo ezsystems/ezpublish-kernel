@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup as CoreObjectStateGroup;
@@ -17,7 +17,7 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup as CoreObject
 /**
  * Parser for ObjectStateGroup
  */
-class ObjectStateGroup extends Parser
+class ObjectStateGroup extends BaseParser
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools

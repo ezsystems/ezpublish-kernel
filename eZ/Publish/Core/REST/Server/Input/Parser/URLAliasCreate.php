@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -16,7 +17,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 /**
  * Parser for URLAliasCreate
  */
-class URLAliasCreate extends Base
+class URLAliasCreate extends BaseParser
 {
     /**
      * Parser tools

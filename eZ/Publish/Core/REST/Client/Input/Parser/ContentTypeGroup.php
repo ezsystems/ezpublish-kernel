@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Client\Values;
@@ -17,7 +17,7 @@ use eZ\Publish\Core\REST\Client\Values;
 /**
  * Parser for ContentTypeGroup
  */
-class ContentTypeGroup extends Parser
+class ContentTypeGroup extends BaseParser
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParserTools

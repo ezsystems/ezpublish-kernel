@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values\SessionInput as SessionInputValue;
@@ -16,7 +17,7 @@ use eZ\Publish\Core\REST\Server\Values\SessionInput as SessionInputValue;
 /**
  * Parser for SessionInput
  */
-class SessionInput extends Base
+class SessionInput extends BaseParser
 {
     /**
      * Parse input structure

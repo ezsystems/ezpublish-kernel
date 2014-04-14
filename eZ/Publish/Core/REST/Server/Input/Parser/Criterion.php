@@ -9,13 +9,14 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 
 /**
  * Parser for ViewInput
  */
-abstract class Criterion extends Base
+abstract class Criterion extends BaseParser
 {
     /**
      * @var array

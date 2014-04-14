@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -19,7 +20,7 @@ use eZ\Publish\API\Repository\ContentTypeService;
 /**
  * Parser for UserCreate
  */
-class UserCreate extends Base
+class UserCreate extends BaseParser
 {
     /**
      * User service

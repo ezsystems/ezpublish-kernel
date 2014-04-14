@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Exceptions;
@@ -20,7 +21,7 @@ use eZ\Publish\API\Repository\LocationService;
 /**
  * Parser for UserGroupUpdate
  */
-class UserGroupUpdate extends Base
+class UserGroupUpdate extends BaseParser
 {
     /**
      * User service

@@ -9,15 +9,14 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitation;
 
 /**
  * Parser for Limitation
  */
-class Limitation extends Parser
+class Limitation extends BaseParser
 {
     /**
      * Parse input structure

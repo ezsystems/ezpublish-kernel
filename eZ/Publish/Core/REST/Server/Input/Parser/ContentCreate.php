@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
@@ -21,7 +22,7 @@ use DateTime;
 /**
  * Parser for ContentCreate
  */
-class ContentCreate extends Base
+class ContentCreate extends BaseParser
 {
     /**
      * Content service

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
+use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
@@ -19,7 +20,7 @@ use Exception;
 /**
  * Parser for FieldDefinitionCreate
  */
-class FieldDefinitionCreate extends Base
+class FieldDefinitionCreate extends BaseParser
 {
     /**
      * ContentType service
