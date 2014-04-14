@@ -90,11 +90,14 @@ class LegacyKernelController
 
         if ( $result instanceof ezpKernelRedirect )
         {
-            return $this->legacyResponseManager->generateRedirectResponse( $result );
+            $response = $this->legacyResponseManager->generateRedirectResponse( $result );
+        }
+        else
+        {
+            $response = $this->legacyResponseManager->generateResponseFromModuleResult( $result );
         }
 
-        $response = $this->legacyResponseManager->generateResponseFromModuleResult( $result );
-        $response->setLegacyHeaders( headers_list() );
+        $this->legacyResponseManager->mapHeaders( headers_list(), $response );
 
         return $response;
     }

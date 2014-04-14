@@ -14,6 +14,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
+use DateTime;
 use ezpKernelResult;
 use ezpKernelRedirect;
 
@@ -123,7 +124,56 @@ class LegacyResponseManager
     {
         $response = new LegacyResponse();
         $response->setContent( $this->templateEngine->render( $view, $parameters ) );
+        return $response;
+    }
+
+    /**
+     * Maps headers sent by the legacy stack to $response.
+     *
+     * @param array $headers Array headers.
+     * @param \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse $response
+     *
+     * @return \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse
+     */
+    public function mapHeaders( array $headers, LegacyResponse $response )
+    {
+        foreach ( $headers as $header )
+        {
+            $headerArray = explode( ": ", $header, 2 );
+            $headerName = strtolower( $headerArray[0] );
+            $headerValue = $headerArray[1];
+            // Removing existing header to avoid duplicate values
+            $this->removeHeader( $headerName );
+
+            switch ( $headerName )
+            {
+                // max-age and s-maxage are skipped because they are values of the cache-control header
+                case "etag":
+                    $response->setEtag( $headerValue );
+                    break;
+                case "last-modified":
+                    $response->setLastModified( new DateTime( $headerValue ) );
+                    break;
+                case "expires":
+                    $response->setExpires( new DateTime( $headerValue ) );
+                    break;
+                default;
+                    $response->headers->set( $headerName, $headerValue, true );
+                    break;
+            }
+        }
 
         return $response;
+    }
+
+    /**
+     * Wraps header_remove() function.
+     * This is mainly to isolate it and become testable.
+     *
+     * @param string $headerName
+     */
+    protected function removeHeader( $headerName )
+    {
+        header_remove( $headerName );
     }
 }
