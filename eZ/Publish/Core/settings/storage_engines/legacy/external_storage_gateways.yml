@@ -60,7 +60,7 @@ services:
     ezpublish.fieldType.ezpage.storage_gateway:
         class: %ezpublish.fieldType.ezpage.storage_gateway.class%
         calls:
-            - [setConnection, [@ezpublish.connection]]
+            - [setConnection, [@ezpublish.api.storage_engine.legacy.dbhandler]]
 
     ezpublish.fieldType.ezimage.storage_gateway:
         class: %ezpublish.fieldType.ezimage.storage_gateway.class%
