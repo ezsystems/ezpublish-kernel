@@ -233,7 +233,10 @@ class UserService implements UserServiceInterface
         if ( !$this->permissionsService->canUser( 'content', 'edit', $userGroup ) )
             throw new UnauthorizedException( 'content', 'edit' );
 
-        if ( $userGroupUpdateStruct->contentUpdateStruct->creatorId === null )
+        if (
+            $userGroupUpdateStruct->contentUpdateStruct !== null &&
+            $userGroupUpdateStruct->contentUpdateStruct->creatorId === null
+        )
         {
             $userGroupUpdateStruct->contentUpdateStruct->creatorId = $this->permissionsService->getCurrentUser()->id;
         }
@@ -382,6 +385,14 @@ class UserService implements UserServiceInterface
     {
         if ( !$this->permissionsService->canUser( 'content', 'edit', $user ) )
             throw new UnauthorizedException( 'content', 'edit' );
+
+        if (
+            $userUpdateStruct->contentUpdateStruct !== null &&
+            $userUpdateStruct->contentUpdateStruct->creatorId === null
+        )
+        {
+            $userUpdateStruct->contentUpdateStruct->creatorId = $this->permissionsService->getCurrentUser()->id;
+        }
 
         return $this->innerUserService->updateUser( $user, $userUpdateStruct );
     }
