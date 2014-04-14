@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LegacyDbHandlerFactoryTest class.
+ * File containing the StorageConnectionFactoryTest class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,15 +9,15 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyDbHandlerFactory;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageConnectionFactory;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider;
 
-class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
+class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider buildLegacyDbHandlerProvider
+     * @dataProvider getConnectionProvider
      */
-    public function testBuildLegacyDbHandler( $repositoryAlias, $doctrineConnection )
+    public function testGetConnection( $repositoryAlias, $doctrineConnection )
     {
         $repositories = array(
             $repositoryAlias => array(
@@ -36,11 +36,6 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
         $container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
         $container
             ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'ezpublish.api.storage_engine.legacy.dbhandler.class' )
-            ->will( $this->returnValue( 'eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler' ) );
-        $container
-            ->expects( $this->once() )
             ->method( 'has' )
             ->with( "doctrine.dbal.{$doctrineConnection}_connection" )
             ->will( $this->returnValue( true ) );
@@ -51,16 +46,16 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $this->getMock( 'Doctrine\DBAL\Driver\Connection' ) ) );
 
         $storageRepositoryProvider = new StorageRepositoryProvider( $configResolver, $repositories );
-        $factory = new LegacyDbHandlerFactory( $storageRepositoryProvider );
+        $factory = new StorageConnectionFactory( $storageRepositoryProvider );
         $factory->setContainer( $container );
-        $handler = $factory->buildLegacyDbHandler();
+        $connection = $factory->getConnection();
         $this->assertInstanceOf(
-            'eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler',
-            $handler
+            'Doctrine\DBAL\Driver\Connection',
+            $connection
         );
     }
 
-    public function buildLegacyDbHandlerProvider()
+    public function getConnectionProvider()
     {
         return array(
             array( 'my_repository', 'my_doctrine_connection' ),
@@ -72,7 +67,7 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
      */
-    public function testBuildLegacyDbHandlerInvalidRepository()
+    public function testGetConnectionInvalidRepository()
     {
         $repositories = array(
             'foo' => array(
@@ -89,15 +84,15 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( 'inexistent_repository' ) );
 
         $storageRepositoryProvider = new StorageRepositoryProvider( $configResolver, $repositories );
-        $factory = new LegacyDbHandlerFactory( $storageRepositoryProvider );
+        $factory = new StorageConnectionFactory( $storageRepositoryProvider );
         $factory->setContainer( $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' ) );
-        $factory->buildLegacyDbHandler();
+        $factory->getConnection();
     }
 
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testBuildLegacyDbHandlerInvalidConnection()
+    public function testGetConnectionInvalidConnection()
     {
         $storageRepositoryProviderMock = $this->getMockBuilder( 'eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider' )
             ->disableOriginalConstructor()
@@ -123,8 +118,8 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             ->method( 'getParameter' )
             ->with( 'doctrine.connections' )
             ->will( $this->returnValue( array() ) );
-        $factory = new LegacyDbHandlerFactory( $storageRepositoryProviderMock );
+        $factory = new StorageConnectionFactory( $storageRepositoryProviderMock );
         $factory->setContainer( $container );
-        $factory->buildLegacyDbHandler();
+        $factory->getConnection();
     }
 }

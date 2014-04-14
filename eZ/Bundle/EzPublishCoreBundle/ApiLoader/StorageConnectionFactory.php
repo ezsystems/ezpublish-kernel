@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LegacyDbHandlerFactory class.
+ * File containing the StorageConnectionFactory class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,14 +12,14 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use InvalidArgumentException;
 
-class LegacyDbHandlerFactory extends ContainerAware
+class StorageConnectionFactory extends ContainerAware
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
      */
     protected $storageRepositoryProvider;
 
-    public function __construct( $storageRepositoryProvider )
+    public function __construct( StorageRepositoryProvider $storageRepositoryProvider )
     {
         $this->storageRepositoryProvider = $storageRepositoryProvider;
     }
@@ -31,7 +31,7 @@ class LegacyDbHandlerFactory extends ContainerAware
      *
      * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
-    public function buildLegacyDbHandler()
+    public function getConnection()
     {
         $repositoryConfig = $this->storageRepositoryProvider->getRepositoryConfig();
         // Taking provided connection name if any.
@@ -54,7 +54,6 @@ class LegacyDbHandlerFactory extends ContainerAware
             );
         }
 
-        $connectionHandlerClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.dbhandler.class' );
-        return new $connectionHandlerClass( $this->container->get( $doctrineConnectionId ) );
+        return $this->container->get( $doctrineConnectionId );
     }
 }
