@@ -48,11 +48,10 @@ services:
         class: %ezpublish.api.storage_engine.factory.class%
         arguments: [@ezpublish.api.storage_repository_provider]
 
-    ezpublish.api.storage_engine:
+    ezpublish.api.persistence_handler:
         class: %ezpublish.api.storage_engine.class%
         factory_service: ezpublish.api.storage_engine.factory
         factory_method: buildStorageEngine
-        public: false
 
     # Symfony event converter Slot
     ezpublish.signalslot.event_converter_slot:
