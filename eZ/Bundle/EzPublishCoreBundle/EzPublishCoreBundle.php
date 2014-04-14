@@ -26,6 +26,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\XmlTextConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory;
@@ -53,6 +54,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new SecurityPass );
         $container->addCompilerPass( new RichTextHtml5ConverterPass );
         $container->addCompilerPass( new FragmentPass );
+        $container->addCompilerPass( new StorageConnectionPass );
 
         $container->addCompilerPass( new LegacyStorage\FieldTypeRegistryPass() );
         $container->addCompilerPass( new LegacyStorage\FieldValueConverterRegistryPass );
