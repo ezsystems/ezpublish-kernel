@@ -22,8 +22,7 @@ services:
         abstract: true
         arguments:
             - @ezpublish.api.inner_repository
-            - @ezpublish.spi.persistence.solr
-            #- @ezpublish.api.persistence_handler
+            - @ezpublish.api.persistence_handler
 
     ezpublish.persistence.solr.slot.publish_version:
         parent: ezpublish.persistence.solr.slot
