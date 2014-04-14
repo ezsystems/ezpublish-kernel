@@ -112,6 +112,11 @@ class ChainRoutingPassTest extends AbstractCompilerPassTest
             array( '%ezpublish.default_router.legacy_aware_routes%' )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'router.default',
+            'setSiteAccessRouter',
+            array( new Reference( 'ezpublish.siteaccess_router' ) )
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.chain_router',
             'add',
             array( new Reference( 'router.default' ), 255 )

@@ -10,9 +10,11 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Routing;
 
 use eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
+use ReflectionObject;
 
 class DefaultRouterTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,11 +28,17 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
      */
     private $configResolver;
 
+    /**
+     * @var \Symfony\Component\Routing\RequestContext
+     */
+    private $requestContext;
+
     protected function setUp()
     {
         parent::setUp();
         $this->container = $this->getMock( 'Symfony\\Component\\DependencyInjection\\ContainerInterface' );
         $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
+        $this->requestContext = new RequestContext();
     }
 
     /**
@@ -40,9 +48,10 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
      */
     private function generateRouter( array $mockedMethods = array() )
     {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|DefaultRouter $router */
         $router = $this
             ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\Routing\\DefaultRouter' )
-            ->setConstructorArgs( array( $this->container, 'foo' ) )
+            ->setConstructorArgs( array( $this->container, 'foo', array(), $this->requestContext ) )
             ->setMethods( array_merge( $mockedMethods ) )
             ->getMock();
         $router->setConfigResolver( $this->configResolver );
@@ -264,6 +273,60 @@ class DefaultRouterTest extends \PHPUnit_Framework_TestCase
             array( '/foo/bar/baz', '/foo/bar/baz', '/test_siteaccess/foo/bar/baz', 'test_siteaccess', true, false, null ),
             array( '/foo/root_folder/bar/baz', '/bar/baz', '/foo/root_folder/test_siteaccess/bar/baz', 'test_siteaccess', true, false, null ),
             array( '/foo/bar/baz', '/foo/bar/baz', '/foo/bar/baz', 'test_siteaccess', true, false, '_dontwantsiteaccess' ),
+        );
+    }
+
+    public function testGenerateReverseSiteAccessMatch()
+    {
+        $routeName = 'some_route_name';
+        $urlGenerated = 'http://phoenix-rises.fm/foo/bar';
+
+        $siteAccessName = 'foo_test';
+        $siteAccessRouter = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface' );
+        $versatileMatcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher' );
+        $simplifiedRequest = new SimplifiedRequest(
+            array(
+                'host' => 'phoenix-rises.fm',
+                'scheme' => 'http'
+            )
+        );
+        $versatileMatcher
+            ->expects( $this->once() )
+            ->method( 'getRequest' )
+            ->will( $this->returnValue( $simplifiedRequest ) );
+        $siteAccessRouter
+            ->expects( $this->once() )
+            ->method( 'matchByName' )
+            ->with( $siteAccessName )
+            ->will( $this->returnValue( new SiteAccess( $siteAccessName, 'foo', $versatileMatcher ) ) );
+
+        $generator = $this->getMock( 'Symfony\Component\Routing\Generator\UrlGeneratorInterface' );
+        $generator
+            ->expects( $this->at( 0 ) )
+            ->method( 'setContext' )
+            ->with( $this->isInstanceOf( 'Symfony\Component\Routing\RequestContext' ) );
+        $generator
+            ->expects( $this->at( 1 ) )
+            ->method( 'generate' )
+            ->with( $routeName )
+            ->will( $this->returnValue( $urlGenerated ) );
+        $generator
+            ->expects( $this->at( 2 ) )
+            ->method( 'setContext' )
+            ->with( $this->requestContext );
+
+        $router = new DefaultRouter( $this->container, 'foo', array(), $this->requestContext );
+        $router->setConfigResolver( $this->configResolver );
+        $router->setSiteAccess( new SiteAccess( 'test', 'test', $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher' ) ) );
+        $router->setSiteAccessRouter( $siteAccessRouter );
+        $refRouter = new ReflectionObject( $router );
+        $refGenerator = $refRouter->getProperty( 'generator' );
+        $refGenerator->setAccessible( true );
+        $refGenerator->setValue( $router, $generator );
+
+        $this->assertSame(
+            $urlGenerated,
+            $router->generate( $routeName, array( 'siteaccess' => $siteAccessName ), DefaultRouter::ABSOLUTE_PATH )
         );
     }
 }
