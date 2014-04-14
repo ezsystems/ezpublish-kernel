@@ -55,8 +55,3 @@ services:
         arguments:
             - %legacy_dsn%
 
-    # Alias for backend connection used by eZ Publish storage engine
-    # Useful if you need to reuse it in order to access resources not related to eZ Publish,
-    # but stored in your backend (e.g. foreign DB tables)
-    #ezpublish.connection:
-    #    alias: ezpublish.api.storage_engine.legacy.dbhandler
