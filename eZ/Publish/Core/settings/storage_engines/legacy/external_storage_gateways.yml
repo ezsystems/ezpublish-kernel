@@ -3,7 +3,7 @@ parameters:
     ezpublish.persistence.legacy.external_storage_handler.class: eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
 
     ezpublish.fieldType.ezbinaryfile.storage_gateway.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage
+    ezpublish.fieldType.ezgmaplocation.storage_gateway.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezimage.storage_gateway.class: eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezkeyword.storage_gateway.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage
     ezpublish.fieldType.ezmedia.storage_gateway.class: eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\LegacyStorage
@@ -68,7 +68,7 @@ services:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezimage, identifier: LegacyStorage}
 
     ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway:
-        class: %ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class%
+        class: %ezpublish.fieldType.ezgmaplocation.storage_gateway.class%
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezgmaplocation, identifier: LegacyStorage}
 
