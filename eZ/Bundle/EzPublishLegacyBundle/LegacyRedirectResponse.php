@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LegacyResponse class.
+ * File containing the LegacyRedirectResponse class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,24 +10,16 @@
 namespace eZ\Bundle\EzPublishLegacyBundle;
 
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse\LegacyResponseManager;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * Class LegacyResponse
+ * Class LegacyRedirectResponse
  *
- * An extend of the Symfony Response class with an extra module result attribute.
- * It can be useful if you need to access module result information in an event listener.
+ * An extend of the Symfony RedirectResponse class with header cleanup features.
  *
  */
-class LegacyResponse extends Response
+class LegacyRedirectResponse extends RedirectResponse
 {
-    /**
-     * Module result sent by the legacy stack.
-     *
-     * @var array
-     */
-    protected $moduleResult = null;
-
     /**
      * Sets the response headers from an array of legacy headers.
      *
@@ -49,26 +41,6 @@ class LegacyResponse extends Response
     public function removeHeader( $headerName )
     {
         header_remove( $headerName );
-    }
-
-    /*
-     * Sets the module result in the response.
-     *
-     * @param array $moduleResult
-     */
-    public function setModuleResult( $moduleResult )
-    {
-        $this->moduleResult = $moduleResult;
-    }
-
-    /**
-     * Gets the module result if it exists.
-     *
-     * @return array result or null if it doesn't exist.
-     */
-    public function getModuleResult()
-    {
-        return $this->moduleResult;
     }
 
 }
