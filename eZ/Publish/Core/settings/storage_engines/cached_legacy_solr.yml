@@ -1,0 +1,74 @@
+# Depends on 'legacy_solr' storage
+services:
+    ezpublish.spi.persistence.cached_legacy_solr.abstractHandler:
+        class: %ezpublish.spi.persistence.cache.abstractHandler.class%
+        abstract:  true
+        arguments:
+            - @ezpublish.cache_pool.spi.cache.decorator
+            - @ezpublish.spi.persistence.legacy_solr
+            - @ezpublish.spi.persistence.cache.persistenceLogger
+
+    ezpublish.spi.persistence.cached_legacy_solr.sectionHandler:
+        class: %ezpublish.spi.persistence.cache.sectionHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.locationHandler:
+        class: %ezpublish.spi.persistence.cache.locationHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.contentHandler:
+        class: %ezpublish.spi.persistence.cache.contentHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.contentLanguageHandler:
+        class: %ezpublish.spi.persistence.cache.contentLanguageHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.contentTypeHandler:
+        class: %ezpublish.spi.persistence.cache.contentTypeHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.userHandler:
+        class: %ezpublish.spi.persistence.cache.userHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.searchHandler:
+        class: %ezpublish.spi.persistence.cache.searchHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.trashHandler:
+        class: %ezpublish.spi.persistence.cache.trashHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.locationSearchHandler:
+        class: %ezpublish.spi.persistence.cache.locationSearchHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.urlAliasHandler:
+        class: %ezpublish.spi.persistence.cache.urlAliasHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy_solr.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy_solr.persistenceLogger:
+        class: %ezpublish.spi.persistence.cache.persistenceLogger.class%
+        arguments:
+            - %ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging%
+
+    ezpublish.spi.persistence.cached_legacy_solr:
+        class: %ezpublish.spi.persistence.cache.class%
+        arguments:
+            - @ezpublish.spi.persistence.legacy_solr
+            - @ezpublish.spi.persistence.cached_legacy_solr.sectionHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.locationHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.contentHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.contentLanguageHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.contentTypeHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.userHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.searchHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.trashHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.locationSearchHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.urlAliasHandler
+            - @ezpublish.spi.persistence.cached_legacy_solr.persistenceLogger
+            - @ezpublish.cache_pool.spi.cache.decorator
+        tags:
+            - {name: ezpublish.storageEngine, alias: cached_legacy_solr}
+        lazy: true
