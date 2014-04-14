@@ -48,13 +48,9 @@ services:
             - @ezpublish.api.persistence_handler
         lazy: true
 
+    # Storage engine switch
     ezpublish.api.persistence_handler:
-        #To disable cache, switch alias to ezpublish.api.storage_engine
-        alias: ezpublish.spi.persistence.cache
-
-    # TODO: figure out how to handle cache storage
-    ezpublish.api.storage_engine:
-        alias: ezpublish.spi.persistence.legacy
+        alias: ezpublish.spi.persistence.cached_legacy
 
     ezpublish.api.service.content:
         class: %ezpublish.api.service.content.class%
