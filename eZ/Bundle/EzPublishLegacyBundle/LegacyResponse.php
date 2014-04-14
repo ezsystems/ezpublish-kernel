@@ -29,13 +29,13 @@ class LegacyResponse extends Response
     protected $moduleResult = null;
 
     /**
-     * Sets the response headers from an array of legacy headers.
+     * Sets headers sent by the legacy stack to $response.
      *
-     * The array of legacy headers reads as follow: array('X-Foo: Bar', ...)
+     * The array of headers is as follow: array('X-Foo: Bar', ...)
      *
-     * @param array $headers Array of legacy headers.
+     * @param array $headers Array headers.
      */
-    public function setLegacyHeaders( array $headers )
+    public function setHeaders( array $headers )
     {
         foreach ( $headers as $header )
         {

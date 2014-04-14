@@ -38,7 +38,7 @@ class LegacyResponseTest extends PHPUnit_Framework_TestCase
             ->expects( $this->exactly( count( $headers ) ) )
             ->method( 'removeHeader' );
 
-        $response->setLegacyHeaders( $headers );
+        $response->setHeaders( $headers );
 
         $this->assertSame( 'Bar', $response->headers->get( 'X-Foo' ) );
         $this->assertSame( '"' . $etag . '"', $response->getEtag() );
