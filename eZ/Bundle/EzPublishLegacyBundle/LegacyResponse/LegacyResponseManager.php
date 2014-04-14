@@ -9,13 +9,14 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 
+use eZ\Bundle\EzPublishLegacyBundle\LegacyRedirectResponse;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 use ezpKernelResult;
 use ezpKernelRedirect;
+use DateTime;
 
 /**
  * Utility class to manage Response from legacy controllers, map headers...
@@ -100,15 +101,15 @@ class LegacyResponseManager
     }
 
     /**
-     * Generates proper RedirectResponse from $redirectResult.
+     * Generates proper LegacyRedirectResponse from $redirectResult.
      *
      * @param \ezpKernelRedirect $redirectResult
      *
-     * @return RedirectResponse
+     * @return LegacyRedirectResponse
      */
     public function generateRedirectResponse( ezpKernelRedirect $redirectResult )
     {
-        return new RedirectResponse( $redirectResult->getTargetUrl(), $redirectResult->getStatusCode() );
+        return new LegacyRedirectResponse( $redirectResult->getTargetUrl(), $redirectResult->getStatusCode() );
     }
 
     /**
@@ -125,5 +126,42 @@ class LegacyResponseManager
         $response->setContent( $this->templateEngine->render( $view, $parameters ) );
 
         return $response;
+    }
+
+    /**
+     * Sets the response headers from an array of legacy headers.
+     *
+     * The array of legacy headers reads as follow: array('X-Foo: Bar', ...)
+     *
+     * @param LegacyResponse|LegacyRedirectResponse $response
+     * @param array $headers Array of legacy headers.
+     */
+    public static function updateLegacyHeaders( $response, array $headers )
+    {
+        foreach ( $headers as $header )
+        {
+            $headerArray = explode( ': ', $header, 2 );
+            $headerName = strtolower( $headerArray[0] );
+            $headerValue = $headerArray[1];
+            // Removing existing header to avoid duplicate values
+            $response->removeHeader( $headerName );
+
+            switch ( $headerName )
+            {
+                // max-age and s-maxage are skipped because they are values of the cache-control header
+                case 'etag':
+                    $response->setEtag( $headerValue );
+                    break;
+                case 'last-modified':
+                    $response->setLastModified( new DateTime( $headerValue ) );
+                    break;
+                case 'expires':
+                    $response->setExpires( new DateTime( $headerValue ) );
+                    break;
+                default;
+                    $response->headers->set( $headerName, $headerValue, true );
+                    break;
+            }
+        }
     }
 }

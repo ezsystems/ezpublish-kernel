@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishLegacyBundle\Tests\LegacyResponse;
+namespace eZ\Bundle\EzPublishLegacyBundle\Tests;
 
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use PHPUnit_Framework_TestCase;
@@ -15,6 +15,13 @@ use DateTime;
 
 class LegacyResponseTest extends PHPUnit_Framework_TestCase
 {
+    public function generateMockResponse()
+    {
+        return $this->getMockBuilder( 'eZ\Bundle\EzPublishLegacyBundle\LegacyResponse' )
+                ->setMethods( array( 'removeHeader' ) )
+                ->getMock();
+    }
+
     public function testSetHeaders()
     {
         $etag = '86fb269d190d2c85f6e0468ceca42a20';
@@ -30,9 +37,7 @@ class LegacyResponseTest extends PHPUnit_Framework_TestCase
 
         // Partially mock the legacy response to emulate calls
         // to the header_remove() function.
-        $response = $this->getMockBuilder( 'eZ\Bundle\EzPublishLegacyBundle\LegacyResponse' )
-            ->setMethods( array( 'removeHeader' ) )
-            ->getMock();
+        $response = $this->generateMockResponse();
 
         $response
             ->expects( $this->exactly( count( $headers ) ) )
