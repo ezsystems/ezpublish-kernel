@@ -299,32 +299,6 @@ class RepositoryTest extends BaseTest
     }
 
     /**
-     * @HACK this is a hack to get the Repository without current user being set
-     * @todo find a way to do it differently
-     *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     */
-    private function setNullAsCurrentUser( $repository )
-    {
-        while ( true )
-        {
-            $repositoryReflection = new \ReflectionObject( $repository );
-            // If the repository is decorated, we need to recurse in the "repository" property
-            if ( !$repositoryReflection->hasProperty( "repository" ) )
-            {
-                break;
-            }
-
-            $repositoryProperty = $repositoryReflection->getProperty( "repository" );
-            $repositoryProperty->setAccessible( true );
-            $repository = $repositoryProperty->getValue( $repository );
-        }
-        $currentUserProperty = new \ReflectionProperty( $repository, 'currentUser' );
-        $currentUserProperty->setAccessible( true );
-        $currentUserProperty->setValue( $repository, null );
-    }
-
-    /**
      * Test for the getCurrentUser() method.
      *
      * @return void
@@ -335,8 +309,6 @@ class RepositoryTest extends BaseTest
     public function testGetCurrentUserReturnsAnonymousUser()
     {
         $repository = $this->getRepository();
-        $this->setNullAsCurrentUser( $repository );
-
         $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
@@ -367,7 +339,6 @@ class RepositoryTest extends BaseTest
     public function testSetCurrentUser()
     {
         $repository = $this->getRepository();
-        $this->setNullAsCurrentUser( $repository );
 
         $administratorUserId = $this->generateId( 'user', 14 );
 
