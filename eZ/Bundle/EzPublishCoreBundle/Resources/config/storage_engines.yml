@@ -1,23 +1,17 @@
 parameters:
-    ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-    ezpublish.api.storage_engine.legacy.dbhandler.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyDbHandlerFactory
+    ezpublish.persistence.connection.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageConnectionFactory
     #ezpublish.api.storage_engine.legacy.dsn: <database_type>://<user>:<password>@<host>/<database_name>
     ezpublish.api.storage_engine.legacy.defer_type_update: false
 
 services:
-    ezpublish.api.storage_engine.legacy.dbhandler.factory:
-        class: %ezpublish.api.storage_engine.legacy.dbhandler.factory.class%
+    ezpublish.persistence.connection.factory:
+        class: %ezpublish.persistence.connection.factory.class%
         arguments: [@ezpublish.api.storage_repository_provider]
         calls:
             - [setContainer, [@service_container]]
 
-    ezpublish.api.storage_engine.legacy.dbhandler:
-        class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
-        factory_service: ezpublish.api.storage_engine.legacy.dbhandler.factory
-        factory_method: buildLegacyDbHandler
+    ezpublish.persistence.connection:
+        class: %ezpublish.persistence.connection.class%
+        factory_service: ezpublish.persistence.connection.factory
+        factory_method: getConnection
         lazy: true
-
-    # Alias for backend connection used by eZ Publish storage engine
-    # Useful if you need to reuse it in order to access resources not related to eZ Publish, but stored in your backend (e.g. foreign DB tables)
-    ezpublish.connection:
-        alias: ezpublish.api.storage_engine.legacy.dbhandler
