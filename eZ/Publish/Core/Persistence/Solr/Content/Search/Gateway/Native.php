@@ -93,7 +93,15 @@ class Native extends Gateway
      *
      * @return void
      */
-    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler, FieldNameGenerator $nameGenerator )
+    public function __construct(
+        HttpClient $client,
+        CriterionVisitor $criterionVisitor,
+        SortClauseVisitor $sortClauseVisitor,
+        FacetBuilderVisitor $facetBuilderVisitor,
+        FieldValueMapper $fieldValueMapper,
+        ContentHandler $contentHandler,
+        FieldNameGenerator $nameGenerator
+    )
     {
         $this->client              = $client;
         $this->criterionVisitor    = $criterionVisitor;
