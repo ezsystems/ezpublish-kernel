@@ -86,6 +86,10 @@ Changes affecting version compatibility with former or future versions.
 * In semantic configuration, `ezpublish.system.<siteAccessName>.session_name` is deprecated.
   Use `ezpublish.system.<siteAccessName>.session.name` instead.
 
+* All Location based SortClauses, as well as PriorityCriterion and DepthCriterion has been
+  deprecated for content search use since their behaviour is unpredictable by design when
+  content has several locations. Instead use same functionality on new Location Search API.
+
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).
