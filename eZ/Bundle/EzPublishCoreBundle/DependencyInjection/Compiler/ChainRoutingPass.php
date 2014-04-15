@@ -43,6 +43,10 @@ class ChainRoutingPass implements CompilerPassInterface
                 'setLegacyAwareRoutes',
                 array( '%ezpublish.default_router.legacy_aware_routes%' )
             );
+            $defaultRouter->addMethodCall(
+                'setSiteAccessRouter',
+                array( new Reference( 'ezpublish.siteaccess_router' ) )
+            );
             if ( !$defaultRouter->hasTag( 'router' ) )
             {
                 $defaultRouter->addTag(

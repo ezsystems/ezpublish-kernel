@@ -167,8 +167,6 @@ services:
         class: %ezpublish_legacy.url_generator.class%
         arguments: [@ezpublish_legacy.kernel]
         parent: ezpublish.url_generator.base
-        calls:
-            - [setSiteAccess, [@ezpublish.siteaccess]]
 
     ezpublish_legacy.siteaccess_mapper:
         class: %ezpublish_legacy.siteaccess_mapper.class%

@@ -13,7 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 
-class Host extends Map implements Matcher
+class Host extends Map
 {
     public function getName()
     {
@@ -24,11 +24,25 @@ class Host extends Map implements Matcher
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
-     *
-     * @return void
      */
     public function setRequest( SimplifiedRequest $request )
     {
-        $this->setMapKey( $request->host );
+        if ( !$this->key )
+        {
+            $this->setMapKey( $request->host );
+        }
+
+        parent::setRequest( $request );
+    }
+
+    public function reverseMatch( $siteAccessName )
+    {
+        $matcher = parent::reverseMatch( $siteAccessName );
+        if ( $matcher instanceof Host )
+        {
+            $matcher->getRequest()->setHost( $matcher->getMapKey() );
+        }
+
+        return $matcher;
     }
 }

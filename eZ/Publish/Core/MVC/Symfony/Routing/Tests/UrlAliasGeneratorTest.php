@@ -47,11 +47,17 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
      */
     private $urlAliasGenerator;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $siteAccessRouter;
+
     protected function setUp()
     {
         parent::setUp();
         $this->router = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
         $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
+        $this->siteAccessRouter = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface' );
         $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
         $this->repository = $repository = $this
             ->getMockBuilder( $repositoryClass )
@@ -76,9 +82,10 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
 
         $this->urlAliasGenerator = new UrlAliasGenerator(
             $this->repository,
-            $this->router,
-            $this->logger
+            $this->router
         );
+        $this->urlAliasGenerator->setLogger( $this->logger );
+        $this->urlAliasGenerator->setSiteAccessRouter( $this->siteAccessRouter );
     }
 
     public function testGetPathPrefixByRootLocationId()
@@ -160,13 +167,7 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->with( $location, false )
             ->will( $this->returnValue( array( $urlAlias ) ) );
 
-        $siteAccessMatcher = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer' );
-        $siteAccessMatcher
-            ->expects( $this->once() )
-            ->method( 'analyseLink' )
-            ->with( $urlAlias->path )
-            ->will( $this->returnArgument( 0 ) );
-        $this->urlAliasGenerator->setSiteAccess( new SiteAccess( 'test', 'fake', $siteAccessMatcher ) );
+        $this->urlAliasGenerator->setSiteAccess( new SiteAccess( 'test', 'fake', $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer' ) ) );
 
         $this->assertSame( $expected, $this->urlAliasGenerator->doGenerate( $location, $parameters ) );
     }

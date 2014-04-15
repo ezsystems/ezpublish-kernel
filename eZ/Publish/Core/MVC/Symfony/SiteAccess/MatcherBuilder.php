@@ -25,7 +25,7 @@ class MatcherBuilder implements MatcherBuilderInterface
      * @param mixed $matchingConfiguration Configuration to pass to the matcher. Can be anything the matcher supports.
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request The request to match against.
      *
-     * @return \eZ\Bundle\EzPublishCoreBundle\SiteAccess\Matcher
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher
      */
     public function buildMatcher( $matcherIdentifier, $matchingConfiguration, SimplifiedRequest $request )
     {
@@ -34,6 +34,7 @@ class MatcherBuilder implements MatcherBuilderInterface
         if ( $matcherIdentifier[0] !== '\\' )
             $matcherIdentifier = __NAMESPACE__ . "\\Matcher\\$matcherIdentifier";
 
+        /** @var $matcher \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher */
         $matcher = new $matcherIdentifier( $matchingConfiguration );
         $matcher->setRequest( $request );
 

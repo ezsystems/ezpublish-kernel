@@ -74,6 +74,62 @@ class SimplifiedRequest extends ValueObject
     protected $headers;
 
     /**
+     * @param array $headers
+     */
+    public function setHeaders( array $headers )
+    {
+        $this->headers = $headers;
+    }
+
+    /**
+     * @param string $host
+     */
+    public function setHost( $host )
+    {
+        $this->host = $host;
+    }
+
+    /**
+     * @param array $languages
+     */
+    public function setLanguages( array $languages )
+    {
+        $this->languages = $languages;
+    }
+
+    /**
+     * @param string $pathinfo
+     */
+    public function setPathinfo( $pathinfo )
+    {
+        $this->pathinfo = $pathinfo;
+    }
+
+    /**
+     * @param string $port
+     */
+    public function setPort( $port )
+    {
+        $this->port = $port;
+    }
+
+    /**
+     * @param array $queryParams
+     */
+    public function setQueryParams( array $queryParams )
+    {
+        $this->queryParams = $queryParams;
+    }
+
+    /**
+     * @param string $scheme
+     */
+    public function setScheme( $scheme )
+    {
+        $this->scheme = $scheme;
+    }
+
+    /**
      * Constructs a SimplifiedRequest object from a standard URL (http://www.example.com/foo/bar?queryParam=value)
      *
      * @param string $url

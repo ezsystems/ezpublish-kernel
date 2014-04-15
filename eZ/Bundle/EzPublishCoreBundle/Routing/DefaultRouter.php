@@ -10,8 +10,10 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Routing;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -36,6 +38,11 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     protected $configResolver;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface
+     */
+    protected $siteAccessRouter;
 
     public function setConfigResolver( ConfigResolverInterface $configResolver )
     {
@@ -66,6 +73,14 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
     public function setLegacyAwareRoutes( array $routes )
     {
         $this->legacyAwareRoutes = $routes;
+    }
+
+    /**
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface $siteAccessRouter
+     */
+    public function setSiteAccessRouter( SiteAccessRouterInterface $siteAccessRouter )
+    {
+        $this->siteAccessRouter = $siteAccessRouter;
     }
 
     /**
@@ -101,10 +116,34 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
 
     public function generate( $name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH )
     {
-        $url = parent::generate( $name, $parameters, $referenceType );
-        if ( $this->isSiteAccessAwareRoute( $name ) && isset( $this->siteAccess ) && $this->siteAccess->matcher instanceof URILexer )
+        $siteAccess = $this->siteAccess;
+        $originalContext = $context = $this->getContext();
+        $isSiteAccessAware = $this->isSiteAccessAwareRoute( $name );
+
+        // Retrieving the appropriate SiteAccess to generate the link for.
+        if ( isset( $parameters['siteaccess'] ) && $isSiteAccessAware )
         {
-            $context = $this->getContext();
+            $siteAccess = $this->siteAccessRouter->matchByName( $parameters['siteaccess'] );
+            if ( $siteAccess instanceof SiteAccess && $siteAccess->matcher instanceof SiteAccess\VersatileMatcher )
+            {
+                // Switch request context for link generation.
+                $context = $this->getContextBySimplifiedRequest( $siteAccess->matcher->getRequest() );
+                $this->setContext( $context );
+            }
+            else if ( $this->logger )
+            {
+                $siteAccess = $this->siteAccess;
+                $this->logger->notice( "Could not generate a link using provided 'siteaccess' parameter: {$parameters['siteaccess']}. Generating using current context." );
+            }
+
+            unset( $parameters['siteaccess'] );
+        }
+
+        $url = parent::generate( $name, $parameters, $referenceType );
+
+        // Now putting back SiteAccess URI if needed.
+        if ( $isSiteAccessAware && $siteAccess && $siteAccess->matcher instanceof URILexer )
+        {
             if ( $referenceType == self::ABSOLUTE_URL || $referenceType == self::NETWORK_PATH )
             {
                 $scheme = $context->getScheme();
@@ -126,9 +165,11 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
             }
 
             $linkUri = $base ? substr( $url, strpos( $url, $base ) + strlen( $base ) ) : $url;
-            $url = str_replace( $linkUri, $this->siteAccess->matcher->analyseLink( $linkUri ), $url );
+            $url = str_replace( $linkUri, $siteAccess->matcher->analyseLink( $linkUri ), $url );
         }
 
+        // Switch back to original context, for next links generation.
+        $this->setContext( $originalContext );
         return $url;
     }
 
@@ -171,5 +212,38 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
         }
 
         return false;
+    }
+
+    /**
+     * Merges context from $simplifiedRequest into a clone of the current context.
+     *
+     * @param SimplifiedRequest $simplifiedRequest
+     *
+     * @return \Symfony\Component\Routing\RequestContext
+     */
+    public function getContextBySimplifiedRequest( SimplifiedRequest $simplifiedRequest )
+    {
+        $context = clone $this->context;
+        if ( $simplifiedRequest->scheme )
+        {
+            $context->setScheme( $simplifiedRequest->scheme );
+        }
+
+        if ( $simplifiedRequest->port )
+        {
+            $context->setHttpPort( $simplifiedRequest->port );
+        }
+
+        if ( $simplifiedRequest->host )
+        {
+            $context->setHost( $simplifiedRequest->host );
+        }
+
+        if ( $simplifiedRequest->pathinfo )
+        {
+            $context->setPathInfo( $simplifiedRequest->pathinfo );
+        }
+
+        return $context;
     }
 }

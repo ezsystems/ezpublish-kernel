@@ -28,9 +28,6 @@ class RouterURITextTest extends PHPUnit_Framework_TestCase
         $this->matcherBuilder = new MatcherBuilder;
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::__construct
-     */
     public function testConstruct()
     {
         return new Router(
@@ -58,16 +55,8 @@ class RouterURITextTest extends PHPUnit_Framework_TestCase
     /**
      * @depends testConstruct
      * @dataProvider matchProvider
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex::__construct
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex::match
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText::__construct
      */
-    public function testMatch( $request, $siteAccess, $router )
+    public function testMatch( SimplifiedRequest $request, $siteAccess, Router $router )
     {
         $sa = $router->match( $request );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa );
@@ -133,12 +122,57 @@ class RouterURITextTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText::getName
-     */
     public function testGetName()
     {
         $matcher = new URITextMatcher( array(), array() );
         $this->assertSame( 'uri:text', $matcher->getName() );
+    }
+
+    public function testAnalyseURI()
+    {
+        $siteAccessURI = "/footestbar";
+        $semanticURI = "/something/hoho";
+        $matcher = new URITextMatcher(
+            array(
+                "prefix" => "foo",
+                "suffix" => "bar",
+            )
+        );
+        $matcher->setRequest( SimplifiedRequest::fromUrl( "http://phoenix-rises.fm/footestbar/blabla" ) );
+
+        $this->assertSame( $semanticURI, $matcher->analyseURI( $siteAccessURI . $semanticURI ) );
+    }
+
+    public function testAnalyseLink()
+    {
+        $siteAccessURI = "/footestbar";
+        $semanticURI = "/something/hoho";
+        $matcher = new URITextMatcher(
+            array(
+                "prefix" => "foo",
+                "suffix" => "bar",
+            )
+        );
+        $matcher->setRequest( SimplifiedRequest::fromUrl( "http://phoenix-rises.fm/footestbar/blabla" ) );
+
+        $this->assertSame( $siteAccessURI . $semanticURI, $matcher->analyseLink( $semanticURI ) );
+    }
+
+    public function testReverseMatch()
+    {
+        $semanticURI = "/hihi/hoho";
+        $matcher = new URITextMatcher(
+            array(
+                "prefix" => "foo",
+                "suffix" => "bar",
+            )
+        );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => $semanticURI ) ) );
+
+        $result = $matcher->reverseMatch( 'something' );
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIText', $result );
+        $request = $result->getRequest();
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest', $request );
+        $this->assertSame( "/foosomethingbar{$semanticURI}", $request->pathinfo );
     }
 }

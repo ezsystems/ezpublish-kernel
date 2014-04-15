@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
 
-class HostElement implements Matcher
+class HostElement implements VersatileMatcher
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
@@ -57,11 +57,28 @@ class HostElement implements Matcher
      * Injects the request object to match against.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $request
-     *
-     * @return void
      */
     public function setRequest( SimplifiedRequest $request )
     {
         $this->request = $request;
+    }
+
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    public function reverseMatch( $siteAccessName )
+    {
+        $hostElements = explode( '.', $this->request->host );
+        $elementNumber = $this->elementNumber - 1;
+        if ( !isset( $hostElements[$elementNumber] ) )
+        {
+            return null;
+        }
+
+        $hostElements[$elementNumber] = $siteAccessName;
+        $this->request->setHost( implode( '.', $hostElements ) );
+        return $this;
     }
 }
