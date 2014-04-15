@@ -8,7 +8,7 @@ Feature: Install eZ Publish Demo with/withoutout content
         Given I am on the "Setup Wizard" page
         And I am on "Welcome to eZ Publish Community Project 5.3.0alpha1" step
         When I select "English (United Kingdom)"
-        And I click at "Next" button
+        And I press "Next"
         Then I see "System check" step
         And I see "AcceptPathInfo disabled or running in CGI mode" message
 
@@ -17,14 +17,14 @@ Feature: Install eZ Publish Demo with/withoutout content
     Scenario: Bypass system check for FastCGI
         Given I am on "System check" step
         When I check "Ignore this test" checkbox
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Outgoing Email" step
 
     @javascript @democontent_install @democlean_install
     Scenario: Choose Sendmail/MTA
         Given I am on "Outgoing Email" step
         When I select "Sendmail/MTA" radio button
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Database initialization" step
 
     @javascript @democontent_install @democlean_install
@@ -36,7 +36,7 @@ Feature: Install eZ Publish Demo with/withoutout content
             | Port       |           |
             | Username   | ezp       |
             | Password   | ezp       |
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Language support" step
 
     @javascript @democontent_install @democlean_install
@@ -44,14 +44,14 @@ Feature: Install eZ Publish Demo with/withoutout content
         Given I am on "Language support" step
         When I select "English (United Kingdom)" radio button
         And I check "German" checkbox
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Site package" step
 
     @javascript @democontent_install
     Scenario: Choose Demo Site (with content) for installation
         Given I am on "Site package" step
         When I select "eZ Publish Demo Site" package version "5.3.0alpha1"
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Site package" step
         And I see "eZ Publish Demo Site" package version "5.3-0-alpha1" imported
         And I see following packages for version "5.3.0-alpha1" imported:
@@ -70,7 +70,7 @@ Feature: Install eZ Publish Demo with/withoutout content
     Scenario: Choose Demo Site (with content) for installation
         Given I am on "Site package" step
         When I select "eZ Publish Demo Site (without demo content)" package version "5.3.0alpha1"
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Site package" step
         And I see "eZ Publish Demo Site (without demo content)" package version "5.3-0-alpha1" imported
         And I see following packages for version "5.3.0-alpha1" imported:
@@ -95,7 +95,7 @@ Feature: Install eZ Publish Demo with/withoutout content
     Scenario: Choose the recommended URL site access configuration
         Given I am on "Site access configuration" step
         When I select "URL" radio button
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Site details" step
 
     @javascript @democontent_install
@@ -108,7 +108,7 @@ Feature: Install eZ Publish Demo with/withoutout content
             | User path     | behat_site                        |
             | Admin path    | behat_site_admin                  |
         And I select "behattestdb"
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Site administrator" step
 
     @javascript @democlean_install
@@ -121,7 +121,7 @@ Feature: Install eZ Publish Demo with/withoutout content
             | User path     | behat_site                           |
             | Admin path    | behat_site_admin                     |
         And I select "behattestdb"
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Site administrator" step
 
     @javascript @democontent_install @democlean_install
@@ -134,7 +134,7 @@ Feature: Install eZ Publish Demo with/withoutout content
             | Email address     | foo@example.com   |
             | Password          | publish           |
             | Confirm password  | publish           |
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Site registration" step
 
     @javascript @democontent_install @democlean_install
@@ -147,5 +147,5 @@ Feature: Install eZ Publish Demo with/withoutout content
             | Your email   | nospam@ez.no   |
             | Country      | Norway         |
             | Company      | eZ Systems     |
-        And I click at "Next" button
+        And I press "Next"
         Then I see "Finished" step
