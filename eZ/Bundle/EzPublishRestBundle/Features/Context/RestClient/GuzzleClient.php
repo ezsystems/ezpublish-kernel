@@ -41,7 +41,7 @@ class GuzzleClient extends RestClient
     public function getResponseHeaders()
     {
         $headers = array();
-        foreach( $this->response->getHeaders()->getAll() as $header => $headerObject )
+        foreach ( $this->response->getHeaders()->getAll() as $header => $headerObject )
         {
             $allHeaderValues = $headerObject->toArray();
             // only getting the first of the array, most of the cases this will
@@ -73,7 +73,7 @@ class GuzzleClient extends RestClient
         );
 
         // set headers
-        foreach( $this->headers as $header => $value )
+        foreach ( $this->headers as $header => $value )
         {
             $request->setHeader( $header, $value );
         }
