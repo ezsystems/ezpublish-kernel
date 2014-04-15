@@ -18,8 +18,6 @@ use InvalidArgumentException;
  * Criterion that matches content that belongs to a given (list of) Subtree(s)
  *
  * Content will be matched if it is part of at least one of the given subtree path strings
- *
- * @deprecated Since 5.3, use Location search instead
  */
 class Subtree extends Criterion implements CriterionInterface
 {
@@ -30,8 +28,6 @@ class Subtree extends Criterion implements CriterionInterface
      *
      * @throws InvalidArgumentException if a non path string is given
      * @throws InvalidArgumentException if the value type doesn't match the operator
-     *
-     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $value )
     {

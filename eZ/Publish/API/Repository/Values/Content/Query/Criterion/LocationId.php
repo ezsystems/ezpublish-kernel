@@ -21,8 +21,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * Supported operators:
  * - IN: matches against a list of location ids
  * - EQ: matches against a unique location id
- *
- * @deprecated Since 5.3, use Location search instead
  */
 class LocationId extends Criterion implements CriterionInterface
 {
@@ -33,8 +31,6 @@ class LocationId extends Criterion implements CriterionInterface
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
-     *
-     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $value )
     {
