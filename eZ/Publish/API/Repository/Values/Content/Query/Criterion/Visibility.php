@@ -17,7 +17,9 @@ use InvalidArgumentException;
 /**
  * A criterion that matches content based on its visibility
  *
- * @deprecated Since 5.3, use Location search instead
+ * @warning This Criterion acts on all locations of a Content, so it will include hidden
+ * content within the tree you are searching for if content has visible location elsewhere.
+ * This is intentional and you should rather use LocationSearch if this is not the behaviour you want.
  */
 class Visibility extends Criterion implements CriterionInterface
 {
@@ -37,8 +39,6 @@ class Visibility extends Criterion implements CriterionInterface
      * @param int $value Visibility: self::VISIBLE, self::HIDDEN
      *
      * @throws \InvalidArgumentException
-     *
-     * @deprecated Since 5.3, use Location search instead
      */
     public function __construct( $value )
     {
