@@ -108,13 +108,6 @@ class Repository implements PermissionRepositoryInterface
     protected $objectStateService;
 
     /**
-     * Instance of field type service
-     *
-     * @var \eZ\Publish\API\Repository\FieldTypeService
-     */
-    protected $fieldTypeService;
-
-    /**
      * Instance of URL alias service
      *
      * @var \eZ\Publish\API\Repository\UrlAliasService
