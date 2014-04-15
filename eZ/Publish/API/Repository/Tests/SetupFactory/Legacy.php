@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
+use eZ\Publish\API\Repository\Tests\Values\LazyUser;
 
 use eZ\Publish\Core\Base\ConfigurationManager;
 use eZ\Publish\Core\Base\ServiceContainer;
@@ -103,7 +104,9 @@ class Legacy extends SetupFactory
         $this->clearInternalCaches();
         $repository = $this->getServiceContainer()->get( 'permission_repository' );
         $repository->setCurrentUser(
-            $repository->getUserService()->loadUser( 14 )
+            // FIXME: in case of tests failes after clearing admin user, use a fake user object for admin
+            new LazyUser( $repository, 14 )
+            //$repository->getUserService()->loadUser( 14 )
         );
         return $repository;
     }
