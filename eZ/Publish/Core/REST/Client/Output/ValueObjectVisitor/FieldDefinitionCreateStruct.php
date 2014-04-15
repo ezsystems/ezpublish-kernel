@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
@@ -29,9 +28,8 @@ class FieldDefinitionCreateStruct extends ValueObjectVisitor
      * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
      * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
      */
-    public function __construct( RequestParser $requestParser, FieldTypeSerializer $fieldTypeSerializer )
+    public function __construct( FieldTypeSerializer $fieldTypeSerializer )
     {
-        parent::__construct( $requestParser );
         $this->fieldTypeSerializer = $fieldTypeSerializer;
     }
 

@@ -10,10 +10,10 @@
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\Core\REST\Client\ContentTypeService;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Client\Values;
+use eZ\Publish\API\Repository\ContentTypeService;
 
 /**
  * Parser for ContentInfo
@@ -26,13 +26,13 @@ class ContentInfo extends BaseParser
     protected $parserTools;
 
     /**
-     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
+     * @var \eZ\Publish\API\Repository\ContentTypeService
      */
     protected $contentTypeService;
 
     /**
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
-     * @param \eZ\Publish\Core\REST\Client\ContentTypeService $contentTypeService
+     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      */
     public function __construct( ParserTools $parserTools, ContentTypeService $contentTypeService )
     {

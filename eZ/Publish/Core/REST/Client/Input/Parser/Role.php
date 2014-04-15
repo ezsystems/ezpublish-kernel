@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-
 use eZ\Publish\Core\REST\Client;
 
 /**
