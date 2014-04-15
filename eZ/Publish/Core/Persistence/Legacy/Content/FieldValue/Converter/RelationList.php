@@ -17,6 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use DOMDocument;
+use PDO;
 
 class RelationList implements Converter
 {
@@ -48,8 +49,15 @@ class RelationList implements Converter
         $doc->appendChild( $root );
 
         $relationList = $doc->createElement( 'relation-list' );
-        foreach ( $this->getRelationXmlHashFromDB( $value->data['destinationContentIds'] ) as $row )
+        $data = $this->getRelationXmlHashFromDB( $value->data['destinationContentIds'] );
+        $priority = 0;
+
+        foreach ( $value->data['destinationContentIds'] as $id )
         {
+            $row = $data[$id][0];
+            $row["ezcontentobject_id"] = $id;
+            $row["priority"] = ( $priority += 1 );
+
             $relationItem = $doc->createElement( 'relation-item' );
             foreach ( self::dbAttributeMap() as $domAttrKey => $propertyKey )
             {
@@ -80,15 +88,22 @@ class RelationList implements Converter
         if ( $value->dataText === null )
             return;
 
+        $priorityByContentId = array();
+
         $dom = new DOMDocument( '1.0', 'utf-8' );
         if ( $dom->loadXML( $value->dataText ) === true )
         {
             foreach ( $dom->getElementsByTagName( 'relation-item' ) as $relationItem )
             {
                 /** @var \DOMElement $relationItem */
-                $fieldValue->data['destinationContentIds'][] = $relationItem->getAttribute( 'contentobject-id' );
+                $priorityByContentId[$relationItem->getAttribute( 'contentobject-id' )] =
+                    $relationItem->getAttribute( 'priority' );
             }
         }
+
+        asort( $priorityByContentId, SORT_NUMERIC );
+
+        $fieldValue->data['destinationContentIds'] = array_keys( $priorityByContentId );
     }
 
     /**
@@ -201,7 +216,7 @@ class RelationList implements Converter
         if ( !( $constraints = $dom->getElementsByTagName( 'constraints' ) ) )
             return;
 
-        foreach ( $constraints->item( 0 )->childNodes as $allowedClass )
+        foreach ( $constraints->item( 0 )->getElementsByTagName( 'allowed-class' ) as $allowedClass )
             $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute( 'contentclass-identifier' );
     }
 
@@ -226,7 +241,7 @@ class RelationList implements Converter
      *
      * @return array
      */
-    private function getRelationXmlHashFromDB( array $destinationContentIds )
+    protected function getRelationXmlHashFromDB( array $destinationContentIds )
     {
         if ( empty( $destinationContentIds ) )
             return array();
@@ -265,7 +280,7 @@ class RelationList implements Converter
                     ),
                     $q->expr->eq(
                         $this->db->quoteColumn( 'version', 'ezcontentclass' ),
-                        $q->bindValue( ContentType::STATUS_DEFINED, null, \PDO::PARAM_INT )
+                        $q->bindValue( ContentType::STATUS_DEFINED, null, PDO::PARAM_INT )
                     )
                 )
             )
@@ -277,18 +292,12 @@ class RelationList implements Converter
             );
         $stmt = $q->prepare();
         $stmt->execute();
-        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        $rows = $stmt->fetchAll( PDO::FETCH_ASSOC | PDO::FETCH_GROUP );
 
         if ( empty( $rows ) )
             throw new \Exception( "Could find Content with id's" . var_export( $destinationContentIds, true ) );
         else if ( count( $rows ) !== count( $destinationContentIds ) )
             throw new \Exception( "Miss match of rows & id count:" . var_export( $destinationContentIds, true ) );
-
-        // Add priority starting from 1
-        for ( $i = 0; isset( $rows[$i] ); ++$i )
-        {
-            $rows[$i]['priority'] = $i + 1;
-        }
 
         return $rows;
     }
