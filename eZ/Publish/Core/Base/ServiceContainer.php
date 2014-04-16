@@ -100,16 +100,11 @@ class ServiceContainer implements Container
             $this->debug
         );
 
-        if ( $this->debug || !$cache->isFresh() )
+        if ( isset( $this->innerContainer ) || !$cache->isFresh() )
         {
             if ( !isset( $this->innerContainer ) )
             {
                 $this->innerContainer = $this->requireContainerBuilder();
-            }
-            else
-            {
-                $this->innerContainer->compile();
-                return;
             }
             $this->innerContainer->compile();
             $this->dumpContainer( $cache );
