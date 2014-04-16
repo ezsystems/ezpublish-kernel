@@ -38,9 +38,11 @@ services:
             - @ezpublish.persistence.legacy.search.gateway.content.exception_conversion
             - @ezpublish.persistence.legacy.content.mapper
             - @ezpublish.persistence.legacy.field_handler
+        lazy: true
 
     ezpublish.spi.persistence.legacy.search.handler.location:
         class: %ezpublish.spi.persistence.legacy.search.handler.location.class%
         arguments:
             - @ezpublish.persistence.legacy.search.gateway.location.exception_conversion
             - @ezpublish.persistence.legacy.location.mapper
+        lazy: true

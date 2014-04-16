@@ -17,3 +17,4 @@ services:
         class: %ezpublish.spi.persistence.legacy.section.handler.class%
         arguments:
             - @ezpublish.persistence.legacy.section.gateway.exception_conversion
+        lazy: true

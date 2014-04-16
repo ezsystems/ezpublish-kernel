@@ -29,3 +29,4 @@ services:
             - @ezpublish.persistence.legacy.location.gateway.exception_conversion
             - @ezpublish.spi.persistence.legacy.language.handler
             - @ezpublish.persistence.slug_converter
+        lazy: true

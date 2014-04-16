@@ -57,3 +57,4 @@ services:
             - @ezpublish.persistence.legacy.role.gateway
             - @ezpublish.persistence.legacy.user.mapper
             - @ezpublish.persistence.legacy.role.limitation.converter
+        lazy: true

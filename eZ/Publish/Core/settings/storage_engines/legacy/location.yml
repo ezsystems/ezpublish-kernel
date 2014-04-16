@@ -26,3 +26,4 @@ services:
             - @ezpublish.spi.persistence.legacy.content.handler
             - @ezpublish.spi.persistence.legacy.object_state.handler
             - @ezpublish.persistence.legacy.tree_handler
+        lazy: true

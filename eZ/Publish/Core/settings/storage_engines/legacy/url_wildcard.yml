@@ -22,3 +22,4 @@ services:
         arguments:
             - @ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion
             - @ezpublish.persistence.legacy.url_wildcard.mapper
+        lazy: true

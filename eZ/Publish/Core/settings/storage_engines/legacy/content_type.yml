@@ -68,3 +68,4 @@ services:
 
     ezpublish.spi.persistence.legacy.content_type.handler:
         alias: ezpublish.spi.persistence.legacy.content_type.handler.caching
+        lazy: true

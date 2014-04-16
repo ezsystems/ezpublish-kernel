@@ -25,3 +25,4 @@ services:
         arguments:
             - @ezpublish.persistence.legacy.object_state.gateway.exception_conversion
             - @ezpublish.persistence.legacy.object_state.mapper
+        lazy: true

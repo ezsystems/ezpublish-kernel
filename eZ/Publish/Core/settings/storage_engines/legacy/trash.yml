@@ -9,3 +9,4 @@ services:
             - @ezpublish.persistence.legacy.location.gateway.exception_conversion
             - @ezpublish.persistence.legacy.location.mapper
             - @ezpublish.spi.persistence.legacy.content.handler
+        lazy: true

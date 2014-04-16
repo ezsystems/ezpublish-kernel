@@ -41,6 +41,7 @@ services:
             - @ezpublish.persistence.legacy.external_storage_handler
             - @ezpublish.spi.persistence.legacy.language.handler
             - @ezpublish.persistence.field_type_registry
+        lazy: true
 
     ezpublish.persistence.legacy.tree_handler:
         class: %ezpublish.persistence.legacy.tree_handler.class%
@@ -62,3 +63,4 @@ services:
             - @ezpublish.persistence.legacy.url_alias.gateway.exception_conversion
             - @ezpublish.spi.persistence.legacy.content_type.handler
             - @ezpublish.persistence.legacy.tree_handler
+        lazy: true

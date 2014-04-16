@@ -48,6 +48,7 @@ services:
             - @ezpublish.spi.persistence.legacy.object_state.handler
             - @ezpublish.spi.persistence.legacy.section.handler
             - @ezpublish.persistence.solr.search.content.field_name_generator
+        lazy: true
 
     ezpublish.spi.persistence.legacy_solr:
         class: %ezpublish.spi.persistence.legacy.class%
