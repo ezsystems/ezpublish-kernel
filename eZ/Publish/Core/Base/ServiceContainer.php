@@ -100,11 +100,16 @@ class ServiceContainer implements Container
             $this->debug
         );
 
-        if ( isset( $this->innerContainer ) || !$cache->isFresh() )
+        if ( $this->debug || !$cache->isFresh() )
         {
             if ( !isset( $this->innerContainer ) )
             {
                 $this->innerContainer = $this->requireContainerBuilder();
+            }
+            else
+            {
+                $this->innerContainer->compile();
+                return;
             }
             $this->innerContainer->compile();
             $this->dumpContainer( $cache );
@@ -118,7 +123,7 @@ class ServiceContainer implements Container
     protected function requireContainerBuilder()
     {
         $installDir = $this->installDir;
-        return require_once $this->settingsDir . "/container_builder.php";
+        return require_once $this->settingsDir . "/containerBuilder.php";
     }
 
     protected function dumpContainer( ConfigCache $cache )
