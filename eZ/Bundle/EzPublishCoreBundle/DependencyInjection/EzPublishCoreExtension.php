@@ -277,7 +277,6 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'io.yml' );
         $loader->load( 'storage_engines.yml' );
         $loader->load( 'fieldtype_services.yml' );
-        $loader->load( 'storage_engines/cache.yml' );
     }
 
     /**
