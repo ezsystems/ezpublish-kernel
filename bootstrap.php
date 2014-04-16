@@ -60,5 +60,3 @@ if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
     $_ENV['legacyPath'] = $settings['service']['parameters']['legacy_dir'];
     $_ENV['imagemagickConvertPath'] = $settings['service']['parameters']['imagemagick_convert_path'];
 }
-
-return include 'container.php';
