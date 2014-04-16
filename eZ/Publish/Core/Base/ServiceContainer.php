@@ -17,26 +17,77 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use RuntimeException;
 
 /**
- *
+ * Container implementation wrapping Symfony container component.
+ * Provides cache generation.
  */
 class ServiceContainer implements Container
 {
+    /**
+     * Holds class name for generated container cache
+     *
+     * @var string
+     */
     protected $containerClassName = "EzPublishPublicAPIServiceContainer";
-    protected $containerBaseClassName = "Container";
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
+     * Holds inner Symfony container instance
+     *
+     * @var \Symfony\Component\DependencyInjection\Container|\Symfony\Component\DependencyInjection\ContainerBuilder
      */
     protected $innerContainer;
-    protected $cacheDir;
-    protected $settingsDir;
+
+    /**
+     * Holds installation directory path
+     *
+     * @var string
+     */
     protected $installDir;
+
+    /**
+     * Holds settings directory path
+     *
+     * @var string
+     */
+    protected $settingsDir;
+
+    /**
+     * Holds cache directory path
+     *
+     * @var string
+     */
+    protected $cacheDir;
+
+    /**
+     * Holds debug flag for cache service
+     *
+     * @var bool
+     */
     protected $debug;
 
+    /**
+     * Holds flag whether cache should be bypassed
+     *
+     * @var bool
+     */
+    protected $bypassCache;
+
+    /**
+     * @param string $installDir Installation directory, required by default 'containerBuilder.php' file
+     * @param string $settingsDir Settings directory, will be checked for 'containerBuilder.php' if
+     *                            $containerBuilder is not provided
+     * @param string $cacheDir Directory where PHP container cache will be stored
+     * @param bool $bypassCache Default false should be used for production, if true completely bypasses
+     *                          the cache, using compiled ContainerBuilder as container
+     * @param bool $debug Default false should be used for production, if true resources will be checked
+     *                    for cache to be regenerated if necessary
+     * @param null|\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder Optional, if not given
+     *        ContainerBuilder from 'containerBuilder.php' file in settings directory will be loaded
+     */
     public function __construct(
         $installDir,
         $settingsDir,
         $cacheDir,
+        $bypassCache = false,
         $debug = false,
         ContainerBuilder $containerBuilder = null
     )
@@ -44,8 +95,8 @@ class ServiceContainer implements Container
         $this->installDir = $installDir;
         $this->settingsDir = $settingsDir;
         $this->cacheDir = $cacheDir;
+        $this->bypassCache = $bypassCache;
         $this->debug = $debug;
-
         $this->innerContainer = $containerBuilder;
 
         $this->initializeContainer();
@@ -72,7 +123,9 @@ class ServiceContainer implements Container
     }
 
     /**
-     * @param $id
+     * Convenience method to inner container
+     *
+     * @param string $id
      *
      * @return object
      */
@@ -82,7 +135,9 @@ class ServiceContainer implements Container
     }
 
     /**
-     * @param $name
+     * Convenience method to inner container
+     *
+     * @param string $name
      *
      * @return mixed
      */
@@ -91,41 +146,81 @@ class ServiceContainer implements Container
         return $this->innerContainer->getParameter( $name );
     }
 
+    /**
+     * Initializes inner container
+     *
+     * @throws \RuntimeException
+     */
     protected function initializeContainer()
     {
-        $this->prepareDirectory( $this->cacheDir, "cache" );
-
-        $cache = new ConfigCache(
-            $this->cacheDir . "/container/" . $this->containerClassName . ".php",
-            $this->debug
-        );
-
-        if ( $this->debug || !$cache->isFresh() )
+        // First check if cache should be bypassed
+        if ( $this->bypassCache )
         {
             if ( !isset( $this->innerContainer ) )
             {
                 $this->innerContainer = $this->requireContainerBuilder();
             }
-            else
+            $this->innerContainer->compile();
+            return;
+        }
+
+        // Prepare cache directory
+        $this->prepareDirectory( $this->cacheDir, "cache" );
+
+        // Instantiate cache
+        $cache = new ConfigCache(
+            $this->cacheDir . "/container/" . $this->containerClassName . ".php",
+            $this->debug
+        );
+
+        // Check if cache needs to be regenerated, depends on debug being set to true
+        if ( !$cache->isFresh() )
+        {
+            if ( !isset( $this->innerContainer ) )
             {
-                $this->innerContainer->compile();
-                return;
+                $this->innerContainer = $this->requireContainerBuilder();
             }
             $this->innerContainer->compile();
             $this->dumpContainer( $cache );
         }
 
+        // Include container cache
         require_once $cache;
 
+        // Instantiate container
         $this->innerContainer = new $this->containerClassName;
     }
 
+    /**
+     * Returns ContainerBuilder by including the default file 'containerBuilder.php' from settings directory
+     *
+     * @throws \RuntimeException
+     *
+     * @return \Symfony\Component\DependencyInjection\ContainerBuilder
+     */
     protected function requireContainerBuilder()
     {
+        $containerBuilderFilePath = $this->settingsDir . "/containerBuilder.php";
+        if ( !is_readable( $containerBuilderFilePath ) )
+        {
+            throw new RuntimeException(
+                sprintf(
+                    "Unable to read file %s\n",
+                    $containerBuilderFilePath
+                )
+            );
+        }
+
+        // 'containerBuilder.php' file expects $installDir variable to be set by caller
         $installDir = $this->installDir;
-        return require_once $this->settingsDir . "/containerBuilder.php";
+        return require_once $containerBuilderFilePath;
     }
 
+    /**
+     * Dumps the service container to PHP code in the cache
+     *
+     * @param \Symfony\Component\Config\ConfigCache $cache
+     */
     protected function dumpContainer( ConfigCache $cache )
     {
         $dumper = new PhpDumper( $this->innerContainer );
@@ -138,13 +233,21 @@ class ServiceContainer implements Container
         $content = $dumper->dump(
             array(
                 'class' => $this->containerClassName,
-                'base_class' => $this->containerBaseClassName
+                'base_class' => "Container"
             )
         );
 
         $cache->write( $content, $this->innerContainer->getResources() );
     }
 
+    /**
+     * Checks for existence of given $directory and tries to create it if found missing
+     *
+     * @throws \RuntimeException
+     *
+     * @param string $directory Path to the directory
+     * @param string $name Used for exception message
+     */
     protected function prepareDirectory( $directory, $name )
     {
         if ( !is_dir( $directory ) )

@@ -69,6 +69,7 @@ class LegacySolr extends Legacy
                 $config['settings_dir'],
                 $config['cache_dir'],
                 true,
+                true,
                 $containerBuilder
             );
         }

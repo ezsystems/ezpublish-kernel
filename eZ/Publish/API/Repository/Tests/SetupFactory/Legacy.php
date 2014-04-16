@@ -350,6 +350,7 @@ class Legacy extends SetupFactory
                 $config['settings_dir'],
                 $config['cache_dir'],
                 true,
+                true,
                 $containerBuilder
             );
         }

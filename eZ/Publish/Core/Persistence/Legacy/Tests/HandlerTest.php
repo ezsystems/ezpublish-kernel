@@ -325,6 +325,7 @@ class HandlerTest extends TestCase
                 $config['settings_dir'],
                 $config['cache_dir'],
                 true,
+                true,
                 $containerBuilder
             );
         }
