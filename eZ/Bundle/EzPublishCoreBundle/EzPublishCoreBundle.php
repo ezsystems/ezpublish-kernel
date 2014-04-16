@@ -9,7 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Publish\Core\Base\Container\Compiler\FieldTypeRepositoryPass;
+use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
@@ -41,8 +41,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new ChainRoutingPass );
         $container->addCompilerPass( new ChainConfigResolverPass );
         $container->addCompilerPass( new FieldTypeParameterProviderRegistryPass );
-        $container->addCompilerPass( new FieldTypeRepositoryPass );
-        $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new RegisterStorageEnginePass );
         $container->addCompilerPass( new LocalePass );
         $container->addCompilerPass( new ContentViewPass );
@@ -56,7 +54,8 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new FragmentPass );
         $container->addCompilerPass( new StorageConnectionPass );
 
-        $container->addCompilerPass( new Storage\FieldTypeRegistryPass() );
+        $container->addCompilerPass( new FieldTypeCollectionPass );
+        $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new Storage\Legacy\FieldValueConverterRegistryPass );
         $container->addCompilerPass( new Storage\Legacy\CriterionFieldValueHandlerRegistryPass );
         $container->addCompilerPass( new Storage\Legacy\CriteriaConverterPass );

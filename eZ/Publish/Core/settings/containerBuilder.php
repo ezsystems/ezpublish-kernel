@@ -41,10 +41,9 @@ $loader->load( 'settings.yml' );
 
 $containerBuilder->setParameter( "ezpublish.kernel.root_dir", $installDir );
 
-$containerBuilder->addCompilerPass( new Compiler\FieldTypeRepositoryPass() );
+$containerBuilder->addCompilerPass( new Compiler\FieldTypeCollectionPass() );
 $containerBuilder->addCompilerPass( new Compiler\RegisterLimitationTypePass() );
 
-$containerBuilder->addCompilerPass( new Compiler\Storage\FieldTypeRegistryPass() );
 $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\CriteriaConverterPass() );
 $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\CriterionFieldValueHandlerRegistryPass() );
 $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\ExternalStorageRegistryPass() );

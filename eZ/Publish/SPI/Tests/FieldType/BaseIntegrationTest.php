@@ -596,7 +596,7 @@ abstract class BaseIntegrationTest extends TestCase
 
         $containerBuilder->setParameter( "ezpublish.kernel.root_dir", $installDir );
 
-        //$containerBuilder->addCompilerPass( new Compiler\FieldTypeRepositoryPass() );
+        //$containerBuilder->addCompilerPass( new Compiler\FieldTypeCollectionPass() );
         //$containerBuilder->addCompilerPass( new Compiler\RegisterLimitationTypePass() );
         //$containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\FieldTypeRegistryPass() );
         $containerBuilder->addCompilerPass( new Compiler\Storage\Legacy\CriteriaConverterPass() );
@@ -628,7 +628,7 @@ abstract class BaseIntegrationTest extends TestCase
         /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry */
         $converterRegistry = self::$container->get( "ezpublish.persistence.legacy.field_value_converter.registry" );
         /** @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry $storageRegistry */
-        $storageRegistry = self::$container->get( "ezpublish.persistence.legacy.external_storage_registry" );
+        $storageRegistry = self::$container->get( "ezpublish.persistence.external_storage_registry" );
 
         $textLineFieldType = new \eZ\Publish\Core\FieldType\TextLine\Type();
         $textLineFieldType->setTransformationProcessor( $this->getTransformationProcessor() );
