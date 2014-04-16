@@ -354,6 +354,10 @@ class ContentExtension extends Twig_Extension
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $fieldIdentifier Identifier for the field we want to render
      * @param array $params An array of parameters to pass to the field view
+     *        Some parameters which have a specific behaviour:
+     *        - lang: language to use. If not passed, the language from current siteaccess is used
+     *        - ifMissing: some text to be displayed if desired attribute is missing, instead of throwing an error
+     *        - template: name of the template to be used, instead of the standard one
      * @throws \InvalidArgumentException If $fieldIdentifier is invalid in $content
      * @return string The HTML markup
      */
@@ -363,6 +367,10 @@ class ContentExtension extends Twig_Extension
 
         if ( !$field instanceof Field )
         {
+            if ( $params['ifMissing'] )
+            {
+                return $params['ifMissing'];
+            }
             throw new InvalidArgumentException(
                 "Invalid field identifier '$fieldIdentifier' for content #{$content->contentInfo->id}"
             );
