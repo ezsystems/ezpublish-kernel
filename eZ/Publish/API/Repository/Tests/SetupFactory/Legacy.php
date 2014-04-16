@@ -403,10 +403,9 @@ class Legacy extends SetupFactory
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/containerBuilder.php";
 
-            $containerBuilder->setParameter(
-                "languages",
-                array( "eng-US", "eng-GB" )
-            );
+            /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load( 'tests/integration_legacy.yml' );
+
             $containerBuilder->setParameter(
                 "legacy_dsn",
                 self::$dsn

@@ -49,6 +49,9 @@ class LegacySolr extends Legacy
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/containerBuilder.php";
 
+            /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load( 'tests/integration_legacy_solr.yml' );
+
             $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateCriterionVisitorPass() );
             $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass() );
             $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateFieldValueMapperPass() );
@@ -56,14 +59,6 @@ class LegacySolr extends Legacy
             $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\FieldRegistryPass() );
             $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\SignalSlotPass() );
 
-            $containerBuilder->setAlias(
-                "ezpublish.api.persistence_handler",
-                "ezpublish.spi.persistence.cached_legacy_solr"
-            );
-            $containerBuilder->setParameter(
-                "languages",
-                array( "eng-US", "eng-GB" )
-            );
             $containerBuilder->setParameter(
                 "legacy_dsn",
                 self::$dsn

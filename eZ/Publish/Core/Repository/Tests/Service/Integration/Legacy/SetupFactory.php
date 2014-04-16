@@ -38,15 +38,9 @@ class SetupFactory extends APILegacySetupFactory
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/containerBuilder.php";
 
-            // disable cache - TODO fix bug with trash recover
-            $containerBuilder->setAlias(
-                "ezpublish.api.persistence_handler",
-                "ezpublish.spi.persistence.legacy"
-            );
-            $containerBuilder->setParameter(
-                "languages",
-                array()
-            );
+            /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load( 'tests/integration_legacy_core.yml' );
+
             $containerBuilder->setParameter(
                 "legacy_dsn",
                 static::$dsn
