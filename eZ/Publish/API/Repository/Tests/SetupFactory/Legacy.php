@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
-use eZ\Publish\Core\Base\WrappedServiceContainer;
+use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler as CachingContentTypeHandler;
@@ -391,7 +391,7 @@ class Legacy extends SetupFactory
     /**
      * Returns the service container used for initialization of the repository
      *
-     * @return \eZ\Publish\Core\Base\WrappedServiceContainer
+     * @return \eZ\Publish\Core\Base\ServiceContainer
      */
     protected function getServiceContainer()
     {
@@ -412,7 +412,7 @@ class Legacy extends SetupFactory
                 self::$dsn
             );
 
-            self::$serviceContainer = new WrappedServiceContainer(
+            self::$serviceContainer = new ServiceContainer(
                 $installDir,
                 $installDir . "/eZ/Publish/Core/settings",
                 $installDir . "/var/cache/container",

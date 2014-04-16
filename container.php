@@ -10,14 +10,14 @@
  * @version //autogentag//
  */
 
-use eZ\Publish\Core\Base\WrappedServiceContainer;
+use eZ\Publish\Core\Base\ServiceContainer;
 
 if ( !isset( $settings ) )
 {
     throw new \RuntimeException( '$settings not provided to container.php' );
 }
 
-return new WrappedServiceContainer(
+return new ServiceContainer(
     $settings['service']['parameters']['install_dir'],
     $settings['service']['parameters']['install_dir'] . "/eZ/Publish/Core/settings",
     $settings['service']['parameters']['install_dir'] . "/var/cache/container"

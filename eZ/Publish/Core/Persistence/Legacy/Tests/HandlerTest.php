@@ -13,7 +13,6 @@ use eZ\Publish\Core\Base\ConfigurationManager;
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Persistence\Legacy\Handler;
 
-use eZ\Publish\Core\Base\WrappedServiceContainer;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 use Symfony\Component\Config\FileLocator;
@@ -321,7 +320,7 @@ class HandlerTest extends TestCase
                 $this->getDsn()
             );
 
-            self::$container = new WrappedServiceContainer(
+            self::$container = new ServiceContainer(
                 $installDir,
                 $installDir . "/eZ/Publish/Core/settings",
                 $installDir . "/var/cache/container",

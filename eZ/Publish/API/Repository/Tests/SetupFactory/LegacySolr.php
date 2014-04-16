@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
-use eZ\Publish\Core\Base\WrappedServiceContainer;
+use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Base\Container\Compiler;
 use PDO;
 
@@ -69,7 +69,7 @@ class LegacySolr extends Legacy
                 self::$dsn
             );
 
-            self::$serviceContainer = new WrappedServiceContainer(
+            self::$serviceContainer = new ServiceContainer(
                 $installDir,
                 $installDir . "/eZ/Publish/Core/settings",
                 $installDir . "/var/cache/container",

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy;
 
-use eZ\Publish\Core\Base\WrappedServiceContainer;
+use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as APILegacySetupFactory;
 
 /**
@@ -52,7 +52,7 @@ class SetupFactory extends APILegacySetupFactory
                 static::$dsn
             );
 
-            static::$serviceContainer = new WrappedServiceContainer(
+            static::$serviceContainer = new ServiceContainer(
                 $installDir,
                 $installDir . "/eZ/Publish/Core/settings",
                 $installDir . "/var/cache/container",
