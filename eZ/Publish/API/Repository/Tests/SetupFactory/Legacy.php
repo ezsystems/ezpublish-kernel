@@ -323,72 +323,6 @@ class Legacy extends SetupFactory
     }
 
     /**
-     * Returns the global ezpublish-kernel settings
-     *
-     * @return mixed
-     *//*
-    protected function getGlobalSettings()
-    {
-        if ( self::$globalSettings === null )
-        {
-            $settingsPath = __DIR__ . '/../../../../../../config.php';
-
-            if ( !file_exists( $settingsPath ) )
-            {
-                throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
-            }
-
-            self::$globalSettings = include $settingsPath;
-        }
-
-        return self::$globalSettings;
-    }*/
-
-    /**
-     * Returns the configuration manager
-     *
-     * @return \eZ\Publish\Core\Base\ConfigurationManager
-     *//*
-    protected function getConfigurationManager()
-    {
-        if ( !isset( self::$configurationManager ) )
-        {
-            $settings = $this->getGlobalSettings();
-
-            self::$configurationManager = new ConfigurationManager(
-                array_merge_recursive(
-                    $settings,
-                    array(
-                        'base' => array(
-                            'Configuration' => array(
-                                'UseCache' => false
-                            )
-                        )
-                    )
-                ),
-                $settings['base']['Configuration']['Paths']
-            );
-        }
-
-        return self::$configurationManager;
-    }*/
-
-    /**
-     * Returns the dependency configuration
-     *
-     * @return array
-     *//*
-    protected function getDependencyConfiguration()
-    {
-        $dependencies = array();
-        if ( isset( $_ENV['legacyKernel'] ) )
-        {
-            $dependencies['@legacyKernel'] = $_ENV['legacyKernel'];
-        }
-        return $dependencies;
-    }*/
-
-    /**
      * Returns the service container used for initialization of the repository
      *
      * @return \eZ\Publish\Core\Base\ServiceContainer
@@ -421,30 +355,5 @@ class Legacy extends SetupFactory
         }
 
         return self::$serviceContainer;
-
-        /*
-        if ( !isset( self::$serviceContainer ) )
-        {
-            $configManager = $this->getConfigurationManager();
-
-            $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
-
-            $serviceSettings['persistence_handler']['alias'] = 'persistence_handler_cache';
-            $serviceSettings['io_handler']['alias'] = 'io_handler_legacy';
-
-            // Needed for URLAliasService tests
-            $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-US';
-            $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-GB';
-
-            $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
-
-            self::$serviceContainer = new ServiceContainer(
-                $serviceSettings,
-                $this->getDependencyConfiguration()
-            );
-        }
-
-        return self::$serviceContainer;
-        */
     }
 }
