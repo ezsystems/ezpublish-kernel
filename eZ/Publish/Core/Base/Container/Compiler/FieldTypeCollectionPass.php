@@ -1,23 +1,22 @@
 <?php
 /**
- * File containing the FieldTypeRegistryPass class.
+ * File containing the FieldTypeCollectionPass class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage;
+namespace eZ\Publish\Core\Base\Container\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use LogicException;
 
 /**
  * This compiler pass will register eZ Publish field types.
  */
-class FieldTypeRegistryPass implements CompilerPassInterface
+class FieldTypeCollectionPass implements CompilerPassInterface
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
@@ -26,12 +25,12 @@ class FieldTypeRegistryPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.field_type_registry' ) )
+        if ( !$container->hasDefinition( 'ezpublish.field_type_collection.factory' ) )
         {
             return;
         }
 
-        $fieldTypeRegistryDefinition = $container->getDefinition( 'ezpublish.persistence.field_type_registry' );
+        $fieldTypeCollectionFactoryDef = $container->getDefinition( 'ezpublish.field_type_collection.factory' );
 
         // Field types.
         // Alias attribute is the field type string.
@@ -46,11 +45,12 @@ class FieldTypeRegistryPass implements CompilerPassInterface
                     );
                 }
 
-                $fieldTypeRegistryDefinition->addMethodCall(
-                    'register',
+                $fieldTypeCollectionFactoryDef->addMethodCall(
+                    'registerFieldType',
                     array(
-                        $attribute['alias'],
-                        new Reference( $id ),
+                        // Only pass the service Id since field types will be lazy loaded via the service container
+                        $id,
+                        $attribute['alias']
                     )
                 );
             }

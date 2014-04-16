@@ -25,9 +25,9 @@ class RepositoryFactory extends ContainerAware
     /**
      * Collection of fieldTypes, lazy loaded via a closure
      *
-     * @var \Closure[]
+     * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
      */
-    protected $fieldTypes;
+    protected $fieldTypeCollectionFactory;
 
     /**
      * Collection of limitation types for the RoleService.
@@ -36,9 +36,10 @@ class RepositoryFactory extends ContainerAware
      */
     protected $roleLimitations = array();
 
-    public function __construct( $repositoryClass )
+    public function __construct( $repositoryClass, FieldTypeCollectionFactory $fieldTypeCollectionFactory )
     {
         $this->repositoryClass = $repositoryClass;
+        $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
     }
 
     /**
@@ -56,7 +57,7 @@ class RepositoryFactory extends ContainerAware
         $repository = new $this->repositoryClass(
             $persistenceHandler,
             array(
-                'fieldType'     => $this->fieldTypes,
+                'fieldType'     => $this->fieldTypeCollectionFactory->getFieldTypes(),
                 'role'          => array(
                     'limitationTypes'   => $this->roleLimitations
                 ),
@@ -74,22 +75,6 @@ class RepositoryFactory extends ContainerAware
     }
 
     /**
-     * Registers an eZ Publish field type.
-     * Field types are being registered as a closure so that they will be lazy loaded.
-     *
-     * @param string $fieldTypeServiceId The field type service Id
-     * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
-     */
-    public function registerFieldType( $fieldTypeServiceId, $fieldTypeAlias )
-    {
-        $container = $this->container;
-        $this->fieldTypes[$fieldTypeAlias] = function () use ( $container, $fieldTypeServiceId )
-        {
-            return $container->get( $fieldTypeServiceId );
-        };
-    }
-
-    /**
      * Registers a limitation type for the RoleService.
      *
      * @param string $limitationName
@@ -98,16 +83,6 @@ class RepositoryFactory extends ContainerAware
     public function registerLimitationType( $limitationName, SPILimitationType $limitationType )
     {
         $this->roleLimitations[$limitationName] = $limitationType;
-    }
-
-    /**
-     * Returns registered field types (as closures to be lazy loaded in the public API)
-     *
-     * @return \Closure[]
-     */
-    public function getFieldTypes()
-    {
-        return $this->fieldTypes;
     }
 
     /**

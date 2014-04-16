@@ -9,17 +9,17 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
-use eZ\Publish\Core\Base\Container\Compiler\FieldTypeRepositoryPass;
+use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class FieldTypeRepositoryPassTest extends AbstractCompilerPassTest
+class FieldTypeCollectionPassTest extends AbstractCompilerPassTest
 {
     protected function setUp()
     {
         parent::setUp();
-        $this->setDefinition( 'ezpublish.api.repository.factory', new Definition() );
+        $this->setDefinition( 'ezpublish.field_type_collection.factory', new Definition() );
     }
 
     /**
@@ -30,10 +30,10 @@ class FieldTypeRepositoryPassTest extends AbstractCompilerPassTest
      */
     protected function registerCompilerPass( ContainerBuilder $container )
     {
-        $container->addCompilerPass( new FieldTypeRepositoryPass() );
+        $container->addCompilerPass( new FieldTypeCollectionPass() );
     }
 
-    public function testRegisterLimitationType()
+    public function testRegisterFieldType()
     {
         $fieldTypeIdentifier = 'field_type_identifier';
         $serviceId = 'service_id';
@@ -44,7 +44,7 @@ class FieldTypeRepositoryPassTest extends AbstractCompilerPassTest
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
+            'ezpublish.field_type_collection.factory',
             'registerFieldType',
             array( $serviceId, $fieldTypeIdentifier )
         );
@@ -53,7 +53,7 @@ class FieldTypeRepositoryPassTest extends AbstractCompilerPassTest
     /**
      * @expectedException \LogicException
      */
-    public function testRegisterLimitationTypeNoAlias()
+    public function testRegisterFieldTypeNoAlias()
     {
         $fieldTypeIdentifier = 'field_type_identifier';
         $serviceId = 'service_id';
@@ -64,7 +64,7 @@ class FieldTypeRepositoryPassTest extends AbstractCompilerPassTest
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
+            'ezpublish.field_type_collection.factory',
             'registerFieldType',
             array( $serviceId, $fieldTypeIdentifier )
         );
