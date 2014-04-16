@@ -160,7 +160,7 @@ class WrappedServiceContainer implements Container
                 );
             }
         }
-        elseif ( !is_writable( $directory ) )
+        else if ( !is_writable( $directory ) )
         {
             throw new RuntimeException(
                 sprintf(
