@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
+use eZ\Publish\Core\Base\WrappedServiceContainer;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler as CachingContentTypeHandler;
@@ -396,21 +397,28 @@ class Legacy extends SetupFactory
     {
         if ( !isset( self::$serviceContainer ) )
         {
-            $settings = include __DIR__ . "/../../../../../../config.php";
+            $config = include __DIR__ . "/../../../../../../config.php";
+            $installDir = $config['service']['parameters']['install_dir'];
 
-            /** @var \eZ\Publish\Core\Base\WrappedServiceContainer $container */
-            $container = include __DIR__ . "/../../../../../../container.php";
+            /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
+            $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/container_builder.php";
 
-            $container->getInnerContainer()->setParameter(
+            $containerBuilder->setParameter(
                 "languages",
                 array( "eng-US", "eng-GB" )
             );
-            $container->getInnerContainer()->setParameter(
+            $containerBuilder->setParameter(
                 "legacy_dsn",
                 self::$dsn
             );
 
-            self::$serviceContainer = $container;
+            self::$serviceContainer = new WrappedServiceContainer(
+                $installDir,
+                $installDir . "/eZ/Publish/Core/settings",
+                $installDir . "/var/cache/container",
+                true,
+                $containerBuilder
+            );
         }
 
         return self::$serviceContainer;

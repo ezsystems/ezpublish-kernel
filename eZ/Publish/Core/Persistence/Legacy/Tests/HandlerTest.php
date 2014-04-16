@@ -13,6 +13,7 @@ use eZ\Publish\Core\Base\ConfigurationManager;
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Persistence\Legacy\Handler;
 
+use eZ\Publish\Core\Base\WrappedServiceContainer;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 use Symfony\Component\Config\FileLocator;
@@ -291,20 +292,45 @@ class HandlerTest extends TestCase
     {
         if ( !isset( self::$legacyHandler ) )
         {
-            $settings = include __DIR__ . '/../../../../../../config.php';
-
-            /** @var \eZ\Publish\Core\Base\WrappedServiceContainer $container */
-            $container = include __DIR__ . '/../../../../../../container.php';
-
-            $container->getInnerContainer()->setParameter(
-                "legacy_dsn",
-                $this->getDsn()
-            );
+            $container = $this->getContainer();
 
             self::$legacyHandler = $container->get( 'ezpublish.spi.persistence.legacy' );
         }
 
         return self::$legacyHandler;
+    }
+
+    protected static $container;
+
+    protected function getContainer()
+    {
+        if ( !isset( self::$container ) )
+        {
+            $config = include __DIR__ . '/../../../../../../config.php';
+            $installDir = $config['service']['parameters']['install_dir'];
+
+            /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
+            $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/container_builder.php";
+
+            $containerBuilder->setParameter(
+                "languages",
+                array( "eng-US", "eng-GB" )
+            );
+            $containerBuilder->setParameter(
+                "legacy_dsn",
+                $this->getDsn()
+            );
+
+            self::$container = new WrappedServiceContainer(
+                $installDir,
+                $installDir . "/eZ/Publish/Core/settings",
+                $installDir . "/var/cache/container",
+                true,
+                $containerBuilder
+            );
+        }
+
+        return self::$container;
     }
 
     /**
@@ -314,15 +340,13 @@ class HandlerTest extends TestCase
      */
     public function testDatabaseInstance()
     {
-        $method = new \ReflectionProperty(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Handler',
-            'dbHandler'
-        );
-        $method->setAccessible( true );
-
-        $dbHandler = $method->getValue( $this->getHandlerFixture() );
+        $container = $this->getContainer();
+        $databaseHandler = $container->get( "ezpublish.api.storage_engine.legacy.dbhandler" );
         $className = get_class( $this->getDatabaseHandler() );
 
-        $this->assertTrue( $dbHandler instanceof $className, get_class( $dbHandler ) . " not of type $className." );
+        $this->assertTrue(
+            $databaseHandler instanceof $className,
+            get_class( $databaseHandler ) . " not of type $className."
+        );
     }
 }

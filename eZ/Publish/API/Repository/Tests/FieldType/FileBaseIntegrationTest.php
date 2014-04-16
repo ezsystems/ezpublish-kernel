@@ -86,7 +86,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 
         if ( !isset( self::$installDir ) )
         {
-            self::$installDir = $this->getConfigValue( 'install_dir' );
+            self::$installDir = $this->getConfigValue( 'ezpublish.kernel.root_dir' );
             self::$storageDir = $this->getConfigValue( static::$storageDirConfigKey );
 
             self::setUpIgnoredPath( $this->getConfigValue( 'ignored_storage_files' ) );

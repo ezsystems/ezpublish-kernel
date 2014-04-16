@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy;
 
+use eZ\Publish\Core\Base\WrappedServiceContainer;
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as APILegacySetupFactory;
 
 /**
@@ -29,19 +30,34 @@ class SetupFactory extends APILegacySetupFactory
      */
     protected function getServiceContainer()
     {
-        if ( !isset( self::$serviceContainer ) )
+        if ( !isset( static::$serviceContainer ) )
         {
-            $container = parent::getServiceContainer()->getInnerContainer();
+            $config = include __DIR__ . "/../../../../../../../../config.php";
+            $installDir = $config['service']['parameters']['install_dir'];
+
+            /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
+            $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/container_builder.php";
 
             // disable cache - TODO fix bug with trash recover
-            $container->setAlias(
+            $containerBuilder->setAlias(
                 "ezpublish.api.persistence_handler",
                 "ezpublish.spi.persistence.legacy"
             );
-            // Reset changed language settings from parent factory
-            $container->setParameter(
+            $containerBuilder->setParameter(
                 "languages",
                 array()
+            );
+            $containerBuilder->setParameter(
+                "legacy_dsn",
+                static::$dsn
+            );
+
+            static::$serviceContainer = new WrappedServiceContainer(
+                $installDir,
+                $installDir . "/eZ/Publish/Core/settings",
+                $installDir . "/var/cache/container",
+                true,
+                $containerBuilder
             );
         }
 

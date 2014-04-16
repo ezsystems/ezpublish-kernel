@@ -9,9 +9,8 @@
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
+use eZ\Publish\Core\Base\WrappedServiceContainer;
 use eZ\Publish\Core\Base\Container\Compiler;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use PDO;
 
 /**
@@ -44,18 +43,38 @@ class LegacySolr extends Legacy
     {
         if ( !isset( self::$serviceContainer ) )
         {
-            $container = parent::getServiceContainer()->getInnerContainer();
+            $config = include __DIR__ . "/../../../../../../config.php";
+            $installDir = $config['service']['parameters']['install_dir'];
 
-            $container->addCompilerPass( new Compiler\Storage\Solr\AggregateCriterionVisitorPass() );
-            $container->addCompilerPass( new Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass() );
-            $container->addCompilerPass( new Compiler\Storage\Solr\AggregateFieldValueMapperPass() );
-            $container->addCompilerPass( new Compiler\Storage\Solr\AggregateSortClauseVisitorPass() );
-            $container->addCompilerPass( new Compiler\Storage\Solr\FieldRegistryPass() );
-            $container->addCompilerPass( new Compiler\Storage\Solr\SignalSlotPass() );
+            /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
+            $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/container_builder.php";
 
-            $container->setAlias(
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateCriterionVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateFieldValueMapperPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateSortClauseVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\FieldRegistryPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\SignalSlotPass() );
+
+            $containerBuilder->setAlias(
                 "ezpublish.api.persistence_handler",
                 "ezpublish.spi.persistence.cached_legacy_solr"
+            );
+            $containerBuilder->setParameter(
+                "languages",
+                array( "eng-US", "eng-GB" )
+            );
+            $containerBuilder->setParameter(
+                "legacy_dsn",
+                self::$dsn
+            );
+
+            self::$serviceContainer = new WrappedServiceContainer(
+                $installDir,
+                $installDir . "/eZ/Publish/Core/settings",
+                $installDir . "/var/cache/container",
+                true,
+                $containerBuilder
             );
         }
 
@@ -71,12 +90,10 @@ class LegacySolr extends Legacy
         // require this to run a full index here.
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
         $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy_solr' );
-        $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
-        $dbHandlerProperty->setAccessible( true );
-        /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $db */
-        $db = $dbHandlerProperty->getValue( $persistenceHandler );
+        /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
+        $databaseHandler = $this->getServiceContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
 
-        $query = $db
+        $query = $databaseHandler
             ->createSelectQuery()
             ->select( 'id', 'current_version' )
             ->from( 'ezcontentobject' );
