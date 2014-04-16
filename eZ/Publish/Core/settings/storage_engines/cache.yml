@@ -13,13 +13,14 @@ parameters:
     ezpublish.spi.persistence.cache.urlAliasHandler.class: eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     ezpublish.cache_pool.spi.cache.decorator.class: eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
-    ezpublish.cache_pool.class: eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator
+    ezpublish.cache_pool.class: Stash\Pool
     # Make sure logging is only enabled for debug by default
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: %kernel.debug%
 
 services:
     ezpublish.cache_pool.spi.cache.decorator:
-        class: eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator
+        class: %ezpublish.cache_pool.spi.cache.decorator.class%
+        arguments: [@ezpublish.cache_pool]
 
     ezpublish.cache_pool:
         class: %ezpublish.cache_pool.class%
