@@ -398,7 +398,7 @@ class Legacy extends SetupFactory
         if ( !isset( self::$serviceContainer ) )
         {
             $config = include __DIR__ . "/../../../../../../config.php";
-            $installDir = $config['service']['parameters']['install_dir'];
+            $installDir = $config['install_dir'];
 
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/container_builder.php";
@@ -414,8 +414,8 @@ class Legacy extends SetupFactory
 
             self::$serviceContainer = new ServiceContainer(
                 $installDir,
-                $installDir . "/eZ/Publish/Core/settings",
-                $installDir . "/var/cache/container",
+                $config['settings_dir'],
+                $config['cache_dir'],
                 true,
                 $containerBuilder
             );

@@ -359,7 +359,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ( $installDir === null )
         {
             $config = require 'config.php';
-            $installDir = $config['service']['parameters']['install_dir'];
+            $installDir = $config['install_dir'];
         }
         return $installDir;
     }

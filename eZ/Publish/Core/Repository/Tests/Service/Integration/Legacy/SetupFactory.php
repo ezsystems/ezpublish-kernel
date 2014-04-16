@@ -33,7 +33,7 @@ class SetupFactory extends APILegacySetupFactory
         if ( !isset( static::$serviceContainer ) )
         {
             $config = include __DIR__ . "/../../../../../../../../config.php";
-            $installDir = $config['service']['parameters']['install_dir'];
+            $installDir = $config['install_dir'];
 
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/container_builder.php";
@@ -54,8 +54,8 @@ class SetupFactory extends APILegacySetupFactory
 
             static::$serviceContainer = new ServiceContainer(
                 $installDir,
-                $installDir . "/eZ/Publish/Core/settings",
-                $installDir . "/var/cache/container",
+                $config['settings_dir'],
+                $config['cache_dir'],
                 true,
                 $containerBuilder
             );

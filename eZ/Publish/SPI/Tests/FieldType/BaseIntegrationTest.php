@@ -71,7 +71,7 @@ abstract class BaseIntegrationTest extends TestCase
         if ( $installDir === null )
         {
             $config = require __DIR__ . '/../../../../../config.php';
-            $installDir = $config['service']['parameters']['install_dir'];
+            $installDir = $config['install_dir'];
         }
         return $installDir;
     }
@@ -575,8 +575,8 @@ abstract class BaseIntegrationTest extends TestCase
 
     protected function getContainer()
     {
-        $settings = include __DIR__ . "/../../../../../config.php";
-        $installDir = $settings["service"]["parameters"]["install_dir"];
+        $config = include __DIR__ . "/../../../../../config.php";
+        $installDir = $config["install_dir"];
 
         $containerBuilder = new ContainerBuilder();
         $settingsPath = $installDir . "/eZ/Publish/Core/settings/";

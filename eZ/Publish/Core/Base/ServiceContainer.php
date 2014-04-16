@@ -96,7 +96,7 @@ class ServiceContainer implements Container
         $this->prepareDirectory( $this->cacheDir, "cache" );
 
         $cache = new ConfigCache(
-            $this->cacheDir . "/" . $this->containerClassName . ".php",
+            $this->cacheDir . "/container/" . $this->containerClassName . ".php",
             $this->debug
         );
 

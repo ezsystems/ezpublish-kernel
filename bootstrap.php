@@ -26,12 +26,12 @@ require_once $rootDir . "/vendor/autoload.php";
 
 
 // Bootstrap eZ Publish legacy kernel if configured
-if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
+if ( !empty( $settings['legacy_dir'] ) )
 {
     if ( !defined( 'EZCBASE_ENABLED' ) )
     {
         define( 'EZCBASE_ENABLED', false );
-        require_once $settings['service']['parameters']['legacy_dir'] . '/autoload.php';
+        require_once $settings['legacy_dir'] . '/autoload.php';
     }
 
     // Define $legacyKernelHandler to whatever you need before loading this bootstrap file.
@@ -45,7 +45,7 @@ if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
     {
         $legacyKernelHandler = new LegacyKernelCLI;
     }
-    $legacyKernel = new LegacyKernel( $legacyKernelHandler, $settings['service']['parameters']['legacy_dir'], getcwd() );
+    $legacyKernel = new LegacyKernel( $legacyKernelHandler, $settings['legacy_dir'], getcwd() );
     set_exception_handler( null );
     // Avoid "Fatal error" text from legacy kernel if not called
     $legacyKernel->runCallback(
@@ -57,6 +57,6 @@ if ( !empty( $settings['service']['parameters']['legacy_dir'] ) )
 
     // Exposing in env variables in order be able to use them in test cases.
     $_ENV['legacyKernel'] = $legacyKernel;
-    $_ENV['legacyPath'] = $settings['service']['parameters']['legacy_dir'];
-    $_ENV['imagemagickConvertPath'] = $settings['service']['parameters']['imagemagick_convert_path'];
+    $_ENV['legacyPath'] = $settings['legacy_dir'];
+    $_ENV['imagemagickConvertPath'] = $settings['imagemagick_convert_path'];
 }

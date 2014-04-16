@@ -2,7 +2,7 @@
 /**
  * File generates service container instance
  *
- * Expects global $settings to be set by caller
+ * Expects global $config to be set by caller
  *
  * @deprecated Since 5.0, this is only used for unit tests.
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
@@ -12,13 +12,13 @@
 
 use eZ\Publish\Core\Base\ServiceContainer;
 
-if ( !isset( $settings ) )
+if ( !isset( $config ) )
 {
-    throw new \RuntimeException( '$settings not provided to container.php' );
+    throw new \RuntimeException( '$config not provided to container.php' );
 }
 
 return new ServiceContainer(
-    $settings['service']['parameters']['install_dir'],
-    $settings['service']['parameters']['install_dir'] . "/eZ/Publish/Core/settings",
-    $settings['service']['parameters']['install_dir'] . "/var/cache/container"
+    $config['install_dir'],
+    $config['settings_dir'],
+    $config['cache_dir']
 );
