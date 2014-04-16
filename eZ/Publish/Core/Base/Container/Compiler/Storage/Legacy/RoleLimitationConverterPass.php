@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This compiler pass will register eZ Publish field types.
+ * This compiler pass will register Legacy Storage role limitation converters.
  */
 class RoleLimitationConverterPass implements CompilerPassInterface
 {
