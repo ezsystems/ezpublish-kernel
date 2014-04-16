@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler\Stubs;
+namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs;
 
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 use eZ\Publish\SPI\Persistence\Content\Field;

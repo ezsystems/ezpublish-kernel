@@ -25,12 +25,14 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.legacy.external_storage_registry' ) )
+        if ( !$container->hasDefinition( 'ezpublish.persistence.external_storage_registry.factory' ) )
         {
             return;
         }
 
-        $externalStorageRegistry = $container->getDefinition( 'ezpublish.persistence.legacy.external_storage_registry' );
+        $externalStorageRegistryFactoryDefinition = $container->getDefinition(
+            'ezpublish.persistence.external_storage_registry.factory'
+        );
 
         // Gateways for external storage handlers.
         // Alias attribute is the corresponding field type string.
@@ -91,11 +93,11 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                     );
                 }
 
-                $externalStorageRegistry->addMethodCall(
-                    'register',
+                $externalStorageRegistryFactoryDefinition->addMethodCall(
+                    'registerExternalStorageHandler',
                     array(
+                        $id,
                         $attribute['alias'],
-                        new Reference( $id ),
                     )
                 );
             }
