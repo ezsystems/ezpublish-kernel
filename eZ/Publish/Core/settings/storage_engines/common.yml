@@ -2,9 +2,7 @@ parameters:
     ezpublish.persistence.field_type_registry.class: eZ\Publish\Core\Persistence\FieldTypeRegistry
     ezpublish.persistence.slug_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
 
-    # Legacy storage engine configuration
     # Transformation parser/compiler for search purpose
-
     ezpublish.api.storage_engine.pcre_compiler.class: eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler
     ezpublish.api.storage_engine.transformation_converter.class: eZ\Publish\Core\Persistence\Utf8Converter
 
