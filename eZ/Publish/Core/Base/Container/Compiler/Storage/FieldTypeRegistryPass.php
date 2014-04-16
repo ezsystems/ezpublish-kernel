@@ -7,11 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy;
+namespace eZ\Publish\Core\Base\Container\Compiler\Storage;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use LogicException;
 
 /**
  * This compiler pass will register eZ Publish field types.
@@ -30,7 +31,7 @@ class FieldTypeRegistryPass implements CompilerPassInterface
             return;
         }
 
-        $repositoryFactoryDef = $container->getDefinition( 'ezpublish.persistence.field_type_registry' );
+        $fieldTypeRegistryDefinition = $container->getDefinition( 'ezpublish.persistence.field_type_registry' );
 
         // Field types.
         // Alias attribute is the field type string.
@@ -40,10 +41,12 @@ class FieldTypeRegistryPass implements CompilerPassInterface
             {
                 if ( !isset( $attribute['alias'] ) )
                 {
-                    throw new \LogicException( 'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.' );
+                    throw new LogicException(
+                        'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.'
+                    );
                 }
 
-                $repositoryFactoryDef->addMethodCall(
+                $fieldTypeRegistryDefinition->addMethodCall(
                     'register',
                     array(
                         $attribute['alias'],
