@@ -14,14 +14,9 @@ parameters:
 services:
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
-        arguments:
-            # @todo: this will ONLY take the default binary_dir setting into account !
-            - %ezsettings.default.binary_dir%
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
-        arguments:
-            - %ezsettings.default.image.published_images_dir%
 
     ezpublish.fieldType.ezbinaryfile.externalStorage:
         class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
