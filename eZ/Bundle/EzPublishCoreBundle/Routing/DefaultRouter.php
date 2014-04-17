@@ -217,7 +217,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
     /**
      * Merges context from $simplifiedRequest into a clone of the current context.
      *
-     * @param SimplifiedRequest $simplifiedRequest
+     * @param \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest $simplifiedRequest
      *
      * @return \Symfony\Component\Routing\RequestContext
      */

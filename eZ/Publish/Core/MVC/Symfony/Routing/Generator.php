@@ -57,7 +57,7 @@ abstract class Generator implements SiteAccessAware
     }
 
     /**
-     * @param SiteAccess $siteAccess
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      */
     public function setSiteAccess( SiteAccess $siteAccess = null )
     {
