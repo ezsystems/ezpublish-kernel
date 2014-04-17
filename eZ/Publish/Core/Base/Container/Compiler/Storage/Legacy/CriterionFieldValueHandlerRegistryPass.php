@@ -34,29 +34,17 @@ class CriterionFieldValueHandlerRegistryPass implements CompilerPassInterface
             foreach ( $attributes as $attribute )
             {
                 if ( !isset( $attribute['alias'] ) )
-                    throw new LogicException( 'ezpublish.storageEngine.legacy.converter service tag needs an "alias" attribute to identify the field type. None given.' );
-
-                if ( isset( $attribute['lazy'] ) && $attribute['lazy'] === true )
                 {
-                    if ( !isset( $attribute['callback'] ) )
-                        throw new LogicException( "Converter service '$id' is marked as lazy but no callback is provided! Please provide a callback." );
-
-                    $converter = $attribute['callback'];
-                    if ( strpos( $converter, '::' ) === 0 )
-                    {
-                        $converter = $container->getDefinition( $id )->getClass() . $converter;
-                    }
-                }
-                else
-                {
-                    $converter = new Reference( $id );
+                    throw new LogicException(
+                        'ezpublish.storageEngine.legacy.converter service tag needs an "alias" attribute to identify the field type. None given.'
+                    );
                 }
 
                 $registry->addMethodCall(
                     'register',
                     array(
                         $attribute['alias'],
-                        $converter
+                        new Reference( $id )
                     )
                 );
             }
