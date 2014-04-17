@@ -74,7 +74,6 @@ class URI extends Map implements URILexer
 
     public function reverseMatch( $siteAccessName )
     {
-        $mapKey = $this->getMapKey();
         $matcher = parent::reverseMatch( $siteAccessName );
         if ( $matcher instanceof URI )
         {

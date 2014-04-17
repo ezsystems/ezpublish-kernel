@@ -1101,7 +1101,7 @@ class User extends RestController
             $session->getName(),
             $session->getId(),
             $inputCsrf,
-            $sessionCreated = false
+            false
         );
     }
 
