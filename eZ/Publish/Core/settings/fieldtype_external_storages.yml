@@ -12,12 +12,6 @@ parameters:
     ezpublish.fieldType.ezrichtext.externalStorage.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage
 
 services:
-    ezpublish.fieldType.ezbinaryfile.pathGenerator:
-        class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
-
-    ezpublish.fieldType.ezimage.pathGenerator:
-        class: %ezpublish.fieldType.ezimage.pathGenerator.class%
-
     ezpublish.fieldType.ezbinaryfile.externalStorage:
         class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
         arguments:
