@@ -584,7 +584,7 @@ abstract class BaseIntegrationTest extends TestCase
 
         $loader->load( 'fieldtypes.yml' );
         $loader->load( 'io.yml' );
-        $loader->load( 'papi.yml' );
+        $loader->load( 'repository.yml' );
         $loader->load( 'roles.yml' );
         $loader->load( 'fieldtype_external_storages.yml' );
         $loader->load( 'storage_engines/common.yml' );

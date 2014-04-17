@@ -262,7 +262,7 @@ class EzPublishCoreExtension extends Extension
             $container,
             new FileLocator( __DIR__ . '/../../../Publish/Core/settings' )
         );
-        $coreLoader->load( 'papi.yml' );
+        $coreLoader->load( 'repository.yml' );
         //$coreLoader->load( 'io.yml' );
         $coreLoader->load( 'fieldtypes.yml' );
         $coreLoader->load( 'fieldtype_external_storages.yml' );

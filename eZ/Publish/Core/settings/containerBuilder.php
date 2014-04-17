@@ -30,7 +30,7 @@ $loader->load( 'fieldtype_external_storages.yml' );
 $loader->load( 'fieldtype_services.yml' );
 $loader->load( 'indexable_fieldtypes.yml' );
 $loader->load( 'fieldtypes.yml' );
-$loader->load( 'papi.yml' );
+$loader->load( 'repository.yml' );
 $loader->load( 'storage_engines/common.yml' );
 $loader->load( 'storage_engines/cache.yml' );
 $loader->load( 'storage_engines/legacy.yml' );
