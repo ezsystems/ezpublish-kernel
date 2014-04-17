@@ -34,7 +34,7 @@ services:
             - @ezpublish.spi.persistence.legacy.content_type.handler
             - @ezpublish.persistence.solr.search.content.field_name_generator
 
-    # TODO
+    # TODO: when Solr storage is enabled and multiple storage engines are used simultaneously this will need to be set by factory
     ezpublish.persistence.solr.search.content.field_map:
         alias: ezpublish.persistence.legacy_solr.search.content.field_map
 
