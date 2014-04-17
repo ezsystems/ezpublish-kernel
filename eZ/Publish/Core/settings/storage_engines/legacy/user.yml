@@ -10,7 +10,7 @@ parameters:
     ezpublish.persistence.legacy.role.limitation.converter.class: eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter
 
 services:
-    ezpublish.persistence.legacy.user.gateway:
+    ezpublish.persistence.legacy.user.gateway.inner:
         class: %ezpublish.persistence.legacy.user.gateway.class%
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
@@ -18,7 +18,11 @@ services:
     ezpublish.persistence.legacy.user.gateway.exception_conversion:
         class: %ezpublish.persistence.legacy.user.gateway.exception_conversion.class%
         arguments:
-            - @ezpublish.persistence.legacy.user.gateway
+            - @ezpublish.persistence.legacy.user.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.user.gateway:
+        alias: ezpublish.persistence.legacy.user.gateway.exception_conversion
 
     ezpublish.persistence.legacy.role.gateway:
         class: %ezpublish.persistence.legacy.role.gateway.class%
@@ -53,7 +57,7 @@ services:
     ezpublish.spi.persistence.legacy.user.handler:
         class: %ezpublish.spi.persistence.legacy.user.handler.class%
         arguments:
-            - @ezpublish.persistence.legacy.user.gateway.exception_conversion
+            - @ezpublish.persistence.legacy.user.gateway
             - @ezpublish.persistence.legacy.role.gateway
             - @ezpublish.persistence.legacy.user.mapper
             - @ezpublish.persistence.legacy.role.limitation.converter

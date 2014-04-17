@@ -8,14 +8,19 @@ parameters:
     ezpublish.persistence.legacy.language.mask_generator.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
 
 services:
-    ezpublish.persistence.legacy.language.gateway:
+    ezpublish.persistence.legacy.language.gateway.inner:
         class: %ezpublish.persistence.legacy.language.gateway.class%
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
 
     ezpublish.persistence.legacy.language.gateway.exception_conversion:
         class: %ezpublish.persistence.legacy.language.gateway.exception_conversion.class%
-        arguments: [@ezpublish.persistence.legacy.language.gateway]
+        arguments:
+            - @ezpublish.persistence.legacy.language.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.language.gateway:
+        alias: ezpublish.persistence.legacy.language.gateway.exception_conversion
 
     ezpublish.persistence.legacy.language.mapper:
         class: %ezpublish.persistence.legacy.language.mapper.class%
@@ -23,7 +28,7 @@ services:
     ezpublish.spi.persistence.legacy.language.handler.inner:
         class: %ezpublish.spi.persistence.legacy.language.handler.class%
         arguments:
-            - @ezpublish.persistence.legacy.language.gateway.exception_conversion
+            - @ezpublish.persistence.legacy.language.gateway
             - @ezpublish.persistence.legacy.language.mapper
 
     ezpublish.persistence.legacy.language.cache:
