@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Legacy;
+namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\ExternalStorageRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageRegistryPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
