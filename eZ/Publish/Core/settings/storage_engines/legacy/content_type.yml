@@ -44,19 +44,24 @@ services:
         abstract: true
         class: %ezpublish.persistence.legacy.content_type.update_handler.base.class%
 
-    ezpublish.persistence.legacy.content_type.update_handler:
+    ezpublish.persistence.legacy.content_type.update_handler.basic:
         parent: ezpublish.persistence.legacy.content_type.update_handler.base
         class: %ezpublish.persistence.legacy.content_type.update_handler.class%
         arguments:
             - @ezpublish.persistence.legacy.content_type.gateway
             - @ezpublish.persistence.legacy.content_type.content_updater
 
-    # TODO
+    # Note: if deferred ContentType update handler is required uncomment this service and override
+    # 'ezpublish.persistence.legacy.content_type.update_handler' alias so that it points to it
+    #
     #ezpublish.persistence.legacy.content_type.update_handler.deferred:
     #    parent: ezpublish.persistence.legacy.content_type.update_handler.base
     #    class: %ezpublish.persistence.legacy.content_type.update_handler.deferred.class%
     #    arguments:
     #        - @ezpublish.persistence.legacy.content_type.gateway
+
+    ezpublish.persistence.legacy.content_type.update_handler:
+        alias: ezpublish.persistence.legacy.content_type.update_handler.basic
 
     ezpublish.spi.persistence.legacy.content_type.handler.inner:
         class: %ezpublish.spi.persistence.legacy.content_type.handler.class%
