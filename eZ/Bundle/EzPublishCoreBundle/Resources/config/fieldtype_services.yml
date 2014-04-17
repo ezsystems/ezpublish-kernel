@@ -228,6 +228,9 @@ services:
             - @ezpublish.core.io.handler.legacy
             - 'image.published_images_dir'
 
+    ezpublish.fieldType.ezimage.pathGenerator:
+        class: %ezpublish.fieldType.ezimage.pathGenerator.class%
+
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.IOService:
         class: %ezpublish.core.io.service.class%
@@ -236,3 +239,6 @@ services:
         arguments:
             - @ezpublish.core.io.handler.legacy
             - 'binary_dir'
+
+    ezpublish.fieldType.ezbinaryfile.pathGenerator:
+        class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
