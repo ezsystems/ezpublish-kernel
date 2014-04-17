@@ -12,6 +12,7 @@ parameters:
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
 
 services:
+    # Image
     ezpublish.fieldType.ezimage.IOService:
         class: %ezpublish.core.io.service.class%
         arguments:
@@ -20,6 +21,10 @@ services:
             -
                 prefix: %image_storage_prefix%
 
+    ezpublish.fieldType.ezimage.pathGenerator:
+        class: %ezpublish.fieldType.ezimage.pathGenerator.class%
+
+    # BinaryFile
     ezpublish.fieldType.ezbinaryfile.IOService:
         class: %ezpublish.core.io.service.class%
         arguments:
@@ -27,6 +32,9 @@ services:
             - @ezpublish.core.io.mimeTypeDetector
             -
                 prefix: %binaryfile_storage_prefix%
+
+    ezpublish.fieldType.ezbinaryfile.pathGenerator:
+        class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
 
     # RichText
     ezpublish.fieldType.ezrichtext.converter.input.dispatcher:
@@ -48,10 +56,3 @@ services:
     # Page
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
-
-    ezpublish.fieldType.ezimage.pathGenerator:
-        class: %ezpublish.fieldType.ezimage.pathGenerator.class%
-
-    ezpublish.fieldType.ezbinaryfile.pathGenerator:
-        class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
-
