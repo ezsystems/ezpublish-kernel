@@ -82,9 +82,6 @@ services:
     # are registered to this one using compilation pass
     ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.registry:
         class: %ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.registry.class%
-        arguments:
-            - []
-            - @ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.composite
 
     ezpublish.persistence.legacy.search.gateway.criterion_field_value_converter:
         class: %ezpublish.persistence.legacy.search.gateway.criterion_field_value_converter.class%
