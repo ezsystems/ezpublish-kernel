@@ -56,6 +56,7 @@ class EzPublishCoreBundle extends Bundle
 
         $container->addCompilerPass( new FieldTypeCollectionPass );
         $container->addCompilerPass( new RegisterLimitationTypePass );
+        $container->addCompilerPass( new Storage\ExternalStorageRegistryPass() );
         $container->addCompilerPass( new Storage\Legacy\FieldValueConverterRegistryPass );
         $container->addCompilerPass( new Storage\Legacy\CriterionFieldValueHandlerRegistryPass );
         $container->addCompilerPass( new Storage\Legacy\CriteriaConverterPass );
