@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\Core\REST\Client\ContentService;
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
@@ -38,7 +38,7 @@ class Content extends BaseParser
     protected $parserTools;
 
     /**
-     * @var \eZ\Publish\Core\REST\Client\ContentService
+     * @var \eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
 
@@ -49,7 +49,7 @@ class Content extends BaseParser
 
     /**
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
-     * @param \eZ\Publish\Core\REST\Client\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo $versionInfoParser
      * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
      */

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use eZ\Publish\Core\REST\Server\Input\Parser;
+use eZ\Publish\Core\REST\Common\Input\Parser;
 
 class ContentObjectStatesTest extends BaseTest
 {
@@ -97,7 +97,7 @@ class ContentObjectStatesTest extends BaseTest
     /**
      * Gets the ContentObjectStates parser
      *
-     * @return \eZ\Publish\Core\REST\Server\Input\Parser\ContentObjectStates;
+     * @return \eZ\Publish\Core\REST\Common\Input\Parser\ContentObjectStates;
      */
     protected function internalGetParser()
     {

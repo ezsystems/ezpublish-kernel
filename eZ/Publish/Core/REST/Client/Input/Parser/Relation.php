@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Client\Input\Parser;
 use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Client\Values;
-use eZ\Publish\Core\REST\Client\ContentService;
+use eZ\Publish\API\Repository\ContentService;
 
 /**
  * Parser for Relation
@@ -27,7 +27,7 @@ class Relation extends BaseParser
     protected $contentService;
 
     /**
-     * @param \eZ\Publish\Core\REST\Input\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
     public function __construct( ContentService $contentService )
     {

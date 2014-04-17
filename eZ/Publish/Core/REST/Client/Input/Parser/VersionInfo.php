@@ -13,7 +13,7 @@ use eZ\Publish\Core\REST\Common\Input\BaseParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\Values;
-use eZ\Publish\Core\REST\Client\ContentService;
+use eZ\Publish\API\Repository\ContentService;
 
 /**
  * Parser for VersionInfo
@@ -34,7 +34,7 @@ class VersionInfo extends BaseParser
 
     /**
      * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
-     * @param \eZ\Publish\Core\REST\Client\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
     public function __construct( ParserTools $parserTools, ContentService $contentService )
     {
