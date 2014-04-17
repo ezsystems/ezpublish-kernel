@@ -1,7 +1,6 @@
 parameters:
     ezpublish.persistence.connection.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageConnectionFactory
     #ezpublish.api.storage_engine.legacy.dsn: <database_type>://<user>:<password>@<host>/<database_name>
-    ezpublish.api.storage_engine.legacy.defer_type_update: false
 
 services:
     ezpublish.persistence.connection.factory:
