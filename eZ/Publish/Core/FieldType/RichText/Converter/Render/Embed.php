@@ -14,7 +14,6 @@ use eZ\Publish\Core\FieldType\RichText\Converter;
 use eZ\Publish\Core\FieldType\RichText\Converter\Render;
 use Psr\Log\LoggerInterface;
 use DOMDocument;
-use DOMElement;
 
 /**
  * RichText Template converter injects rendered template payloads into template elements.
