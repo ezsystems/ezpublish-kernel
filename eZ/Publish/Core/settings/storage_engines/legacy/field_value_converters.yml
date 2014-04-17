@@ -26,7 +26,6 @@ parameters:
     ezpublish.fieldType.ezurl.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url
     ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
     ezpublish.fieldType.ezpage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Page
-    ezpublish.fieldType.ezrecommendation.converter.class: %ezpublish.fieldType.eznull.converter.class%
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
 services:
@@ -253,8 +252,7 @@ services:
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: eztags, lazy: true, callback: '::create'}
 
-    # TODO
     ezpublish.fieldType.ezrecommendation.converter:
-        class: %ezpublish.fieldType.ezrecommendation.converter.class%
+        class: %ezpublish.fieldType.eznull.converter.class%
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezrecommendation, lazy: true, callback: '::create'}
