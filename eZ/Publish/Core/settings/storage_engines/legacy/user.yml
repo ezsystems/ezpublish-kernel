@@ -24,16 +24,19 @@ services:
     ezpublish.persistence.legacy.user.gateway:
         alias: ezpublish.persistence.legacy.user.gateway.exception_conversion
 
-    ezpublish.persistence.legacy.role.gateway:
+    ezpublish.persistence.legacy.role.gateway.inner:
         class: %ezpublish.persistence.legacy.role.gateway.class%
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
 
-    # TODO fix
-    #ezpublish.persistence.legacy.role.gateway.exception_conversion:
-    #    class: %ezpublish.persistence.legacy.role.gateway.exception_conversion.class%
-    #    arguments:
-    #        - @ezpublish.persistence.legacy.role.gateway
+    ezpublish.persistence.legacy.role.gateway.exception_conversion:
+        class: %ezpublish.persistence.legacy.role.gateway.exception_conversion.class%
+        arguments:
+            - @ezpublish.persistence.legacy.role.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.role.gateway:
+        alias: ezpublish.persistence.legacy.role.gateway.exception_conversion
 
     ezpublish.persistence.legacy.user.mapper:
         class: %ezpublish.persistence.legacy.user.mapper.class%
