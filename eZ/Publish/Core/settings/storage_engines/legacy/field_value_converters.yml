@@ -29,7 +29,8 @@ parameters:
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Null
 
 services:
-    # TODO
+    # Note: converter services tagged with 'ezpublish.storageEngine.legacy.converter' are
+    # registered to this one using compilation pass and factory
     ezpublish.persistence.legacy.field_value_converter.registry:
         class: %ezpublish.persistence.legacy.field_value_converter.registry.class%
 

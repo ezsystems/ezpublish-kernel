@@ -50,7 +50,8 @@ services:
         tags:
             - {name: ezpublish.persistence.legacy.role.limitation.handler}
 
-    # TODO
+    # Note: services tagged with 'ezpublish.persistence.legacy.role.limitation.handler'
+    # are registered to this one using compilation pass
     ezpublish.persistence.legacy.role.limitation.converter:
         class: %ezpublish.persistence.legacy.role.limitation.converter.class%
 
