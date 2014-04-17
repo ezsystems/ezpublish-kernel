@@ -11,7 +11,7 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context;
 
-use EzSystems\BehatBundle\Features\Context\BrowserContext;
+use EzSystems\BehatBundle\Features\Context\Browser\BrowserContext;
 use PHPUnit_Framework_Assert as Assertion;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
