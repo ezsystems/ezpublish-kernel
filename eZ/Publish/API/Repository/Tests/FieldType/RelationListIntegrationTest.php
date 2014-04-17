@@ -84,6 +84,14 @@ class RelationListFieldTypeIntegrationTest extends RelationBaseIntegrationTest
             ),
             new Relation(
                 array(
+                    "sourceFieldDefinitionIdentifier" => "data",
+                    "type" => Relation::FIELD,
+                    "sourceContentInfo" => $content->contentInfo,
+                    "destinationContentInfo" => $contentService->loadContentInfo( 49 )
+                )
+            ),
+            new Relation(
+                array(
                     "id" => null,
                     "sourceFieldDefinitionIdentifier" => "data",
                     "type" => Relation::FIELD,
@@ -249,7 +257,7 @@ class RelationListFieldTypeIntegrationTest extends RelationBaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new RelationListValue( array( 4, 54 ) );
+        return new RelationListValue( array( 49, 54, 4 ) );
     }
 
     /**
@@ -267,7 +275,7 @@ class RelationListFieldTypeIntegrationTest extends RelationBaseIntegrationTest
         );
 
         $expectedData = array(
-            'destinationContentIds' => array( 4, 54 ),
+            'destinationContentIds' => array( 49, 54, 4 ),
         );
         $this->assertPropertiesCorrectUnsorted(
             $expectedData,
