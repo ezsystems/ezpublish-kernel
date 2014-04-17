@@ -56,10 +56,6 @@ services:
             - @ezpublish.api.persistence_handler
         lazy: true
 
-    # Storage engine switch
-    ezpublish.api.persistence_handler:
-        alias: ezpublish.spi.persistence.cached_legacy
-
     ezpublish.api.service.content:
         class: %ezpublish.api.service.content.class%
         factory_service: ezpublish.api.repository.factory
