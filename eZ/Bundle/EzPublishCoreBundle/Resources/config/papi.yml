@@ -15,7 +15,7 @@ parameters:
     ezpublish.signalslot.event_converter_slot.class: eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot
 
     # Using legacy storage engine for data compatibility with 4.x
-    ezpublish.api.storage_engine.default: legacy
+    ezpublish.api.storage_engine.default: cached_legacy
 
     ezpublish.api.content.class: eZ\Publish\Core\Repository\Values\Content\Content
     ezpublish.api.location.class: eZ\Publish\Core\Repository\Values\Content\Location
