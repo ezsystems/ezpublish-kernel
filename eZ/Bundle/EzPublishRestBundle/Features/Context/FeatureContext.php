@@ -14,11 +14,12 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 use EzSystems\BehatBundle\Features\Context\FeatureContext as BaseContext;
 use eZ\Bundle\EzPublishRestBundle\Features\Context\RestInternalSentences;
 use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\PyStringNode;
 use PHPUnit_Framework_Assert as Assertion;
 
 /**
@@ -74,14 +75,15 @@ class FeatureContext extends BaseContext implements RestInternalSentences
     public function convertObjectTo( ValueObject $object, $type )
     {
         $type = strtolower( $type );
-        switch( $type ) {
-        case 'json':
-        case 'xml':
-            $visitor = $this->kernel->getContainer()->get( 'ezpublish_rest.output.visitor.' . $type );
-            break;
+        switch( $type )
+        {
+            case 'json':
+            case 'xml':
+                $visitor = $this->kernel->getContainer()->get( 'ezpublish_rest.output.visitor.' . $type );
+                break;
 
-        default:
-            throw new InvalidArgumentException( 'rest body type', $type );
+            default:
+                throw new InvalidArgumentException( 'rest body type', $type );
         }
 
         return $visitor->visit( $object );
@@ -143,8 +145,6 @@ class FeatureContext extends BaseContext implements RestInternalSentences
      */
     protected function createAnObject( $objectType )
     {
-        $repository = $this->getRepository();
-
         switch( $objectType ) {
         default:
             throw new PendingException( "Make object of '$objectType' type is not defined yet" );
@@ -509,13 +509,14 @@ class FeatureContext extends BaseContext implements RestInternalSentences
             throw new InvalidArgumentException( 'response object', 'is not an exception' );
         }
 
-        switch ( $property ) {
-        case 'code':
-            return $exception->getCode();
+        switch ( $property )
+        {
+            case 'code':
+                return $exception->getCode();
 
-        case 'description':
-        case 'message':
-            return $exception->getMessage();
+            case 'description':
+            case 'message':
+                return $exception->getMessage();
         }
     }
 

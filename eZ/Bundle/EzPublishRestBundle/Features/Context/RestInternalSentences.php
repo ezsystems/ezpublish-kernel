@@ -12,6 +12,7 @@
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\PyStringNode;
 
 /**
  * RestInternalSentences
