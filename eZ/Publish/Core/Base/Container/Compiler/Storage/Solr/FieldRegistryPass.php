@@ -31,7 +31,7 @@ class FieldRegistryPass implements CompilerPassInterface
             return;
         }
 
-        $fieldRegistryDefinitions = $container->getDefinition( 'ezpublish.persistence.solr.search.field_registry' );
+        $fieldRegistryDefinition = $container->getDefinition( 'ezpublish.persistence.solr.search.field_registry' );
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType.indexable' ) as $id => $attributes )
         {
@@ -45,7 +45,7 @@ class FieldRegistryPass implements CompilerPassInterface
                     );
                 }
 
-                $fieldRegistryDefinitions->addMethodCall(
+                $fieldRegistryDefinition->addMethodCall(
                     'registerType',
                     array(
                         $attribute['alias'],
