@@ -14,6 +14,10 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 
+/**
+ * The TreeHandler is an intersect between ContentHandler and LocationHandler,
+ * used to avoid circular dependency between them.
+ */
 class TreeHandler
 {
     /**
