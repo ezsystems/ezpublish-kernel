@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Exception\LogicException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This compiler pass will register eZ Publish field types.
+ * This compiler pass will register Legacy Storage field value converters.
  */
 class FieldValueConverterRegistryPass implements CompilerPassInterface
 {

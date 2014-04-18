@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
- * This compiler pass will register eZ Publish field types.
+ * This compiler pass will register Legacy Storage sort clause handlers.
  */
 class SortClauseConverterPass implements CompilerPassInterface
 {
