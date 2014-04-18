@@ -177,6 +177,9 @@ class LegacyResponseManager
      */
     protected function removeHeader( $headerName )
     {
-        header_remove( $headerName );
+        if ( !headers_sent() )
+        {
+            header_remove( $headerName );
+        }
     }
 }
