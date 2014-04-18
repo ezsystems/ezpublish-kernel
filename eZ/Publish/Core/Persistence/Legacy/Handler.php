@@ -17,6 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as TypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as TypeMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Handler as LocationSearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler as TrashHandler;
@@ -308,6 +309,11 @@ class Handler implements HandlerInterface
     protected $connection;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler
+     */
+    protected $treeHandler;
+
+    /**
      * Creates a new repository handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler The database handler
@@ -341,8 +347,6 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @todo remove circular dependency with LocationHandler
-     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     public function contentHandler()
@@ -355,11 +359,27 @@ class Handler implements HandlerInterface
                 $this->getContentMapper(),
                 $this->getFieldHandler(),
                 $this->getSlugConverter(),
-                $this->getUrlAliasGateway()
+                $this->getUrlAliasGateway(),
+                $this->contentTypeHandler(),
+                $this->getTreeHandler()
             );
-            $this->contentHandler->locationHandler = $this->locationHandler();
         }
         return $this->contentHandler;
+    }
+
+    protected function getTreeHandler()
+    {
+        if ( !isset( $this->locationTreeHandler ) )
+        {
+            $this->treeHandler = new TreeHandler(
+                $this->getLocationGateway(),
+                $this->getLocationMapper(),
+                $this->getContentGateway(),
+                $this->getContentMapper(),
+                $this->getFieldHandler()
+            );
+        }
+        return $this->treeHandler;
     }
 
     /**
@@ -403,8 +423,6 @@ class Handler implements HandlerInterface
     /**
      * Returns a field handler
      *
-     * @todo remove circular dependency with ContentTypeHandler
-     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected function getFieldHandler()
@@ -418,7 +436,6 @@ class Handler implements HandlerInterface
                 $this->contentLanguageHandler(),
                 $this->getFieldTypeRegistry()
             );
-            $this->fieldHandler->typeHandler = $this->contentTypeHandler();
         }
         return $this->fieldHandler;
     }
@@ -605,12 +622,10 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @todo remove circular dependency with FieldHandler
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler()
     {
-        $this->getFieldHandler();
         if ( !isset( $this->contentTypeHandler ) )
         {
             $this->contentTypeHandler = new Content\Type\MemoryCachingHandler(
@@ -709,21 +724,18 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @todo remove circular dependency with ContentHandler
-     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
      */
     public function locationHandler()
     {
-        $this->contentHandler();
         if ( !isset( $this->locationHandler ) )
         {
             $this->locationHandler = new LocationHandler(
                 $this->getLocationGateway(),
                 $this->getLocationMapper(),
                 $this->contentHandler(),
-                $this->getContentMapper(),
-                $this->objectStateHandler()
+                $this->objectStateHandler(),
+                $this->getTreeHandler()
             );
         }
         return $this->locationHandler;
