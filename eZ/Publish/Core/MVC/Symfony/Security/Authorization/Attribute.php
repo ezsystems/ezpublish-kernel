@@ -14,16 +14,19 @@ namespace eZ\Publish\Core\MVC\Symfony\Security\Authorization;
  *
  * $module represents the global scope you want to check access to (e.g. "content")
  * $function represents the feature inside $module (e.g. "read")
- * $limitations are optional limitations to check against (e.g. array( 'SectionID' => 3 ))
+ * $limitations are optional limitations to check against (e.g. array( 'valueObject' => $contentInfo )).
+ *              Supported keys are "valueObject" and "targets".
+ *              "valueObject": ValueObject you want to check access to (e.g. ContentInfo)
+ *              "targets": Location, parent or "assignment" (e.g. Section) value object, or an array of the same
  *
  * Usage example:
  * <code>
  * use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
  *
  * // From inside a controller
- * // Will check if current user has access to content/read for section 3 (media)
+ * // Will check if current user can assign a content to a section, $section being a Section value object.
  * $hasAccess = $this->isGranted(
- *     new AuthorizationAttribute( 'content', 'read', array( 'SectionID' => 3 ) )
+ *     new AuthorizationAttribute( 'content', 'read', array( 'valueObject' => $contentInfo, 'targets' => $section ) )
  * );
  * </code>
  */
@@ -44,11 +47,6 @@ class Attribute
      */
     public $limitations;
 
-    /**
-     * @param string $module
-     * @param string $function
-     * @param array $limitations
-     */
     public function __construct( $module = null, $function = null, array $limitations = array() )
     {
         $this->module = $module;
