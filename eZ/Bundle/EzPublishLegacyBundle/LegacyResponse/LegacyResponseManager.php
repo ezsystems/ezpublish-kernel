@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Templating\EngineInterface;
 use DateTime;
@@ -109,6 +110,8 @@ class LegacyResponseManager
      */
     public function generateRedirectResponse( ezpKernelRedirect $redirectResult )
     {
+        // Remove duplicate Location header.
+        $this->removeHeader( 'location' );
         return new RedirectResponse( $redirectResult->getTargetUrl(), $redirectResult->getStatusCode() );
     }
 
@@ -131,11 +134,11 @@ class LegacyResponseManager
      * Maps headers sent by the legacy stack to $response.
      *
      * @param array $headers Array headers.
-     * @param \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse $response
+     * @param \Symfony\Component\HttpFoundation\Response $response
      *
-     * @return \eZ\Bundle\EzPublishLegacyBundle\LegacyResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function mapHeaders( array $headers, LegacyResponse $response )
+    public function mapHeaders( array $headers, Response $response )
     {
         foreach ( $headers as $header )
         {
