@@ -22,6 +22,7 @@ if ( !isset( $installDir ) )
 
 $containerBuilder = new ContainerBuilder();
 
+// Track current file for changes
 $containerBuilder->addResource( new FileResource( __FILE__ ) );
 
 $settingsPath = $installDir . "/eZ/Publish/Core/settings/";

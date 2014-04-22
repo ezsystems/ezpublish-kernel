@@ -309,7 +309,7 @@ class HandlerTest extends TestCase
             $installDir = $config['install_dir'];
 
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
-            $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/containerBuilder.php";
+            $containerBuilder = include $config['container_builder_path'];
 
             $containerBuilder->setParameter(
                 "languages",
@@ -321,12 +321,11 @@ class HandlerTest extends TestCase
             );
 
             self::$container = new ServiceContainer(
+                $containerBuilder,
                 $installDir,
-                $config['settings_dir'],
                 $config['cache_dir'],
                 true,
-                true,
-                $containerBuilder
+                true
             );
         }
 

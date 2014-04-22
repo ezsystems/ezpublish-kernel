@@ -47,7 +47,7 @@ class LegacySolr extends Legacy
             $installDir = $config['install_dir'];
 
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
-            $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/containerBuilder.php";
+            $containerBuilder = include $config['container_builder_path'];
 
             /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
             $loader->load( 'tests/integration_legacy_solr.yml' );
@@ -65,12 +65,11 @@ class LegacySolr extends Legacy
             );
 
             self::$serviceContainer = new ServiceContainer(
+                $containerBuilder,
                 $installDir,
-                $config['settings_dir'],
                 $config['cache_dir'],
                 true,
-                true,
-                $containerBuilder
+                true
             );
         }
 

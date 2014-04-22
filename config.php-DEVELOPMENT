@@ -20,8 +20,8 @@ error_reporting( E_ALL | E_STRICT );
 return array(
     // The installation directory
     'install_dir' => __DIR__,
-    // The settings directory containing YAML settings and containerBuilder.php used by service container
-    'settings_dir' => __DIR__ . "/eZ/Publish/Core/settings",
+    // Path to the containerBuilder.php file used by service container
+    'container_builder_path' => __DIR__ . "/eZ/Publish/Core/settings/containerBuilder.php",
     // The cache directory
     'cache_dir' => __DIR__ . "/var/cache",
 

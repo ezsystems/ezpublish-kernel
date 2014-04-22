@@ -36,7 +36,7 @@ class SetupFactory extends APILegacySetupFactory
             $installDir = $config['install_dir'];
 
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
-            $containerBuilder = include $installDir . "/eZ/Publish/Core/settings" . "/containerBuilder.php";
+            $containerBuilder = include $config['container_builder_path'];
 
             /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
             $loader->load( 'tests/integration_legacy_core.yml' );
@@ -47,12 +47,11 @@ class SetupFactory extends APILegacySetupFactory
             );
 
             static::$serviceContainer = new ServiceContainer(
+                $containerBuilder,
                 $installDir,
-                $config['settings_dir'],
                 $config['cache_dir'],
                 true,
-                true,
-                $containerBuilder
+                true
             );
         }
 

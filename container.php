@@ -17,7 +17,7 @@ if ( !isset( $config ) )
 }
 
 return new ServiceContainer(
+    $config['container_builder_path'],
     $config['install_dir'],
-    $config['settings_dir'],
     $config['cache_dir']
 );
