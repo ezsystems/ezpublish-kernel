@@ -12,20 +12,49 @@ namespace eZ\Bundle\EzPublishCoreBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Exception;
 
 class TestInitDbCommand extends ContainerAwareCommand
 {
+    const DEFAULT_FIXTURE = "demoempty.php";
+    const DEFAULT_FIXTURE_FOLDER = "/../../../../data/";
+
     protected function configure()
     {
+        // present the existing fixtures on the default location
+        $fixturesHelp = "";
+        foreach ( $this->getDefaultDirectoryFixtures() as $key )
+        {
+            $fixturesHelp .= "  - $key\n";
+        }
+
+        // command configurations
         $this
             ->setName( 'ezpublish:test:init_db' )
-            ->setDescription( 'Inits the configured database for test use based on existing fixtures for eZ Demo install (4.7 atm)' )
+            ->addOption(
+                'no-database',
+                null,
+                InputOption::VALUE_NONE,
+                'Do not init the database'
+            )
+            ->addOption(
+                'fixture',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Choose what fixture to add to database'
+            )
+            ->setDescription( 'Inits the configured database for test use based on existing fixtures' )
             ->setHelp(
                 <<<EOT
-The command <info>%command.name%</info> initializes current configured database with existing fixture data.
+The command <info>%command.name%</info> initializes current configured database with
+existing fixture data.
 
-WARNING: This command will delete all data in the configured database before filling it with fixture data.
+<info>Possible fixtures</info>:
+$fixturesHelp
+<error>WARNING:</error>
+  This command will delete all data in the configured database before filling it
+  with fixture data.
 EOT
             );
     }
@@ -61,11 +90,31 @@ EOT
             return;
         }
 
-        $output->writeln( "<info>Database is now being emptied and re filled with fixture data.</info>" );
+        $output->writeln( "<info>Starting to take care of:</info>" );
 
         // @TODO Reuse API Integration tests SetupFactory when it has been refactored to be able to use Symfony DIC
-        $this->applyStatements( $this->getSchemaStatements( $dbType ) );
-        $this->insertData( $dbType );
+        // take care of database initialization
+        $output->write( "<info>Database: </info>" );
+        if ( !$input->getOption( 'no-database' ) )
+        {
+            $this->applyStatements( $this->getSchemaStatements( $dbType ) );
+            $output->writeln( "done!" );
+        }
+        else
+        {
+            $output->writeln( "skipped!" );
+        }
+
+        // get fixture name or set default one
+        $fixtureOptionValue = $input->getOption( 'fixture' );
+        $fixture = ( empty( $fixtureOptionValue ) ) ?
+            self::DEFAULT_FIXTURE :
+            $fixtureOptionValue;
+
+        // take care of initial data for the database
+        $output->write( "<info>Fixture: </info>'$fixture' " );
+        $this->insertData( $dbType, $fixture );
+        $output->writeln( "done!" );
     }
 
     /**
@@ -74,10 +123,10 @@ EOT
      * @param string $dbType Name of Database type (mysql, sqlite, pgsql, ..)
      * @return void
      */
-    public function insertData( $dbType )
+    public function insertData( $dbType, $fixture )
     {
         // Get Initial fixture data and union with some tables that must be present but sometimes aren't
-        $data = $this->getInitialData() + array(
+        $data = $this->getInitialData( $fixture ) + array(
             'ezcontentobject_trash' => array(),
             'ezurlwildcard' => array(),
             'ezmedia' => array(),
@@ -160,11 +209,36 @@ EOT
     /**
      * Returns the initial database data
      *
+     * @param string $fixture Name or path to fixture file
      * @return array
+     *
+     * @throws InvalidArgumentException If the $fixture doesn't point to a file
      */
-    protected function getInitialData()
+    protected function getInitialData( $fixture )
     {
-        return include __DIR__ . "/../../../../data/demo_data.php";
+        // verify if $fixture is a complete path to a file
+        $file = ( file_exists( $fixture ) ) ? $fixture : false;
+
+        // this is needed since it's possible to pass a complete path to a file
+        if ( !$file )
+        {
+            $file = __DIR__ . self::DEFAULT_FIXTURE_FOLDER . $fixture;
+        }
+
+        // if file doesn't exist throw invalid argument exception
+        if ( !file_exists( $file ) || !is_readable( $file ) || is_dir( $file ) )
+        {
+            throw new \InvalidArgumentException( "Fixture '$fixture' wasn't be found" );
+        }
+
+        // include file and verify if it is an array
+        $fixtureData = include $file;
+        if ( !is_array( $fixtureData ) )
+        {
+            throw new \InvalidArgumentException( "Fixture file '$fixture' is invalid" );
+        }
+
+        return $fixtureData;
     }
 
     /**
@@ -203,5 +277,27 @@ EOT
     protected function getDatabaseHandler()
     {
         return $this->getContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
+    }
+
+    /**
+     * Reads files in the default directory and return a filtered list with them
+     * excluding all non PHP (.php) files
+     *
+     * @return array
+     */
+    protected function getDefaultDirectoryFixtures()
+    {
+        $files = scandir( __DIR__ . self::DEFAULT_FIXTURE_FOLDER );
+        $return = array();
+        for ( $i = 0; !empty( $files[$i] ); $i++ )
+        {
+            // check if the file has php extension
+            if ( strpos( $files[$i], ".php" ) === strlen( $files[$i] ) - 4 )
+            {
+                $return[] = $files[$i];
+            }
+        }
+
+        return $return;
     }
 }
