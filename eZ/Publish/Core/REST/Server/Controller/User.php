@@ -33,7 +33,9 @@ use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Security\User as CoreUser;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * User controller
@@ -973,109 +975,58 @@ class User extends RestController
                 $this->request->getContent()
             )
         );
+        $this->request->attributes->set( 'username', $sessionInput->login );
+        $this->request->attributes->set( 'password', $sessionInput->password );
 
         try
         {
-            $apiUser = $this->userService->loadUserByCredentials(
-                $sessionInput->login,
-                $sessionInput->password
-            );
-        }
-        catch ( APINotFoundException $e )
-        {
-            throw new UnauthorizedException( "Invalid login or password", 0, null, $e );
-        }
-        if ( $csrfEnabled = $this->container->getParameter( 'form.type_extension.csrf.enabled' ) )
-        {
-            /** @var $csrfProvider \Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface */
-            $csrfProvider = $this->container->get( 'form.csrf_provider' );
-        }
-
-        /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
-        $session = $this->container->get( 'session' );
-
-        /** @var $authenticationToken \Symfony\Component\Security\Core\Authentication\Token\TokenInterface */
-        $securityContext = $this->container->get( 'security.context' );
-
-        $sessionCreated = true;
-        $csrfToken = "";
-        if ( $session->isStarted() )
-        {
-            // Check csrf if enabled
-            if ( $csrfEnabled )
+            $csrfToken = '';
+            $csrfProvider = $this->container->get( 'form.csrf_provider', ContainerInterface::NULL_ON_INVALID_REFERENCE );
+            $session = $this->request->getSession();
+            if ( $session->isStarted() )
             {
-                $csrfToken = $this->request->headers->get( 'X-CSRF-Token' );
-                $isCsrfTokenValid = $csrfProvider->isCsrfTokenValid(
-                    $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' ),
-                    $csrfToken
-                );
-
-                if ( !$isCsrfTokenValid )
+                if ( $csrfProvider )
                 {
-                    throw new UnauthorizedException(
-                        "Missing or invalid CSRF token",
-                        $csrfToken
-                    );
+                    $csrfToken = $this->request->headers->get( 'X-CSRF-Token' );
+                    if (
+                        !$csrfProvider->isCsrfTokenValid(
+                            $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' ),
+                            $csrfToken
+                        )
+                    )
+                    {
+                        throw new UnauthorizedException( 'Missing or invalid CSRF token', $csrfToken );
+                    }
                 }
-            }
-
-            // Get user if there is one
-            $sameUser = false;
-            $isAnonymous = true;
-            $authenticationToken = $securityContext->getToken();
-            if ( $authenticationToken !== null && $authenticationToken->getUser() instanceof CoreUser )
-            {
-                /** @var $currentApiUser \eZ\Publish\API\Repository\Values\User\User */
-                $currentApiUser = $authenticationToken->getUser()->getAPIUser();
-                $sameUser = $apiUser->id == $currentApiUser->id;
-                $isAnonymous = $currentApiUser->id == $this->container->get( "ezpublish.config.resolver" )
-                    ->getParameter( "anonymous_user_id" );
-            }
-
-            if ( !$sameUser && !$isAnonymous )
-            {
-                // Already logged in with another user, this will be converted to HTTP status 409
-                return new Values\Conflict();
-            }
-            else if ( !$sameUser )
-            {
-                // This was a login, but user has session so we migrate it and generate new session id
-                $session->migrate( true );
             }
             else
             {
-                // Same user, new session not created here
-                $sessionCreated = false;
-            }
-        }
-        else
-        {
-            $session->start();
-            $roles = array( 'ROLE_USER' );
-            $securityContext->setToken(
-                new UsernamePasswordToken(
-                    new CoreUser( $apiUser, $roles ),
-                    $apiUser->passwordHash,
-                    'ezpublish_rest',
-                    $roles
-                )
-            );
-
-            if ( $csrfEnabled )
-            {
+                $session->start();
                 $csrfToken = $csrfProvider->generateCsrfToken(
                     $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' )
                 );
             }
-        }
 
-        return new Values\UserSession(
-            $apiUser,
-            $session->getName(),
-            $session->getId(),
-            $csrfToken,
-            $sessionCreated
-        );
+            $authenticator = $this->container->get( 'ezpublish_rest.session_authenticator' );
+            $token = $authenticator->authenticate( $this->request );
+            return new Values\UserSession(
+                $token->getUser()->getAPIUser(),
+                $session->getName(),
+                $session->getId(),
+                $csrfToken,
+                !$token->hasAttribute( 'isFromSession' )
+            );
+
+        }
+        // Already logged in with another user, this will be converted to HTTP status 409
+        catch ( Exceptions\UserConflictException $e )
+        {
+            return new Values\Conflict();
+        }
+        catch ( AuthenticationException $e )
+        {
+            throw new UnauthorizedException( "Invalid login or password", $this->request->getPathInfo() );
+        }
     }
 
     /**

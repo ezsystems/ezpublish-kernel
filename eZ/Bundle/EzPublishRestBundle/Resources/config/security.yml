@@ -1,0 +1,15 @@
+parameters:
+    ezpublish_rest.security.authentication.listener.session.class: eZ\Publish\Core\REST\Server\Security\RestSessionBasedAuthenticator
+
+services:
+    # Following service will be aliased at compile time to "ezpublish_rest.session_authenticator" by the Security factory.
+    ezpublish_rest.security.authentication.listener.session:
+        class: %ezpublish_rest.security.authentication.listener.session.class%
+        arguments:
+            - @security.context
+            - @security.authentication.manager
+            - ~ # Will be replaced at compile time by security provider key
+            - @event_dispatcher
+            - @ezpublish.config.resolver
+            - @?logger
+        abstract: true
