@@ -28,9 +28,14 @@ class LimitationConverter
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler[] $limitationHandlers
      */
-    public function __construct( array $limitationHandlers )
+    public function __construct( array $limitationHandlers = array() )
     {
         $this->limitationHandlers = $limitationHandlers;
+    }
+
+    public function addHandler( $handler )
+    {
+        $this->limitationHandlers[] = $handler;
     }
 
     /**

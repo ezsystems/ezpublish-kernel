@@ -52,21 +52,15 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\EmailAddress\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezemail', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezemail',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\EmailAddress(),
             new FieldType\NullStorage()
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezemail',
-            new Legacy\Content\FieldValue\Converter\EmailAddress()
-        );
-
-        return $handler;
     }
 
     /**

@@ -52,21 +52,15 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\TextBlock\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'eztext', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'eztext',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\TextBlock(),
             new FieldType\NullStorage()
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'eztext',
-            new Legacy\Content\FieldValue\Converter\TextBlock()
-        );
-
-        return $handler;
     }
 
     /**

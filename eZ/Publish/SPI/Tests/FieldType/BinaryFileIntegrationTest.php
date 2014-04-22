@@ -77,13 +77,13 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\BinaryFile\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezbinaryfile', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezbinaryfile',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\BinaryFile(),
             new FieldType\BinaryFile\BinaryFileStorage(
                 array(
                     'LegacyStorage' => new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage(),
@@ -93,12 +93,6 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                 $this->getMimeTypeDetector()
             )
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezbinaryfile',
-            new Legacy\Content\FieldValue\Converter\BinaryFile()
-        );
-
-        return $handler;
     }
 
     /**

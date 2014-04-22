@@ -52,21 +52,15 @@ class FloatIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\Float\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezfloat', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezfloat',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Float(),
             new FieldType\NullStorage()
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezfloat',
-            new Legacy\Content\FieldValue\Converter\Float()
-        );
-
-        return $handler;
     }
 
     /**

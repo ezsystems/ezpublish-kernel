@@ -213,7 +213,7 @@ class Handler implements SearchHandlerInterface
      *
      * @return void
      */
-    public function bulkIndexContent( array $contentObjects)
+    public function bulkIndexContent( array $contentObjects )
     {
         foreach ( $contentObjects as $content )
             $documents[] = $this->mapContent( $content );

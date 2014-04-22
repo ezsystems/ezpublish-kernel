@@ -53,25 +53,19 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\Keyword\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezkeyword', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezkeyword',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Null(),
             new FieldType\Keyword\KeywordStorage(
                 array(
                     'LegacyStorage' => new FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage(),
                 )
             )
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezkeyword',
-            new Legacy\Content\FieldValue\Converter\Null()
-        );
-
-        return $handler;
     }
 
     /**

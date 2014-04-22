@@ -26,11 +26,9 @@ class Aggregate extends FieldValueMapper
     protected $mappers = array();
 
     /**
-     * COnstruct from optional mapper array
+     * Construct from optional mapper array
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper[] $mappers
-     *
-     * @return void
      */
     public function __construct( array $mappers = array() )
     {

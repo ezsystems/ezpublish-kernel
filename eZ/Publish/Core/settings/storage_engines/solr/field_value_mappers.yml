@@ -1,0 +1,62 @@
+parameters:
+    ezpublish.persistence.solr.search.content.field_value_mapper.identifier.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\IdentifierMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.multiple_identifier.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\MultipleIdentifierMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.string.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\StringMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.multiple_string.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\MultipleStringMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.integer.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\IntegerMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.date.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\DateMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.price.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\PriceMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.boolean.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\BooleanMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.multiple_boolean.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\MultipleBooleanMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.geo_location.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\GeoLocationMapper
+
+services:
+    ezpublish.persistence.solr.search.content.field_value_mapper.identifier:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.identifier.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.multiple_identifier:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.multiple_identifier.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.string:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.string.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.multiple_string:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.multiple_string.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.integer:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.integer.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.date:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.date.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.price:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.price.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.boolean:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.boolean.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.multiple_boolean:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.multiple_boolean.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.geo_location:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.geo_location.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}

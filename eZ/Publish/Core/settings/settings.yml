@@ -1,0 +1,14 @@
+parameters:
+    legacy_dsn: sqlite://:memory:
+    anonymous_user_id: 10
+    kernel.debug: false
+    languages: []
+    image_storage_prefix: images
+    binaryfile_storage_prefix: binary
+    storage_dir: var/ezdemo_site/storage
+
+services:
+    # Storage engine switch
+    # Note: if multiple storage engines are to be used simultaneously this will need to use a factory
+    ezpublish.api.persistence_handler:
+        alias: ezpublish.spi.persistence.cached_legacy

@@ -38,21 +38,15 @@ class SelectionIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\Selection\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezselection', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezselection',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Selection(),
             new FieldType\NullStorage()
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezselection',
-            new Legacy\Content\FieldValue\Converter\Selection()
-        );
-
-        return $handler;
     }
 
     /**

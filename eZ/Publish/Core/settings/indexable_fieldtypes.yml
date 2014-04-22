@@ -1,0 +1,74 @@
+parameters:
+    ezpublish.fieldType.indexable.ezstring.class: eZ\Publish\Core\FieldType\TextLine\SearchField
+    ezpublish.fieldType.indexable.ezprice.class: eZ\Publish\Core\FieldType\Price\SearchField
+    ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
+    ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
+    ezpublish.fieldType.indexable.unindexed.class: eZ\Publish\Core\FieldType\Unindexed
+
+services:
+    ezpublish.fieldType.indexable.ezstring:
+        class: %ezpublish.fieldType.indexable.ezstring.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezstring}
+
+    ezpublish.fieldType.indexable.ezprice:
+        class: %ezpublish.fieldType.indexable.ezprice.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezprice}
+
+    ezpublish.fieldType.indexable.ezgmaplocation:
+        class: %ezpublish.fieldType.indexable.ezgmaplocation.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezgmaplocation}
+
+    ezpublish.fieldType.indexable.ezcountry:
+        class: %ezpublish.fieldType.indexable.ezcountry.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezcountry}
+
+    # TODO: define proper type
+    ezpublish.fieldType.indexable.eztext:
+        class: %ezpublish.fieldType.indexable.ezstring.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: eztext}
+
+    # TODO: define proper type
+    ezpublish.fieldType.indexable.ezxmltext:
+        class: %ezpublish.fieldType.indexable.ezstring.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezxmltext}
+
+    # TODO: define proper type
+    ezpublish.fieldType.indexable.ezrichtext:
+        class: %ezpublish.fieldType.indexable.ezstring.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezrichtext}
+
+    ezpublish.fieldType.indexable.unindexed:
+        class: %ezpublish.fieldType.indexable.unindexed.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezfloat}
+            - {name: ezpublish.fieldType.indexable, alias: ezinteger}
+            - {name: ezpublish.fieldType.indexable, alias: ezuser}
+            - {name: ezpublish.fieldType.indexable, alias: ezimage}
+            - {name: ezpublish.fieldType.indexable, alias: ezboolean}
+            - {name: ezpublish.fieldType.indexable, alias: ezkeyword}
+            - {name: ezpublish.fieldType.indexable, alias: ezdate}
+            - {name: ezpublish.fieldType.indexable, alias: eztime}
+            - {name: ezpublish.fieldType.indexable, alias: ezdatetime}
+            - {name: ezpublish.fieldType.indexable, alias: ezinisetting}
+            - {name: ezpublish.fieldType.indexable, alias: ezpackage}
+            - {name: ezpublish.fieldType.indexable, alias: ezurl}
+            - {name: ezpublish.fieldType.indexable, alias: ezobjectrelation}
+            - {name: ezpublish.fieldType.indexable, alias: ezmultioption}
+            - {name: ezpublish.fieldType.indexable, alias: ezauthor}
+            - {name: ezpublish.fieldType.indexable, alias: ezsrrating}
+            - {name: ezpublish.fieldType.indexable, alias: ezselection}
+            - {name: ezpublish.fieldType.indexable, alias: ezsubtreesubscription}
+            - {name: ezpublish.fieldType.indexable, alias: ezobjectrelationlist}
+            - {name: ezpublish.fieldType.indexable, alias: ezemail}
+            - {name: ezpublish.fieldType.indexable, alias: ezoption}
+            - {name: ezpublish.fieldType.indexable, alias: ezbinaryfile}
+            - {name: ezpublish.fieldType.indexable, alias: ezmedia}
+            - {name: ezpublish.fieldType.indexable, alias: ezpage}
+            - {name: ezpublish.fieldType.indexable, alias: ezcomcomments}

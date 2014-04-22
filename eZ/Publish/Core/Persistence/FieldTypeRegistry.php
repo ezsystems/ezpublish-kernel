@@ -42,7 +42,7 @@ class FieldTypeRegistry
      * @param array $fieldTypeMap A map where key is field type identifier and value is
      *              a callable factory to get FieldType OR FieldType object.
      */
-    public function __construct( array $fieldTypeMap )
+    public function __construct( array $fieldTypeMap = array() )
     {
         $this->coreFieldTypeMap = $fieldTypeMap;
     }

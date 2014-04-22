@@ -53,25 +53,19 @@ class UrlIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\Url\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezurl', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezurl',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Url(),
             new FieldType\Url\UrlStorage(
                 array(
                     'LegacyStorage' => new FieldType\Url\UrlStorage\Gateway\LegacyStorage(),
                 )
             )
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezurl',
-            new Legacy\Content\FieldValue\Converter\Url()
-        );
-
-        return $handler;
     }
 
     /**

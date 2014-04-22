@@ -42,6 +42,11 @@ class SortClauseConverter
         $this->handlers = $handlers;
     }
 
+    public function addHandler( $handler )
+    {
+        $this->handlers[] = $handler;
+    }
+
     /**
      * Apply select parts of sort clauses to query
      *

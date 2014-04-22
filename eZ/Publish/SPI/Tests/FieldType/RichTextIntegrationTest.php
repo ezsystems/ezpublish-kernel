@@ -56,8 +56,6 @@ class RichTextIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\RichText\Type(
             new FieldType\RichText\ConverterDispatcher( array() ),
             new FieldType\RichText\ValidatorDispatcher(
@@ -72,17 +70,10 @@ class RichTextIntegrationTest extends BaseIntegrationTest
             )
         );
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezrichtext', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezrichtext',
-            new FieldType\RichText\RichTextStorage(
-                array(
-                    'LegacyStorage' => new LegacyStorage()
-                )
-            )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezrichtext',
+            $fieldType,
             new RichTextConverter(
                 new RichTextConverter\XsltConverter(
                     $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/stylesheets/docbook_ezxml.xsl" )
@@ -93,10 +84,13 @@ class RichTextIntegrationTest extends BaseIntegrationTest
                 new RichTextConverter\XsdValidator(
                     $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/schemas/ezxml.xsd" )
                 )
+            ),
+            new FieldType\RichText\RichTextStorage(
+                array(
+                    'LegacyStorage' => new LegacyStorage()
+                )
             )
         );
-
-        return $handler;
     }
 
     /**
@@ -204,7 +198,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
         if ( $installDir === null )
         {
             $config = require 'config.php';
-            $installDir = $config['service']['parameters']['install_dir'];
+            $installDir = $config['install_dir'];
         }
         return $installDir;
     }

@@ -202,7 +202,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
 
         $this->assertTrue(
             file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
-            "File $path exists."
+            "File $path does not exists."
         );
 
         self::$loadedMediaPath = $field->value->id;
@@ -286,7 +286,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
 
         $this->assertTrue(
             file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
-            "File $path exists."
+            "File $path does not exists."
         );
     }
 

@@ -1,0 +1,69 @@
+# Depends on 'legacy' storage
+services:
+    ezpublish.spi.persistence.cached_legacy.abstractHandler:
+        class: %ezpublish.spi.persistence.cache.abstractHandler.class%
+        abstract:  true
+        arguments:
+            - @ezpublish.cache_pool.spi.cache.decorator
+            - @ezpublish.spi.persistence.legacy
+            - @ezpublish.spi.persistence.cache.persistenceLogger
+
+    ezpublish.spi.persistence.cached_legacy.sectionHandler:
+        class: %ezpublish.spi.persistence.cache.sectionHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy.locationHandler:
+        class: %ezpublish.spi.persistence.cache.locationHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy.contentHandler:
+        class: %ezpublish.spi.persistence.cache.contentHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy.contentLanguageHandler:
+        class: %ezpublish.spi.persistence.cache.contentLanguageHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy.contentTypeHandler:
+        class: %ezpublish.spi.persistence.cache.contentTypeHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy.userHandler:
+        class: %ezpublish.spi.persistence.cache.userHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy.searchHandler:
+        class: %ezpublish.spi.persistence.cache.searchHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy.trashHandler:
+        class: %ezpublish.spi.persistence.cache.trashHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy.locationSearchHandler:
+        class: %ezpublish.spi.persistence.cache.locationSearchHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy.urlAliasHandler:
+        class: %ezpublish.spi.persistence.cache.urlAliasHandler.class%
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
+
+    ezpublish.spi.persistence.cached_legacy:
+        class: %ezpublish.spi.persistence.cache.class%
+        arguments:
+            - @ezpublish.spi.persistence.legacy
+            - @ezpublish.spi.persistence.cached_legacy.sectionHandler
+            - @ezpublish.spi.persistence.cached_legacy.locationHandler
+            - @ezpublish.spi.persistence.cached_legacy.contentHandler
+            - @ezpublish.spi.persistence.cached_legacy.contentLanguageHandler
+            - @ezpublish.spi.persistence.cached_legacy.contentTypeHandler
+            - @ezpublish.spi.persistence.cached_legacy.userHandler
+            - @ezpublish.spi.persistence.cached_legacy.searchHandler
+            - @ezpublish.spi.persistence.cached_legacy.trashHandler
+            - @ezpublish.spi.persistence.cached_legacy.locationSearchHandler
+            - @ezpublish.spi.persistence.cached_legacy.urlAliasHandler
+            - @ezpublish.spi.persistence.cache.persistenceLogger
+            - @ezpublish.cache_pool.spi.cache.decorator
+        tags:
+            - {name: ezpublish.storageEngine, alias: cached_legacy}
+        lazy: true

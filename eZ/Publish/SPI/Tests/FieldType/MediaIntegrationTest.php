@@ -77,13 +77,13 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
         $fieldType = new FieldType\Media\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezmedia', $fieldType );
-        $handler->getStorageRegistry()->register(
+
+        return $this->getHandler(
             'ezmedia',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Media(),
             new FieldType\Media\MediaStorage(
                 array(
                     'LegacyStorage' => new FieldType\Media\MediaStorage\Gateway\LegacyStorage(),
@@ -93,12 +93,6 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 $this->getMimeTypeDetector()
             )
         );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezmedia',
-            new Legacy\Content\FieldValue\Converter\Media()
-        );
-
-        return $handler;
     }
 
     /**

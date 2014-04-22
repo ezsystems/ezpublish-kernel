@@ -23,6 +23,49 @@ class ConnectionHandler implements DatabaseHandler
     protected $connection;
 
     /**
+     * @param string|array $dsn
+     *
+     * @return \Doctrine\DBAL\Driver\Connection
+     */
+    public static function createConnectionFromDSN( $dsn )
+    {
+        if ( is_string( $dsn ) )
+        {
+            $parsed = self::parseDSN( $dsn );
+        }
+        else
+        {
+            $parsed = $dsn;
+        }
+
+        return DriverManager::getConnection( $parsed );
+    }
+
+    /**
+     * Create a Connection Handler from given Doctrine $connection
+     *
+     * @param \Doctrine\DBAL\Driver\Connection $connection
+     *
+     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+     */
+    public static function createFromConnection( Connection $connection )
+    {
+        $driver = $connection->getDriver()->getName();
+
+        if ( $driver === 'pdo_sqlite' )
+        {
+            return new ConnectionHandler\SqliteConnectionHandler( $connection );
+        }
+
+        if ( $driver === 'pdo_pgsql' )
+        {
+            return new ConnectionHandler\PostgresConnectionHandler( $connection );
+        }
+
+        return new self( $connection );
+    }
+
+    /**
      * Create a Connection Handler with corresponding Doctrine connection from DSN.
      *
      * @param string|array $dsn
