@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use eZ\Publish\Core\Base\Container\Compiler;
+use Symfony\Component\Config\Resource\FileResource;
 
 if ( !isset( $installDir ) )
 {
@@ -20,6 +21,8 @@ if ( !isset( $installDir ) )
 }
 
 $containerBuilder = new ContainerBuilder();
+
+$containerBuilder->addResource( new FileResource( __FILE__ ) );
 
 $settingsPath = $installDir . "/eZ/Publish/Core/settings/";
 $loader = new YamlFileLoader( $containerBuilder, new FileLocator( $settingsPath ) );
