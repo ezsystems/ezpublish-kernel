@@ -152,6 +152,7 @@ class LegacySolr extends Legacy
                         new CriterionVisitor\LogicalNot(),
                         new CriterionVisitor\SubtreeIn(),
                         new CriterionVisitor\ContentTypeIdIn(),
+                        new CriterionVisitor\ContentTypeIdentifierIn( $persistenceHandler->contentTypeHandler() ),
                         new CriterionVisitor\ContentTypeGroupIdIn(),
                         new CriterionVisitor\LocationIdIn(),
                         new CriterionVisitor\ParentLocationIdIn(),
