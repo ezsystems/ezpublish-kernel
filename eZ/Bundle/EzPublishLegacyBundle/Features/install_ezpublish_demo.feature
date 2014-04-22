@@ -16,6 +16,13 @@ Feature: Install eZ Publish Demo with/withoutout content
         Given I am on "Outgoing Email" step
         When I select "Sendmail/MTA" radio button
         And I press "Next"
+        Then I see "Choose database system" step
+
+    @javascript @democontent_install @democlean_install
+    Scenario: Choose which database system to use
+        Given I am on "Choose database system" step
+        When I select "MySQL Improved" radio button
+        And I press "Next"
         Then I see "Database initialization" step
 
     @javascript @democontent_install @democlean_install
