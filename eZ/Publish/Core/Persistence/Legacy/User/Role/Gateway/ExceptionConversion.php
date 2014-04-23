@@ -177,6 +177,29 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads role assignments for given role ID
+     *
+     * @param mixed $roleId
+     *
+     * @return array
+     */
+    public function loadRoleAssignmentsByRoleId( $roleId )
+    {
+        try
+        {
+            return $this->innerGateway->loadRoleAssignmentsByRoleId( $roleId );
+        }
+        catch ( DBALException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Returns the user policies associated with the user
      *
      * @param mixed $userId
