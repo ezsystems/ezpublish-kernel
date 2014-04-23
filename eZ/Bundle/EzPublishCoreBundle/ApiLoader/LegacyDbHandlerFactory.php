@@ -55,6 +55,9 @@ class LegacyDbHandlerFactory extends ContainerAware
         }
 
         $connectionHandlerClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.dbhandler.class' );
-        return new $connectionHandlerClass( $this->container->get( $doctrineConnectionId ) );
+        return call_user_func_array(
+            array( $connectionHandlerClass, "createFromConnection" ),
+            array( $this->container->get( $doctrineConnectionId ) )
+        );
     }
 }
