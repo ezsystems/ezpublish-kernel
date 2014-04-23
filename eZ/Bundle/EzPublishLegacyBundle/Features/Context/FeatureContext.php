@@ -11,6 +11,7 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context;
 
+use eZ\Bundle\EzPublishLegacyBundle\Features\Context\LegacyInternalSentences;
 use EzSystems\BehatBundle\Features\Context\Browser\BrowserContext;
 use PHPUnit_Framework_Assert as Assertion;
 use Behat\Behat\Context\Step;
@@ -19,34 +20,33 @@ use Behat\Gherkin\Node\TableNode;
 /**
  * Setup Wizard context.
  */
-class FeatureContext extends BrowserContext
+class FeatureContext extends BrowserContext implements LegacyInternalSentences
 {
     /**
      * @var array This var should have the association between title in setup and package
      */
-    protected $packages = array(
-        'ez publish demo site' => 'ezdemo_site',
-        'ez publish demo site (without demo content)' => 'ezdemo_site_clean'
-    );
+    protected $packages = array();
 
-    /**
-     * Initializes context with parameters from behat.yml.
-     *
-     * @param array $parameters
-     */
     public function __construct( array $parameters )
     {
         parent::__construct( $parameters );
 
         $this->pageIdentifierMap += array(
-            "Setup Wizard" => "/ezsetup",
+            "setup wizard" => "/ezsetup",
+        );
+
+        $this->packages += array(
+            'ez publish demo site' => 'ezdemo_site',
+            'ez publish demo site (without demo content)' => 'ezdemo_site_clean'
         );
     }
 
     /**
-     * @Given /^(?:|I )am (?:at|on) (?:|the )"([^"]*)" step/
-     * @Then /^I see "([^"]*)" step$/
+     * After this comment are the Legacy sentences implementation
+     *
+     * @see \eZ\Bundle\EzPublishLegacyBundle\Features\Context\LegacyInternalSentences
      */
+
     public function iAmOnStep( $stepTitle )
     {
         return array(
@@ -55,9 +55,6 @@ class FeatureContext extends BrowserContext
         );
     }
 
-    /**
-     * @When /^I select "([^"]*)" package version "([^"]*)"$/
-     */
     public function iSelectPackage( $packageName, $version )
     {
         $package = $this->packages[strtolower( $packageName )];
@@ -77,9 +74,6 @@ class FeatureContext extends BrowserContext
         );
     }
 
-    /**
-     * @Then /^I see "([^"]*)" package version "([^"]*)" imported$/
-     */
     public function iSeeImported( $packageName, $version )
     {
         $versionLabel = "$packageName (ver. $version)";
@@ -100,9 +94,6 @@ class FeatureContext extends BrowserContext
         Assertion::assertNotNull( $importElement, "Couldn't find 'Imported' for '$versionLabel' package" );
     }
 
-    /**
-     * @Then /^I see following packages for version "([^"]*)" imported(?:|\:)$/
-     */
     public function iSeeFollowingPackagesForVersionImported( $version, TableNode $packagesTable )
     {
         $packages = $this->convertTableToArrayOfData( $packagesTable );
@@ -114,7 +105,7 @@ class FeatureContext extends BrowserContext
             $versionLabel = "$packageName (ver.{$version})";
 
             // notice this xpath uses contains instead of the "=" because the
-            // text as an <enter> and trailling spaces, so it fails
+            // text as an <enter> and trailing spaces, so it fails
             $el = $this->getSession()->getPage()->find(
                 "xpath",
                 "//*[contains( text(), '$versionLabel' )]"
