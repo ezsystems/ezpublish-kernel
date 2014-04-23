@@ -11,14 +11,14 @@ namespace eZ\Publish\Core\Persistence\Doctrine;
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\QueryException;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\DBALException;
 
 class ConnectionHandler implements DatabaseHandler
 {
     /**
-     * @var \Doctrine\DBAL\Driver\Connection
+     * @var \Doctrine\DBAL\Connection
      */
     protected $connection;
 
@@ -265,7 +265,7 @@ class ConnectionHandler implements DatabaseHandler
     }
 
     /**
-     * @param \Doctrine\DBAL\Driver\Connection $connection
+     * @param \Doctrine\DBAL\Connection $connection
      */
     public function __construct( Connection $connection )
     {
@@ -273,7 +273,7 @@ class ConnectionHandler implements DatabaseHandler
     }
 
     /**
-     * @return \Doctrine\DBAL\Driver\Connection
+     * @return \Doctrine\DBAL\Connection
      */
     public function getConnection()
     {
