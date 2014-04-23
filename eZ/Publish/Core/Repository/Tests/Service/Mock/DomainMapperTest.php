@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\UserTest class
+ * File contains: eZ\Publish\Core\Repository\Tests\Service\Mock\DomainMapperTest class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -17,9 +17,9 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 
 /**
- * Mock test case for User Service
+ * Mock test case for internal DomainMapper
  */
-class UserTest extends BaseServiceMockTest
+class DomainMapperTest extends BaseServiceMockTest
 {
     /**
      * @covers \eZ\Publish\Core\Repository\DomainMapper::buildVersionInfoDomainObject
