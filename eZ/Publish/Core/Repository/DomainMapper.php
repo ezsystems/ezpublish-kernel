@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler;
 
 use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -140,6 +141,22 @@ class DomainMapper
             $languageCodes[] = $this->contentLanguageHandler->load( $languageId )->languageCode;
         }
 
+        // Map SPI statuses to API
+        switch ( $spiVersionInfo->status )
+        {
+            case SPIVersionInfo::STATUS_ARCHIVED:
+                $status = APIVersionInfo::STATUS_ARCHIVED;
+                break;
+
+            case SPIVersionInfo::STATUS_PUBLISHED:
+                $status = APIVersionInfo::STATUS_PUBLISHED;
+                break;
+
+            case SPIVersionInfo::STATUS_DRAFT:
+            default:
+                $status = APIVersionInfo::STATUS_DRAFT;
+        }
+
         return new VersionInfo(
             array(
                 "id" => $spiVersionInfo->id,
@@ -147,7 +164,7 @@ class DomainMapper
                 "modificationDate" => $this->getDateTime( $spiVersionInfo->modificationDate ),
                 "creatorId" => $spiVersionInfo->creatorId,
                 "creationDate" => $this->getDateTime( $spiVersionInfo->creationDate ),
-                "status" => $spiVersionInfo->status,
+                "status" => $status,
                 "initialLanguageCode" => $spiVersionInfo->initialLanguageCode,
                 "languageCodes" => $languageCodes,
                 "names" => $spiVersionInfo->names,
