@@ -932,7 +932,9 @@ class Handler implements HandlerInterface
                 new User\Gateway\ExceptionConversion(
                     new User\Gateway\DoctrineDatabase( $this->dbHandler )
                 ),
-                new User\Role\Gateway\DoctrineDatabase( $this->dbHandler ),
+                new User\Role\Gateway\ExceptionConversion(
+                    new User\Role\Gateway\DoctrineDatabase( $this->dbHandler )
+                ),
                 new UserMapper(),
                 new LimitationConverter( array( new ObjectStateLimitationHandler( $this->dbHandler ) ) )
             );
