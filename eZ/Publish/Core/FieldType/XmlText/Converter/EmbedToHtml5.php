@@ -114,8 +114,8 @@ class EmbedToHtml5 implements Converter
                 );
 
                 if (
-                    !$this->repository->canUser( 'content', 'read', $location )
-                    && !$this->repository->canUser( 'content', 'view_embed', $location )
+                    !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location )
+                    && !$this->repository->canUser( 'content', 'view_embed', $location->getContentInfo(), $location )
                 )
                 {
                     throw new UnauthorizedException( 'content', 'read' );
