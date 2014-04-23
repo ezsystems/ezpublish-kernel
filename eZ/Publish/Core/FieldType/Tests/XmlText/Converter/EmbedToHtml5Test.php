@@ -318,7 +318,13 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $viewManager = $this->getMockViewManager();
         $locationService = $this->getMockLocationService();
 
+        $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
+        $location
+            ->expects( $this->atLeastOnce() )
+            ->method( "getContentInfo" )
+            ->will( $this->returnValue( $contentInfo ) );
+
         $locationService->expects( $this->once() )
             ->method( 'loadLocation' )
             ->with( $this->equalTo( $locationId ) )
@@ -332,8 +338,8 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 ->with(
                     $permissions[0],
                     $permissions[1],
-                    $location,
-                    null
+                    $contentInfo,
+                    $location
                 )
                 ->will(
                     $this->returnValue( $permissions[2] )
@@ -473,7 +479,13 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $viewManager = $this->getMockViewManager();
         $locationService = $this->getMockLocationService();
 
+        $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
         $location = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
+        $location
+            ->expects( $this->exactly( 2 ) )
+            ->method( "getContentInfo" )
+            ->will( $this->returnValue( $contentInfo ) );
+
         $locationService->expects( $this->once() )
             ->method( 'loadLocation' )
             ->with( $this->equalTo( 42 ) )
@@ -483,7 +495,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $repository->expects( $this->at( 1 ) )
             ->method( "canUser" )
             ->with(
-                "content", "read", $location, null
+                "content", "read", $contentInfo, $location
             )
             ->will(
                 $this->returnValue( false )
@@ -491,7 +503,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $repository->expects( $this->at( 2 ) )
             ->method( "canUser" )
             ->with(
-                "content", "view_embed", $location, null
+                "content", "view_embed", $contentInfo, $location
             )
             ->will(
                 $this->returnValue( false )
