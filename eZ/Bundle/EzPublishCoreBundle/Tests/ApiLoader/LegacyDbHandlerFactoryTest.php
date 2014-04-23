@@ -44,11 +44,24 @@ class LegacyDbHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             ->method( 'has' )
             ->with( "doctrine.dbal.{$doctrineConnection}_connection" )
             ->will( $this->returnValue( true ) );
+
+        $driverMock = $this->getMockBuilder( 'Doctrine\DBAL\Driver' )->getMock();
+        $driverMock
+            ->expects( $this->once() )
+            ->method( 'getName' )
+            ->will( $this->returnValue( 'Ferdinand' ) );
+
+        $connectionMock = $this->getMockBuilder( 'Doctrine\DBAL\Connection' )->disableOriginalConstructor()->getMock();
+        $connectionMock
+            ->expects( $this->once() )
+            ->method( 'getDriver' )
+            ->will( $this->returnValue( $driverMock ) );
+
         $container
             ->expects( $this->once() )
             ->method( 'get' )
             ->with( "doctrine.dbal.{$doctrineConnection}_connection" )
-            ->will( $this->returnValue( $this->getMock( 'Doctrine\DBAL\Driver\Connection' ) ) );
+            ->will( $this->returnValue( $connectionMock ) );
 
         $storageEngineFactory = new StorageEngineFactory( $configResolver, $repositories );
         $factory = new LegacyDbHandlerFactory( $storageEngineFactory );
