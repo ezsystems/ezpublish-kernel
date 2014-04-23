@@ -104,6 +104,15 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
+                    'filter' => new Criterion\ContentTypeIdentifier(
+                        "user"
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'ContentTypeId.php',
+            ),
+            array(
+                array(
                     'filter' => new Criterion\ContentTypeGroupId(
                         2
                     ),
