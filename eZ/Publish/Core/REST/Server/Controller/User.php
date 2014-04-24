@@ -999,16 +999,18 @@ class User extends RestController
                     }
                 }
             }
-            else
+
+            $authenticator = $this->container->get( 'ezpublish_rest.session_authenticator' );
+            $token = $authenticator->authenticate( $this->request );
+            // If CSRF token has not been generated yet (i.e. session not started), we generate it now.
+            // This will seamlessly start the session.
+            if ( !$csrfToken )
             {
-                $session->start();
                 $csrfToken = $csrfProvider->generateCsrfToken(
                     $this->container->getParameter( 'ezpublish_rest.csrf_token_intention' )
                 );
             }
 
-            $authenticator = $this->container->get( 'ezpublish_rest.session_authenticator' );
-            $token = $authenticator->authenticate( $this->request );
             return new Values\UserSession(
                 $token->getUser()->getAPIUser(),
                 $session->getName(),
