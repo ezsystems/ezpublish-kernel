@@ -42,6 +42,10 @@ class Content extends Provider implements ContentViewProviderInterface
                      * @var \eZObjectForwarder
                      */
                     $funcObject = $tpl->fetchFunctionObject( 'content_view_gui' );
+                    if ( !$funcObject )
+                    {
+                        return '';
+                    }
 
                     // Used by XmlText field type
                     if ( isset( $params['objectParameters'] ) )

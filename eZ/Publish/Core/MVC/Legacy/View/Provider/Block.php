@@ -55,6 +55,11 @@ class Block extends Provider implements BlockViewProviderInterface
                      * @var \eZObjectForwarder
                      */
                     $funcObject = $tpl->fetchFunctionObject( 'block_view_gui' );
+                    if ( !$funcObject )
+                    {
+                        return '';
+                    }
+
                     $children = array();
                     $funcObject->process(
                         $tpl, $children, 'block_view_gui', false,
