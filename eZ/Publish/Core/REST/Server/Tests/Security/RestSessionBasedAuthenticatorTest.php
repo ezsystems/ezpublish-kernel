@@ -9,9 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Security;
 
-use eZ\Publish\Core\REST\Server\Security\RestSessionBasedAuthenticator;
+use eZ\Publish\Core\REST\Server\Security\RestAuthenticator;
 use eZ\Publish\Core\MVC\Symfony\Security\User as EzUser;
-use eZ\Publish\Core\Repository\Values\User\User as APIUser;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -48,7 +47,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
     private $logger;
 
     /**
-     * @var \eZ\Publish\Core\REST\Server\Security\RestSessionBasedAuthenticator
+     * @var \eZ\Publish\Core\REST\Server\Security\RestAuthenticator
      */
     private $authenticator;
 
@@ -60,7 +59,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $this->eventDispatcher = $this->getMock( 'Symfony\Component\EventDispatcher\EventDispatcherInterface' );
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->logger = $this->getMock( 'Psr\Log\LoggerInterface' );
-        $this->authenticator = new RestSessionBasedAuthenticator(
+        $this->authenticator = new RestAuthenticator(
             $this->securityContext,
             $this->authenticationManager,
             self::PROVIDER_KEY,

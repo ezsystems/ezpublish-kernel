@@ -1,5 +1,5 @@
 parameters:
-    ezpublish_rest.security.authentication.listener.session.class: eZ\Publish\Core\REST\Server\Security\RestSessionBasedAuthenticator
+    ezpublish_rest.security.authentication.listener.session.class: eZ\Publish\Core\REST\Server\Security\RestAuthenticator
 
 services:
     # Following service will be aliased at compile time to "ezpublish_rest.session_authenticator" by the Security factory.

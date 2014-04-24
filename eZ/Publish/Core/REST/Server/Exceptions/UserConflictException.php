@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Server\Exceptions;
 
-use RuntimeException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-class UserConflictException extends RuntimeException
+class UserConflictException extends AuthenticationException
 {
 }

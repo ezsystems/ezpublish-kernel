@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\REST\Server\Security;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AuthenticatorInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\User as EzUser;
 use eZ\Publish\Core\REST\Server\Exceptions\InvalidUserTypeException;
 use eZ\Publish\Core\REST\Server\Exceptions\UserConflictException;
@@ -26,7 +27,13 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Http\SecurityEvents;
 
-class RestSessionBasedAuthenticator implements ListenerInterface
+/**
+ * Authenticator for REST API, mainly used for session based authentication (session creation resource).
+ *
+ * Implements \Symfony\Component\Security\Http\Firewall\ListenerInterface to be able to receive the provider key
+ * (firewall identifier from configuration).
+ */
+class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
 {
     /**
      * @var \Psr\Log\LoggerInterface
@@ -85,15 +92,6 @@ class RestSessionBasedAuthenticator implements ListenerInterface
         return;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
-     *
-     * @throws \Symfony\Component\Security\Core\Exception\TokenNotFoundException
-     * @throws \eZ\Publish\Core\REST\Server\Exceptions\InvalidUserTypeException
-     * @throws \eZ\Publish\Core\REST\Server\Exceptions\UserConflictException
-     */
     public function authenticate( Request $request )
     {
         // If a token already exists and username is the same as the one we request authentication for,
