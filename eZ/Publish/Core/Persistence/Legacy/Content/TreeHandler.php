@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGatew
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\API\Repository\Values\Content\Relation;
 
 /**
  * The TreeHandler is an intersect between ContentHandler and LocationHandler,
@@ -78,6 +79,22 @@ class TreeHandler
     }
 
     /**
+     * Returns the object for a content identified by $contentId.
+     *
+     * @param int|string $contentId
+     * @param int $versionNo
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content
+     */
+    public function load( $contentId, $versionNo )
+    {
+        $contentObjects = $this->contentMapper->extractContentFromRows(
+            $this->contentGateway->load( $contentId, $versionNo )
+        );
+        return $contentObjects[0];
+    }
+
+    /**
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId
@@ -106,10 +123,31 @@ class TreeHandler
         {
             $this->fieldHandler->deleteFields( $contentId, $versionInfo );
         }
+        $this->cleanupReverseRelationFields( $contentId );
         $this->contentGateway->deleteRelations( $contentId );
         $this->contentGateway->deleteVersions( $contentId );
         $this->contentGateway->deleteNames( $contentId );
         $this->contentGateway->deleteContent( $contentId );
+    }
+
+    /**
+     * Removes references to deleted content in relation fields
+     *
+     * @param int $deletedContentId
+     * @return void
+     */
+    private function cleanupReverseRelationFields( $deletedContentId )
+    {
+        $reverseRelations = $this->contentGateway->loadReverseRelations( $deletedContentId, Relation::FIELD );
+        foreach ( $reverseRelations as $relationData )
+        {
+            $content = $this->load(
+                $relationData['ezcontentobject_link_from_contentobject_id'],
+                $relationData['ezcontentobject_link_from_contentobject_version']
+            );
+            $this->fieldHandler->loadExternalFieldData( $content );
+            // what next ?
+        }
     }
 
     /**
