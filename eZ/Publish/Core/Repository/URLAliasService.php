@@ -395,15 +395,45 @@ class URLAliasService implements URLAliasServiceInterface
      */
     protected function matchLanguageCode( array $pathElementData, $pathElement )
     {
-        foreach ( $pathElementData["translations"] as $languageCode => $translation )
+        foreach ( $this->sortTranslationsByPrioritizedLanguages( $pathElementData["translations"] ) as $translationData )
         {
-            if ( strtolower( $pathElement ) === strtolower( $translation ) )
+            if ( strtolower( $pathElement ) === strtolower( $translationData['text'] ) )
             {
-                return $languageCode;
+                return $translationData['lang'];
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param array $translations
+     * @return array
+     */
+    private function sortTranslationsByPrioritizedLanguages( array $translations )
+    {
+        $sortedTranslations = array();
+        foreach ( $this->settings["prioritizedLanguageList"] as $languageCode )
+        {
+            if ( isset( $translations[$languageCode] ) )
+            {
+                $sortedTranslations[] = array(
+                    'lang' => $languageCode,
+                    'text' => $translations[$languageCode]
+                );
+                unset( $translations[$languageCode] );
+            }
+        }
+
+        foreach ( $translations as $languageCode => $translation )
+        {
+            $sortedTranslations[] = array(
+                'lang' => $languageCode,
+                'text' => $translation
+            );
+        }
+
+        return $sortedTranslations;
     }
 
     /**
