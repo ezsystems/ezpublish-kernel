@@ -21,4 +21,5 @@
     <globalUrlAliases media-type="application/vnd.ez.api.UrlAliasRefList+xml" href="/api/ezp/v2/content/urlaliases"/>
     <urlWildcards media-type="application/vnd.ez.api.UrlWildcardList+xml" href="/api/ezp/v2/content/urlwildcards"/>
     <createSession media-type="application/vnd.ez.api.UserSession+xml" href="/api/ezp/v2/user/sessions"/>
+    <refreshSession media-type="application/vnd.ez.api.UserSession+xml" href="/api/ezp/v1/user/sessions/{sessionId}/refresh"/>
 </Root>

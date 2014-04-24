@@ -339,6 +339,7 @@ XML Example
         <globalUrlAliases media-type="application/vnd.ez.api.UrlAliasRefList+xml" href="/api/ezp/v2/content/urlaliases"/>
         <urlWildcards media-type="application/vnd.ez.api.UrlWildcardList+xml" href="/api/ezp/v2/content/urlwildcards"/>
         <createSession media-type="application/vnd.ez.api.UserSession+xml" href="/api/ezp/v2/user/sessions"/>
+        <refreshSession media-type="application/vnd.ez.api.UserSession+xml" href="/api/ezp/v2/user/sessions/{sessionId}/refresh"/>
     </Root>
 
 JSON Example
@@ -444,6 +445,10 @@ JSON Example
             "views": {
                 "_href": "/api/ezp/v2/content/views",
                 "_media-type": "application/vnd.ez.api.RefList+json"
+            },
+            "refreshSession": {
+                "_media-type": "application\/vnd.ez.api.UserSession+json",
+                "_href": "\/api\/ezp\/v2\/user\/sessions\/{sessionId}\/refresh"
             }
         }
     }
@@ -6454,6 +6459,7 @@ Root Resources
           <xsd:element name="trash" type="ref"/>
           <xsd:element name="sections" type="ref"/>
           <xsd:element name="views" type="ref"/>
+          <xsd:element name="refreshSession" type="ref"/>
         </xsd:all>
       </xsd:complexType>
       <xsd:element name="Root" type="vnd.ez.api.Root"/>
