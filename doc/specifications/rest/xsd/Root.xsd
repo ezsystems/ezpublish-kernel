@@ -24,6 +24,7 @@
       <xsd:element name="globalUrlAliases" type="ref"/>
       <xsd:element name="urlWildcards" type="ref"/>
       <xsd:element name="createSession" type="ref"/>
+      <xsd:element name="refreshSession" type="ref"/>
     </xsd:all>
   </xsd:complexType>
   <xsd:element name="Root" type="vnd.ez.api.Root"/>

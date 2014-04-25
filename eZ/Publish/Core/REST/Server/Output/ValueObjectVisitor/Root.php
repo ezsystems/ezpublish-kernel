@@ -211,6 +211,17 @@ class Root extends ValueObjectVisitor
         $generator->endAttribute( 'href' );
         $generator->endObjectElement( 'createSession' );
 
+        $generator->startObjectElement( 'refreshSession', 'UserSession' );
+        $generator->startAttribute(
+            'href',
+            $this->templateRouter->generate(
+                'ezpublish_rest_refreshSession',
+                array( 'sessionId' => '{sessionId}' )
+            )
+        );
+        $generator->endAttribute( 'href' );
+        $generator->endObjectElement( 'refreshSession' );
+
         $generator->endObjectElement( 'Root' );
     }
 }
