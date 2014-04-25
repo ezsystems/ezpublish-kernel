@@ -6450,7 +6450,11 @@ Root Resources
       <xsd:complexType name="vnd.ez.api.Root">
         <xsd:all>
           <xsd:element name="content" type="ref" />
+          <xsd:element name="contentByRemoteId" type="ref" />
           <xsd:element name="contentTypes" type="ref" />
+          <xsd:element name="contentTypeByIdentifier" type="ref" />
+          <xsd:element name="contentTypeGroups" type="ref" />
+          <xsd:element name="contentTypeGroupByIdentifier" type="ref" />
           <xsd:element name="users" type="ref"/>
           <xsd:element name="roles" type="ref"/>
           <xsd:element name="rootLocation" type="ref"/>
@@ -6459,6 +6463,11 @@ Root Resources
           <xsd:element name="trash" type="ref"/>
           <xsd:element name="sections" type="ref"/>
           <xsd:element name="views" type="ref"/>
+          <xsd:element name="objectStateGroups" type="ref"/>
+          <xsd:element name="objectStates" type="ref"/>
+          <xsd:element name="globalUrlAliases" type="ref"/>
+          <xsd:element name="urlWildcards" type="ref"/>
+          <xsd:element name="createSession" type="ref"/>
           <xsd:element name="refreshSession" type="ref"/>
         </xsd:all>
       </xsd:complexType>
