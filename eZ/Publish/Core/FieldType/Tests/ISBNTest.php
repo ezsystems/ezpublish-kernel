@@ -267,7 +267,7 @@ class ISBNTest extends FieldTypeTest
     {
         return array(
             array( $this->getEmptyValueExpectation(), "" ),
-            array( new ISBNValue( "9789722514095" ), "978-972-25-1409-5" )
+            array( new ISBNValue( "9789722514095" ), "9789722514095" )
         );
     }
 }

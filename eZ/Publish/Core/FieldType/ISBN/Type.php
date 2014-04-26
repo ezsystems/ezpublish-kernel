@@ -56,10 +56,10 @@ class Type extends FieldType
             return $validationErrors;
         }
 
+        $isbnTestNumber = preg_replace( "/[\s|\-]/", "", trim( $fieldValue ) );
         $fieldSettings = $fieldDefinition->fieldSettings;
-
         if ( ( !isset( $fieldSettings["isISBN13"] ) || $fieldSettings["isISBN13"] === false )
-            && strlen( $fieldValue ) > 10 )
+            && strlen( $isbnTestNumber ) > 10 )
         {
             $validationErrors[] = new ValidationError(
                 "Field definition limits ISBN to ISBN10.",

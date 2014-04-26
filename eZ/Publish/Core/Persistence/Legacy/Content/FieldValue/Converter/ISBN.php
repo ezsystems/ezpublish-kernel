@@ -14,11 +14,10 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\FieldType\FieldSettings;
 
 class ISBN implements Converter
 {
-    const ISBN_VALUE_VALIDATOR_IDENTIFIER = "ISBNValueValidator";
-
     /**
      * Factory for current class
      *
@@ -63,13 +62,13 @@ class ISBN implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::ISBN_VALUE_VALIDATOR_IDENTIFIER]['isISBN13'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->fieldSettings["isISBN13"] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::ISBN_VALUE_VALIDATOR_IDENTIFIER]['isISBN13'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings["isISBN13"];
         }
         else
         {
-            $storageDef->dataInt1 = 0;
+            $storageDef->dataInt1 = 1;
         }
 
         $storageDef->dataText1 = $fieldDef->defaultValue->data;
@@ -83,17 +82,12 @@ class ISBN implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $validatorConstraints = array();
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
+                "isISBN13" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : true
+            )
+        );
 
-        if ( isset( $storageDef->dataInt1 ) )
-        {
-            $validatorConstraints[self::ISBN_VALUE_VALIDATOR_IDENTIFIER]["isISBN13"] =
-                $storageDef->dataInt1 != 0 ?
-                    (int)$storageDef->dataInt1 :
-                    true;
-        }
-
-        $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
         $fieldDef->defaultValue->data = $storageDef->dataText1 ?: null;
         $fieldDef->defaultValue->sortKey = $storageDef->dataText1 ?: "";
     }
