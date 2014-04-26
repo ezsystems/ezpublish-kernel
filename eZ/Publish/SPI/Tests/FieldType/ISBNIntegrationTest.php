@@ -84,11 +84,6 @@ class ISBNIntegrationTest extends BaseIntegrationTest
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
                     array(
-                        'validators' => array(
-                            'ISBNValueValidator' => array(
-                                'isISBN13' => true,
-                            ),
-                        ),
                         'fieldSettings' => new FieldType\FieldSettings(
                             array(
                                 'isISBN13' => true
