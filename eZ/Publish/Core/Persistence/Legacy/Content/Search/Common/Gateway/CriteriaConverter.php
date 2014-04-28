@@ -23,16 +23,16 @@ class CriteriaConverter
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler[]
      */
-    protected $handler;
+    protected $handlers;
 
     /**
      * Construct from an optional array of Criterion handlers
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler[] $handler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler[] $handlers
      */
-    public function __construct( array $handler )
+    public function __construct( array $handlers )
     {
-        $this->handler = $handler;
+        $this->handlers = $handlers;
     }
 
     /**
@@ -47,7 +47,7 @@ class CriteriaConverter
      */
     public function convertCriteria( SelectQuery $query, Criterion $criterion )
     {
-        foreach ( $this->handler as $handler )
+        foreach ( $this->handlers as $handler )
         {
             if ( $handler->accept( $criterion ) )
             {
