@@ -5,6 +5,7 @@ parameters:
     ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
+    ezpublish.field_type_collection.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\FieldTypeCollectionFactory
 
     # API services
     ezpublish.api.service.content.class: eZ\Publish\Core\Repository\ContentService
@@ -36,9 +37,17 @@ services:
     ezpublish.api.repository:
         alias: ezpublish.signalslot.repository
 
+    ezpublish.field_type_collection.factory:
+        class: %ezpublish.field_type_collection.factory.class%
+        calls:
+            - [setContainer, [@service_container]]
+
     ezpublish.api.repository.factory:
         class: %ezpublish.api.repository.factory.class%
-        arguments: [@ezpublish.config.resolver, %ezpublish.api.inner_repository.class%]
+        arguments:
+            - @ezpublish.config.resolver
+            - @ezpublish.field_type_collection.factory
+            - %ezpublish.api.inner_repository.class%
         calls:
             - [setContainer, [@service_container]]
 

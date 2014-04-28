@@ -1,0 +1,30 @@
+parameters:
+    ezpublish.spi.persistence.legacy.url_wildcard.handler.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler
+    ezpublish.persistence.legacy.url_wildcard.mapper.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper
+    ezpublish.persistence.legacy.url_wildcard.gateway.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
+    ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\ExceptionConversion
+
+services:
+    ezpublish.persistence.legacy.url_wildcard.gateway.inner:
+        class: %ezpublish.persistence.legacy.url_wildcard.gateway.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+
+    ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion:
+        class: %ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion.class%
+        arguments:
+            - @ezpublish.persistence.legacy.url_wildcard.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.url_wildcard.gateway:
+        alias: ezpublish.persistence.legacy.url_wildcard.gateway.exception_conversion
+
+    ezpublish.persistence.legacy.url_wildcard.mapper:
+        class: %ezpublish.persistence.legacy.url_wildcard.mapper.class%
+
+    ezpublish.spi.persistence.legacy.url_wildcard.handler:
+        class: %ezpublish.spi.persistence.legacy.url_wildcard.handler.class%
+        arguments:
+            - @ezpublish.persistence.legacy.url_wildcard.gateway
+            - @ezpublish.persistence.legacy.url_wildcard.mapper
+        lazy: true

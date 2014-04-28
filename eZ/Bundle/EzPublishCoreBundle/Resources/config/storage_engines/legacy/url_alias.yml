@@ -1,0 +1,36 @@
+parameters:
+    ezpublish.spi.persistence.legacy.url_alias.handler.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler
+    ezpublish.persistence.legacy.url_alias.mapper.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper
+    ezpublish.persistence.legacy.url_alias.gateway.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase
+    ezpublish.persistence.legacy.url_alias.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\ExceptionConversion
+
+services:
+    ezpublish.persistence.legacy.url_alias.gateway.inner:
+        class: %ezpublish.persistence.legacy.url_alias.gateway.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.persistence.legacy.language.mask_generator
+
+    ezpublish.persistence.legacy.url_alias.gateway.exception_conversion:
+        class: %ezpublish.persistence.legacy.url_alias.gateway.exception_conversion.class%
+        arguments:
+            - @ezpublish.persistence.legacy.url_alias.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.url_alias.gateway:
+        alias: ezpublish.persistence.legacy.url_alias.gateway.exception_conversion
+
+    ezpublish.persistence.legacy.url_alias.mapper:
+        class: %ezpublish.persistence.legacy.url_alias.mapper.class%
+        arguments:
+            - @ezpublish.persistence.legacy.language.mask_generator
+
+    ezpublish.spi.persistence.legacy.url_alias.handler:
+        class: %ezpublish.spi.persistence.legacy.url_alias.handler.class%
+        arguments:
+            - @ezpublish.persistence.legacy.url_alias.gateway
+            - @ezpublish.persistence.legacy.url_alias.mapper
+            - @ezpublish.persistence.legacy.location.gateway
+            - @ezpublish.spi.persistence.legacy.language.handler
+            - @ezpublish.persistence.slug_converter
+        lazy: true

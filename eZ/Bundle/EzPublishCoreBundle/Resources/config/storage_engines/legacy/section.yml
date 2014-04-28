@@ -1,0 +1,25 @@
+parameters:
+    ezpublish.spi.persistence.legacy.section.handler.class: eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler
+    ezpublish.persistence.legacy.section.gateway.class: eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase
+    ezpublish.persistence.legacy.section.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\ExceptionConversion
+
+services:
+    ezpublish.persistence.legacy.section.gateway.inner:
+        class: %ezpublish.persistence.legacy.section.gateway.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+
+    ezpublish.persistence.legacy.section.gateway.exception_conversion:
+        class: %ezpublish.persistence.legacy.section.gateway.exception_conversion.class%
+        arguments:
+            - @ezpublish.persistence.legacy.section.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.section.gateway:
+        alias: ezpublish.persistence.legacy.section.gateway.exception_conversion
+
+    ezpublish.spi.persistence.legacy.section.handler:
+        class: %ezpublish.spi.persistence.legacy.section.handler.class%
+        arguments:
+            - @ezpublish.persistence.legacy.section.gateway
+        lazy: true
