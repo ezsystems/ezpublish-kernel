@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
@@ -35,11 +36,21 @@ class SortClauseConverter
     /**
      * Construct from an optional array of sort clause handlers
      *
-     * @param array $handlers
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler[] $handlers
      */
     public function __construct( array $handlers = array() )
     {
         $this->handlers = $handlers;
+    }
+
+    /**
+     * Adds handler
+     *
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler $handler
+     */
+    public function addHandler( SortClauseHandler $handler )
+    {
+        $this->handlers[] = $handler;
     }
 
     /**
