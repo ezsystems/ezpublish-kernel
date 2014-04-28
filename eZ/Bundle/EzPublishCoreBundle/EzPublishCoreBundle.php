@@ -9,7 +9,8 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeCollectionPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
@@ -25,6 +26,12 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\XmlTextConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\ExternalStorageRegistryPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\CriteriaConverterPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\CriterionFieldValueHandlerRegistryPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\RoleLimitationConverterPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\SortClauseConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory;
@@ -36,9 +43,10 @@ class EzPublishCoreBundle extends Bundle
     public function build( ContainerBuilder $container )
     {
         parent::build( $container );
+        $container->addCompilerPass( new FieldTypeCollectionPass );
+        $container->addCompilerPass( new FieldTypeParameterProviderRegistryPass );
         $container->addCompilerPass( new ChainRoutingPass );
         $container->addCompilerPass( new ChainConfigResolverPass );
-        $container->addCompilerPass( new AddFieldTypePass );
         $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new RegisterStorageEnginePass );
         $container->addCompilerPass( new LegacyStorageEnginePass );
@@ -52,6 +60,15 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new SecurityPass );
         $container->addCompilerPass( new RichTextHtml5ConverterPass );
         $container->addCompilerPass( new FragmentPass );
+
+        // Storage passes
+        $container->addCompilerPass( new ExternalStorageRegistryPass );
+        // Legacy Storage passes
+        $container->addCompilerPass( new CriteriaConverterPass );
+        $container->addCompilerPass( new CriterionFieldValueHandlerRegistryPass );
+        $container->addCompilerPass( new FieldValueConverterRegistryPass );
+        $container->addCompilerPass( new RoleLimitationConverterPass );
+        $container->addCompilerPass( new SortClauseConverterPass );
 
         $securityExtension = $container->getExtension( 'security' );
         $securityExtension->addSecurityListenerFactory( new HttpBasicFactory );
