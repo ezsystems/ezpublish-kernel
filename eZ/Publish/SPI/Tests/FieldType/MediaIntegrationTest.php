@@ -17,6 +17,8 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
+use eZ\Publish\Core\Base\ConfigurationManager;
+use eZ\Publish\Core\Base\ServiceContainer;
 
 /**
  * Integration test for legacy storage field types
@@ -40,6 +42,12 @@ use FileSystemIterator;
  */
 class MediaIntegrationTest extends FileBaseIntegrationTest
 {
+    static public function setUpBeforeClass()
+    {
+        self::$setUp = false;
+        parent::setUpBeforeClass();
+    }
+
     /**
      * Returns the storage dir used by the file service
      *
@@ -53,7 +61,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     /**
      * Returns the storage identifier prefix used by the file service
      *
-     * @return void
+     * @return string
      */
     protected function getStoragePrefix()
     {
@@ -77,28 +85,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
-        $fieldType = new FieldType\Media\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezmedia', $fieldType );
-        $handler->getStorageRegistry()->register(
-            'ezmedia',
-            new FieldType\Media\MediaStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Media\MediaStorage\Gateway\LegacyStorage(),
-                ),
-                $this->getIOService(),
-                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
-                $this->getMimeTypeDetector()
-            )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezmedia',
-            new Legacy\Content\FieldValue\Converter\Media()
-        );
-
-        return $handler;
+        return $this->getHandler();
     }
 
     /**
@@ -310,6 +297,41 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 );
             }
         }
+    }
 
+    protected function getContainer()
+    {
+        // get configuration config
+        if ( !( $settings = include 'config.php' ) )
+        {
+            throw new \RuntimeException(
+                'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!'
+            );
+        }
+
+        // load configuration uncached
+        $configManager = new ConfigurationManager(
+            array_merge_recursive(
+                $settings,
+                array(
+                    'base' => array(
+                        'Configuration' => array(
+                            'UseCache' => false
+                        )
+                    )
+                )
+            ),
+            $settings['base']['Configuration']['Paths']
+        );
+
+        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
+        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
+        $serviceSettings['parameters']['storage_dir'] = $this->getStorageDir();
+        $serviceSettings['parameters']['binaryfile_storage_prefix'] = $this->getStoragePrefix();
+
+        return new ServiceContainer(
+            $serviceSettings,
+            array()
+        );
     }
 }

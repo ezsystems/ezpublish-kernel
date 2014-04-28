@@ -42,7 +42,7 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
      */
     public function getTypeName()
     {
-        return 'ezbool';
+        return 'ezboolean';
     }
 
     /**
@@ -52,21 +52,7 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
-        $fieldType = new FieldType\Checkbox\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezbool', $fieldType );
-        $handler->getStorageRegistry()->register(
-            'ezbool',
-            new FieldType\NullStorage()
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezbool',
-            new Legacy\Content\FieldValue\Converter\Checkbox()
-        );
-
-        return $handler;
+        return $this->getHandler();
     }
 
     /**
@@ -92,7 +78,7 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezbool field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezbool' ),
+            array( 'fieldType', 'ezboolean' ),
             array( 'fieldTypeConstraints', new Content\FieldTypeConstraints( array() ) ),
         );
     }

@@ -17,6 +17,8 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
+use eZ\Publish\Core\Base\ConfigurationManager;
+use eZ\Publish\Core\Base\ServiceContainer;
 
 /**
  * Integration test for legacy storage field types
@@ -40,6 +42,12 @@ use FileSystemIterator;
  */
 class ImageIntegrationTest extends FileBaseIntegrationTest
 {
+    static public function setUpBeforeClass()
+    {
+        self::$setUp = false;
+        parent::setUpBeforeClass();
+    }
+
     /**
      * Returns the storage dir used by the file service
      *
@@ -53,7 +61,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     /**
      * Returns the storage identifier prefix used by the file service
      *
-     * @return void
+     * @return string
      */
     protected function getStoragePrefix()
     {
@@ -77,28 +85,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
-        $fieldType = new FieldType\Image\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezimage', $fieldType );
-        $handler->getStorageRegistry()->register(
-            'ezimage',
-            new FieldType\Image\ImageStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
-                ),
-                $this->getIOService(),
-                new FieldType\Image\PathGenerator\LegacyPathGenerator(),
-                new IO\MetadataHandler\ImageSize()
-            )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezimage',
-            new Legacy\Content\FieldValue\Converter\Image()
-        );
-
-        return $handler;
+        return $this->getHandler();
     }
 
     /**
@@ -232,7 +219,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $storagePath = $this->getStorageDir() . '/' . $field->value->data['uri'];
         $this->assertTrue(
             file_exists( $storagePath ),
-            "Stored file ".$field->value->data['uri']." exists"
+            "Stored file ".$field->value->data['uri']." does not exists"
         );
 
         $this->assertEquals( 'Blueish-Blue.jpg', $field->value->data['fileName'] );
@@ -271,6 +258,42 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 );
             }
         }*/
+    }
+
+    protected function getContainer()
+    {
+        // get configuration config
+        if ( !( $settings = include 'config.php' ) )
+        {
+            throw new \RuntimeException(
+                'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!'
+            );
+        }
+
+        // load configuration uncached
+        $configManager = new ConfigurationManager(
+            array_merge_recursive(
+                $settings,
+                array(
+                    'base' => array(
+                        'Configuration' => array(
+                            'UseCache' => false
+                        )
+                    )
+                )
+            ),
+            $settings['base']['Configuration']['Paths']
+        );
+
+        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
+        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
+        $serviceSettings['parameters']['storage_dir'] = $this->getStorageDir();
+        $serviceSettings['parameters']['image_storage_prefix'] = $this->getStoragePrefix();
+
+        return new ServiceContainer(
+            $serviceSettings,
+            array()
+        );
     }
 }
 
