@@ -1,8 +1,8 @@
 <?php
 /**
- * File containing the RestClientContext class.
+ * File containing the GuzzleClient class.
  *
- * This class Rest Client for BDD testing
+ * This class contains the Guzzle Rest Client for BDD testing
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -35,7 +35,13 @@ class GuzzleClient extends RestClient
 
         $bodyObject->rewind();
 
-        return $bodyObject->read( $bodyObject->getContentLength() );
+        $length = $bodyObject->getContentLength();
+        if ( $length === false || $length <= 0 )
+        {
+            return "";
+        }
+
+        return $bodyObject->read( $length );
     }
 
     public function getResponseHeaders()
@@ -79,13 +85,16 @@ class GuzzleClient extends RestClient
         }
 
         // set body
-        $request->setBody( $this->body );
+        if ( !empty( $this->body ) )
+        {
+            $request->setBody( $this->body );
+        }
 
         $this->request = $request;
 
         try
         {
-            // finaly send the request
+            // finally send the request
             $this->response = $request->send();
         }
         // if the response is an 40x or a 50x then it will throw an exception
