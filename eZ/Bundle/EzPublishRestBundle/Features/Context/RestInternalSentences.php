@@ -2,8 +2,6 @@
 /**
  * File containing the FeatureContext class.
  *
- * This interface contains the BDD sentences to use internally on rest testing
- *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
@@ -16,6 +14,8 @@ use Behat\Gherkin\Node\PyStringNode;
 
 /**
  * RestInternalSentences
+ *
+ * This interface contains the BDD sentences to use internally on rest testing
  */
 interface RestInternalSentences
 {
@@ -58,13 +58,6 @@ interface RestInternalSentences
     public function iAddHeaderForObject( $header, $object );
 
     /**
-     * @When /^I add request object to "(?P<identifier>[^"]*)" object map on "(?P<objectStep>[^"]*)" step$/
-     *
-     * This will store/save the requested object for testing on the Then steps
-     */
-    public function iAddRequestedObjectToObjectMap( $identifier, $objectStep );
-
-    /**
      * @When /^I make (?:an |a |)"(?P<objectType>[^"]*)" object$/
      *
      * This will create an object of the type passed for step by step be filled
@@ -92,9 +85,9 @@ interface RestInternalSentences
     public function iSendRequest();
 
     /**
-     * @Then /^I see (?<satusCode>\d{3}) status code$/
+     * @Then /^I see (?<statusCode>\d{3}) status code$/
      */
-    public function iSeeResponseStatusCode( $satusCode );
+    public function iSeeResponseStatusCode( $statusCode );
 
     /**
      * @Then /^I see "(?<statusMessage>[^"]*)" status (?:reason phrase|message)$/
