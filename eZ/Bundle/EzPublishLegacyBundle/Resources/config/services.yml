@@ -114,6 +114,7 @@ services:
             - @ezpublish.config.resolver
             - @ezpublish_legacy.uri_helper
             - @ezpublish_legacy.response_manager
+            - @ezpublish_legacy.templating.legacy_helper
         calls:
             - [setRequest, [@?request=]]
 

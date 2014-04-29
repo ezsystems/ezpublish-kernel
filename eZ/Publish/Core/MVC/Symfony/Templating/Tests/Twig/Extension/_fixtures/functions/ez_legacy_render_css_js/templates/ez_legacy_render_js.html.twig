@@ -1,0 +1,8 @@
+{# Template for unit testing of ez_legacy_render_js  #}
+{% for item in js_files %}
+    File: {{ item }}
+{%endfor %}
+
+{% for item in js_code_lines %}
+    Code: {{ item|raw }}
+{%endfor %}

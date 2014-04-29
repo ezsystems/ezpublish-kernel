@@ -1,0 +1,12 @@
+{# Template used by ez_legacy_render_css  #}
+{% block ez_legacy_render_css %}
+    {% for item in css_files %}
+        <link rel="stylesheet" type="text/css" href="{{ asset( item ) }}" />
+    {%endfor %}
+
+    {% for item in css_code_lines %}
+        <style type="text/css">
+            {{ item|raw }}
+        </style>
+    {%endfor %}
+{% endblock %}
