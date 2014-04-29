@@ -131,8 +131,25 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface, 
         $defaultScopeParamName = "$namespace." . self::SCOPE_DEFAULT . ".$paramName";
         $globalScopeParamName = "$namespace." . self::SCOPE_GLOBAL . ".$paramName";
         $relativeScopeParamName = "$namespace.$scope.$paramName";
+
+        // Relative scope, siteacces group wise
+        $groupScopeHasParam = false;
+        if ( isset( $this->groupsBySiteAccess[$scope] ) )
+        {
+            foreach ( $this->groupsBySiteAccess[$scope] as $groupName )
+            {
+                $groupScopeParamName = "$namespace.$groupName.$paramName";
+                if ( $this->container->hasParameter( $groupScopeParamName ) )
+                {
+                    $groupScopeHasParam = true;
+                    break;
+                }
+            }
+        }
+
         return
             $this->container->hasParameter( $defaultScopeParamName )
+            || $groupScopeHasParam
             || $this->container->hasParameter( $relativeScopeParamName )
             || $this->container->hasParameter( $globalScopeParamName );
     }

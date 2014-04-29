@@ -216,56 +216,78 @@ class ConfigResolverTest extends PHPUnit_Framework_TestCase
     public function hasParameterProvider()
     {
         return array(
-            array( true, true, true, true ),
-            array( true, true, false, true ),
-            array( true, false, false, true ),
-            array( false, false, false, false ),
-            array( false, true, false, true ),
-            array( false, false, true, true ),
-            array( false, true, true, true ),
+            array( true, true, true, true, true ),
+            array( true, true, true, false, true ),
+            array( true, true, false, false, true ),
+            array( false, false, false, false, false ),
+            array( false, false, true, false, true ),
+            array( false, false, false, true, true ),
+            array( false, false, true, true, true ),
+            array( false, true, false, false, true ),
         );
     }
 
     /**
      * @dataProvider hasParameterProvider
      */
-    public function testHasParameterNoNamespace( $defaultMatch, $scopeMatch, $globalMatch, $expectedResult )
+    public function testHasParameterNoNamespace( $defaultMatch, $groupMatch, $scopeMatch, $globalMatch, $expectedResult )
     {
         $paramName = 'foo.bar';
+        $groupName = 'my_group';
+        $configResolver = $this->getResolver(
+            'ezsettings',
+            ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION,
+            array( $this->siteAccess->name => array( $groupName ) )
+        );
+
         $this->containerMock->expects( $this->atLeastOnce() )
             ->method( 'hasParameter' )
-            ->with(
-                $this->logicalOr(
-                    "ezsettings.global.$paramName",
-                    "ezsettings.{$this->siteAccess->name}.$paramName",
-                    "ezsettings.default.$paramName"
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( "ezsettings.default.$paramName", $defaultMatch ),
+                        array( "ezsettings.$groupName.$paramName", $groupMatch ),
+                        array( "ezsettings.{$this->siteAccess->name}.$paramName", $scopeMatch ),
+                        array( "ezsettings.global.$paramName", $globalMatch ),
+                    )
                 )
-            )
-            ->will( $this->onConsecutiveCalls( $defaultMatch, $scopeMatch, $globalMatch ) );
+            );
 
-        $this->assertSame( $expectedResult, $this->getResolver()->hasParameter( $paramName ) );
+        $this->assertSame( $expectedResult, $configResolver->hasParameter( $paramName ) );
     }
 
     /**
      * @dataProvider hasParameterProvider
      */
-    public function testHasParameterWithNamespaceAndScope( $defaultMatch, $scopeMatch, $globalMatch, $expectedResult )
+    public function testHasParameterWithNamespaceAndScope( $defaultMatch, $groupMatch, $scopeMatch, $globalMatch, $expectedResult )
     {
         $paramName = 'foo.bar';
         $namespace = 'my.namespace';
         $scope = "another_siteaccess";
+        $groupName = 'my_group';
+        $configResolver = $this->getResolver(
+            'ezsettings',
+            ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION,
+            array(
+                $this->siteAccess->name => array( 'some_group' ),
+                $scope => array( $groupName )
+            )
+        );
+
         $this->containerMock->expects( $this->atLeastOnce() )
             ->method( 'hasParameter' )
-            ->with(
-                $this->logicalOr(
-                    "$namespace.global.$paramName",
-                    "$namespace.$scope.$paramName",
-                    "$namespace.default.$paramName"
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( "$namespace.default.$paramName", $defaultMatch ),
+                        array( "$namespace.$groupName.$paramName", $groupMatch ),
+                        array( "$namespace.$scope.$paramName", $scopeMatch ),
+                        array( "$namespace.global.$paramName", $globalMatch ),
+                    )
                 )
-            )
-            ->will( $this->onConsecutiveCalls( $defaultMatch, $scopeMatch, $globalMatch ) );
+            );
 
-        $this->assertSame( $expectedResult, $this->getResolver()->hasParameter( $paramName, $namespace, $scope ) );
+        $this->assertSame( $expectedResult, $configResolver->hasParameter( $paramName, $namespace, $scope ) );
     }
 
     public function testGetSetDefaultScope()
