@@ -23,14 +23,15 @@ class AuthenticationContext extends RestSubContext implements Authentication
 {
     public function iAmLoggedInAsAn( $role )
     {
-        switch( strtolower( $role ) ) {
-        case 'administrator':
-            $user = 'admin';
-            $passwd = 'publish';
-            break;
+        switch( strtolower( $role ) )
+        {
+            case 'administrator':
+                $user = 'admin';
+                $passwd = 'publish';
+                break;
 
-        default:
-            throw new PendingException( "Login with '$role' role not implemented yet" );
+            default:
+                throw new PendingException( "Login with '$role' role not implemented yet" );
         }
 
         $this->restclient->setAuthentication( $user, $passwd );
