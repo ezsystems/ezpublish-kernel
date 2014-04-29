@@ -109,6 +109,8 @@ class EzPublishCoreExtension extends Extension
 
             throw new InvalidArgumentException( $message );
         }
+
+        $this->handleSiteAccessesRelation( $container );
     }
 
     /**
@@ -365,5 +367,54 @@ class EzPublishCoreExtension extends Extension
     private function handleHelpers( array $config, ContainerBuilder $container, FileLoader $loader )
     {
         $loader->load( 'helpers.yml' );
+    }
+
+    /**
+     * Handles relation between SiteAccesses.
+     * Related SiteAccesses share the same repository and root location id.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    private function handleSiteAccessesRelation( ContainerBuilder $container )
+    {
+        $configResolver = $container->get( 'ezpublish.config.resolver.core' );
+        $configResolver->setContainer( $container );
+
+        $saRelationMap = array();
+        $saList = $container->getParameter( 'ezpublish.siteaccess.list' );
+        // First build the SiteAccess relation map, indexed by repository and rootLocationId.
+        foreach ( $saList as $sa )
+        {
+            // Exclude siteaccesses in legacy_mode (e.g. admin interface)
+            if ( $configResolver->getParameter( 'legacy_mode', 'ezsettings', $sa ) === true )
+            {
+                continue;
+            }
+
+            $repository = $configResolver->getParameter( 'repository', 'ezsettings', $sa );
+            if ( !isset( $saRelationMap[$repository] ) )
+            {
+                $saRelationMap[$repository] = array();
+            }
+
+            $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id', 'ezsettings', $sa );
+            if ( !isset( $saRelationMap[$repository][$rootLocationId] ) )
+            {
+                $saRelationMap[$repository][$rootLocationId] = array();
+            }
+            $saRelationMap[$repository][$rootLocationId][] = $sa;
+        }
+        $container->setParameter( 'ezpublish.siteaccess.relation_map', $saRelationMap );
+
+        // Now build the related SiteAccesses list, based on the relation map.
+        foreach ( $saList as $sa )
+        {
+            $repository = $configResolver->getParameter( 'repository', 'ezsettings', $sa );
+            $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id', 'ezsettings', $sa );
+            $container->setParameter(
+                "ezsettings.$sa.related_siteaccesses",
+                $saRelationMap[$repository][$rootLocationId]
+            );
+        }
     }
 }
