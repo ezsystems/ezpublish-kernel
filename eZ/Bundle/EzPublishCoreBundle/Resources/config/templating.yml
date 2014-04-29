@@ -18,6 +18,8 @@ parameters:
     ezpublish.twig.extension.core.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\CoreExtension
     ezpublish.twig.extension.filesize.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FileSizeExtension
     ezpublish.twig.extension.filesize.suffixes: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB']
+    ezpublish.templating.extension.routing.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension
+
 services:
     twig.loader.string:
         class: %twig.loader.string.class%
@@ -111,4 +113,10 @@ services:
         arguments: [@translator, %ezpublish.twig.extension.filesize.suffixes%, @ezpublish.config.resolver, @ezpublish.locale.converter ]
         tags:
             - {name: twig.extension}
+
+    ezpublish.templating.extension.routing:
+      class: %ezpublish.templating.extension.routing.class%
+      arguments: [@ezpublish.route_reference.generator]
+      tags:
+        - {name: twig.extension}
 
