@@ -69,4 +69,12 @@ final class MVCEvents
      * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\InteractiveLoginEvent instance.
      */
     const INTERACTIVE_LOGIN = 'ezpublish.security.interactive_login';
+
+    /**
+     * ROUTE_REFERENCE_GENERATION event occurs when a RouteReference is generated, and gives an opportunity to
+     * alter the RouteReference, e.g. by adding parameters.
+     *
+     * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent instance.
+     */
+    const ROUTE_REFERENCE_GENERATION = 'ezpublish.routing.reference_generation';
 }
