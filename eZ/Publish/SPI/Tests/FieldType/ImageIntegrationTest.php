@@ -9,8 +9,10 @@
 
 namespace eZ\Publish\SPI\Tests\FieldType;
 
+use eZ\Publish\Core\FieldType\Image\IO\Legacy as LegacyImageIOService;
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\IO;
+use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -76,6 +78,30 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getTypeName()
     {
         return 'ezimage';
+    }
+
+    /**
+     * @return \eZ\Publish\Core\IO\IOService
+     */
+    public function getIOService()
+    {
+        return new LegacyImageIOService(
+            new IOService(
+                $this->getIOHandler(),
+                $this->getMimeTypeDetector(),
+                array( 'prefix' => $this->getStoragePrefix() )
+            ),
+            new IOService(
+                $this->getIOHandler(),
+                $this->getMimeTypeDetector(),
+                array( 'prefix' => 'images-versioned' )
+            ),
+            array(
+                'var_dir' => $this->getStorageDir(),
+                'published_images_dir' => $this->getStoragePrefix(),
+                'draft_images_dir' => 'images-versioned'
+            )
+        );
     }
 
     /**
@@ -169,7 +195,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $this->assertNotNull( $field->value->data );
 
         $this->assertTrue(
-            file_exists( $this->getStorageDir() . '/' . $field->value->data['uri'] ),
+            file_exists( getcwd() . $field->value->data['uri'] ),
             "Stored file " . $field->value->data['uri'] . " doesn't exist"
         );
         $this->assertEquals( 'Ice-Flower.jpg', $field->value->data['fileName'] );
@@ -216,10 +242,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->data );
 
-        $storagePath = $this->getStorageDir() . '/' . $field->value->data['uri'];
         $this->assertTrue(
-            file_exists( $storagePath ),
-            "Stored file ".$field->value->data['uri']." does not exists"
+            file_exists( getcwd() . $field->value->data['uri'] ),
+            "Stored file ".$field->value->data['uri']." does not exist"
         );
 
         $this->assertEquals( 'Blueish-Blue.jpg', $field->value->data['fileName'] );

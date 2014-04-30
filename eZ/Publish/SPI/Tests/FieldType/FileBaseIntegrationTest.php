@@ -79,8 +79,14 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     {
         $calledClass = get_called_class();
 
+        $varDir = getcwd() . '/var';
+        if ( !file_exists( $varDir ) )
+        {
+            mkdir( $varDir );
+        }
+
         $tmpFile = tempnam(
-            sys_get_temp_dir(),
+            $varDir,
             'eZ_' . substr( $calledClass, strrpos( $calledClass, '\\' ) + 1 )
         );
 
@@ -88,7 +94,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         unlink( $tmpFile );
         mkdir( $tmpFile );
 
-        self::$storageDir = $tmpFile;
+        self::$storageDir = str_replace( getcwd() . '/', '', $tmpFile );
     }
 
     /**

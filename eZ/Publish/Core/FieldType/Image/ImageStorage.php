@@ -165,7 +165,7 @@ class ImageStorage extends GatewayBasedStorage
 
             try
             {
-                $binaryFile = $this->IOService->loadBinaryFile( $this->IOService->getExternalPath( $field->value->data['id'] ) );
+                $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
                 $metadata = $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile );
             }
             catch ( NotFoundException $e )
@@ -209,14 +209,11 @@ class ImageStorage extends GatewayBasedStorage
     {
         if ( $field->value->data !== null )
         {
-            // @todo wrap this within a dedicated service that uses the handler + service under the hood
-            // Required since images are stored with their full path, e.g. uri with a Legacy compatible IO handler
-            $binaryFileId = $this->IOService->getExternalPath( $field->value->data['id'] );
             $field->value->data['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
 
             try
             {
-                $binaryFile = $this->IOService->loadBinaryFile( $binaryFileId );
+                $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
             }
             catch ( NotFoundException $e )
             {
@@ -258,10 +255,9 @@ class ImageStorage extends GatewayBasedStorage
                 $gateway->removeImageReferences( $storedFilePath, $versionInfo->versionNo, $fieldId );
                 if ( $gateway->countImageReferences( $storedFilePath ) === 0 )
                 {
-                    $binaryFileId = $this->IOService->getExternalPath( $storedFilePath );
                     try
                     {
-                        $binaryFile = $this->IOService->loadBinaryFile( $binaryFileId );
+                        $binaryFile = $this->IOService->loadBinaryFile( $storedFilePath );
                         $this->IOService->deleteBinaryFile( $binaryFile );
                     }
                     catch ( NotFoundException $e )
