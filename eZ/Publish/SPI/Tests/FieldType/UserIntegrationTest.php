@@ -55,25 +55,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
-        $fieldType = new FieldType\User\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezuser', $fieldType );
-        $handler->getStorageRegistry()->register(
-            'ezuser',
-            new FieldType\User\UserStorage(
-                array(
-                    'LegacyStorage' => new FieldType\User\UserStorage\Gateway\LegacyStorage(),
-                )
-            )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezuser',
-            new Legacy\Content\FieldValue\Converter\Null()
-        );
-
-        return $handler;
+        return $this->getHandler();
     }
 
     /**

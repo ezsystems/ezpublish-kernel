@@ -26,9 +26,9 @@ class Handler implements LocationSearchHandler
     /**
      * Gateway for handling location data
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway
      */
-    protected $locationGateway;
+    protected $gateway;
 
     /**
      * Location locationMapper
@@ -40,12 +40,12 @@ class Handler implements LocationSearchHandler
     /**
      * Construct from search gateway and mapper
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway $locationGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      */
-    public function __construct( Gateway $locationGateway, LocationMapper $locationMapper )
+    public function __construct( Gateway $gateway, LocationMapper $locationMapper )
     {
-        $this->locationGateway = $locationGateway;
+        $this->gateway = $gateway;
         $this->locationMapper = $locationMapper;
     }
 
@@ -65,7 +65,7 @@ class Handler implements LocationSearchHandler
 
         // The legacy search does not know about scores, so we just
         // combine the query with the filter
-        $data = $this->locationGateway->find(
+        $data = $this->gateway->find(
             new Criterion\LogicalAnd( array( $query->query, $query->filter ) ),
             $query->offset,
             $query->limit,

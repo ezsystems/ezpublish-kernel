@@ -42,7 +42,7 @@ class IntegerIntegrationTest extends BaseIntegrationTest
      */
     public function getTypeName()
     {
-        return 'ezint';
+        return 'ezinteger';
     }
 
     /**
@@ -52,21 +52,7 @@ class IntegerIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
-        $fieldType = new FieldType\Integer\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezint', $fieldType );
-        $handler->getStorageRegistry()->register(
-            'ezint',
-            new FieldType\NullStorage()
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezint',
-            new Legacy\Content\FieldValue\Converter\Integer()
-        );
-
-        return $handler;
+        return $this->getHandler();
     }
 
     /**
@@ -92,7 +78,7 @@ class IntegerIntegrationTest extends BaseIntegrationTest
         return array(
             // The ezint field type does not have any special field definition
             // properties
-            array( 'fieldType', 'ezint' ),
+            array( 'fieldType', 'ezinteger' ),
             array(
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(

@@ -56,47 +56,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
-        $fieldType = new FieldType\RichText\Type(
-            new FieldType\RichText\ConverterDispatcher( array() ),
-            new FieldType\RichText\ValidatorDispatcher(
-                array(
-                    "http://docbook.org/ns/docbook" => new FieldType\RichText\Validator(
-                        array(
-                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng" ),
-                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl" )
-                        )
-                    )
-                )
-            )
-        );
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezrichtext', $fieldType );
-        $handler->getStorageRegistry()->register(
-            'ezrichtext',
-            new FieldType\RichText\RichTextStorage(
-                array(
-                    'LegacyStorage' => new LegacyStorage()
-                )
-            )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezrichtext',
-            new RichTextConverter(
-                new RichTextConverter\XsltConverter(
-                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/stylesheets/docbook_ezxml.xsl" )
-                ),
-                new RichTextConverter\XsltConverter(
-                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/stylesheets/ezxml_docbook.xsl" )
-                ),
-                new RichTextConverter\XsdValidator(
-                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/schemas/ezxml.xsd" )
-                )
-            )
-        );
-
-        return $handler;
+        return $this->getHandler();
     }
 
     /**

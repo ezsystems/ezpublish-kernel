@@ -21,6 +21,10 @@ use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
+use eZ\Publish\Core\Base\ConfigurationManager;
+use eZ\Publish\Core\Base\ServiceContainer;
+use eZ\Publish\Core\Persistence\Legacy\Handler;
+
 /**
  * Integration test for the legacy storage
  *
@@ -55,6 +59,11 @@ abstract class BaseIntegrationTest extends TestCase
      * @var string
      */
     protected static $contentVersion;
+
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
+     */
+    protected static $container;
 
     /**
      * @return string
@@ -221,6 +230,9 @@ abstract class BaseIntegrationTest extends TestCase
     {
         if ( !self::$setUp )
         {
+            self::$container = $this->getContainer();
+            $this->handler = self::$container->get( "legacy_db_handler" );
+            $this->db = $this->handler->getName();
             parent::setUp();
             $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
             self::$setUp = $this->handler;
@@ -569,7 +581,7 @@ abstract class BaseIntegrationTest extends TestCase
      *
      * @return Handler
      */
-    protected function getHandler()
+    protected function getHandler2()
     {
         $textLineFieldType = new \eZ\Publish\Core\FieldType\TextLine\Type();
         $textLineFieldType->setTransformationProcessor( $this->getTransformationProcessor() );
@@ -589,6 +601,75 @@ abstract class BaseIntegrationTest extends TestCase
                 array()
             ),
             $this->getTransformationProcessor()
+        );
+    }
+
+    /**
+     * Get a Doctrine database connection handler
+     *
+     * Get a ConnectionHandler, which can be used to interact with the configured
+     * database. The database connection string is read from an optional
+     * environment variable "DATABASE" and defaults to an in-memory SQLite
+     * database.
+     *
+     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+     */
+    public function getDatabaseHandler()
+    {
+        if ( !$this->handler )
+        {
+            $persistenceHandler = $this->getHandler();
+
+            $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
+            $dbHandlerProperty->setAccessible( true );
+            $dbHandler = $dbHandlerProperty->getValue( $persistenceHandler );
+
+            $this->handler = $dbHandler;
+            $this->db = $this->handler->getName();
+        }
+
+        return $this->handler;
+    }
+
+    /**
+     * Returns the Handler
+     *
+     * @return Handler
+     */
+    protected function getHandler()
+    {
+        return self::$container->get( "persistence_handler_legacy" );
+    }
+
+    protected function getContainer()
+    {
+        // get configuration config
+        if ( !( $settings = include 'config.php' ) )
+        {
+            throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+        }
+
+        // load configuration uncached
+        $configManager = new ConfigurationManager(
+            array_merge_recursive(
+                $settings,
+                array(
+                    'base' => array(
+                        'Configuration' => array(
+                            'UseCache' => false
+                        )
+                    )
+                )
+            ),
+            $settings['base']['Configuration']['Paths']
+        );
+
+        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
+        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
+
+        return new ServiceContainer(
+            $serviceSettings,
+            array()
         );
     }
 }

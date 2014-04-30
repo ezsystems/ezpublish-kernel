@@ -1,0 +1,68 @@
+parameters:
+    ezpublish.spi.persistence.legacy.user.handler.class: eZ\Publish\Core\Persistence\Legacy\User\Handler
+    ezpublish.persistence.legacy.user.mapper.class: eZ\Publish\Core\Persistence\Legacy\User\Mapper
+    ezpublish.persistence.legacy.user.gateway.class: eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase
+    ezpublish.persistence.legacy.user.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\User\Gateway\ExceptionConversion
+    ezpublish.persistence.legacy.role.gateway.class: eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase
+    ezpublish.persistence.legacy.role.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\ExceptionConversion
+    ezpublish.persistence.legacy.role.limitation.handler.class: eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler
+    ezpublish.persistence.legacy.role.limitation.handler.object_state.class: eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler\ObjectStateHandler
+    ezpublish.persistence.legacy.role.limitation.converter.class: eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter
+
+services:
+    ezpublish.persistence.legacy.user.gateway.inner:
+        class: %ezpublish.persistence.legacy.user.gateway.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+
+    ezpublish.persistence.legacy.user.gateway.exception_conversion:
+        class: %ezpublish.persistence.legacy.user.gateway.exception_conversion.class%
+        arguments:
+            - @ezpublish.persistence.legacy.user.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.user.gateway:
+        alias: ezpublish.persistence.legacy.user.gateway.exception_conversion
+
+    ezpublish.persistence.legacy.role.gateway.inner:
+        class: %ezpublish.persistence.legacy.role.gateway.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+
+    ezpublish.persistence.legacy.role.gateway.exception_conversion:
+        class: %ezpublish.persistence.legacy.role.gateway.exception_conversion.class%
+        arguments:
+            - @ezpublish.persistence.legacy.role.gateway.inner
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.role.gateway:
+        alias: ezpublish.persistence.legacy.role.gateway.exception_conversion
+
+    ezpublish.persistence.legacy.user.mapper:
+        class: %ezpublish.persistence.legacy.user.mapper.class%
+
+    ezpublish.persistence.legacy.role.limitation.handler:
+        abstract: true
+        class: %ezpublish.persistence.legacy.role.limitation.handler.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+
+    ezpublish.persistence.legacy.role.limitation.handler.object_state:
+        parent: ezpublish.persistence.legacy.role.limitation.handler
+        class: %ezpublish.persistence.legacy.role.limitation.handler.object_state.class%
+        tags:
+            - {name: ezpublish.persistence.legacy.role.limitation.handler}
+
+    # Note: services tagged with 'ezpublish.persistence.legacy.role.limitation.handler'
+    # are registered to this one using compilation pass
+    ezpublish.persistence.legacy.role.limitation.converter:
+        class: %ezpublish.persistence.legacy.role.limitation.converter.class%
+
+    ezpublish.spi.persistence.legacy.user.handler:
+        class: %ezpublish.spi.persistence.legacy.user.handler.class%
+        arguments:
+            - @ezpublish.persistence.legacy.user.gateway
+            - @ezpublish.persistence.legacy.role.gateway
+            - @ezpublish.persistence.legacy.user.mapper
+            - @ezpublish.persistence.legacy.role.limitation.converter
+        lazy: true

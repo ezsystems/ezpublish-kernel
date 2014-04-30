@@ -1,121 +1,34 @@
 <?php
 /**
- * File containing the AddFieldTypePassTest class.
+ * File containing the ExternalStorageRegistryPassTest class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
+namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler\Storage;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\ExternalStorageRegistryPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class AddFieldTypePassTest extends AbstractCompilerPassTest
+class ExternalStorageRegistryPassTest extends AbstractCompilerPassTest
 {
     protected function setUp()
     {
         parent::setUp();
-        $this->setDefinition( 'ezpublish.api.repository.factory', new Definition() );
-        $this->setDefinition( 'ezpublish.fieldType.parameterProviderRegistry', new Definition() );
+        $this->setDefinition( 'ezpublish.persistence.external_storage_registry.factory', new Definition() );
     }
 
     protected function registerCompilerPass( ContainerBuilder $container )
     {
-        $container->addCompilerPass( new AddFieldTypePass() );
+        $container->addCompilerPass( new ExternalStorageRegistryPass() );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     */
-    public function testAddSimpleFieldType()
-    {
-        $fieldTypeDef = new Definition();
-        $fieldTypeIdentifier = 'field_type_identifier';
-        $fieldTypeDef->addTag( 'ezpublish.fieldType', array( 'alias' => $fieldTypeIdentifier ) );
-        $fieldTypeServiceId = 'field_type_service';
-        $this->setDefinition( $fieldTypeServiceId, $fieldTypeDef );
-
-        $this->compile();
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
-            'registerFieldType',
-            array( $fieldTypeServiceId, $fieldTypeIdentifier )
-        );
-    }
-
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     *
-     * @expectedException \LogicException
-     */
-    public function testAddSimpleFieldTypeNoAlias()
-    {
-        $fieldTypeDef = new Definition();
-        $fieldTypeDef->addTag( 'ezpublish.fieldType' );
-        $fieldTypeServiceId = 'field_type_service';
-        $this->setDefinition( $fieldTypeServiceId, $fieldTypeDef );
-
-        $this->compile();
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
-            'registerFieldType',
-            array( $fieldTypeServiceId, 'field_type_identifier' )
-        );
-    }
-
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     */
-    public function testAddParameterProvider()
-    {
-        $def = new Definition();
-        $fieldTypeIdentifier = 'field_type_identifier';
-        $def->addTag( 'ezpublish.fieldType.parameterProvider', array( 'alias' => $fieldTypeIdentifier ) );
-        $serviceId = 'field_type_service';
-        $this->setDefinition( $serviceId, $def );
-
-        $this->compile();
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.fieldType.parameterProviderRegistry',
-            'setParameterProvider',
-            array( $serviceId, $fieldTypeIdentifier )
-        );
-    }
-
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     *
-     * @expectedException \LogicException
-     */
-    public function testAddParameterProviderNoAlias()
-    {
-        $def = new Definition();
-        $fieldTypeIdentifier = 'field_type_identifier';
-        $def->addTag( 'ezpublish.fieldType.parameterProvider' );
-        $serviceId = 'some_service_id';
-        $this->setDefinition( $serviceId, $def );
-
-        $this->compile();
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.fieldType.parameterProviderRegistry',
-            'setParameterProvider',
-            array( $serviceId, $fieldTypeIdentifier )
-        );
-    }
-
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     */
-    public function testAddExternalStorageHandler()
+    public function testRegisterExternalStorageHandler()
     {
         $def = new Definition();
         $fieldTypeIdentifier = 'field_type_identifier';
@@ -126,18 +39,16 @@ class AddFieldTypePassTest extends AbstractCompilerPassTest
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
+            'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
             array( $serviceId, $fieldTypeIdentifier )
         );
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     *
      * @expectedException \LogicException
      */
-    public function testAddExternalStorageHandlerNoAlias()
+    public function testRegisterExternalStorageHandlerNoAlias()
     {
         $def = new Definition();
         $fieldTypeIdentifier = 'field_type_identifier';
@@ -148,16 +59,13 @@ class AddFieldTypePassTest extends AbstractCompilerPassTest
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
+            'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
             array( $serviceId, $fieldTypeIdentifier )
         );
     }
 
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     */
-    public function testAddExternalStorageHandlerWithGateway()
+    public function testRegisterExternalStorageHandlerWithGateway()
     {
         $handlerDef = new Definition();
         $handlerDef->setClass(
@@ -180,7 +88,7 @@ class AddFieldTypePassTest extends AbstractCompilerPassTest
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
+            'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
             array( $storageHandlerServiceId, $fieldTypeIdentifier )
         );
@@ -193,11 +101,9 @@ class AddFieldTypePassTest extends AbstractCompilerPassTest
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     *
      * @expectedException \LogicException
      */
-    public function testAddExternalStorageHandlerWithoutRegisteredGateway()
+    public function testRegisterExternalStorageHandlerWithoutRegisteredGateway()
     {
         $handlerDef = new Definition();
         $handlerDef->setClass(
@@ -211,18 +117,16 @@ class AddFieldTypePassTest extends AbstractCompilerPassTest
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
+            'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
             array( $storageHandlerServiceId, $fieldTypeIdentifier )
         );
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     *
      * @expectedException \LogicException
      */
-    public function testAddExternalStorageHandlerWithGatewayNoAlias()
+    public function testRegisterExternalStorageHandlerWithGatewayNoAlias()
     {
         $handlerDef = new Definition();
         $handlerDef->setClass(
@@ -242,18 +146,16 @@ class AddFieldTypePassTest extends AbstractCompilerPassTest
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
+            'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
             array( $storageHandlerServiceId, $fieldTypeIdentifier )
         );
     }
 
     /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AddFieldTypePass::process
-     *
      * @expectedException \LogicException
      */
-    public function testAddExternalStorageHandlerWithGatewayNoIdentifier()
+    public function testRegisterExternalStorageHandlerWithGatewayNoIdentifier()
     {
         $handlerDef = new Definition();
         $handlerDef->setClass(
@@ -276,7 +178,7 @@ class AddFieldTypePassTest extends AbstractCompilerPassTest
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.api.repository.factory',
+            'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
             array( $storageHandlerServiceId, $fieldTypeIdentifier )
         );

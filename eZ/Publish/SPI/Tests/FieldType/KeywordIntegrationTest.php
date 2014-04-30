@@ -53,25 +53,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $handler = $this->getHandler();
-
-        $fieldType = new FieldType\Keyword\Type();
-        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $handler->getFieldTypeRegistry()->register( 'ezkeyword', $fieldType );
-        $handler->getStorageRegistry()->register(
-            'ezkeyword',
-            new FieldType\Keyword\KeywordStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage(),
-                )
-            )
-        );
-        $handler->getFieldValueConverterRegistry()->register(
-            'ezkeyword',
-            new Legacy\Content\FieldValue\Converter\Null()
-        );
-
-        return $handler;
+        return $this->getHandler();
     }
 
     /**
@@ -111,9 +93,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data'         => array(),
                 'externalData' => array( 'foo', 'bar', 'sindelfingen' ),
-                'sortKey'      => null,
+                'sortKey'      => false,
             )
         );
     }
@@ -134,7 +116,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value->externalData
         );
 
-        $this->assertNull( $field->value->data );
+        $this->assertEquals( array(), $field->value->data );
         $this->assertNull( $field->value->sortKey );
     }
 
@@ -186,9 +168,9 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     {
         return new Content\FieldValue(
             array(
-                'data'         => null,
+                'data'         => array(),
                 'externalData' => array( 'sindelfingen', 'baz' ),
-                'sortKey'      => null,
+                'sortKey'      => false,
             )
         );
     }
@@ -212,7 +194,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value->externalData
         );
 
-        $this->assertNull( $field->value->data );
+        $this->assertEquals( array(), $field->value->data );
         $this->assertNull( $field->value->sortKey );
     }
 }

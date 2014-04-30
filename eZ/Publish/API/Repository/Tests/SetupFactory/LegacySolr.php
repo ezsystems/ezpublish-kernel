@@ -48,7 +48,7 @@ class LegacySolr extends Legacy
         // there a well supported way to do this? I don't think so.
         $persistenceHandler = $this->getServiceContainer()->get( 'persistence_handler' );
         $legacyPersistenceHandler = $this->getServiceContainer()->get( 'persistence_handler_legacy' );
-        $searchProperty = new \ReflectionProperty( $legacyPersistenceHandler, 'searchHandler' );
+        $searchProperty = new \ReflectionProperty( $legacyPersistenceHandler, 'contentSearchHandler' );
         $searchProperty->setAccessible( true );
         $searchProperty->setValue(
             $legacyPersistenceHandler,

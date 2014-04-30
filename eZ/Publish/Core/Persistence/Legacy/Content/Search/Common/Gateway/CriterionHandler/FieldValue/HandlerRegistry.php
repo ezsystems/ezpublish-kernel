@@ -30,7 +30,7 @@ class HandlerRegistry
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler[] $map
      *        Map of Criterion field value handlers where key is field type identifier and value field value handler
      */
-    public function __construct( array $map )
+    public function __construct( array $map = array() )
     {
         foreach ( $map as $fieldTypeIdentifier => $handler )
         {
