@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\EventListener;
 
+use eZ\Publish\Core\MVC\Legacy\Kernel\Loader;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -16,6 +17,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ConfigScopeListener extends ContainerAware implements EventSubscriberInterface
 {
+    /**
+     * @var \eZ\Publish\Core\MVC\Legacy\Kernel\Loader
+     */
+    private $kernelLoader;
+
+    public function __construct( Loader $kernelLoader )
+    {
+        $this->kernelLoader = $kernelLoader;
+    }
+
     public static function getSubscribedEvents()
     {
         return array(
@@ -26,9 +37,6 @@ class ConfigScopeListener extends ContainerAware implements EventSubscriberInter
 
     public function onConfigScopeChange( ScopeChangeEvent $event )
     {
-        // Resets legacy kernel services to ensure having a new instance of it.
-        $this->container->set( 'ezpublish_legacy.kernel', null );
-        $this->container->set( 'ezpublish_legacy.kernel.lazy', null );
-        $this->container->set( 'ezpublish_legacy.kernel_handler.web', null );
+        $this->kernelLoader->resetKernel();
     }
 }

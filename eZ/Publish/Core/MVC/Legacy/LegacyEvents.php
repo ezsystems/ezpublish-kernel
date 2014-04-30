@@ -39,4 +39,11 @@ final class LegacyEvents
      * The event listener method receives a \eZ\Publish\Core\MVC\Legacy\Event\PostBuildKernelEvent
      */
     const POST_BUILD_LEGACY_KERNEL = 'ezpublish_legacy.post_build_kernel';
+
+    /**
+     * The PRE_RESET_LEGACY_KERNEL event occurs before the legacy kernel is reset (unset from the container)
+     *
+     * The event listener doesn't receive any argument.
+     */
+    const PRE_RESET_LEGACY_KERNEL = 'ezpublish_legacy.pre_reset_legacy_kernel';
 }

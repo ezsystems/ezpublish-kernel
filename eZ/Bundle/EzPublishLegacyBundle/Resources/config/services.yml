@@ -59,6 +59,7 @@ parameters:
     ezpublish_legacy.siteaccess_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\SiteAccessListener
     ezpublish_legacy.request_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\RequestListener
     ezpublish_legacy.config_scope_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\ConfigScopeListener
+    ezpublish_legacy.legacy_kernel_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\LegacyKernelListener
 
     ezpublish_legacy.legacy_bundles.extension_locator.class: eZ\Bundle\EzPublishLegacyBundle\LegacyBundles\LegacyExtensionsLocator
 
@@ -285,8 +286,15 @@ services:
 
     ezpublish_legacy.config_scope_listener:
         class: %ezpublish_legacy.config_scope_listener.class%
+        arguments: [@ezpublish_legacy.kernel.lazy_loader]
         calls:
             - [setContainer, [@service_container]]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish_legacy.legacy_kernel_listener:
+        class: %ezpublish_legacy.legacy_kernel_listener.class%
+        arguments: [@ezpublish_legacy.kernel]
         tags:
             - { name: kernel.event_subscriber }
 

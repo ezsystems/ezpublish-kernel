@@ -77,6 +77,11 @@ class Kernel extends ezpKernel
         return static::$instance !== null;
     }
 
+    public static function resetInstance()
+    {
+        static::$instance = null;
+    }
+
     /**
      * Changes the current working directory to the legacy root dir.
      * Calling this method is mandatory to use legacy kernel since a lot of resources in eZ Publish 4.x relatively defined.
