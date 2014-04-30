@@ -2,8 +2,6 @@
 /**
  * File containing the FeatureContext class.
  *
- * This class contains general REST feature context for Behat.
- *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
@@ -13,7 +11,10 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
 use EzSystems\BehatBundle\Features\Context\FeatureContext as BaseContext;
 use eZ\Bundle\EzPublishRestBundle\Features\Context\RestInternalSentences;
-use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient;
+use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
+use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext\ContentTypeGroupContext;
+use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext\AuthenticationContext;
+use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext\ErrorContext;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -24,13 +25,15 @@ use PHPUnit_Framework_Assert as Assertion;
 
 /**
  * Feature context.
+ *
+ * This class contains general REST feature context for Behat.
  */
 class FeatureContext extends BaseContext implements RestInternalSentences
 {
     /**
      * Rest client for all requests and responses
      *
-     * @var eZ\Bundle\EzPublishRestBundle\Features\Context\RestClientInterface
+     * @var \eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient
      */
     public $restclient;
 
@@ -38,7 +41,7 @@ class FeatureContext extends BaseContext implements RestInternalSentences
      * Since there is a need to prepare an object in several steps it needs to be
      * hold until sent to the request body
      *
-     * @var eZ\Publish\API\Repository\Values\ValueObject
+     * @var \eZ\Publish\API\Repository\Values\ValueObject
      */
     public $requestObject;
 
@@ -46,7 +49,7 @@ class FeatureContext extends BaseContext implements RestInternalSentences
      * Same idea as the $requestObject, since we need to verify it step by step
      * it need to be stored (as object) for testing
      *
-     * @var eZ\Publish\API\Repository\Values\ValueObject|Exception
+     * @var \eZ\Publish\API\Repository\Values\ValueObject|Exception
      */
     public $responseObject;
 
@@ -59,7 +62,13 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         parent::__construct( $parameters );
 
         // create a new REST Client
-        $this->restclient = new RestClient();
+        //$this->restclient = new RestClient\BuzzClient();
+        $this->restclient = new RestClient\GuzzleClient();
+
+        // sub contexts
+        $this->useContext( 'Authentication', new AuthenticationContext( $this->restclient ) );
+        $this->useContext( 'ContentTypeGroup', new ContentTypeGroupContext( $this->restclient ) );
+        $this->useContext( 'Error', new ErrorContext( $this->restclient ) );
     }
 
     /**
@@ -68,7 +77,7 @@ class FeatureContext extends BaseContext implements RestInternalSentences
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object Object to be converted
      * @param string $type Type for conversion
      *
-     * @return Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws InvalidArgumentException
      */
@@ -145,9 +154,17 @@ class FeatureContext extends BaseContext implements RestInternalSentences
      */
     protected function createAnObject( $objectType )
     {
+        $repository = $this->getRepository();
+
         switch( $objectType ) {
-        default:
-            throw new PendingException( "Make object of '$objectType' type is not defined yet" );
+            case "ContentTypeGroupCreateStruct":
+                $this->requestObject = $repository
+                    ->getContentTypeService()
+                    ->newContentTypeGroupCreateStruct( 'identifier' );
+                break;
+
+            default:
+                throw new PendingException( "Make object of '$objectType' type is not defined yet" );
         }
     }
 
@@ -176,95 +193,6 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         $this->restclient->setBody( $request->getContent() );
     }
 
-    /**
-     * Gets an object property/field
-     *
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to be updated
-     * @param string $property Name of property or field
-     *
-     * @return mixed
-     *
-     * @throws InvalidArgumentException If the property/field is not found
-     */
-    protected function getProperty( ValueObject $object, $property )
-    {
-        if ( !is_object( $object ) )
-        {
-            throw new InvalidArgumentException( $object, 'is not an object' );
-        }
-
-        if ( property_exists( $object, $property ) )
-        {
-            return $object->$property;
-        }
-        else if ( method_exists( $object, 'setField' ) )
-        {
-            return $object->getField( $property );
-        }
-        else
-        {
-            throw new InvalidArgumentException( $property, "wasn't foun in '" . get_class( $object ) ."' object" );
-        }
-    }
-
-    /**
-     * Sets an object property/field to the intended value
-     *
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to be updated
-     * @param string $property Name of property or field
-     * @param mixed  $value The value to set the property/field to
-     *
-     * @throws InvalidArgumentException If the property/field is not found
-     */
-    protected function setProperty( ValueObject $object, $property, $value )
-    {
-        if ( !is_object( $object ) )
-        {
-            throw new InvalidArgumentException( $object, 'is not an object' );
-        }
-
-        if ( property_exists( $object, $property ) )
-        {
-            $object->$property = $value;
-        }
-        else if ( method_exists( $object, 'setField' ) )
-        {
-            $object->setField( $property, $value );
-        }
-        else
-        {
-            throw new InvalidArgumentException( $property, "wasn't foun in '" . get_class( $object ) ."' object" );
-        }
-    }
-
-    /**
-     * Sets an objects properties
-     *
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object Object to be updated
-     * @param array $values Associative array with properties => values
-     */
-    protected function setProperties( ValueObject $object, array $values )
-    {
-        if ( empty( $values ) )
-        {
-            return;
-        }
-
-        foreach ( $values as $property => $value )
-        {
-            $this->setProperty( $object, $property, $value );
-        }
-    }
-
-    /**
-     * After this comment are the REST internal sentences implementation
-     */
-
-    public function iAddRequestedObjectToObjectMap( $identifier, $objectStep )
-    {
-        $this->setObjectToObjectMap( $identifier, $objectStep, $this->requestObject );
-    }
-
     public function iCreateRequest( $resourceUrl, $requestType )
     {
         $this->restclient->setResourceUrl( $resourceUrl );
@@ -288,10 +216,10 @@ class FeatureContext extends BaseContext implements RestInternalSentences
 
     public function iAddValueToField( $value, $field )
     {
-        // normaly fields are defined in lower camelCase
+        // normally fields are defined in lower camelCase
         $field = lcfirst( $field );
 
-        $this->setProperty( $this->requestObject, $field, $value );
+        $this->getMainContext()->valueObjectHelper->setProperty( $this->requestObject, $field, $value );
     }
 
     public function iSendRequest()
@@ -442,10 +370,10 @@ class FeatureContext extends BaseContext implements RestInternalSentences
     public function iSeeResponseObjectWithFieldValue( $field, $value )
     {
         $responseObject = $this->getResponseObject();
-        $actualValue = $this->getProperty( $responseObject, $field );
+        $actualValue = $this->getMainContext()->valueObjectHelper->getProperty( $responseObject, $field );
 
         Assertion::assertEquals(
-            $this->getProperty( $responseObject, $field ),
+            $actualValue,
             $value,
             "Expected '$field' property to have '$value' value but found '$actualValue' value"
         );
@@ -482,12 +410,12 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         );
     }
 
-    public function iSeeResponseStatusCode( $satusCode )
+    public function iSeeResponseStatusCode( $statusCode )
     {
         Assertion::assertEquals(
-            $satusCode,
+            $statusCode,
             $this->restclient->getResponseStatusCode(),
-            "Wrong status code found '{$this->restclient->getResponseStatusCode()}' expected '$satusCode'"
+            "Wrong status code found '{$this->restclient->getResponseStatusCode()}' expected '$statusCode'"
         );
     }
 
@@ -518,6 +446,8 @@ class FeatureContext extends BaseContext implements RestInternalSentences
             case 'message':
                 return $exception->getMessage();
         }
+
+        throw new InvalidArgumentException( 'property', $property . ' is invalid' );
     }
 
     public function iSeeResponseErrorWithDescription( $errorDescriptionRegEx )
