@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\BinaryBase;
 
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
-use eZ\Publish\Core\IO\IOService;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -31,7 +31,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
     /**
      * An instance of IOService configured to store to the images folder
      *
-     * @var IOService
+     * @var IOServiceInterface
      */
     protected $IOService;
 
@@ -47,12 +47,12 @@ class BinaryBaseStorage extends GatewayBasedStorage
      * Construct from gateways
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
-     * @param IOService $IOService
+     * @param IOServiceInterface $IOService
      * @param PathGenerator $pathGenerator
      * @param MimeTypeDetector $mimeTypeDetector
      * @param LoggerInterface $logger
      */
-    public function __construct( array $gateways, IOService $IOService, PathGenerator $pathGenerator, MimeTypeDetector $mimeTypeDetector, LoggerInterface $logger = null )
+    public function __construct( array $gateways, IOServiceInterface $IOService, PathGenerator $pathGenerator, MimeTypeDetector $mimeTypeDetector, LoggerInterface $logger = null )
     {
         parent::__construct( $gateways );
         $this->IOService = $IOService;

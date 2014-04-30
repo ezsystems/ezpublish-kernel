@@ -24,7 +24,7 @@ use eZ\Publish\Core\IO\MetadataHandler;
  *
  * @package eZ\Publish\Core\Repository
  */
-class IOService
+class IOService implements IOServiceInterface
 {
     /**
      * @var \eZ\Publish\Core\IO\Handler
@@ -169,6 +169,7 @@ class IOService
 
     /**
      * Loads the binary file with $id
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $path exists
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If the id is invalid
      * @param string $binaryFileId
      * @return BinaryFile|bool the file, or false if it doesn't exist

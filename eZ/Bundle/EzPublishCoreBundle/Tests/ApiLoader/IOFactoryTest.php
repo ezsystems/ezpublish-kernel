@@ -40,7 +40,7 @@ class IOFactoryTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( 'my_prefix' ) );
         $factory = new IOFactory( $this->configResolver, $this->mimeDetector );
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\IO\\IOService',
+            'eZ\\Publish\\Core\\IO\\IOServiceInterface',
             $factory->getService( $this->getMock( 'eZ\\Publish\\Core\\IO\\Handler' ), $prefixSetting )
         );
     }

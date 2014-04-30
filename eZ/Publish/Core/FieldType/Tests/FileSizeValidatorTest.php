@@ -157,7 +157,7 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
     protected function getBinaryFileValue( $size )
     {
         $this->markTestSkipped( 'BinaryFile field type does not use this validator anymore.' );
-        $value = new BinaryFileValue( $this->getMock( 'eZ\\Publish\\API\\Repository\\IOService' ) );
+        $value = new BinaryFileValue( $this->getMock( 'eZ\\Publish\\API\\Repository\\IOServiceInterface' ) );
         $value->file = new BinaryFile( array( "size" => $size ) );
 
         return $value;
