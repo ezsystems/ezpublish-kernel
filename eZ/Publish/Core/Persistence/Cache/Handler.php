@@ -18,6 +18,7 @@ use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLang
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
+use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHandler;
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 
@@ -82,14 +83,14 @@ class Handler implements PersistenceHandlerInterface
     protected $urlAliasHandler;
 
     /**
+     * @var TransactionHandler
+     */
+    protected $transactionHandler;
+
+    /**
      * @var PersistenceLogger
      */
     protected $logger;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
-     */
-    protected $cache;
 
     /**
      * Construct the class
@@ -102,11 +103,11 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Cache\UserHandler $userHandler
      * @param \eZ\Publish\Core\Persistence\Cache\SearchHandler $searchHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\TransactionHandler $transactionHandler
      * @param \eZ\Publish\Core\Persistence\Cache\TrashHandler $trashHandler
      * @param \eZ\Publish\Core\Persistence\Cache\LocationSearchHandler $locationSearchHandler
      * @param \eZ\Publish\Core\Persistence\Cache\UrlAliasHandler $urlAliasHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
-     * @param \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator $cache
      */
     public function __construct(
         PersistenceHandlerInterface $persistenceHandler,
@@ -117,11 +118,11 @@ class Handler implements PersistenceHandlerInterface
         CacheContentTypeHandler $contentTypeHandler,
         CacheUserHandler $userHandler,
         CacheSearchHandler $searchHandler,
+        CacheTransactionHandler $transactionHandler,
         CacheTrashHandler $trashHandler,
         CacheLocationSearchHandler $locationSearchHandler,
         CacheUrlAliasHandler $urlAliasHandler,
-        PersistenceLogger $logger,
-        CacheServiceDecorator $cache
+        PersistenceLogger $logger
     )
     {
         $this->persistenceHandler = $persistenceHandler;
@@ -132,11 +133,11 @@ class Handler implements PersistenceHandlerInterface
         $this->contentTypeHandler = $contentTypeHandler;
         $this->userHandler = $userHandler;
         $this->searchHandler = $searchHandler;
+        $this->transactionHandler = $transactionHandler;
         $this->trashHandler = $trashHandler;
         $this->locationSearchHandler = $locationSearchHandler;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->logger = $logger;
-        $this->cache = $cache;
     }
 
     /**
@@ -189,6 +190,7 @@ class Handler implements PersistenceHandlerInterface
 
     /**
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
+     * @todo Create cache implementation so we can avoid injecting persistenceHandler and logger
      */
     public function objectStateHandler()
     {
@@ -230,6 +232,7 @@ class Handler implements PersistenceHandlerInterface
 
     /**
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
+     * @todo Create cache implementation so we can avoid injecting persistenceHandler and logger
      */
     public function urlWildcardHandler()
     {
@@ -238,16 +241,21 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\TransactionHandler
+     */
+    public function transactionHandler()
+    {
+        return $this->transactionHandler;
+    }
+
+    /**
      * Begin transaction
      *
-     * @todo Either disable cache or layer it with in-memory cache per transaction (last layer would be the normal layer)
-     * Begins an transaction, make sure you'll call commit or rollback when done,
-     * otherwise work will be lost.
+     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
      */
     public function beginTransaction()
     {
-        $this->logger->logCall( __METHOD__ );
-        $this->persistenceHandler->beginTransaction();
+        $this->transactionHandler->beginTransaction();
     }
 
     /**
@@ -256,11 +264,12 @@ class Handler implements PersistenceHandlerInterface
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
      * @throws \RuntimeException If no transaction has been started
+     *
+     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
      */
     public function commit()
     {
-        $this->logger->logCall( __METHOD__ );
-        $this->persistenceHandler->commit();
+        $this->transactionHandler->commit();
     }
 
     /**
@@ -269,11 +278,11 @@ class Handler implements PersistenceHandlerInterface
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
      * @throws \RuntimeException If no transaction has been started
+     *
+     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
      */
     public function rollback()
     {
-        $this->logger->logCall( __METHOD__ );
-        $this->cache->clear();
-        $this->persistenceHandler->rollback();
+        $this->transactionHandler->rollback();
     }
 }

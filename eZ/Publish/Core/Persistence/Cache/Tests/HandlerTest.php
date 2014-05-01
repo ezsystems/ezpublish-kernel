@@ -18,6 +18,7 @@ use eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler as CacheContentLang
 use eZ\Publish\Core\Persistence\Cache\ContentTypeHandler as CacheContentTypeHandler;
 use eZ\Publish\Core\Persistence\Cache\UserHandler as CacheUserHandler;
 use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
+use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHandler;
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
@@ -37,6 +38,11 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
      * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $persistenceHandlerMock;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\TransactionHandler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionHandlerMock;
 
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\Handler
@@ -62,6 +68,8 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
 
         $this->persistenceHandlerMock = $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' );
 
+        $this->transactionHandlerMock = $this->getMock( 'eZ\Publish\SPI\Persistence\TransactionHandler' );
+
         $this->cacheMock = $this->getMock(
             "eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator",
             array(),
@@ -81,6 +89,7 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
             new CacheContentTypeHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheUserHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheSearchHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
+            new CacheTransactionHandler( $this->cacheMock, $this->transactionHandlerMock, $this->loggerMock ),
             new CacheTrashHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheLocationSearchHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheUrlAliasHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),

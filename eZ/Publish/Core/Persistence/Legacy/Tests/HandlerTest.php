@@ -321,12 +321,12 @@ class HandlerTest extends TestCase
     public function testDatabaseInstance()
     {
         $method = new \ReflectionProperty(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\TransactionHandler',
             'dbHandler'
         );
         $method->setAccessible( true );
 
-        $dbHandler = $method->getValue( $this->getHandlerFixture() );
+        $dbHandler = $method->getValue( $this->getHandlerFixture()->transactionHandler() );
         $className = get_class( $this->getDatabaseHandler() );
 
         $this->assertTrue( $dbHandler instanceof $className, get_class( $dbHandler ) . " not of type $className." );
