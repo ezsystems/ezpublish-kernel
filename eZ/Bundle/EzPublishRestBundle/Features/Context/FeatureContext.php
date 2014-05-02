@@ -54,18 +54,20 @@ class FeatureContext extends BaseContext implements RestInternalSentences
     public $responseObject;
 
     /**
-     * Last action (and last action status) are needed to verify the status
-     * code an message
+     * Last action should have the (last) action made through REST
      *
      * @var string
      */
     protected $lastAction;
 
     /**
+     * Status data for action is an array with the status code and message for a
+     * predefined action
+     *
      * @var array Each array entry should have the "action" => [ code, "message" ]
      * @see FeatureContext::lastAction
      */
-    protected $lastActionStatus = array(
+    protected $statusDataForAction = array(
         // action => array( <status code>, <status message> )
         "create" => array( 201, "created" ),
         "update" => array( 200, "ok" ),
@@ -106,13 +108,13 @@ class FeatureContext extends BaseContext implements RestInternalSentences
      */
     public function getLastActionStatusCodeAndMessage()
     {
-        if ( empty( $this->lastAction ) || empty( $this->lastActionStatus[$this->lastAction] ) )
+        if ( empty( $this->lastAction ) || empty( $this->statusDataForAction[$this->lastAction] ) )
         {
             $data = array( 200, "ok" );
         }
         else
         {
-            $data = $this->lastActionStatus[$this->lastAction];
+            $data = $this->statusDataForAction[$this->lastAction];
         }
 
         return $data;
