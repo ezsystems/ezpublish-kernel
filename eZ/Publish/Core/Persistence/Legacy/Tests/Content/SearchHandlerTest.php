@@ -1013,6 +1013,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
                             )
                         ),
                         'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
                     )
                 )
             )
