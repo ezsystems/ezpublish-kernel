@@ -24,6 +24,11 @@ use RuntimeException;
 class TransactionHandler implements TransactionHandlerInterface
 {
     /**
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     */
+    protected $dbHandler;
+
+    /**
      * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     protected $contentTypeHandler;
@@ -32,11 +37,6 @@ class TransactionHandler implements TransactionHandlerInterface
      * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected $languageHandler;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
-    protected $dbHandler;
 
     /**
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler

@@ -164,6 +164,18 @@ class PersistenceHandlerTest extends HandlerTest
         $this->loggerMock->expects( $this->once() )->method( 'logUnCachedHandler' );
         $this->persistenceHandlerMock->expects( $this->once() )->method( 'urlWildcardHandler' );
         $this->persistenceCacheHandler->urlWildcardHandler();
+    }
 
+    /**
+     * Test that instance is of correct type
+     *
+     * @covers eZ\Publish\Core\Persistence\Cache\Handler::transactionHandler
+     */
+    public function testTransactionHandler()
+    {
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
+        $handler = $this->persistenceCacheHandler->transactionHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\TransactionHandler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\TransactionHandler', $handler );
     }
 }
