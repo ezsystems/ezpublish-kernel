@@ -1003,7 +1003,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
     {
         $this->assertSearchResults(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
-            $this->getContentSearchHandler()->findContent(
+            $searchResult = $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         // Status criterion is gone, but this will also match all published
@@ -1013,9 +1013,15 @@ class SearchHandlerTest extends LanguageAwareTestCase
                             )
                         ),
                         'limit' => 10,
+                        'sortClauses' => array( new SortClause\ContentId ),
                     )
                 )
             )
+        );
+
+        $this->assertEquals(
+            185,
+            $searchResult->totalCount
         );
     }
 
