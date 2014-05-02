@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\RelationList class.
+ * File containing the eZ\Publish\API\Repository\Values\Content\Query\Criterion\FieldRelation class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,13 +14,16 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specificat
 use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
- * A criterion that matches content based on the object relation field name
+ * A criterion that matches Content based on the relations in relation field.
+ * This includes Relation and RelationList field types in standard installation, but also any
+ * other field type storing {@link \eZ\Publish\API\Repository\Values\Content\Relation::FIELD}
+ * type relation.
  *
  * Supported operators:
- * - IN: will match from a list of Content id found in a RelationList
- * - CONTAINS: will match against one Content id or a list of Content id found in a RelationList
+ * - IN: will match if Content relates to one or more of the given ids through given relation field
+ * - CONTAINS: will match if Content relates to all of the given ids through given relation field
  */
-class RelationList extends Criterion implements CriterionInterface
+class FieldRelation extends Criterion implements CriterionInterface
 {
     public function getSpecifications()
     {
