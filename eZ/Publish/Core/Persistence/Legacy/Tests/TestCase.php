@@ -99,11 +99,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        if ( !class_exists( 'ezcBase' ) )
-        {
-            $this->markTestSkipped( 'Missing Apache Zeta Components.' );
-        }
-
         try
         {
             $handler = $this->getDatabaseHandler();
