@@ -25,6 +25,8 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
 {
     public function iReadContentTypeGroupsList()
     {
+        $this->getMainContext()->setLastAction( "read" );
+
         return array(
             new Step\When( 'I create a "GET" request to "/content/typegroups"' ),
             new Step\When( 'I add "content-type" header with "Input" for "ContentTypeGroup"' ),
@@ -35,6 +37,8 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
 
     public function iCreateContentTypeGroup( $identifier )
     {
+        $this->getMainContext()->setLastAction( "create" );
+
         return array(
             new Step\When( 'I create a "POST" request to "/content/typegroups"' ),
             new Step\When( 'I add "content-type" header with "Input" for "ContentTypeGroup"' ),
@@ -45,11 +49,33 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
         );
     }
 
+    public function iUpdateContentTypeGroupIdentifier( $actualIdentifier, $newIdentifier )
+    {
+        $this->getMainContext()->setLastAction( "update" );
+
+        $repository = $this->getMainContext()->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        // load the ContentTypeGroup to be updated
+        $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier( $actualIdentifier );
+
+        return array(
+            new Step\When( 'I create a "PATCH" request to "/content/typegroups/' . $contentTypeGroup->id . '"' ),
+            new Step\When( 'I add "content-type" header with "Input" for "ContentTypeGroup"' ),
+            new Step\When( 'I add "accept" header for a "ContentTypeGroup"' ),
+            new Step\When( 'I make a "ContentTypeGroupUpdateStruct" object' ),
+            new Step\When( 'I add "' . $newIdentifier . '" value to "identifier" field' ),
+            new Step\When( 'I send the request' )
+        );
+    }
+
     public function iSeeContentTypeGroup( $identifier )
     {
+        list( $code, $message ) = $this->getMainContext()->getLastActionStatusCodeAndMessage();
+
         return array(
-            new Step\Then( 'I see 201 status code' ),
-            new Step\Then( 'I see "created" status message' ),
+            new Step\Then( 'I see ' . $code . ' status code' ),
+            new Step\Then( 'I see "' . $message . '" status message' ),
             new Step\Then( 'I see "content-type" header with a "ContentTypeGroup"' ),
             new Step\Then( 'I see response body with "eZ\\Publish\\Core\\REST\\Client\\Values\\ContentType\\ContentTypeGroup" object' ),
             new Step\Then( 'I see response object field "identifier" with "' . $identifier . '" value' ),

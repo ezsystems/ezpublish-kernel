@@ -54,6 +54,26 @@ class FeatureContext extends BaseContext implements RestInternalSentences
     public $responseObject;
 
     /**
+     * Last action should have the (last) action made through REST
+     *
+     * @var string
+     */
+    protected $lastAction;
+
+    /**
+     * Status data for action is an array with the status code and message for a
+     * predefined action
+     *
+     * @var array Each array entry should have the "action" => [ code, "message" ]
+     * @see FeatureContext::lastAction
+     */
+    protected $statusDataForAction = array(
+        // action => array( <status code>, <status message> )
+        "create" => array( 201, "created" ),
+        "update" => array( 200, "ok" ),
+    );
+
+    /**
      * @param array $parameters
      */
     public function __construct( array $parameters )
@@ -69,6 +89,35 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         $this->useContext( 'Authentication', new AuthenticationContext( $this->restclient ) );
         $this->useContext( 'ContentTypeGroup', new ContentTypeGroupContext( $this->restclient ) );
         $this->useContext( 'Error', new ErrorContext( $this->restclient ) );
+    }
+
+    /**
+     * Sets the last action
+     *
+     * @param string $action
+     */
+    public function setLastAction( $action )
+    {
+        $this->lastAction = $action;
+    }
+
+    /**
+     * Get the code and message for the last action
+     *
+     * @return array Status data array( code, message )
+     */
+    public function getLastActionStatusCodeAndMessage()
+    {
+        if ( empty( $this->lastAction ) || empty( $this->statusDataForAction[$this->lastAction] ) )
+        {
+            $data = array( 200, "ok" );
+        }
+        else
+        {
+            $data = $this->statusDataForAction[$this->lastAction];
+        }
+
+        return $data;
     }
 
     /**
@@ -162,6 +211,11 @@ class FeatureContext extends BaseContext implements RestInternalSentences
                     ->getContentTypeService()
                     ->newContentTypeGroupCreateStruct( 'identifier' );
                 break;
+            case "ContentTypeGroupUpdateStruct":
+                $this->requestObject = $repository
+                    ->getContentTypeService()
+                    ->newContentTypeGroupUpdateStruct();
+                break;
 
             default:
                 throw new PendingException( "Make object of '$objectType' type is not defined yet" );
@@ -219,7 +273,7 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         // normally fields are defined in lower camelCase
         $field = lcfirst( $field );
 
-        $this->getMainContext()->valueObjectHelper->setProperty( $this->requestObject, $field, $value );
+        $this->valueObjectHelper->setProperty( $this->requestObject, $field, $value );
     }
 
     public function iSendRequest()
@@ -370,7 +424,7 @@ class FeatureContext extends BaseContext implements RestInternalSentences
     public function iSeeResponseObjectWithFieldValue( $field, $value )
     {
         $responseObject = $this->getResponseObject();
-        $actualValue = $this->getMainContext()->valueObjectHelper->getProperty( $responseObject, $field );
+        $actualValue = $this->valueObjectHelper->getProperty( $responseObject, $field );
 
         Assertion::assertEquals(
             $actualValue,
@@ -415,7 +469,7 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         Assertion::assertEquals(
             $statusCode,
             $this->restclient->getResponseStatusCode(),
-            "Wrong status code found '{$this->restclient->getResponseStatusCode()}' expected '$statusCode'"
+            "Expected status code '$statusCode' found '{$this->restclient->getResponseStatusCode()}'"
         );
     }
 
@@ -424,7 +478,7 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         Assertion::assertEquals(
             strtolower( $statusMessage ),
             strtolower( $this->restclient->getResponseStatusMessage() ),
-            "Wrong status message found '{$this->restclient->getResponseStatusMessage()}' expected '$statusMessage'"
+            "Expected status message '$statusMessage' found '{$this->restclient->getResponseStatusMessage()}'"
         );
     }
 
