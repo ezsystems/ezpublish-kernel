@@ -174,6 +174,16 @@ class GlobalHelper
     }
 
     /**
+     * Returns the list of available languages.
+     *
+     * @return array
+     */
+    public function getAvailableLanguages()
+    {
+        return $this->translationHelper->getAvailableLanguages();
+    }
+
+    /**
      * Returns the config resolver.
      *
      * @return \eZ\Publish\Core\MVC\ConfigResolverInterface
