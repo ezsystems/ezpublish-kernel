@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Helper class for translation
@@ -30,10 +31,22 @@ class TranslationHelper
      */
     protected $contentService;
 
-    public function __construct( ConfigResolverInterface $configResolver, ContentService $contentService )
+    /**
+     * @var array
+     */
+    private $siteAccessesByLanguage;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    public function __construct( ConfigResolverInterface $configResolver, ContentService $contentService, array $siteAccessesByLanguage, LoggerInterface $logger = null )
     {
         $this->configResolver = $configResolver;
         $this->contentService = $contentService;
+        $this->siteAccessesByLanguage = $siteAccessesByLanguage;
+        $this->logger = $logger;
     }
 
     /**
@@ -128,5 +141,36 @@ class TranslationHelper
                 return $field;
             }
         }
+    }
+
+    /**
+     * Returns a SiteAccess name for translation in $languageCode.
+     * This is used for LanguageSwitcher feature (generate links for current content in a different language if available).
+     * Will use configured translation_siteaccesses if any. Otherwise will use related siteaccesses (e.g. same repository, same rootLocationId).
+     *
+     * Will return null if no translation SiteAccess can be found.
+     *
+     * @param string $languageCode Translation language code.
+     *
+     * @return string|null
+     */
+    public function getTranslationSiteAccess( $languageCode )
+    {
+        $translationSiteAccesses = $this->configResolver->getParameter( 'translation_siteaccesses' );
+        $relatedSiteAccesses = $this->configResolver->getParameter( 'related_siteaccesses' );
+
+        if ( !isset( $this->siteAccessesByLanguage[$languageCode] ) )
+        {
+            if ( $this->logger )
+            {
+                $this->logger->error( "Couldn't find any SiteAccess with '$languageCode' as main language." );
+            }
+
+            return null;
+        }
+
+        $relatedSiteAccesses = $translationSiteAccesses ?: $relatedSiteAccesses;
+        $translationSiteAccesses = array_intersect( $this->siteAccessesByLanguage[$languageCode], $relatedSiteAccesses );
+        return array_shift( $translationSiteAccesses );
     }
 }

@@ -29,9 +29,16 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
     private $contentService;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
+    /**
      * @var \eZ\Publish\Core\Helper\TranslationHelper
      */
-    private $contentHelper;
+    private $translationHelper;
+
+    private $siteAccessByLanguages;
 
     /**
      * @var Field[]
@@ -48,7 +55,19 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
         parent::setUp();
         $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $this->contentService = $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' );
-        $this->contentHelper = new TranslationHelper( $this->configResolver, $this->contentService );
+        $this->logger = $this->getMock( 'Psr\Log\LoggerInterface' );
+        $this->siteAccessByLanguages = array(
+            'fre-FR' => array( 'fre' ),
+            'eng-GB' => array( 'my_siteaccess', 'eng' ),
+            'esl-ES' => array( 'esl', 'mex' ),
+            'heb-IL' => array( 'heb' ),
+        );
+        $this->translationHelper = new TranslationHelper(
+            $this->configResolver,
+            $this->contentService,
+            $this->siteAccessByLanguages,
+            $this->logger
+        );
         $this->translatedNames = array(
             'eng-GB' => 'My name in english',
             'fre-FR' => 'Mon nom en français',
@@ -96,7 +115,7 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
             ->with( 'languages' )
             ->will( $this->returnValue( $prioritizedLanguages ) );
 
-        $this->assertSame( $this->translatedNames[$expectedLocale], $this->contentHelper->getTranslatedContentName( $content ) );
+        $this->assertSame( $this->translatedNames[$expectedLocale], $this->translationHelper->getTranslatedContentName( $content ) );
     }
 
     /**
@@ -121,7 +140,7 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
             ->with( $contentInfo )
             ->will( $this->returnValue( $content ) );
 
-        $this->assertSame( $this->translatedNames[$expectedLocale], $this->contentHelper->getTranslatedContentNameByContentInfo( $contentInfo ) );
+        $this->assertSame( $this->translatedNames[$expectedLocale], $this->translationHelper->getTranslatedContentNameByContentInfo( $contentInfo ) );
     }
 
     public function getTranslatedNameProvider()
@@ -149,8 +168,8 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
             ->with( $contentInfo )
             ->will( $this->returnValue( $content ) );
 
-        $this->assertSame( 'My name in english', $this->contentHelper->getTranslatedContentNameByContentInfo( $contentInfo, 'eng-GB' ) );
-        $this->assertSame( 'Mon nom en français', $this->contentHelper->getTranslatedContentNameByContentInfo( $contentInfo, 'eng-US' ) );
+        $this->assertSame( 'My name in english', $this->translationHelper->getTranslatedContentNameByContentInfo( $contentInfo, 'eng-GB' ) );
+        $this->assertSame( 'Mon nom en français', $this->translationHelper->getTranslatedContentNameByContentInfo( $contentInfo, 'eng-US' ) );
     }
 
     public function testGetTranslatedNameByContentInfoForcedLanguageMainLanguage()
@@ -174,7 +193,7 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $name,
-            $this->contentHelper->getTranslatedContentNameByContentInfo( $contentInfo, $mainLanguage )
+            $this->translationHelper->getTranslatedContentNameByContentInfo( $contentInfo, $mainLanguage )
         );
     }
 
@@ -185,8 +204,8 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
             ->expects( $this->never() )
             ->method( 'getParameter' );
 
-        $this->assertSame( 'My name in english', $this->contentHelper->getTranslatedContentName( $content, 'eng-GB' ) );
-        $this->assertSame( 'Mon nom en français', $this->contentHelper->getTranslatedContentName( $content, 'eng-US' ) );
+        $this->assertSame( 'My name in english', $this->translationHelper->getTranslatedContentName( $content, 'eng-GB' ) );
+        $this->assertSame( 'Mon nom en français', $this->translationHelper->getTranslatedContentName( $content, 'eng-US' ) );
     }
 
     /**
@@ -204,7 +223,7 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
             ->with( 'languages' )
             ->will( $this->returnValue( $prioritizedLanguages ) );
 
-        $this->assertSame( $this->translatedFields[$expectedLocale], $this->contentHelper->getTranslatedField( $content, 'test' ) );
+        $this->assertSame( $this->translatedFields[$expectedLocale], $this->translationHelper->getTranslatedField( $content, 'test' ) );
     }
 
     public function getTranslatedFieldProvider()
@@ -215,6 +234,65 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
             array( array( 'eng-US', 'heb-IL' ), 'heb-IL' ),
             array( array( 'eng-US', 'eng-GB' ), 'eng-GB' ),
             array( array( 'eng-US', 'ger-DE' ), 'fre-FR' ),
+        );
+    }
+
+    public function testGetTranslationSiteAccessUnkownLanguage()
+    {
+        $this->configResolver
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'translation_siteaccesses', null, null, array() ),
+                        array( 'related_siteaccesses', null, null, array() ),
+                    )
+                )
+            );
+
+        $this->logger
+            ->expects( $this->once() )
+            ->method( 'error' );
+
+        $this->assertNull( $this->translationHelper->getTranslationSiteAccess( 'eng-DE' ) );
+    }
+
+    /**
+     * @dataProvider getTranslationSiteAccessProvider
+     */
+    public function testGetTranslationSiteAccess( $language, array $translationSiteAccesses, array $relatedSiteAccesses, $expectedResult )
+    {
+        $this->configResolver
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'translation_siteaccesses', null, null, $translationSiteAccesses ),
+                        array( 'related_siteaccesses', null, null, $relatedSiteAccesses ),
+                    )
+                )
+            );
+
+        $this->assertSame( $expectedResult, $this->translationHelper->getTranslationSiteAccess( $language ) );
+    }
+
+    public function getTranslationSiteAccessProvider()
+    {
+        return array(
+            array( 'eng-GB', array( 'fre', 'eng', 'heb' ), array( 'esl', 'fre', 'eng', 'heb' ), 'eng' ),
+            array( 'eng-GB', array(), array( 'esl', 'fre', 'eng', 'heb' ), 'eng' ),
+            array( 'eng-GB', array(), array( 'esl', 'fre', 'eng', 'heb', 'my_siteaccess' ), 'my_siteaccess' ),
+            array( 'eng-GB', array( 'esl', 'fre', 'eng', 'heb', 'my_siteaccess' ), array(), 'my_siteaccess' ),
+            array( 'eng-GB', array( 'esl', 'fre', 'eng', 'heb' ), array(), 'eng' ),
+            array( 'fre-FR', array( 'esl', 'fre', 'eng', 'heb' ), array(), 'fre' ),
+            array( 'fre-FR', array( 'esl', 'eng', 'heb' ), array(), null ),
+            array( 'heb-IL', array( 'esl', 'eng' ), array(), null ),
+            array( 'esl-ES', array(), array( 'esl', 'mex', 'fre', 'eng', 'heb' ), 'esl' ),
+            array( 'esl-ES', array(), array( 'mex', 'fre', 'eng', 'heb' ), 'mex' ),
+            array( 'esl-ES', array( 'esl', 'mex', 'fre', 'eng', 'heb' ), array(), 'esl' ),
+            array( 'esl-ES', array( 'mex', 'fre', 'eng', 'heb' ), array(), 'mex' ),
         );
     }
 }
