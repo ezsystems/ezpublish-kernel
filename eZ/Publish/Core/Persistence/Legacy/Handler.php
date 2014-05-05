@@ -22,11 +22,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler as UrlWildcardHandler;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler as CachingContentTypeHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as CachingLanguageHandler;
-use Exception;
-use RuntimeException;
+use eZ\Publish\SPI\Persistence\TransactionHandler as SPITransactionHandler;
 
 /**
  * The main handler for Legacy Storage Engine
@@ -74,6 +70,11 @@ class Handler implements HandlerInterface
     protected $sectionHandler;
 
     /**
+     * @var \eZ\Publish\SPI\Persistence\TransactionHandler
+     */
+    protected $transactionHandler;
+
+    /**
      * @var \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     protected $trashHandler;
@@ -93,13 +94,7 @@ class Handler implements HandlerInterface
      */
     protected $userHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
-    protected $dbHandler;
-
     public function __construct(
-        DatabaseHandler $dbHandler,
         ContentHandler $contentHandler,
         ContentSearchHandler $contentSearchHandler,
         ContentTypeHandler $contentTypeHandler,
@@ -108,13 +103,13 @@ class Handler implements HandlerInterface
         LocationSearchHandler $locationSearchHandler,
         ObjectStateHandler $objectStateHandler,
         SectionHandler $sectionHandler,
+        SPITransactionHandler $transactionHandler,
         TrashHandler $trashHandler,
         UrlAliasHandler $urlAliasHandler,
         UrlWildcardHandler $urlWildcardHandler,
         UserHandler $userHandler
     )
     {
-        $this->dbHandler = $dbHandler;
         $this->contentHandler = $contentHandler;
         $this->contentSearchHandler = $contentSearchHandler;
         $this->contentTypeHandler = $contentTypeHandler;
@@ -123,6 +118,7 @@ class Handler implements HandlerInterface
         $this->locationSearchHandler = $locationSearchHandler;
         $this->objectStateHandler = $objectStateHandler;
         $this->sectionHandler = $sectionHandler;
+        $this->transactionHandler = $transactionHandler;
         $this->trashHandler = $trashHandler;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->urlWildcardHandler = $urlWildcardHandler;
@@ -190,43 +186,49 @@ class Handler implements HandlerInterface
         return $this->userHandler;
     }
 
+    /**
+     * @return \eZ\Publish\SPI\Persistence\TransactionHandler
+     */
+    public function transactionHandler()
+    {
+        return $this->transactionHandler;
+    }
+
+    /**
+     * Begin transaction
+     *
+     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
+     */
     public function beginTransaction()
     {
-        $this->dbHandler->beginTransaction();
+        $this->transactionHandler->beginTransaction();
     }
 
+    /**
+     * Commit transaction
+     *
+     * Commit transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
+     *
+     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
+     */
     public function commit()
     {
-        try
-        {
-            $this->dbHandler->commit();
-        }
-        catch ( Exception $e )
-        {
-            throw new RuntimeException( $e->getMessage() );
-        }
+        $this->transactionHandler->commit();
     }
 
+    /**
+     * Rollback transaction
+     *
+     * Rollback transaction, or throw exceptions if no transactions has been started.
+     *
+     * @throws \RuntimeException If no transaction has been started
+     *
+     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
+     */
     public function rollback()
     {
-        try
-        {
-            $this->dbHandler->rollback();
-
-            // Clear all caches after rollback
-            if ( $this->contentTypeHandler instanceof CachingContentTypeHandler )
-            {
-                $this->contentTypeHandler->clearCache();
-            }
-
-            if ( $this->languageHandler instanceof CachingLanguageHandler )
-            {
-                $this->languageHandler->clearCache();
-            }
-        }
-        catch ( Exception $e )
-        {
-            throw new RuntimeException( $e->getMessage() );
-        }
+        $this->transactionHandler->rollback();
     }
 }

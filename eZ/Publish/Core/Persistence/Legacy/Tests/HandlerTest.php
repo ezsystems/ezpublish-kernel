@@ -12,12 +12,32 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 use eZ\Publish\Core\Base\ConfigurationManager;
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Persistence\Legacy\Handler;
+use PDOException;
 
 /**
  * Test case for Repository Handler
  */
 class HandlerTest extends TestCase
 {
+    /**
+     * Does not reset database for this class as this class only tests handler instances.
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        try
+        {
+            $this->getDatabaseHandler();
+        }
+        catch ( PDOException $e )
+        {
+            $this->fail(
+                'PDO session could not be created: ' . $e->getMessage()
+            );
+        }
+    }
+
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
      *
@@ -276,6 +296,41 @@ class HandlerTest extends TestCase
     }
 
     /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
+     *
+     * @return void
+     */
+    public function testTransactionHandler()
+    {
+        $handler = $this->getHandlerFixture();
+        $transactionHandler = $handler->transactionHandler();
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\SPI\\Persistence\\TransactionHandler',
+            $transactionHandler
+        );
+        $this->assertInstanceOf(
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\TransactionHandler',
+            $transactionHandler
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
+     *
+     * @return void
+     */
+    public function testTransactionHandlerTwice()
+    {
+        $handler = $this->getHandlerFixture();
+
+        $this->assertSame(
+            $handler->transactionHandler(),
+            $handler->transactionHandler()
+        );
+    }
+
+    /**
      * Returns the Handler
      *
      * @return Handler
@@ -321,12 +376,12 @@ class HandlerTest extends TestCase
     public function testDatabaseInstance()
     {
         $method = new \ReflectionProperty(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\TransactionHandler',
             'dbHandler'
         );
         $method->setAccessible( true );
 
-        $dbHandler = $method->getValue( $this->getHandlerFixture() );
+        $dbHandler = $method->getValue( $this->getHandlerFixture()->transactionHandler() );
         $className = get_class( $this->getDatabaseHandler() );
 
         $this->assertTrue( $dbHandler instanceof $className, get_class( $dbHandler ) . " not of type $className." );

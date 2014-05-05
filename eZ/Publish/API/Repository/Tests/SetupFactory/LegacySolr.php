@@ -230,9 +230,10 @@ class LegacySolr extends Legacy
     {
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
-        $dbHandlerProperty = new \ReflectionProperty( $legacyPersistenceHandler, 'dbHandler' );
+        $transactionHandler = $legacyPersistenceHandler->transactionHandler();
+        $dbHandlerProperty = new \ReflectionProperty( $transactionHandler, 'dbHandler' );
         $dbHandlerProperty->setAccessible( true );
-        $db = $dbHandlerProperty->getValue( $legacyPersistenceHandler );
+        $db = $dbHandlerProperty->getValue( $transactionHandler );
 
         $query = $db->createSelectQuery()
             ->select( 'id', 'current_version' )
