@@ -15,13 +15,6 @@ namespace eZ\Publish\Core\Base\Configuration;
 interface Parser
 {
     /**
-     * Construct an instance of Parser
-     *
-     * @param array $settings
-     */
-    public function __construct( array $settings );
-
-    /**
      * Parse file and return raw configuration data
      *
      * @param string $fileName A valid file name
