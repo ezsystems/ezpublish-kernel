@@ -69,6 +69,22 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
         );
     }
 
+    public function iDeleteContentTypeGroup( $identifier )
+    {
+        $this->getMainContext()->setLastAction( "delete " );
+
+        $repository = $this->getMainContext()->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        // load the ContentTypeGroup to be updated
+        $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier( $identifier );
+
+        return array(
+            new Step\When( 'I create a "DELETE" request to "/content/typegroups/' . $contentTypeGroup->id . '"' ),
+            new Step\When( 'I send the request' )
+        );
+    }
+
     public function iSeeContentTypeGroup( $identifier )
     {
         // verify that the object exist
