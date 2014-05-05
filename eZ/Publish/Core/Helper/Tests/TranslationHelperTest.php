@@ -295,4 +295,47 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
             array( 'esl-ES', array( 'mex', 'fre', 'eng', 'heb' ), array(), 'mex' ),
         );
     }
+
+    public function testGetAvailableLanguagesWithTranslationSiteAccesses()
+    {
+        $this->configResolver
+            ->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'translation_siteaccesses', null, null, array( 'fre', 'esl' ) ),
+                        array( 'related_siteaccesses', null, null, array( 'fre', 'esl', 'heb' ) ),
+                        array( 'languages', null, null, array( 'eng-GB' ) ),
+                        array( 'languages', null, 'fre', array( 'fre-FR', 'eng-GB' ) ),
+                        array( 'languages', null, 'esl', array( 'esl-ES', 'fre-FR', 'eng-GB' ) ),
+                    )
+                )
+            );
+
+        $expectedLanguages = array( 'eng-GB', 'fre-FR', 'esl-ES' );
+        $this->assertSame( $expectedLanguages, $this->translationHelper->getAvailableLanguages() );
+    }
+
+    public function testGetAvailableLanguagesWithoutTranslationSiteAccesses()
+    {
+        $this->configResolver
+            ->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'translation_siteaccesses', null, null, array() ),
+                        array( 'related_siteaccesses', null, null, array( 'fre', 'esl', 'heb' ) ),
+                        array( 'languages', null, null, array( 'eng-GB' ) ),
+                        array( 'languages', null, 'fre', array( 'fre-FR', 'eng-GB' ) ),
+                        array( 'languages', null, 'esl', array( 'esl-ES', 'fre-FR', 'eng-GB' ) ),
+                        array( 'languages', null, 'heb', array( 'heb-IL', 'eng-GB' ) ),
+                    )
+                )
+            );
+
+        $expectedLanguages = array( 'eng-GB', 'fre-FR', 'esl-ES', 'heb-IL' );
+        $this->assertSame( $expectedLanguages, $this->translationHelper->getAvailableLanguages() );
+    }
 }

@@ -173,4 +173,26 @@ class TranslationHelper
         $translationSiteAccesses = array_intersect( $this->siteAccessesByLanguage[$languageCode], $relatedSiteAccesses );
         return array_shift( $translationSiteAccesses );
     }
+
+    /**
+     * Returns the list of all available languages, including the ones configured in related SiteAccesses.
+     *
+     * @return array
+     */
+    public function getAvailableLanguages()
+    {
+        $translationSiteAccesses = $this->configResolver->getParameter( 'translation_siteaccesses' );
+        $relatedSiteAccesses = $translationSiteAccesses ?: $this->configResolver->getParameter( 'related_siteaccesses' );
+        $availableLanguages = array();
+        $currentLanguages = $this->configResolver->getParameter( 'languages' );
+        $availableLanguages[] = array_shift( $currentLanguages );
+
+        foreach ( $relatedSiteAccesses as $sa )
+        {
+            $languages = $this->configResolver->getParameter( 'languages', null, $sa );
+            $availableLanguages[] = array_shift( $languages );
+        }
+
+        return array_unique( $availableLanguages );
+    }
 }
