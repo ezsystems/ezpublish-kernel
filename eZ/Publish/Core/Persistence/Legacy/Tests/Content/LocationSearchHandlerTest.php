@@ -176,7 +176,7 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\MapLocationDistance( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\MatchAll( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ObjectStateId( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\RelationList( $this->getDatabaseHandler() ),
+                        new CommonCriterionHandler\FieldRelation( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\RemoteId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\SectionId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\UserMetadata( $this->getDatabaseHandler() ),
@@ -1183,14 +1183,14 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterContainsSingle()
+    public function testFieldRelationFilterContainsSingle()
     {
         $this->assertSearchResults(
             array( 69 ),
             $this->getLocationSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\RelationList(
+                        'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array( 60 )
@@ -1201,14 +1201,14 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterContainsSingleNoMatch()
+    public function testFieldRelationFilterContainsSingleNoMatch()
     {
         $this->assertSearchResults(
             array(),
             $this->getLocationSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\RelationList(
+                        'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array( 4 )
@@ -1219,14 +1219,14 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterContainsArray()
+    public function testFieldRelationFilterContainsArray()
     {
         $this->assertSearchResults(
             array( 69 ),
             $this->getLocationSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\RelationList(
+                        'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array( 60, 75 )
@@ -1237,14 +1237,14 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterContainsArrayNotMatch()
+    public function testFieldRelationFilterContainsArrayNotMatch()
     {
         $this->assertSearchResults(
             array(),
             $this->getLocationSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\RelationList(
+                        'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array( 60, 64 )
@@ -1255,14 +1255,14 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterInArray()
+    public function testFieldRelationFilterInArray()
     {
         $this->assertSearchResults(
             array( 69, 77 ),
             $this->getLocationSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\RelationList(
+                        'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
                             array( 60, 64 )
@@ -1273,14 +1273,14 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterInArrayNotMatch()
+    public function testFieldRelationFilterInArrayNotMatch()
     {
         $this->assertSearchResults(
             array(),
             $this->getLocationSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
-                        'filter' => new Criterion\RelationList(
+                        'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
                             array( 4, 10 )

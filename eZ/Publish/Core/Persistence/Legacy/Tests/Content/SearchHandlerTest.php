@@ -218,7 +218,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Common\Gateway\CriterionHandler\UserMetadata(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\RelationList(
+                        new Content\Search\Common\Gateway\CriterionHandler\FieldRelation(
                             $this->getDatabaseHandler()
                         ),
                         new Content\Search\Gateway\CriterionHandler\Depth(
@@ -1542,14 +1542,14 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterContainsSingle()
+    public function testFieldRelationFilterContainsSingle()
     {
         $this->assertSearchResults(
             array( 67 ),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\RelationList(
+                        'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array( 60 )
@@ -1560,14 +1560,14 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterContainsSingleNoMatch()
+    public function testFieldRelationFilterContainsSingleNoMatch()
     {
         $this->assertSearchResults(
             array(),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\RelationList(
+                        'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array( 4 )
@@ -1578,14 +1578,14 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterContainsArray()
+    public function testFieldRelationFilterContainsArray()
     {
         $this->assertSearchResults(
             array( 67 ),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\RelationList(
+                        'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array( 60, 75 )
@@ -1596,14 +1596,14 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterContainsArrayNotMatch()
+    public function testFieldRelationFilterContainsArrayNotMatch()
     {
         $this->assertSearchResults(
             array(),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\RelationList(
+                        'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
                             array( 60, 64 )
@@ -1614,14 +1614,14 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterInArray()
+    public function testFieldRelationFilterInArray()
     {
         $this->assertSearchResults(
             array( 67, 75 ),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\RelationList(
+                        'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
                             array( 60, 64 )
@@ -1632,14 +1632,14 @@ class SearchHandlerTest extends LanguageAwareTestCase
         );
     }
 
-    public function testRelationListFilterInArrayNotMatch()
+    public function testFieldRelationFilterInArrayNotMatch()
     {
         $this->assertSearchResults(
             array(),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
-                        'criterion' => new Criterion\RelationList(
+                        'criterion' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
                             array( 4, 10 )

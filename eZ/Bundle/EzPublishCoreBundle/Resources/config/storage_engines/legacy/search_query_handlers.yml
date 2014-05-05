@@ -16,7 +16,7 @@ parameters:
     ezpublish.persistence.legacy.search.gateway.criterion_handler.common.map_location_distance.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\MapLocationDistance
     ezpublish.persistence.legacy.search.gateway.criterion_handler.common.match_all.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\MatchAll
     ezpublish.persistence.legacy.search.gateway.criterion_handler.common.object_state_id.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\ObjectStateId
-    ezpublish.persistence.legacy.search.gateway.criterion_handler.common.relation_list.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\RelationList
+    ezpublish.persistence.legacy.search.gateway.criterion_handler.common.field_relation.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldRelation
     ezpublish.persistence.legacy.search.gateway.criterion_handler.common.remote_id.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\RemoteId
     ezpublish.persistence.legacy.search.gateway.criterion_handler.common.section_id.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\SectionId
     ezpublish.persistence.legacy.search.gateway.criterion_handler.common.user_metadata.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\UserMetadata
@@ -215,9 +215,9 @@ services:
         tags:
             - {name: ezpublish.persistence.legacy.search.gateway.criterion_handler.common}
 
-    ezpublish.persistence.legacy.search.gateway.criterion_handler.common.relation_list:
+    ezpublish.persistence.legacy.search.gateway.criterion_handler.common.field_relation:
         parent: ezpublish.persistence.legacy.search.gateway.criterion_handler.base
-        class: %ezpublish.persistence.legacy.search.gateway.criterion_handler.common.relation_list.class%
+        class: %ezpublish.persistence.legacy.search.gateway.criterion_handler.common.field_relation.class%
         tags:
             - {name: ezpublish.persistence.legacy.search.gateway.criterion_handler.common}
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the DoctrineDatabase RelationList criterion handler class
+ * File containing the DoctrineDatabase FieldRelation criterion handler class
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,9 +16,9 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
 
 /**
- * RelationList criterion handler
+ * FieldRelation criterion handler
  */
-class RelationList extends CriterionHandler
+class FieldRelation extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -29,7 +29,7 @@ class RelationList extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\RelationList;
+        return $criterion instanceof Criterion\FieldRelation;
     }
 
     /**
