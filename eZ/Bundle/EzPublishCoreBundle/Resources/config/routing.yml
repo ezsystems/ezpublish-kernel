@@ -15,6 +15,7 @@ parameters:
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
     ezpublish.siteaccess_match_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
     ezpublish.route_reference.generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator
+    ezpublish.route_reference.listener.language_switch.class: eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener
 
 services:
     ezpublish.chain_router:
@@ -100,3 +101,9 @@ services:
       arguments: [@event_dispatcher]
       calls:
         - [setRequest, [@?request=]]
+
+    ezpublish.route_reference.listener.language_switch:
+        class: %ezpublish.route_reference.listener.language_switch.class%
+        arguments: [@ezpublish.translation_helper]
+        tags:
+            - { name: kernel.event_subscriber }
