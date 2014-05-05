@@ -41,6 +41,11 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
      */
     protected $router;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $translationHelper;
+
     protected function setUp()
     {
         parent::setUp();
@@ -49,7 +54,10 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
         $this->locationService = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
         $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $this->router = $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' );
-        $this->helper = new GlobalHelper( $this->configResolver, $this->locationService, $this->router );
+        $this->translationHelper = $this->getMockBuilder( 'eZ\Publish\Core\Helper\TranslationHelper' )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->helper = new GlobalHelper( $this->configResolver, $this->locationService, $this->router, $this->translationHelper );
     }
 
     public function testGetSiteaccess()
@@ -151,5 +159,29 @@ class GlobalHelperTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $rootLocation ) );
 
         $this->assertSame( $rootLocation, $this->helper->getRootLocation() );
+    }
+
+    public function testGetTranslationSiteAccess()
+    {
+        $language = 'fre-FR';
+        $siteaccess = 'fre';
+        $this->translationHelper
+            ->expects( $this->once() )
+            ->method( 'getTranslationSiteAccess' )
+            ->with( $language )
+            ->will( $this->returnValue( $siteaccess ) );
+
+        $this->assertSame( $siteaccess, $this->helper->getTranslationSiteAccess( $language ) );
+    }
+
+    public function testGetAvailableLanguages()
+    {
+        $languages = array( 'fre-FR', 'eng-GB', 'esl-ES' );
+        $this->translationHelper
+            ->expects( $this->once() )
+            ->method( 'getAvailableLanguages' )
+            ->will( $this->returnValue( $languages ) );
+
+        $this->assertSame( $languages, $this->helper->getAvailableLanguages() );
     }
 }
