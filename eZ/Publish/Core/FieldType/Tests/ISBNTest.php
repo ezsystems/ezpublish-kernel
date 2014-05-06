@@ -270,4 +270,74 @@ class ISBNTest extends FieldTypeTest
             array( new ISBNValue( "9789722514095" ), "9789722514095" )
         );
     }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings and
+     * field value which are considered valid by the {@link validate()} method.
+     *
+     * @return array
+     */
+    public function provideValidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    "fieldSettings" => array(
+                        'isISBN13' => true
+                    ),
+                ),
+                new ISBNValue(),
+            ),
+            array(
+                array(
+                    "fieldSettings" => array(
+                        'isISBN13' => false
+                    ),
+                ),
+                new ISBNValue(),
+            ),
+            array(
+                array(
+                    "fieldSettings" => array(
+                        'isISBN13' => true
+                    ),
+                ),
+                new ISBNValue( "9789722514095" ),
+            ),
+            array(
+                array(
+                    "fieldSettings" => array(
+                        'isISBN13' => false
+                    ),
+                ),
+                new ISBNValue( "0-9752298-0-X" ),
+            ),
+        );
+    }
+
+    /**
+     * Provides data sets with validator configuration and/or field settings,
+     * field value and corresponding validation errors returned by
+     * the {@link validate()} method.
+     *
+     * @return array
+     */
+    public function provideInvalidDataForValidate()
+    {
+        return array(
+            array(
+                array(
+                    "fieldSettings" => array(
+                        'isISBN13' => false
+                    ),
+                ),
+                new ISBNValue( "9789722514095" ),
+                array(
+                    new ValidationError(
+                        "Field definition limits ISBN to ISBN10."
+                    ),
+                ),
+            ),
+        );
+    }
 }
