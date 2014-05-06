@@ -19,13 +19,7 @@ This is precisely the goal of the language switcher.
 
 ## Solution
 The language switcher relies on the [Cross-SiteAccess linking feature](cross_siteaccess_links.md) to generate links to
-the content's translation.
-
-It adds the concept of **RouteReference**, which works in the same way of Symfony's
-`ControllerReference` for sub-requests. A `RouteReference` represents a route (to a location object, a declared route...)
-with its parameters and can be passed to the `Router` for link generation.
-The advantage of a `RouteReference` is that its params can be modified later (e.g. to generate a link to the same
-location in several different languages).
+the content's translation, and on [RouteReference feature](../routing/route_reference.md).
 
 ## Usage
 ### Configuration
