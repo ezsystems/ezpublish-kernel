@@ -60,11 +60,6 @@ class Languages extends AbstractParser
                 $mainLanguage = array_shift( $languages );
                 if ( $mainLanguage )
                 {
-                    if ( !isset( $siteAccessesByLanguage[$mainLanguage] ) )
-                    {
-                        $siteAccessesByLanguage[$mainLanguage] = array();
-                    }
-
                     $siteAccessesByLanguage[$mainLanguage][] = $sa;
                 }
             }
