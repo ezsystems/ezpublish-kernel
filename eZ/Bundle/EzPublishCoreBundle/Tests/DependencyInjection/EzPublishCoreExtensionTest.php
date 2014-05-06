@@ -9,10 +9,13 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Common;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Content;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Yaml\Yaml;
+use ReflectionObject;
 
 class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 {
@@ -20,9 +23,14 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     private $siteaccessConfig = array();
 
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension
+     */
+    private $extension;
+
     protected function setUp()
     {
-        parent::setUp();
+        $this->extension = new EzPublishCoreExtension();
         $this->siteaccessConfig = array(
             'siteaccess' => array(
                 'default_siteaccess' => 'ezdemo_site',
@@ -35,22 +43,38 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'URILElement' => 1,
                     'Map\URI' => array( 'the_front' => 'ezdemo_site', 'the_back' => 'ezdemo_site_admin' )
                 )
+            ),
+            'system' => array(
+                'ezdemo_site' => array(),
+                'eng' => array(),
+                'fre' => array(),
+                'ezdemo_site_admin' => array(
+                    'legacy_mode' => true
+                ),
             )
         );
+
+        parent::setUp();
     }
 
     protected function getContainerExtensions()
     {
-        return array( new EzPublishCoreExtension() );
+        return array( $this->extension );
     }
 
     protected function getMinimalConfiguration()
     {
-        return $this->minimalConfig = Yaml::parse( __DIR__ . '/Fixtures/ezpublish_minimal_no_siteaccess.yml' );
+        return $this->minimalConfig = Yaml::parse( file_get_contents( __DIR__ . '/Fixtures/ezpublish_minimal_no_siteaccess.yml' ) );
     }
 
     public function testSiteAccessConfiguration()
     {
+        // Injecting needed config parsers.
+        $refExtension = new ReflectionObject( $this->extension );
+        $refParsers = $refExtension->getProperty( 'configParsers' );
+        $refParsers->setAccessible( true );
+        $refParsers->setValue( $this->extension, array( new Common(), new Content() ) );
+
         $this->load( $this->siteaccessConfig );
         $this->assertContainerBuilderHasParameter(
             'ezpublish.siteaccess.list',
@@ -82,6 +106,22 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             }
         }
         $this->assertContainerBuilderHasParameter( 'ezpublish.siteaccess.groups_by_siteaccess', $groupsBySiteaccess );
+
+        $relatedSiteAccesses = array( 'ezdemo_site', 'eng', 'fre' );
+        $this->assertContainerBuilderHasParameter(
+            'ezpublish.siteaccess.relation_map',
+            array(
+                // Empty string is the default repository name
+                '' => array(
+                    // 2 is the default rootLocationId
+                    2 => $relatedSiteAccesses
+                )
+            )
+        );
+
+        $this->assertContainerBuilderHasParameter( 'ezsettings.ezdemo_site.related_siteaccesses', $relatedSiteAccesses );
+        $this->assertContainerBuilderHasParameter( 'ezsettings.eng.related_siteaccesses', $relatedSiteAccesses );
+        $this->assertContainerBuilderHasParameter( 'ezsettings.fre.related_siteaccesses', $relatedSiteAccesses );
     }
 
     public function testSiteAccessNoConfiguration()
@@ -281,5 +321,81 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $repositoryConfig['config'] = array();
         }
         $this->assertSame( $repositories, $this->container->getParameter( 'ezpublish.repositories' ) );
+    }
+
+    public function testRelatedSiteAccesses()
+    {
+        $mainRepo = 'main';
+        $fooRepo = 'foo';
+        $rootLocationId1 = 123;
+        $rootLocationId2 = 456;
+        $rootLocationId3 = 2;
+        $config = array(
+            'siteaccess' => array(
+                'default_siteaccess' => 'ezdemo_site',
+                'list' => array( 'ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin', 'ezdemo_site2', 'eng2', 'ezdemo_site3', 'fre3' ),
+                'groups' => array(
+                    'ezdemo_group' => array( 'ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin' ),
+                    'ezdemo_frontend_group' => array( 'ezdemo_site', 'eng', 'fre' ),
+                    'ezdemo_group2' => array( 'ezdemo_site2', 'eng2' ),
+                    'ezdemo_group3' => array( 'ezdemo_site3', 'fre3' ),
+                ),
+                'match' => array()
+            ),
+            'repositories' => array(
+                $mainRepo => array( 'engine' => 'legacy', 'connection' => 'default' ),
+                $fooRepo => array( 'engine' => 'bar', 'connection' => 'blabla' ),
+            ),
+            'system' => array(
+                'ezdemo_group' => array(
+                    'repository' => $mainRepo,
+                    'content' => array(
+                        'tree_root' => array( 'location_id' => $rootLocationId1 )
+                    )
+                ),
+                'ezdemo_group2' => array(
+                    'repository' => $mainRepo,
+                    'content' => array(
+                        'tree_root' => array( 'location_id' => $rootLocationId2 )
+                    )
+                ),
+                'ezdemo_group3' => array(
+                    'repository' => $fooRepo,
+                ),
+                'ezdemo_site_admin' => array( 'legacy_mode' => true )
+            )
+        ) + $this->siteaccessConfig;
+
+        // Injecting needed config parsers.
+        $refExtension = new ReflectionObject( $this->extension );
+        $refParsers = $refExtension->getProperty( 'configParsers' );
+        $refParsers->setAccessible( true );
+        $refParsers->setValue( $this->extension, array( new Common(), new Content() ) );
+
+        $this->load( $config );
+
+        $relatedSiteAccesses1 = array( 'ezdemo_site', 'eng', 'fre' );
+        $relatedSiteAccesses2 = array( 'ezdemo_site2', 'eng2' );
+        $relatedSiteAccesses3 = array( 'ezdemo_site3', 'fre3' );
+        $expectedRelationMap = array(
+            $mainRepo => array(
+                $rootLocationId1 => $relatedSiteAccesses1,
+                $rootLocationId2 => $relatedSiteAccesses2
+            ),
+            $fooRepo => array(
+                $rootLocationId3 => $relatedSiteAccesses3
+            )
+        );
+        $this->assertContainerBuilderHasParameter( 'ezpublish.siteaccess.relation_map', $expectedRelationMap );
+
+        $this->assertContainerBuilderHasParameter( 'ezsettings.ezdemo_site.related_siteaccesses', $relatedSiteAccesses1 );
+        $this->assertContainerBuilderHasParameter( 'ezsettings.eng.related_siteaccesses', $relatedSiteAccesses1 );
+        $this->assertContainerBuilderHasParameter( 'ezsettings.fre.related_siteaccesses', $relatedSiteAccesses1 );
+
+        $this->assertContainerBuilderHasParameter( 'ezsettings.ezdemo_site2.related_siteaccesses', $relatedSiteAccesses2 );
+        $this->assertContainerBuilderHasParameter( 'ezsettings.eng2.related_siteaccesses', $relatedSiteAccesses2 );
+
+        $this->assertContainerBuilderHasParameter( 'ezsettings.ezdemo_site3.related_siteaccesses', $relatedSiteAccesses3 );
+        $this->assertContainerBuilderHasParameter( 'ezsettings.fre3.related_siteaccesses', $relatedSiteAccesses3 );
     }
 }

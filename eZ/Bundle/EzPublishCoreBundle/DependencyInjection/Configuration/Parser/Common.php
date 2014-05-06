@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class Common extends AbstractParser implements SuggestionCollectorAwareInterface
 {
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\SuggestionCollectorInterface
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface
      */
     private $suggestionCollector;
 
@@ -36,12 +36,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
     public function addSemanticConfig( NodeBuilder $nodeBuilder )
     {
         $nodeBuilder
-            ->arrayNode( 'languages' )
-                ->cannotBeEmpty()
-                ->info( 'Available languages, in order of precedence' )
-                ->example( array( 'fre-FR', 'eng-GB' ) )
-                ->prototype( 'scalar' )->end()
-            ->end()
             ->scalarNode( 'repository' )->info( 'The repository to use. Choose among ezpublish.repositories.' )->end()
             // @deprecated
             // Use ezpublish.repositories / repository settings instead.
@@ -148,10 +142,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
      */
     public function registerInternalConfig( array $config, ContainerBuilder $container )
     {
-        $this->registerInternalConfigArray(
-            'languages', $config, $container, self::UNIQUE
-        );
-
         foreach ( $config[$this->baseKey] as $sa => $settings )
         {
             if ( isset( $settings['database'] ) )

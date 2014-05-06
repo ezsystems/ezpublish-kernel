@@ -227,7 +227,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
             }
 
             $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->locationService->loadLocation( $parameters['locationId'] );
-            unset( $parameters['location'], $parameters['locationId'] );
+            unset( $parameters['location'], $parameters['locationId'], $parameters['viewType'], $parameters['layout'] );
             return $this->generator->generate( $location, $parameters, $absolute );
         }
 

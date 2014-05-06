@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -49,10 +50,16 @@ class UrlAliasGenerator extends Generator
      */
     private $pathPrefixMap = array();
 
-    public function __construct( Repository $repository, RouterInterface $defaultRouter )
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    private $configResolver;
+
+    public function __construct( Repository $repository, RouterInterface $defaultRouter, ConfigResolverInterface $configResolver )
     {
         $this->repository = $repository;
         $this->defaultRouter = $defaultRouter;
+        $this->configResolver = $configResolver;
     }
 
     /**
@@ -66,7 +73,26 @@ class UrlAliasGenerator extends Generator
      */
     public function doGenerate( $location, array $parameters )
     {
-        $urlAliases = $this->repository->getURLAliasService()->listLocationAliases( $location, false );
+        $urlAliasService = $this->repository->getURLAliasService();
+        if ( isset( $parameters['siteaccess'] ) )
+        {
+            // We generate for a different SiteAccess, so potentially in a different language.
+            // We then loop against configured languages until we find a valid URLAlias.
+            $languages = $this->configResolver->getParameter( 'languages', null, $parameters['siteaccess'] );
+            foreach ( $languages as $lang )
+            {
+                if ( $urlAliases = $urlAliasService->listLocationAliases( $location, false, $lang, null, $languages ) )
+                {
+                    break;
+                }
+            }
+
+            unset( $parameters['siteaccess'] );
+        }
+        else
+        {
+            $urlAliases = $urlAliasService->listLocationAliases( $location, false );
+        }
 
         $queryString = '';
         if ( !empty( $parameters ) )

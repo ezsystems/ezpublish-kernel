@@ -72,7 +72,8 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
             ->setConstructorArgs(
                 array(
                     $repository,
-                    $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' )
+                    $this->getMock( 'Symfony\\Component\\Routing\\RouterInterface' ),
+                    $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' )
                 )
             )
             ->getMock();

@@ -21,6 +21,8 @@ parameters:
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
     ezsettings.default.index_page: ~                    # The page to show when accessing IndexPage (/)
     ezsettings.default.languages: []
+    ezsettings.default.translation_siteaccesses: []
+    ezsettings.default.related_siteaccesses: []
     ezsettings.default.cache_pool_name: "default"       # The cache pool name to use for a siteaccess / siteaccess-group
     ezsettings.default.var_dir: "var"                   # The root directory where all log files, cache files and other stored files are created
     ezsettings.default.storage_dir: "storage"           # Where to place new files for storage, it's relative to var directory
@@ -282,3 +284,9 @@ parameters:
     ezpublish.siteaccess.groups: {}
     ezpublish.siteaccess.groups_by_siteaccess: {}
     ezpublish.siteaccess.default: ~
+    # SiteAccesses relation map. 2 dimensions array.
+    # First dimension is indexed by repository identifier.
+    # Second dimension is indexed by root location Id.
+    ezpublish.siteaccess.relation_map: {}
+    # SiteAccesses, indexed by language.
+    ezpublish.siteaccesses_by_language: {}

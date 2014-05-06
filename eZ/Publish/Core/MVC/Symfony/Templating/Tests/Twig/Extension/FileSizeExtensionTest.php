@@ -80,7 +80,7 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
      */
     protected function getFixturesDir()
     {
-        return __DIR__ . '/_fixtures/functions/';
+        return __DIR__ . '/_fixtures/functions/ez_file_size';
     }
 
     /**

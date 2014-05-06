@@ -4,7 +4,7 @@ parameters:
     ezpublish.default_router.non_siteaccess_aware_routes: ['_assetic_', '_wdt', '_profiler', '_configurator_']
     ezpublish.default_router.legacy_aware_routes: ['_ezpublishLegacyTreeMenu', 'ezpublish_rest_', '_ezpublishPreviewContent', '_wdt', '_profiler', '_assetic']
 
-    ezpublish.chain_router.class: Symfony\Cmf\Component\Routing\ChainRouter
+    ezpublish.chain_router.class: eZ\Publish\Core\MVC\Symfony\Routing\ChainRouter
     ezpublish.url_generator.base.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
     ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
     ezpublish.urlalias_generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
@@ -14,6 +14,8 @@ parameters:
     ezpublish.siteaccess_listener.routing.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RoutingListener
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
     ezpublish.siteaccess_match_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
+    ezpublish.route_reference.generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator
+    ezpublish.route_reference.listener.language_switch.class: eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener
 
 services:
     ezpublish.chain_router:
@@ -52,7 +54,7 @@ services:
 
     ezpublish.urlalias_generator:
         class: %ezpublish.urlalias_generator.class%
-        arguments: [@ezpublish.api.repository, @router.default]
+        arguments: [@ezpublish.api.repository, @router.default, @ezpublish.config.resolver]
         parent: ezpublish.url_generator.base
 
     ezpublish.siteaccess.matcher_builder:
@@ -91,5 +93,17 @@ services:
             - %ezpublish.siteaccess.default%
             - @ezpublish.user.hash_generator
             - @?logger
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.route_reference.generator:
+      class: %ezpublish.route_reference.generator.class%
+      arguments: [@event_dispatcher]
+      calls:
+        - [setRequest, [@?request=]]
+
+    ezpublish.route_reference.listener.language_switch:
+        class: %ezpublish.route_reference.listener.language_switch.class%
+        arguments: [@ezpublish.translation_helper]
         tags:
             - { name: kernel.event_subscriber }

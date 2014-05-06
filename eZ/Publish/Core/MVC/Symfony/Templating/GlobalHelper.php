@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Templating;
 
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,12 +41,22 @@ class GlobalHelper
      * @var \Symfony\Component\HttpFoundation\Request
      */
     protected $request;
+    /**
+     * @var \eZ\Publish\Core\Helper\TranslationHelper
+     */
+    protected $translationHelper;
 
-    public function __construct( ConfigResolverInterface $configResolver, LocationService $locationService, RouterInterface $router )
+    public function __construct(
+        ConfigResolverInterface $configResolver,
+        LocationService $locationService,
+        RouterInterface $router,
+        TranslationHelper $translationHelper
+    )
     {
         $this->configResolver = $configResolver;
         $this->locationService = $locationService;
         $this->router = $router;
+        $this->translationHelper = $translationHelper;
     }
 
     /**
@@ -148,6 +159,28 @@ class GlobalHelper
         return $this->locationService->loadLocation(
             $this->configResolver->getParameter( 'content.tree_root.location_id' )
         );
+    }
+
+    /**
+     * Returns the translation SiteAccess for $language, or null if it cannot be found.
+     *
+     * @param string $language
+     *
+     * @return null|string
+     */
+    public function getTranslationSiteAccess( $language )
+    {
+        return $this->translationHelper->getTranslationSiteAccess( $language );
+    }
+
+    /**
+     * Returns the list of available languages.
+     *
+     * @return array
+     */
+    public function getAvailableLanguages()
+    {
+        return $this->translationHelper->getAvailableLanguages();
     }
 
     /**
