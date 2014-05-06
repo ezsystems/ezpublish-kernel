@@ -49,23 +49,13 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Returns the storage dir used by the file service
-     *
-     * @return string
-     */
-    protected function getStorageDir()
-    {
-        return self::$storageDir;
-    }
-
-    /**
      * Returns the storage identifier prefix used by the file service
      *
      * @return string
      */
     protected function getStoragePrefix()
     {
-        return 'original';
+        return $this->getContainer()->getVariable( 'binaryfile_storage_prefix' );
     }
 
     /**
@@ -171,14 +161,10 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->externalData );
 
-        $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'];
-        $this->assertTrue(
-            file_exists( $path ),
-            "Stored file $path does not exists"
-        );
+        $this->assertIOIdExists( $field->value->externalData['id'] );
 
         $this->assertEquals( 'Ice-Flower-Binary.jpg', $field->value->externalData['fileName'] );
-        $this->assertEquals( filesize( $path ), $field->value->externalData['fileSize'] );
+        $this->assertEquals( $this->getFilesize( $field->value->externalData['id'] ), $field->value->externalData['fileSize'] );
         $this->assertEquals( 'image/jpeg', $field->value->externalData['mimeType'] );
         $this->assertEquals( 0, $field->value->externalData['downloadCount'] );
 
@@ -226,11 +212,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->externalData );
 
-        $this->assertTrue(
-            file_exists( ( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ) ),
-            "Stored file $path does not exists"
-        );
+        $this->assertIOIdExists( $field->value->externalData['id'] );
 
+        $path = $this->getPathFromId( $field->value->externalData['id'] );
         // Check old file removed before update
         $this->assertEquals(
             1,
@@ -274,41 +258,5 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                 );
             }
         }
-    }
-
-    protected function getContainer()
-    {
-        // get configuration config
-        if ( !( $settings = include 'config.php' ) )
-        {
-            throw new \RuntimeException(
-                'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!'
-            );
-        }
-
-        // load configuration uncached
-        $configManager = new ConfigurationManager(
-            array_merge_recursive(
-                $settings,
-                array(
-                    'base' => array(
-                        'Configuration' => array(
-                            'UseCache' => false
-                        )
-                    )
-                )
-            ),
-            $settings['base']['Configuration']['Paths']
-        );
-
-        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
-        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
-        $serviceSettings['parameters']['storage_dir'] = $this->getStorageDir();
-        $serviceSettings['parameters']['binaryfile_storage_prefix'] = $this->getStoragePrefix();
-
-        return new ServiceContainer(
-            $serviceSettings,
-            array()
-        );
     }
 }

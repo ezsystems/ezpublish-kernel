@@ -55,7 +55,7 @@ class FilesystemTest extends BaseHandlerTest
      */
     public function testConstructDirectoryNotFound()
     {
-        $this->getIOHandler( '/some/path' );
+        $this->getIOHandler( 'some/path' );
     }
 
     public function testConstructDirectoryNotWritable()

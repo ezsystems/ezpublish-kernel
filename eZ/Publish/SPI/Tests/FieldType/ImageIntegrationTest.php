@@ -19,8 +19,6 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
-use eZ\Publish\Core\Base\ConfigurationManager;
-use eZ\Publish\Core\Base\ServiceContainer;
 
 /**
  * Integration test for legacy storage field types
@@ -51,23 +49,13 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Returns the storage dir used by the file service
-     *
-     * @return string
-     */
-    protected function getStorageDir()
-    {
-        return self::$storageDir;
-    }
-
-    /**
      * Returns the storage identifier prefix used by the file service
      *
      * @return string
      */
     protected function getStoragePrefix()
     {
-        return 'images';
+        return $this->getContainer()->getVariable( 'image_storage_prefix' );
     }
 
     /**
@@ -78,30 +66,6 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getTypeName()
     {
         return 'ezimage';
-    }
-
-    /**
-     * @return \eZ\Publish\Core\IO\IOService
-     */
-    public function getIOService()
-    {
-        return new LegacyImageIOService(
-            new IOService(
-                $this->getIOHandler(),
-                $this->getMimeTypeDetector(),
-                array( 'prefix' => $this->getStoragePrefix() )
-            ),
-            new IOService(
-                $this->getIOHandler(),
-                $this->getMimeTypeDetector(),
-                array( 'prefix' => 'images-versioned' )
-            ),
-            array(
-                'var_dir' => $this->getStorageDir(),
-                'published_images_dir' => $this->getStoragePrefix(),
-                'draft_images_dir' => 'images-versioned'
-            )
-        );
     }
 
     /**
@@ -194,10 +158,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull( $field->value->data );
 
-        $this->assertTrue(
-            file_exists( getcwd() . $field->value->data['uri'] ),
-            "Stored file " . $field->value->data['uri'] . " doesn't exist"
-        );
+        $this->assertIOUriExists( $field->value->data['uri'] );
         $this->assertEquals( 'Ice-Flower.jpg', $field->value->data['fileName'] );
         $this->assertEquals( 'An icy flower.', $field->value->data['alternativeText'] );
         $this->assertNull( $field->value->externalData );
@@ -241,11 +202,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function assertUpdatedFieldDataCorrect( Field $field )
     {
         $this->assertNotNull( $field->value->data );
-
-        $this->assertTrue(
-            file_exists( getcwd() . $field->value->data['uri'] ),
-            "Stored file ".$field->value->data['uri']." does not exist"
-        );
+        $this->assertIOUriExists( $field->value->data['uri'] );
 
         $this->assertEquals( 'Blueish-Blue.jpg', $field->value->data['fileName'] );
         $this->assertEquals( 'This blue is so blueish.', $field->value->data['alternativeText'] );
@@ -283,42 +240,6 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 );
             }
         }*/
-    }
-
-    protected function getContainer()
-    {
-        // get configuration config
-        if ( !( $settings = include 'config.php' ) )
-        {
-            throw new \RuntimeException(
-                'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!'
-            );
-        }
-
-        // load configuration uncached
-        $configManager = new ConfigurationManager(
-            array_merge_recursive(
-                $settings,
-                array(
-                    'base' => array(
-                        'Configuration' => array(
-                            'UseCache' => false
-                        )
-                    )
-                )
-            ),
-            $settings['base']['Configuration']['Paths']
-        );
-
-        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
-        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
-        $serviceSettings['parameters']['storage_dir'] = $this->getStorageDir();
-        $serviceSettings['parameters']['image_storage_prefix'] = $this->getStoragePrefix();
-
-        return new ServiceContainer(
-            $serviceSettings,
-            array()
-        );
     }
 }
 

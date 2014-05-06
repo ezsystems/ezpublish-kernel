@@ -98,9 +98,9 @@ interface IOServiceInterface
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct );
 
     /**
-     * Returns the public HTTP uri for $path
+     * Returns the public HTTP uri for $id
      *
-     * @param string $path
+     * @param string $id
      *
      * @return string
      */
@@ -118,7 +118,7 @@ interface IOServiceInterface
     public function getFileInputStream( BinaryFile $binaryFile );
 
     /**
-     * Deletes the BinaryFile with $path
+     * Deletes the BinaryFile with $id
      *
      * @param BinaryFile $binaryFile
      *
