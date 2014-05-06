@@ -73,13 +73,15 @@ class UrlAliasGenerator extends Generator
      */
     public function doGenerate( $location, array $parameters )
     {
+        $urlAliasService = $this->repository->getURLAliasService();
         if ( isset( $parameters['siteaccess'] ) )
         {
             // We generate for a different SiteAccess, so potentially in a different language.
             // We then loop against configured languages until we find a valid URLAlias.
-            foreach ( $this->configResolver->getParameter( 'languages', null, $parameters['siteaccess'] ) as $lang )
+            $languages = $this->configResolver->getParameter( 'languages', null, $parameters['siteaccess'] );
+            foreach ( $languages as $lang )
             {
-                if ( $urlAliases = $this->repository->getURLAliasService()->listLocationAliases( $location, false, $lang ) )
+                if ( $urlAliases = $urlAliasService->listLocationAliases( $location, false, $lang, null, $languages ) )
                 {
                     break;
                 }
@@ -89,7 +91,7 @@ class UrlAliasGenerator extends Generator
         }
         else
         {
-            $urlAliases = $this->repository->getURLAliasService()->listLocationAliases( $location, false );
+            $urlAliases = $urlAliasService->listLocationAliases( $location, false );
         }
 
         $queryString = '';
