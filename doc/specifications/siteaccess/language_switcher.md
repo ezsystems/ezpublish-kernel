@@ -22,7 +22,7 @@ The language switcher relies on the [Cross-SiteAccess linking feature](cross_sit
 the content's translation, and on [RouteReference feature](../routing/route_reference.md).
 
 ## Usage
-### Configuration
+### Configuration: explicit *translation SiteAccesses*
 Configuration is not mandatory, but can help to distinguish which SiteAccesses can be considered *translation SiteAccesses*.
 
 ```yaml
@@ -35,10 +35,11 @@ ezpublish:
             - fre
             - ezdemo_site_admin
 
-    ezdemo_frontend_group:
-        - ezdemo_site
-        - eng
-        - fre
+        groups:
+            ezdemo_frontend_group:
+                - ezdemo_site
+                - eng
+                - fre
 
     # ...
 
@@ -50,13 +51,82 @@ ezpublish:
             languages: [eng-GB]
         fre:
             languages: [fre-FR, eng-GB]
+        ezdemo_site:
+            languages: [eng-GB]
 ```
 
-> If configuration is not provided, *related SiteAccesses* will be used instead.
-> SiteAccesses are considered *related* when they share:
+> **Note**:
+> Top prioritized language is always used for as the SiteAccess language reference (e.g. `fre-FR` for `fre` SiteAccess
+> in the example above).
 >
-> * The same repository
-> * The same root location Id (see [Multisite feature](../multisite/design_routing.md))
+> If several translation SiteAccesses share the same language reference, **the first declared SiteAccess always wins**.
+
+### Configuration: more complex translation setup
+There are some cases where your SiteAccesses share settings (repository, content settings...), but you don't want all
+of them to share the same `translation_siteaccesses` setting. This can be the case when you use SiteAccesses for mobile.
+
+Solution is as easy as defining new groups:
+
+```yaml
+ezpublish:
+    siteaccess:
+        default_siteaccess: eng
+        list:
+            - ezdemo_site
+            - eng
+            - fre
+            - mobile_eng
+            - mobile_fre
+            - ezdemo_site_admin
+
+        groups:
+            # This group can be used for common front settings
+            ezdemo_common_group:
+                - ezdemo_site
+                - eng
+                - fre
+                - mobile_eng
+                - mobile_fre
+
+            ezdemo_frontend_group:
+                - ezdemo_site
+                - eng
+                - fre
+
+            ezdemo_mobile_group
+                - mobile_eng
+                - mobile_fre
+
+    # ...
+
+    system:
+        # Translation SiteAccesses for regular frontend
+        ezdemo_frontend_group:
+            translation_siteaccesses: [fre, eng]
+
+        # Translation SiteAccesses for mobile frontend
+        ezdemo_mobile_group:
+            translation_siteaccesses: [mobile_fre, mobile_eng]
+
+        eng:
+            languages: [eng-GB]
+        fre:
+            languages: [fre-FR, eng-GB]
+        ezdemo_site:
+            languages: [eng-GB]
+
+        mobile_eng:
+            languages: [eng-GB]
+        mobile_fre:
+            languages: [fre-FR, eng-GB]
+```
+
+### Configuration: using implicit *related SiteAccesses*
+If `translation_siteaccesses` setting is not provided, implicit *related SiteAccesses* will be used instead.
+SiteAccesses are considered *related* if they share:
+
+* The same repository
+* The same root location Id (see [Multisite feature](../multisite/design_routing.md))
 
 ### In a template
 To generate a language switch link, you need to generate the `RouteReference`, with the `language` parameter.
