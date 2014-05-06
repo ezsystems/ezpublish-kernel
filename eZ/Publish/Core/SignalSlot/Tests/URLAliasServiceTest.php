@@ -105,7 +105,7 @@ class URLAliasServiceTest extends ServiceTest
             ),
             array(
                 'listLocationAliases',
-                array( $location, false, $languageCode ),
+                array( $location, false, $languageCode, false, array() ),
                 array( $locationUrlAlias ),
                 0
             ),
@@ -133,7 +133,7 @@ class URLAliasServiceTest extends ServiceTest
             ),
             array(
                 'reverseLookup',
-                array( $location, $languageCode ),
+                array( $location, $languageCode, false, array() ),
                 $locationUrlAlias,
                 0
             ),
