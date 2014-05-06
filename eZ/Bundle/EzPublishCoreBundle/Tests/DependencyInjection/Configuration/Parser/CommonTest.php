@@ -38,7 +38,7 @@ class CommonTest extends AbstractExtensionTestCase
 
     protected function getMinimalConfiguration()
     {
-        return $this->minimalConfig = Yaml::parse( __DIR__ . '/../../Fixtures/ezpublish_minimal.yml' );
+        return $this->minimalConfig = Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_minimal.yml' ) );
     }
 
     public function testIndexPage()
@@ -58,48 +58,6 @@ class CommonTest extends AbstractExtensionTestCase
         $this->assertFalse( $this->container->hasParameter( 'ezsettings.global.index_page' ) );
         $this->assertSame( $indexPage1, $this->container->getParameter( 'ezsettings.ezdemo_site.index_page' ) );
         $this->assertSame( $indexPage2, $this->container->getParameter( 'ezsettings.ezdemo_site_admin.index_page' ) );
-    }
-
-    public function testLanguagesSingleSiteaccess()
-    {
-        $langDemoSite = array( 'eng-GB' );
-        $langFre = array( 'fre-FR', 'eng-GB' );
-        $config = array(
-            'system' => array(
-                'ezdemo_site' => array( 'languages' => $langDemoSite ),
-                'fre' => array( 'languages' => $langFre ),
-            )
-        );
-        $this->load( $config );
-
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.languages' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.fre.languages' ) );
-        $this->assertFalse( $this->container->hasParameter( 'ezsettings.global.languages' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.languages' ) );
-        $this->assertSame( $langDemoSite, $this->container->getParameter( 'ezsettings.ezdemo_site.languages' ) );
-        $this->assertSame( $langFre, $this->container->getParameter( 'ezsettings.fre.languages' ) );
-        // languages for ezdemo_site_admin will take default value (empty array)
-        $this->assertEmpty( $this->container->getParameter( 'ezsettings.ezdemo_site_admin.languages' ) );
-    }
-
-    public function testLanguagesSiteaccessGroup()
-    {
-        $langDemoSite = array( 'eng-US', 'eng-GB' );
-        $config = array(
-            'system' => array(
-                'ezdemo_frontend_group' => array( 'languages' => $langDemoSite ),
-            )
-        );
-        $this->load( $config );
-
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.languages' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.fre.languages' ) );
-        $this->assertFalse( $this->container->hasParameter( 'ezsettings.global.languages' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.languages' ) );
-        $this->assertSame( $langDemoSite, $this->container->getParameter( 'ezsettings.ezdemo_site.languages' ) );
-        $this->assertSame( $langDemoSite, $this->container->getParameter( 'ezsettings.fre.languages' ) );
-        // languages for ezdemo_site_admin will take default value (empty array)
-        $this->assertEmpty( $this->container->getParameter( 'ezsettings.ezdemo_site_admin.languages' ) );
     }
 
     /**

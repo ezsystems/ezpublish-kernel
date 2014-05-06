@@ -24,7 +24,7 @@ class GlobalHelperTest extends BaseGlobalHelperTest
         parent::setUp();
         $this->legacyHelper = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Legacy\\Templating\\LegacyHelper' );
         // Force to use Legacy GlobalHelper
-        $this->helper = new GlobalHelper( $this->configResolver, $this->locationService, $this->router );
+        $this->helper = new GlobalHelper( $this->configResolver, $this->locationService, $this->router, $this->translationHelper );
         $this->helper->setLegacyHelper( $this->legacyHelper );
     }
 

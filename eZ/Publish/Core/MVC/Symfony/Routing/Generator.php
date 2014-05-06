@@ -98,8 +98,8 @@ abstract class Generator implements SiteAccessAware
             else if ( $this->logger )
             {
                 $siteAccess = $this->siteAccess;
-                $parameters['siteaccess'] = $this->siteAccess->name;
                 $this->logger->notice( "Could not generate a link using provided 'siteaccess' parameter: {$parameters['siteaccess']}. Generating using current context." );
+                unset( $parameters['siteaccess'] );
             }
         }
 

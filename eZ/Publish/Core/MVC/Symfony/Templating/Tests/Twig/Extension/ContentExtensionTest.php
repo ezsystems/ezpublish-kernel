@@ -45,7 +45,12 @@ class ContentExtensionIntegrationTest extends Twig_Test_IntegrationTestCase
                 $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\RichText\\Converter' )->disableOriginalConstructor()->getMock(),
                 $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\RichText\\Converter' )->disableOriginalConstructor()->getMock(),
                 $this->getMock( 'eZ\Publish\SPI\Variation\VariationHandler' ),
-                new TranslationHelper( $configResolver, $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ) ),
+                new TranslationHelper(
+                    $configResolver,
+                    $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
+                    array(),
+                    $this->getMock( 'Psr\Log\LoggerInterface' )
+                ),
                 $this->fieldHelperMock
             )
         );
