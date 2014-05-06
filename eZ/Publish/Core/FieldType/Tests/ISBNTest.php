@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\ISBN\Type as ISBN;
 use eZ\Publish\Core\FieldType\ISBN\Value as ISBNValue;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * @group fieldType
