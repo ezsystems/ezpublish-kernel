@@ -71,6 +71,11 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         // action => array( <status code>, <status message> )
         "create" => array( 201, "created" ),
         "update" => array( 200, "ok" ),
+
+        // errors
+        // these aren't actions, but they will change status
+        "invalid" => array( 403, "forbidden"),
+        "unauthorized" => array( 401, "unauthorized" ),
     );
 
     /**
