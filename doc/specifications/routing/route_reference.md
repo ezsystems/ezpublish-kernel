@@ -80,7 +80,7 @@ All listeners receive a `eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerat
 current request object and the route reference.
 
 ### Example
-```
+```php
 namespace Acme\AcmeTestBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent;
