@@ -24,7 +24,7 @@ use eZ\Publish\Core\IO\MetadataHandler;
  *
  * @package eZ\Publish\Core\Repository
  */
-class IOService
+class IOService implements IOServiceInterface
 {
     /**
      * @var \eZ\Publish\Core\IO\Handler
@@ -45,6 +45,7 @@ class IOService
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\Core\IO\Handler $handler
+     * @param \eZ\Publish\SPI\IO\MimeTypeDetector $mimeTypeDetector
      * @param array $settings
      */
     public function __construct( Handler $handler, MimeTypeDetector $mimeTypeDetector, array $settings = array() )
@@ -90,7 +91,7 @@ class IOService
     /**
      * Creates a BinaryFileCreateStruct object from $localFile
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When given a non existing / unreadable file
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When $localFile doesn't exist/can't be read
      *
      * @param string $localFile Path to local file
      *
@@ -153,7 +154,7 @@ class IOService
     }
 
     /**
-     * Deletes the BinaryFile with $path
+     * Deletes $binaryFile
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
@@ -168,8 +169,9 @@ class IOService
     }
 
     /**
-     * Loads the binary file with $id
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If the id is invalid
+     * Loads the binary file with $binaryFileId
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $binaryFileId exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $binaryFileId is invalid
      * @param string $binaryFileId
      * @return BinaryFile|bool the file, or false if it doesn't exist
      */
@@ -188,7 +190,7 @@ class IOService
     }
 
     /**
-     * Returns a read (mode: rb) file resource to the binary file identified by $path
+     * Returns a read (mode: rb) file resource to $binaryFile
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
@@ -239,7 +241,7 @@ class IOService
     }
 
     /**
-     * Returns the external path to $internalPath
+     * Returns the external path to $internalId
      * @param string $internalId
      * @return string
      */
@@ -249,8 +251,8 @@ class IOService
     }
 
     /**
-     * Returns the public HTTP uri for $path
-     * @param string $path
+     * Returns the public HTTP uri for $id
+     * @param string $id
      * @return string
      */
     public function getUri( $id )

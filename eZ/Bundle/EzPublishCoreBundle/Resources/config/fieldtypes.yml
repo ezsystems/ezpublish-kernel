@@ -538,6 +538,9 @@ services:
             - @ezpublish.core.io.handler.legacy
             - 'image.published_images_dir'
 
+    ezpublish.fieldType.ezimage.io:
+        alias: ezpublish.fieldType.ezimage.IOService
+
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
         arguments:
@@ -547,7 +550,7 @@ services:
         class: %ezpublish.fieldType.ezimage.externalStorage.class%
         arguments:
             - []
-            - @ezpublish.fieldType.ezimage.IOService
+            - @ezpublish.fieldType.ezimage.io
             - @ezpublish.fieldType.ezimage.pathGenerator
             - @ezpublish.fieldType.metadataHandler.imagesize
             - @?logger

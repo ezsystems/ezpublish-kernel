@@ -1,0 +1,139 @@
+<?php
+/**
+ * File containing the ${NAME} class.
+ *
+ * @copyright Copyright (C) 2014 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+namespace eZ\Publish\Core\IO;
+use eZ\Publish\Core\IO\Values\BinaryFile;
+use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+
+/**
+ * Interface for Input/Output handling of binary files
+ */
+interface IOServiceInterface
+{
+    /**
+     * Returns the external path to $internalPath
+     *
+     * @param string $internalId
+     *
+     * @return string
+     */
+    public function getExternalPath( $internalId );
+
+    /**
+     * @param MetadataHandler $metadataHandler
+     * @param BinaryFile $binaryFile
+     *
+     * @return array
+     */
+    public function getMetadata( MetadataHandler $metadataHandler, BinaryFile $binaryFile );
+
+    /**
+     * Creates a BinaryFileCreateStruct object from $localFile
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When given a non existing / unreadable file
+     *
+     * @param string $localFile Path to local file
+     *
+     * @return BinaryFileCreateStruct
+     */
+    public function newBinaryCreateStructFromLocalFile( $localFile );
+
+    /**
+     * Checks if a Binary File with $binaryFileId exists
+     *
+     * @param string $binaryFileId
+     *
+     * @return bool
+     */
+    public function exists( $binaryFileId );
+
+    /**
+     * Returns the internal, handler level path to $externalPath
+     *
+     * @param string $externalId
+     *
+     * @return string
+     */
+    public function getInternalPath( $externalId );
+
+    /**
+     * Loads the binary file with $id
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If the id is invalid
+     *
+     * @param string $binaryFileId
+     *
+     * @return BinaryFile the file, or false if it doesn't exist
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $binaryFileId exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $binaryFileId is invalid
+     */
+    public function loadBinaryFile( $binaryFileId );
+
+    /**
+     * Returns the content of the binary file
+     *
+     * @param BinaryFile $binaryFile
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $binaryFile isn't found
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     *
+     * @return string
+     */
+    public function getFileContents( BinaryFile $binaryFile );
+
+    /**
+     * Creates a binary file in the repository
+     *
+     * @param BinaryFileCreateStruct $binaryFileCreateStruct
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     *
+     * @return BinaryFile The created BinaryFile object
+     */
+    public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct );
+
+    /**
+     * Returns the public HTTP uri for $id
+     *
+     * @param string $id
+     *
+     * @return string
+     */
+    public function getUri( $id );
+
+    /**
+     * Returns a read (mode: rb) file resource to the binary file identified by $path
+     *
+     * @param BinaryFile $binaryFile
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     *
+     * @return resource
+     */
+    public function getFileInputStream( BinaryFile $binaryFile );
+
+    /**
+     * Deletes the BinaryFile with $id
+     *
+     * @param BinaryFile $binaryFile
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     */
+    public function deleteBinaryFile( BinaryFile $binaryFile );
+
+    /**
+     * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When given an invalid uploaded file
+     *
+     * @param array $uploadedFile The $_POST hash of an uploaded file
+     *
+     * @return BinaryFileCreateStruct
+     */
+    public function newBinaryCreateStructFromUploadedFile( array $uploadedFile );
+}

@@ -18,6 +18,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use DateTime;
 use RuntimeException;
 use eZ\Publish\Core\IO\MetadataHandler;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Legacy Io/Storage handler, based on eZ Cluster
@@ -36,15 +37,48 @@ class Filesystem implements IOHandlerInterface
     private $storageDirectory;
 
     /**
+     * The root dir for storage. Defaults to the current working directory.
+     * Example: /mnt/binary
+     * @var string
+     */
+    private $rootDirectory;
+
+    /**
      * @var string
      */
     private $prefix;
 
     /**
-     * @param string $storageDirectory
+     * @param array|string $options Possible keys: storage_dir, root_dir.
+     *        Supports string instead of array for BC, in which case it is considered as storage_dir.
      */
-    public function __construct( $storageDirectory )
+    public function __construct( $options = array() )
     {
+        // BC with < 5.3
+        if ( is_string( $options ) )
+        {
+            $options = array( 'storage_dir' => $options );
+        }
+
+        $optionsResolver = new OptionsResolver();
+        $this->configureOptions( $optionsResolver );
+        $options = $optionsResolver->resolve( $options );
+
+        if ( $options['storage_dir'][0] === '/' )
+        {
+            throw new InvalidArgumentException( 'storage_dir', 'can not be absolute. Use root_dir.' );
+        }
+
+        if ( isset( $options['root_dir'] ) && $options['root_dir'] !== '' )
+        {
+            $this->rootDirectory = $options['root_dir'];
+            $storageDirectory = $options['root_dir'] . '/' . $options['storage_dir'];
+        }
+        else
+        {
+            $storageDirectory = $options['storage_dir'];
+        }
+
         if ( !file_exists( $storageDirectory ) || !is_dir( $storageDirectory ) )
         {
             throw new RuntimeException( "Storage directory $storageDirectory doesn't exist" );
@@ -53,11 +87,15 @@ class Filesystem implements IOHandlerInterface
         {
             throw new RuntimeException( "Storage directory $storageDirectory can not be written to" );
         }
-        $this->storageDirectory = realpath( $storageDirectory );
-        if ( $storageDirectory[0] !== DIRECTORY_SEPARATOR )
-        {
-            $this->prefix = $storageDirectory;
-        }
+
+        $this->storageDirectory = $options['storage_dir'];
+    }
+
+    private function configureOptions( OptionsResolver $optionsResolver )
+    {
+        $optionsResolver->setRequired( array( 'storage_dir' ) );
+        $optionsResolver->setOptional( array( 'root_dir' ) );
+        $optionsResolver->setAllowedTypes( array( 'storage_dir' => 'string', 'root_dir' => 'string' ) );
     }
 
     /**
@@ -279,13 +317,13 @@ class Filesystem implements IOHandlerInterface
 */
     public function getInternalPath( $spiBinaryFileId )
     {
-        if ( !isset( $this->prefix ) )
+        if ( !isset( $this->storageDirectory ) )
         {
             return $spiBinaryFileId;
         }
         else
         {
-            return $this->prefix . '/' . $spiBinaryFileId;
+            return $this->storageDirectory . '/' . $spiBinaryFileId;
         }
     }
 
@@ -316,26 +354,31 @@ class Filesystem implements IOHandlerInterface
     {
         if ( $this->storageDirectory )
             $path = $this->storageDirectory . '/' . $path;
+
+        if ( $this->rootDirectory )
+        {
+            $path = $this->rootDirectory . '/' . $path;
+        }
         return $path;
     }
 
     protected function removePrefix( $spiBinaryFileId )
     {
-        if ( !isset( $this->prefix ) )
+        if ( !isset( $this->storageDirectory ) )
         {
             return $spiBinaryFileId;
         }
 
-        if ( strpos( $spiBinaryFileId, $this->prefix . '/' ) !== 0 )
+        if ( strpos( $spiBinaryFileId, $this->storageDirectory . '/' ) !== 0 )
         {
-            throw new InvalidArgumentException( '$uri', "Prefix {$this->prefix} not found in {$spiBinaryFileId}" );
+            throw new InvalidArgumentException( '$uri', "Storage directory {$this->prefix} not found in {$spiBinaryFileId}" );
         }
 
-        return substr( $spiBinaryFileId, strlen( $this->prefix ) + 1 );
+        return substr( $spiBinaryFileId, strlen( $this->storageDirectory ) + 1 );
     }
 
     public function getUri( $spiBinaryFileId )
     {
-        return '/' . ( $this->prefix ? $this->prefix . '/' : '') . $spiBinaryFileId;
+        return '/' . ( $this->storageDirectory ? $this->storageDirectory . '/' : '') . $spiBinaryFileId;
     }
 }

@@ -49,23 +49,13 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     }
 
     /**
-     * Returns the storage dir used by the file service
-     *
-     * @return string
-     */
-    protected function getStorageDir()
-    {
-        return self::$storageDir;
-    }
-
-    /**
      * Returns the storage identifier prefix used by the file service
      *
      * @return string
      */
     protected function getStoragePrefix()
     {
-        return 'original';
+        return $this->getContainer()->getVariable( 'binaryfile_storage_prefix' );
     }
 
     /**
@@ -297,41 +287,5 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 );
             }
         }
-    }
-
-    protected function getContainer()
-    {
-        // get configuration config
-        if ( !( $settings = include 'config.php' ) )
-        {
-            throw new \RuntimeException(
-                'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!'
-            );
-        }
-
-        // load configuration uncached
-        $configManager = new ConfigurationManager(
-            array_merge_recursive(
-                $settings,
-                array(
-                    'base' => array(
-                        'Configuration' => array(
-                            'UseCache' => false
-                        )
-                    )
-                )
-            ),
-            $settings['base']['Configuration']['Paths']
-        );
-
-        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
-        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
-        $serviceSettings['parameters']['storage_dir'] = $this->getStorageDir();
-        $serviceSettings['parameters']['binaryfile_storage_prefix'] = $this->getStoragePrefix();
-
-        return new ServiceContainer(
-            $serviceSettings,
-            array()
-        );
     }
 }

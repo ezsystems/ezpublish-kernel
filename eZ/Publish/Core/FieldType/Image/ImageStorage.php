@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\Image;
 
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\Core\IO\IOService;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -34,7 +34,7 @@ class ImageStorage extends GatewayBasedStorage
     /**
      * The IO Service used to manipulate data
      *
-     * @var IOService
+     * @var IOServiceInterface
      */
     protected $IOService;
 
@@ -52,12 +52,12 @@ class ImageStorage extends GatewayBasedStorage
      * Construct from gateways
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
-     * @param IOService                                   $IOService
+     * @param IOServiceInterface                          $IOService
      * @param \eZ\Publish\Core\IO\MetadataHandler         $pathGenerator
      * @param \eZ\Publish\Core\IO\MetadataHandler         $imageSizeMetadataHandler
      * @param \Psr\Log\LoggerInterface                    $logger
      */
-    public function __construct( array $gateways, IOService $IOService, PathGenerator $pathGenerator, MetadataHandler $imageSizeMetadataHandler, LoggerInterface $logger = null )
+    public function __construct( array $gateways, IOServiceInterface $IOService, PathGenerator $pathGenerator, MetadataHandler $imageSizeMetadataHandler, LoggerInterface $logger = null )
     {
         parent::__construct( $gateways );
         $this->IOService = $IOService;
@@ -165,7 +165,7 @@ class ImageStorage extends GatewayBasedStorage
 
             try
             {
-                $binaryFile = $this->IOService->loadBinaryFile( $this->IOService->getExternalPath( $field->value->data['id'] ) );
+                $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
                 $metadata = $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile );
             }
             catch ( NotFoundException $e )
@@ -209,14 +209,11 @@ class ImageStorage extends GatewayBasedStorage
     {
         if ( $field->value->data !== null )
         {
-            // @todo wrap this within a dedicated service that uses the handler + service under the hood
-            // Required since images are stored with their full path, e.g. uri with a Legacy compatible IO handler
-            $binaryFileId = $this->IOService->getExternalPath( $field->value->data['id'] );
             $field->value->data['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
 
             try
             {
-                $binaryFile = $this->IOService->loadBinaryFile( $binaryFileId );
+                $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
             }
             catch ( NotFoundException $e )
             {
@@ -258,10 +255,9 @@ class ImageStorage extends GatewayBasedStorage
                 $gateway->removeImageReferences( $storedFilePath, $versionInfo->versionNo, $fieldId );
                 if ( $gateway->countImageReferences( $storedFilePath ) === 0 )
                 {
-                    $binaryFileId = $this->IOService->getExternalPath( $storedFilePath );
                     try
                     {
-                        $binaryFile = $this->IOService->loadBinaryFile( $binaryFileId );
+                        $binaryFile = $this->IOService->loadBinaryFile( $storedFilePath );
                         $this->IOService->deleteBinaryFile( $binaryFile );
                     }
                     catch ( NotFoundException $e )
