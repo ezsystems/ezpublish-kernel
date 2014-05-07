@@ -82,7 +82,6 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         parent::__construct( $parameters );
 
         // create a new REST Client
-        //$this->restclient = new RestClient\BuzzClient();
         $this->restclient = new RestClient\GuzzleClient();
 
         // sub contexts
