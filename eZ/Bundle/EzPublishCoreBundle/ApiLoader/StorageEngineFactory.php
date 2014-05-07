@@ -9,9 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 
 /**
@@ -20,14 +18,9 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 class StorageEngineFactory
 {
     /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
      */
-    private $configResolver;
-
-    /**
-     * @var array
-     */
-    private $repositories;
+    private $storageRepositoryProvider;
 
     /**
      * Hash of registered storage engines.
@@ -37,10 +30,9 @@ class StorageEngineFactory
      */
     protected $storageEngines = array();
 
-    public function __construct( ConfigResolverInterface $configResolver, array $repositories )
+    public function __construct( StorageRepositoryProvider $storageRepositoryProvider )
     {
-        $this->configResolver = $configResolver;
-        $this->repositories = $repositories;
+        $this->storageRepositoryProvider = $storageRepositoryProvider;
     }
 
     /**
@@ -73,13 +65,13 @@ class StorageEngineFactory
      */
     public function buildStorageEngine()
     {
-        $repositoryConfig = $this->getRepositoryConfig();
+        $repositoryConfig = $this->storageRepositoryProvider->getRepositoryConfig();
 
         if (
-            !(
-                isset( $repositoryConfig['engine'] )
-                && isset( $this->storageEngines[$repositoryConfig['engine']] )
-            )
+        !(
+            isset( $repositoryConfig['engine'] )
+            && isset( $this->storageEngines[$repositoryConfig['engine']] )
+        )
         )
         {
             throw new InvalidStorageEngine(
@@ -88,31 +80,5 @@ class StorageEngineFactory
         }
 
         return $this->storageEngines[$repositoryConfig['engine']];
-    }
-
-    /**
-     * @return array
-     *
-     * @throws \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
-     */
-    public function getRepositoryConfig()
-    {
-        // Takes configured repository as the reference, if it exists.
-        // If not, the first configured repository is considered instead.
-        $repositoryAlias = $this->configResolver->getParameter( 'repository' );
-        if ( $repositoryAlias === null )
-        {
-            $aliases = array_keys( $this->repositories );
-            $repositoryAlias = array_shift( $aliases );
-        }
-
-        if ( empty( $repositoryAlias ) || !isset( $this->repositories[$repositoryAlias] ) )
-        {
-            throw new InvalidRepositoryException(
-                "Undefined repository '$repositoryAlias'. Did you forget to configure it in ezpublish_*.yml?"
-            );
-        }
-
-        return array( 'alias' => $repositoryAlias ) + $this->repositories[$repositoryAlias];
     }
 }
