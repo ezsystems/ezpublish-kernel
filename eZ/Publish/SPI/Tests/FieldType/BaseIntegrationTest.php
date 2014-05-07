@@ -644,7 +644,7 @@ abstract class BaseIntegrationTest extends TestCase
     protected function getContainer()
     {
         // get configuration config
-        if ( !( $settings = include 'config.php' ) )
+        if ( !( $settings = include __DIR__ . '/../../../../../config.php' ) )
         {
             throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
         }
