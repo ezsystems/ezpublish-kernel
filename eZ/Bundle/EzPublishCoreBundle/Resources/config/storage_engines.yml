@@ -1,6 +1,28 @@
 parameters:
+    ezpublish.persistence.connection.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageConnectionFactory
+    ezpublish.api.storage_repository_provider.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
+    ezpublish.persistence.connection.class: Doctrine\DBAL\Driver\Connection
 
 services:
+    ezpublish.api.storage_repository_provider:
+        class: %ezpublish.api.storage_repository_provider.class%
+        arguments:
+            - @ezpublish.config.resolver
+            - %ezpublish.repositories%
+
+    ezpublish.persistence.connection.factory:
+        class: %ezpublish.persistence.connection.factory.class%
+        arguments:
+            - @ezpublish.api.storage_repository_provider
+        calls:
+            - [setContainer, [@service_container]]
+
+    ezpublish.persistence.connection:
+        class: %ezpublish.persistence.connection.class%
+        factory_service: ezpublish.persistence.connection.factory
+        factory_method: getConnection
+        lazy: true
+
     # Legacy storage engine
 
     # Alias for backend connection used by eZ Publish storage engine
