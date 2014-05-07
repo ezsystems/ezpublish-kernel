@@ -16,18 +16,6 @@ parameters:
     # Make sure logging is only enabled for debug by default
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: %kernel.debug%
 
-    # External storage gateways
-    ezpublish.fieldType.ezbinaryfile.storage_gateway.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.ezimage.storage_gateway.class: eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.ezkeyword.storage_gateway.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.ezmedia.storage_gateway.class: eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.ezrichtext.storage_gateway.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.ezxmltext.storage_gateway.class: eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.ezurl.storage_gateway.class: eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.ezuser.storage_gateway.class: eZ\Publish\Core\FieldType\User\UserStorage\Gateway\LegacyStorage
-    ezpublish.fieldType.ezpage.storage_gateway.class: eZ\Publish\Core\FieldType\Page\PageStorage\Gateway\LegacyStorage
-
 services:
     # Persistence cache & Lazy loaded storage engine factory
     ezpublish.spi.persistence.cache:
@@ -116,54 +104,3 @@ services:
 
     ezpublish.api.storage_engine.legacy:
         alias: ezpublish.spi.persistence.legacy
-
-    ezpublish.fieldType.ezbinaryfile.storage_gateway:
-        class: %ezpublish.fieldType.ezbinaryfile.storage_gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezbinaryfile, identifier: LegacyStorage}
-
-    ezpublish.fieldType.ezkeyword.storage_gateway:
-        class: %ezpublish.fieldType.ezkeyword.storage_gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezkeyword, identifier: LegacyStorage}
-
-    ezpublish.fieldType.ezmedia.storage_gateway:
-        class: %ezpublish.fieldType.ezmedia.storage_gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezmedia, identifier: LegacyStorage}
-
-    ezpublish.fieldType.ezrichtext.storage_gateway:
-        class: %ezpublish.fieldType.ezrichtext.storage_gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezrichtext, identifier: LegacyStorage}
-
-    ezpublish.fieldType.ezxmltext.storage_gateway:
-        class: %ezpublish.fieldType.ezxmltext.storage_gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezxmltext, identifier: LegacyStorage}
-
-    ezpublish.fieldType.ezurl.storage_gateway:
-        class: %ezpublish.fieldType.ezurl.storage_gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezurl, identifier: LegacyStorage}
-
-    ezpublish.fieldType.ezpage.storage_gateway:
-        class: %ezpublish.fieldType.ezpage.storage_gateway.class%
-        calls:
-            - [setConnection, [@ezpublish.connection]]
-
-    ezpublish.fieldType.ezimage.storage_gateway:
-        class: %ezpublish.fieldType.ezimage.storage_gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezimage, identifier: LegacyStorage}
-
-    ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway:
-        class: %ezpublish.fieldType.externalStorageHandler.ezgmaplocation.gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezgmaplocation, identifier: LegacyStorage}
-
-    ezpublish.fieldType.ezuser.storage_gateway:
-        class: %ezpublish.fieldType.ezuser.storage_gateway.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezuser, identifier: LegacyStorage}
-
