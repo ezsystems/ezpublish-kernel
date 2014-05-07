@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 
 use eZ\Publish\Core\MVC\Legacy\Event\PostBuildKernelEvent;
+use eZ\Publish\Core\MVC\Legacy\Event\PreResetLegacyKernelEvent;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
@@ -54,6 +55,10 @@ class Loader extends ContainerAware
      * @var bool
      */
     private $buildEventsEnabled = true;
+
+    private static $webHandler;
+
+    private static $cliHandler;
 
     public function __construct( $legacyRootDir, $webrootDir, EventDispatcherInterface $eventDispatcher, URIHelper $uriHelper, LoggerInterface $logger = null )
     {
@@ -133,10 +138,10 @@ class Loader extends ContainerAware
         $eventDispatcher = $this->eventDispatcher;
         $container = $this->container;
         $that = $this;
+        $webHandler = static::$webHandler;
 
-        return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass, $uriHelper, $eventDispatcher, $that )
+        return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass, $uriHelper, $eventDispatcher, $that, $webHandler )
         {
-            static $webHandler;
             if ( !$webHandler instanceof ezpKernelHandler )
             {
                 chdir( $legacyRootDir );
@@ -183,10 +188,10 @@ class Loader extends ContainerAware
         $eventDispatcher = $this->eventDispatcher;
         $container = $this->container;
         $that = $this;
+        $cliHandler = static::$cliHandler;
 
-        return function () use ( $legacyRootDir, $webrootDir, $container, $eventDispatcher, $that )
+        return function () use ( $legacyRootDir, $webrootDir, $container, $eventDispatcher, $that, $cliHandler )
         {
-            static $cliHandler;
             if ( !$cliHandler instanceof ezpKernelHandler )
             {
                 chdir( $legacyRootDir );
@@ -219,5 +224,29 @@ class Loader extends ContainerAware
                 'use-exceptions'       => true
             )
         );
+    }
+
+    /**
+     * Resets the legacy kernel instances from the container
+     *
+     * @return void
+     */
+    public function resetKernel()
+    {
+        /** @var \Closure $kernelClosure */
+        $kernelClosure = $this->container->get( 'ezpublish_legacy.kernel' );
+        $this->eventDispatcher->dispatch(
+            LegacyEvents::PRE_RESET_LEGACY_KERNEL,
+            new PreResetLegacyKernelEvent( $kernelClosure() )
+        );
+
+        LegacyKernel::resetInstance();
+        static::$webHandler = null;
+        static::$cliHandler = null;
+
+        $this->container->set( 'ezpublish_legacy.kernel', null );
+        $this->container->set( 'ezpublish_legacy.kernel.lazy', null );
+        $this->container->set( 'ezpublish_legacy.kernel_handler.web', null );
+        $this->container->set( 'ezpublish_legacy.kernel_handler.cli', null );
     }
 }
