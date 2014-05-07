@@ -13,21 +13,6 @@ parameters:
     ezpublish.http_cache.purge_client.browser.class: Buzz\Browser
 
 services:
-    ezpublish.cache_pool:
-        class: %ezpublish.cache_pool.class%
-        factory_service: ezpublish.cache_pool.factory
-        factory_method: getCachePool
-        arguments: [@ezpublish.config.resolver]
-
-    ezpublish.cache_pool.factory:
-        class: %ezpublish.cache_pool.factory.class%
-        calls:
-            - [setContainer, [@service_container]]
-
-    ezpublish.cache_pool.spi.cache.decorator:
-        class: %ezpublish.cache_pool.spi.cache.decorator.class%
-        arguments: [@ezpublish.cache_pool]
-
     ezpublish.http_cache.purger.instant:
         class: %ezpublish.http_cache.purger.instant.class%
         arguments: [@ezpublish.http_cache.purge_client]
