@@ -15,6 +15,9 @@ use eZ\Publish\Core\MVC\Legacy\Event\PreResetLegacyKernelEvent;
 use eZINI;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Resets eZINI when the Legacy Kernel is reset.
+ */
 class LegacyKernelListener implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()

@@ -43,7 +43,7 @@ final class LegacyEvents
     /**
      * The PRE_RESET_LEGACY_KERNEL event occurs before the legacy kernel is reset (unset from the container)
      *
-     * The event listener doesn't receive any argument.
+     * Event listeners receive a PreResetKernelEvent object that gives access to the legacy kernel.
      */
     const PRE_RESET_LEGACY_KERNEL = 'ezpublish_legacy.pre_reset_legacy_kernel';
 }
