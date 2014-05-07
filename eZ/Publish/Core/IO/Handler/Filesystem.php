@@ -64,12 +64,12 @@ class Filesystem implements IOHandlerInterface
         $this->configureOptions( $optionsResolver );
         $options = $optionsResolver->resolve( $options );
 
-        if ( $options['storage_dir'][0] == '/' )
+        if ( $options['storage_dir'][0] === '/' )
         {
             throw new InvalidArgumentException( 'storage_dir', 'can not be absolute. Use root_dir.' );
         }
 
-        if ( isset( $options['root_dir'] ) && $options['root_dir'] != '' )
+        if ( isset( $options['root_dir'] ) && $options['root_dir'] !== '' )
         {
             $this->rootDirectory = $options['root_dir'];
             $storageDirectory = $options['root_dir'] . '/' . $options['storage_dir'];

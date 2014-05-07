@@ -34,7 +34,12 @@ class IOServiceFactory
         $this->configResolver = $configResolver;
     }
 
-    public function buildService()
+    /**
+     * Builds the IOService from $class
+     * @param string $class
+     * @return \eZ\Publish\Core\IO\IOServiceInterface
+     */
+    public function buildService( $class )
     {
         $options = array(
             'var_dir' => $this->configResolver->getParameter( 'var_dir' ),
@@ -43,6 +48,6 @@ class IOServiceFactory
             'published_images_dir' => $this->configResolver->getParameter( 'image.published_images_dir' )
         );
 
-        return new LegacyImageIOService( $this->publishedIOService, $this->draftIOService, $options );
+        return new $class( $this->publishedIOService, $this->draftIOService, $options );
     }
 }
