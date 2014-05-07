@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Security;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AuthenticatorInterface;
-use eZ\Publish\Core\MVC\Symfony\Security\User as EzUser;
+use eZ\Publish\Core\MVC\Symfony\Security\UserInterface as EzUser;
 use eZ\Publish\Core\REST\Server\Exceptions\InvalidUserTypeException;
 use eZ\Publish\Core\REST\Server\Exceptions\UserConflictException;
 use Psr\Log\LoggerInterface;
