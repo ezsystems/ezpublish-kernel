@@ -23,6 +23,8 @@ class ErrorContext extends RestSubContext implements Error
 {
     public function iSeeAnInvalidFieldError()
     {
+        $this->getMainContext()->setLastAction( "invalid" );
+
         $errorDescriptionRegEx = "/^Argument '([^']*)' is invalid:(.*)/";
 
         return array(
@@ -37,6 +39,8 @@ class ErrorContext extends RestSubContext implements Error
 
     public function iSeeNotAuthorizedError()
     {
+        $this->getMainContext()->setLastAction( "unauthorized" );
+
         return array(
             new Step\Then( 'I see 401 status code' ),
             new Step\Then( 'I see "Unauthorized" status message' ),

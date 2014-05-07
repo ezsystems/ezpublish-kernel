@@ -71,6 +71,11 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         // action => array( <status code>, <status message> )
         "create" => array( 201, "created" ),
         "update" => array( 200, "ok" ),
+
+        // errors
+        // these aren't actions, but they will change status
+        "invalid" => array( 403, "forbidden" ),
+        "unauthorized" => array( 401, "unauthorized" ),
     );
 
     /**
@@ -98,6 +103,24 @@ class FeatureContext extends BaseContext implements RestInternalSentences
     public function setLastAction( $action )
     {
         $this->lastAction = $action;
+    }
+
+    /**
+     * Indicate if the response should be checked based on the "lastAction"
+     *
+     * @return bool
+     */
+    public function shouldVerifyResponse()
+    {
+        switch( $this->lastAction )
+        {
+            case 'unauthorized':
+            case 'forbidden':
+                return false;
+
+            default:
+                return true;
+        }
     }
 
     /**
