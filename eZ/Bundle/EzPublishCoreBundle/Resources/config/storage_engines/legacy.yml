@@ -17,7 +17,6 @@ imports:
 parameters:
     ezpublish.spi.persistence.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
     ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-    ezpublish.api.storage_engine.legacy.dbhandler.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyDbHandlerFactory
     ezpublish.spi.persistence.legacy.transactionhandler.class: eZ\Publish\Core\Persistence\Legacy\TransactionHandler
 
 services:
