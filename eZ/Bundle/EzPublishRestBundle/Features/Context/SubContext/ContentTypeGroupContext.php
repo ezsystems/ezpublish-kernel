@@ -71,14 +71,31 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
 
     public function iSeeContentTypeGroup( $identifier )
     {
-        list( $code, $message ) = $this->getMainContext()->getLastActionStatusCodeAndMessage();
+        // verify that the object exist
+        $repository = $this->getMainContext()->getRepository();
 
+        // verify ContentTypeGroup with $identifier exist
+        $repository->sudo(
+            function() use ( $repository, $identifier )
+            {
+                $repository->getContentTypeService()->loadContentTypeGroupByIdentifier( $identifier );
+            }
+        );
+
+        // check if response should be tested/verified
+        if ( !$this->getMainContext()->shouldVerifyResponse() )
+        {
+            return;
+        }
+
+        // if it is check it up
+        list( $code, $message ) = $this->getMainContext()->getLastActionStatusCodeAndMessage();
         return array(
             new Step\Then( 'I see ' . $code . ' status code' ),
             new Step\Then( 'I see "' . $message . '" status message' ),
             new Step\Then( 'I see "content-type" header with a "ContentTypeGroup"' ),
             new Step\Then( 'I see response body with "eZ\\Publish\\Core\\REST\\Client\\Values\\ContentType\\ContentTypeGroup" object' ),
-            new Step\Then( 'I see response object field "identifier" with "' . $identifier . '" value' ),
+            new Step\Then( 'I see response object field "identifier" with "' . $identifier . '" value' )
         );
     }
 
