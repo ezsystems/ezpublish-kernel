@@ -193,6 +193,7 @@ class TranslationHelper
             $availableLanguages[] = array_shift( $languages );
         }
 
+        sort( $availableLanguages );
         return array_unique( $availableLanguages );
     }
 }

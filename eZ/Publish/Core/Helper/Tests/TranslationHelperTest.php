@@ -313,7 +313,7 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $expectedLanguages = array( 'eng-GB', 'fre-FR', 'esl-ES' );
+        $expectedLanguages = array( 'eng-GB', 'esl-ES', 'fre-FR' );
         $this->assertSame( $expectedLanguages, $this->translationHelper->getAvailableLanguages() );
     }
 
@@ -335,7 +335,7 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $expectedLanguages = array( 'eng-GB', 'fre-FR', 'esl-ES', 'heb-IL' );
+        $expectedLanguages = array( 'eng-GB', 'esl-ES', 'fre-FR', 'heb-IL' );
         $this->assertSame( $expectedLanguages, $this->translationHelper->getAvailableLanguages() );
     }
 }
