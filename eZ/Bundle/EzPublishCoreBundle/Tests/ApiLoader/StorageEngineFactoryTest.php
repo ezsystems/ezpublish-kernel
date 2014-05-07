@@ -10,13 +10,19 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider;
 use PHPUnit_Framework_TestCase;
 
 class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testRegisterStorageEngine()
     {
-        $factory = new StorageEngineFactory( $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' ), array() );
+        /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider $storageRepositoryProvider */
+        $storageRepositoryProvider = $this
+            ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\ApiLoader\\StorageRepositoryProvider' )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $factory = new StorageEngineFactory( $storageRepositoryProvider );
 
         $storageEngines = array(
             'foo' => $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' ),
@@ -34,7 +40,7 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testBuildStorageEngine()
     {
-        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $configResolver = $this->getConfigResolverMock();
         $repositoryAlias = 'main';
         $repositories = array(
             $repositoryAlias => array(
@@ -50,7 +56,8 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
             'bar' => $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' ),
             'baz' => $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' )
         );
-        $factory = new StorageEngineFactory( $configResolver, $repositories );
+        $storageRepositoryProvider = new StorageRepositoryProvider( $configResolver, $repositories );
+        $factory = new StorageEngineFactory( $storageRepositoryProvider );
         foreach ( $storageEngines as $identifier => $persistenceHandler )
         {
             $factory->registerStorageEngine( $persistenceHandler, $identifier );
@@ -70,7 +77,7 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testBuildInvalidStorageEngine()
     {
-        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $configResolver = $this->getConfigResolverMock();
         $repositoryAlias = 'main';
         $repositories = array(
             $repositoryAlias => array(
@@ -87,7 +94,8 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
             'baz' => $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' )
         );
 
-        $factory = new StorageEngineFactory( $configResolver, $repositories );
+        $storageRepositoryProvider = new StorageRepositoryProvider( $configResolver, $repositories );
+        $factory = new StorageEngineFactory( $storageRepositoryProvider );
         foreach ( $storageEngines as $identifier => $persistenceHandler )
         {
             $factory->registerStorageEngine( $persistenceHandler, $identifier );
@@ -102,78 +110,11 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' ), $factory->buildStorageEngine() );
     }
 
-    public function testGetRepositoryConfigSpecifiedRepository()
-    {
-        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-        $repositoryAlias = 'main';
-        $repositoryConfig = array(
-            'engine' => 'foo',
-            'connection' => 'some_connection'
-        );
-        $repositories = array(
-            $repositoryAlias => $repositoryConfig,
-            'another' => array(
-                'engine' => 'bar'
-            )
-        );
-        $factory = new StorageEngineFactory( $configResolver, $repositories );
-
-        $configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( $repositoryAlias ) );
-
-        $this->assertSame( array( 'alias' => $repositoryAlias ) + $repositoryConfig, $factory->getRepositoryConfig() );
-    }
-
-    public function testGetRepositoryConfigNotSpecifiedRepository()
-    {
-        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-        $repositoryAlias = 'main';
-        $repositoryConfig = array(
-            'engine' => 'foo',
-            'connection' => 'some_connection'
-        );
-        $repositories = array(
-            $repositoryAlias => $repositoryConfig,
-            'another' => array(
-                'engine' => 'bar'
-            )
-        );
-        $factory = new StorageEngineFactory( $configResolver, $repositories );
-
-        $configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( null ) );
-
-        $this->assertSame( array( 'alias' => $repositoryAlias ) + $repositoryConfig, $factory->getRepositoryConfig() );
-    }
-
     /**
-     * @expectedException \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    public function testGetRepositoryConfigUndefinedRepository()
+    protected function getConfigResolverMock()
     {
-        $repositories = array(
-            'main' => array(
-                'engine' => 'foo'
-            ),
-            'another' => array(
-                'engine' => 'bar'
-            )
-        );
-        $configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-
-        $configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'repository' )
-            ->will( $this->returnValue( 'undefined_repository' ) );
-
-        $factory = new StorageEngineFactory( $configResolver, $repositories );
-        $factory->getRepositoryConfig();
+        return $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
     }
 }
