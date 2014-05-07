@@ -12,38 +12,11 @@ namespace eZ\Bundle\EzPublishLegacyBundle\EventListener;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreResetLegacyKernelEvent;
+use eZINI;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class LegacyKernelListener implements EventSubscriberInterface
 {
-    /** @var \eZ\Publish\Core\MVC\Legacy\Kernel */
-    private $legacyKernelClosure;
-
-    /** @var LegacyKernel */
-    private $legacyKernel;
-
-    /**
-     * @param \Closure $kernelClosure The LegacyKernel closure
-     */
-    public function __construct( \Closure $kernelClosure )
-    {
-        $this->legacyKernelClosure = $kernelClosure;
-    }
-
-    /**
-     * @return LegacyKernel
-     */
-    protected function getLegacyKernel()
-    {
-        if ( !isset( $this->legacyKernel ) && isset( $this->legacyKernelClosure ) )
-        {
-            $kernelClosure = $this->legacyKernelClosure;
-            $this->legacyKernel = $kernelClosure();
-        }
-
-        return $this->legacyKernel;
-    }
-
     public static function getSubscribedEvents()
     {
         return array(
@@ -51,8 +24,12 @@ class LegacyKernelListener implements EventSubscriberInterface
         );
     }
 
-    public function onKernelReset()
+    public function onKernelReset( PreResetLegacyKernelEvent $event )
     {
-        \eZINI::resetAllInstances();
+        $event->getLegacyKernel()->runCallback(
+            function() {
+                eZINI::resetAllInstances();
+            }
+        );
     }
 }

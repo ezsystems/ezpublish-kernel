@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Legacy\Kernel;
 
 use eZ\Publish\Core\MVC\Legacy\Event\PostBuildKernelEvent;
+use eZ\Publish\Core\MVC\Legacy\Event\PreResetLegacyKernelEvent;
 use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
@@ -232,10 +233,16 @@ class Loader extends ContainerAware
      */
     public function resetKernel()
     {
-        $this->eventDispatcher->dispatch( LegacyEvents::PRE_RESET_LEGACY_KERNEL );
+        /** @var \Closure $kernelClosure */
+        $kernelClosure = $this->container->get( 'ezpublish_legacy.kernel' );
+        $this->eventDispatcher->dispatch(
+            LegacyEvents::PRE_RESET_LEGACY_KERNEL,
+            new PreResetLegacyKernelEvent( $kernelClosure() )
+        );
 
         LegacyKernel::resetInstance();
         static::$webHandler = null;
+        static::$cliHandler = null;
 
         $this->container->set( 'ezpublish_legacy.kernel', null );
         $this->container->set( 'ezpublish_legacy.kernel.lazy', null );

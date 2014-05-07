@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\Event;
 
+use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -17,25 +18,23 @@ use Symfony\Component\HttpFoundation\ParameterBag;
  * It allows to inject parameters into the legacy kernel through
  * the parameter bag.
  */
-class PreBuildKernelEvent extends Event
+class PreResetLegacyKernelEvent extends Event
 {
     /**
-     * Parameters that will be passed to the legacy kernel web handler
-     *
-     * @var \Symfony\Component\HttpFoundation\ParameterBag
+     * @var \eZ\Publish\Core\MVC\Legacy\Kernel
      */
-    private $parameters;
+    private $legacyKernel;
 
-    public function __construct( ParameterBag $parameters )
+    public function __construct( LegacyKernel $legacyKernel )
     {
-        $this->parameters = $parameters;
+        $this->legacyKernel = $legacyKernel;
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\ParameterBag
+     * @return \eZ\Publish\Core\MVC\Legacy\Kernel
      */
-    public function getParameters()
+    public function getLegacyKernel()
     {
-        return $this->parameters;
+        return $this->legacyKernel;
     }
 }
