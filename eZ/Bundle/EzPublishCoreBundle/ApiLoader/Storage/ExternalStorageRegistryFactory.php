@@ -9,7 +9,6 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader\Storage;
 
-use eZ\Publish\Core\Base\Container\ApiLoader\ExternalStorageCollectionFactory;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 class ExternalStorageRegistryFactory extends ContainerAware
