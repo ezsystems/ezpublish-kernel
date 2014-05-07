@@ -15,7 +15,7 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ConfigScopeListener extends ContainerAware implements EventSubscriberInterface
+class ConfigScopeListener implements EventSubscriberInterface
 {
     /**
      * @var \eZ\Publish\Core\MVC\Legacy\Kernel\Loader
