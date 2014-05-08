@@ -10,9 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException;
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 
 /**
  * The storage engine factory.
