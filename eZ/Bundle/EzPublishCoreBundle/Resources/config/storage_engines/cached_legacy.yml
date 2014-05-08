@@ -1,4 +1,4 @@
-# Depends on 'legacy' storage
+# Depends on 'legacy' storage and common cache configuration defined in storage_engines/cache.yml
 services:
     ezpublish.spi.persistence.cached_legacy.abstractHandler:
         class: %ezpublish.spi.persistence.cache.abstractHandler.class%

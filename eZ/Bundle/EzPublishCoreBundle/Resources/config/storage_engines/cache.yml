@@ -1,3 +1,4 @@
+# This configuration is common for all cached storages
 parameters:
     ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
     ezpublish.spi.persistence.cache.abstractHandler.class: eZ\Publish\Core\Persistence\Cache\AbstractHandler
