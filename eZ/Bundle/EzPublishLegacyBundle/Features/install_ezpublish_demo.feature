@@ -133,17 +133,10 @@ Feature: Install eZ Publish Demo with/withoutout content
             | Password          | publish           |
             | Confirm password  | publish           |
         And I press "Next"
-        Then I see "Site registration" step
+        Then I see "Opensource software is nothing without a vibrant community!" step
 
     @javascript @democontent_install @democlean_install
-    Scenario: Define the data for the information email
-        Given I am on "Site registration" step
-        When I fill form with:
-            | field        | value          |
-            | First name   | Testing        |
-            | Last name    | Installation   |
-            | Your email   | nospam@ez.no   |
-            | Country      | Norway         |
-            | Company      | eZ Systems     |
-        And I press "Next"
+    Scenario: Show open source information
+        Given I am on "Opensource software is nothing without a vibrant community!" step
+        When I press "Next"
         Then I see "Finished" step
