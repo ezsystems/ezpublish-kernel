@@ -38,10 +38,7 @@ services:
 
     ezpublish.spi.persistence.cached_legacy.transactionhandler:
         class: %ezpublish.spi.persistence.cache.transactionhandler.class%
-        arguments:
-            - @ezpublish.cache_pool.spi.cache.decorator
-            - @ezpublish.spi.persistence.legacy.transactionhandler
-            - @ezpublish.spi.persistence.cache.persistenceLogger
+        parent: ezpublish.spi.persistence.cached_legacy.abstractHandler
 
     ezpublish.spi.persistence.cached_legacy.trashHandler:
         class: %ezpublish.spi.persistence.cache.trashHandler.class%

@@ -68,8 +68,6 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
 
         $this->persistenceHandlerMock = $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' );
 
-        $this->transactionHandlerMock = $this->getMock( 'eZ\Publish\SPI\Persistence\TransactionHandler' );
-
         $this->cacheMock = $this->getMock(
             "eZ\\Publish\\Core\\Persistence\\Cache\\CacheServiceDecorator",
             array(),
@@ -89,7 +87,7 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
             new CacheContentTypeHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheUserHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheSearchHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
-            new CacheTransactionHandler( $this->cacheMock, $this->transactionHandlerMock, $this->loggerMock ),
+            new CacheTransactionHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheTrashHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheLocationSearchHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheUrlAliasHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
