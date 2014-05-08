@@ -29,14 +29,6 @@ class StorageRepositoryProvider
      */
     private $repositories;
 
-    /**
-     * Hash of registered storage engines.
-     * Key is the storage engine identifier, value persistence handler itself.
-     *
-     * @var \eZ\Publish\SPI\Persistence\Handler[]
-     */
-    protected $storageEngines = array();
-
     public function __construct( ConfigResolverInterface $configResolver, array $repositories )
     {
         $this->configResolver = $configResolver;
