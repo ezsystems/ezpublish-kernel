@@ -159,7 +159,7 @@ argument to your sub-controller from the master request.
 
 ```jinja
 {# Render the language switch links in a sub-controller #}
-{{ render( controller( 'AcmeTestBundle:Default:languages', {'routeReference': ez_route()} ) ) }}
+{{ render( controller( 'AcmeTestBundle:Default:languages', {'routeRef': ez_route()} ) ) }}
 ```
 
 ```php
