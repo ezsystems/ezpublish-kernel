@@ -13,7 +13,7 @@ use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
- * The storage engine factory.
+ * The storage repository provider.
  */
 class StorageRepositoryProvider
 {
