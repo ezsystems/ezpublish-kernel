@@ -33,6 +33,12 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\Cr
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\RoleLimitationConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\SortClauseConverterPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Solr\AggregateCriterionVisitorPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Solr\AggregateFieldValueMapperPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Solr\AggregateSortClauseVisitorPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Solr\FieldRegistryPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Solr\SignalSlotPass as SolrSignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory;
@@ -71,6 +77,13 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new FieldValueConverterRegistryPass );
         $container->addCompilerPass( new RoleLimitationConverterPass );
         $container->addCompilerPass( new SortClauseConverterPass );
+        // Solr
+        $container->addCompilerPass( new AggregateCriterionVisitorPass );
+        $container->addCompilerPass( new AggregateFacetBuilderVisitorPass );
+        $container->addCompilerPass( new AggregateFieldValueMapperPass );
+        $container->addCompilerPass( new AggregateSortClauseVisitorPass );
+        $container->addCompilerPass( new FieldRegistryPass );
+        $container->addCompilerPass( new SolrSignalSlotPass );
 
         $securityExtension = $container->getExtension( 'security' );
         $securityExtension->addSecurityListenerFactory( new HttpBasicFactory );
