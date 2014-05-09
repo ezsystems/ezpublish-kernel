@@ -17,7 +17,6 @@ imports:
 parameters:
     ezpublish.spi.persistence.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
     ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-    ezpublish.api.storage_engine.legacy.dbhandler.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LegacyDbHandlerFactory
     ezpublish.spi.persistence.legacy.transactionhandler.class: eZ\Publish\Core\Persistence\Legacy\TransactionHandler
 
 services:
@@ -41,22 +40,18 @@ services:
             - {name: ezpublish.storageEngine, alias: legacy}
         lazy: true
 
+    # Compiler pass will alias 'ezpublish.api.storage_engine.legacy.connection' service to the StorageConnectionFactory
+    ezpublish.api.storage_engine.legacy.dbhandler:
+        class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_method: createFromConnection
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.connection
+        lazy: true
+
     ezpublish.spi.persistence.legacy.transactionhandler:
         class: %ezpublish.spi.persistence.legacy.transactionhandler.class%
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.spi.persistence.legacy.content_type.handler.caching
             - @ezpublish.spi.persistence.legacy.language.handler.caching
-
-    ezpublish.api.storage_engine.legacy.dbhandler.factory:
-        class: %ezpublish.api.storage_engine.legacy.dbhandler.factory.class%
-        arguments: [@ezpublish.api.storage_engine.factory]
-        calls:
-            - [setContainer, [@service_container]]
-
-    ezpublish.api.storage_engine.legacy.dbhandler:
-        class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
-        factory_service: ezpublish.api.storage_engine.legacy.dbhandler.factory
-        factory_method: buildLegacyDbHandler
-        lazy: true
-

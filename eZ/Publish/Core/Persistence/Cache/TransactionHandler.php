@@ -14,41 +14,8 @@ use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface
 /**
  * Persistence Transaction Cache Handler class
  */
-class TransactionHandler implements TransactionHandlerInterface
+class TransactionHandler extends AbstractHandler implements TransactionHandlerInterface
 {
-    /**
-     * @var TransactionHandler
-     */
-    protected $innerTransactionHandler;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
-     */
-    protected $cache;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
-     */
-    protected $logger;
-
-    /**
-     * Construct the class
-     *
-     * @param CacheServiceDecorator $cache
-     * @param \eZ\Publish\SPI\Persistence\TransactionHandler $transactionHandler
-     * @param PersistenceLogger $logger
-     */
-    public function __construct(
-        CacheServiceDecorator $cache,
-        TransactionHandlerInterface $transactionHandler,
-        PersistenceLogger $logger
-    )
-    {
-        $this->cache = $cache;
-        $this->innerTransactionHandler = $transactionHandler;
-        $this->logger = $logger;
-    }
-
     /**
      * Begin transaction
      *
@@ -61,7 +28,7 @@ class TransactionHandler implements TransactionHandlerInterface
     public function beginTransaction()
     {
         $this->logger->logCall( __METHOD__ );
-        $this->innerTransactionHandler->beginTransaction();
+        $this->persistenceHandler->transactionHandler()->beginTransaction();
     }
 
     /**
@@ -74,7 +41,7 @@ class TransactionHandler implements TransactionHandlerInterface
     public function commit()
     {
         $this->logger->logCall( __METHOD__ );
-        $this->innerTransactionHandler->commit();
+        $this->persistenceHandler->transactionHandler()->commit();
     }
 
     /**
@@ -89,6 +56,6 @@ class TransactionHandler implements TransactionHandlerInterface
         $this->logger->logCall( __METHOD__ );
         // {@see beginTransaction()}
         $this->cache->clear();
-        $this->innerTransactionHandler->rollback();
+        $this->persistenceHandler->transactionHandler()->rollback();
     }
 }

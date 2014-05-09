@@ -27,7 +27,13 @@ class TransactionHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $this->transactionHandlerMock
+        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\TransactionHandler' );
+        $this->persistenceHandlerMock
+            ->expects( $this->once() )
+            ->method( 'transactionHandler' )
+            ->will( $this->returnValue( $innerHandlerMock ) );
+
+        $innerHandlerMock
             ->expects( $this->once() )
             ->method( 'beginTransaction' );
 
@@ -48,7 +54,13 @@ class TransactionHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $this->transactionHandlerMock
+        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\TransactionHandler' );
+        $this->persistenceHandlerMock
+            ->expects( $this->once() )
+            ->method( 'transactionHandler' )
+            ->will( $this->returnValue( $innerHandlerMock ) );
+
+        $innerHandlerMock
             ->expects( $this->once() )
             ->method( 'commit' );
 
@@ -69,7 +81,13 @@ class TransactionHandlerTest extends HandlerTest
             ->expects( $this->once() )
             ->method( 'clear' );
 
-        $this->transactionHandlerMock
+        $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\TransactionHandler' );
+        $this->persistenceHandlerMock
+            ->expects( $this->once() )
+            ->method( 'transactionHandler' )
+            ->will( $this->returnValue( $innerHandlerMock ) );
+
+        $innerHandlerMock
             ->expects( $this->once() )
             ->method( 'rollback' );
 

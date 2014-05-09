@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LegacyDbHandlerFactory class.
+ * File containing the StorageConnectionFactory class.
  *
  * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,28 +12,28 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use InvalidArgumentException;
 
-class LegacyDbHandlerFactory extends ContainerAware
+class StorageConnectionFactory extends ContainerAware
 {
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
      */
-    protected $storageEngineFactory;
+    protected $storageRepositoryProvider;
 
-    public function __construct( StorageEngineFactory $storageEngineFactory )
+    public function __construct( StorageRepositoryProvider $storageRepositoryProvider )
     {
-        $this->storageEngineFactory = $storageEngineFactory;
+        $this->storageRepositoryProvider = $storageRepositoryProvider;
     }
 
     /**
-     * Builds the DB handler used by the legacy storage engine.
+     * Returns database connection used by database handler
      *
      * @throws \InvalidArgumentException
      *
-     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+     * @return \Doctrine\DBAL\Connection
      */
-    public function buildLegacyDbHandler()
+    public function getConnection()
     {
-        $repositoryConfig = $this->storageEngineFactory->getRepositoryConfig();
+        $repositoryConfig = $this->storageRepositoryProvider->getRepositoryConfig();
         // Taking provided connection name if any.
         // Otherwise, just fallback to the default connection.
         if ( isset( $repositoryConfig['connection'] ) )
@@ -54,10 +54,6 @@ class LegacyDbHandlerFactory extends ContainerAware
             );
         }
 
-        $connectionHandlerClass = $this->container->getParameter( 'ezpublish.api.storage_engine.legacy.dbhandler.class' );
-        return call_user_func_array(
-            array( $connectionHandlerClass, "createFromConnection" ),
-            array( $this->container->get( $doctrineConnectionId ) )
-        );
+        return $this->container->get( $doctrineConnectionId );
     }
 }
