@@ -95,6 +95,28 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
+                    'filter' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\ContentId(
+                                array( 1, 4, 10 )
+                            ),
+                            new Criterion\LogicalAnd(
+                                array(
+                                    new Criterion\LogicalNot(
+                                        new Criterion\ContentId(
+                                            array( 10, 12 )
+                                        )
+                                    ),
+                                )
+                            ),
+                        )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'LogicalNot.php',
+            ),
+            array(
+                array(
                     'filter' => new Criterion\ContentTypeId(
                         4
                     ),
