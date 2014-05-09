@@ -11,7 +11,7 @@ services:
     ezpublish.persistence.solr.search.content.gateway.client.http.stream:
         class: %ezpublish.persistence.solr.search.content.gateway.client.http.stream.class%
         arguments:
-            - %solrServer%
+            - %ezpublish.solr_server%
 
     # Note: services tagged with 'ezpublish.persistence.solr.search.content.criterion_visitor'
     # are registered to this one using compilation pass

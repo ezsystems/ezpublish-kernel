@@ -9,7 +9,7 @@ imports:
     - {resource: storage_engines/solr/sort_clause_visitors.yml}
 
 parameters:
-    solrServer: http://localhost:8983/
+    ezpublish.solr_server: http://localhost:8983/
     ezpublish.persistence.solr.search.content.gateway.native.class: eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Native
     ezpublish.spi.persistence.solr.search.handler.content.class: eZ\Publish\Core\Persistence\Solr\Content\Search\Handler
     ezpublish.persistence.solr.search.content.field_map.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap
