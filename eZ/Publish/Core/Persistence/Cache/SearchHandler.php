@@ -99,6 +99,18 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     }
 
     /**
+     * Purges all contents from the index
+     *
+     * @todo: Make this public API?
+     *
+     * @return void
+     */
+    public function purgeIndex()
+    {
+        $this->persistenceHandler->searchHandler()->purgeIndex();
+    }
+
+    /**
      * Set if index/delete actions should commit or if several actions is to be expected
      *
      * This should be set to false before group of actions and true before the last one
