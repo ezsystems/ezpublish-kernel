@@ -27,11 +27,11 @@ class Type extends FieldType
         'IntegerValueValidator' => array(
             'minIntegerValue' => array(
                 'type' => 'int',
-                'default' => 0
+                'default' => null
             ),
             'maxIntegerValue' => array(
                 'type' => 'int',
-                'default' => false
+                'default' => null
             )
         )
     );
