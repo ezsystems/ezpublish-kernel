@@ -91,7 +91,7 @@ class ContentPreviewHelper implements SiteAccessAware
      *
      * @param mixed $contentId
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location|Location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location|null Null when content does not have location
      */
     public function getPreviewLocation( $contentId )
     {
@@ -105,7 +105,15 @@ class ContentPreviewHelper implements SiteAccessAware
         // New Content, never published, create a virtual location object.
         else
         {
-            $location = new Location( array( 'contentInfo' => $contentInfo ) );
+            // @todo In future releases this will be a full draft location when this feature
+            // is implemented. Or it might return null when content does not have location,
+            // but for now we can't detect that so we return a virtual draft location
+            $location = new Location(
+                array(
+                    'contentInfo' => $contentInfo,
+                    'status' => Location::STATUS_DRAFT
+                )
+            );
         }
 
         return $location;
