@@ -56,9 +56,11 @@ class Loader extends ContainerAware
      */
     private $buildEventsEnabled = true;
 
-    private static $webHandler;
+    /** @var ezpKernelHandler */
+    private $webHandler;
 
-    private static $cliHandler;
+    /** @var ezpKernelHandler */
+    private $cliHandler;
 
     public function __construct( $legacyRootDir, $webrootDir, EventDispatcherInterface $eventDispatcher, URIHelper $uriHelper, LoggerInterface $logger = null )
     {
@@ -138,11 +140,10 @@ class Loader extends ContainerAware
         $eventDispatcher = $this->eventDispatcher;
         $container = $this->container;
         $that = $this;
-        $webHandler = static::$webHandler;
 
-        return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass, $uriHelper, $eventDispatcher, $that, $webHandler )
+        return function () use ( $legacyRootDir, $webrootDir, $container, $defaultLegacyOptions, $webHandlerClass, $uriHelper, $eventDispatcher, $that )
         {
-            if ( !$webHandler instanceof ezpKernelHandler )
+            if ( !$that->getWebHandler() )
             {
                 chdir( $legacyRootDir );
 
@@ -166,14 +167,30 @@ class Loader extends ContainerAware
                 if ( !isset( $interfaces['ezpKernelHandler'] ) )
                     throw new \InvalidArgumentException( 'A legacy kernel handler must be an instance of ezpKernelHandler.' );
 
-                $webHandler = new $webHandlerClass( $legacyParameters->all() );
+                $that->setWebHandler( new $webHandlerClass( $legacyParameters->all() ) );
                 // Fix up legacy URI for global use cases (i.e. using runCallback()).
                 $uriHelper->updateLegacyURI( $request );
                 chdir( $webrootDir );
             }
 
-            return $webHandler;
+            return $that->getWebHandler();
         };
+    }
+
+    /**
+     * @param $handler
+     */
+    public function setWebHandler( ezpKernelHandler $handler )
+    {
+        $this->webHandler = $handler;
+    }
+
+    /**
+     * @return ezpKernelHandler
+     */
+    public function getWebHandler()
+    {
+        return $this->webHandler;
     }
 
     /**
@@ -188,11 +205,10 @@ class Loader extends ContainerAware
         $eventDispatcher = $this->eventDispatcher;
         $container = $this->container;
         $that = $this;
-        $cliHandler = static::$cliHandler;
 
-        return function () use ( $legacyRootDir, $webrootDir, $container, $eventDispatcher, $that, $cliHandler )
+        return function () use ( $legacyRootDir, $webrootDir, $container, $eventDispatcher, $that )
         {
-            if ( !$cliHandler instanceof ezpKernelHandler )
+            if ( !$that->getCLIHandler() )
             {
                 chdir( $legacyRootDir );
 
@@ -202,12 +218,27 @@ class Loader extends ContainerAware
                     $eventDispatcher->dispatch( LegacyEvents::PRE_BUILD_LEGACY_KERNEL, new PreBuildKernelEvent( $legacyParameters ) );
                 }
 
-                $cliHandler = new CLIHandler( $legacyParameters->all(), $container->get( 'ezpublish.siteaccess' ), $container );
+                $that->setCLIHandler(
+                    new CLIHandler( $legacyParameters->all(), $container->get( 'ezpublish.siteaccess' ), $container )
+                );
                 chdir( $webrootDir );
             }
 
-            return $cliHandler;
+            return $that->getCLIHandler();
         };
+    }
+
+    /**
+     * @return ezpKernelhandler
+     */
+    public function getCLIHandler()
+    {
+        return $this->cliHandler;
+    }
+
+    public function setCLIHandler( ezpKernelHandler $kernelHandler )
+    {
+        $this->cliHandler = $kernelHandler;
     }
 
     /**
@@ -241,8 +272,8 @@ class Loader extends ContainerAware
         );
 
         LegacyKernel::resetInstance();
-        static::$webHandler = null;
-        static::$cliHandler = null;
+        $this->webHandler = null;
+        $this->cliHandler = null;
 
         $this->container->set( 'ezpublish_legacy.kernel', null );
         $this->container->set( 'ezpublish_legacy.kernel.lazy', null );
