@@ -941,7 +941,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
         $validationErrors = $this->doValidate( $fieldDefinitionData, $value );
 
         $this->assertInternalType( "array", $validationErrors );
-        $this->assertEmpty( $validationErrors );
+        $this->assertEmpty( $validationErrors, "Got value:\n" . var_export( $validationErrors, true ) );
     }
 
     /**

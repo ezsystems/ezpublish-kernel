@@ -57,7 +57,7 @@ class Type extends FieldType
         }
 
         $isbnTestNumber = preg_replace( "/[\s|\-]/", "", trim( $fieldValue ) );
-        $fieldSettings = $fieldDefinition->fieldSettings;
+        $fieldSettings = $fieldDefinition->getFieldSettings();
         if ( ( !isset( $fieldSettings["isISBN13"] ) || $fieldSettings["isISBN13"] === false )
             && strlen( $isbnTestNumber ) > 10 )
         {
