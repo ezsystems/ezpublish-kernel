@@ -40,6 +40,7 @@ class Relation implements Converter
         $storageFieldValue->dataInt = !empty( $value->data['destinationContentId'] )
             ? $value->data['destinationContentId']
             : null;
+        $storageFieldValue->sortKeyInt = (int)$value->sortKey;
     }
 
     /**
@@ -53,7 +54,7 @@ class Relation implements Converter
         $fieldValue->data = array(
             "destinationContentId" => $value->dataInt ?: null,
         );
-        $fieldValue->sortKey = false;
+        $fieldValue->sortKey = (int)$value->sortKeyInt;
     }
 
     /**
