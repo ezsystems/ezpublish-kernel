@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
 use eZ\Publish\SPI\Persistence\User\Role;
@@ -239,6 +240,34 @@ class RepositoryTest extends BaseServiceMockTest
                         )
                     )
                 ),
+            ),
+            array(
+                array(
+                    31 => $this->createRole(
+                        array(
+                            array( "test-module", "test-function", "notfound" )
+                        ),
+                        31
+                    ),
+                    32 => $this->createRole(
+                        array(
+                            array( "test-module", "test-function", "test-limitation" )
+                        ),
+                        32
+                    ),
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 31,
+                        )
+                    ),
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 32,
+                        )
+                    ),
+                ),
             )
         );
     }
@@ -294,20 +323,31 @@ class RepositoryTest extends BaseServiceMockTest
 
         $permissionSets = array();
         /** @var $roleAssignments \eZ\Publish\SPI\Persistence\User\RoleAssignment[] */
+        $count = 0;
         foreach ( $roleAssignments as $i => $roleAssignment )
         {
             $permissionSet = array( "limitation" => null );
             foreach ( $roles[$roleAssignment->roleId]->policies as $k => $policy )
             {
                 $policyName = "policy-" . $i . "-" . $k;
+                if ( $policy->limitations === 'notfound' )
+                {
+                    $return = $this->throwException( new NotFoundException( "Limitation", "notfound" ) );
+                }
+                else
+                {
+                    $return = $this->returnValue( $policyName );
+                    $permissionSet["policies"][] = $policyName;
+                }
+
                 $roleServiceMock
-                    ->expects( $this->at( $k ) )
+                    ->expects( $this->at( $count++ ) )
                     ->method( "buildDomainPolicyObject" )
                     ->with( $policy )
-                    ->will( $this->returnValue( $policyName ) );
-                $permissionSet["policies"][] = $policyName;
+                    ->will( $return );
             }
-            $permissionSets[] = $permissionSet;
+            if ( !empty( $permissionSet["policies"] ) )
+                $permissionSets[] = $permissionSet;
         }
 
         /** @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
