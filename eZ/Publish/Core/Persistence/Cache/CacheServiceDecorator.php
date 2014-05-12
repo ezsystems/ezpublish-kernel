@@ -65,7 +65,13 @@ class CacheServiceDecorator
      */
     public function clear()
     {
-        $item = call_user_func_array( array( $this, 'getItem' ), func_get_args() );
+        $args = func_get_args();
+
+        // Do a purge, but with cache key in case of no arguments
+        if ( empty( $args ) )
+            return $this->cachePool->getDriver()->clear( array( self::SPI_CACHE_KEY_PREFIX ) );
+
+        $item = call_user_func_array( array( $this, 'getItem' ), $args );
         return $item->clear();
     }
 }
