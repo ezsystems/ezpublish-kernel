@@ -80,10 +80,8 @@ class FieldMap
      */
     public function getFieldTypes( CustomFieldInterface $criterion )
     {
-        if ( $this->fieldTypes !== null )
-        {
-            return $this->fieldTypes;
-        }
+        // @TODO: temp fixed by disabling caching, see https://jira.ez.no/browse/EZP-22834
+        $this->fieldTypes = array();
 
         foreach ( $this->contentTypeHandler->loadAllGroups() as $group )
         {

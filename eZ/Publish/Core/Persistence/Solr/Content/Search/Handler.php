@@ -525,7 +525,7 @@ class Handler implements SearchHandlerInterface
      */
     public function setCommit( $commit )
     {
-       $this->gateway->setCommit( $commit );
+        $this->gateway->setCommit( $commit );
     }
 }
 
