@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Exception;
 use RuntimeException;
@@ -353,7 +354,16 @@ class Repository implements RepositoryInterface
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
+                try
+                {
+                    $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
+                }
+                catch ( APINotFoundException $e )
+                {
+                    // Limitation type (and value) missing, so no access on this set, continue to next one.
+                    // @todo Introduce logging here to warn about missing limitations, and more specific exception
+                    continue;
+                }
             }
 
             if ( !empty( $permissionSet['policies'] ) )
