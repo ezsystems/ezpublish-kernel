@@ -270,11 +270,9 @@ class EzPublishCoreExtension extends Extension
 
         // Storage engine
         $loader->load( 'storage_engines.yml' );
-        $loader->load( 'indexable_fieldtypes.yml' );
         $loader->load( "storage_engines/common.yml" );
         $loader->load( "storage_engines/cache.yml" );
         $loader->load( "storage_engines/legacy.yml" );
-        $loader->load( "storage_engines/legacy_solr.yml" );
     }
 
     /**

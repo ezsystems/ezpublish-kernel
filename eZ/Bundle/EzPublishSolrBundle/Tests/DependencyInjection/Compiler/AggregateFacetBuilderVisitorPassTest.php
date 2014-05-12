@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler\Storage\Solr;
+namespace eZ\Bundle\EzPublishSolrBundle\Tests\DependencyInjection\Compiler;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass;
+use eZ\Bundle\EzPublishSolrBundle\DependencyInjection\Compiler\AggregateFacetBuilderVisitorPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
