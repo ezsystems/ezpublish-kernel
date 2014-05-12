@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext\RestSubContext;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use EzSystems\BehatBundle\Features\Context\SentencesInterfaces\ContentTypeGroup;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
@@ -77,7 +78,12 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
         $contentTypeService = $repository->getContentTypeService();
 
         // load the ContentTypeGroup to be updated
-        $contentTypeGroup = $contentTypeService->loadContentTypeGroupByIdentifier( $identifier );
+        $contentTypeGroup = $repository->sudo(
+            function() use( $contentTypeService, $identifier )
+            {
+                return $contentTypeService->loadContentTypeGroupByIdentifier( $identifier );
+            }
+        );
 
         return array(
             new Step\When( 'I create a "DELETE" request to "/content/typegroups/' . $contentTypeGroup->id . '"' ),
@@ -115,6 +121,35 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
         );
     }
 
+    public function iDonTSeeAContentTypeGroup( $identifier )
+    {
+        /** @var \eZ\Publish\API\Repository\Repository $repository */
+        $repository = $this->getMainContext()->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        // verify if the content type group exists
+        try
+        {
+            $contentTypeGroup = $repository->sudo(
+                function() use( $identifier, $contentTypeService )
+                {
+                    return $contentTypeService->loadContentTypeGroupByIdentifier( $identifier );
+                }
+            );
+
+            Assertion::assertEmpty(
+                $contentTypeGroup,
+                "Not expected Content Type Group  with '$identifier' identifier found"
+            );
+        }
+        catch ( NotFoundException $e )
+        {
+            // do nothing
+        }
+
+        // @todo: verify status code / message / content type / accept header
+    }
+
     public function iSeeTotalContentTypeGroup( $total, $identifier )
     {
         $repository = $this->getMainContext()->getRepository();
@@ -143,6 +178,8 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
             $count,
             "Expected '$total' ContentTypeGroups with '$identifier' identifier but found '$count'"
         );
+
+        // @todo: verify status code / message / content type / accecpt header
     }
 
     public function iSeeTheFollowingContentTypeGroups( TableNode $table )
@@ -167,5 +204,7 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
             $groups,
             "Expected to find all groups but couldn't find: " . print_r( $groups, true )
         );
+
+        // @todo: verify status code / message / content type / accecpt header
     }
 }
