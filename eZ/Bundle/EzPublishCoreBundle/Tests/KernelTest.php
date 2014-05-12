@@ -157,7 +157,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
         $kernel
             ->expects( $this->once() )
             ->method( 'getCacheDriver' )
-            ->will( $this->returnValue( $this->getMock( 'Stash\\Interfaces\\DriverInterface' ) ) );
+            ->will( $this->returnValue( $this->getMock( 'Stash\\Driver\\BlackHole' ) ) );
 
         $cachePool = $kernel->getCachePool();
         $this->assertInstanceOf( 'Stash\Interfaces\PoolInterface', $cachePool );
