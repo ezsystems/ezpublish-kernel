@@ -86,8 +86,12 @@ class FeatureContext extends BaseContext implements RestInternalSentences
         // set parent parameters
         parent::__construct( $parameters );
 
+        $rest_url = !empty( $parameters['rest_url'] ) ?
+            $parameters['rest_url'] :
+            null;
+
         // create a new REST Client
-        $this->restclient = new RestClient\GuzzleClient();
+        $this->restclient = new RestClient\GuzzleClient( $rest_url );
 
         // sub contexts
         $this->useContext( 'Authentication', new AuthenticationContext( $this->restclient ) );
