@@ -207,7 +207,6 @@ class Type extends FieldType
         return new Value( $hash );
     }
 
-
     /**
      * Converts a $Value to a hash
      *
