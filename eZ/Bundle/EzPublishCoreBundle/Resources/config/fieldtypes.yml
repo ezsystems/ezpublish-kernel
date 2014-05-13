@@ -4,7 +4,6 @@ parameters:
     ezpublish.fieldType.class: eZ\Publish\Core\FieldType\FieldType
     ezpublish.fieldType.ezauthor.class: eZ\Publish\Core\FieldType\Author\Type
     ezpublish.fieldType.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\Type
-    ezpublish.fieldType.ezbinaryfile.externalStorage.class: eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\Type
     ezpublish.fieldType.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\Type
@@ -15,21 +14,16 @@ parameters:
     ezpublish.fieldType.ezinteger.class: eZ\Publish\Core\FieldType\Integer\Type
     ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type
     ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
-    ezpublish.fieldType.ezimage.externalStorage.class: eZ\Publish\Core\FieldType\Image\ImageStorage
     ezpublish.fieldType.ezisbn.class: eZ\Publish\Core\FieldType\ISBN\Type
     ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
-    ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
-    ezpublish.fieldType.ezmedia.externalStorage.class: eZ\Publish\Core\FieldType\Media\MediaStorage
     ezpublish.fieldType.ezobjectrelation.class: eZ\Publish\Core\FieldType\Relation\Type
     ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\FieldType\Rating\Type
     ezpublish.fieldType.ezselection.class: eZ\Publish\Core\FieldType\Selection\Type
     ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
     ezpublish.fieldType.ezstring.class: eZ\Publish\Core\FieldType\TextLine\Type
     ezpublish.fieldType.ezurl.class: eZ\Publish\Core\FieldType\Url\Type
-    ezpublish.fieldType.ezurl.externalStorage.class: eZ\Publish\Core\FieldType\Url\UrlStorage
     ezpublish.fieldType.ezxmltext.class: eZ\Publish\Core\FieldType\XmlText\Type
-    ezpublish.fieldType.ezxmltext.externalStorage.class: eZ\Publish\Core\FieldType\XmlText\XmlTextStorage
     ezpublish.fieldType.ezxmltext.converter.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\XmlText\Converter\Html5
     ezpublish.fieldType.ezxmltext.converter.html5.resources: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5.xsl
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
@@ -46,10 +40,8 @@ parameters:
     ezpublish.fieldType.locale.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProvider\LocaleParameterProvider
 
     ezpublish.fieldType.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\Type
-    ezpublish.fieldType.ezgmaplocation.externalStorage.class: eZ\Publish\Core\FieldType\MapLocation\MapLocationStorage
     ezpublish.fieldType.ezobjectrelationlist.class: eZ\Publish\Core\FieldType\RelationList\Type
     ezpublish.fieldType.ezuser.class: eZ\Publish\Core\FieldType\User\Type
-    ezpublish.fieldType.ezuser.externalStorage.class: eZ\Publish\Core\FieldType\User\UserStorage
     ezpublish.fieldType.ezcountry.class: eZ\Publish\Core\FieldType\Country\Type
     ezpublish.fieldType.ezcountry.data:
         AF: {Name: "Afghanistan", Alpha2: "AF", Alpha3: "AFG", IDC: "93"}
@@ -302,7 +294,6 @@ parameters:
     ezpublish.fieldType.eznull.class: eZ\Publish\Core\FieldType\Null\Type
 
     ezpublish.fieldType.ezrichtext.class: eZ\Publish\Core\FieldType\RichText\Type
-    ezpublish.fieldType.ezrichtext.externalStorage.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage
     ezpublish.fieldType.ezrichtext.converter.xslt.class: eZ\Publish\Core\FieldType\RichText\Converter\Xslt
     ezpublish.fieldType.ezrichtext.converter.aggregate.class: eZ\Publish\Core\FieldType\RichText\Converter\Aggregate
     ezpublish.fieldType.ezrichtext.converter.output.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5
@@ -477,17 +468,6 @@ services:
             # @todo: this will ONLY take the default binary_dir setting into account !
             - %ezsettings.default.binary_dir%
 
-    ezpublish.fieldType.ezbinaryfile.externalStorage:
-        class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
-        arguments:
-            - []
-            - @ezpublish.fieldType.ezbinaryfile.IOService
-            - @ezpublish.fieldType.ezbinaryfile.pathGenerator
-            - @ezpublish.core.io.mimeTypeDetector
-            - @?logger
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezbinaryfile}
-
     ezpublish.fieldType.ezboolean:
         class: %ezpublish.fieldType.ezboolean.class%
         parent: ezpublish.fieldType
@@ -547,17 +527,6 @@ services:
         arguments:
             - %ezsettings.default.image.published_images_dir%
 
-    ezpublish.fieldType.ezimage.externalStorage:
-        class: %ezpublish.fieldType.ezimage.externalStorage.class%
-        arguments:
-            - []
-            - @ezpublish.fieldType.ezimage.io
-            - @ezpublish.fieldType.ezimage.pathGenerator
-            - @ezpublish.fieldType.metadataHandler.imagesize
-            - @?logger
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}
-
     # Image alias generator
     # @todo: Implement a new one not to rely only on legacy
     # See @EzPublishLegacyBundle/config/services.yml
@@ -576,27 +545,11 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezkeyword}
 
-    ezpublish.fieldType.ezkeyword.externalStorage:
-        class: %ezpublish.fieldType.ezkeyword.externalStorage.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezkeyword}
-
     ezpublish.fieldType.ezmedia:
         class: %ezpublish.fieldType.ezmedia.class%
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
-
-    ezpublish.fieldType.ezmedia.externalStorage:
-        class: %ezpublish.fieldType.ezmedia.externalStorage.class%
-        arguments:
-            - []
-            - @ezpublish.fieldType.ezbinaryfile.IOService
-            - @ezpublish.fieldType.ezbinaryfile.pathGenerator
-            - @ezpublish.core.io.mimeTypeDetector
-            - @?logger
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
 
     ezpublish.fieldType.ezobjectrelation:
         class: %ezpublish.fieldType.ezobjectrelation.class%
@@ -634,11 +587,6 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezurl}
 
-    ezpublish.fieldType.ezurl.externalStorage:
-        class: %ezpublish.fieldType.ezurl.externalStorage.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezurl}
-
     ezpublish.fieldType.ezrichtext:
         class: %ezpublish.fieldType.ezrichtext.class%
         parent: ezpublish.fieldType
@@ -648,21 +596,11 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
 
-    ezpublish.fieldType.ezrichtext.externalStorage:
-        class: %ezpublish.fieldType.ezrichtext.externalStorage.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezrichtext}
-
     ezpublish.fieldType.ezxmltext:
         class: %ezpublish.fieldType.ezxmltext.class%
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezxmltext}
-
-    ezpublish.fieldType.ezxmltext.externalStorage:
-        class: %ezpublish.fieldType.ezxmltext.externalStorage.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezxmltext}
 
     ezpublish.fieldType.ezxmltext.converter.html5:
         class: %ezpublish.fieldType.ezxmltext.converter.html5.class%
@@ -730,11 +668,6 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezgmaplocation}
 
-    ezpublish.fieldType.ezgmaplocation.externalStorage:
-        class: %ezpublish.fieldType.ezgmaplocation.externalStorage.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezgmaplocation}
-
     ezpublish.fieldType.ezobjectrelationlist:
         class: %ezpublish.fieldType.ezobjectrelationlist.class%
         parent: ezpublish.fieldType
@@ -746,11 +679,6 @@ services:
         parent: ezpublish.fieldType
         tags:
             - {name: ezpublish.fieldType, alias: ezuser}
-
-    ezpublish.fieldType.ezuser.externalStorage:
-        class: %ezpublish.fieldType.ezuser.externalStorage.class%
-        tags:
-            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezuser}
 
     # Not implemented fieldtypes
     # Configured to use the Null type to not throw exception
