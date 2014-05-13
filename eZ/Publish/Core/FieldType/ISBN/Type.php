@@ -24,11 +24,11 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class Type extends FieldType
 {
-    const PREFIX_LENGTH = 3;
-    const CHECK_LENGTH = 1;
-    const LENGTH = 13;
-    const PREFIX_978 = 978;
-    const PREFIX_979 = 979;
+    const ISBN13_PREFIX_LENGTH = 3;
+    const ISBN13_CHECK_LENGTH = 1;
+    const ISBN13_LENGTH = 13;
+    const ISBN13_PREFIX_978 = 978;
+    const ISBN13_PREFIX_979 = 979;
 
     protected $settingsSchema = array(
         "isISBN13" => array(
@@ -36,40 +36,6 @@ class Type extends FieldType
             "default" => true
         )
     );
-
-    /**
-     * Validates a field based on the validators in the field definition
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
-     * @param \eZ\Publish\Core\FieldType\ISBN\Value $fieldValue The field value for which an action is performed
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
-    {
-        $validationErrors = array();
-
-        if ( $this->isEmptyValue( $fieldValue ) )
-        {
-            return $validationErrors;
-        }
-
-        $isbnTestNumber = preg_replace( "/[\s|\-]/", "", trim( $fieldValue ) );
-        $fieldSettings = $fieldDefinition->getFieldSettings();
-        if ( ( !isset( $fieldSettings["isISBN13"] ) || $fieldSettings["isISBN13"] === false )
-            && strlen( $isbnTestNumber ) > 10 )
-        {
-            $validationErrors[] = new ValidationError(
-                "Field definition limits ISBN to ISBN10.",
-                null,
-                array()
-            );
-        }
-
-        return $validationErrors;
-    }
 
     /**
      * Returns the field type identifier for this field type
@@ -158,6 +124,42 @@ class Type extends FieldType
     }
 
     /**
+     * Validates a field based on the validators in the field definition
+     *
+     * Does not use validators.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\ISBN\Value $fieldValue The field value for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
+    {
+        $validationErrors = array();
+
+        if ( $this->isEmptyValue( $fieldValue ) )
+        {
+            return $validationErrors;
+        }
+
+        $isbnTestNumber = preg_replace( "/[\s|\-]/", "", trim( $fieldValue->isbn ) );
+        $fieldSettings = $fieldDefinition->getFieldSettings();
+        if ( ( !isset( $fieldSettings["isISBN13"] ) || $fieldSettings["isISBN13"] === false )
+            && strlen( $isbnTestNumber ) > 10 )
+        {
+            $validationErrors[] = new ValidationError(
+                "Field definition limits ISBN to ISBN10.",
+                null,
+                array()
+            );
+        }
+
+        return $validationErrors;
+    }
+
+    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @param \eZ\Publish\Core\FieldType\ISBN\Value $value
@@ -203,6 +205,78 @@ class Type extends FieldType
             }
         }
         return new Value( $hash );
+    }
+
+
+    /**
+     * Converts a $Value to a hash
+     *
+     * @param \eZ\Publish\Core\FieldType\ISBN\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash( SPIValue $value )
+    {
+        if ( $this->isEmptyValue( $value ) )
+        {
+            return null;
+        }
+        return $value->isbn;
+    }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return boolean
+     */
+    public function isSearchable()
+    {
+        return true;
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        $validationErrors = array();
+
+        foreach ( $fieldSettings as $name => $value )
+        {
+            if ( !isset( $this->settingsSchema[$name] ) )
+            {
+                $validationErrors[] = new ValidationError(
+                    "Setting '%setting%' is unknown",
+                    null,
+                    array(
+                        "setting" => $name
+                    )
+                );
+                continue;
+            }
+
+            switch ( $name )
+            {
+                case "isISBN13":
+                    if ( !is_bool( $value ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of boolean type",
+                            null,
+                            array(
+                                "setting" => $name
+                            )
+                        );
+                    }
+                    break;
+            }
+        }
+
+        return $validationErrors;
     }
 
     /**
@@ -253,8 +327,14 @@ class Type extends FieldType
         if ( !$isbnNr )
             return false;
         $isbnNr = preg_replace( "/[\s|\-]+/", "", $isbnNr );
-        if ( substr( $isbnNr, 0, self::PREFIX_LENGTH ) != self::PREFIX_978 and
-             substr( $isbnNr, 0, self::PREFIX_LENGTH ) != self::PREFIX_979 )
+        if ( strlen( $isbnNr ) != self::ISBN13_LENGTH )
+        {
+            $error = 'ISBN length is invalid';
+            return false;
+        }
+
+        if ( substr( $isbnNr, 0, self::ISBN13_PREFIX_LENGTH ) != self::ISBN13_PREFIX_978 and
+             substr( $isbnNr, 0, self::ISBN13_PREFIX_LENGTH ) != self::ISBN13_PREFIX_979 )
         {
             $error = '13 digit ISBN must start with 978 or 979';
             return false;
@@ -262,15 +342,9 @@ class Type extends FieldType
 
         $checksum13 = 0;
         $weight13 = 1;
-        if ( strlen( $isbnNr ) != self::LENGTH )
-        {
-            $error = 'ISBN length is invalid';
-            return false;
-        }
-
         //compute checksum
         $val = 0;
-        for ( $i = 0; $i < self::LENGTH; $i++ )
+        for ( $i = 0; $i < self::ISBN13_LENGTH; $i++ )
         {
             $val = $isbnNr{$i};
             if ( !is_numeric( $isbnNr{$i} ) )
@@ -290,32 +364,6 @@ class Type extends FieldType
             return false;
         }
 
-        return true;
-    }
-
-    /**
-     * Converts a $Value to a hash
-     *
-     * @param \eZ\Publish\Core\FieldType\ISBN\Value $value
-     *
-     * @return mixed
-     */
-    public function toHash( SPIValue $value )
-    {
-        if ( $this->isEmptyValue( $value ) )
-        {
-            return null;
-        }
-        return $value->isbn;
-    }
-
-    /**
-     * Returns whether the field type is searchable
-     *
-     * @return boolean
-     */
-    public function isSearchable()
-    {
         return true;
     }
 }

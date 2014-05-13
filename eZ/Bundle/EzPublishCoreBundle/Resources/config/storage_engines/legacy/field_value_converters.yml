@@ -178,11 +178,6 @@ services:
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezinisetting, lazy: true, callback: '::create'}
 
-    ezpublish.fieldType.ezisbn.converter:
-        class: %ezpublish.fieldType.eznull.converter.class%
-        tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezisbn, lazy: true, callback: '::create'}
-
     ezpublish.fieldType.ezmatrix.converter:
         class: %ezpublish.fieldType.eznull.converter.class%
         tags:
