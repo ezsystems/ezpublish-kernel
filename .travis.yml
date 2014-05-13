@@ -13,57 +13,49 @@ env:
     - DB_NAME="testdb"
   matrix:
     # If SYMFONY_VERSION is not specified, will take the latest available.
-    - TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
-    - TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
-    - TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
-    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta" SYMFONY_VERSION="2.3.*"
-    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
-    - SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
-    - SOLR_VERSION="4.6.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+    - TEST_CONFIG="phpunit.xml"
+    - TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
+    - TEST_CONFIG="phpunit-integration-legacy.xml"
+    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+    - SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
 
 matrix:
-  allow_failures:
-    - php: 5.3.3
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
   exclude:
-# 5.3.3 run: unit test + mysql integration test
+# 5.3.3 run: mysql integration test
     - php: 5.3.3
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit.xml"
     - php: 5.3.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
     - php: 5.3.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
     - php: 5.3.3
-      env: SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
     - php: 5.3.3
-      env: SOLR_VERSION="4.6.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
-# 5.3 run: unit test + sqlite integration test
+      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
+# 5.3 run: unit test (Symfony 2.3) + sqlite integration test
     - php: 5.3
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
+      env: TEST_CONFIG="phpunit.xml"
     - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
     - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
     - php: 5.3
-      env: SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
-    - php: 5.3
-      env: SOLR_VERSION="4.6.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
-# 5.4 run: unit test + solr 3.6 integration test
+      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
+# 5.4 run: unit test + postgres integration test
     - php: 5.4
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
     - php: 5.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" TIMEZONE="Europe/Oslo"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
     - php: 5.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" TIMEZONE="Asia/Calcutta" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
     - php: 5.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
-    - php: 5.4
-      env: SOLR_VERSION="4.6.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
-# 5.5 run: unit test + sqlite integration test + postgres integration test + mysql integration test + solr 4.x integration test
+      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
+# 5.5 run: unit test (Symfony 2.3) + sqlite integration test + mysql integration test + solr 4.x integration test
     - php: 5.5
-      env: TEST_CONFIG="phpunit.xml" TIMEZONE="Asia/Calcutta"
+      env: TEST_CONFIG="phpunit.xml"
     - php: 5.5
-      env: SOLR_VERSION="3.6.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" TIMEZONE="America/New_York" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
 
 # test only master (+ Pull requests)
 branches:
@@ -79,6 +71,9 @@ before_script:
   - if [ $SYMFONY_VERSION != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;
   - composer install --dev --prefer-source
   - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl -L https://raw.github.com/moliware/travis-solr/master/travis-solr.sh | SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
+ # Detecting timezone issues by testing on random timezone
+  - declare -a TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
+  - declare -a TIMEZONE=${TIMEZONES["`shuf -i 0-2 -n 1`"]}
 
 # execute phpunit as the script command
 script: "phpunit -d date.timezone=$TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG"
