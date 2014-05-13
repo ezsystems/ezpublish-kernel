@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\FieldType\ISBN;
 
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\FieldType\ISBN\Exception\InvalidValue;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
@@ -27,8 +26,8 @@ class Type extends FieldType
     const ISBN13_PREFIX_LENGTH = 3;
     const ISBN13_CHECK_LENGTH = 1;
     const ISBN13_LENGTH = 13;
-    const ISBN13_PREFIX_978 = 978;
-    const ISBN13_PREFIX_979 = 979;
+    const ISBN13_PREFIX_978 = '978';
+    const ISBN13_PREFIX_979 = '979';
 
     protected $settingsSchema = array(
         "isISBN13" => array(
@@ -138,22 +137,47 @@ class Type extends FieldType
     public function validate( FieldDefinition $fieldDefinition, SPIValue $fieldValue )
     {
         $validationErrors = array();
-
         if ( $this->isEmptyValue( $fieldValue ) )
         {
             return $validationErrors;
         }
 
-        $isbnTestNumber = preg_replace( "/[\s|\-]/", "", trim( $fieldValue->isbn ) );
         $fieldSettings = $fieldDefinition->getFieldSettings();
+        $isbnTestNumber = preg_replace( "/[\s|\-]/", "", trim( $fieldValue->isbn ) );
+
+        // Check if value and settings are inline
         if ( ( !isset( $fieldSettings["isISBN13"] ) || $fieldSettings["isISBN13"] === false )
-            && strlen( $isbnTestNumber ) > 10 )
+            && strlen( $isbnTestNumber ) !== 10 )
         {
             $validationErrors[] = new ValidationError(
-                "Field definition limits ISBN to ISBN10.",
+                "ISBN-10 must be 10 character length",
                 null,
                 array()
             );
+        }
+        // ISBN-10 check
+        else if ( strlen( $isbnTestNumber ) === 10 )
+        {
+            if ( !$this->validateISBNChecksum( $isbnTestNumber ) )
+            {
+                $validationErrors[] = new ValidationError(
+                    "ISBN value must be in a valid ISBN-10 format",
+                    null,
+                    array()
+                );
+            }
+        }
+        // ISBN-13 check
+        else
+        {
+            if ( !$this->validateISBN13Checksum( $isbnTestNumber, $error ) )
+            {
+                $validationErrors[] = new ValidationError(
+                    $error,
+                    null,
+                    array()
+                );
+            }
         }
 
         return $validationErrors;
@@ -183,26 +207,6 @@ class Type extends FieldType
         if ( $hash === null || $hash === "" )
         {
             return $this->getEmptyValue();
-        }
-
-        $isbn = $hash;
-
-        $isbnTestNumber = preg_replace( "/[\s|\-]/", "", trim( $isbn ) );
-        if ( strlen( $isbnTestNumber ) == 10 )
-        {
-            $status = $this->validateISBNChecksum( $isbnTestNumber );
-            if ( $status === false )
-            {
-                throw new InvalidValue( $hash );
-            }
-        }
-        else
-        {
-            $status = $this->validateISBN13Checksum( $isbnTestNumber, $error );
-            if ( $status === false )
-            {
-                throw new InvalidValue( $hash, $error );
-            }
         }
         return new Value( $hash );
     }
@@ -287,21 +291,21 @@ class Type extends FieldType
      * 
      * @return boolean
      */
-    private function validateISBNChecksum ( $isbnNr )
+    private function validateISBNChecksum( $isbnNr )
     {
         $result = 0;
         $isbnNr = strtoupper( $isbnNr );
         for ( $i = 10; $i > 0; $i-- )
         {
-            if ( is_numeric( $isbnNr{$i - 1} ) or ( $i == 10 and $isbnNr{$i - 1} == 'X' ) )
+            if ( is_numeric( $isbnNr[$i - 1] ) || ( $i === 10 && $isbnNr[$i - 1] === 'X' ) )
             {
-                if ( ( $i == 1 ) and ( $isbnNr{9} == 'X' ) )
+                if ( ( $i === 1 ) && ( $isbnNr[9] === 'X' ) )
                 {
                     $result += 10 * $i;
                 }
                 else
                 {
-                    $result += $isbnNr{10 - $i} * $i;
+                    $result += $isbnNr[10 - $i] * $i;
                 }
             }
             else
@@ -309,7 +313,7 @@ class Type extends FieldType
                 return false;
             }
         }
-        return ( $result % 11 == 0 );
+        return ( $result % 11 === 0 );
     }
 
     /**
@@ -321,21 +325,21 @@ class Type extends FieldType
      * 
      * @return boolean
      */
-    private function validateISBN13Checksum ( $isbnNr, &$error )
+    private function validateISBN13Checksum( $isbnNr, &$error )
     {
         if ( !$isbnNr )
             return false;
-        $isbnNr = preg_replace( "/[\s|\-]+/", "", $isbnNr );
-        if ( strlen( $isbnNr ) != self::ISBN13_LENGTH )
+
+        if ( strlen( $isbnNr ) !== self::ISBN13_LENGTH )
         {
-            $error = 'ISBN length is invalid';
+            $error = 'ISBN-13 must be 13 digit, digit count is: ' . strlen( $isbnNr );
             return false;
         }
 
-        if ( substr( $isbnNr, 0, self::ISBN13_PREFIX_LENGTH ) != self::ISBN13_PREFIX_978 and
-             substr( $isbnNr, 0, self::ISBN13_PREFIX_LENGTH ) != self::ISBN13_PREFIX_979 )
+        if ( substr( $isbnNr, 0, self::ISBN13_PREFIX_LENGTH ) !== self::ISBN13_PREFIX_978 &&
+             substr( $isbnNr, 0, self::ISBN13_PREFIX_LENGTH ) !== self::ISBN13_PREFIX_979 )
         {
-            $error = '13 digit ISBN must start with 978 or 979';
+            $error = 'ISBN-13 value must start with 978 or 979, got: ' . substr( $isbnNr, 0, self::ISBN13_PREFIX_LENGTH );
             return false;
         }
 
@@ -345,21 +349,21 @@ class Type extends FieldType
         $val = 0;
         for ( $i = 0; $i < self::ISBN13_LENGTH; $i++ )
         {
-            $val = $isbnNr{$i};
-            if ( !is_numeric( $isbnNr{$i} ) )
+            $val = $isbnNr[$i];
+            if ( !is_numeric( $isbnNr[$i] ) )
             {
-                $error = 'All ISBN 13 characters need to be numeric';
+                $error = 'All ISBN-13 characters need to be numeric';
                 return false;
             }
             $checksum13 = $checksum13 + $weight13 * $val;
             $weight13 = ( $weight13 + 2 ) % 4;
         }
-        if ( ( $checksum13 % 10 ) != 0 )
+        if ( ( $checksum13 % 10 ) !== 0 )
         {
             // Calculate the last digit from the 12 first numbers.
             $checkDigit = ( 10 - ( ( $checksum13 - ( ( $weight13 + 2 ) % 4 ) * $val ) % 10 ) ) % 10;
             //bad checksum
-            $error = 'Bad checksum, last digit should be ' . $checkDigit;
+            $error = 'Bad checksum, last digit of ISBN-13 should be ' . $checkDigit;
             return false;
         }
 

@@ -162,19 +162,19 @@ class ISBNIntegrationTest extends BaseIntegrationTest
         return array(
             array(
                 '9789722',
-                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException'
             ),
             array(
                 "NON_VALID_ISBN_CODE",
-                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException'
             ),
             array(
-                array( "No", "Array", "Support"  ),
+                new \stdClass(),
                 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
             ),
             array(
                 new ISBNValue( "97897225" ),
-                'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'
+                'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException'
             ),
         );
     }

@@ -104,20 +104,16 @@ class ISBNTest extends FieldTypeTest
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                "1234567890",
-                'eZ\\Publish\\Core\\FieldType\\ISBN\\Exception\\InvalidValue',
+                array(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                "here is an invalid isbn",
-                'eZ\\Publish\\Core\\FieldType\\ISBN\\Exception\\InvalidValue',
+                new \stdClass(),
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
             array(
-                "9789722514093",
-                'eZ\\Publish\\Core\\FieldType\\ISBN\\Exception\\InvalidValue',
-            ),
-            array(
-                "3789722514095",
-                'eZ\\Publish\\Core\\FieldType\\ISBN\\Exception\\InvalidValue',
+                44.55,
+                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
             ),
         );
     }
@@ -335,7 +331,7 @@ class ISBNTest extends FieldTypeTest
                 new ISBNValue( "9789722514095" ),
                 array(
                     new ValidationError(
-                        "Field definition limits ISBN to ISBN10."
+                        "ISBN-10 must be 10 character length"
                     ),
                 ),
             ),
