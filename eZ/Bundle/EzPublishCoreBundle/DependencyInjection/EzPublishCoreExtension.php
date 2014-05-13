@@ -265,14 +265,19 @@ class EzPublishCoreExtension extends Extension
         $loader->load( 'io.yml' );
         // Built-in field types
         $loader->load( 'fieldtypes.yml' );
-        // Roles and limitations
-        $loader->load( 'roles.yml' );
 
         // Storage engine
         $loader->load( 'storage_engines.yml' );
-        $loader->load( "storage_engines/common.yml" );
-        $loader->load( "storage_engines/cache.yml" );
-        $loader->load( "storage_engines/legacy.yml" );
+
+        // Loading configuration from Core/settings
+        $coreLoader = new Loader\YamlFileLoader(
+            $container,
+            new FileLocator( __DIR__ . '/../../../Publish/Core/settings' )
+        );
+        $coreLoader->load( 'roles.yml' );
+        $coreLoader->load( 'storage_engines/common.yml' );
+        $coreLoader->load( 'storage_engines/cache.yml' );
+        $coreLoader->load( 'storage_engines/legacy.yml' );
     }
 
     /**
