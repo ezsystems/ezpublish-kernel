@@ -915,6 +915,7 @@ class RoleService implements RoleServiceInterface
     /**
      * Maps provided SPI Policy value object to API Policy value object
      *
+     * @uses getLimitationType
      * @access private Only accessible for other services and the internals of the repository
      * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      * @param \eZ\Publish\SPI\Persistence\User\Role|null $role
