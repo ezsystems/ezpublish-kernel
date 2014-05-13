@@ -7,22 +7,20 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
+namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class RepositoryFactory extends ContainerAware
 {
     /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @var string
      */
-    private $configResolver;
+    private $repositoryClass;
 
     /**
      * Collection of fieldTypes, lazy loaded via a closure
@@ -32,26 +30,16 @@ class RepositoryFactory extends ContainerAware
     protected $fieldTypeCollectionFactory;
 
     /**
-     * @var string
-     */
-    private $repositoryClass;
-
-    /**
      * Collection of limitation types for the RoleService.
      *
      * @var \eZ\Publish\SPI\Limitation\Type[]
      */
     protected $roleLimitations = array();
 
-    public function __construct(
-        ConfigResolverInterface $configResolver,
-        FieldTypeCollectionFactory $fieldTypeCollectionFactory,
-        $repositoryClass
-    )
+    public function __construct( $repositoryClass, FieldTypeCollectionFactory $fieldTypeCollectionFactory )
     {
-        $this->configResolver = $configResolver;
-        $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
         $this->repositoryClass = $repositoryClass;
+        $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
     }
 
     /**
@@ -69,17 +57,17 @@ class RepositoryFactory extends ContainerAware
         $repository = new $this->repositoryClass(
             $persistenceHandler,
             array(
-                'fieldType'     => $this->fieldTypeCollectionFactory->getFieldTypes(),
-                'role'          => array(
-                    'limitationTypes'   => $this->roleLimitations
+                'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
+                'role' => array(
+                    'limitationTypes' => $this->roleLimitations
                 ),
-                'languages'     => $this->configResolver->getParameter( 'languages' )
+                'languages' => $this->container->getParameter( "languages" )
             )
         );
 
         /** @var \eZ\Publish\API\Repository\Repository $repository */
         $anonymousUser = $repository->getUserService()->loadUser(
-            $this->configResolver->getParameter( "anonymous_user_id" )
+            $this->container->getParameter( "anonymous_user_id" )
         );
         $repository->setCurrentUser( $anonymousUser );
 

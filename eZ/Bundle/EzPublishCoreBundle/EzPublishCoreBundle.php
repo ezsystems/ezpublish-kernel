@@ -9,12 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeCollectionPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterLimitationTypePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainConfigResolverPass;
@@ -27,12 +25,14 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\XmlTextConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\ExternalStorageRegistryPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\CriteriaConverterPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\CriterionFieldValueHandlerRegistryPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\RoleLimitationConverterPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\Storage\Legacy\SortClauseConverterPass;
+use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
+use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\CriteriaConverterPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\CriterionFieldValueHandlerRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\RoleLimitationConverterPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\SortClauseConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory;
