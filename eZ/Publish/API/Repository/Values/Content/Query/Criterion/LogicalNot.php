@@ -21,7 +21,7 @@ class LogicalNot extends LogicalOperator
      *
      * Will match of the given criterion doesn't match
      *
-     * @param Criterion[] $criteria One criterion, as a an array
+     * @param Criterion[] $criteria One criterion, as an array
      *
      * @throws \InvalidArgumentException if more than one criterion is given in the array parameter
      */
