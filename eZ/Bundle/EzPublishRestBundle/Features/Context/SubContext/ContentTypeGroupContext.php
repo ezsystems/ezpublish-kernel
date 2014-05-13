@@ -72,7 +72,7 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
 
     public function iDeleteContentTypeGroup( $identifier )
     {
-        $this->getMainContext()->setLastAction( "delete " );
+        $this->getMainContext()->setLastAction( "delete" );
 
         $repository = $this->getMainContext()->getRepository();
         $contentTypeService = $repository->getContentTypeService();
