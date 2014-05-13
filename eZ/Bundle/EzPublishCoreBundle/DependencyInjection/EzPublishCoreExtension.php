@@ -260,6 +260,7 @@ class EzPublishCoreExtension extends Extension
     private function handleApiLoading( ContainerBuilder $container, FileLoader $loader )
     {
         // Public API services
+        $loader->load( 'repository.yml' );
         $loader->load( 'papi.yml' );
         // IO Services
         $loader->load( 'io.yml' );
