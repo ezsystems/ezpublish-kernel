@@ -1,4 +1,6 @@
 parameters:
+    ezpublish.kernel.root_dir: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel
+
     # API
     ezpublish.api.repository.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryFactory
     ezpublish.api.repository.lazy_factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory

@@ -1,6 +1,4 @@
 parameters:
-    ezpublish.kernel.root_dir: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel
-
     # Parameter provider
     ezpublish.fieldType.parameterProviderRegistry.class: eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry
     ezpublish.fieldType.ezpage.parameterProvider.class: eZ\Publish\Core\MVC\Symfony\FieldType\Page\ParameterProvider
