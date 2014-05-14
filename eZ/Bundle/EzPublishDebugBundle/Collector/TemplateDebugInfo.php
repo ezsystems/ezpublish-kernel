@@ -79,13 +79,13 @@ class TemplateDebugInfo
             return $templateList;
         }
 
+        $formTokenWasEnabled = false;
         try
         {
             // Deactivate ezxFormToken to avoid double checks on it.
-            // At this point (kernel.response), token checks have been already done anyway.
             // Checking on ezxFormToken existence since might not be loadable if eZ is not yet installed
             // (ezp_extension.php not yet generated in legacy).
-            if ( class_exists( 'ezxFormToken' ) )
+            if ( class_exists( 'ezxFormToken' ) && ( $formTokenWasEnabled = ezxFormToken::isEnabled() ) )
             {
                 ezxFormToken::setIsEnabled( false );
             }
@@ -102,6 +102,10 @@ class TemplateDebugInfo
             // Ignore the exception thrown by legacy kernel as this would break debug toolbar (and thus debug info display).
             // Furthermore, some legacy kernel handlers don't support runCallback (e.g. ezpKernelTreeMenu)
             $templateStats = array();
+            if ( $formTokenWasEnabled )
+            {
+                ezxFormToken::setIsEnabled( true );
+            }
         }
 
         foreach ( $templateStats as $tplInfo )
@@ -123,6 +127,14 @@ class TemplateDebugInfo
                 $templateList["compact"][$actualTpl]++;
             }
         }
+
+        // Re-activate ezxFormToken if it was before, as we might be inside an inline sub-request.
+        // See https://jira.ez.no/browse/EZP-22643
+        if ( $formTokenWasEnabled )
+        {
+            ezxFormToken::setIsEnabled( true );
+        }
+
         return $templateList;
     }
 }
