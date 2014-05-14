@@ -1,4 +1,7 @@
 parameters:
+    ezpublish.cache_pool.class: Stash\Pool
+    ezpublish.cache_pool.spi.cache.decorator.class: eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
+
     ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
     ezpublish.spi.persistence.cache.abstractHandler.class: eZ\Publish\Core\Persistence\Cache\AbstractHandler
     ezpublish.spi.persistence.cache.sectionHandler.class: eZ\Publish\Core\Persistence\Cache\SectionHandler
@@ -19,14 +22,6 @@ parameters:
 services:
     ezpublish.cache_pool:
         class: %ezpublish.cache_pool.class%
-        factory_service: ezpublish.cache_pool.factory
-        factory_method: getCachePool
-        arguments: [@ezpublish.config.resolver]
-
-    ezpublish.cache_pool.factory:
-        class: %ezpublish.cache_pool.factory.class%
-        calls:
-            - [setContainer, [@service_container]]
 
     ezpublish.cache_pool.spi.cache.decorator:
         class: %ezpublish.cache_pool.spi.cache.decorator.class%
