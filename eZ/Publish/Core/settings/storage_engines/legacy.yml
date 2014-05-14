@@ -17,6 +17,7 @@ imports:
 parameters:
     ezpublish.spi.persistence.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
     ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+    ezpublish.persistence.connection.class: Doctrine\DBAL\Driver\Connection
     ezpublish.spi.persistence.legacy.transactionhandler.class: eZ\Publish\Core\Persistence\Legacy\TransactionHandler
 
 services:
@@ -48,6 +49,13 @@ services:
         arguments:
             - @ezpublish.api.storage_engine.legacy.connection
         lazy: true
+
+    ezpublish.api.storage_engine.legacy.connection:
+        class: %ezpublish.persistence.connection.class%
+        factory_class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_method: createConnectionFromDSN
+        arguments:
+            - %legacy_dsn%
 
     ezpublish.spi.persistence.legacy.transactionhandler:
         class: %ezpublish.spi.persistence.legacy.transactionhandler.class%
