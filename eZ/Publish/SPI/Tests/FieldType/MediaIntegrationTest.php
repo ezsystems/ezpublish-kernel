@@ -17,8 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
-use eZ\Publish\Core\Base\ConfigurationManager;
-use eZ\Publish\Core\Base\ServiceContainer;
+use eZ\Publish\Core\IO\MimeTypeDetector\FileInfo;
 
 /**
  * Integration test for legacy storage field types
@@ -42,12 +41,6 @@ use eZ\Publish\Core\Base\ServiceContainer;
  */
 class MediaIntegrationTest extends FileBaseIntegrationTest
 {
-    static public function setUpBeforeClass()
-    {
-        self::$setUp = false;
-        parent::setUpBeforeClass();
-    }
-
     /**
      * Returns the storage identifier prefix used by the file service
      *
@@ -55,7 +48,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     protected function getStoragePrefix()
     {
-        return $this->getContainer()->getVariable( 'binaryfile_storage_prefix' );
+        return $this->getContainer()->getParameter( 'binaryfile_storage_prefix' );
     }
 
     /**
@@ -75,7 +68,22 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\Media\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezmedia',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Media(),
+            new FieldType\Media\MediaStorage(
+                array(
+                    'LegacyStorage' => new FieldType\Media\MediaStorage\Gateway\LegacyStorage(),
+                ),
+                $this->getContainer()->get( "ezpublish.fieldType.ezbinaryfile.IOService" ),
+                new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
+                new FileInfo()
+            )
+        );
     }
 
     /**

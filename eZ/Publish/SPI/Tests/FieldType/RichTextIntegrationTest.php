@@ -56,7 +56,41 @@ class RichTextIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\RichText\Type(
+            new FieldType\RichText\ConverterDispatcher( array() ),
+            new FieldType\RichText\ValidatorDispatcher(
+                array(
+                    "http://docbook.org/ns/docbook" => new FieldType\RichText\Validator(
+                        array(
+                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng" ),
+                            $this->getAbsolutePath( "eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl" )
+                        )
+                    )
+                )
+            )
+        );
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezrichtext',
+            $fieldType,
+            new RichTextConverter(
+                new RichTextConverter\XsltConverter(
+                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/stylesheets/docbook_ezxml.xsl" )
+                ),
+                new RichTextConverter\XsltConverter(
+                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/stylesheets/ezxml_docbook.xsl" )
+                ),
+                new RichTextConverter\XsdValidator(
+                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/schemas/ezxml.xsd" )
+                )
+            ),
+            new FieldType\RichText\RichTextStorage(
+                array(
+                    'LegacyStorage' => new LegacyStorage()
+                )
+            )
+        );
     }
 
     /**
@@ -164,7 +198,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
         if ( $installDir === null )
         {
             $config = require 'config.php';
-            $installDir = $config['service']['parameters']['install_dir'];
+            $installDir = $config['install_dir'];
         }
         return $installDir;
     }

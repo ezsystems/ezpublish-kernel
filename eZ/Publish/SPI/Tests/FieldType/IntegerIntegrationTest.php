@@ -52,7 +52,15 @@ class IntegerIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\Integer\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezinteger',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Integer(),
+            new FieldType\NullStorage()
+        );
     }
 
     /**

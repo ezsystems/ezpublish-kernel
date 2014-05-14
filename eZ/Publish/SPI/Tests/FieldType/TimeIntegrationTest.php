@@ -52,7 +52,15 @@ class TimeIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\Time\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'eztime',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Time(),
+            new FieldType\NullStorage()
+        );
     }
 
     /**

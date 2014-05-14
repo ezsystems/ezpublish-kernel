@@ -53,7 +53,19 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\MapLocation\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezgmaplocation',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\MapLocation(),
+            new FieldType\MapLocation\MapLocationStorage(
+                array(
+                    'LegacyStorage' => new FieldType\MapLocation\MapLocationStorage\Gateway\LegacyStorage(),
+                )
+            )
+        );
     }
 
     /**

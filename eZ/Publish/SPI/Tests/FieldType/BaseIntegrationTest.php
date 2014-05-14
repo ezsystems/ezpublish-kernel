@@ -17,13 +17,10 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
-use eZ\Publish\Core\Persistence\FieldTypeRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
-
-use eZ\Publish\Core\Base\ConfigurationManager;
-use eZ\Publish\Core\Base\ServiceContainer;
-use eZ\Publish\Core\Persistence\Legacy\Handler;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Publish\Core\Base\Container\Compiler;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Integration test for the legacy storage
@@ -74,7 +71,7 @@ abstract class BaseIntegrationTest extends TestCase
         if ( $installDir === null )
         {
             $config = require __DIR__ . '/../../../../../config.php';
-            $installDir = $config['service']['parameters']['install_dir'];
+            $installDir = $config['install_dir'];
         }
         return $installDir;
     }
@@ -231,7 +228,7 @@ abstract class BaseIntegrationTest extends TestCase
         if ( !self::$setUp )
         {
             self::$container = $this->getContainer();
-            $this->handler = self::$container->get( "legacy_db_handler" );
+            $this->handler = self::$container->get( "ezpublish.api.storage_engine.legacy.dbhandler" );
             $this->db = $this->handler->getName();
             parent::setUp();
             $this->insertDatabaseFixture( __DIR__ . '/../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php' );
@@ -576,100 +573,67 @@ abstract class BaseIntegrationTest extends TestCase
         );
     }
 
-    /**
-     * Returns the Handler
-     *
-     * @return Handler
-     */
-    protected function getHandler2()
-    {
-        $textLineFieldType = new \eZ\Publish\Core\FieldType\TextLine\Type();
-        $textLineFieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        return new Legacy\Handler(
-            self::$setUp,
-            new FieldTypeRegistry(
-                array(
-                    'ezstring' => $textLineFieldType,
-                )
-            ),
-            new ConverterRegistry(
-                array(
-                    'ezstring' => new Legacy\Content\FieldValue\Converter\TextLine(),
-                )
-            ),
-            new StorageRegistry(
-                array()
-            ),
-            $this->getTransformationProcessor()
-        );
-    }
-
-    /**
-     * Get a Doctrine database connection handler
-     *
-     * Get a ConnectionHandler, which can be used to interact with the configured
-     * database. The database connection string is read from an optional
-     * environment variable "DATABASE" and defaults to an in-memory SQLite
-     * database.
-     *
-     * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
-     */
-    public function getDatabaseHandler()
-    {
-        if ( !$this->handler )
-        {
-            $persistenceHandler = $this->getHandler();
-
-            $dbHandlerProperty = new \ReflectionProperty( $persistenceHandler, 'dbHandler' );
-            $dbHandlerProperty->setAccessible( true );
-            $dbHandler = $dbHandlerProperty->getValue( $persistenceHandler );
-
-            $this->handler = $dbHandler;
-            $this->db = $this->handler->getName();
-        }
-
-        return $this->handler;
-    }
-
-    /**
-     * Returns the Handler
-     *
-     * @return Handler
-     */
-    protected function getHandler()
-    {
-        return self::$container->get( "persistence_handler_legacy" );
-    }
-
     protected function getContainer()
     {
-        // get configuration config
-        if ( !( $settings = include __DIR__ . '/../../../../../config.php' ) )
-        {
-            throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
-        }
+        $config = include __DIR__ . "/../../../../../config.php";
+        $installDir = $config["install_dir"];
 
-        // load configuration uncached
-        $configManager = new ConfigurationManager(
-            array_merge_recursive(
-                $settings,
-                array(
-                    'base' => array(
-                        'Configuration' => array(
-                            'UseCache' => false
-                        )
-                    )
-                )
-            ),
-            $settings['base']['Configuration']['Paths']
+        $containerBuilder = new ContainerBuilder();
+        $settingsPath = $installDir . "/eZ/Publish/Core/settings/";
+        $loader = new YamlFileLoader( $containerBuilder, new FileLocator( $settingsPath ) );
+
+        $loader->load( 'fieldtypes.yml' );
+        $loader->load( 'io.yml' );
+        $loader->load( 'repository.yml' );
+        $loader->load( 'fieldtype_external_storages.yml' );
+        $loader->load( 'storage_engines/common.yml' );
+        $loader->load( 'storage_engines/legacy.yml' );
+        $loader->load( 'storage_engines/cache.yml' );
+        $loader->load( 'settings.yml' );
+        $loader->load( 'fieldtype_services.yml' );
+
+        $containerBuilder->setParameter( "ezpublish.kernel.root_dir", $installDir );
+
+        $containerBuilder->setParameter(
+            "legacy_dsn",
+            $this->getDsn()
         );
 
-        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
-        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
+        $containerBuilder->compile();
 
-        return new ServiceContainer(
-            $serviceSettings,
-            array()
-        );
+        return $containerBuilder;
+    }
+
+    /**
+     * Returns the Handler
+     *
+     * @param string $identifier
+     * @param \eZ\Publish\SPI\Persistence\FieldType $fieldType
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter $fieldValueConverter
+     * @param \eZ\Publish\SPI\FieldType\FieldStorage $externalStorage
+     *
+     * @return \eZ\Publish\SPI\Persistence\Handler
+     */
+    protected function getHandler( $identifier, $fieldType, $fieldValueConverter, $externalStorage )
+    {
+        /** @var \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry */
+        $fieldTypeRegistry = self::$container->get( "ezpublish.persistence.field_type_registry" );
+        /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry */
+        $converterRegistry = self::$container->get( "ezpublish.persistence.legacy.field_value_converter.registry" );
+        /** @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry $storageRegistry */
+        $storageRegistry = self::$container->get( "ezpublish.persistence.external_storage_registry" );
+
+        $textLineFieldType = new \eZ\Publish\Core\FieldType\TextLine\Type();
+        $textLineFieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+        $textLineFieldValueConverter = new Legacy\Content\FieldValue\Converter\TextLine();
+
+        $fieldTypeRegistry->register( "ezstring", $textLineFieldType );
+        $converterRegistry->register( "ezstring", $textLineFieldValueConverter );
+
+        $fieldTypeRegistry->register( $identifier, $fieldType );
+        $converterRegistry->register( $identifier, $fieldValueConverter );
+        $storageRegistry->register( $identifier, $externalStorage );
+
+        return self::$container->get( "ezpublish.spi.persistence.legacy" );
     }
 }

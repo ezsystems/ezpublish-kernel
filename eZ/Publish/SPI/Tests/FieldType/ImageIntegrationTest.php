@@ -42,12 +42,6 @@ use FileSystemIterator;
  */
 class ImageIntegrationTest extends FileBaseIntegrationTest
 {
-    static public function setUpBeforeClass()
-    {
-        self::$setUp = false;
-        parent::setUpBeforeClass();
-    }
-
     /**
      * Returns the storage identifier prefix used by the file service
      *
@@ -55,7 +49,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     protected function getStoragePrefix()
     {
-        return $this->getContainer()->getVariable( 'image_storage_prefix' );
+        return $this->getContainer()->getParameter( 'image_storage_prefix' );
     }
 
     /**
@@ -75,7 +69,22 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\Image\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezimage',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Image(),
+            new FieldType\Image\ImageStorage(
+                array(
+                    'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
+                ),
+                $this->getContainer()->get( "ezpublish.fieldType.ezimage.IOService" ),
+                new FieldType\Image\PathGenerator\LegacyPathGenerator(),
+                new IO\MetadataHandler\ImageSize()
+            )
+        );
     }
 
     /**

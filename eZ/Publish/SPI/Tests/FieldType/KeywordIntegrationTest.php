@@ -49,11 +49,23 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     /**
      * Get handler with required custom field types registered
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\Keyword\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezkeyword',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Keyword(),
+            new FieldType\Keyword\KeywordStorage(
+                array(
+                    'LegacyStorage' => new FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage(),
+                )
+            )
+        );
     }
 
     /**
