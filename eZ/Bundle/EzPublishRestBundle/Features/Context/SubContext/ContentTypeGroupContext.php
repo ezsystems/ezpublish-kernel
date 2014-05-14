@@ -24,13 +24,24 @@ use PHPUnit_Framework_Assert as Assertion;
  */
 class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
 {
+    public function iReadContentTypeGroup( $identifier )
+    {
+        $this->getMainContext()->setLastAction( "read" );
+
+        return array(
+            new Step\When( 'I create a "GET" request to "/content/typegroups?identifier=' . $identifier . '"' ),
+            // this next step is needed for guzzle client
+            new Step\When( 'I add "accept" header with a "ContentTypeGroup"' ),
+            new Step\When( 'I send the request' )
+        );
+    }
+
     public function iReadContentTypeGroupsList()
     {
         $this->getMainContext()->setLastAction( "read" );
 
         return array(
             new Step\When( 'I create a "GET" request to "/content/typegroups"' ),
-            new Step\When( 'I add "content-type" header with "Input" for "ContentTypeGroup"' ),
             new Step\When( 'I add "accept" header to "List" a "ContentTypeGroup"' ),
             new Step\When( 'I send the request' )
         );
