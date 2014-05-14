@@ -26,8 +26,21 @@ abstract class DebugTemplate extends Twig_Template
         $startTime = microtime( true );
 
         $templateListBefore = TemplateDebugInfo::getTemplatesList();
+        $templateName = $this->getTemplateName();
+        // Check if template name ends with "html.twig", indicating this is an HTML template.
+        $isHtmlTemplate = substr( $templateName, -strlen( 'html.twig' ) ) === 'html.twig';
+
+        if ( $isHtmlTemplate )
+        {
+            echo '<!-- START ' . $this->getTemplateName() . ' -->';
+        }
 
         parent::display( $context, $blocks );
+
+        if ( $isHtmlTemplate )
+        {
+            echo '<!-- STOP ' . $this->getTemplateName() . ' -->';
+        }
 
         $endTime = microtime( true );
 
