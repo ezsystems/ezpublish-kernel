@@ -357,3 +357,10 @@
         {{ isMultiple ? 'Yes' : 'No' }}
     </li>
 {% endblock %}
+
+{% block settings_allowisbn13 %}
+    <li class="isbn">
+        <span>Selected ISBN format:</span>
+        {{ isISBN13 ? 'ISBN-13' : 'ISBN-10' }}
+    </li>
+{% endblock %}
