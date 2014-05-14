@@ -9,35 +9,15 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
-use eZ\Publish\Core\Base\ConfigurationManager;
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Persistence\Legacy\Handler;
-use PDOException;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 /**
  * Test case for Repository Handler
  */
 class HandlerTest extends TestCase
 {
-    /**
-     * Does not reset database for this class as this class only tests handler instances.
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        try
-        {
-            $this->getDatabaseHandler();
-        }
-        catch ( PDOException $e )
-        {
-            $this->fail(
-                'PDO session could not be created: ' . $e->getMessage()
-            );
-        }
-    }
-
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
      *
@@ -330,6 +310,8 @@ class HandlerTest extends TestCase
         );
     }
 
+    protected static $legacyHandler;
+
     /**
      * Returns the Handler
      *
@@ -337,35 +319,47 @@ class HandlerTest extends TestCase
      */
     protected function getHandlerFixture()
     {
-        // get configuration config
-        if ( !( $settings = include 'config.php' ) )
+        if ( !isset( self::$legacyHandler ) )
         {
-            throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
+            $container = $this->getContainer();
+
+            self::$legacyHandler = $container->get( 'ezpublish.spi.persistence.legacy' );
         }
 
-        // load configuration uncached
-        $configManager = new ConfigurationManager(
-            array_merge_recursive(
-                $settings,
-                array(
-                    'base' => array(
-                        'Configuration' => array(
-                            'UseCache' => false
-                        )
-                    )
-                )
-            ),
-            $settings['base']['Configuration']['Paths']
-        );
+        return self::$legacyHandler;
+    }
 
-        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
-        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
-        $sc = new ServiceContainer(
-            $serviceSettings,
-            array()
-        );
+    protected static $container;
 
-        return $sc->get( 'persistence_handler_legacy' );
+    protected function getContainer()
+    {
+        if ( !isset( self::$container ) )
+        {
+            $config = include __DIR__ . '/../../../../../../config.php';
+            $installDir = $config['install_dir'];
+
+            /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
+            $containerBuilder = include $config['container_builder_path'];
+
+            $containerBuilder->setParameter(
+                "languages",
+                array( "eng-US", "eng-GB" )
+            );
+            $containerBuilder->setParameter(
+                "legacy_dsn",
+                $this->getDsn()
+            );
+
+            self::$container = new ServiceContainer(
+                $containerBuilder,
+                $installDir,
+                $config['cache_dir'],
+                true,
+                true
+            );
+        }
+
+        return self::$container;
     }
 
     /**
@@ -375,15 +369,13 @@ class HandlerTest extends TestCase
      */
     public function testDatabaseInstance()
     {
-        $method = new \ReflectionProperty(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\TransactionHandler',
-            'dbHandler'
-        );
-        $method->setAccessible( true );
-
-        $dbHandler = $method->getValue( $this->getHandlerFixture()->transactionHandler() );
+        $container = $this->getContainer();
+        $databaseHandler = $container->get( "ezpublish.api.storage_engine.legacy.dbhandler" );
         $className = get_class( $this->getDatabaseHandler() );
 
-        $this->assertTrue( $dbHandler instanceof $className, get_class( $dbHandler ) . " not of type $className." );
+        $this->assertTrue(
+            $databaseHandler instanceof $className,
+            get_class( $databaseHandler ) . " not of type $className."
+        );
     }
 }
