@@ -32,8 +32,6 @@ class SortClauseConverterPass implements CompilerPassInterface
             return;
         }
 
-        $commonHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common' );
-
         if ( $container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content' ) )
         {
             $sortClauseConverterContent = $container->getDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content' );
@@ -41,7 +39,6 @@ class SortClauseConverterPass implements CompilerPassInterface
             $contentHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content' );
 
             $this->addHandlers( $sortClauseConverterContent, $contentHandlers );
-            $this->addHandlers( $sortClauseConverterContent, $commonHandlers );
         }
 
         if ( $container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location' ) )
@@ -51,7 +48,6 @@ class SortClauseConverterPass implements CompilerPassInterface
             $locationHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location' );
 
             $this->addHandlers( $sortClauseConverterLocation, $locationHandlers );
-            $this->addHandlers( $sortClauseConverterLocation, $commonHandlers );
         }
     }
 

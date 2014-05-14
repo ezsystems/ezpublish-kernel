@@ -49,38 +49,6 @@ class SortClauseConverterPassTest extends AbstractCompilerPassTest
         );
     }
 
-    public function testAddContentAndCommonHandlers()
-    {
-        $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
-            new Definition()
-        );
-
-        $contentServiceId = 'content_service_id';
-        $def1 = new Definition();
-        $def1->addTag( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content' );
-        $this->setDefinition( $contentServiceId, $def1 );
-
-        $commonServiceId = 'common_service_id';
-        $def2 = new Definition();
-        $def2->addTag( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common' );
-        $this->setDefinition( $commonServiceId, $def2 );
-
-        $this->compile();
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
-            'addHandler',
-            array( new Reference( $contentServiceId ) )
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
-            'addHandler',
-            array( new Reference( $commonServiceId ) )
-        );
-    }
-
     public function testAddLocationHandlers()
     {
         $this->setDefinition(
@@ -102,39 +70,7 @@ class SortClauseConverterPassTest extends AbstractCompilerPassTest
         );
     }
 
-    public function testAddLocationAndCommonHandlers()
-    {
-        $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location',
-            new Definition()
-        );
-
-        $locationServiceId = 'content_service_id';
-        $def1 = new Definition();
-        $def1->addTag( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location' );
-        $this->setDefinition( $locationServiceId, $def1 );
-
-        $commonServiceId = 'common_service_id';
-        $def2 = new Definition();
-        $def2->addTag( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common' );
-        $this->setDefinition( $commonServiceId, $def2 );
-
-        $this->compile();
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location',
-            'addHandler',
-            array( new Reference( $locationServiceId ) )
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location',
-            'addHandler',
-            array( new Reference( $commonServiceId ) )
-        );
-    }
-
-    public function testAddLocationAndContentAndCommonHandlers()
+    public function testAddLocationAndContentHandlers()
     {
         $this->setDefinition(
             'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
@@ -145,39 +81,18 @@ class SortClauseConverterPassTest extends AbstractCompilerPassTest
             new Definition()
         );
 
-        $contentServiceId = 'content_service_id';
-        $def1 = new Definition();
-        $def1->addTag( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content' );
-        $this->setDefinition( $contentServiceId, $def1 );
-
-        $locationServiceId = 'location_service_id';
-        $def2 = new Definition();
-        $def2->addTag( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location' );
-        $this->setDefinition( $locationServiceId, $def2 );
-
         $commonServiceId = 'common_service_id';
-        $def3 = new Definition();
-        $def3->addTag( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.common' );
-        $this->setDefinition( $commonServiceId, $def3 );
+        $def = new Definition();
+        $def->addTag( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content' );
+        $def->addTag( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location' );
+        $this->setDefinition( $commonServiceId, $def );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
             'addHandler',
-            array( new Reference( $contentServiceId ) )
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
-            'addHandler',
             array( new Reference( $commonServiceId ) )
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location',
-            'addHandler',
-            array( new Reference( $locationServiceId ) )
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
