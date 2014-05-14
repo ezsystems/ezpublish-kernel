@@ -264,6 +264,15 @@
 
 {% block ezurl_settings %}{% endblock %}
 
+{% block ezisbn_settings %}
+<ul class="fielddef-settings {{ fielddefinition.fieldTypeIdentifier }}-settings">
+    {% set defaultValue = '' %}
+    {{ block( 'settings_defaultvalue' ) }}
+    {% set isISBN13 = settings.isISBN13 %}
+    {{ block( 'settings_allowisbn13' ) }}
+</ul>
+{% endblock %}
+
 {% block ezkeyword_settings %}{% endblock %}
 
 {% block ezuser_settings %}{% endblock %}
@@ -346,5 +355,12 @@
     <li class="multiple">
         <span>Allow multiple choices:</span>
         {{ isMultiple ? 'Yes' : 'No' }}
+    </li>
+{% endblock %}
+
+{% block settings_allowisbn13 %}
+    <li class="isbn">
+        <span>Selected ISBN format:</span>
+        {{ isISBN13 ? 'ISBN-13' : 'ISBN-10' }}
     </li>
 {% endblock %}

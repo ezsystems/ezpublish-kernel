@@ -44,6 +44,12 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezrichtext}
 
+    # TODO: define proper type
+    ezpublish.fieldType.indexable.ezisbn:
+        class: %ezpublish.fieldType.indexable.ezstring.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezisbn}
+
     ezpublish.fieldType.indexable.unindexed:
         class: %ezpublish.fieldType.indexable.unindexed.class%
         tags:

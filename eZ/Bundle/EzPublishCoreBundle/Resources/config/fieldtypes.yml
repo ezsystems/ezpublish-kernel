@@ -16,6 +16,7 @@ parameters:
     ezpublish.fieldType.ezimage.class: eZ\Publish\Core\FieldType\Image\Type
     ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezimage.externalStorage.class: eZ\Publish\Core\FieldType\Image\ImageStorage
+    ezpublish.fieldType.ezisbn.class: eZ\Publish\Core\FieldType\ISBN\Type
     ezpublish.fieldType.ezkeyword.class: eZ\Publish\Core\FieldType\Keyword\Type
     ezpublish.fieldType.ezkeyword.externalStorage.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
@@ -563,6 +564,12 @@ services:
     #ezpublish.fieldType.ezimage.variation_service:
     #    alias: ezpublish.fieldType.ezimage.variation_service.default
 
+    ezpublish.fieldType.ezisbn:
+        class: %ezpublish.fieldType.ezisbn.class%
+        parent: ezpublish.fieldType
+        tags:
+            - {name: ezpublish.fieldType, alias: ezisbn}
+
     ezpublish.fieldType.ezkeyword:
         class: %ezpublish.fieldType.ezkeyword.class%
         parent: ezpublish.fieldType
@@ -774,13 +781,6 @@ services:
         arguments: [ "ezinisetting" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezinisetting}
-
-    ezpublish.fieldType.ezisbn:
-        class: %ezpublish.fieldType.eznull.class%
-        parent: ezpublish.fieldType
-        arguments: [ "ezisbn" ]
-        tags:
-            - {name: ezpublish.fieldType, alias: ezisbn}
 
     ezpublish.fieldType.ezmatrix:
         class: %ezpublish.fieldType.eznull.class%
