@@ -52,6 +52,7 @@ parameters:
     ezpublish_rest.output.value_object_visitor.CreatedUser.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\CreatedUser
     ezpublish_rest.output.value_object_visitor.RestUser.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestUser
     ezpublish_rest.output.value_object_visitor.UserSession.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\UserSession
+    ezpublish_rest.output.value_object_visitor.UserSessionDeleted.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\DeletedUserSession
 
     # ContentType
     ezpublish_rest.output.value_object_visitor.RestContentType.class: eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor\RestContentType
@@ -388,6 +389,12 @@ services:
         class: %ezpublish_rest.output.value_object_visitor.UserSession.class%
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\UserSession }
+
+    ezpublish_rest.output.value_object_visitor.UserSessionDeleted:
+        parent: ezpublish_rest.output.value_object_visitor.base
+        class: %ezpublish_rest.output.value_object_visitor.UserSessionDeleted.class%
+        tags:
+            - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\DeletedUserSession }
 
     # ContentType
     ezpublish_rest.output.value_object_visitor.RestContentType:

@@ -44,6 +44,11 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $sessionStorage;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $logger;
 
     /**
@@ -58,6 +63,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $this->authenticationManager = $this->getMock( 'Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface' );
         $this->eventDispatcher = $this->getMock( 'Symfony\Component\EventDispatcher\EventDispatcherInterface' );
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $this->sessionStorage = $this->getMock( 'Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface' );
         $this->logger = $this->getMock( 'Psr\Log\LoggerInterface' );
         $this->authenticator = new RestAuthenticator(
             $this->securityContext,
@@ -65,6 +71,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
             self::PROVIDER_KEY,
             $this->eventDispatcher,
             $this->configResolver,
+            $this->sessionStorage,
             $this->logger
         );
     }
@@ -533,5 +540,48 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $authenticatedUser ) );
 
         $this->assertSame( $authenticatedToken, $this->authenticator->authenticate( $request ) );
+    }
+
+    public function testLogout()
+    {
+        $sessionLogoutHandler = $this->getMock( 'Symfony\Component\Security\Http\Logout\SessionLogoutHandler' );
+        $sessionLogoutHandler
+            ->expects( $this->never() )
+            ->method( 'logout' );
+
+        $token = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
+        $this->securityContext
+            ->expects( $this->once() )
+            ->method( 'getToken' )
+            ->will( $this->returnValue( $token ) );
+
+        $request = new Request();
+        $logoutHandler1 = $this->getMock( 'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface' );
+        $logoutHandler1
+            ->expects( $this->once() )
+            ->method( 'logout' )
+            ->with(
+                $request,
+                $this->isInstanceOf( 'Symfony\Component\HttpFoundation\Response' ),
+                $token
+            );
+        $logoutHandler2 = $this->getMock( 'Symfony\Component\Security\Http\Logout\LogoutHandlerInterface' );
+        $logoutHandler2
+            ->expects( $this->once() )
+            ->method( 'logout' )
+            ->with(
+                $request,
+                $this->isInstanceOf( 'Symfony\Component\HttpFoundation\Response' ),
+                $token
+            );
+
+        $this->authenticator->addLogoutHandler( $sessionLogoutHandler );
+        $this->authenticator->addLogoutHandler( $logoutHandler1 );
+        $this->authenticator->addLogoutHandler( $logoutHandler2 );
+
+        $this->assertInstanceOf(
+            'Symfony\Component\HttpFoundation\Response',
+            $this->authenticator->logout( $request )
+        );
     }
 }

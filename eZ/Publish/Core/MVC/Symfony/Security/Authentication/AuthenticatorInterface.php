@@ -33,4 +33,13 @@ interface AuthenticatorInterface
      * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException If any authentication issue occured.
      */
     public function authenticate( Request $request );
+
+    /**
+     * Performs logout by running configured logout handlers.
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function logout( Request $request );
 }

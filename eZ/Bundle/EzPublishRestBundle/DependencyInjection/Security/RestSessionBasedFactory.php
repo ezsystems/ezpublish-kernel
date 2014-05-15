@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishRestBundle\DependencyInjection\Security;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\FormLoginFactory;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Reference;
 
 class RestSessionBasedFactory extends FormLoginFactory
 {
@@ -32,6 +33,26 @@ class RestSessionBasedFactory extends FormLoginFactory
         $listenerId .= '.'.$id;
         $container->setDefinition( $listenerId, $listener );
         $container->setAlias( 'ezpublish_rest.session_authenticator', $listenerId );
+
+        if ( $container->hasDefinition( 'security.logout_listener.' . $id ) )
+        {
+            // Copying logout handlers to REST session authenticator, to allow proper logout using it.
+            $logoutListenerDef = $container->getDefinition( 'security.logout_listener.' . $id );
+            $logoutListenerDef->addMethodCall(
+                'addHandler',
+                array( new Reference( 'ezpublish_rest.security.authentication.logout_handler' ) )
+            );
+
+            foreach ( $logoutListenerDef->getMethodCalls() as $callArray )
+            {
+                if ( $callArray[0] !== 'addHandler' )
+                {
+                    continue;
+                }
+
+                $listener->addMethodCall( 'addLogoutHandler', $callArray[1] );
+            }
+        }
 
         return $listenerId;
     }
