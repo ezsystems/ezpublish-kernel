@@ -11,6 +11,8 @@ parameters:
     ezpublish.http_cache.purge_client.browser.class: Buzz\Browser
 
 services:
+    # Parameter %ezpublish.cache_pool.class% and cache decorator service are defined
+    # in Core configuration, see eZ/Publish/Core/settings/storage_engines/cache.yml for details
     ezpublish.cache_pool:
         class: %ezpublish.cache_pool.class%
         factory_service: ezpublish.cache_pool.factory
