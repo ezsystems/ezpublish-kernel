@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
 use eZ\Publish\Core\Base\ServiceContainer;
+use eZ\Publish\Core\Base\Container\Compiler;
 use PDO;
 
 /**
@@ -19,47 +20,16 @@ use PDO;
 class LegacySolr extends Legacy
 {
     /**
-     * Solr server
-     *
-     * @var string
-     */
-    protected static $solrServer;
-
-    /**
-     * Creates a new setup factory
-     */
-    public function __construct()
-    {
-        self::$solrServer = getenv( "solrServer" );
-
-        if ( !self::$solrServer )
-        {
-            self::$solrServer = "http://localhost:8983/";
-        }
-
-        parent::__construct();
-    }
-
-    /**
      * Returns a configured repository for testing.
      *
-     * @param boolean $initializeFromScratch if the back end should be initialized
-     *                                    from scratch or re-used
+     * @param bool $initializeFromScratch
+     *
      * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository( $initializeFromScratch = true )
     {
-        if ( $initializeFromScratch || !self::$schemaInitialized )
-        {
-            $this->initializeSchema();
-            $this->insertData();
-        }
-
-        $this->clearInternalCaches();
-        $repository = $this->getServiceContainer()->get( 'repository' );
-        $repository->setCurrentUser(
-            $repository->getUserService()->loadUser( 14 )
-        );
+        // Load repository first so all initialization steps are done
+        $repository = parent::getRepository( $initializeFromScratch );
 
         if ( $initializeFromScratch )
         {
@@ -73,24 +43,33 @@ class LegacySolr extends Legacy
     {
         if ( !isset( self::$serviceContainer ) )
         {
-            $configManager = $this->getConfigurationManager();
+            $config = include __DIR__ . "/../../../../../../config.php";
+            $installDir = $config['install_dir'];
 
-            $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
+            /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
+            $containerBuilder = include $config['container_builder_path'];
 
-            $serviceSettings['persistence_handler']['alias'] = 'persistence_handler_legacysolr';
-            $serviceSettings['signal_dispatcher']['alias'] = 'legacysolr_signal_dispatcher';
-            $serviceSettings['io_handler']['alias'] = 'io_handler_legacy';
+            /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load( 'tests/integration_legacy_solr.yml' );
 
-            // Needed for URLAliasService tests
-            $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-US';
-            $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-GB';
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateCriterionVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateFieldValueMapperPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateSortClauseVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\FieldRegistryPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\SignalSlotPass() );
 
-            $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
-            $serviceSettings['legacysolr_search_content_gateway_client_http_stream']['arguments']['server'] = self::$solrServer;
+            $containerBuilder->setParameter(
+                "legacy_dsn",
+                self::$dsn
+            );
 
             self::$serviceContainer = new ServiceContainer(
-                $serviceSettings,
-                $this->getDependencyConfiguration()
+                $containerBuilder,
+                $installDir,
+                $config['cache_dir'],
+                true,
+                true
             );
         }
 
@@ -105,9 +84,9 @@ class LegacySolr extends Legacy
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
-        $persistenceHandler = $this->getServiceContainer()->get( 'persistence_handler_legacysolr' );
+        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy_solr' );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
-        $databaseHandler = $this->getServiceContainer()->get( 'legacy_db_handler' );
+        $databaseHandler = $this->getServiceContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
 
         $query = $databaseHandler
             ->createSelectQuery()

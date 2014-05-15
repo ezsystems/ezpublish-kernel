@@ -52,7 +52,15 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\Checkbox\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezboolean',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Checkbox(),
+            new FieldType\NullStorage()
+        );
     }
 
     /**

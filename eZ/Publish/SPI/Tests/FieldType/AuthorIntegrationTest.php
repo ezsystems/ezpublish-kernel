@@ -52,7 +52,15 @@ class AuthorIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\Author\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezauthor',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Author(),
+            new FieldType\NullStorage()
+        );
     }
 
     /**

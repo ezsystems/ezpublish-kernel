@@ -13,7 +13,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\FieldTypeCollectionFactory;
+use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -27,7 +27,7 @@ class RepositoryFactory extends ContainerAware
     /**
      * Collection of fieldTypes, lazy loaded via a closure
      *
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\FieldTypeCollectionFactory
+     * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
      */
     protected $fieldTypeCollectionFactory;
 

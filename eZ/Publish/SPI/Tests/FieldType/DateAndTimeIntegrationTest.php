@@ -52,7 +52,15 @@ class DateAndTimeIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\DateAndTime\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezdatetime',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\DateAndTime(),
+            new FieldType\NullStorage()
+        );
     }
 
     /**

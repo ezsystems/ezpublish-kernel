@@ -56,7 +56,19 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\XmlText\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezxmltext',
+            $fieldType,
+            new XmlTextConverter(),
+            new FieldType\XmlText\XmlTextStorage(
+                array(
+                    'LegacyStorage' => new LegacyStorage()
+                )
+            )
+        );
     }
 
     /**

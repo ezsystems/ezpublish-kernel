@@ -1,0 +1,87 @@
+parameters:
+    ezpublish.persistence.field_type_registry.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\Storage\FieldTypeRegistryFactory
+    ezpublish.persistence.field_type_registry.class: eZ\Publish\Core\Persistence\FieldTypeRegistry
+    ezpublish.persistence.external_storage_registry.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\Storage\ExternalStorageRegistryFactory
+    ezpublish.persistence.external_storage_registry.class: eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
+    ezpublish.persistence.slug_converter.class: eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
+
+    # Transformation parser/compiler for search purpose
+    ezpublish.api.storage_engine.pcre_compiler.class: eZ\Publish\Core\Persistence\TransformationProcessor\PcreCompiler
+    ezpublish.api.storage_engine.transformation_converter.class: eZ\Publish\Core\Persistence\Utf8Converter
+
+    # Using definition files:
+    #
+    # ezpublish.api.storage_engine.transformation_processor.class: eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased
+    ezpublish.api.storage_engine.transformation_parser.class: eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased\Parser
+    # Transformation rules resources
+    ezpublish.api.storage_engine.transformation_rules.resources:
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/basic.tr
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/cyrillic.tr
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/greek.tr
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/hebrew.tr
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/latin.tr
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr
+
+    # Using preprocessed files:
+    #
+    ezpublish.api.storage_engine.transformation_processor.class: eZ\Publish\Core\Persistence\TransformationProcessor\PreprocessedBased
+    ezpublish.api.storage_engine.preprocessed_transformation_rules.resources:
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/ascii.tr.result
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/basic.tr.result
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/cyrillic.tr.result
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/greek.tr.result
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/hebrew.tr.result
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/latin.tr.result
+        - %ezpublish.kernel.root_dir%/eZ/Publish/Core/Persistence/Tests/TransformationProcessor/_fixtures/transformations/search.tr.result
+
+services:
+    ezpublish.persistence.field_type_registry.factory:
+        class: %ezpublish.persistence.field_type_registry.factory.class%
+
+    ezpublish.persistence.field_type_registry:
+        class: %ezpublish.persistence.field_type_registry.class%
+        factory_service: ezpublish.persistence.field_type_registry.factory
+        factory_method: buildFieldTypeRegistry
+        arguments:
+            - %ezpublish.persistence.field_type_registry.class%
+            - @ezpublish.field_type_collection.factory
+
+    ezpublish.persistence.external_storage_registry.factory:
+        class: %ezpublish.persistence.external_storage_registry.factory.class%
+        calls:
+            - [setContainer, [@service_container]]
+
+    ezpublish.persistence.external_storage_registry:
+        class: %ezpublish.persistence.external_storage_registry.class%
+        factory_service: ezpublish.persistence.external_storage_registry.factory
+        factory_method: buildExternalStorageRegistry
+        arguments:
+            - %ezpublish.persistence.external_storage_registry.class%
+
+    ezpublish.persistence.slug_converter:
+        class: %ezpublish.persistence.slug_converter.class%
+        arguments: [@ezpublish.api.storage_engine.transformation_processor]
+
+    ezpublish.api.storage_engine.transformation_parser:
+        class: %ezpublish.api.storage_engine.transformation_parser.class%
+
+    ezpublish.api.storage_engine.pcre_compiler:
+        class: %ezpublish.api.storage_engine.pcre_compiler.class%
+        arguments: [@ezpublish.api.storage_engine.transformation_converter]
+
+    ezpublish.api.storage_engine.transformation_converter:
+        class: %ezpublish.api.storage_engine.transformation_converter.class%
+
+    ezpublish.api.storage_engine.transformation_processor:
+        class: %ezpublish.api.storage_engine.transformation_processor.class%
+        arguments:
+            # Using definition files:
+            #
+            # - @ezpublish.api.storage_engine.transformation_parser
+            # - @ezpublish.api.storage_engine.pcre_compiler
+            # - %ezpublish.api.storage_engine.transformation_rules.resources%
+
+            # Using preprocessed files:
+            - @ezpublish.api.storage_engine.pcre_compiler
+            - %ezpublish.api.storage_engine.preprocessed_transformation_rules.resources%

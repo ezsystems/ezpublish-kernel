@@ -28,9 +28,10 @@ class EzPublishSolrExtension extends Extension
      */
     public function load( array $configs, ContainerBuilder $container )
     {
+        // Loading configuration from Core/settings
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator( __DIR__ . '/../Resources/config' )
+            new FileLocator( __DIR__ . '/../../../Publish/Core/settings' )
         );
         $loader->load( 'indexable_fieldtypes.yml' );
         $loader->load( "storage_engines/legacy_solr.yml" );

@@ -4,7 +4,7 @@
  *
  * @copyright Copyright (C) 1999-2013 eZ Systems AS. All rights reserved.
  * @license http://ez.no/licenses/gnu_gpl GNU General Public License v2.0
- * @version 
+ * @version
  */
 
 namespace eZ\Publish\SPI\Tests\FieldType;
@@ -53,7 +53,15 @@ class ISBNIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\ISBN\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezisbn',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\ISBN(),
+            new FieldType\NullStorage()
+        );
     }
 
     /**

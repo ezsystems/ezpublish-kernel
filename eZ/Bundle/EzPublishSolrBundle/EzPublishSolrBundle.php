@@ -11,12 +11,12 @@ namespace eZ\Bundle\EzPublishSolrBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use eZ\Bundle\EzPublishSolrBundle\DependencyInjection\Compiler\AggregateCriterionVisitorPass;
-use eZ\Bundle\EzPublishSolrBundle\DependencyInjection\Compiler\AggregateFacetBuilderVisitorPass;
-use eZ\Bundle\EzPublishSolrBundle\DependencyInjection\Compiler\AggregateFieldValueMapperPass;
-use eZ\Bundle\EzPublishSolrBundle\DependencyInjection\Compiler\AggregateSortClauseVisitorPass;
-use eZ\Bundle\EzPublishSolrBundle\DependencyInjection\Compiler\FieldRegistryPass;
-use eZ\Bundle\EzPublishSolrBundle\DependencyInjection\Compiler\SignalSlotPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\AggregateCriterionVisitorPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\AggregateFieldValueMapperPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\AggregateSortClauseVisitorPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\FieldRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\SignalSlotPass;
 
 class EzPublishSolrBundle extends Bundle
 {

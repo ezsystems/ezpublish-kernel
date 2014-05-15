@@ -6,9 +6,11 @@ use eZ\Publish\Core\FieldType;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
-use eZ\Publish\Core\Base\ConfigurationManager;
-use eZ\Publish\Core\Base\ServiceContainer;
 use Symfony\Component\Filesystem\Filesystem as FilesystemComponent;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use eZ\Publish\Core\Base\Container\Compiler;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 {
@@ -52,6 +54,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
             $fs = new FilesystemComponent();
             $fs->mkdir( $storageDir );
         }
+
+        parent::setUpBeforeClass();
     }
 
     /**
@@ -62,6 +66,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     public static function tearDownAfterClass()
     {
         self::removeRecursive( self::$tmpDir );
+        parent::tearDownAfterClass();
     }
 
     /**
@@ -98,37 +103,37 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 
     protected function getContainer()
     {
-        // get configuration config
-        if ( !( $settings = include 'config.php' ) )
-        {
-            throw new \RuntimeException(
-                'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!'
-            );
-        }
+        $config = include __DIR__ . "/../../../../../config.php";
+        $installDir = $config["install_dir"];
 
-        // load configuration uncached
-        $configManager = new ConfigurationManager(
-            array_merge_recursive(
-                $settings,
-                array(
-                    'base' => array(
-                        'Configuration' => array(
-                            'UseCache' => false
-                        )
-                    )
-                )
-            ),
-            $settings['base']['Configuration']['Paths']
+        $containerBuilder = new ContainerBuilder();
+        $settingsPath = $installDir . "/eZ/Publish/Core/settings/";
+        $loader = new YamlFileLoader( $containerBuilder, new FileLocator( $settingsPath ) );
+
+        $loader->load( 'fieldtypes.yml' );
+        $loader->load( 'io.yml' );
+        $loader->load( 'repository.yml' );
+        $loader->load( 'fieldtype_external_storages.yml' );
+        $loader->load( 'storage_engines/common.yml' );
+        $loader->load( 'storage_engines/legacy.yml' );
+        $loader->load( 'storage_engines/cache.yml' );
+        $loader->load( 'settings.yml' );
+        $loader->load( 'fieldtype_services.yml' );
+
+        $containerBuilder->setParameter( "ezpublish.kernel.root_dir", $installDir );
+
+        $containerBuilder->setParameter(
+            "legacy_dsn",
+            $this->getDsn()
+        );
+        $containerBuilder->setParameter(
+            "io_root_dir",
+            self::$tmpDir
         );
 
-        $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
-        $serviceSettings['legacy_db_handler']['arguments']['dsn'] = $this->getDsn();
-        $serviceSettings['parameters']['io_root_dir'] = self::$tmpDir;
+        $containerBuilder->compile();
 
-        return new ServiceContainer(
-            $serviceSettings,
-            array()
-        );
+        return $containerBuilder;
     }
 
     /**
@@ -166,7 +171,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 
     protected function getStorageDir()
     {
-        return ( self::$tmpDir ? self::$tmpDir . '/' : '' ) . $this->getContainer()->getVariable( 'storage_dir' );
+        return ( self::$tmpDir ? self::$tmpDir . '/' : '' ) . $this->getContainer()->getParameter( 'storage_dir' );
     }
 
     protected function getFilesize( $binaryFileId )

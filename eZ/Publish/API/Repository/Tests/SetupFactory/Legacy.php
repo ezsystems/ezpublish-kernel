@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
+use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
-
-use eZ\Publish\Core\Base\ConfigurationManager;
-use eZ\Publish\Core\Base\ServiceContainer;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler as CachingContentTypeHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as CachingLanguageHandler;
 use Exception;
 
 /**
@@ -44,20 +44,6 @@ class Legacy extends SetupFactory
     protected static $serviceContainer;
 
     /**
-     * Global settings of eZ Publish setup
-     *
-     * @var mixed
-     * @todo This might change, if ezpublish-kernel starts using another DI mechanism
-     */
-    protected static $globalSettings;
-
-    /**
-     * @var \eZ\Publish\Core\Base\ConfigurationManager
-     * Configuration manager
-     */
-    protected static $configurationManager;
-
-    /**
      * If the DB schema has already been initialized
      *
      * @var boolean
@@ -71,10 +57,10 @@ class Legacy extends SetupFactory
      */
     protected static $initialData;
 
+    protected $repositoryReference = "ezpublish.api.repository";
+
     /**
      * Creates a new setup factory
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -101,10 +87,12 @@ class Legacy extends SetupFactory
         }
 
         $this->clearInternalCaches();
-        $repository = $this->getServiceContainer()->get( 'inner_repository' );
+        $repository = $this->getServiceContainer()->get( $this->repositoryReference );
+
         $repository->setCurrentUser(
             $repository->getUserService()->loadUser( 14 )
         );
+
         return $repository;
     }
 
@@ -119,7 +107,7 @@ class Legacy extends SetupFactory
      */
     public function getConfigValue( $configKey )
     {
-        return $this->getServiceContainer()->getVariable( $configKey );
+        return $this->getServiceContainer()->getParameter( $configKey );
     }
 
     /**
@@ -214,12 +202,23 @@ class Legacy extends SetupFactory
     protected function clearInternalCaches()
     {
         /** @var $handler \eZ\Publish\Core\Persistence\Legacy\Handler */
-        $handler = $this->getServiceContainer()->get( 'persistence_handler_legacy' );
-        $handler->contentLanguageHandler()->clearCache();
-        $handler->contentTypeHandler()->clearCache();
+        $handler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
+
+        $contentLanguageHandler = $handler->contentLanguageHandler();
+        if ( $contentLanguageHandler instanceof CachingLanguageHandler )
+        {
+            $contentLanguageHandler->clearCache();
+        }
+
+        $contentTypeHandler = $handler->contentTypeHandler();
+        if ( $contentTypeHandler instanceof CachingContentTypeHandler )
+        {
+            $contentTypeHandler->clearCache();
+        }
 
         /** @var $decorator \eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator */
-        $decorator = $this->getServiceContainer()->get( 'persistence_handler_cache_integration_decorator' );
+        $decorator = $this->getServiceContainer()->get( 'ezpublish.cache_pool.spi.cache.decorator' );
+
         $decorator->clearAllTestData();
     }
 
@@ -306,79 +305,11 @@ class Legacy extends SetupFactory
      */
     protected function getDatabaseHandler()
     {
-        return $this->getServiceContainer()->get( 'legacy_db_handler' );
-    }
-
-    /**
-     * Returns the global ezpublish-kernel settings
-     *
-     * @return mixed
-     */
-    protected function getGlobalSettings()
-    {
-        if ( self::$globalSettings === null )
-        {
-            $settingsPath = __DIR__ . '/../../../../../../config.php';
-
-            if ( !file_exists( $settingsPath ) )
-            {
-                throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
-            }
-
-            self::$globalSettings = include $settingsPath;
-        }
-
-        return self::$globalSettings;
-    }
-
-    /**
-     * Returns the configuration manager
-     *
-     * @return \eZ\Publish\Core\Base\ConfigurationManager
-     */
-    protected function getConfigurationManager()
-    {
-        if ( !isset( self::$configurationManager ) )
-        {
-            $settings = $this->getGlobalSettings();
-
-            self::$configurationManager = new ConfigurationManager(
-                array_merge_recursive(
-                    $settings,
-                    array(
-                        'base' => array(
-                            'Configuration' => array(
-                                'UseCache' => false
-                            )
-                        )
-                    )
-                ),
-                $settings['base']['Configuration']['Paths']
-            );
-        }
-
-        return self::$configurationManager;
-    }
-
-    /**
-     * Returns the dependency configuration
-     *
-     * @return array
-     */
-    protected function getDependencyConfiguration()
-    {
-        $dependencies = array();
-        if ( isset( $_ENV['legacyKernel'] ) )
-        {
-            $dependencies['@legacyKernel'] = $_ENV['legacyKernel'];
-        }
-        return $dependencies;
+        return $this->getServiceContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
     }
 
     /**
      * Returns the service container used for initialization of the repository
-     *
-     * @todo Getting service container statically, too, would be nice
      *
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
@@ -386,22 +317,26 @@ class Legacy extends SetupFactory
     {
         if ( !isset( self::$serviceContainer ) )
         {
-            $configManager = $this->getConfigurationManager();
+            $config = include __DIR__ . "/../../../../../../config.php";
+            $installDir = $config['install_dir'];
 
-            $serviceSettings = $configManager->getConfiguration( 'service' )->getAll();
+            /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
+            $containerBuilder = include $config['container_builder_path'];
 
-            $serviceSettings['persistence_handler']['alias'] = 'persistence_handler_cache';
-            $serviceSettings['io_handler']['alias'] = 'io_handler_legacy';
+            /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load( 'tests/integration_legacy.yml' );
 
-            // Needed for URLAliasService tests
-            $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-US';
-            $serviceSettings['inner_repository']['arguments']['service_settings']['language']['languages'][] = 'eng-GB';
-
-            $serviceSettings['legacy_db_handler']['arguments']['dsn'] = self::$dsn;
+            $containerBuilder->setParameter(
+                "legacy_dsn",
+                self::$dsn
+            );
 
             self::$serviceContainer = new ServiceContainer(
-                $serviceSettings,
-                $this->getDependencyConfiguration()
+                $containerBuilder,
+                $installDir,
+                $config['cache_dir'],
+                true,
+                true
             );
         }
 

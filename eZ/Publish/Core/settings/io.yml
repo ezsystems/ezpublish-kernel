@@ -1,0 +1,25 @@
+parameters:
+    ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
+    ezpublish.core.io.handler.filesystem.class: eZ\Publish\Core\IO\Handler\Filesystem
+    ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
+    ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
+
+services:
+    ezpublish.core.io.service:
+        class: %ezpublish.core.io.service.class%
+        arguments:
+            - @ezpublish.core.io.handler.filesystem
+            - @ezpublish.core.io.mimeTypeDetector
+
+    ezpublish.core.io.handler.filesystem:
+        class: %ezpublish.core.io.handler.filesystem.class%
+        arguments:
+            -
+                storage_dir: %storage_dir%
+                root_dir: %io_root_dir%
+
+    ezpublish.core.io.mimeTypeDetector.fileinfo:
+        class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
+
+    ezpublish.core.io.mimeTypeDetector:
+        alias: ezpublish.core.io.mimeTypeDetector.fileinfo

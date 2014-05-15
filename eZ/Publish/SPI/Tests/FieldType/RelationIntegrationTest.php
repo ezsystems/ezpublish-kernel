@@ -53,7 +53,15 @@ class RelationIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\Relation\Type();
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezobjectrelation',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Relation(),
+            new FieldType\NullStorage()
+        );
     }
 
     /**

@@ -52,7 +52,30 @@ class CountryIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        return $this->getHandler();
+        $fieldType = new FieldType\Country\Type(
+            array(
+                "BE" => array(
+                    "Name" => "Belgium",
+                    "Alpha2" => "BE",
+                    "Alpha3" => "BEL",
+                    "IDC" => "32",
+                ),
+                "FR" => array(
+                    "Name" => "France",
+                    "Alpha2" => "FR",
+                    "Alpha3" => "FRA",
+                    "IDC" => "33",
+                ),
+            )
+        );
+        $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
+
+        return $this->getHandler(
+            'ezcountry',
+            $fieldType,
+            new Legacy\Content\FieldValue\Converter\Country(),
+            new FieldType\NullStorage()
+        );
     }
 
     /**

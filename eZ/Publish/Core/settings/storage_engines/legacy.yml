@@ -1,0 +1,65 @@
+imports:
+    - {resource: storage_engines/legacy/content.yml}
+    - {resource: storage_engines/legacy/content_type.yml}
+    - {resource: storage_engines/legacy/external_storage_gateways.yml}
+    - {resource: storage_engines/legacy/field_value_converters.yml}
+    - {resource: storage_engines/legacy/language.yml}
+    - {resource: storage_engines/legacy/location.yml}
+    - {resource: storage_engines/legacy/object_state.yml}
+    - {resource: storage_engines/legacy/search.yml}
+    - {resource: storage_engines/legacy/search_query_handlers.yml}
+    - {resource: storage_engines/legacy/section.yml}
+    - {resource: storage_engines/legacy/trash.yml}
+    - {resource: storage_engines/legacy/url_alias.yml}
+    - {resource: storage_engines/legacy/url_wildcard.yml}
+    - {resource: storage_engines/legacy/user.yml}
+
+parameters:
+    ezpublish.spi.persistence.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
+    ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+    ezpublish.persistence.connection.class: Doctrine\DBAL\Driver\Connection
+    ezpublish.spi.persistence.legacy.transactionhandler.class: eZ\Publish\Core\Persistence\Legacy\TransactionHandler
+
+services:
+    ezpublish.spi.persistence.legacy:
+        class: %ezpublish.spi.persistence.legacy.class%
+        arguments:
+            - @ezpublish.spi.persistence.legacy.content.handler
+            - @ezpublish.spi.persistence.legacy.search.handler.content
+            - @ezpublish.spi.persistence.legacy.content_type.handler
+            - @ezpublish.spi.persistence.legacy.language.handler
+            - @ezpublish.spi.persistence.legacy.location.handler
+            - @ezpublish.spi.persistence.legacy.search.handler.location
+            - @ezpublish.spi.persistence.legacy.object_state.handler
+            - @ezpublish.spi.persistence.legacy.section.handler
+            - @ezpublish.spi.persistence.legacy.transactionhandler
+            - @ezpublish.spi.persistence.legacy.trash.handler
+            - @ezpublish.spi.persistence.legacy.url_alias.handler
+            - @ezpublish.spi.persistence.legacy.url_wildcard.handler
+            - @ezpublish.spi.persistence.legacy.user.handler
+        tags:
+            - {name: ezpublish.storageEngine, alias: legacy}
+        lazy: true
+
+    # Compiler pass will alias 'ezpublish.api.storage_engine.legacy.connection' service to the StorageConnectionFactory
+    ezpublish.api.storage_engine.legacy.dbhandler:
+        class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_method: createFromConnection
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.connection
+        lazy: true
+
+    ezpublish.api.storage_engine.legacy.connection:
+        class: %ezpublish.persistence.connection.class%
+        factory_class: %ezpublish.api.storage_engine.legacy.dbhandler.class%
+        factory_method: createConnectionFromDSN
+        arguments:
+            - %legacy_dsn%
+
+    ezpublish.spi.persistence.legacy.transactionhandler:
+        class: %ezpublish.spi.persistence.legacy.transactionhandler.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.spi.persistence.legacy.content_type.handler.caching
+            - @ezpublish.spi.persistence.legacy.language.handler.caching
