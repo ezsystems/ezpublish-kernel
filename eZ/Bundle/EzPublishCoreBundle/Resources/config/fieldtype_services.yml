@@ -32,8 +32,6 @@ parameters:
     ezpublish.fieldType.ezrichtext.renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\Renderer
     ezpublish.fieldType.ezrichtext.tag.namespace: fieldtypes.ezrichtext.tag
     ezpublish.fieldType.ezrichtext.embed.namespace: fieldtypes.ezrichtext.embed
-    # Note: 'esi' rendering strategy will fall back to 'inline' if reverse proxy is not available
-    ezpublish.fieldType.ezrichtext.embed.rendering_strategy: esi
     ezpublish.fieldType.ezrichtext.converter.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
     ezpublish.fieldType.ezrichtext.validator.xml.class: eZ\Publish\Core\FieldType\RichText\Validator
     ezpublish.fieldType.ezrichtext.validator.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
