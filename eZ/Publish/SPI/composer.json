@@ -4,7 +4,7 @@
     "homepage": "http://share.ez.no",
     "license": "GPL-2.0",
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.4.4",
         "ezsystems/ezpublish-api": "self.version"
     },
     "autoload": {

@@ -59,20 +59,6 @@ class Type extends FieldType
     }
 
     /**
-     * Returns if the given $value is considered empty by the field type
-     *
-     * @param mixed $value
-     *
-     * @return boolean
-     */
-    public function isEmptyValue( SPIValue $value )
-    {
-        // @todo workaround for a bug in PHP 5.3.3 {@link https://bugs.php.net/bug.php?id=61326},
-        // when support for it ends this implementation should be removed for overridden method
-        return (array)$value->authors == (array)$this->getEmptyValue()->authors;
-    }
-
-    /**
      * Inspects given $inputValue and potentially converts it into a dedicated value object.
      *
      * @param array|\eZ\Publish\Core\FieldType\Author\Value $inputValue

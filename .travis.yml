@@ -2,8 +2,6 @@ language: php
 
 # run tests on php misc php versions
 php:
-  - 5.3.3
-  - 5.3
   - 5.4
   - 5.5
   - hhvm
@@ -28,26 +26,6 @@ matrix:
     - php: hhvm
       env: TEST_CONFIG="phpunit-integration-legacy.xml"
   exclude:
-# 5.3.3 run: mysql integration test
-    - php: 5.3.3
-      env: TEST_CONFIG="phpunit.xml"
-    - php: 5.3.3
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
-    - php: 5.3.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml"
-    - php: 5.3.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
-    - php: 5.3.3
-      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
-# 5.3 run: unit test (Symfony 2.3) + sqlite integration test
-    - php: 5.3
-      env: TEST_CONFIG="phpunit.xml"
-    - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
-    - php: 5.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
-    - php: 5.3
-      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
 # 5.4 run: unit test + postgres integration test
     - php: 5.4
       env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
