@@ -9,6 +9,13 @@ parameters:
     ezpublish_legacy.signalslot.move_subtree.class: eZ\Publish\Core\SignalSlot\Slot\LegacyMoveSubtreeSlot
     ezpublish_legacy.signalslot.publish_version.class: eZ\Publish\Core\SignalSlot\Slot\LegacyPublishVersionSlot
     ezpublish_legacy.signalslot.set_content_state.class: eZ\Publish\Core\SignalSlot\Slot\LegacySetContentStateSlot
+    ezpublish_legacy.signalslot.create_object_state.class: eZ\Publish\Core\SignalSlot\Slot\LegacyCreateObjectStateSlot
+    ezpublish_legacy.signalslot.create_object_state_group.class: eZ\Publish\Core\SignalSlot\Slot\LegacyCreateObjectStateGroupSlot
+    ezpublish_legacy.signalslot.delete_object_state.class: eZ\Publish\Core\SignalSlot\Slot\LegacyDeleteObjectStateSlot
+    ezpublish_legacy.signalslot.delete_object_state_group.class: eZ\Publish\Core\SignalSlot\Slot\LegacyDeleteObjectStateGroupSlot
+    ezpublish_legacy.signalslot.set_priority_of_object_state.class: eZ\Publish\Core\SignalSlot\Slot\LegacySetPriorityOfObjectStateSlot
+    ezpublish_legacy.signalslot.update_object_state.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUpdateObjectStateSlot
+    ezpublish_legacy.signalslot.update_object_state_group.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUpdateObjectStateGroupSlot
     ezpublish_legacy.signalslot.swap_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacySwapLocationSlot
     ezpublish_legacy.signalslot.unhide_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUnhideLocationSlot
     ezpublish_legacy.signalslot.update_location.class: eZ\Publish\Core\SignalSlot\Slot\LegacyUpdateLocationSlot
@@ -82,6 +89,48 @@ services:
         arguments: [@ezpublish_legacy.kernel]
         tags:
             - { name: ezpublish.api.slot, signal: ObjectStateService\SetContentStateSignal }
+
+    ezpublish_legacy.signalslot.create_object_state:
+        class: %ezpublish_legacy.signalslot.create_object_state.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ObjectStateService\CreateObjectStateSignal }
+
+    ezpublish_legacy.signalslot.create_object_state_group:
+        class: %ezpublish_legacy.signalslot.create_object_state_group.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ObjectStateService\CreateObjectStateGroupSignal }
+
+    ezpublish_legacy.signalslot.delete_object_state:
+        class: %ezpublish_legacy.signalslot.delete_object_state.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ObjectStateService\DeleteObjectStateSignal }
+
+    ezpublish_legacy.signalslot.delete_object_state_group:
+        class: %ezpublish_legacy.signalslot.delete_object_state_group.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ObjectStateService\DeleteObjectStateGroupSignal }
+
+    ezpublish_legacy.signalslot.set_priority_of_object_state:
+        class: %ezpublish_legacy.signalslot.set_priority_of_object_state.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ObjectStateService\SetPriorityOfObjectStateSignal }
+
+    ezpublish_legacy.signalslot.update_object_state:
+        class: %ezpublish_legacy.signalslot.update_object_state.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ObjectStateService\UpdateObjectStateSignal }
+
+    ezpublish_legacy.signalslot.update_object_state_group:
+        class: %ezpublish_legacy.signalslot.update_object_state_group.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            - { name: ezpublish.api.slot, signal: ObjectStateService\UpdateObjectStateGroupSignal }
 
     ezpublish_legacy.signalslot.swap_location:
         class: %ezpublish_legacy.signalslot.swap_location.class%
