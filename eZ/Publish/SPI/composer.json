@@ -14,7 +14,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "5.3.x-dev"
+            "dev-master": "5.4.x-dev"
         }
     },
     "target-dir": "eZ/Publish/SPI"
