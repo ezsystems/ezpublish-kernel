@@ -127,4 +127,4 @@ For further information please have a look at the [related guidance page](http:/
 A dedicated forum has been set-up to discuss all PHP API-related topics : http://share.ez.no/forums/new-php-api
 
 ## Copyright & license
-eZ Systems AS & GPL 2.0
+Copyright eZ Systems AS, for copyright and license details see proviced LICENSE file.
