@@ -22,7 +22,15 @@ class GlobalHelperTest extends BaseGlobalHelperTest
     protected function setUp()
     {
         parent::setUp();
-        $this->legacyHelper = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Legacy\\Templating\\LegacyHelper' );
+        $this->legacyHelper = $this->getMock(
+            'eZ\\Publish\\Core\\MVC\\Legacy\\Templating\\LegacyHelper',
+            array(),
+            array(
+                function ()
+                {
+                }
+            )
+        );
         // Force to use Legacy GlobalHelper
         $this->helper = new GlobalHelper( $this->configResolver, $this->locationService, $this->router, $this->translationHelper );
         $this->helper->setLegacyHelper( $this->legacyHelper );

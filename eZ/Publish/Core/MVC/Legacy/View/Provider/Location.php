@@ -18,8 +18,6 @@ use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\View\ViewProviderMatcher;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZModule;
-use ezjscPacker;
-use eZINI;
 use ezpEvent;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -118,8 +116,11 @@ class Location extends Provider implements LocationViewProviderInterface
      */
     public function renderPublishedView( APILocation $location, $viewType, array $params, LegacyHelper $legacyHelper )
     {
-        return $this->getLegacyKernel()->runCallback(
-            function () use ( $location, $viewType, $params, $legacyHelper )
+        $moduleResult = array();
+
+        // Filling up moduleResult
+        $result = $this->getLegacyKernel()->runCallback(
+            function () use ( $location, $viewType, $params, &$moduleResult )
             {
                 $contentViewModule = eZModule::findModule( 'content' );
                 $moduleResult = $contentViewModule->run(
@@ -129,60 +130,14 @@ class Location extends Provider implements LocationViewProviderInterface
                     $params
                 );
 
-                // Injecting all $moduleResult entries in the legacy helper
-                foreach ( $moduleResult as $key => $val )
-                {
-                    if ( $key === 'content' )
-                        continue;
-
-                    $legacyHelper->set( $key, $val );
-                }
-
-                // Javascript/CSS files required with ezcss_require/ezscript_require
-                // Compression level is forced to 0 to only get the files list
-                if ( isset( $moduleResult['content_info']['persistent_variable']['css_files'] ) )
-                {
-                    $legacyHelper->set(
-                        'css_files',
-                        ezjscPacker::buildStylesheetFiles(
-                            $moduleResult['content_info']['persistent_variable']['css_files'],
-                            0
-                        )
-                    );
-                }
-                if ( isset( $moduleResult['content_info']['persistent_variable']['js_files'] ) )
-                {
-                    $legacyHelper->set(
-                        'js_files',
-                        ezjscPacker::buildJavascriptFiles(
-                            $moduleResult['content_info']['persistent_variable']['js_files'],
-                            0
-                        )
-                    );
-                }
-
-                // Now getting configured JS/CSS files, in design.ini
-                // Will only take FrontendCSSFileList/FrontendJavascriptList
-                $designINI = eZINI::instance( 'design.ini' );
-                $legacyHelper->set(
-                    'css_files_configured',
-                    ezjscPacker::buildStylesheetFiles(
-                        $designINI->variable( 'StylesheetSettings', 'FrontendCSSFileList' ),
-                        0
-                    )
-                );
-                $legacyHelper->set(
-                    'js_files_configured',
-                    ezjscPacker::buildJavascriptFiles(
-                        $designINI->variable( 'JavaScriptSettings', 'FrontendJavaScriptList' ),
-                        0
-                    )
-                );
-
                 return ezpEvent::getInstance()->filter( 'response/output', $moduleResult['content'] );
             },
             false
         );
+
+        $legacyHelper->loadDataFromModuleResult( $moduleResult );
+
+        return $result;
     }
 
     /**
@@ -198,8 +153,11 @@ class Location extends Provider implements LocationViewProviderInterface
     {
         /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess */
         $siteAccess = $this->request->attributes->get( 'siteaccess' );
-        return $this->getLegacyKernel()->runCallback(
-            function () use ( $content, $params, $legacyHelper, $siteAccess )
+        $moduleResult = array();
+
+        // Filling up moduleResult
+        $result = $this->getLegacyKernel()->runCallback(
+            function () use ( $content, $params, $siteAccess, &$moduleResult )
             {
                 $contentViewModule = eZModule::findModule( 'content' );
                 $moduleResult = $contentViewModule->run(
@@ -209,59 +167,13 @@ class Location extends Provider implements LocationViewProviderInterface
                     array( 'site_access' => $siteAccess->name ) + $params
                 );
 
-                // Injecting all $moduleResult entries in the legacy helper
-                foreach ( $moduleResult as $key => $val )
-                {
-                    if ( $key === 'content' )
-                        continue;
-
-                    $legacyHelper->set( $key, $val );
-                }
-
-                // Javascript/CSS files required with ezcss_require/ezscript_require
-                // Compression level is forced to 0 to only get the files list
-                if ( isset( $moduleResult['content_info']['persistent_variable']['css_files'] ) )
-                {
-                    $legacyHelper->set(
-                        'css_files',
-                        ezjscPacker::buildStylesheetFiles(
-                            $moduleResult['content_info']['persistent_variable']['css_files'],
-                            0
-                        )
-                    );
-                }
-                if ( isset( $moduleResult['content_info']['persistent_variable']['js_files'] ) )
-                {
-                    $legacyHelper->set(
-                        'js_files',
-                        ezjscPacker::buildJavascriptFiles(
-                            $moduleResult['content_info']['persistent_variable']['js_files'],
-                            0
-                        )
-                    );
-                }
-
-                // Now getting configured JS/CSS files, in design.ini
-                // Will only take FrontendCSSFileList/FrontendJavascriptList
-                $designINI = eZINI::instance( 'design.ini' );
-                $legacyHelper->set(
-                    'css_files_configured',
-                    ezjscPacker::buildStylesheetFiles(
-                        $designINI->variable( 'StylesheetSettings', 'FrontendCSSFileList' ),
-                        0
-                    )
-                );
-                $legacyHelper->set(
-                    'js_files_configured',
-                    ezjscPacker::buildJavascriptFiles(
-                        $designINI->variable( 'JavaScriptSettings', 'FrontendJavaScriptList' ),
-                        0
-                    )
-                );
-
                 return ezpEvent::getInstance()->filter( 'response/output', $moduleResult['content'] );
             },
             false
         );
+
+        $legacyHelper->loadDataFromModuleResult( $moduleResult );
+
+        return $result;
     }
 }

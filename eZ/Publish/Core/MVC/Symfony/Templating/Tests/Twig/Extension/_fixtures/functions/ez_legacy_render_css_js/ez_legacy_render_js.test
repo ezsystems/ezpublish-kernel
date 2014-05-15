@@ -1,0 +1,33 @@
+--TEST--
+"ez_legacy_render_js" function
+--TEMPLATE--
+{{ ez_legacy_render_js() }}
+
+--DATA--
+$this->setJsFiles( array( '' ) ); return array();
+--EXPECT--
+
+--DATA--
+$this->setJsFiles( array( 'foo' ) ); return array();
+--EXPECT--
+Code: foo
+
+--DATA--
+$this->setJsFiles( array( 'http://foo/bar' ) ); return array();
+--EXPECT--
+File: http://foo/bar
+
+--DATA--
+$this->setJsFiles( array( 'https://foo/bar' ) ); return array();
+--EXPECT--
+File: https://foo/bar
+
+--DATA--
+$this->setJsFiles( array( '/foo/bar.js' ) ); return array();
+--EXPECT--
+File: /foo/bar.js
+
+--DATA--
+$this->setJsFiles( array( 'var foo = bar' ) ); return array();
+--EXPECT--
+Code: var foo = bar

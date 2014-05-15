@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyResponse\LegacyResponseManager;
 use eZ\Publish\Core\MVC\Legacy\Kernel\URIHelper;
+use eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use ezpKernelRedirect;
@@ -52,13 +53,23 @@ class LegacyKernelController
      */
     private $legacyResponseManager;
 
-    public function __construct( \Closure $kernelClosure, ConfigResolverInterface $configResolver, URIHelper $uriHelper, LegacyResponseManager $legacyResponseManager )
+    /** @var  \eZ\Publish\Core\MVC\Legacy\Templating\LegacyHelper; */
+    private $legacyHelper;
+
+    public function __construct(
+        \Closure $kernelClosure,
+        ConfigResolverInterface $configResolver,
+        URIHelper $uriHelper,
+        LegacyResponseManager $legacyResponseManager,
+        LegacyHelper $legacyHelper
+    )
     {
         $this->kernel = $kernelClosure();
         $this->legacyLayout = $configResolver->getParameter( 'module_default_layout', 'ezpublish_legacy' );
         $this->configResolver = $configResolver;
         $this->uriHelper = $uriHelper;
         $this->legacyResponseManager = $legacyResponseManager;
+        $this->legacyHelper = $legacyHelper;
     }
 
     public function setRequest( Request $request = null )
@@ -86,6 +97,9 @@ class LegacyKernelController
         }
 
         $result = $this->kernel->run();
+
+        $this->legacyHelper->loadDataFromModuleResult( $result->getAttribute( 'module_result' ) );
+
         $this->kernel->setUseExceptions( true );
 
         if ( $result instanceof ezpKernelRedirect )
