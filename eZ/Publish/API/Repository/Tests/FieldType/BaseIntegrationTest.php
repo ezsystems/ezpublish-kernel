@@ -683,9 +683,19 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
+     * Tests creeating a new version keeps the existing value
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     * @depends testLoadFieldType
+     */
+    public function testUpdateFieldNoNewContent()
+    {
+        return $this->updateContent( null );
+    }
+
+    /**
      * Updates the standard published content object with $fieldData
      *
-     * @param mixed $fieldData
+     * @param mixed $fieldData Update data for the custom field. If set to null, the update struct is empty.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
@@ -699,10 +709,13 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $draft = $contentService->createContentDraft( $content->contentInfo );
 
         $updateStruct = $contentService->newContentUpdateStruct();
-        $updateStruct->setField(
-            $this->customFieldIdentifier,
-            $fieldData
-        );
+        if ( $fieldData !== null )
+        {
+            $updateStruct->setField(
+                $this->customFieldIdentifier,
+                $fieldData
+            );
+        }
 
         return $contentService->updateContent( $draft->versionInfo, $updateStruct );
     }
@@ -724,9 +737,33 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
+     * @depends testUpdateFieldNoNewContent
+     */
+    public function testUpdateNoNewContentTypeFieldStillAvailable( $content )
+    {
+        foreach ( $content->getFields() as $field )
+        {
+            if ( $field->fieldDefIdentifier === $this->customFieldIdentifier )
+            {
+                return $field;
+            }
+        }
+
+        $this->fail( "Custom field not found." );
+    }
+
+    /**
      * @depends testUpdateTypeFieldStillAvailable
      */
     public function testUpdatedDataCorrect( Field $field )
+    {
+        $this->assertUpdatedFieldDataLoadedCorrect( $field );
+    }
+
+    /**
+     * @depends testUpdateNoNewContentTypeFieldStillAvailable
+     */
+    public function testUpdatedNoNewContentDataCorrect( Field $field )
     {
         $this->assertUpdatedFieldDataLoadedCorrect( $field );
     }
