@@ -132,17 +132,17 @@
     </xsl:template>
 
     <xsl:template match="strong">
-        <b>
+        <strong>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
-        </b>
+        </strong>
     </xsl:template>
 
     <xsl:template match="emphasize">
-        <i>
+        <em>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates/>
-        </i>
+        </em>
     </xsl:template>
 
     <xsl:template match="ol | ul | li">
