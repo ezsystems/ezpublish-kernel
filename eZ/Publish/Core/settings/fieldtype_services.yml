@@ -14,43 +14,46 @@ parameters:
 
 services:
     # Image
-    ezpublish.fieldType.ezimage.IOService:
-        class: %ezpublish.fieldType.ezimage.io_legacy.class%
+    ezpublish.fieldType.ezimage.io:
+        alias: ezpublish.fieldType.ezimage.IOService
+
+    ezpublish.fieldType.ezimage.io_service.filesystem:
+        class: %ezpublish.core.io.service.class%
         arguments:
-            - @ezpublish.fieldType.ezimage.IOService.published
-            - @ezpublish.fieldType.ezimage.IOService.published
+            - @ezpublish.fieldType.ezimage.io_service.filesystem.draft
+            - @ezpublish.fieldType.ezimage.io_service.filesystem.draft
             -
                 var_dir: %storage_dir%
                 draft_images_dir: %image_draft_storage_prefix%
                 published_images_dir: %image_storage_prefix%
 
-    ezpublish.fieldType.ezimage.IOService.published:
+    ezpublish.fieldType.ezimage.io_service.filesystem.published:
         class: %ezpublish.core.io.service.class%
         arguments:
             - @ezpublish.core.io.handler.filesystem
             - @ezpublish.core.io.mimeTypeDetector
-            -
-                prefix: %image_storage_prefix%
+            - { prefix: %image_storage_prefix% }
 
-    ezpublish.fieldType.ezimage.IOService.draft:
+    ezpublish.fieldType.ezimage.io_service.filesystem.draft:
         class: %ezpublish.core.io.service.class%
         arguments:
             - @ezpublish.core.io.handler.filesystem
             - @ezpublish.core.io.mimeTypeDetector
-            -
-                prefix: %image_draft_storage_prefix%
+            - { prefix: %image_draft_storage_prefix% }
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
 
     # BinaryFile
-    ezpublish.fieldType.ezbinaryfile.IOService:
+    ezpublish.fieldType.ezbinaryfile.io_service:
+        alias: ezpublish.fieldType.ezbinaryfile.io.filesystem
+
+    ezpublish.fieldType.ezbinaryfile.io_service.filesystem:
         class: %ezpublish.core.io.service.class%
         arguments:
             - @ezpublish.core.io.handler.filesystem
             - @ezpublish.core.io.mimeTypeDetector
-            -
-                prefix: %binaryfile_storage_prefix%
+            - { prefix: %binaryfile_storage_prefix% }
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
