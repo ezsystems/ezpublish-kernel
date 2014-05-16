@@ -21,11 +21,8 @@ use eZ\Publish\Core\IO\MetadataHandler;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Legacy Io/Storage handler, based on eZ Cluster
- *
- * Due to the legacy API, this handler has a few limitations:
- * - ctime is not really supported, and will always have the same value as mtime
- * - mtime can not be modified, and will always automatically be set depending on the server time upon each write operation
+ * Filesystem IO handler that uses native functions.
+ * Used for integration tests.
  */
 class Filesystem implements IOHandlerInterface
 {
