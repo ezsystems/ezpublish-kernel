@@ -1,7 +1,10 @@
 <?php
 /**
- * @copyright: Copyright (C) 2014 Heliopsis. All rights reserved.
- * @license: proprietary
+ * File containing the EZP22408DeleteRelatedObjectTest class
+ *
+ * @copyright Copyright (C) 1999-2014 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  */
 
 namespace eZ\Publish\API\Repository\Tests\Regression;
