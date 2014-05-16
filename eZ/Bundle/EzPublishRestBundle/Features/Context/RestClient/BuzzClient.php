@@ -53,7 +53,7 @@ class BuzzClient extends RestClient
 
     public function sendRequest()
     {
-        // new Resquest
+        // new Request
         $request = new Request(
             $this->requestType,
             $this->resource,

@@ -45,7 +45,7 @@ abstract class DebugTemplate extends Twig_Template
 
     /**
      * Given a raw $executionTime, and list of templates before and after display, computes the *real* execution time
-     * by substracting the time taken to display nested templates
+     * by subtracting the time taken to display nested templates
      *
      * @param int $executionTime milliseconds
      * @param array $templateListBefore templateName => executionTime

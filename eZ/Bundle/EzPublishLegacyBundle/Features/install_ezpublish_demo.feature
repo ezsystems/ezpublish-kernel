@@ -1,4 +1,4 @@
-Feature: Install eZ Publish Demo with/withoutout content
+Feature: Install eZ Publish Demo with/without content
     In order to install eZ Publish Demo
     As an anonymous user
     I need to be able to install eZ Publish Demo through Setup Wizard
