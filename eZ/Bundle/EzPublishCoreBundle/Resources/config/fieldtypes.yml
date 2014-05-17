@@ -22,6 +22,8 @@ parameters:
     ezpublish.fieldType.ezmedia.class: eZ\Publish\Core\FieldType\Media\Type
     ezpublish.fieldType.ezmedia.externalStorage.class: eZ\Publish\Core\FieldType\Media\MediaStorage
     ezpublish.fieldType.ezobjectrelation.class: eZ\Publish\Core\FieldType\Relation\Type
+    ezpublish.fieldType.ezprice.class: eZ\Publish\Core\FieldType\Price\Type
+    ezpublish.fieldType.ezprice.externalStorage.class: eZ\Publish\Core\FieldType\Price\PriceStorage
     ezpublish.fieldType.ezsrrating.class: eZ\Publish\Core\FieldType\Rating\Type
     ezpublish.fieldType.ezselection.class: eZ\Publish\Core\FieldType\Selection\Type
     ezpublish.fieldType.eztext.class: eZ\Publish\Core\FieldType\TextBlock\Type
@@ -825,11 +827,16 @@ services:
             - {name: ezpublish.fieldType, alias: ezpackage}
 
     ezpublish.fieldType.ezprice:
-        class: %ezpublish.fieldType.eznull.class%
+        class: %ezpublish.fieldType.ezprice.class%
         parent: ezpublish.fieldType
-        arguments: [ "ezprice" ]
+        arguments: [@ezpublish.fieldType.ezpage.pageService]
         tags:
             - {name: ezpublish.fieldType, alias: ezprice}
+
+    ezpublish.fieldType.ezprice.externalStorage:
+        class: %ezpublish.fieldType.ezprice.externalStorage.class%
+        tags:
+            - {name: ezpublish.fieldType.externalStorageHandler, alias: ezprice}
 
     ezpublish.fieldType.ezproductcategory:
         class: %ezpublish.fieldType.eznull.class%

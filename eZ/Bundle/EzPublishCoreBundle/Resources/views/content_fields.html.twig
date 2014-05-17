@@ -440,6 +440,19 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezprice_field %}
+{% spaceless %}
+    {{ field.value.hasDiscount }}
+{% if field.value.hasDiscount %}
+    <span class="old-price">Price: {{ field.value.incVatPrice }}</span> <br />
+    <span class="new-price">Your price: {{ field.value.discountPriceIncVat }}</span><br />
+    <span class="discount-percent">You save: {{ field.value.incVatPrice - field.value.discountPriceIncVat }} ( {{ field.value.discountPercent }} % )</span>
+{% else %}
+    {{ field.value.incVatPrice }}
+{% endif %}
+{% endspaceless %}
+{% endblock %}
+
 
 {# The simple_block_field block is a shorthand html block-based fields (like eztext or ezxmltext) #}
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
