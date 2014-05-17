@@ -829,7 +829,6 @@ services:
     ezpublish.fieldType.ezprice:
         class: %ezpublish.fieldType.ezprice.class%
         parent: ezpublish.fieldType
-        arguments: [@ezpublish.fieldType.ezpage.pageService]
         tags:
             - {name: ezpublish.fieldType, alias: ezprice}
 
