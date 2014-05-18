@@ -3,7 +3,7 @@
 ## Description
 
 As of eZ Publish 5.3, configuration for content repositories are application wide.
-This makes them easily reusable across SiteAccesses by simply mentionning their alias.
+This makes them easily reusable across SiteAccesses by simply mentioning their alias.
 
 ## Example
 

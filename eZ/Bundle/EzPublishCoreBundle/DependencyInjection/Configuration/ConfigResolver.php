@@ -132,7 +132,7 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface, 
         $globalScopeParamName = "$namespace." . self::SCOPE_GLOBAL . ".$paramName";
         $relativeScopeParamName = "$namespace.$scope.$paramName";
 
-        // Relative scope, siteacces group wise
+        // Relative scope, siteaccess group wise
         $groupScopeHasParam = false;
         if ( isset( $this->groupsBySiteAccess[$scope] ) )
         {
@@ -190,7 +190,7 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface, 
         $triedScopes[] = $this->defaultScope;
         unset( $relativeScopeParamName );
 
-        // Relative scope, siteacces group wise
+        // Relative scope, siteaccess group wise
         if ( isset( $this->groupsBySiteAccess[$scope] ) )
         {
             foreach ( $this->groupsBySiteAccess[$scope] as $groupName )

@@ -111,7 +111,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             ->setMethods( array( 'handle', 'getCachePool' ) )
             ->getMockForAbstractClass();
 
-        // Set expectactions for cache.
+        // Set expectations for cache.
         $cacheItem = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $cacheItem
             ->expects( $this->once() )

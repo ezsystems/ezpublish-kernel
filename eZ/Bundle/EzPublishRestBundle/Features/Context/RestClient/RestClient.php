@@ -203,7 +203,7 @@ abstract class RestClient
     /**
      * Setter for @var $resource
      *
-     * @param string $resourceUrl Url wihtout host (or prefix)
+     * @param string $resourceUrl Url without host (or prefix)
      */
     public function setResourceUrl( $resourceUrl )
     {
@@ -261,7 +261,7 @@ abstract class RestClient
     abstract public function getResponseHeaders();
 
     /**
-     * Get respose body
+     * Get response body
      *
      * @return string
      */
@@ -297,13 +297,13 @@ abstract class RestClient
      */
     protected function formatHeaders()
     {
-        $formatedHeaders = array();
+        $formattedHeaders = array();
         foreach ( $this->headers as $header => $value )
         {
-            $formatedHeaders = "{$header}: {$value}";
+            $formattedHeaders = "{$header}: {$value}";
         }
 
-        return $formatedHeaders;
+        return $formattedHeaders;
     }
 
     /**
@@ -342,7 +342,7 @@ abstract class RestClient
      * Create the authentication header
      *
      * @param string $username Username for the authentication
-     * @param string $password Passowrd for the authentication
+     * @param string $password Password for the authentication
      * @param string $authtype Authentication type (ex: 'BASIC', 'OAUTH')
      * @return string The value for the 'Authentication' header
      *
@@ -371,7 +371,7 @@ abstract class RestClient
      * @param string $header    This should be used only for 'accept' and 'content-type' headers
      * @param string $object    Content for the header (see self::$contentHeaderTypes)
      * @param string $action    Action for the header (see self::$contentHeaderTypes)
-     * @param string $type      Type can be (at this momment) XML or JSON
+     * @param string $type      Type can be (at this moment) XML or JSON
      */
     public function addSpecialHeader( $header, $object, $action = null, $type = null )
     {
@@ -383,7 +383,7 @@ abstract class RestClient
      *
      * @param string $object    Content for the header (see self::$contentHeaderTypes)
      * @param string $action    Action for the header (see self::$contentHeaderTypes)
-     * @param string $type      Type can be (at this momment) XML or JSON
+     * @param string $type      Type can be (at this moment) XML or JSON
      *
      * @return string Header value should look like <prefix><content><action>+<type>
      *

@@ -92,7 +92,7 @@ class PageTest extends AbstractExtensionTestCase
     }
 
     /**
-     * Returs expected ezpage configuration for a siteaccess, where only enabled blocks/layouts should be present.
+     * Returns expected ezpage configuration for a siteaccess, where only enabled blocks/layouts should be present.
      *
      * @param array $defaultConfig
      * @param array $additionalConfig

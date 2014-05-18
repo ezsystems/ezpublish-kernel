@@ -190,7 +190,7 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
             "Expected '$total' ContentTypeGroups with '$identifier' identifier but found '$count'"
         );
 
-        // @todo: verify status code / message / content type / accecpt header
+        // @todo: verify status code / message / content type / accept header
     }
 
     public function iSeeTheFollowingContentTypeGroups( TableNode $table )
@@ -216,6 +216,6 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
             "Expected to find all groups but couldn't find: " . print_r( $groups, true )
         );
 
-        // @todo: verify status code / message / content type / accecpt header
+        // @todo: verify status code / message / content type / accept header
     }
 }
