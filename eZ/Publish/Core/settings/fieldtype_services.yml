@@ -15,12 +15,12 @@ parameters:
 services:
     # Image
     ezpublish.fieldType.ezimage.io:
-        alias: ezpublish.fieldType.ezimage.IOService
+        alias: ezpublish.fieldType.ezimage.io_service.filesystem
 
     ezpublish.fieldType.ezimage.io_service.filesystem:
-        class: %ezpublish.core.io.service.class%
+        class: %ezpublish.fieldType.ezimage.io_legacy.class%
         arguments:
-            - @ezpublish.fieldType.ezimage.io_service.filesystem.draft
+            - @ezpublish.fieldType.ezimage.io_service.filesystem.published
             - @ezpublish.fieldType.ezimage.io_service.filesystem.draft
             -
                 var_dir: %storage_dir%
@@ -46,7 +46,7 @@ services:
 
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.io_service:
-        alias: ezpublish.fieldType.ezbinaryfile.io.filesystem
+        alias: ezpublish.fieldType.ezbinaryfile.io_service.filesystem
 
     ezpublish.fieldType.ezbinaryfile.io_service.filesystem:
         class: %ezpublish.core.io.service.class%

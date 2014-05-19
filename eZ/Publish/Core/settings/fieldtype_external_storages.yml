@@ -14,7 +14,7 @@ services:
         class: %ezpublish.fieldType.ezbinaryfile.externalStorage.class%
         arguments:
             - []
-            - @ezpublish.fieldType.ezbinaryfile.IOService
+            - @ezpublish.fieldType.ezbinaryfile.io_service
             - @ezpublish.fieldType.ezbinaryfile.pathGenerator
             - @ezpublish.core.io.mimeTypeDetector
             - @?logger
@@ -41,7 +41,7 @@ services:
         class: %ezpublish.fieldType.ezmedia.externalStorage.class%
         arguments:
             - []
-            - @ezpublish.fieldType.ezbinaryfile.IOService
+            - @ezpublish.fieldType.ezbinaryfile.io_service
             - @ezpublish.fieldType.ezbinaryfile.pathGenerator
             - @ezpublish.core.io.mimeTypeDetector
             - @?logger

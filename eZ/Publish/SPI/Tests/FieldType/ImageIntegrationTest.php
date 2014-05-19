@@ -80,7 +80,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
                 ),
-                $this->getContainer()->get( "ezpublish.fieldType.ezimage.IOService" ),
+                $this->getContainer()->get( "ezpublish.fieldType.ezimage.io" ),
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
                 new IO\MetadataHandler\ImageSize()
             )
