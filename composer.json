@@ -72,9 +72,6 @@
         "process-timeout": 3000
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "5.3.x-dev"
-        },
         "ezpublish-legacy-dir": "vendor/ezsystems/ezpublish-legacy"
     }
 }
