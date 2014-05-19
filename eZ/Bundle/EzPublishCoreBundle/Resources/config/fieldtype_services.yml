@@ -234,7 +234,7 @@ services:
     #ezpublish.fieldType.ezimage.variation_service:
     #    alias: ezpublish.fieldType.ezimage.variation_service.default
 
-    ezpublish.fieldType.ezimage.IOService:
+    ezpublish.fieldType.ezimage.io_service:
         class: %ezpublish.core.io.service.class%
         factory_service: ezpublish.core.io.factory
         factory_method: getService
@@ -243,7 +243,7 @@ services:
             - 'image.published_images_dir'
 
     ezpublish.fieldType.ezimage.io:
-        alias: ezpublish.fieldType.ezimage.IOService
+        alias: ezpublish.fieldType.ezimage.io_service
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
@@ -251,7 +251,7 @@ services:
             - %ezsettings.default.image.published_images_dir%
 
     # BinaryFile
-    ezpublish.fieldType.ezbinaryfile.IOService:
+    ezpublish.fieldType.ezbinaryfile.io_service:
         class: %ezpublish.core.io.service.class%
         factory_service: ezpublish.core.io.factory
         factory_method: getService
