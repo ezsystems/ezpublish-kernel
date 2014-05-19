@@ -43,6 +43,7 @@ use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
 use Exception;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
  * This class provides service methods for managing content
@@ -1168,7 +1169,7 @@ class ContentService implements ContentServiceInterface
      */
     public function translateVersion( TranslationInfo $translationInfo, APITranslationValues $translationValues, User $modifier = null )
     {
-
+        throw new NotImplementedException( 'ContentService::translateVersion' );
     }
 
     /**
@@ -1900,7 +1901,7 @@ class ContentService implements ContentServiceInterface
      */
     public function addTranslationInfo( TranslationInfo $translationInfo )
     {
-
+        throw new NotImplementedException( 'ContentService::addTranslationInfo()' );
     }
 
     /**
