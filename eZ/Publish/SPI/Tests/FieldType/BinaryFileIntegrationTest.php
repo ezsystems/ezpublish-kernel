@@ -79,7 +79,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage(),
                 ),
-                $this->getContainer()->get( "ezpublish.fieldType.ezbinaryfile.IOService" ),
+                $this->getContainer()->get( "ezpublish.fieldType.ezbinaryfile.io_service" ),
                 new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
                 new FileInfo()
             )
