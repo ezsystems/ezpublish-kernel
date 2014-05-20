@@ -17,6 +17,8 @@ use eZ\Publish\Core\REST\Server\Exceptions\UserConflictException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -25,6 +27,8 @@ use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
+use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
+use Symfony\Component\Security\Http\Logout\SessionLogoutHandler;
 use Symfony\Component\Security\Http\SecurityEvents;
 
 /**
@@ -64,12 +68,23 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
      */
     private $configResolver;
 
+    /**
+     * @var \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
+     */
+    private $sessionStorage;
+
+    /**
+     * @var \Symfony\Component\Security\Http\Logout\LogoutHandlerInterface[]
+     */
+    private $logoutHandlers = array();
+
     public function __construct(
         SecurityContextInterface $securityContext,
         AuthenticationManagerInterface $authenticationManager,
         $providerKey,
         EventDispatcherInterface $dispatcher,
         ConfigResolverInterface $configResolver,
+        SessionStorageInterface $sessionStorage,
         LoggerInterface $logger = null
     )
     {
@@ -78,6 +93,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
         $this->providerKey = $providerKey;
         $this->dispatcher = $dispatcher;
         $this->configResolver = $configResolver;
+        $this->sessionStorage = $sessionStorage;
         $this->logger = $logger;
 
     }
@@ -189,5 +205,37 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
 
         $wasAnonymous = $previousUser->getAPIUser()->id == $this->configResolver->getParameter( 'anonymous_user_id' );
         return ( !$wasAnonymous && !$user->isEqualTo( $previousUser ) );
+    }
+
+    public function addLogoutHandler( LogoutHandlerInterface $handler )
+    {
+        $this->logoutHandlers[] = $handler;
+    }
+
+    public function logout( Request $request )
+    {
+        $response = new Response();
+
+        // Manually clear the session through session storage.
+        // Session::invalidate() is not called on purpose, to avoid unwanted session migration that would imply
+        // generation of a new session id.
+        // REST logout must indeed clear the session cookie.
+        // See \eZ\Publish\Core\REST\Server\Security\RestLogoutHandler
+        $this->sessionStorage->clear();
+
+        $token = $this->securityContext->getToken();
+        foreach ( $this->logoutHandlers as $handler )
+        {
+            // Explicitly ignore SessionLogoutHandler as we do session invalidation manually here,
+            // through the session storage, to avoid unwanted session migration.
+            if ( $handler instanceof SessionLogoutHandler )
+            {
+                continue;
+            }
+
+            $handler->logout( $request, $response, $token );
+        }
+
+        return $response;
     }
 }

@@ -1,5 +1,6 @@
 parameters:
     ezpublish_rest.security.authentication.listener.session.class: eZ\Publish\Core\REST\Server\Security\RestAuthenticator
+    ezpublish_rest.security.authentication.logout_handler.class: eZ\Publish\Core\REST\Server\Security\RestLogoutHandler
 
 services:
     # Following service will be aliased at compile time to "ezpublish_rest.session_authenticator" by the Security factory.
@@ -11,5 +12,9 @@ services:
             - ~ # Will be replaced at compile time by security provider key
             - @event_dispatcher
             - @ezpublish.config.resolver
+            - @session.storage
             - @?logger
         abstract: true
+
+    ezpublish_rest.security.authentication.logout_handler:
+        class: %ezpublish_rest.security.authentication.logout_handler.class%

@@ -1072,10 +1072,9 @@ class User extends RestController
             throw new RestNotFoundException( "Session not found: '{$sessionId}'." );
         }
 
-        $this->container->get( 'security.context' )->setToken( null );
-        $session->invalidate();
-
-        return new Values\NoContent();
+        return new Values\DeletedUserSession(
+            $this->container->get( 'ezpublish_rest.session_authenticator' )->logout( $this->request )
+        );
     }
 
     /**
