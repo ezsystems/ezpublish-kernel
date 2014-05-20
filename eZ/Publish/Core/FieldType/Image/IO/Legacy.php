@@ -8,12 +8,10 @@
  */
 namespace eZ\Publish\Core\FieldType\Image\IO;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**

@@ -8,7 +8,6 @@
  */
 namespace eZ\Bundle\EzPublishLegacyBundle\FieldType\Image\IO;
 
-use eZ\Publish\Core\FieldType\Image\IO\Legacy as LegacyImageIOService;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 

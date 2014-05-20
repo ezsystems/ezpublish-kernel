@@ -12,7 +12,6 @@ namespace eZ\Bundle\EzPublishLegacyBundle\EventListener;
 use eZ\Publish\Core\MVC\Legacy\Kernel\Loader;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
-use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ConfigScopeListener implements EventSubscriberInterface

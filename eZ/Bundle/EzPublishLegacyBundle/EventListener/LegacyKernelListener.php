@@ -9,7 +9,6 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\EventListener;
 
-use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreResetLegacyKernelEvent;
 use eZINI;
