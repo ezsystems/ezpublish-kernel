@@ -418,6 +418,11 @@ class EzPublishCoreExtension extends Extension
         // Now build the related SiteAccesses list, based on the relation map.
         foreach ( $saList as $sa )
         {
+            if ( $configResolver->getParameter( 'legacy_mode', 'ezsettings', $sa ) === true )
+            {
+                continue;
+            }
+
             $repository = $configResolver->getParameter( 'repository', 'ezsettings', $sa );
             $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id', 'ezsettings', $sa );
             $container->setParameter(
