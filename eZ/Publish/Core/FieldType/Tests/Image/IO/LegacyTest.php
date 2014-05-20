@@ -13,9 +13,6 @@ use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use PHPUnit_Framework_TestCase;
 
-/**
- * @covers \eZ\Publish\Core\FieldType\Tests\Image\IO\Legacy
- */
 class LegacyTest extends PHPUnit_Framework_TestCase
 {
     /**
