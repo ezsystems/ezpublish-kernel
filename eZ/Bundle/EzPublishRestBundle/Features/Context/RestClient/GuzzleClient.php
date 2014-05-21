@@ -1,8 +1,6 @@
 <?php
 /**
- * File containing the GuzzleClient class.
- *
- * This class contains the Guzzle Rest Client for BDD testing
+ * File containing the GuzzleClient class for RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -11,21 +9,17 @@
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
-use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient;
 use Guzzle\Http\Client;
 
-/**
- * Guzzle REST Client.
- */
 class GuzzleClient extends RestClient
 {
     /**
-     * @var Guzzle\Http\Message\Request
+     * @var \Guzzle\Http\Message\Request
      */
     protected $request;
 
     /**
-     * @var Guzzle\Http\Message\Response
+     * @var \Guzzle\Http\Message\Response
      */
     protected $response;
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ErrorContext class.
+ * File containing the Exception context class for RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,17 +9,10 @@
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
-use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext\RestSubContext;
-use EzSystems\BehatBundle\Features\Context\SentencesInterfaces\Error;
+use EzSystems\BehatBundle\Sentence\Exception as ExceptionSentences;
 use Behat\Behat\Context\Step;
 
-/**
- * Class ErrorContext
- *
- * This class contains the implementation of the Error interface which
- * has the sentences for the Errors BDD
- */
-class ErrorContext extends RestSubContext implements Error
+class Exception extends Base implements ExceptionSentences
 {
     public function iSeeAnInvalidFieldError()
     {

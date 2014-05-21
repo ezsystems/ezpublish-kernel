@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the FeatureContext class.
+ * File containing the RestSentences interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -17,7 +17,7 @@ use Behat\Gherkin\Node\PyStringNode;
  *
  * This interface contains the BDD sentences to use internally on rest testing
  */
-interface RestInternalSentences
+interface RestSentences
 {
     /**
      * @When /^I create a "(?P<requestType>[^"]*)" request to "(?P<resourceUrl>[^"]*)"$/
@@ -70,7 +70,7 @@ interface RestInternalSentences
     public function iAddValueToField( $value, $field );
 
     /**
-     * @When /^I add "(?<header>[^"]*)" header with "(?P<value>[^"]*)" value$/
+     * @When /^I add "(?P<header>[^"]*)" header with "(?P<value>[^"]*)" value$/
      */
     public function iAddHeaderWithValue( $header, $value );
 
@@ -85,31 +85,27 @@ interface RestInternalSentences
     public function iSendRequest();
 
     /**
-     * @Then /^I see (?<statusCode>\d{3}) status code$/
+     * @Then /^I see (?P<statusCode>\d{3}) status code$/
      */
     public function iSeeResponseStatusCode( $statusCode );
 
     /**
-     * @Then /^I see "(?<statusMessage>[^"]*)" status (?:reason phrase|message)$/
+     * @Then /^I see "(?P<statusMessage>[^"]*)" status (?:reason phrase|message)$/
      */
     public function iSeeResponseStatusMessage( $statusMessage );
 
     /**
-     * @Then /^I see "(?<header>[^"]*)" header with "(?P<value>[^"]*)" value$/
+     * @Then /^I see "(?P<header>[^"]*)" header with "(?P<value>[^"]*)" value$/
      */
     public function iSeeResponseHeaderWithValue( $header, $value );
 
     /**
      * @Then /^I see "(?P<header>[^"]*)" header to "(?P<action>[^"]*)" (?:an|a|for|to|the) "(?P<object>[^"]*)"$/
-     *
-     * @see RestInternalInterface::iAddHeaderToObjectAction()
      */
     public function iSeeResponseHeaderToObjectAction( $header, $action, $object );
 
     /**
      * @Then /^I see "(?P<header>[^"]*)" header (?:for|with) (?:an|a|to|the) "(?P<object>[^"]*)"$/
-     *
-     * @see RestInternalInterface::iAddHeaderForObject()
      */
     public function iSeeResponseHeaderForObject( $header, $object );
 
@@ -169,7 +165,7 @@ interface RestInternalSentences
     public function iSeeResponseErrorWithDescription( $errorDescriptionRegEx );
 
     /**
-     * @Then /^I see response error (?<statusCode>\d{3}) status code$/
+     * @Then /^I see response error (?P<statusCode>\d{3}) status code$/
      */
     public function iSeeResponseErrorStatusCode( $statusCode );
 }

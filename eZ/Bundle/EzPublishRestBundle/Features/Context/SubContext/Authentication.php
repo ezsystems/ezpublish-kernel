@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the AuthenticationContext class.
+ * File containing the Authentication context class for RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,17 +9,10 @@
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
-use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext\RestSubContext;
-use EzSystems\BehatBundle\Features\Context\SentencesInterfaces\Authentication;
+use EzSystems\BehatBundle\Sentence\Authentication as AuthenticationSentences;
 use Behat\Behat\Exception\PendingException;
 
-/**
- * AuthenticationContext
- *
- * This class contains the implementation of the Authentication interface which
- * has the sentences for the Authentication BDD
- */
-class AuthenticationContext extends RestSubContext implements Authentication
+class Authentication extends Base implements AuthenticationSentences
 {
     public function iAmLoggedInAsAn( $role )
     {
@@ -27,23 +20,23 @@ class AuthenticationContext extends RestSubContext implements Authentication
         {
             case 'administrator':
                 $user = 'admin';
-                $passwd = 'publish';
+                $password = 'publish';
                 break;
 
             default:
                 throw new PendingException( "Login with '$role' role not implemented yet" );
         }
 
-        $this->restclient->setAuthentication( $user, $passwd );
+        $this->restClient->setAuthentication( $user, $password );
     }
 
     public function iAmLoggedInAsWithPassword( $user, $password )
     {
-        $this->restclient->setAuthentication( $user, $password );
+        $this->restClient->setAuthentication( $user, $password );
     }
 
     public function iAmNotLoggedIn()
     {
-        $this->restclient->setAuthentication( '', '' );
+        $this->restClient->setAuthentication( '', '' );
     }
 }
