@@ -53,6 +53,7 @@ class LegacyHelper extends ParameterBag
                 {
                     $moduleResult['content_info']['persistent_variable'] = ezjscPackerTemplateFunctions::getPersistentVariable();
                 }
+                $that->set( 'persistent_variable', $moduleResult['content_info']['persistent_variable'] );
 
                 // Javascript/CSS files required with ezcss_require/ezscript_require
                 // Compression level is forced to 0 to only get the files list
