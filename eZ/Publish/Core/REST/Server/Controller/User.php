@@ -33,6 +33,7 @@ use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -1026,6 +1027,10 @@ class User extends RestController
         catch ( AuthenticationException $e )
         {
             throw new UnauthorizedException( "Invalid login or password", $this->request->getPathInfo() );
+        }
+        catch ( AccessDeniedException $e )
+        {
+            throw new UnauthorizedException( $e->getMessage(), $this->request->getPathInfo() );
         }
     }
 
