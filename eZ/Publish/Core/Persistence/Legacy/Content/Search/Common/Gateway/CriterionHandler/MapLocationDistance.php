@@ -140,7 +140,6 @@ class MapLocationDistance extends CriterionHandler
          * Note: this formula is precise only for short distances.
          * @todo if ABS function was available in Zeta Database component it should be possible to account for
          * distances across the date line. Revisit when Doctrine DBAL is introduced.
-         * @todo distances across poles need to be tested
          */
         $longitudeCorrectionByLatitude = pow( cos( deg2rad( $location->latitude ) ), 2 );
         $distanceExpression = $subSelect->expr->add(
@@ -313,12 +312,34 @@ class MapLocationDistance extends CriterionHandler
         $angularDistance = $distance / self::EARTH_RADIUS;
         $deltaLongitude = asin( sin( $angularDistance ) / cos( $radiansLatitude ) );
 
-        return array(
-            "lowLatitude" => rad2deg( $radiansLatitude - $angularDistance ),
-            "lowLongitude" => rad2deg( $radiansLongitude - $deltaLongitude ),
-            "highLatitude" => rad2deg( $radiansLatitude + $angularDistance ),
-            "highLongitude" => rad2deg( $radiansLongitude + $deltaLongitude )
-        );
+        $lowLatitudeRadians = $radiansLatitude - $angularDistance;
+        $highLatitudeRadians = $radiansLatitude + $angularDistance;
+
+        // Check that bounding box does not include poles.
+        if ( $lowLatitudeRadians > -M_PI_2 && $highLatitudeRadians < M_PI_2 )
+        {
+            $boundingCoordinates = array(
+                "lowLatitude" => rad2deg( $lowLatitudeRadians ),
+                "lowLongitude" => rad2deg( $radiansLongitude - $deltaLongitude ),
+                "highLatitude" => rad2deg( $highLatitudeRadians ),
+                "highLongitude" => rad2deg( $radiansLongitude + $deltaLongitude )
+            );
+        }
+        else
+        {
+            // Handle the pole(s) being inside a bounding box, in this case we MUST cover
+            // full circle of Earth's longitude and one or both poles.
+            // Note that calculation for distances over the polar regions with flat Earth formula
+            // will be VERY imprecise.
+            $boundingCoordinates = array(
+                "lowLatitude" => rad2deg( max( $lowLatitudeRadians, -M_PI_2 ) ),
+                "lowLongitude" => rad2deg( -M_PI ),
+                "highLatitude" => rad2deg( min( $highLatitudeRadians, M_PI_2 ) ),
+                "highLongitude" => rad2deg( M_PI )
+            );
+        }
+
+        return $boundingCoordinates;
     }
 
 }
