@@ -2562,6 +2562,77 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
+     * This tests the distance over the pole. The tests intentionally uses large range,
+     * as the flat Earth model used in Legacy Storage Search is not precise for the use case.
+     * What is tested here is that outer bounding box is correctly calculated, so that
+     * location is not excluded.
+     *
+     * Range between 222km and 350km shows the magnitude of error between great-circle
+     * (always very precise) and flat Earth (very imprecise for this use case) models.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @group maplocation
+     */
+    public function testMapLocationDistanceBetweenPolar()
+    {
+        $contentType = $this->createTestPlaceContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->alwaysAvailable = false;
+        $createStruct->mainLanguageCode = "eng-GB";
+        $createStruct->setField(
+            "maplocation",
+            array(
+                "latitude" => 89,
+                "longitude" => -164,
+                "address" => "Polar bear media tower",
+            ),
+            "eng-GB"
+        );
+
+        $draft = $contentService->createContent( $createStruct );
+        $polarBear = $contentService->publishVersion( $draft->getVersionInfo() );
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\MapLocationDistance(
+                            "maplocation",
+                            Criterion\Operator::BETWEEN,
+                            array( 222, 350 ),
+                            89,
+                            16
+                        )
+                    )
+                ),
+                'offset' => 0,
+                'limit' => 10,
+                'sortClauses' => array()
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 1, $result->totalCount );
+        $this->assertEquals(
+            $polarBear->id,
+            $result->searchHits[0]->valueObject->id
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
