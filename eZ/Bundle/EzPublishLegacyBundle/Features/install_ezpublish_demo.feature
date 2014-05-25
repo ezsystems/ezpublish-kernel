@@ -133,10 +133,10 @@ Feature: Install eZ Publish Demo with/without content
             | Password          | publish           |
             | Confirm password  | publish           |
         And I press "Next"
-        Then I see "Opensource software is nothing without a vibrant community!" step
+        Then I see "Open source software is nothing without a vibrant community!" step
 
     @javascript @democontent_install @democlean_install
     Scenario: Show open source information
-        Given I am on "Opensource software is nothing without a vibrant community!" step
+        Given I am on "Open source software is nothing without a vibrant community!" step
         When I press "Next"
         Then I see "Finished" step
