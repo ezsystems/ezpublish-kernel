@@ -117,8 +117,8 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
      * (also, see note on bulkIndexContent())
      * @param bool $commit
      */
-    public function setCommit( $commit )
+    public function setCommitType( $commit )
     {
-       $this->persistenceHandler->searchHandler()->setCommit( $commit );
+       $this->persistenceHandler->searchHandler()->setCommitType( $commit );
     }
 }

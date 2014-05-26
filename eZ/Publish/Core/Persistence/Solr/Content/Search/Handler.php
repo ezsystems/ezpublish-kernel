@@ -517,15 +517,20 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
-     * Set if index/delete actions should commit or if several actions is to be expected
+     * Set how/if index/delete actions should committed
      *
-     * This should be set to false before group of actions and true before the last one
+     * Can for instance be used to disable commit when doing bulk insert, and enable afterwards.
+     * @todo Check with elasticsearch and consider to remove options that does not fit there.
      *
-     * @param bool $commit
+     * @param string|int|bool $commitType Specify solr commit type on updates, defaults to 'soft' one of:
+     *        'soft' Cache update, makes change instantly available, requries autoCommit to be enabled in solrconfig.xml
+     *        'hard' Full commit, for durability across hardware crashes but slow so will affect your publishing time.
+     *        bool True is hard & false is none, false requries autoCommit to be enabled in solrconfig.xml
+     *        int Use CommitWithin, time in milliseconds before at latest doing commit (hard by default in solrconfig.xml)
      */
-    public function setCommit( $commit )
+    public function setCommitType( $commit )
     {
-        $this->gateway->setCommit( $commit );
+        $this->gateway->setCommitType( $commit );
     }
 }
 
