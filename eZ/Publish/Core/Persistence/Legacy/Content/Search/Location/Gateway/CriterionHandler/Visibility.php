@@ -1,23 +1,25 @@
 <?php
 /**
- * File containing the DoctrineDatabase subtree criterion handler class
+ * File containing the DoctrineDatabase location visibility criterion handler class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\CriterionHandler\Location;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\CriterionHandler;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use RuntimeException;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use PDO;
 
 /**
- * Location subtree criterion handler
+ * Location visibility criterion handler
  */
-class Subtree extends CriterionHandler
+class Visibility extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -28,7 +30,7 @@ class Subtree extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\Location\Subtree;
+        return $criterion instanceof Criterion\Visibility;
     }
 
     /**
@@ -44,18 +46,27 @@ class Subtree extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
-        $statements = array();
-        foreach ( $criterion->value as $pattern )
-        {
-            $statements[] = $query->expr->like(
-                $this->dbHandler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
-                $query->bindValue( $pattern . '%' )
-            );
-        }
+        $column = $this->dbHandler->quoteColumn( 'is_invisible', 'ezcontentobject_tree' );
 
-        return $query->expr->lOr(
-            $statements
-        );
+        switch ( $criterion->value[0] )
+        {
+            case Criterion\Visibility::VISIBLE:
+                return $query->expr->eq(
+                    $column,
+                    $query->bindValue( 0, null, PDO::PARAM_INT )
+                );
+
+            case Criterion\Visibility::HIDDEN:
+                return $query->expr->eq(
+                    $column,
+                    $query->bindValue( 1, null, PDO::PARAM_INT )
+                );
+
+            default:
+                throw new RuntimeException(
+                    "Unknown value '{$criterion->value[0]}' for Visibility criterion handler."
+                );
+        }
     }
 }
 
