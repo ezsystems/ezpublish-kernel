@@ -77,9 +77,9 @@ class Native extends Gateway
     protected $nameGenerator;
 
     /**
-     * @var bool
+     * @var string
      */
-    protected $commit = true;
+    private $commitText = 'softCommit=true';
 
     /**
      * Construct from HTTP client
@@ -90,10 +90,14 @@ class Native extends Gateway
      * @param FacetBuilderVisitor $facetBuilderVisitor
      * @param FieldValueMapper $fieldValueMapper
      * @param ContentHandler $contentHandler
-     *
-     * @return void
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator $nameGenerator
+     * @param string|int|bool $commitType Specify solr commit type on updates, defaults to 'soft' one of:
+     *        'soft' Cache update, makes change instantly available, requries autoCommit to be enabled in solrconfig.xml
+     *        'hard' Full commit, for durability across hardware crashes but slow so will affect your publishing time.
+     *        bool True is hard & false is none, false requries autoCommit to be enabled in solrconfig.xml
+     *        int Use CommitWithin, this is time in milliseconds before doing commit (hard by default in solrconfig.xml)
      */
-    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler, FieldNameGenerator $nameGenerator )
+    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler, FieldNameGenerator $nameGenerator, $commitType = 'soft' )
     {
         $this->client              = $client;
         $this->criterionVisitor    = $criterionVisitor;
@@ -102,6 +106,7 @@ class Native extends Gateway
         $this->fieldValueMapper    = $fieldValueMapper;
         $this->contentHandler      = $contentHandler;
         $this->nameGenerator       = $nameGenerator;
+        $this->setCommitType( $commitType );
     }
 
     /**
@@ -202,7 +207,7 @@ class Native extends Gateway
         $updates   = $this->createUpdates( $documents );
         $result   = $this->client->request(
             'POST',
-            '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
+            '/solr/update?' . ( $this->commitText ? $this->commitText . '&' : '' ) . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -229,7 +234,7 @@ class Native extends Gateway
     {
         $this->client->request(
             'POST',
-            '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
+            '/solr/update?' . ( $this->commitText ? $this->commitText . '&' : '' ) . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -280,7 +285,7 @@ class Native extends Gateway
         {
             $this->client->request(
                 "POST",
-                "/solr/update?" . ( $this->commit ? "commit=true&" : "" ) . "wt=json",
+                "/solr/update?" . ( $this->commitText ? $this->commitText . '&' : '' ) . "wt=json",
                 new Message(
                     array(
                         "Content-Type" => "text/xml",
@@ -332,7 +337,7 @@ class Native extends Gateway
 
             $this->client->request(
                 "POST",
-                "/solr/update/json?" . ( $this->commit ? "commit=true&" : "" ) . "wt=json",
+                "/solr/update/json?" . ( $this->commitText ? $this->commitText . '&' : '' ) . "wt=json",
                 new Message(
                     array(
                         "Content-Type: application/json",
@@ -352,7 +357,7 @@ class Native extends Gateway
     {
         $this->client->request(
             'POST',
-            '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
+            '/solr/update?' . ( $this->commitText ? $this->commitText . '&' : '' ) . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -363,11 +368,38 @@ class Native extends Gateway
     }
 
     /**
-     * @param bool $commit
+     * @param string|int|bool $commitType Specify solr commit type on updates, defaults to 'soft' one of:
+     *        'soft' Cache update, makes change instantly available, requries autoCommit to be enabled in solrconfig.xml
+     *        'hard' Full commit, for durability across hardware crashes but slow so will affect your publishing time.
+     *        bool True is hard & false is none, false requries autoCommit to be enabled in solrconfig.xml
+     *        int Use CommitWithin, time in milliseconds before at latest doing commit (hard by default in solrconfig.xml)
      */
-    public function setCommit( $commit )
+    public function setCommitType( $commitType )
     {
-        $this->commit = !!$commit;
+        $commitWithin = 0;
+        if ( is_numeric( $commitType ) )
+        {
+            $commitWithin = (int)$commitType;
+            $commitType = 'defered';
+        }
+
+        switch ( $commitType )
+        {
+            case 'soft':
+                $this->commitText = 'softCommit=true';
+                break;
+            case 'defered':
+                $this->commitText = 'commitWithin=' . $commitWithin;
+                break;
+            case false:
+                $this->commitText = '';
+                break;
+            case 'hard':
+            case true:
+            default:
+                $this->commitText = 'commit=true';
+        }
+
     }
 
     /**

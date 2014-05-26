@@ -57,9 +57,9 @@ EOT
 
         /** @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Handler $searchHandler */
         $searchHandler = $persistenceHandler->searchHandler();
-        $searchHandler->setCommit( false );
+        $searchHandler->setCommitType( false );
         $searchHandler->purgeIndex();
-        $searchHandler->setCommit( true );
+        $searchHandler->setCommitType( 'soft' );
 
         /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
         $progress = $this->getHelperSet()->get( 'progress' );

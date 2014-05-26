@@ -46,7 +46,7 @@ abstract class Slot extends BaseSlot
         $this->repository->commitEvent(
             function ( $lastEvent ) use ( $searchHandler, $content )
             {
-                $searchHandler->setCommit( $lastEvent );
+                $searchHandler->setCommitType( $lastEvent ? 'soft' : false );
                 $searchHandler->indexContent( $content );
             }
         );
@@ -65,7 +65,7 @@ abstract class Slot extends BaseSlot
         $this->repository->commitEvent(
             function ( $lastEvent ) use ( $searchHandler, $contentId, $versionNo )
             {
-                $searchHandler->setCommit( $lastEvent );
+                $searchHandler->setCommitType( $lastEvent ? 'soft' : false );
                 $searchHandler->deleteContent( $contentId, $versionNo );
             }
         );
@@ -83,7 +83,7 @@ abstract class Slot extends BaseSlot
         $this->repository->commitEvent(
             function ( $lastEvent ) use ( $searchHandler, $locationId )
             {
-                $searchHandler->setCommit( $lastEvent );
+                $searchHandler->setCommitType( $lastEvent ? 'soft' : false );
                 $searchHandler->deleteLocation( $locationId );
             }
         );
