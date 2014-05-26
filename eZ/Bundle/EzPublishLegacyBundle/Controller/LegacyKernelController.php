@@ -98,14 +98,14 @@ class LegacyKernelController
 
         $result = $this->kernel->run();
 
-        $this->legacyHelper->loadDataFromModuleResult( $result->getAttribute( 'module_result' ) );
-
         $this->kernel->setUseExceptions( true );
 
         if ( $result instanceof ezpKernelRedirect )
         {
             return $this->legacyResponseManager->generateRedirectResponse( $result );
         }
+
+        $this->legacyHelper->loadDataFromModuleResult( $result->getAttribute( 'module_result' ) );
 
         $response = $this->legacyResponseManager->generateResponseFromModuleResult( $result );
         $this->legacyResponseManager->mapHeaders( headers_list(), $response );
