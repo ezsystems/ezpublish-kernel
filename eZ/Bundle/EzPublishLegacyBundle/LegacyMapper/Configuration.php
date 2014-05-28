@@ -20,6 +20,7 @@ use ezpEvent;
 use ezxFormToken;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RuntimeException;
 
 /**
  * Maps configuration parameters to the legacy parameters
@@ -118,13 +119,36 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
                 "user" => "User",
                 "password" => "Password",
                 "dbname" => "Database",
-                "unix_socket" => "Socket"
+                "unix_socket" => "Socket",
+                "driver" => "DatabaseImplementation"
             ) as $key => $iniKey
         )
         {
             if ( isset( $databaseSettings[$key] ) )
             {
-                $settings["site.ini/DatabaseSettings/$iniKey"] = $databaseSettings[$key];
+                $iniValue = $databaseSettings[$key];
+
+                switch ( $key )
+                {
+                    case "driver":
+                        $driverMap = array(
+                            'pdo_mysql' => 'ezmysqli',
+                            'pdo_pgsql' => 'ezpostgresql',
+                            'oci8' => 'ezoracle'
+                        );
+                        if ( !isset( $driverMap[$iniValue] ) )
+                        {
+                            throw new RuntimeException(
+                                "Could not map database driver to Legacy Stack database implementation.\n" .
+                                "Expected one of '" . implode( "', '", array_keys( $driverMap ) ) . "', got '" .
+                                $iniValue . "'."
+                            );
+                        }
+                        $iniValue = $driverMap[$iniValue];
+                        break;
+                }
+
+                $settings["site.ini/DatabaseSettings/$iniKey"] = $iniValue;
             }
             // Some settings need specific values when not present.
             else
@@ -133,15 +157,6 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
                 {
                     case "unix_socket":
                         $settings["site.ini/DatabaseSettings/$iniKey"] = "disabled";
-                        break;
-                    case "driver":
-                        $driverMap = array(
-                            'pdo_mysql' => 'mysqli',
-                            'pdo_pgsql' => 'pgsql',
-                            'oci8' => 'oracle'
-                        );
-                        if ( isset( $driverMap[$databaseSettings[$key]] ) )
-                            $settings["site.ini/DatabaseSettings/DatabaseImplementation"] = $driverMap[$databaseSettings[$key]];
                         break;
                 }
             }
