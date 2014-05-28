@@ -95,11 +95,11 @@ class SearchTest extends BaseServiceMockTest
     {
         return array(
             array(
-                new Query( array( "filter" => new Criterion\Location\Id( 42 ) ) ),
+                new Query( array( "filter" => new Criterion\Location\Depth( Criterion\Operator::LT, 2 ) ) ),
                 "Argument '\$query' is invalid: Location criterions cannot be used in Content search"
             ),
             array(
-                new Query( array( "query" => new Criterion\Location\Id( 42 ) ) ),
+                new Query( array( "query" => new Criterion\Location\Depth( Criterion\Operator::LT, 2 ) ) ),
                 "Argument '\$query' is invalid: Location criterions cannot be used in Content search"
             ),
             array(
@@ -107,7 +107,7 @@ class SearchTest extends BaseServiceMockTest
                     array(
                         "query" => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Location\Id( 42 )
+                                new Criterion\Location\Depth( Criterion\Operator::LT, 2 )
                             )
                         )
                     )
@@ -160,13 +160,13 @@ class SearchTest extends BaseServiceMockTest
     {
         return array(
             array(
-                new Criterion\Location\Id( 42 ),
+                new Criterion\Location\Depth( Criterion\Operator::LT, 2 ),
                 "Argument '\$filter' is invalid: Location criterions cannot be used in Content search"
             ),
             array(
                 new Criterion\LogicalAnd(
                     array(
-                        new Criterion\Location\Id( 42 )
+                        new Criterion\Location\Depth( Criterion\Operator::LT, 2 )
                     )
                 ),
                 "Argument '\$filter' is invalid: Location criterions cannot be used in Content search"

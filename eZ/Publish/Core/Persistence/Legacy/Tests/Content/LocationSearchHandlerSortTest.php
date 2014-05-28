@@ -88,8 +88,8 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
                 $this->getDatabaseHandler(),
                 new CriteriaConverter(
                     array(
-                        new LocationCriterionHandler\Location\Id( $this->getDatabaseHandler() ),
-                        new LocationCriterionHandler\Location\ParentLocationId( $this->getDatabaseHandler() ),
+                        new LocationCriterionHandler\LocationId( $this->getDatabaseHandler() ),
+                        new LocationCriterionHandler\ParentLocationId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\LogicalAnd( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\MatchAll( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\SectionId( $this->getDatabaseHandler() ),
@@ -160,7 +160,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\ParentLocationId( array( 178 ) ),
+                    'filter' => new Criterion\ParentLocationId( array( 178 ) ),
                     'offset' => 0,
                     'limit' => 5,
                     'sortClauses' => array()
@@ -183,7 +183,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\ParentLocationId( array( 178 ) ),
+                    'filter' => new Criterion\ParentLocationId( array( 178 ) ),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array( new SortClause\Location\Path( LocationQuery::SORT_DESC ) )
@@ -204,7 +204,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 148, 167, 169, 172 ) ),
+                    'filter' => new Criterion\LocationId( array( 148, 167, 169, 172 ) ),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array( new SortClause\Location\Depth( LocationQuery::SORT_ASC ) )
@@ -225,7 +225,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 141, 142, 143, 144, 146, 147 ) ),
+                    'filter' => new Criterion\LocationId( array( 141, 142, 143, 144, 146, 147 ) ),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
@@ -249,7 +249,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 149, 156, 167 ) ),
+                    'filter' => new Criterion\LocationId( array( 149, 156, 167 ) ),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
@@ -272,7 +272,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 148, 167, 169, 172 ) ),
+                    'filter' => new Criterion\LocationId( array( 148, 167, 169, 172 ) ),
                     'offset' => 0,
                     'limit'  => 10,
                     'sortClauses' => array(
@@ -295,7 +295,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 148, 167, 169, 172 ) ),
+                    'filter' => new Criterion\LocationId( array( 148, 167, 169, 172 ) ),
                     'offset' => 0,
                     'limit' => 10,
                     'sortClauses' => array(
@@ -318,7 +318,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id(
+                    'filter' => new Criterion\LocationId(
                         array( 5, 43, 45, 48, 51, 54, 156, 157 )
                     ),
                     'offset' => 0,
@@ -362,7 +362,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 13, 15, 44, 45, 228 ) ),
+                    'filter' => new Criterion\LocationId( array( 13, 15, 44, 45, 228 ) ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -385,7 +385,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 13, 15, 44, 45, 228 ) ),
+                    'filter' => new Criterion\LocationId( array( 13, 15, 44, 45, 228 ) ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -408,7 +408,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 13, 15, 44, 45, 228 ) ),
+                    'filter' => new Criterion\LocationId( array( 13, 15, 44, 45, 228 ) ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -431,7 +431,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 45, 228 ) ),
+                    'filter' => new Criterion\LocationId( array( 45, 228 ) ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -454,7 +454,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\Id( array( 45, 228 ) ),
+                    'filter' => new Criterion\LocationId( array( 45, 228 ) ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -622,7 +622,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\ParentLocationId( 224 ),
+                    'filter' => new Criterion\ParentLocationId( 224 ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -645,7 +645,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $locations = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\Location\ParentLocationId( 224 ),
+                    'filter' => new Criterion\ParentLocationId( 224 ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(

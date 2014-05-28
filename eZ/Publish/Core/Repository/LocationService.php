@@ -360,7 +360,7 @@ class LocationService implements LocationServiceInterface
     {
         $query = new LocationQuery(
             array(
-                "filter" => new Criterion\Location\ParentLocationId( $parentLocationId ),
+                "filter" => new Criterion\ParentLocationId( $parentLocationId ),
                 "offset" => $offset >= 0 ? (int)$offset : 0,
                 "limit" => $limit >= 0 ? (int)$limit : null
             )

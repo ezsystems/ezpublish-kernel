@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\CriterionHandler\Location;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\CriterionHandler;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter;
@@ -17,7 +17,7 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
 /**
  * Location id criterion handler
  */
-class Id extends CriterionHandler
+class LocationId extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -28,7 +28,7 @@ class Id extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\Location\Id;
+        return $criterion instanceof Criterion\LocationId;
     }
 
     /**

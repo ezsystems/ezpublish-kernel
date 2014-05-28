@@ -280,12 +280,6 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'FieldOr.php',
             ),
-        );
-    }
-    public function getFilterContentSearchesDeprecated()
-    {
-        $fixtureDir = $this->getFixtureDir();
-        return array(
             array(
                 array(
                     'filter' => new Criterion\Subtree(
@@ -358,49 +352,6 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    public function getLocationFilterSearches()
-    {
-        $fixtureDir = $this->getFixtureDir();
-        return array(
-            array(
-                array(
-                    'filter' => new Criterion\Location\Subtree(
-                        '/1/5/'
-                    ),
-                    'sortClauses' => array( new SortClause\ContentId() )
-                ),
-                $fixtureDir . 'Subtree.php',
-            ),
-            array(
-                array(
-                    'filter' => new Criterion\Location\Id(
-                        array( 1, 2, 5 )
-                    ),
-                    'sortClauses' => array( new SortClause\ContentId() )
-                ),
-                $fixtureDir . 'LocationId.php',
-            ),
-            array(
-                array(
-                    'filter' => new Criterion\Location\ParentLocationId(
-                        array( 1 )
-                    ),
-                    'sortClauses' => array( new SortClause\ContentId() )
-                ),
-                $fixtureDir . 'ParentLocationId.php',
-            ),
-            array(
-                array(
-                    'filter' => new Criterion\Location\RemoteId(
-                        array( '3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983' )
-                    ),
-                    'sortClauses' => array( new SortClause\ContentId() )
-                ),
-                $fixtureDir . 'LocationRemoteId.php',
-            ),
-        );
-    }
-
     public function getContentQuerySearches()
     {
         $fixtureDir = $this->getFixtureDir();
@@ -462,6 +413,15 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'LanguageCodeAlwaysAvailable.php',
             ),
+            array(
+                array(
+                    'criterion' => new Criterion\Visibility(
+                        Criterion\Visibility::VISIBLE
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'Visibility.php',
+            ),
         );
     }
 
@@ -517,15 +477,6 @@ class SearchServiceTest extends BaseTest
                     'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'DepthLte.php',
-            ),
-            array(
-                array(
-                    'criterion' => new Criterion\Visibility(
-                        Criterion\Visibility::VISIBLE
-                    ),
-                    'sortClauses' => array( new SortClause\ContentId() )
-                ),
-                $fixtureDir . 'Visibility.php',
             ),
         );
     }
@@ -583,15 +534,6 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'DepthLte.php',
             ),
-            array(
-                array(
-                    'criterion' => new Criterion\Location\Visibility(
-                        Criterion\Location\Visibility::VISIBLE
-                    ),
-                    'sortClauses' => array( new SortClause\ContentId() )
-                ),
-                $fixtureDir . 'Visibility.php',
-            ),
         );
     }
 
@@ -609,20 +551,6 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
-     * Test for the findContent() method.
-     *
-     * @deprecated
-     * @dataProvider getFilterContentSearchesDeprecated
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
-     */
-    public function testFindContentFilteredDeprecated( $queryData, $fixture, $closure = null )
-    {
-        $query = new Query( $queryData );
-        $this->assertQueryFixture( $query, $fixture, $closure );
-    }
-
-    /**
      * Test for the findLocations() method.
      *
      * @dataProvider getFilterContentSearches
@@ -630,19 +558,6 @@ class SearchServiceTest extends BaseTest
      * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindLocationsContentFiltered( $queryData, $fixture, $closure = null )
-    {
-        $query = new LocationQuery( $queryData );
-        $this->assertQueryFixture( $query, $fixture, $closure );
-    }
-
-    /**
-     * Test for the findLocations() method.
-     *
-     * @dataProvider getLocationFilterSearches
-     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
-     */
-    public function testFindLocationsFiltered( $queryData, $fixture, $closure = null )
     {
         $query = new LocationQuery( $queryData );
         $this->assertQueryFixture( $query, $fixture, $closure );
@@ -3094,7 +3009,7 @@ class SearchServiceTest extends BaseTest
             array(
                 'filter' => new Criterion\LogicalAnd(
                     array(
-                        new Criterion\Location\ParentLocationId( $designLocationId ),
+                        new Criterion\ParentLocationId( $designLocationId ),
                         new Criterion\Location\IsMainLocation(
                             Criterion\Location\IsMainLocation::MAIN
                         )
@@ -3143,7 +3058,7 @@ class SearchServiceTest extends BaseTest
             array(
                 'filter' => new Criterion\LogicalAnd(
                     array(
-                        new Criterion\Location\ParentLocationId( $designLocationId ),
+                        new Criterion\ParentLocationId( $designLocationId ),
                         new Criterion\Location\IsMainLocation(
                             Criterion\Location\IsMainLocation::NOT_MAIN
                         ),
@@ -3191,7 +3106,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\Location\ParentLocationId( $designLocationId ),
+                'filter' => new Criterion\ParentLocationId( $designLocationId ),
                 'offset' => 0,
                 'limit' => 10,
                 'sortClauses' => array(
@@ -3239,7 +3154,7 @@ class SearchServiceTest extends BaseTest
 
         $query = new LocationQuery(
             array(
-                'filter' => new Criterion\Location\ParentLocationId( $designLocationId ),
+                'filter' => new Criterion\ParentLocationId( $designLocationId ),
                 'offset' => 0,
                 'limit' => 10,
                 'sortClauses' => array(
