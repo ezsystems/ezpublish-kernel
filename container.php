@@ -19,6 +19,9 @@ if ( !isset( $config ) )
     throw new \RuntimeException( '$config not provided to container.php' );
 }
 
+// Setup class loader
+require_once $config['install_dir'] . "/vendor/autoload.php";
+
 return new ServiceContainer(
     $config['container_builder_path'],
     $config['install_dir'],
