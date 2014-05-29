@@ -55,6 +55,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
             $fs->mkdir( $storageDir );
         }
 
+        self::$setUp = false;
+
         parent::setUpBeforeClass();
     }
 
@@ -171,7 +173,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
 
     protected function getStorageDir()
     {
-        return ( self::$tmpDir ? self::$tmpDir . '/' : '' ) . $this->getContainer()->getParameter( 'storage_dir' );
+        return ( self::$tmpDir ? self::$tmpDir . '/' : '' ) . self::$container->getParameter( 'storage_dir' );
     }
 
     protected function getFilesize( $binaryFileId )
