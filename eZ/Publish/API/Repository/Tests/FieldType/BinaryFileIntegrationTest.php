@@ -280,7 +280,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
 
         $this->assertTrue(
             file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
-            "File $path exists."
+            "File $path doesn't exist."
         );
     }
 
