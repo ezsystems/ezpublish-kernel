@@ -131,7 +131,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
     public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
     {
-        if ( $originalField->value->data === null )
+        if ( $originalField->value->externalData === null )
             return false;
 
         // field translations have their own file reference, but to the original file
