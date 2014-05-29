@@ -45,7 +45,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         return array(
             'create' => array(
-                'id'=> null,
+                'id' => null,
                 'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                 'fileName' => 'Icy-Night-Flower-Binary.jpg',
                 'fileSize' => filesize( $path ),
