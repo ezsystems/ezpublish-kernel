@@ -225,7 +225,16 @@ class LegacyStorage extends Gateway
 
         $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
 
-        return ( isset( $rows[0] ) ? $rows[0] : null );
+        if ( !isset( $rows[0] ) )
+        {
+            return null;
+        }
+
+        // Cast coordinates as the DB can return them as strings
+        $rows[0]["latitude"] = (float)$rows[0]["latitude"];
+        $rows[0]["longitude"] = (float)$rows[0]["longitude"];
+
+        return $rows[0];
     }
 
     /**
