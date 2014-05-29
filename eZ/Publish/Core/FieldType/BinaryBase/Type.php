@@ -111,7 +111,7 @@ abstract class Type extends FieldType
         {
             throw new InvalidArgumentValue(
                 '$value->id',
-                $value->path,
+                $value->id,
                 get_class( $this )
             );
         }
