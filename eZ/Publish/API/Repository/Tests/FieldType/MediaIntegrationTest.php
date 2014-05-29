@@ -46,7 +46,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         return array(
             'create' => array(
-                'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'id' => null,
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                 'fileName' => 'Icy-Night-Flower-Binary.jpg',
                 'fileSize' => filesize( $path ),
                 'mimeType' => 'image/jpeg',
@@ -54,7 +55,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                 // 'width' by intention (will be set to defaults)
             ),
             'update' => array(
-                'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'id' => null,
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                 'fileName' => 'Blue-Blue-Blue-Sindelfingen.png',
                 'fileSize' => filesize( $path ),
                 // Left out 'mimeType' by intention (will be auto-detected)
@@ -194,7 +196,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
 
         // Will change during storage
         unset( $expectedData['id'] );
+        $expectedData['inputUri'] = null;
 
+        $this->assertNotEmpty( $field->value->id );
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -276,9 +280,12 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
 
         $fixtureData = $this->getFixtureData();
         $expectedData = $fixtureData['update'];
+
         // Will change during storage
         unset( $expectedData['id'] );
+        $expectedData['inputUri'] = null;
 
+        $this->assertNotEmpty( $field->value->id );
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -286,7 +293,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
 
         $this->assertTrue(
             file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
-            "File $path exists."
+            "File $path doesn't exist."
         );
     }
 
@@ -358,8 +365,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         $fixture = $this->getFixtureData();
 
-        $fixture['create']['uri'] = $fixture['create']['id'];
-        $fixture['create']['path'] = $fixture['create']['id'];
+        $fixture['create']['uri'] = $fixture['create']['inputUri'];
+        $fixture['create']['path'] = $fixture['create']['inputUri'];
 
         // Defaults set by type
         $fixture['create']['hasController'] = false;

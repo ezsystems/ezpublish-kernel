@@ -45,14 +45,16 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         return array(
             'create' => array(
-                'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'id'=> null,
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                 'fileName' => 'Icy-Night-Flower-Binary.jpg',
                 'fileSize' => filesize( $path ),
                 'mimeType' => 'image/jpeg',
                 // Left out'downloadCount' by intention (will be set to 0)
             ),
             'update' => array(
-                'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'id' => null,
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                 'fileName' => 'Blue-Blue-Blue-Sindelfingen.png',
                 'fileSize' => filesize( $path ),
                 'downloadCount' => 23,
@@ -181,7 +183,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
 
         // Will change during storage
         unset( $expectedData['id'] );
+        $expectedData['inputUri'] = null;
 
+        $this->assertNotEmpty( $field->value->id );
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -189,7 +193,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
 
         $this->assertTrue(
             file_exists( $path = $this->getInstallDir() . '/' . $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->id ),
-            "File $path exists"
+            "File $path doesn't exist"
         );
 
         self::$loadedBinaryFilePath = $field->value->id;
@@ -263,9 +267,12 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
 
         $fixtureData = $this->getFixtureData();
         $expectedData = $fixtureData['update'];
+
         // Will change during storage
         unset( $expectedData['id'] );
+        $expectedData['inputUri'] = null;
 
+        $this->assertNotEmpty( $field->value->id );
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -345,8 +352,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $fixture = $this->getFixtureData();
         $fixture['create']['downloadCount'] = 0;
-        $fixture['create']['uri'] = $fixture['create']['id'];
-        $fixture['create']['path'] = $fixture['create']['id'];
+        $fixture['create']['uri'] = $fixture['create']['inputUri'];
+        $fixture['create']['path'] = $fixture['create']['inputUri'];
 
         $fieldValue = $this->getValidCreationFieldData();
         $fieldValue->uri = $fixture['create']['uri'];
@@ -370,7 +377,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     {
         $fixture = $this->getFixtureData();
         $fixture['create']['downloadCount'] = 0;
-        $fixture['create']['uri'] = $fixture['create']['id'];
+        $fixture['create']['uri'] = $fixture['create']['inputUri'];
 
         $fieldValue = $this->getValidCreationFieldData();
         $fieldValue->uri = $fixture['create']['uri'];
