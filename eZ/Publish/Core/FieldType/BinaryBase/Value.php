@@ -74,21 +74,7 @@ abstract class Value extends BaseValue
             unset( $fileData['path'] );
         }
 
-        foreach ( $fileData as $key => $value )
-        {
-            try
-            {
-                $this->$key = $value;
-            }
-            catch ( PropertyNotFoundException $e )
-            {
-                throw new InvalidArgumentType(
-                    sprintf( '$imageData->%s', $key ),
-                    'Property not found',
-                    $value
-                );
-            }
-        }
+        parent::__construct( $fileData );
     }
 
     /**
