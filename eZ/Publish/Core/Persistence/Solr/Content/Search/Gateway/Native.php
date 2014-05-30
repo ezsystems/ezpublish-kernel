@@ -202,7 +202,7 @@ class Native extends Gateway
         $updates   = $this->createUpdates( $documents );
         $result   = $this->client->request(
             'POST',
-            '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
+            '/solr/update?' . ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -229,7 +229,7 @@ class Native extends Gateway
     {
         $this->client->request(
             'POST',
-            '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
+            '/solr/update?' . ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -280,7 +280,7 @@ class Native extends Gateway
         {
             $this->client->request(
                 "POST",
-                "/solr/update?" . ( $this->commit ? "commit=true&" : "" ) . "wt=json",
+                "/solr/update?" . ( $this->commit ? "softCommit=true&" : "" ) . "wt=json",
                 new Message(
                     array(
                         "Content-Type" => "text/xml",
@@ -332,7 +332,7 @@ class Native extends Gateway
 
             $this->client->request(
                 "POST",
-                "/solr/update/json?" . ( $this->commit ? "commit=true&" : "" ) . "wt=json",
+                "/solr/update/json?" . ( $this->commit ? "softCommit=true&" : "" ) . "wt=json",
                 new Message(
                     array(
                         "Content-Type: application/json",
@@ -352,7 +352,7 @@ class Native extends Gateway
     {
         $this->client->request(
             'POST',
-            '/solr/update?' . ( $this->commit ? "commit=true&" : "" ) . 'wt=json',
+            '/solr/update?' . ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
