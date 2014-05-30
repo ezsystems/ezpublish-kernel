@@ -25,12 +25,15 @@ class URIHelper
      */
     public function updateLegacyURI( Request $request )
     {
-        $uri = eZURI::instance();
-        $uri->setURIString(
+        $viewParametersString = rtrim(
             $request->attributes->get(
                 'semanticPathinfo',
                 $request->getPathinfo()
-            ) . $request->attributes->get( 'viewParametersString' )
+            ) . $request->attributes->get( 'viewParametersString' ),
+            '/'
         );
+
+        $uri = eZURI::instance();
+        $uri->setURIString( $viewParametersString );
     }
 }
