@@ -40,8 +40,9 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
          * 2. Use of getLinksId() in form of array( array $arguments, array $return ), empty means no call
          * 3. Use of getObjectId() in form of array( array $arguments, array $return ), empty means no call
          * 4. Use of insertLink() in form of array( $argument, $return ), empty means no call
-         * 5. Expected return value
-         * 6. Resulting XML
+         * 5. Use of linkUrl() in form of array( $argument, $return ), empty means no call
+         * 6. Expected return value
+         * 7. Resulting XML
          */
         return array(
             // LINK
@@ -51,6 +52,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
 ',
                 array( array( '/test' ), array( '/test' => 55 ) ),
                 array( array(), array() ),
+                array(),
                 array(),
                 true,
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -64,6 +66,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 array( array( '/test' ), array( '/test' => 55 ) ),
                 array( array(), array() ),
                 array(),
+                array(),
                 true,
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link url_id="55">object link</link><link url_id="55">object link</link>.</paragraph></section>
@@ -75,6 +78,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
 ',
                 array( array(), array() ),
                 array( array( '34oi5ne5tj5iojte8oj58otehj5tjheo8' ), array( '34oi5ne5tj5iojte8oj58otehj5tjheo8' => 55 ) ),
+                array(),
                 array(),
                 true,
                 '<?xml version="1.0" encoding="utf-8"?>
@@ -88,6 +92,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 array( array(), array() ),
                 array( array( '34oi5ne5tj5iojte8oj58otehj5tjheo8' ), array( '34oi5ne5tj5iojte8oj58otehj5tjheo8' => 55 ) ),
                 array(),
+                array(),
                 true,
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link object_id="55">object link</link><embed object_id="55">object link</embed>.</paragraph></section>
@@ -100,6 +105,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 array( array( '/newUrl' ), array() ),
                 array( array(), array() ),
                 array( '/newUrl', 66 ),
+                array( 66, null ),
                 true,
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link url_id="66">object link</link>.</paragraph></section>
@@ -109,6 +115,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link url_id="55">object link</link>.</paragraph></section>
 ',
+                array(),
                 array(),
                 array(),
                 array(),
@@ -126,6 +133,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 array( array(), array() ),
                 array( array( '34oi5ne5tj5iojte8oj58otehj5tjheo8' ), array( '34oi5ne5tj5iojte8oj58otehj5tjheo8' => 55 ) ),
                 array(),
+                array(),
                 true,
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <embed object_id="55">object embed</embed>.</paragraph></section>
@@ -135,6 +143,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <embed object_id="55">object embed</embed>.</paragraph></section>
 ',
+                array(),
                 array(),
                 array(),
                 array(),
@@ -152,6 +161,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 array( array(), array() ),
                 array( array( '34oi5ne5tj5iojte8oj58otehj5tjheo8' ), array( '34oi5ne5tj5iojte8oj58otehj5tjheo8' => 55 ) ),
                 array(),
+                array(),
                 true,
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <embed-inline object_id="55">object embed</embed-inline>.</paragraph></section>
@@ -161,6 +171,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <embed-inline object_id="55">object embed</embed-inline>.</paragraph></section>
 ',
+                array(),
                 array(),
                 array(),
                 array(),
@@ -180,6 +191,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         $getLinksIdData,
         $getObjectIdData,
         $insertLinkData,
+        $linkUrlData,
         $expectedReturnValue,
         $expectedResultXML
     )
@@ -188,13 +200,14 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         $inputDomDocument->loadXML( $inputXML );
         $versionInfo = new VersionInfo;
         $field = new Field( array( 'value' => new FieldValue( array( 'data' => $inputDomDocument ) ) ) );
-        $legacyStorage = $this->getPartlyMockedLegacyStorage( array( 'getLinksId', 'getObjectId', 'insertLink' ) );
+        $legacyStorage = $this->getPartlyMockedLegacyStorage( array( 'getLinksId', 'getObjectId', 'insertLink', 'linkUrl' ) );
 
         foreach (
             array(
                 'getLinksId' => $getLinksIdData,
                 'getObjectId' => $getObjectIdData,
-                'insertLink' => $insertLinkData
+                'insertLink' => $insertLinkData,
+                'linkUrl' => $linkUrlData,
             ) as $method => $data
         )
         {

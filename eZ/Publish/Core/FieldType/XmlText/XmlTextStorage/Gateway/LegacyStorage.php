@@ -189,7 +189,11 @@ class LegacyStorage extends Gateway
 
                     // Insert url once if not already existing
                     if ( !isset( $linksIds[$url] ) )
-                        $linksIds[$url] = $this->insertLink( $url );
+                    {
+                        $urlId = $this->insertLink( $url );
+                        $linksIds[$url] = $urlId;
+                        $this->linkUrl( $urlId, $field->id, $versionInfo->versionNo );
+                    }
 
                     $element->setAttribute( 'url_id', $linksIds[$url] );
                     $element->removeAttribute( 'url' );
@@ -202,7 +206,11 @@ class LegacyStorage extends Gateway
 
                     // Insert url once if not already existing
                     if ( !isset( $linksIds[$url] ) )
-                        $linksIds[$url] = $this->insertLink( $url );
+                    {
+                        $urlId = $this->insertLink( $url );
+                        $linksIds[$url] = $urlId;
+                        $this->linkUrl( $urlId, $field->id, $versionInfo->versionNo );
+                    }
 
                     $element->setAttribute( 'url_id', $linksIds[$url] );
                     $element->removeAttribute( 'href' );
@@ -320,5 +328,35 @@ class LegacyStorage extends Gateway
         return $dbHandler->lastInsertId(
             $dbHandler->getSequenceName( UrlStorage::URL_TABLE, "id" )
         );
+    }
+
+    /**
+     * Creates link to URL with $urlId for field with $fieldId in $versionNo.
+     *
+     * @param mixed $urlId
+     * @param mixed $fieldId
+     * @param mixed $versionNo
+     *
+     * @return void
+     */
+    protected function linkUrl( $urlId, $fieldId, $versionNo )
+    {
+        $dbHandler = $this->getConnection();
+
+        $q = $dbHandler->createInsertQuery();
+        $q->insertInto(
+            $dbHandler->quoteTable( UrlStorage::URL_LINK_TABLE )
+        )->set(
+            $dbHandler->quoteColumn( "contentobject_attribute_id" ),
+            $q->bindValue( $fieldId, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "contentobject_attribute_version" ),
+            $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "url_id" ),
+            $q->bindValue( $urlId, null, \PDO::PARAM_INT )
+        );
+
+        $q->prepare()->execute();
     }
 }
