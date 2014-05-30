@@ -48,7 +48,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      */
     protected function getStoragePrefix()
     {
-        return $this->getContainer()->getParameter( 'binaryfile_storage_prefix' );
+        return self::$container->getParameter( 'binaryfile_storage_prefix' );
     }
 
     /**
@@ -79,7 +79,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage(),
                 ),
-                $this->getContainer()->get( "ezpublish.fieldType.ezbinaryfile.io_service" ),
+                self::$container->get( "ezpublish.fieldType.ezbinaryfile.io_service" ),
                 new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
                 new FileInfo()
             )

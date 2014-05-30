@@ -49,7 +49,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     protected function getStoragePrefix()
     {
-        return $this->getContainer()->getParameter( 'image_storage_prefix' );
+        return self::$container->getParameter( 'image_storage_prefix' );
     }
 
     /**
@@ -80,7 +80,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
                 ),
-                $this->getContainer()->get( "ezpublish.fieldType.ezimage.io" ),
+                self::$container->get( "ezpublish.fieldType.ezimage.io" ),
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
                 new IO\MetadataHandler\ImageSize()
             )
