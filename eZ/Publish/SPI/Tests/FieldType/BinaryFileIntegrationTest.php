@@ -144,7 +144,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'id' => null,
+                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                     'fileName' => 'Ice-Flower-Binary.jpg',
                     'fileSize' => filesize( $path ),
                     'mimeType' => 'image/jpeg',
@@ -192,7 +193,8 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'id' => null,
+                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                     'fileName' => 'Blueish-Blue-Binary.jpg',
                     'fileSize' => filesize( $path ),
                     'mimeType' => 'image/png',

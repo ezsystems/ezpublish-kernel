@@ -16,22 +16,25 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 /**
  * Base value for binary field types
  * @property string $path Used for BC with 5.0 (EZP-20948). Equivalent to $id.
+ * @property-read string $id Unique file ID, set by storage. Read only since 5.3 (EZP-22808).
  */
 abstract class Value extends BaseValue
 {
     /**
-     * @todo This doesn't really make sense here...
-     * What is the point of exposing this ? It makes no sense as seen from outside (no storage dir nor prefix)
-     * but a path *also* doesn't make sense when we move to a cloud/remote storage
-     * On the other hand, this property IS required when INPUTING files, as they need to be read from
-     * somewhere. It makes no harm, but is still confusing.
+     * Unique file ID, set by storage
      *
-     * Unique file ID
+     * Since 5.3 this is not used for input, use self::$inputUri instead
+     *
+     * @var null|string
+     */
+    protected $id;
+
+    /**
+     * Input file URI, as a path to a file on a disk
      *
      * @var string
-     * @required
      */
-    public $id;
+    public $inputUri;
 
     /**
      * Display file name
@@ -74,21 +77,14 @@ abstract class Value extends BaseValue
             unset( $fileData['path'] );
         }
 
-        foreach ( $fileData as $key => $value )
+        // BC with 5.2 (EZP-22808)
+        if ( isset( $fileData['id'] ) && file_exists( $fileData['id'] ) )
         {
-            try
-            {
-                $this->$key = $value;
-            }
-            catch ( PropertyNotFoundException $e )
-            {
-                throw new InvalidArgumentType(
-                    sprintf( '$imageData->%s', $key ),
-                    'Property not found',
-                    $value
-                );
-            }
+            $fileData['inputUri'] = $fileData['id'];
+            unset( $fileData['id'] );
         }
+
+        parent::__construct( $fileData );
     }
 
     /**
@@ -106,17 +102,27 @@ abstract class Value extends BaseValue
     public function __get( $propertyName )
     {
         if ( $propertyName == 'path' )
-            return $this->id;
+            return $this->inputUri;
 
-        parent::__get( $propertyName );
+        return parent::__get( $propertyName );
     }
 
     public function __set( $propertyName, $propertyValue )
     {
+        // BC with 5.0 (EZP-20948)
         if ( $propertyName == 'path' )
-            $this->id = $propertyValue;
-
-        parent::__set( $propertyName, $propertyValue );
+        {
+            $this->inputUri = $propertyValue;
+        }
+        // BC with 5.2 (EZP-22808)
+        else if ( $propertyName == 'id' && file_exists( $propertyValue ) )
+        {
+            $this->inputUri = $propertyValue;
+        }
+        else
+        {
+            parent::__set( $propertyName, $propertyValue );
+        }
     }
 
     public function __isset( $propertyName )
@@ -124,6 +130,6 @@ abstract class Value extends BaseValue
         if ( $propertyName == 'path' )
             return true;
 
-        parent::__isset( $propertyName );
+        return parent::__isset( $propertyName );
     }
 }

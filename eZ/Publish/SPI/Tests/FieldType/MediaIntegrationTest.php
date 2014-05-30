@@ -152,7 +152,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'id' => null,
+                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                     'fileName' => 'Ice-Flower-Media.jpg',
                     'fileSize' => filesize( $path ),
                     'mimeType' => 'image/jpeg',
@@ -183,7 +184,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
 
         $this->assertTrue(
             file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ),
-            "Stored file $path exists"
+            "Stored file $path does not exists"
         );
 
         $this->assertEquals( 'Ice-Flower-Media.jpg', $field->value->externalData['fileName'] );
@@ -211,7 +212,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'id' => null,
+                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                     'fileName' => 'Blueish-Blue-Media.jpg',
                     'fileSize' => filesize( $path ),
                     'mimeType' => 'image/png',
@@ -245,7 +247,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
 
         $this->assertTrue(
             file_exists( $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'] ),
-            "Stored file $path exists"
+            "Stored file $path does not exists"
         );
 
         // Check old file removed before update

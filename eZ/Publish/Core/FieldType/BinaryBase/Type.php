@@ -70,7 +70,7 @@ abstract class Type extends FieldType
         // construction only from path
         if ( is_string( $inputValue ) )
         {
-            $inputValue = array( 'id' => $inputValue );
+            $inputValue = array( 'inputUri' => $inputValue );
         }
 
         // default construction from array
@@ -95,12 +95,23 @@ abstract class Type extends FieldType
      */
     protected function checkValueStructure( BaseValue $value )
     {
-        // Required parameter $id
-        if ( !isset( $value->id ) || !file_exists( $value->id ) )
+        // Input file URI, if set needs to point to existing file
+        if ( isset( $value->inputUri ) )
+        {
+            if ( !file_exists( $value->inputUri ) )
+            {
+                throw new InvalidArgumentValue(
+                    '$value->inputUri',
+                    $value->inputUri,
+                    get_class( $this )
+                );
+            }
+        }
+        else if ( !isset( $value->id ) )
         {
             throw new InvalidArgumentValue(
                 '$value->id',
-                $value->path,
+                $value->id,
                 get_class( $this )
             );
         }
@@ -135,7 +146,7 @@ abstract class Type extends FieldType
      */
     protected function completeValue( BaseValue $value )
     {
-        if ( !isset( $value->id ) || !file_exists( $value->id ) )
+        if ( !isset( $value->inputUri ) || !file_exists( $value->inputUri ) )
         {
             return;
         }
@@ -143,12 +154,12 @@ abstract class Type extends FieldType
         if ( !isset( $value->fileName ) )
         {
             // @todo this may not always work...
-            $value->fileName = basename( $value->id );
+            $value->fileName = basename( $value->inputUri );
         }
 
         if ( !isset( $value->fileSize ) )
         {
-            $value->fileSize = filesize( $value->id );
+            $value->fileSize = filesize( $value->inputUri );
         }
     }
 
@@ -192,8 +203,9 @@ abstract class Type extends FieldType
     {
         return array(
             'id' => $value->id,
-            // Kept for BC with eZ Publish 5.0 (EZP-20948)
-            'path' => $value->id,
+            // Kept for BC with eZ Publish 5.0 (EZP-20948, EZP-22808)
+            'path' => $value->inputUri,
+            'inputUri' => $value->inputUri,
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
             'mimeType' => $value->mimeType,

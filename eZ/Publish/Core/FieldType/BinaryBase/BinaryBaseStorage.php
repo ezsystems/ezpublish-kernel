@@ -102,18 +102,19 @@ class BinaryBaseStorage extends GatewayBasedStorage
         // no mimeType means we are dealing with an input, local file
         if ( !isset( $field->value->externalData['mimeType'] ) )
         {
-            $field->value->externalData['mimeType'] = $this->mimeTypeDetector->getFromPath( $field->value->externalData['id'] );
+            $field->value->externalData['mimeType'] =
+                $this->mimeTypeDetector->getFromPath( $field->value->externalData['inputUri'] );
         }
 
         $storedValue = $field->value->externalData;
-        $storagePath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
 
         // The file referenced in externalData MAY be an existing IOService file which we can use
-        if ( ( !$this->IOService->exists( $storedValue['id'] ) ) && ( !$this->IOService->exists( $storagePath ) ) )
+        if ( $storedValue['id'] === null )
         {
             $createStruct = $this->IOService->newBinaryCreateStructFromLocalFile(
-                $storedValue['id']
+                $storedValue['inputUri']
             );
+            $storagePath = $this->pathGenerator->getStoragePathForField( $field, $versionInfo );
             $createStruct->id = $storagePath;
             $binaryFile = $this->IOService->createBinaryFile( $createStruct );
             $storedValue['id'] = $binaryFile->id;
@@ -130,7 +131,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
     public function copyLegacyField( VersionInfo $versionInfo, Field $field, Field $originalField, array $context )
     {
-        if ( $originalField->value->data === null )
+        if ( $originalField->value->externalData === null )
             return false;
 
         // field translations have their own file reference, but to the original file
