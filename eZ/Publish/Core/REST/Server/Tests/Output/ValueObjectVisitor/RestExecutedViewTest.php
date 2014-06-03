@@ -39,7 +39,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
         );
 
         $this->addRouteExpectation(
-            'ezpublish_rest_loadView',
+            'ezpublish_rest_getView',
             array( 'viewId' => $view->identifier ),
             "/content/views/{$view->identifier}"
         );
