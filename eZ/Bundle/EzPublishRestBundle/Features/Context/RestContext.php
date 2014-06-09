@@ -46,32 +46,6 @@ class RestContext extends ApiContext implements RestSentences
     public $responseObject;
 
     /**
-     * Last action should have the (last) action made through REST
-     *
-     * @var string
-     */
-    protected $lastAction;
-
-    /**
-     * Status data for action is an array with the status code and message for a
-     * predefined action
-     *
-     * @var array Each array entry should have the "action" => [ code, "message" ]
-     * @see FeatureContext::lastAction
-     */
-    protected $statusDataForAction = array(
-        // action => array( <status code>, <status message> )
-        "create" => array( 201, "created" ),
-        "update" => array( 200, "ok" ),
-        "delete" => array( 204, "no content" ),
-
-        // errors
-        // these aren't actions, but they will change status
-        "invalid" => array( 403, "forbidden" ),
-        "unauthorized" => array( 401, "unauthorized" ),
-    );
-
-    /**
      * @param array $parameters
      */
     public function __construct( array $parameters )
@@ -90,53 +64,6 @@ class RestContext extends ApiContext implements RestSentences
         $this->useContext( 'Authentication', new SubContext\Authentication( $this->restClient ) );
         $this->useContext( 'ContentTypeGroup', new SubContext\ContentTypeGroup( $this->restClient ) );
         $this->useContext( 'Exception', new SubContext\Exception( $this->restClient ) );
-    }
-
-    /**
-     * Sets the last action
-     *
-     * @param string $action
-     */
-    public function setLastAction( $action )
-    {
-        $this->lastAction = $action;
-    }
-
-    /**
-     * Indicate if the response should be checked based on the "lastAction"
-     *
-     * @return bool
-     */
-    public function shouldVerifyResponse()
-    {
-        switch( $this->lastAction )
-        {
-            case 'unauthorized':
-            case 'forbidden':
-                return false;
-
-            default:
-                return true;
-        }
-    }
-
-    /**
-     * Get the code and message for the last action
-     *
-     * @return array Status data array( code, message )
-     */
-    public function getLastActionStatusCodeAndMessage()
-    {
-        if ( empty( $this->lastAction ) || empty( $this->statusDataForAction[$this->lastAction] ) )
-        {
-            $data = array( 200, "ok" );
-        }
-        else
-        {
-            $data = $this->statusDataForAction[$this->lastAction];
-        }
-
-        return $data;
     }
 
     /**
