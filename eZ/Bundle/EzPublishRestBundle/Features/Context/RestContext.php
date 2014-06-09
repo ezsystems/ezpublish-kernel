@@ -84,7 +84,7 @@ class RestContext extends ApiContext implements RestSentences
             null;
 
         // create a new REST Client
-        $this->restClient = new RestClient\GuzzleClient( $rest_url );
+        $this->restClient = new RestClient\BuzzClient( $rest_url );
 
         // sub contexts
         $this->useContext( 'Authentication', new SubContext\Authentication( $this->restClient ) );
@@ -297,12 +297,31 @@ class RestContext extends ApiContext implements RestSentences
         throw new InvalidArgumentException( 'property', $property . ' is invalid' );
     }
 
+    protected function changeMappedValuesOnUrl( $url )
+    {
+        $newUrl = "";
+        foreach( explode( '/', $url ) as $chunk )
+        {
+            $newChunk = $this->getSubContext( 'Common' )->getValuesFromMap( $chunk );
+            if ( empty( $newChunk ) )
+            {
+                $newChunk = $chunk;
+            }
+
+            $newUrl.= '/' . $newChunk;
+        }
+
+        return preg_replace( '/\/\//', '/', $newUrl );
+    }
+
     /**
      * When I create a "<requestType>" request to "<resourceUrl>"
      */
-    public function iCreateRequest( $resourceUrl, $requestType )
+    public function iCreateRequest( $requestType, $resourceUrl )
     {
-        $this->restClient->setResourceUrl( $resourceUrl );
+        $this->restClient->setResourceUrl(
+             $this->changeMappedValuesOnUrl( $resourceUrl )
+        );
         $this->restClient->setRequestType( $requestType );
     }
 
