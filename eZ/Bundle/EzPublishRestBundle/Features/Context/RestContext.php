@@ -326,6 +326,15 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
+     * When I send a "<requestType>" request to "<resourceUrl>"
+     */
+    public function iCreateAndSendRequest( $requestType, $resourceUrl )
+    {
+        $this->iCreateRequest( $requestType, $resourceUrl );
+        $this->iSendRequest();
+    }
+
+    /**
      * When I add "<header>" header (?:to|with) "<action>" (?:an|a|for|to|the|of) "<object>"
      *
      * Sentences examples:
