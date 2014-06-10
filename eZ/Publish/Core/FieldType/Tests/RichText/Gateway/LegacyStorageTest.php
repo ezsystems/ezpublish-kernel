@@ -85,7 +85,9 @@ class LegacyStorageTest extends TestCase
 
         $url = "one/two/three";
         $time = time();
-        $id = $gateway->insertLink( $url );
+        $fieldId = 10;
+        $versionNo = 1;
+        $id = $gateway->insertLink( $url, $fieldId, $versionNo );
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $query
@@ -117,6 +119,31 @@ class LegacyStorageTest extends TestCase
 
         unset( $result[0]["created"] );
         unset( $result[0]["modified"] );
+
+        $this->assertEquals( $expected, $result );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $query
+            ->select( "*" )
+            ->from( 'ezurl_object_link' )
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'url_id' ),
+                    $query->bindValue( $id )
+                )
+            );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
+
+        $expected = array(
+            array(
+                'contentobject_attribute_id' => $fieldId,
+                'contentobject_attribute_version' => $versionNo,
+                'url_id' => $id,
+            ),
+        );
 
         $this->assertEquals( $expected, $result );
     }

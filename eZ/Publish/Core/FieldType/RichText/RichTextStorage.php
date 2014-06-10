@@ -94,7 +94,11 @@ class RichTextStorage extends GatewayBasedStorage
             {
                 if ( !isset( $linksIds[$url] ) )
                 {
-                    $linksIds[$url] = $gateway->insertLink( $url );
+                    $linksIds[$url] = $gateway->insertLink(
+                        $url,
+                        $field->id,
+                        $versionInfo->versionNo
+                    );
                 }
                 $href = "ezurl://{$linksIds[$url]}{$fragment}";
             }

@@ -54,11 +54,13 @@ abstract class Gateway extends StorageGateway
     abstract public function getContentIds( array $linksRemoteIds );
 
     /**
-     * Inserts a new URL and returns its id.
+     * Inserts a new $url for given $fieldId and $versionNo and returns its id.
      *
      * @param string $url The URL to insert in the database
+     * @param int|string $fieldId
+     * @param int $versionNo
      *
      * @return mixed
      */
-    abstract public function insertLink( $url );
+    abstract public function insertLink( $url, $fieldId, $versionNo );
 }

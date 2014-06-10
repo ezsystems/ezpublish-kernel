@@ -160,13 +160,15 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Inserts a new URL and returns its id.
+     * Inserts a new $url for given $fieldId and $versionNo and returns its id.
      *
      * @param string $url The URL to insert in the database
+     * @param int $fieldId
+     * @param int $versionNo
      *
      * @return mixed
      */
-    public function insertLink( $url )
+    public function insertLink( $url, $fieldId, $versionNo )
     {
         $time = time();
         $dbHandler = $this->getConnection();
@@ -190,8 +192,42 @@ class LegacyStorage extends Gateway
 
         $q->prepare()->execute();
 
-        return $dbHandler->lastInsertId(
+        $urlId = $dbHandler->lastInsertId(
             $dbHandler->getSequenceName( UrlStorage::URL_TABLE, "id" )
         );
+
+        $this->linkUrl( $urlId, $fieldId, $versionNo );
+
+        return $urlId;
+    }
+
+    /**
+     * Creates link to URL with $urlId for field with $fieldId in $versionNo.
+     *
+     * @param int $urlId
+     * @param int $fieldId
+     * @param int $versionNo
+     *
+     * @return void
+     */
+    protected function linkUrl( $urlId, $fieldId, $versionNo )
+    {
+        $dbHandler = $this->getConnection();
+
+        $q = $dbHandler->createInsertQuery();
+        $q->insertInto(
+            $dbHandler->quoteTable( UrlStorage::URL_LINK_TABLE )
+        )->set(
+            $dbHandler->quoteColumn( "contentobject_attribute_id" ),
+            $q->bindValue( $fieldId, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "contentobject_attribute_version" ),
+            $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+        )->set(
+            $dbHandler->quoteColumn( "url_id" ),
+            $q->bindValue( $urlId, null, \PDO::PARAM_INT )
+        );
+
+        $q->prepare()->execute();
     }
 }
