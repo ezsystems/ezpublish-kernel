@@ -30,7 +30,7 @@ class ContentTypeGroup extends Base implements ContentTypeGroupSentences
             new Step\When( 'I send the request' )
         );
     }
-    
+
     /**
      * When I read Content Type Group with identifier "<identifier>"
      */

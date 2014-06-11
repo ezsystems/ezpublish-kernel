@@ -227,7 +227,7 @@ class RestContext extends ApiContext implements RestSentences
     protected function changeMappedValuesOnUrl( $url )
     {
         $newUrl = "";
-        foreach( explode( '/', $url ) as $chunk )
+        foreach ( explode( '/', $url ) as $chunk )
         {
             $newChunk = $this->getSubContext( 'Common' )->getValuesFromMap( $chunk );
             if ( empty( $newChunk ) )
@@ -235,7 +235,7 @@ class RestContext extends ApiContext implements RestSentences
                 $newChunk = $chunk;
             }
 
-            $newUrl.= '/' . $newChunk;
+            $newUrl .= '/' . $newChunk;
         }
 
         return preg_replace( '/\/\//', '/', $newUrl );
@@ -247,7 +247,7 @@ class RestContext extends ApiContext implements RestSentences
     public function iCreateRequest( $requestType, $resourceUrl )
     {
         $this->restClient->setResourceUrl(
-             $this->changeMappedValuesOnUrl( $resourceUrl )
+            $this->changeMappedValuesOnUrl( $resourceUrl )
         );
         $this->restClient->setRequestType( $requestType );
     }
