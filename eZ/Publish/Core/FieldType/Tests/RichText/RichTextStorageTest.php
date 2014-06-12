@@ -112,7 +112,13 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         <link xlink:href="http://www.ez.no#fragment2">Existing external link</link>
     </para>
     <para>
+        <link xlink:href="http://www.ez.no#fragment2">Existing external link repeated</link>
+    </para>
+    <para>
         <link xlink:href="http://share.ez.no#fragment3">New external link</link>
+    </para>
+    <para>
+        <link xlink:href="http://share.ez.no#fragment3">New external link repeated</link>
     </para>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -124,7 +130,13 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         <link xlink:href="ezurl://123#fragment2">Existing external link</link>
     </para>
     <para>
+        <link xlink:href="ezurl://123#fragment2">Existing external link repeated</link>
+    </para>
+    <para>
         <link xlink:href="ezurl://456#fragment3">New external link</link>
+    </para>
+    <para>
+        <link xlink:href="ezurl://456#fragment3">New external link repeated</link>
     </para>
 </section>
 ',

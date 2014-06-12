@@ -85,6 +85,7 @@ class RichTextStorage extends GatewayBasedStorage
 
         $urlIdMap = $gateway->getUrlIds( array_keys( $urlSet ) );
         $contentIds = $gateway->getContentIds( array_keys( $remoteIdSet ) );
+        $urlLinkSet = array();
 
         foreach ( $links as $index => $link )
         {
@@ -92,15 +93,21 @@ class RichTextStorage extends GatewayBasedStorage
 
             if ( empty( $scheme ) )
             {
+                // Insert the same URL only once
                 if ( !isset( $urlIdMap[$url] ) )
                 {
                     $urlIdMap[$url] = $gateway->insertUrl( $url );
                 }
-                $gateway->linkUrl(
-                    $urlIdMap[$url],
-                    $field->id,
-                    $versionInfo->versionNo
-                );
+                // Link the same URL only once
+                if ( !isset( $urlLinkSet[$url] ) )
+                {
+                    $gateway->linkUrl(
+                        $urlIdMap[$url],
+                        $field->id,
+                        $versionInfo->versionNo
+                    );
+                    $urlLinkSet[$url] = true;
+                }
                 $href = "ezurl://{$urlIdMap[$url]}{$fragment}";
             }
             else
