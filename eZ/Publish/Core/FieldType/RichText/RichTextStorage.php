@@ -83,7 +83,7 @@ class RichTextStorage extends GatewayBasedStorage
             }
         }
 
-        $linksIds = $gateway->getLinkIds( array_keys( $urlSet ) );
+        $urlIdMap = $gateway->getUrlIds( array_keys( $urlSet ) );
         $contentIds = $gateway->getContentIds( array_keys( $remoteIdSet ) );
 
         foreach ( $links as $index => $link )
@@ -92,15 +92,16 @@ class RichTextStorage extends GatewayBasedStorage
 
             if ( empty( $scheme ) )
             {
-                if ( !isset( $linksIds[$url] ) )
+                if ( !isset( $urlIdMap[$url] ) )
                 {
-                    $linksIds[$url] = $gateway->insertLink(
-                        $url,
-                        $field->id,
-                        $versionInfo->versionNo
-                    );
+                    $urlIdMap[$url] = $gateway->insertUrl( $url );
                 }
-                $href = "ezurl://{$linksIds[$url]}{$fragment}";
+                $gateway->linkUrl(
+                    $urlIdMap[$url],
+                    $field->id,
+                    $versionInfo->versionNo
+                );
+                $href = "ezurl://{$urlIdMap[$url]}{$fragment}";
             }
             else
             {
@@ -144,8 +145,8 @@ class RichTextStorage extends GatewayBasedStorage
             return;
         }
 
-        $linkIdSet = array();
-        $linksInfo = array();
+        $urlIdSet = array();
+        $urlInfo = array();
 
         /** @var \DOMElement $link */
         foreach ( $links as $index => $link )
@@ -155,23 +156,23 @@ class RichTextStorage extends GatewayBasedStorage
                 $link->getAttribute( "xlink:href" ),
                 $matches
             );
-            $linksInfo[$index] = $matches;
+            $urlInfo[$index] = $matches;
 
             if ( !empty( $matches[1] ) )
             {
-                $linkIdSet[$matches[1]] = true;
+                $urlIdSet[$matches[1]] = true;
             }
         }
 
-        $linkUrls = $gateway->getLinkUrls( array_keys( $linkIdSet ) );
+        $idUrlMap = $gateway->getIdUrls( array_keys( $urlIdSet ) );
 
         foreach ( $links as $index => $link )
         {
-            list( , $urlId, $fragment ) = $linksInfo[$index];
+            list( , $urlId, $fragment ) = $urlInfo[$index];
 
-            if ( isset( $linkUrls[$urlId] ) )
+            if ( isset( $idUrlMap[$urlId] ) )
             {
-                $href = $linkUrls[$urlId] . $fragment;
+                $href = $idUrlMap[$urlId] . $fragment;
             }
             else
             {

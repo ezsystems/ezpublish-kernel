@@ -29,7 +29,7 @@ class LegacyStorageTest extends TestCase
                 23 => "/content/view/sitemap/2",
                 24 => "/content/view/tagcloud/2"
             ),
-            $gateway->getLinkUrls(
+            $gateway->getIdUrls(
                 array( 23, 24, "fake" )
             )
         );
@@ -46,7 +46,7 @@ class LegacyStorageTest extends TestCase
                 "/content/view/sitemap/2" => 23,
                 "/content/view/tagcloud/2" => 24
             ),
-            $gateway->getLinkIds(
+            $gateway->getUrlIds(
                 array(
                     "/content/view/sitemap/2",
                     "/content/view/tagcloud/2",
@@ -77,7 +77,7 @@ class LegacyStorageTest extends TestCase
         );
     }
 
-    public function testInsertLink()
+    public function testInsertUrl()
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urls.php" );
 
@@ -85,9 +85,7 @@ class LegacyStorageTest extends TestCase
 
         $url = "one/two/three";
         $time = time();
-        $fieldId = 10;
-        $versionNo = 1;
-        $id = $gateway->insertLink( $url, $fieldId, $versionNo );
+        $id = $gateway->insertUrl( $url );
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $query
@@ -121,17 +119,19 @@ class LegacyStorageTest extends TestCase
         unset( $result[0]["modified"] );
 
         $this->assertEquals( $expected, $result );
+    }
+
+    public function testLinkUrl()
+    {
+        $gateway = $this->getStorageGateway();
+
+        $urlId = 12;
+        $fieldId = 10;
+        $versionNo = 1;
+        $gateway->linkUrl( $urlId, $fieldId, $versionNo );
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query
-            ->select( "*" )
-            ->from( 'ezurl_object_link' )
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'url_id' ),
-                    $query->bindValue( $id )
-                )
-            );
+        $query->select( "*" )->from( 'ezurl_object_link' );
         $statement = $query->prepare();
         $statement->execute();
 
@@ -141,7 +141,7 @@ class LegacyStorageTest extends TestCase
             array(
                 'contentobject_attribute_id' => $fieldId,
                 'contentobject_attribute_version' => $versionNo,
-                'url_id' => $id,
+                'url_id' => $urlId,
             ),
         );
 

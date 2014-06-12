@@ -66,21 +66,21 @@ class LegacyStorage extends Gateway
      *
      * Non-existent ids are ignored.
      *
-     * @param array $linkIds Array of link Ids
+     * @param array $urlIds Array of link Ids
      *
      * @return array
      */
-    public function getLinkUrls( array $linkIds )
+    public function getIdUrls( array $urlIds )
     {
         $linkUrls = array();
 
-        if ( !empty( $linkIds ) )
+        if ( !empty( $urlIds ) )
         {
             $q = $this->getConnection()->createSelectQuery();
             $q
                 ->select( "id", "url" )
                 ->from( UrlStorage::URL_TABLE )
-                ->where( $q->expr->in( 'id', $linkIds ) );
+                ->where( $q->expr->in( 'id', $urlIds ) );
 
             $statement = $q->prepare();
             $statement->execute();
@@ -99,21 +99,21 @@ class LegacyStorage extends Gateway
      *
      * Non-existent URLs are ignored.
      *
-     * @param array $linksUrls
+     * @param array $urls
      *
      * @return array
      */
-    public function getLinkIds( array $linksUrls )
+    public function getUrlIds( array $urls )
     {
         $linkIds = array();
 
-        if ( !empty( $linksUrls ) )
+        if ( !empty( $urls ) )
         {
             $q = $this->getConnection()->createSelectQuery();
             $q
                 ->select( "id", "url" )
                 ->from( UrlStorage::URL_TABLE )
-                ->where( $q->expr->in( 'url', $linksUrls ) );
+                ->where( $q->expr->in( 'url', $urls ) );
 
             $statement = $q->prepare();
             $statement->execute();
@@ -160,15 +160,13 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Inserts a new $url for given $fieldId and $versionNo and returns its id.
+     * Inserts a new $url and returns its id.
      *
      * @param string $url The URL to insert in the database
-     * @param int $fieldId
-     * @param int $versionNo
      *
      * @return mixed
      */
-    public function insertLink( $url, $fieldId, $versionNo )
+    public function insertUrl( $url )
     {
         $time = time();
         $dbHandler = $this->getConnection();
@@ -192,13 +190,9 @@ class LegacyStorage extends Gateway
 
         $q->prepare()->execute();
 
-        $urlId = $dbHandler->lastInsertId(
+        return $dbHandler->lastInsertId(
             $dbHandler->getSequenceName( UrlStorage::URL_TABLE, "id" )
         );
-
-        $this->linkUrl( $urlId, $fieldId, $versionNo );
-
-        return $urlId;
     }
 
     /**
@@ -210,7 +204,7 @@ class LegacyStorage extends Gateway
      *
      * @return void
      */
-    protected function linkUrl( $urlId, $fieldId, $versionNo )
+    public function linkUrl( $urlId, $fieldId, $versionNo )
     {
         $dbHandler = $this->getConnection();
 
