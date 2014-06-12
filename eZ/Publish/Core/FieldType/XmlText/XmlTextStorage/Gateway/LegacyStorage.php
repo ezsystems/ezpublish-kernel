@@ -190,10 +190,9 @@ class LegacyStorage extends Gateway
                     // Insert url once if not already existing
                     if ( !isset( $linksIds[$url] ) )
                     {
-                        $urlId = $this->insertLink( $url );
-                        $linksIds[$url] = $urlId;
-                        $this->linkUrl( $urlId, $field->id, $versionInfo->versionNo );
+                        $linksIds[$url] = $this->insertLink( $url );
                     }
+                    $this->linkUrl( $linksIds[$url], $field->id, $versionInfo->versionNo );
 
                     $element->setAttribute( 'url_id', $linksIds[$url] );
                     $element->removeAttribute( 'url' );
@@ -207,10 +206,9 @@ class LegacyStorage extends Gateway
                     // Insert url once if not already existing
                     if ( !isset( $linksIds[$url] ) )
                     {
-                        $urlId = $this->insertLink( $url );
-                        $linksIds[$url] = $urlId;
-                        $this->linkUrl( $urlId, $field->id, $versionInfo->versionNo );
+                        $linksIds[$url] = $this->insertLink( $url );
                     }
+                    $this->linkUrl( $linksIds[$url], $field->id, $versionInfo->versionNo );
 
                     $element->setAttribute( 'url_id', $linksIds[$url] );
                     $element->removeAttribute( 'href' );

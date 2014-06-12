@@ -53,7 +53,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 array( array( '/test' ), array( '/test' => 55 ) ),
                 array( array(), array() ),
                 array(),
-                array(),
+                array( 55, null ),
                 true,
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link url_id="55">object link</link>.</paragraph></section>
@@ -66,7 +66,7 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
                 array( array( '/test' ), array( '/test' => 55 ) ),
                 array( array(), array() ),
                 array(),
-                array(),
+                array( 55, null ),
                 true,
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link url_id="55">object link</link><link url_id="55">object link</link>.</paragraph></section>
