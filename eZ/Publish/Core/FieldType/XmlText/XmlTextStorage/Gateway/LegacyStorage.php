@@ -176,6 +176,7 @@ class LegacyStorage extends Gateway
         {
             $linksIds = $this->getLinksId( array_keys( $urls ) );
             $objectRemoteIdMap = $this->getObjectId( array_keys( $remoteIds ) );
+            $urlLinkSet = array();
 
             // Now loop again to insert the right value in "url_id" attribute and fix "object_remote_id"
             /** @var $element \DOMElement */
@@ -192,7 +193,11 @@ class LegacyStorage extends Gateway
                     {
                         $linksIds[$url] = $this->insertLink( $url );
                     }
-                    $this->linkUrl( $linksIds[$url], $field->id, $versionInfo->versionNo );
+                    if ( !isset( $urlLinkSet[$url] ) )
+                    {
+                        $this->linkUrl( $linksIds[$url], $field->id, $versionInfo->versionNo );
+                        $urlLinkSet[$url] = true;
+                    }
 
                     $element->setAttribute( 'url_id', $linksIds[$url] );
                     $element->removeAttribute( 'url' );
@@ -208,7 +213,11 @@ class LegacyStorage extends Gateway
                     {
                         $linksIds[$url] = $this->insertLink( $url );
                     }
-                    $this->linkUrl( $linksIds[$url], $field->id, $versionInfo->versionNo );
+                    if ( !isset( $urlLinkSet[$url] ) )
+                    {
+                        $this->linkUrl( $linksIds[$url], $field->id, $versionInfo->versionNo );
+                        $urlLinkSet[$url] = true;
+                    }
 
                     $element->setAttribute( 'url_id', $linksIds[$url] );
                     $element->removeAttribute( 'href' );
