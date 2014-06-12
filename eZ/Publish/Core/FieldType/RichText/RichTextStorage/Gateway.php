@@ -23,11 +23,11 @@ abstract class Gateway extends StorageGateway
      *
      * Non-existent ids are ignored.
      *
-     * @param array $linkIds Array of link Ids
+     * @param array $urlIds Array of link Ids
      *
      * @return array
      */
-    abstract public function getLinkUrls( array $linkIds );
+    abstract public function getIdUrls( array $urlIds );
 
     /**
      * For given array of URLs returns a hash of corresponding ids,
@@ -35,11 +35,11 @@ abstract class Gateway extends StorageGateway
      *
      * Non-existent URLs are ignored.
      *
-     * @param array $linksUrls
+     * @param array $urls
      *
      * @return array
      */
-    abstract public function getLinkIds( array $linksUrls );
+    abstract public function getUrlIds( array $urls );
 
     /**
      * For given array of Content remote ids returns a hash of corresponding
@@ -47,18 +47,29 @@ abstract class Gateway extends StorageGateway
      *
      * Non-existent ids are ignored.
      *
-     * @param array $linksRemoteIds
+     * @param array $linkRemoteIds
      *
      * @return array
      */
-    abstract public function getContentIds( array $linksRemoteIds );
+    abstract public function getContentIds( array $linkRemoteIds );
 
     /**
-     * Inserts a new URL and returns its id.
+     * Inserts a new $url and returns its id.
      *
      * @param string $url The URL to insert in the database
      *
      * @return mixed
      */
-    abstract public function insertLink( $url );
+    abstract public function insertUrl( $url );
+
+    /**
+     * Creates link to URL with $urlId for field with $fieldId in $versionNo.
+     *
+     * @param int $urlId
+     * @param int $fieldId
+     * @param int $versionNo
+     *
+     * @return void
+     */
+    abstract public function linkUrl( $urlId, $fieldId, $versionNo );
 }

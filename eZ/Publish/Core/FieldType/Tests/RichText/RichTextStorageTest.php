@@ -70,12 +70,12 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $gateway = $this->getGatewayMock();
         $gateway
             ->expects( $this->once() )
-            ->method( "getLinkUrls" )
+            ->method( "getIdUrls" )
             ->with( $this->equalTo( $linkIds ) )
             ->will( $this->returnValue( $linkUrls ) );
-        $gateway->expects( $this->never() )->method( "getLinkIds" );
+        $gateway->expects( $this->never() )->method( "getUrlIds" );
         $gateway->expects( $this->never() )->method( "getContentIds" );
-        $gateway->expects( $this->never() )->method( "insertLink" );
+        $gateway->expects( $this->never() )->method( "insertUrl" );
 
         $versionInfo = new VersionInfo();
         $value = new FieldValue( array( "data" => $xmlString ) );
@@ -112,7 +112,13 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         <link xlink:href="http://www.ez.no#fragment2">Existing external link</link>
     </para>
     <para>
+        <link xlink:href="http://www.ez.no#fragment2">Existing external link repeated</link>
+    </para>
+    <para>
         <link xlink:href="http://share.ez.no#fragment3">New external link</link>
+    </para>
+    <para>
+        <link xlink:href="http://share.ez.no#fragment3">New external link repeated</link>
     </para>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -124,13 +130,19 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         <link xlink:href="ezurl://123#fragment2">Existing external link</link>
     </para>
     <para>
+        <link xlink:href="ezurl://123#fragment2">Existing external link repeated</link>
+    </para>
+    <para>
         <link xlink:href="ezurl://456#fragment3">New external link</link>
+    </para>
+    <para>
+        <link xlink:href="ezurl://456#fragment3">New external link repeated</link>
     </para>
 </section>
 ',
                 array( "http://www.ez.no", "http://share.ez.no" ),
                 array( "http://www.ez.no" => 123 ),
-                array( array( "id" => 456, "url" => "http://share.ez.no" ) ),
+                array( "http://share.ez.no" => 456 ),
                 array( "abcdef789" ),
                 array( "abcdef789" => 7575 ),
                 true
@@ -169,35 +181,49 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $isUpdated
     )
     {
+        $gatewayCallIndex = 0;
+        $versionInfo = new VersionInfo( array( "versionNo" => 24 ) );
+        $value = new FieldValue( array( "data" => $xmlString ) );
+        $field = new Field( array( "id" => 42, "value" => $value ) );
         $gateway = $this->getGatewayMock();
+
         $gateway
-            ->expects( $this->once() )
-            ->method( "getLinkIds" )
+            ->expects( $this->at( $gatewayCallIndex++ ) )
+            ->method( "getUrlIds" )
             ->with( $this->equalTo( $linkUrls ) )
             ->will( $this->returnValue( $linkIds ) );
         $gateway
-            ->expects( $this->once() )
+            ->expects( $this->at( $gatewayCallIndex++ ) )
             ->method( "getContentIds" )
             ->with( $this->equalTo( $remoteIds ) )
             ->will( $this->returnValue( $contentIds ) );
-        $gateway->expects( $this->never() )->method( "getLinkUrls" );
+        $gateway->expects( $this->never() )->method( "getIdUrls" );
         if ( empty( $insertLinks ) )
         {
-            $gateway->expects( $this->never() )->method( "insertLink" );
+            $gateway->expects( $this->never() )->method( "insertUrl" );
         }
 
-        foreach ( $insertLinks as $index => $linkMap )
+        foreach ( $linkUrls as $url )
         {
-            $gateway
-                ->expects( $this->at( $index + 2 ) )
-                ->method( "insertLink" )
-                ->with( $this->equalTo( $linkMap["url"] ) )
-                ->will( $this->returnValue( $linkMap["id"] ) );
-        }
+            if ( isset( $insertLinks[$url] ) )
+            {
+                $id = $insertLinks[$url];
+                $gateway
+                    ->expects( $this->at( $gatewayCallIndex++ ) )
+                    ->method( "insertUrl" )
+                    ->with( $this->equalTo( $url ) )
+                    ->will( $this->returnValue( $id ) );
+            }
+            else
+            {
+                $id = $linkIds[$url];
+            }
 
-        $versionInfo = new VersionInfo();
-        $value = new FieldValue( array( "data" => $xmlString ) );
-        $field = new Field( array( "value" => $value ) );
+            $gateway
+                ->expects( $this->at( $gatewayCallIndex++ ) )
+                ->method( "linkUrl" )
+                ->with( $id, 42, 24 );
+        }
 
         $storage = $this->getPartlyMockedStorage( array( "getGateway" ) );
         $storage
@@ -257,7 +283,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $gateway = $this->getGatewayMock();
         $gateway
             ->expects( $this->once() )
-            ->method( "getLinkIds" )
+            ->method( "getUrlIds" )
             ->with( $this->equalTo( $linkUrls ) )
             ->will( $this->returnValue( $linkIds ) );
         $gateway
@@ -265,17 +291,17 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
             ->method( "getContentIds" )
             ->with( $this->equalTo( $remoteIds ) )
             ->will( $this->returnValue( $contentIds ) );
-        $gateway->expects( $this->never() )->method( "getLinkUrls" );
+        $gateway->expects( $this->never() )->method( "getIdUrls" );
         if ( empty( $insertLinks ) )
         {
-            $gateway->expects( $this->never() )->method( "insertLink" );
+            $gateway->expects( $this->never() )->method( "insertUrl" );
         }
 
         foreach ( $insertLinks as $index => $linkMap )
         {
             $gateway
                 ->expects( $this->at( $index + 2 ) )
-                ->method( "insertLink" )
+                ->method( "insertUrl" )
                 ->with( $this->equalTo( $linkMap["url"] ) )
                 ->will( $this->returnValue( $linkMap["id"] ) );
         }
