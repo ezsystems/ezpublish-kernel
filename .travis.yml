@@ -6,6 +6,7 @@ php:
   - 5.5
   - 5.6
   - hhvm
+  - hhvm-nightly
 
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
@@ -25,6 +26,10 @@ matrix:
     - php: hhvm
       env: TEST_CONFIG="phpunit.xml"
     - php: hhvm
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+    - php: hhvm-nightly
+      env: TEST_CONFIG="phpunit.xml"
+    - php: hhvm-nightly
       env: TEST_CONFIG="phpunit-integration-legacy.xml"
   exclude:
 # 5.4 run: unit test + postgres integration test
@@ -60,6 +65,15 @@ matrix:
     - php: hhvm
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
     - php: hhvm
+      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
+# hhvm-nightly run: unit test + sqlite integration test
+    - php: hhvm-nightly
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
+    - php: hhvm-nightly
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+    - php: hhvm-nightly
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+    - php: hhvm-nightly
       env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
 
 # test only master (+ Pull requests)
