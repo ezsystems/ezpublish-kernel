@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentTypeGroupContext class.
+ * File containing the ContentTypeGroup context class for RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,20 +9,13 @@
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
-use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext\RestSubContext;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use EzSystems\BehatBundle\Features\Context\SentencesInterfaces\ContentTypeGroup;
+use EzSystems\BehatBundle\Sentence\ContentTypeGroup as ContentTypeGroupSentences;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 use PHPUnit_Framework_Assert as Assertion;
 
-/**
- * Class ContentTypeGroupContext
- *
- * This class contains the implementation of the ContentTypeGroup interface which
- * has the sentences for the ContentTypeGroup BDD
- */
-class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
+class ContentTypeGroup extends Base implements ContentTypeGroupSentences
 {
     public function iReadContentTypeGroup( $identifier )
     {
@@ -196,7 +189,7 @@ class ContentTypeGroupContext extends RestSubContext implements ContentTypeGroup
     public function iSeeTheFollowingContentTypeGroups( TableNode $table )
     {
         // get groups
-        $groups = $this->getMainContext()->convertTableToArrayOfData( $table );
+        $groups = $this->getMainContext()->getSubContext( 'Common' )->convertTableToArrayOfData( $table );
 
         // get real ContentTypeGroup identifiers
 

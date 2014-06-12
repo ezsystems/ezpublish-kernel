@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the RestInterface class.
+ * File containing the RestClient base class for BDD rest clients in RestBundle.
  *
  * This class contains the interface for the REST implementations
  *
@@ -112,6 +112,7 @@ abstract class RestClient
      * Setter for @var $host
      *
      * @param string $host Host url
+     * @param string $resourcePrefix Constant prefix for the resources
      */
     public function setHost( $host, $resourcePrefix = self::RESOURCE_PREFIX )
     {
@@ -122,7 +123,7 @@ abstract class RestClient
         }
 
         // remove last '/' from host and first from prefix so that there is no
-        // dupplication when concatenating
+        // duplication when concatenating
         if ( substr( $host, -1 ) === '/' )
         {
             $host = substr( $host, 0, strlen( $host ) - 1 );
@@ -187,6 +188,7 @@ abstract class RestClient
      *
      * @param string $username Name of the user for authentication
      * @param string $password Password for the user
+     * @param string $type Authentication type
      */
     public function setAuthentication( $username, $password, $type = self::AUTH_TYPE_BASIC )
     {
@@ -247,7 +249,7 @@ abstract class RestClient
     /**
      * Get all the headers from response
      *
-     * @return array Array with the headers of response
+     * @return array With the headers of response
      *
      * <code>
      *  return array(
@@ -289,7 +291,7 @@ abstract class RestClient
      *      'header1: value1',
      *      'header2: value2',
      *      ...
-     *      'headern:valueN'
+     *      'headerN:valueN'
      *  );
      * </code>
      *
@@ -343,24 +345,24 @@ abstract class RestClient
      *
      * @param string $username Username for the authentication
      * @param string $password Password for the authentication
-     * @param string $authtype Authentication type (ex: 'BASIC', 'OAUTH')
+     * @param string $authType Authentication type (ex: 'BASIC', 'OAUTH')
      * @return string The value for the 'Authentication' header
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If the authentication type is not implemented yet
      */
-    protected function makeAuthenticationHeader( $username, $password, $authtype )
+    protected function makeAuthenticationHeader( $username, $password, $authType )
     {
-        if ( empty( $authtype ) )
+        if ( empty( $authType ) )
         {
             return "";
         }
 
-        switch( strtoupper( $authtype ) ){
+        switch( strtoupper( $authType ) ){
         case self::AUTH_TYPE_BASIC:
             return "Basic " . base64_encode( "$username:$password" );
 
         default:
-            throw new NotImplementedException( "authentication: '$authtype'" );
+            throw new NotImplementedException( "authentication: '$authType'" );
         }
     }
 

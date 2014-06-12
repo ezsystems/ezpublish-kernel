@@ -1,8 +1,6 @@
 <?php
 /**
- * File containing the BuzzClient class.
- *
- * This class contains Buzz Rest Client for BDD testing
+ * File containing the BuzzClient class for RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -11,23 +9,19 @@
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
-use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient;
 use Buzz\Message\Request;
 use Buzz\Message\Response;
 use Buzz\Client\Curl;
 
-/**
- * Buzz Rest Client.
- */
 class BuzzClient extends RestClient
 {
     /**
-     * @var Buzz\Message\Request
+     * @var \Buzz\Message\Request
      */
     protected $request;
 
     /**
-     * @var Buzz\Message\Response
+     * @var \Buzz\Message\Response
      */
     protected $response;
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the RestSubContext class.
+ * File containing the Base context class for sub contexts in RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -12,22 +12,17 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 use Behat\Behat\Context\BehatContext;
 use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient;
 
-/**
- * RestSubContext
- *
- * This is the parent object of all REST sub contexts
- */
-abstract class RestSubContext extends BehatContext
+abstract class Base extends BehatContext
 {
     /**
      * Rest client for all requests and responses
      *
-     * @var eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient
+     * @var \eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient
      */
-    public $restclient;
+    public $restClient;
 
-    public function __construct( RestClient $restclient )
+    public function __construct( RestClient $restClient )
     {
-        $this->restclient = $restclient;
+        $this->restClient = $restClient;
     }
 }
