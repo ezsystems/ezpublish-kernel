@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\FieldType\RichText\Gateway;
 
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 
 /**
@@ -29,7 +30,7 @@ class LegacyStorageTest extends TestCase
                 23 => "/content/view/sitemap/2",
                 24 => "/content/view/tagcloud/2"
             ),
-            $gateway->getIdUrls(
+            $gateway->getIdUrlMap(
                 array( 23, 24, "fake" )
             )
         );
@@ -46,7 +47,7 @@ class LegacyStorageTest extends TestCase
                 "/content/view/sitemap/2" => 23,
                 "/content/view/tagcloud/2" => 24
             ),
-            $gateway->getUrlIds(
+            $gateway->getUrlIdMap(
                 array(
                     "/content/view/sitemap/2",
                     "/content/view/tagcloud/2",
@@ -162,7 +163,9 @@ class LegacyStorageTest extends TestCase
     {
         if ( !isset( $this->storageGateway ) )
         {
-            $this->storageGateway = new LegacyStorage();
+            $this->storageGateway = new LegacyStorage(
+                new UrlStorage()
+            );
             $this->storageGateway->setConnection( $this->getDatabaseHandler() );
         }
         return $this->storageGateway;

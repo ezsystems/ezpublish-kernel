@@ -16,6 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use DOMDocument;
 use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage;
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlGateway;
 
 /**
  * Integration test for legacy storage field types
@@ -65,7 +66,7 @@ class XmlTextIntegrationTest extends BaseIntegrationTest
             new XmlTextConverter(),
             new FieldType\XmlText\XmlTextStorage(
                 array(
-                    'LegacyStorage' => new LegacyStorage()
+                    'LegacyStorage' => new LegacyStorage( new UrlGateway() )
                 )
             )
         );

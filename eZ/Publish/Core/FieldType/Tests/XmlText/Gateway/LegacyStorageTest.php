@@ -27,7 +27,13 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
      */
     protected function getPartlyMockedLegacyStorage( array $testMethods = null )
     {
-        return $this->getMock( 'eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage', $testMethods );
+        return $this->getMock(
+            'eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway\LegacyStorage',
+            $testMethods,
+            array(),
+            "",
+            false
+        );
     }
 
     /**
@@ -200,13 +206,13 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         $inputDomDocument->loadXML( $inputXML );
         $versionInfo = new VersionInfo;
         $field = new Field( array( 'value' => new FieldValue( array( 'data' => $inputDomDocument ) ) ) );
-        $legacyStorage = $this->getPartlyMockedLegacyStorage( array( 'getLinksId', 'getObjectId', 'insertLink', 'linkUrl' ) );
+        $legacyStorage = $this->getPartlyMockedLegacyStorage( array( 'getUrlIdMap', 'getObjectId', 'insertUrl', 'linkUrl' ) );
 
         foreach (
             array(
-                'getLinksId' => $getLinksIdData,
+                'getUrlIdMap' => $getLinksIdData,
                 'getObjectId' => $getObjectIdData,
-                'insertLink' => $insertLinkData,
+                'insertUrl' => $insertLinkData,
                 'linkUrl' => $linkUrlData,
             ) as $method => $data
         )
@@ -298,13 +304,13 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         $inputDomDocument->loadXML( $inputXML );
         $versionInfo = new VersionInfo;
         $field = new Field( array( 'value' => new FieldValue( array( 'data' => $inputDomDocument ) ) ) );
-        $legacyStorage = $this->getPartlyMockedLegacyStorage( array( 'getLinksId', 'getObjectId', 'insertLink' ) );
+        $legacyStorage = $this->getPartlyMockedLegacyStorage( array( 'getUrlIdMap', 'getObjectId', 'insertUrl' ) );
 
         foreach (
             array(
-                'getLinksId' => $getLinksIdData,
+                'getUrlIdMap' => $getLinksIdData,
                 'getObjectId' => $getObjectIdData,
-                'insertLink' => $insertLinkData
+                'insertUrl' => $insertLinkData
             ) as $method => $data
         )
         {
@@ -379,17 +385,17 @@ class LegacyStorageTest extends PHPUnit_Framework_TestCase
         $inputDomDocument = new DOMDocument;
         $inputDomDocument->loadXML( $inputXML );
         $field = new Field( array( 'value' => new FieldValue( array( 'data' => $inputDomDocument ) ) ) );
-        $legacyStorage = $this->getPartlyMockedLegacyStorage( array( 'getLinksUrl' ) );
+        $legacyStorage = $this->getPartlyMockedLegacyStorage( array( 'getIdUrlMap' ) );
 
         if ( empty( $getLinksUrlData ) )
         {
             $legacyStorage->expects( $this->never() )
-                ->method( 'getLinksUrl' );
+                ->method( 'getIdUrlMap' );
         }
         else
         {
             $legacyStorage->expects( $this->once() )
-                ->method( 'getLinksUrl' )
+                ->method( 'getIdUrlMap' )
                 ->with( $this->equalTo( $getLinksUrlData[0] ) )
                 ->will( $this->returnValue( $getLinksUrlData[1] ) );
         }

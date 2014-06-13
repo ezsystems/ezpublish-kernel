@@ -70,10 +70,10 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $gateway = $this->getGatewayMock();
         $gateway
             ->expects( $this->once() )
-            ->method( "getIdUrls" )
+            ->method( "getIdUrlMap" )
             ->with( $this->equalTo( $linkIds ) )
             ->will( $this->returnValue( $linkUrls ) );
-        $gateway->expects( $this->never() )->method( "getUrlIds" );
+        $gateway->expects( $this->never() )->method( "getUrlIdMap" );
         $gateway->expects( $this->never() )->method( "getContentIds" );
         $gateway->expects( $this->never() )->method( "insertUrl" );
 
@@ -189,7 +189,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
 
         $gateway
             ->expects( $this->at( $gatewayCallIndex++ ) )
-            ->method( "getUrlIds" )
+            ->method( "getUrlIdMap" )
             ->with( $this->equalTo( $linkUrls ) )
             ->will( $this->returnValue( $linkIds ) );
         $gateway
@@ -197,7 +197,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
             ->method( "getContentIds" )
             ->with( $this->equalTo( $remoteIds ) )
             ->will( $this->returnValue( $contentIds ) );
-        $gateway->expects( $this->never() )->method( "getIdUrls" );
+        $gateway->expects( $this->never() )->method( "getIdUrlMap" );
         if ( empty( $insertLinks ) )
         {
             $gateway->expects( $this->never() )->method( "insertUrl" );
@@ -283,7 +283,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $gateway = $this->getGatewayMock();
         $gateway
             ->expects( $this->once() )
-            ->method( "getUrlIds" )
+            ->method( "getUrlIdMap" )
             ->with( $this->equalTo( $linkUrls ) )
             ->will( $this->returnValue( $linkIds ) );
         $gateway
@@ -291,7 +291,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
             ->method( "getContentIds" )
             ->with( $this->equalTo( $remoteIds ) )
             ->will( $this->returnValue( $contentIds ) );
-        $gateway->expects( $this->never() )->method( "getIdUrls" );
+        $gateway->expects( $this->never() )->method( "getIdUrlMap" );
         if ( empty( $insertLinks ) )
         {
             $gateway->expects( $this->never() )->method( "insertUrl" );
@@ -384,7 +384,15 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         if ( !isset( $this->gatewayMock ) )
         {
             $this->gatewayMock = $this->getMockForAbstractClass(
-                "eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage\\Gateway"
+                "eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage\\Gateway",
+                array(), "", false, true, true,
+                array(
+                    "getIdUrlMap",
+                    "getUrlIdMap",
+                    "getContentIds",
+                    "insertUrl",
+                    "linkUrl"
+                )
             );
         }
 
