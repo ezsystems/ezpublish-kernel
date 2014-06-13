@@ -115,7 +115,33 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
 
     public function testGetFieldDataNotFound()
     {
+        $versionInfo = new VersionInfo();
+        $fieldValue = new FieldValue( array( "data" => array( "urlId" => 12 ) ) );
+        $field = new Field( array( "id" => 42, "value" => $fieldValue ) );
+        $gateway = $this->getGatewayMock();
 
+        $gateway
+            ->expects( $this->once() )
+            ->method( "getIdUrlMap" )
+            ->with( array( 12 ) )
+            ->will( $this->returnValue( array() ) );
+
+        $storage = $this->getPartlyMockedStorage( array( "getGateway" ) );
+        $storage
+            ->expects( $this->once() )
+            ->method( "getGateway" )
+            ->with( $this->getContext() )
+            ->will( $this->returnValue( $gateway ) );
+
+        $logger = $this->getLoggerMock();
+        $logger
+            ->expects( $this->once() )
+            ->method( "error" )
+            ->with( "URL with ID '12' not found" );
+
+        $storage->getFieldData( $versionInfo, $field, $this->getContext() );
+
+        $this->assertEquals( "", $field->value->externalData );
     }
 
     public function testDeleteFieldData()
@@ -146,7 +172,7 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
     {
         $storage = $this->getPartlyMockedStorage( array( "getGateway" ) );
 
-        $this->assertTrue( $t = $storage->hasFieldData() );
+        $this->assertTrue( $storage->hasFieldData() );
     }
 
     /**
@@ -160,11 +186,9 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
             "eZ\\Publish\\Core\\FieldType\\Url\\UrlStorage",
             $methods,
             array(
-                $this->getContext(),
+                array(),
                 $this->getLoggerMock()
-            ),
-            "",
-            false
+            )
         );
     }
 
@@ -188,7 +212,7 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
     {
         if ( !isset( $this->loggerMock ) )
         {
-            $this->gatewayMock = $this->getMockForAbstractClass(
+            $this->loggerMock = $this->getMockForAbstractClass(
                 "Psr\\Log\\LoggerInterface"
             );
         }

@@ -12,12 +12,30 @@ namespace eZ\Publish\Core\FieldType\Url;
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
+use Psr\Log\LoggerInterface;
 
 /**
  * Converter for Url field type external storage
  */
 class UrlStorage extends GatewayBasedStorage
 {
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * Construct from gateways
+     *
+     * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct( array $gateways, LoggerInterface $logger = null )
+    {
+        parent::__construct( $gateways );
+        $this->logger = $logger;
+    }
+
     /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
      */
@@ -66,7 +84,12 @@ class UrlStorage extends GatewayBasedStorage
 
         $map = $gateway->getIdUrlMap( array( $id ) );
 
-        // @TODO: maybe log an error if URL entry was not found?
+        // URL id is not in the DB
+        if ( !isset( $map[$id] ) && isset( $this->logger ) )
+        {
+            $this->logger->error( "URL with ID '{$id}' not found" );
+        }
+
         $field->value->externalData = isset( $map[$id] ) ? $map[$id] : "";
     }
 
