@@ -19,6 +19,23 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
  */
 class LegacyStorageTest extends TestCase
 {
+    public function testSetConnection()
+    {
+        $gateway = $this->getStorageGateway();
+
+        $gateway->setConnection( $this->getMock( "eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler" ) );
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testSetConnectionThrowsRuntimeException()
+    {
+        $gateway = $this->getStorageGateway();
+
+        $gateway->setConnection( new \DateTime() );
+    }
+
     public function testGetContentIds()
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/contentobjects.php" );
