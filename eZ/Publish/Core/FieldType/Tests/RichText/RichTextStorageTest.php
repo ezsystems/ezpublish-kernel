@@ -77,6 +77,28 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         $gateway->expects( $this->never() )->method( "getContentIds" );
         $gateway->expects( $this->never() )->method( "insertUrl" );
 
+        $logger = $this->getLoggerMock();
+
+        if ( count( $linkIds ) !== count( $linkUrls ) )
+        {
+            $loggerInvocationCount = 0;
+
+            foreach ( $linkIds as $linkId )
+            {
+                if ( !isset( $linkUrls[$linkId] ) )
+                {
+                    $logger
+                        ->expects( $this->at( $loggerInvocationCount ) )
+                        ->method( "error" )
+                        ->with( "URL with ID {$linkId} not found" );
+                }
+            }
+        }
+        else
+        {
+            $logger->expects( $this->never() )->method( $this->anything() );
+        }
+
         $versionInfo = new VersionInfo();
         $value = new FieldValue( array( "data" => $xmlString ) );
         $field = new Field( array( "value" => $value ) );
@@ -335,11 +357,9 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
             "eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage",
             $methods,
             array(
-                $this->getContext(),
+                array(),
                 $this->getLoggerMock()
-            ),
-            "",
-            false
+            )
         );
     }
 
@@ -363,7 +383,7 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
     {
         if ( !isset( $this->loggerMock ) )
         {
-            $this->gatewayMock = $this->getMockForAbstractClass(
+            $this->loggerMock = $this->getMockForAbstractClass(
                 "Psr\\Log\\LoggerInterface"
             );
         }
