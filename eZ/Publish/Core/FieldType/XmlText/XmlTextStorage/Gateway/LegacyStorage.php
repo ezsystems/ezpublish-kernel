@@ -11,9 +11,12 @@ namespace eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
 
 use eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use DOMDocument;
+use PDO;
+use RuntimeException;
 
 class LegacyStorage extends Gateway
 {
@@ -25,7 +28,7 @@ class LegacyStorage extends Gateway
      * @param mixed $dbHandler
      *
      * @return void
-     * @throws \RuntimeException if $dbHandler is not an instance of
+     * @throws RuntimeException if $dbHandler is not an instance of
      *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
      */
     public function setConnection( $dbHandler )
@@ -34,9 +37,9 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof \eZ\Publish\Core\Persistence\Database\DatabaseHandler )
+        if ( !$dbHandler instanceof DatabaseHandler )
         {
-            throw new \RuntimeException( "Invalid dbHandler passed" );
+            throw new RuntimeException( "Invalid dbHandler passed" );
         }
 
         $this->urlGateway->setConnection( $dbHandler );
@@ -46,15 +49,15 @@ class LegacyStorage extends Gateway
     /**
      * Returns the active connection
      *
-     * @throws \RuntimeException if no connection has been set, yet.
+     * @throws RuntimeException if no connection has been set, yet.
      *
-     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @return DatabaseHandler
      */
     protected function getConnection()
     {
         if ( $this->dbHandler === null )
         {
-            throw new \RuntimeException( "Missing database connection." );
+            throw new RuntimeException( "Missing database connection." );
         }
         return $this->dbHandler;
     }
@@ -233,7 +236,7 @@ class LegacyStorage extends Gateway
 
             $statement = $q->prepare();
             $statement->execute();
-            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+            foreach ( $statement->fetchAll( PDO::FETCH_ASSOC ) as $row )
             {
                 $objectRemoteIdMap[$row['remote_id']] = $row['id'];
             }

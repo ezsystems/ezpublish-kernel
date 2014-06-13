@@ -92,7 +92,7 @@ class LegacyStorage extends Gateway
 
             $statement = $q->prepare();
             $statement->execute();
-            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+            foreach ( $statement->fetchAll( PDO::FETCH_ASSOC ) as $row )
             {
                 $map[$row['id']] = $row['url'];
             }
@@ -125,7 +125,7 @@ class LegacyStorage extends Gateway
 
             $statement = $q->prepare();
             $statement->execute();
-            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+            foreach ( $statement->fetchAll( PDO::FETCH_ASSOC ) as $row )
             {
                 $map[$row['url']] = $row['id'];
             }
