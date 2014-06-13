@@ -346,6 +346,35 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testDeleteFieldData()
+    {
+        $versionInfo = new VersionInfo( array( "versionNo" => 42 ) );
+        $fieldIds = array( 12, 23 );
+        $gateway = $this->getGatewayMock();
+        $storage = $this->getPartlyMockedStorage( array( "getGateway" ) );
+        $storage
+            ->expects( $this->once() )
+            ->method( "getGateway" )
+            ->with( $this->getContext() )
+            ->will( $this->returnValue( $gateway ) );
+
+        $gateway
+            ->expects( $this->at( 0 ) )
+            ->method( "unlinkUrl" )
+            ->with( 12, 42 );
+
+        $gateway
+            ->expects( $this->at( 1 ) )
+            ->method( "unlinkUrl" )
+            ->with( 23, 42 );
+
+        $storage->deleteFieldData(
+            $versionInfo,
+            $fieldIds,
+            $this->getContext()
+        );
+    }
+
     /**
      * @param array $methods
      *

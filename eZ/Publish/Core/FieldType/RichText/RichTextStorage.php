@@ -199,6 +199,13 @@ class RichTextStorage extends GatewayBasedStorage
 
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
+        /** @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway $gateway */
+        $gateway = $this->getGateway( $context );
+
+        foreach ( $fieldIds as $fieldId )
+        {
+            $gateway->unlinkUrl( $fieldId, $versionInfo->versionNo );
+        }
     }
 
     /**
