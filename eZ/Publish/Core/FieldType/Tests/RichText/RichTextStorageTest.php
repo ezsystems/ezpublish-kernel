@@ -403,17 +403,10 @@ class RichTextStorageTest extends PHPUnit_Framework_TestCase
     {
         if ( !isset( $this->gatewayMock ) )
         {
-            $this->gatewayMock = $this->getMockForAbstractClass(
-                "eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage\\Gateway",
-                array(), "", false, true, true,
-                array(
-                    "getIdUrlMap",
-                    "getUrlIdMap",
-                    "getContentIds",
-                    "insertUrl",
-                    "linkUrl"
-                )
-            );
+            $this->gatewayMock = $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\FieldType\\RichText\\RichTextStorage\\Gateway" )
+                ->disableOriginalConstructor()
+                ->getMock();
         }
 
         return $this->gatewayMock;
