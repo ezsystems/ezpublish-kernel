@@ -15,8 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Converter for Url field type external storage
- * @todo introduce persistence layer (gateways)
- *
  */
 class UrlStorage extends GatewayBasedStorage
 {
