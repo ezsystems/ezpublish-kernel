@@ -75,17 +75,7 @@ class RichTextIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezrichtext',
             $fieldType,
-            new RichTextConverter(
-                new RichTextConverter\XsltConverter(
-                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/stylesheets/docbook_ezxml.xsl" )
-                ),
-                new RichTextConverter\XsltConverter(
-                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/stylesheets/ezxml_docbook.xsl" )
-                ),
-                new RichTextConverter\XsdValidator(
-                    $this->getAbsolutePath( "eZ/Publish/Core/Persistence/Legacy/Content/FieldValue/Converter/RichText/Resources/schemas/ezxml.xsd" )
-                )
-            ),
+            new RichTextConverter(),
             new FieldType\RichText\RichTextStorage(
                 array(
                     'LegacyStorage' => new LegacyStorage( new UrlGateway() )
