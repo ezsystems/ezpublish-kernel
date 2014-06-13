@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the abstract Gateway class
+ * File containing the abstract Url Gateway class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -10,40 +10,60 @@
 namespace eZ\Publish\Core\FieldType\Url\UrlStorage;
 
 use eZ\Publish\Core\FieldType\StorageGateway;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
- *
+ * Abstract gateway class for Url field type.
+ * Handles URL data.
  */
 abstract class Gateway extends StorageGateway
 {
     /**
-     * Stores a URL based on the given field data
+     * For given array of URL ids returns a hash of corresponding URLs,
+     * with URL ids as keys.
      *
-     * @param VersionInfo $versionInfo
-     * @param Field $field
+     * Non-existent ids are ignored.
      *
-     * @return boolean
+     * @param int[]|string[] $ids An array of link Ids
+     *
+     * @return array
      */
-    abstract public function storeFieldData( VersionInfo $versionInfo, Field $field );
+    abstract public function getIdUrlMap( array $ids );
 
     /**
-     * Sets a loaded URL, if one is stored for the given field
+     * For given array of URLs returns a hash of corresponding ids,
+     * with URLs as keys.
      *
-     * @param Field $field
+     * Non-existent URLs are ignored.
      *
-     * @return void
+     * @param string[] $urls An array of URLs
+     *
+     * @return array
      */
-    abstract public function getFieldData( Field $field );
+    abstract public function getUrlIdMap( array $urls );
 
     /**
-     * Deletes external data for $fieldId in $versionNo
+     * Inserts a new $url and returns its id.
      *
-     * @param mixed $fieldId
-     * @param mixed $versionNo
+     * @param string $url The URL to insert in the database
      *
-     * @return void
+     * @return int|string
      */
-    abstract public function deleteFieldData( $versionNo, $fieldId );
+    abstract public function insertUrl( $url );
+
+    /**
+     * Creates link to URL with $urlId for field with $fieldId in $versionNo.
+     *
+     * @param int|string $urlId
+     * @param int|string $fieldId
+     * @param int $versionNo
+     */
+    abstract public function linkUrl( $urlId, $fieldId, $versionNo );
+
+    /**
+     * Removes link to URL for $fieldId in $versionNo and cleans up possibly orphaned URLs.
+     *
+     * @param int|string $fieldId
+     * @param int $versionNo
+     */
+    abstract public function unlinkUrl( $fieldId, $versionNo );
 }

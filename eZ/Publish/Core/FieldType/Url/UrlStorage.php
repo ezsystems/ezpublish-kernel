@@ -25,8 +25,27 @@ class UrlStorage extends GatewayBasedStorage
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
+        /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway $gateway */
         $gateway = $this->getGateway( $context );
-        return $gateway->storeFieldData( $versionInfo, $field );
+        $url = $field->value->externalData;
+
+        $map = $gateway->getUrlIdMap( array( $url ) );
+
+        if ( isset( $map[$url] ) )
+        {
+            $urlId = $map[$url];
+        }
+        else
+        {
+            $urlId = $gateway->insertUrl( $url );
+        }
+
+        $gateway->linkUrl( $urlId, $field->id, $versionInfo->versionNo );
+
+        $field->value->data["urlId"] = $urlId;
+
+        // Signals that the Value has been modified and that an update is to be performed
+        return true;
     }
 
     /**
@@ -35,6 +54,7 @@ class UrlStorage extends GatewayBasedStorage
      * This value holds the data as a {@link eZ\Publish\Core\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link eZ\Publish\Core\FieldType\TextLine\Value} object).
      *
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      *
@@ -42,8 +62,14 @@ class UrlStorage extends GatewayBasedStorage
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
+        /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway $gateway */
         $gateway = $this->getGateway( $context );
-        return $gateway->getFieldData( $field );
+        $id = $field->value->data["urlId"];
+
+        $map = $gateway->getIdUrlMap( array( $id ) );
+
+        // @TODO: maybe log an error if URL entry was not found?
+        $field->value->externalData = isset( $map[$id] ) ? $map[$id] : "";
     }
 
     /**
@@ -58,10 +84,12 @@ class UrlStorage extends GatewayBasedStorage
      */
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
+        /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway $gateway */
         $gateway = $this->getGateway( $context );
+
         foreach ( $fieldIds as $fieldId )
         {
-            $gateway->deleteFieldData( $fieldId, $versionInfo->versionNo );
+            $gateway->unlinkUrl( $fieldId, $versionInfo->versionNo );
         }
     }
 

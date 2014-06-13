@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo;
-use eZ\Publish\SPI\Persistence\Content\Field;
+use RuntimeException;
+use PDO;
 
 /**
  * Url field type external storage gateway implementation using Zeta Database Component.
@@ -44,9 +44,9 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( ! ( $dbHandler instanceof DatabaseHandler ) )
+        if ( !( $dbHandler instanceof DatabaseHandler ) )
         {
-            throw new \RuntimeException( "Invalid dbHandler passed" );
+            throw new RuntimeException( "Invalid dbHandler passed" );
         }
 
         $this->dbHandler = $dbHandler;
@@ -63,113 +63,85 @@ class LegacyStorage extends Gateway
     {
         if ( $this->dbHandler === null )
         {
-            throw new \RuntimeException( "Missing database connection." );
+            throw new RuntimeException( "Missing database connection." );
         }
         return $this->dbHandler;
     }
 
     /**
-     * @see \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway
+     * For given array of URL ids returns a hash of corresponding URLs,
+     * with URL ids as keys.
+     *
+     * Non-existent ids are ignored.
+     *
+     * @param int[]|string[] $ids An array of link Ids
+     *
+     * @return array
      */
-    public function storeFieldData( VersionInfo $versionInfo, Field $field )
+    public function getIdUrlMap( array $ids )
     {
-        if ( ( $row = $this->fetchByLink( $field->value->externalData ) ) !== false )
+        $map = array();
+
+        if ( !empty( $ids ) )
         {
-            $urlId = $row["id"];
+            $q = $this->getConnection()->createSelectQuery();
+            $q
+                ->select( "id", "url" )
+                ->from( self::URL_TABLE )
+                ->where( $q->expr->in( 'id', $ids ) );
+
+            $statement = $q->prepare();
+            $statement->execute();
+            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+            {
+                $map[$row['id']] = $row['url'];
+            }
         }
-        else
-        {
-            $urlId = $this->insert( $field );
-        }
 
-        $this->linkUrl( $urlId, $field->id, $versionInfo->versionNo );
-
-        $field->value->data["urlId"] = $urlId;
-
-        // Signals that the Value has been modified and that an update is to be performed
-        return true;
+        return $map;
     }
 
     /**
-     * @see \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway
-     */
-    public function getFieldData( Field $field )
-    {
-        $url = $this->fetchById( $field->value->data["urlId"] );
-        // @TODO: maybe log an error if URL entry was not found?
-        $field->value->externalData = isset( $url["url"] ) ? $url["url"] : "";
-    }
-
-    /**
-     * Fetches a row in ezurl table referenced by its $id
+     * For given array of URLs returns a hash of corresponding ids,
+     * with URLs as keys.
      *
-     * @param mixed $id
+     * Non-existent URLs are ignored.
      *
-     * @return null|array Hash with columns as keys or null if no entry can be found
+     * @param string[] $urls An array of URLs
+     *
+     * @return array
      */
-    private function fetchById( $id )
+    public function getUrlIdMap( array $urls )
     {
-        $dbHandler = $this->getConnection();
+        $map = array();
 
-        $q = $dbHandler->createSelectQuery();
-        $e = $q->expr;
-        $q->select( "*" )
-            ->from( $dbHandler->quoteTable( self::URL_TABLE ) )
-            ->where(
-                $e->eq( "id", $q->bindValue( $id, null, \PDO::PARAM_INT ) )
-            );
-
-        $statement = $q->prepare();
-        $statement->execute();
-
-        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        if ( count( $rows ) )
+        if ( !empty( $urls ) )
         {
-            return $rows[0];
+            $q = $this->getConnection()->createSelectQuery();
+            $q
+                ->select( "id", "url" )
+                ->from( self::URL_TABLE )
+                ->where( $q->expr->in( 'url', $urls ) );
+
+            $statement = $q->prepare();
+            $statement->execute();
+            foreach ( $statement->fetchAll( \PDO::FETCH_ASSOC ) as $row )
+            {
+                $map[$row['url']] = $row['id'];
+            }
         }
 
-        return false;
+        return $map;
     }
 
     /**
-     * Fetches a row in ezurl table referenced by $link
+     * Inserts a new $url and returns its id.
      *
-     * @param string $link
+     * @param string $url The URL to insert in the database
      *
-     * @return null|array Hash with columns as keys or null if no entry can be found
+     * @return int
      */
-    private function fetchByLink( $link )
-    {
-        $dbHandler = $this->getConnection();
-
-        $q = $dbHandler->createSelectQuery();
-        $e = $q->expr;
-        $q->select( "*" )
-            ->from( $dbHandler->quoteTable( self::URL_TABLE ) )
-            ->where(
-                $e->eq( "url", $q->bindValue( $link ) )
-            );
-
-        $statement = $q->prepare();
-        $statement->execute();
-
-        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-        if ( count( $rows ) )
-        {
-            return $rows[0];
-        }
-
-        return false;
-    }
-
-    /**
-     * Inserts a new entry in ezurl table with $field value data
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
-     *
-     * @return mixed
-     */
-    private function insert( Field $field )
+    public function insertUrl( $url )
     {
         $dbHandler = $this->getConnection();
 
@@ -180,16 +152,16 @@ class LegacyStorage extends Gateway
             $dbHandler->quoteTable( self::URL_TABLE )
         )->set(
             $dbHandler->quoteColumn( "created" ),
-            $q->bindValue( $time, null, \PDO::PARAM_INT )
+            $q->bindValue( $time, null, PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "modified" ),
-            $q->bindValue( $time, null, \PDO::PARAM_INT )
+            $q->bindValue( $time, null, PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "original_url_md5" ),
-            $q->bindValue( md5( $field->value->externalData ) )
+            $q->bindValue( md5( $url ) )
         )->set(
             $dbHandler->quoteColumn( "url" ),
-            $q->bindValue( $field->value->externalData )
+            $q->bindValue( $url )
         );
 
         $q->prepare()->execute();
@@ -202,13 +174,11 @@ class LegacyStorage extends Gateway
     /**
      * Creates link to URL with $urlId for field with $fieldId in $versionNo.
      *
-     * @param mixed $urlId
-     * @param mixed $fieldId
-     * @param mixed $versionNo
-     *
-     * @return void
+     * @param int $urlId
+     * @param int $fieldId
+     * @param int $versionNo
      */
-    protected function linkUrl( $urlId, $fieldId, $versionNo )
+    public function linkUrl( $urlId, $fieldId, $versionNo )
     {
         $dbHandler = $this->getConnection();
 
@@ -217,43 +187,25 @@ class LegacyStorage extends Gateway
             $dbHandler->quoteTable( self::URL_LINK_TABLE )
         )->set(
             $dbHandler->quoteColumn( "contentobject_attribute_id" ),
-            $q->bindValue( $fieldId, null, \PDO::PARAM_INT )
+            $q->bindValue( $fieldId, null, PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "contentobject_attribute_version" ),
-            $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+            $q->bindValue( $versionNo, null, PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( "url_id" ),
-            $q->bindValue( $urlId, null, \PDO::PARAM_INT )
+            $q->bindValue( $urlId, null, PDO::PARAM_INT )
         );
 
         $q->prepare()->execute();
     }
 
     /**
-     * Deletes external URL data for field with $fieldId in $versionNo.
+     * Removes link to URL for $fieldId in $versionNo and cleans up possibly orphaned URLs.
      *
-     * If URL unlinked is found to be orphaned, it will be deleted.
-     *
-     * @param mixed $fieldId
-     * @param mixed $versionNo
-     *
-     * @return void
+     * @param int $fieldId
+     * @param int $versionNo
      */
-    public function deleteFieldData( $fieldId, $versionNo )
-    {
-        $this->unlinkUrl( $fieldId, $versionNo );
-        $this->deleteOrphanedUrls();
-    }
-
-    /**
-     * Removes link to URL for $fieldId in $versionNo.
-     *
-     * @param mixed $fieldId
-     * @param mixed $versionNo
-     *
-     * @return void
-     */
-    protected function unlinkUrl( $fieldId, $versionNo )
+    public function unlinkUrl( $fieldId, $versionNo )
     {
         $dbHandler = $this->getConnection();
 
@@ -268,6 +220,8 @@ class LegacyStorage extends Gateway
         );
 
         $deleteQuery->prepare()->execute();
+
+        $this->deleteOrphanedUrls();
     }
 
     /**
@@ -277,8 +231,6 @@ class LegacyStorage extends Gateway
      * That could be avoided if the feature is implemented there.
      *
      * URL is orphaned if it is not linked to a content attribute through ezurl_object_link table.
-     *
-     * @return void
      */
     protected function deleteOrphanedUrls()
     {
@@ -303,7 +255,7 @@ class LegacyStorage extends Gateway
 
         $statement = $query->prepare();
         $statement->execute();
-        $ids = $statement->fetchAll( \PDO::FETCH_COLUMN );
+        $ids = $statement->fetchAll( PDO::FETCH_COLUMN );
 
         if ( empty( $ids ) )
         {
