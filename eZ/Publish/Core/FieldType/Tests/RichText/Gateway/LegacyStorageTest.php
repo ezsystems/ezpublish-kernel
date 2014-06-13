@@ -19,44 +19,6 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
  */
 class LegacyStorageTest extends TestCase
 {
-    public function testGetLinkUrls()
-    {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urls.php" );
-
-        $gateway = $this->getStorageGateway();
-
-        $this->assertEquals(
-            array(
-                23 => "/content/view/sitemap/2",
-                24 => "/content/view/tagcloud/2"
-            ),
-            $gateway->getIdUrlMap(
-                array( 23, 24, "fake" )
-            )
-        );
-    }
-
-    public function testGetLinkIds()
-    {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urls.php" );
-
-        $gateway = $this->getStorageGateway();
-
-        $this->assertEquals(
-            array(
-                "/content/view/sitemap/2" => 23,
-                "/content/view/tagcloud/2" => 24
-            ),
-            $gateway->getUrlIdMap(
-                array(
-                    "/content/view/sitemap/2",
-                    "/content/view/tagcloud/2",
-                    "fake"
-                )
-            )
-        );
-    }
-
     public function testGetContentIds()
     {
         $this->insertDatabaseFixture( __DIR__ . "/_fixtures/contentobjects.php" );
@@ -76,77 +38,6 @@ class LegacyStorageTest extends TestCase
                 )
             )
         );
-    }
-
-    public function testInsertUrl()
-    {
-        $this->insertDatabaseFixture( __DIR__ . "/_fixtures/urls.php" );
-
-        $gateway = $this->getStorageGateway();
-
-        $url = "one/two/three";
-        $time = time();
-        $id = $gateway->insertUrl( $url );
-
-        $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query
-            ->select( "*" )
-            ->from( 'ezurl' )
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'id' ),
-                    $query->bindValue( $id )
-                )
-            );
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
-
-        $expected = array(
-            array(
-                'id' => $id,
-                'is_valid' => "1",
-                'last_checked' => "0",
-                'original_url_md5' => md5( $url ),
-                'url' => $url
-            )
-        );
-
-        $this->assertGreaterThanOrEqual( $time, $result[0]["created"] );
-        $this->assertGreaterThanOrEqual( $time, $result[0]["modified"] );
-
-        unset( $result[0]["created"] );
-        unset( $result[0]["modified"] );
-
-        $this->assertEquals( $expected, $result );
-    }
-
-    public function testLinkUrl()
-    {
-        $gateway = $this->getStorageGateway();
-
-        $urlId = 12;
-        $fieldId = 10;
-        $versionNo = 1;
-        $gateway->linkUrl( $urlId, $fieldId, $versionNo );
-
-        $query = $this->getDatabaseHandler()->createSelectQuery();
-        $query->select( "*" )->from( 'ezurl_object_link' );
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
-
-        $expected = array(
-            array(
-                'contentobject_attribute_id' => $fieldId,
-                'contentobject_attribute_version' => $versionNo,
-                'url_id' => $urlId,
-            ),
-        );
-
-        $this->assertEquals( $expected, $result );
     }
 
     /**
