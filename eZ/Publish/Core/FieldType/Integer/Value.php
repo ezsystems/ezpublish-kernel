@@ -26,7 +26,7 @@ class Value extends BaseValue
     /**
      * Construct a new Value object and initialize with $value
      *
-     * @param int $value
+     * @param int|null $value
      */
     public function __construct( $value = null )
     {
