@@ -14,7 +14,6 @@ use eZ\Publish\Core\FieldType;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use DOMDocument;
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlGateway;
 
