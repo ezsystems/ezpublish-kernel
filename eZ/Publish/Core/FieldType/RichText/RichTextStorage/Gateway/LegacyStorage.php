@@ -61,26 +61,25 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * For given array of Content remote ids returns a hash of corresponding
-     * Content ids, with remote ids as keys.
+     * Returns a list of Content ids for a list of remote ids.
      *
      * Non-existent ids are ignored.
      *
-     * @param array $linksRemoteIds
+     * @param array $remoteIds An array of Content remote ids
      *
-     * @return array
+     * @return array An array of Content ids, with remote ids as keys
      */
-    public function getContentIds( array $linksRemoteIds )
+    public function getContentIds( array $remoteIds )
     {
         $objectRemoteIdMap = array();
 
-        if ( !empty( $linksRemoteIds ) )
+        if ( !empty( $remoteIds ) )
         {
             $q = $this->getConnection()->createSelectQuery();
             $q
                 ->select( "id", "remote_id" )
                 ->from( "ezcontentobject" )
-                ->where( $q->expr->in( 'remote_id', $linksRemoteIds ) );
+                ->where( $q->expr->in( 'remote_id', $remoteIds ) );
 
             $statement = $q->prepare();
             $statement->execute();

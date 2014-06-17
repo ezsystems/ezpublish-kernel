@@ -18,26 +18,24 @@ use eZ\Publish\Core\FieldType\StorageGateway;
 abstract class Gateway extends StorageGateway
 {
     /**
-     * For given array of URL ids returns a hash of corresponding URLs,
-     * with URL ids as keys.
+     * Returns a list of URLs for a list of URL ids.
      *
      * Non-existent ids are ignored.
      *
-     * @param int[]|string[] $ids An array of link Ids
+     * @param int[]|string[] $ids An array of URL ids
      *
-     * @return array
+     * @return array An array of URLs, with ids as keys
      */
     abstract public function getIdUrlMap( array $ids );
 
     /**
-     * For given array of URLs returns a hash of corresponding ids,
-     * with URLs as keys.
+     * Returns a list of URL ids for a list of URLs.
      *
      * Non-existent URLs are ignored.
      *
      * @param string[] $urls An array of URLs
      *
-     * @return array
+     * @return array An array of URL ids, with URLs as keys
      */
     abstract public function getUrlIdMap( array $urls );
 
