@@ -75,11 +75,6 @@ class PageService
     protected $blocksById;
 
     /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
-    protected $locationService;
-
-    /**
      * @var \eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
@@ -93,13 +88,11 @@ class PageService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
     public function __construct(
-        LocationService $locationService,
         ContentService $contentService,
         array $zoneDefinition = array(),
         array $blockDefinition = array()
     )
     {
-        $this->locationService = $locationService;
         $this->contentService = $contentService;
         $this->zoneDefinition = $zoneDefinition;
         $this->blockDefinition = $blockDefinition;
@@ -320,9 +313,8 @@ class PageService
             return $this->blocksById[$id];
         }
 
-        $locationId = $this->getStorageGateway()->getLocationIdByBlockId( $id );
-        $location = $this->locationService->loadLocation( $locationId );
-        $content = $this->contentService->loadContent( $location->contentId );
+        $contentId = $this->getStorageGateway()->getContentIdByBlockId( $id );
+        $content = $this->contentService->loadContent( $contentId );
 
         foreach ( $content->getFields() as $field )
         {

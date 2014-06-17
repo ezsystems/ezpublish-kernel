@@ -22,7 +22,6 @@ class PageServiceFactory
      * @param string $serviceClass the class of the page service
      * @param ConfigResolverInterface $resolver
      * @param \eZ\Publish\Core\FieldType\Page\PageStorage\Gateway $storageGateway
-     * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      *
      * @return \eZ\Publish\Core\FieldType\Page\PageService
@@ -31,14 +30,12 @@ class PageServiceFactory
         $serviceClass,
         ConfigResolverInterface $resolver,
         PageGateway $storageGateway,
-        LocationService $locationService,
         ContentService $contentService
     )
     {
         $pageSettings = $resolver->getParameter( 'ezpage' );
         /** @var $pageService \eZ\Publish\Core\FieldType\Page\PageService */
         $pageService = new $serviceClass(
-            $locationService,
             $contentService,
             $pageSettings['layouts'],
             $pageSettings['blocks']

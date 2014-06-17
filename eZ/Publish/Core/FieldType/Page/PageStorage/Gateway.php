@@ -46,14 +46,14 @@ abstract class Gateway extends StorageGateway
     abstract public function getArchivedBlockItems( Block $block );
 
     /**
-     * Returns Location id for the given Block $id,
+     * Returns Content id for the given Block $id,
      * or false if Block could not be found.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If block could not be found.
      *
      * @param int|string $id
      *
-     * @return int|string|false
+     * @return int|string
      */
-    abstract public function getLocationIdByBlockId( $id );
+    abstract public function getContentIdByBlockId( $id );
 }

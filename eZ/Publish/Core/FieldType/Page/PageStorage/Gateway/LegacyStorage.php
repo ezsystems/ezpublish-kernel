@@ -221,25 +221,32 @@ class LegacyStorage extends Gateway
     }
 
     /**
-     * Returns Location id for the given Block $id,
+     * Returns Content id for the given Block $id,
      * or false if Block could not be found.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If block could not be found.
      *
      * @param int|string $id
      *
-     * @return int|false
+     * @return int
      */
-    public function getLocationIdByBlockId( $id )
+    public function getContentIdByBlockId( $id )
     {
         $dbHandler = $this->getConnection();
         $query = $dbHandler->createSelectQuery();
         $query
-            ->select( $dbHandler->quoteColumn( "node_id" ) )
-            ->from( $dbHandler->quoteTable( "ezm_block" ) )
+            ->select( $dbHandler->quoteColumn( "contentobject_id" ) )
+            ->from( $dbHandler->quoteTable( "ezcontentobject_tree" ) )
+            ->innerJoin(
+                $dbHandler->quoteTable( "ezm_block" ),
+                $query->expr->eq(
+                    $dbHandler->quoteColumn( "node_id", "ezm_block" ),
+                    $dbHandler->quoteColumn( "node_id", "ezcontentobject_tree" )
+                )
+            )
             ->where(
                 $query->expr->eq(
-                    "id",
+                    $dbHandler->quoteColumn( "id", "ezm_block" ),
                     $query->bindValue( $id, null, PDO::PARAM_STR )
                 )
             );
@@ -247,14 +254,14 @@ class LegacyStorage extends Gateway
         $stmt = $query->prepare();
         $stmt->execute();
 
-        $locationId = $stmt->fetchColumn();
+        $contentId = $stmt->fetchColumn();
 
-        if ( $locationId === false )
+        if ( $contentId === false )
         {
             throw new NotFoundException( "Block", $id );
         }
 
-        return $locationId;
+        return $contentId;
     }
 
     /**

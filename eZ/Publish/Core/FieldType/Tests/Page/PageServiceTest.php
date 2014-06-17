@@ -48,11 +48,6 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     protected $blockDefinition;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\LocationService
-     */
-    protected $locationService;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
@@ -64,11 +59,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
         $this->blockDefinition = $this->getBlockDefinition();
 
         $this->storageGateway = $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\FieldType\\Page\\PageStorage\\Gateway' );
-        $this->locationService = $this->getMock( "eZ\\Publish\\API\\Repository\\LocationService" );
         $this->contentService = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentService" );
         $pageServiceClass = static::PAGESERVICE_CLASS;
         $this->pageService = new $pageServiceClass(
-            $this->locationService,
             $this->contentService,
             $this->zoneDefinition,
             $this->blockDefinition
@@ -394,7 +387,6 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
 
     public function testGetBlockById()
     {
-        $locationId = 24;
         $contentId = 12;
         $blockId = "abc0123";
         $block = new Block( array( "id" => $blockId ) );
@@ -402,22 +394,14 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
         $page = new Page( array( "zones" => array( $zone ) ) );
         $value = new Value( $page );
         $field = new Field( array( "value" => $value ) );
-        $contentInfo = new ContentInfo( array( "id" => $contentId ) );
-        $location = new Location( array( "contentInfo" => $contentInfo ) );
         $content = new Content( array( "internalFields" => array( $field ) ) );
 
         $this->pageService->setStorageGateway( $this->storageGateway );
         $this->storageGateway
             ->expects( $this->once() )
-            ->method( 'getLocationIdByBlockId' )
+            ->method( 'getContentIdByBlockId' )
             ->with( $blockId )
-            ->will( $this->returnValue( $locationId ) );
-
-        $this->locationService
-            ->expects( $this->once() )
-            ->method( "loadLocation" )
-            ->with( $locationId )
-            ->will( $this->returnValue( $location ) );
+            ->will( $this->returnValue( $contentId ) );
 
         $this->contentService
             ->expects( $this->once() )

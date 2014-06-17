@@ -89,7 +89,6 @@ services:
             - %ezpublish.fieldType.ezpage.pageService.class%
             - @ezpublish.config.resolver
             - @ezpublish.fieldType.ezpage.storage_gateway
-            - @ezpublish.api.service.location
             - @ezpublish.api.service.content
         lazy: true
 
