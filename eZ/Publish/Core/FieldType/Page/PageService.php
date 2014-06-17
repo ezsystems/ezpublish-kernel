@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\FieldType\Page;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\Page\PageStorage\Gateway;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use RuntimeException;
@@ -65,12 +68,36 @@ class PageService
     protected $archivedBlockItems;
 
     /**
+     * Cached Blocks by id.
+     *
+     * @var \eZ\Publish\Core\FieldType\Page\Parts\Block[]
+     */
+    protected $blocksById;
+
+    /**
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
+    protected $contentService;
+
+    /**
      * Constructor
      *
      * @param array $zoneDefinition
      * @param array $blockDefinition
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
-    public function __construct( array $zoneDefinition = array(), array $blockDefinition = array() )
+    public function __construct(
+        array $zoneDefinition = array(),
+        array $blockDefinition = array(),
+        LocationService $locationService,
+        ContentService $contentService
+    )
     {
         $this->zoneDefinition = $zoneDefinition;
         $this->blockDefinition = $blockDefinition;
@@ -78,6 +105,9 @@ class PageService
         $this->lastValidItems = new SplObjectStorage();
         $this->waitingBlockItems = new SplObjectStorage();
         $this->archivedBlockItems = new SplObjectStorage();
+        $this->blocksById = array();
+        $this->locationService =$locationService;
+        $this->contentService = $contentService;
     }
 
     /**
@@ -272,5 +302,47 @@ class PageService
             return $this->archivedBlockItems[$block];
 
         return $this->archivedBlockItems[$block] = $this->getStorageGateway()->getArchivedBlockItems( $block );
+    }
+
+    /**
+     * Returns Block object for the given $id.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If block could not be found.
+     *
+     * @param int|string $id
+     *
+     * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
+     */
+    public function getBlockById( $id )
+    {
+        if ( isset( $this->blocksById[$id] ) )
+        {
+            return $this->blocksById[$id];
+        }
+
+        $locationId = $this->getStorageGateway()->getLocationIdByBlockId( $id );
+        $location = $this->locationService->loadLocation( $locationId );
+        $content = $this->contentService->loadContent( $location->contentId );
+
+        foreach ( $content->getFields() as $field )
+        {
+            if ( !$field->value instanceof Value )
+            {
+                continue;
+            }
+
+            foreach ( $field->value->page->zones as $zone )
+            {
+                foreach ( $zone->blocks as $block )
+                {
+                    if ( $block->id === $id )
+                    {
+                        return $this->blocksById[$id] = $block;
+                    }
+                }
+            }
+        }
+
+        throw new NotFoundException( "Block", $id );
     }
 }

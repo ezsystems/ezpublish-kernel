@@ -21,33 +21,11 @@ class PageServiceTest extends BaseTest
     const PAGESERVICE_CLASS = 'eZ\\Bundle\\EzPublishCoreBundle\\FieldType\\Page\\PageService';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $repository;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $contentService;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->repository = $this->getMock( 'eZ\\Publish\\API\\Repository\\Repository' );
-        $this->contentService = $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' );
-        $this->repository
-            ->expects( $this->any() )
-            ->method( 'getContentService' )
-            ->will( $this->returnValue( $this->contentService ) );
-    }
-
-    /**
      * @covers \eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService::getValidBlockItemsAsContentInfo
      */
     public function testGetValidBlockItemsAsContentInfo()
     {
         $this->pageService->setStorageGateway( $this->storageGateway );
-        $this->pageService->setRepository( $this->repository );
         $block = $this->buildBlock();
         $items = array(
             new Item( array( 'contentId' => 1 ) ),
