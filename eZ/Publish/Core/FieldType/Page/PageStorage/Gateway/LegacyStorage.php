@@ -9,10 +9,12 @@
 
 namespace eZ\Publish\Core\FieldType\Page\PageStorage\Gateway;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\Page\PageStorage\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
+use PDO;
 use RuntimeException;
 use DateTime;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
@@ -39,8 +41,7 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof DatabaseHandler )
-        {
+        if ( !$dbHandler instanceof DatabaseHandler ) {
             throw new RuntimeException( "Invalid dbHandler passed" );
         }
 
@@ -56,8 +57,7 @@ class LegacyStorage extends Gateway
      */
     protected function getConnection()
     {
-        if ( $this->dbHandler === null )
-        {
+        if ( $this->dbHandler === null ) {
             throw new RuntimeException( "Missing database connection." );
         }
         return $this->dbHandler;
@@ -83,20 +83,19 @@ class LegacyStorage extends Gateway
             )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
-                $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
-                $q->expr->eq( 'ts_hidden', $q->bindValue( 0, null, \PDO::PARAM_INT ) )
+                $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, PDO::PARAM_INT ) ),
+                $q->expr->eq( 'ts_hidden', $q->bindValue( 0, null, PDO::PARAM_INT ) )
             )
             ->orderBy( 'priority', SelectQuery::DESC );
 
         $stmt = $q->prepare();
         $stmt->execute();
-        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        $rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
         $items = array();
-        foreach ( $rows as $row )
-        {
+        foreach ( $rows as $row ) {
             $items[] = $this->buildBlockItem(
                 $row + array(
-                    'block_id'  => $block->id,
+                    'block_id' => $block->id,
                     'ts_hidden' => 0
                 )
             );
@@ -122,21 +121,21 @@ class LegacyStorage extends Gateway
             ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
-                $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
-                $q->expr->eq( 'ts_hidden', $q->bindValue( 0, null, \PDO::PARAM_INT ) )
+                $q->expr->gt( 'ts_visible', $q->bindValue( 0, null, PDO::PARAM_INT ) ),
+                $q->expr->eq( 'ts_hidden', $q->bindValue( 0, null, PDO::PARAM_INT ) )
             )
             ->orderBy( 'ts_visible', SelectQuery::DESC )
             ->limit( 1 );
 
         $stmt = $q->prepare();
         $stmt->execute();
-        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        $rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
         if ( empty( $rows ) )
             return;
 
         return $this->buildBlockItem(
             $rows[0] + array(
-                'block_id'  => $block->id,
+                'block_id' => $block->id,
                 'ts_hidden' => 0
             )
         );
@@ -158,23 +157,22 @@ class LegacyStorage extends Gateway
             ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
-                $q->expr->eq( 'ts_visible', $q->bindValue( 0, null, \PDO::PARAM_INT ) ),
-                $q->expr->eq( 'ts_hidden', $q->bindValue( 0, null, \PDO::PARAM_INT ) )
+                $q->expr->eq( 'ts_visible', $q->bindValue( 0, null, PDO::PARAM_INT ) ),
+                $q->expr->eq( 'ts_hidden', $q->bindValue( 0, null, PDO::PARAM_INT ) )
             )
             ->orderBy( 'ts_publication' )
             ->orderBy( 'priority' );
 
         $stmt = $q->prepare();
         $stmt->execute();
-        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        $rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
         $items = array();
-        foreach ( $rows as $row )
-        {
+        foreach ( $rows as $row ) {
             $items[] = $this->buildBlockItem(
                 $row + array(
-                    'block_id'      => $block->id,
-                    'ts_visible'    => 0,
-                    'ts_hidden'     => 0
+                    'block_id' => $block->id,
+                    'ts_visible' => 0,
+                    'ts_hidden' => 0
                 )
             );
         }
@@ -198,16 +196,15 @@ class LegacyStorage extends Gateway
             ->from( $dbHandler->quoteTable( 'ezm_pool' ) )
             ->where(
                 $q->expr->eq( 'block_id', $q->bindValue( $block->id ) ),
-                $q->expr->gt( 'ts_hidden', $q->bindValue( 0, null, \PDO::PARAM_INT ) )
+                $q->expr->gt( 'ts_hidden', $q->bindValue( 0, null, PDO::PARAM_INT ) )
             )
             ->orderBy( 'ts_hidden' );
 
         $stmt = $q->prepare();
         $stmt->execute();
-        $rows = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        $rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
         $items = array();
-        foreach ( $rows as $row )
-        {
+        foreach ( $rows as $row ) {
             $items[] = $this->buildBlockItem(
                 $row + array(
                     'block_id' => $block->id
@@ -216,6 +213,43 @@ class LegacyStorage extends Gateway
         }
 
         return $items;
+    }
+
+    /**
+     * Returns Location id for the given Block $id,
+     * or false if Block could not be found.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If block could not be found.
+     *
+     * @param int|string $id
+     *
+     * @return int|false
+     */
+    public function getLocationIdByBlockId( $id )
+    {
+        $dbHandler = $this->getConnection();
+        $query = $dbHandler->createSelectQuery();
+        $query
+            ->select( $dbHandler->quoteColumn( "node_id" ) )
+            ->from( $dbHandler->quoteTable( "ezm_block" ) )
+            ->where(
+                $query->expr->eq(
+                    "id",
+                    $query->bindValue( $id, null, PDO::PARAM_STR )
+                )
+            );
+
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        $locationId = $stmt->fetchColumn();
+
+        if ( $locationId === false )
+        {
+            throw new NotFoundException( "Block", $id );
+        }
+
+        return $locationId;
     }
 
     /**
