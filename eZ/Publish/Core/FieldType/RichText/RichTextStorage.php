@@ -83,7 +83,7 @@ class RichTextStorage extends GatewayBasedStorage
             }
         }
 
-        $urlIdMap = $gateway->getUrlIds( array_keys( $urlSet ) );
+        $urlIdMap = $gateway->getUrlIdMap( array_keys( $urlSet ) );
         $contentIds = $gateway->getContentIds( array_keys( $remoteIdSet ) );
         $urlLinkSet = array();
 
@@ -171,7 +171,7 @@ class RichTextStorage extends GatewayBasedStorage
             }
         }
 
-        $idUrlMap = $gateway->getIdUrls( array_keys( $urlIdSet ) );
+        $idUrlMap = $gateway->getIdUrlMap( array_keys( $urlIdSet ) );
 
         foreach ( $links as $index => $link )
         {
@@ -199,6 +199,13 @@ class RichTextStorage extends GatewayBasedStorage
 
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
+        /** @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway $gateway */
+        $gateway = $this->getGateway( $context );
+
+        foreach ( $fieldIds as $fieldId )
+        {
+            $gateway->unlinkUrl( $fieldId, $versionInfo->versionNo );
+        }
     }
 
     /**

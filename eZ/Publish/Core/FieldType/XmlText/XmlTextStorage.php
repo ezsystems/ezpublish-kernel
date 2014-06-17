@@ -44,6 +44,13 @@ class XmlTextStorage extends GatewayBasedStorage
 
     public function deleteFieldData( VersionInfo $versionInfo, array $fieldIds, array $context )
     {
+        /** @var \eZ\Publish\Core\FieldType\XmlText\XmlTextStorage\Gateway $gateway */
+        $gateway = $this->getGateway( $context );
+
+        foreach ( $fieldIds as $fieldId )
+        {
+            $gateway->unlinkUrl( $fieldId, $versionInfo->versionNo );
+        }
     }
 
     /**

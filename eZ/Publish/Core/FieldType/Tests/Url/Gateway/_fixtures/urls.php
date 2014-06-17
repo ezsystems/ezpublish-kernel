@@ -21,4 +21,16 @@ return array(
             'url' => '/content/view/tagcloud/2',
         ),
     ),
+    'ezurl_object_link' => array(
+        0 => array(
+            'contentobject_attribute_id' => 42,
+            'contentobject_attribute_version' => 5,
+            'url_id' => 23,
+        ),
+        1 => array(
+            'contentobject_attribute_id' => 43,
+            'contentobject_attribute_version' => 6,
+            'url_id' => 24,
+        ),
+    ),
 );

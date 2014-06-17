@@ -50,6 +50,9 @@ services:
 
     ezpublish.fieldType.ezurl.externalStorage:
         class: %ezpublish.fieldType.ezurl.externalStorage.class%
+        arguments:
+            - []
+            - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezurl}
 
