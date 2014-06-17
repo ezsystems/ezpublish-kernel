@@ -68,10 +68,10 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
         $this->contentService = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentService" );
         $pageServiceClass = static::PAGESERVICE_CLASS;
         $this->pageService = new $pageServiceClass(
-            $this->zoneDefinition,
-            $this->blockDefinition,
             $this->locationService,
-            $this->contentService
+            $this->contentService,
+            $this->zoneDefinition,
+            $this->blockDefinition
         );
     }
 

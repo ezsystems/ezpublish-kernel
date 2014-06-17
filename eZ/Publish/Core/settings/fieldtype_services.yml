@@ -79,8 +79,6 @@ services:
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
         arguments:
-            - []
-            - []
             - @ezpublish.api.service.location
             - @ezpublish.api.service.content
 

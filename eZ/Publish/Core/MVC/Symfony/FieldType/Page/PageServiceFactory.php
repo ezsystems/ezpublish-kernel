@@ -38,10 +38,10 @@ class PageServiceFactory
         $pageSettings = $resolver->getParameter( 'ezpage' );
         /** @var $pageService \eZ\Publish\Core\FieldType\Page\PageService */
         $pageService = new $serviceClass(
-            $pageSettings['layouts'],
-            $pageSettings['blocks'],
             $locationService,
-            $contentService
+            $contentService,
+            $pageSettings['layouts'],
+            $pageSettings['blocks']
         );
         $pageService->setStorageGateway( $storageGateway );
         return $pageService;

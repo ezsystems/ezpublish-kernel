@@ -93,12 +93,14 @@ class PageService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      */
     public function __construct(
-        array $zoneDefinition = array(),
-        array $blockDefinition = array(),
         LocationService $locationService,
-        ContentService $contentService
+        ContentService $contentService,
+        array $zoneDefinition = array(),
+        array $blockDefinition = array()
     )
     {
+        $this->locationService = $locationService;
+        $this->contentService = $contentService;
         $this->zoneDefinition = $zoneDefinition;
         $this->blockDefinition = $blockDefinition;
         $this->validBlockItems = new SplObjectStorage();
@@ -106,8 +108,6 @@ class PageService
         $this->waitingBlockItems = new SplObjectStorage();
         $this->archivedBlockItems = new SplObjectStorage();
         $this->blocksById = array();
-        $this->locationService =$locationService;
-        $this->contentService = $contentService;
     }
 
     /**
