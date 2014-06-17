@@ -41,7 +41,8 @@ class LegacyStorage extends Gateway
         // the given class design there is no sane other option. Actually the
         // dbHandler *should* be passed to the constructor, and there should
         // not be the need to post-inject it.
-        if ( !$dbHandler instanceof DatabaseHandler ) {
+        if ( !$dbHandler instanceof DatabaseHandler )
+        {
             throw new RuntimeException( "Invalid dbHandler passed" );
         }
 
@@ -57,7 +58,8 @@ class LegacyStorage extends Gateway
      */
     protected function getConnection()
     {
-        if ( $this->dbHandler === null ) {
+        if ( $this->dbHandler === null )
+        {
             throw new RuntimeException( "Missing database connection." );
         }
         return $this->dbHandler;
@@ -92,7 +94,8 @@ class LegacyStorage extends Gateway
         $stmt->execute();
         $rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
         $items = array();
-        foreach ( $rows as $row ) {
+        foreach ( $rows as $row )
+        {
             $items[] = $this->buildBlockItem(
                 $row + array(
                     'block_id' => $block->id,
@@ -167,7 +170,8 @@ class LegacyStorage extends Gateway
         $stmt->execute();
         $rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
         $items = array();
-        foreach ( $rows as $row ) {
+        foreach ( $rows as $row )
+        {
             $items[] = $this->buildBlockItem(
                 $row + array(
                     'block_id' => $block->id,
@@ -204,7 +208,8 @@ class LegacyStorage extends Gateway
         $stmt->execute();
         $rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
         $items = array();
-        foreach ( $rows as $row ) {
+        foreach ( $rows as $row )
+        {
             $items[] = $this->buildBlockItem(
                 $row + array(
                     'block_id' => $block->id
