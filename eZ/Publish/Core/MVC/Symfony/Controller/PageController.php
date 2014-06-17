@@ -76,4 +76,29 @@ class PageController extends Controller
         );
         return $response;
     }
+
+    /**
+     * Renders the block with given $id.
+     *
+     * This method can be used with ESI rendering strategy.
+     *
+     * @uses self::viewBlock()
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If block could not be found.
+     *
+     * @param mixed $id Block id
+     * @param array $params
+     * @param array $cacheSettings settings for the HTTP cache, 'smax-age' and
+     *              'max-age' are checked.
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function viewBlockById( $id, array $params = array(), array $cacheSettings = array() )
+    {
+        return $this->viewBlock(
+            $this->pageService->getBlockById( $id ),
+            $params,
+            $cacheSettings
+        );
+    }
 }
