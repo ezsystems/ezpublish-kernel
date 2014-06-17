@@ -298,7 +298,7 @@ class PageService
     }
 
     /**
-     * Returns Block object for the given $id.
+     * Loads Block object for the given $id.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If block could not be found.
      *
@@ -306,7 +306,7 @@ class PageService
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
-    public function getBlockById( $id )
+    public function loadBlock( $id )
     {
         if ( isset( $this->blocksById[$id] ) )
         {

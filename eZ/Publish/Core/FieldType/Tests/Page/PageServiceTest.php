@@ -385,7 +385,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $items, $this->pageService->getArchivedBlockItems( $block ) );
     }
 
-    public function testGetBlockById()
+    public function testLoadBlock()
     {
         $contentId = 12;
         $blockId = "abc0123";
@@ -411,8 +411,8 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
 
         // Calling assertion twice to test cache (comes along with storage gateway's
         // getLocationIdByBlockId() that should be called only once. See above)
-        $this->assertSame( $block, $this->pageService->getBlockById( $blockId ) );
-        $this->assertSame( $block, $this->pageService->getBlockById( $blockId ) );
+        $this->assertSame( $block, $this->pageService->loadBlock( $blockId ) );
+        $this->assertSame( $block, $this->pageService->loadBlock( $blockId ) );
 
     }
 }

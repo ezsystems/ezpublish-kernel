@@ -96,7 +96,7 @@ class PageController extends Controller
     public function viewBlockById( $id, array $params = array(), array $cacheSettings = array() )
     {
         return $this->viewBlock(
-            $this->pageService->getBlockById( $id ),
+            $this->pageService->loadBlock( $id ),
             $params,
             $cacheSettings
         );
