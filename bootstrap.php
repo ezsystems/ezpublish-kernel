@@ -13,9 +13,17 @@ use eZ\Publish\Core\MVC\Legacy\Kernel as LegacyKernel;
 use eZ\Publish\Core\MVC\Legacy\Kernel\CLIHandler as LegacyKernelCLI;
 
 // Get global config.php settings
+if ( !file_exists( __DIR__ . '/config.php' ) )
+{
+    if ( !symlink( __DIR__ . '/config.php-DEVELOPMENT', __DIR__ . '/config.php' ) )
+    {
+        throw new \RuntimeException( 'Could not symlink config.php-DEVELOPMENT to config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!' );
+    }
+}
+
 if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
 {
-    throw new \RuntimeException( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!' );
+    throw new \RuntimeException( 'Could not read config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!' );
 }
 
 // Setup class loader, detect ezpublish-community repo context and use vendor files from there if that is the case

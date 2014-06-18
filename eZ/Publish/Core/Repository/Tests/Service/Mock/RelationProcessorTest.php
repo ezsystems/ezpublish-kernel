@@ -29,7 +29,6 @@ class RelationProcessorTest extends BaseServiceMockTest
      */
     public function testConstructor()
     {
-        $this->markTestSkipped( "This test in some cases with PHP 5.3.3 causes segmentation fault" );
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
 
         $this->assertAttributeSame(
