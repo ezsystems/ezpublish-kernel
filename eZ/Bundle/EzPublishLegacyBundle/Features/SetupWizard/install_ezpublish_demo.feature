@@ -59,7 +59,6 @@ Feature: Install eZ Publish Demo with/without content
             | ezgmaplocation_extension  |
             | ezdemo_extension          |
             | ezflow_extension          |
-            | ezcomments_extension      |
             | ezdemo_classes            |
             | ezdemo_democontent        |
         And I don't see "Not Imported" message
@@ -78,7 +77,6 @@ Feature: Install eZ Publish Demo with/without content
             | ezgmaplocation_extension  |
             | ezdemo_extension          |
             | ezflow_extension          |
-            | ezcomments_extension      |
             | ezdemo_classes            |
             | ezdemo_democontent_clean  |
         And I don't see "Not Imported" message
