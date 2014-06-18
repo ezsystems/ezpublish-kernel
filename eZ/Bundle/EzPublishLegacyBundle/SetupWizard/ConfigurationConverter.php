@@ -246,7 +246,7 @@ class ConfigurationConverter
         return array(
             'caches' => array(
                 'default' => array(
-                    'handlers' => $handlers,
+                    'drivers' => $handlers,
                     // inMemory will enable/disable "Ephemeral", not allowed as separate handler in stash-bundle
                     'inMemory' => $inMemory,
                     'registerDoctrineAdapter' => false
