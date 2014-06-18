@@ -6,7 +6,7 @@ Feature: Install eZ Publish Demo with/without content
     @javascript @democontent_install @democlean_install
     Scenario: Choose english UK for installation
         Given I am on the "Setup Wizard" page
-        And I am on "Welcome to eZ Publish Community Project 5.3.0alpha1" step
+        And I am on "Welcome to eZ Publish Community Project 5.4.0alpha1" step
         When I select "English (United Kingdom)"
         And I press "Next"
         Then I see "Outgoing Email" step
