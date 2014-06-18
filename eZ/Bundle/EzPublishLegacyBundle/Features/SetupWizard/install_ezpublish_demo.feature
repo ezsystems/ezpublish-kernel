@@ -48,11 +48,11 @@ Feature: Install eZ Publish Demo with/without content
     @javascript @democontent_install
     Scenario: Choose Demo Site (with content) for installation
         Given I am on "Site package" step
-        When I select "eZ Publish Demo Site" package version "5.3.0alpha1"
+        When I select "eZ Publish Demo Site" package version "5.4.0alpha1"
         And I press "Next"
         Then I see "Site package" step
-        And I see "eZ Publish Demo Site" package version "5.3-0-alpha1" imported
-        And I see following packages for version "5.3.0-alpha1" imported:
+        And I see "eZ Publish Demo Site" package version "5.4-0-alpha1" imported
+        And I see following packages for version "5.4.0-alpha1" imported:
             | package                   |
             | ezwt_extension            |
             | ezstarrating_extension    |
@@ -67,11 +67,11 @@ Feature: Install eZ Publish Demo with/without content
     @javascript @democlean_install
     Scenario: Choose Demo Site (with content) for installation
         Given I am on "Site package" step
-        When I select "eZ Publish Demo Site (without demo content)" package version "5.3.0alpha1"
+        When I select "eZ Publish Demo Site (without demo content)" package version "5.4.0alpha1"
         And I press "Next"
         Then I see "Site package" step
-        And I see "eZ Publish Demo Site (without demo content)" package version "5.3-0-alpha1" imported
-        And I see following packages for version "5.3.0-alpha1" imported:
+        And I see "eZ Publish Demo Site (without demo content)" package version "5.4-0-alpha1" imported
+        And I see following packages for version "5.4.0-alpha1" imported:
             | package                   |
             | ezwt_extension            |
             | ezstarrating_extension    |
