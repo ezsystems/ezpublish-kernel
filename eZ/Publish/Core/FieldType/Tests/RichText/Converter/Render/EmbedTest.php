@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\RichText\Converter\Render;
+namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Render;
 
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed;

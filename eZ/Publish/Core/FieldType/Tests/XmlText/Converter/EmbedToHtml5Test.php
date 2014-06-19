@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter;
+namespace eZ\Publish\Core\FieldType\Tests\XmlText\Converter;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;

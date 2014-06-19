@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\XmlText\Converter;
+namespace eZ\Publish\Core\FieldType\Tests\XmlText\Converter;
 
 use eZ\Publish\Core\FieldType\XmlText\Converter\Html5;
 use PHPUnit_Framework_TestCase;
@@ -20,10 +20,18 @@ use DOMXPath;
  */
 class Html5Test extends PHPUnit_Framework_TestCase
 {
+    protected $file;
 
     protected function getDefaultStylesheet()
     {
-        return __DIR__ . '../../../../XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl';
+        if ( !empty( $this->file ) )
+            return $this->file;
+
+        $file = __DIR__ . '/../../../XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl';
+        if ( !file_exists( $file ) )
+            throw new \InvalidArgumentException( "Could not find: " . $file );
+
+        return $this->file = $file;
     }
 
     protected function getPreConvertMock()
@@ -55,6 +63,7 @@ class Html5Test extends PHPUnit_Framework_TestCase
     public function testPreConverterCalled()
     {
         $dom = new DOMDocument();
+        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?><section/>' );
         $preConverterMock1 = $this->getPreConvertMock();
         $preConverterMock2 = $this->getPreConvertMock();
 

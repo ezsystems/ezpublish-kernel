@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\RichText\Gateway;
+namespace eZ\Publish\Core\FieldType\Tests\RichText\Gateway;
 
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\RichText;
+namespace eZ\Publish\Core\FieldType\Tests\RichText;
 
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;

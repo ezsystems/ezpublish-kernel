@@ -42,29 +42,25 @@ if ( !empty( $settings['legacy_dir'] ) )
         require_once $settings['legacy_dir'] . '/autoload.php';
     }
 
-    // Define $legacyKernelHandler to whatever you need before loading this bootstrap file.
-    // CLI handler is used by defaut, but you must use \ezpKernelWeb if not in CLI context (i.e. REST server)
-    // $legacyKernelHandler can be a closure returning the appropriate kernel handler (to avoid autoloading issues)
-    if ( isset( $legacyKernelHandler ) )
+    if ( empty( $_ENV['legacyKernel'] ) )
     {
-        $legacyKernelHandler = $legacyKernelHandler instanceof \Closure ? $legacyKernelHandler() : $legacyKernelHandler;
-    }
-    else
-    {
-        $legacyKernelHandler = new LegacyKernelCLI;
-    }
-    $legacyKernel = new LegacyKernel( $legacyKernelHandler, $settings['legacy_dir'], getcwd() );
-    set_exception_handler( null );
-    // Avoid "Fatal error" text from legacy kernel if not called
-    $legacyKernel->runCallback(
-        function ()
+        // Define $legacyKernelHandler to whatever you need before loading this bootstrap file.
+        // CLI handler is used by defaut, but you must use \ezpKernelWeb if not in CLI context (i.e. REST server)
+        // $legacyKernelHandler can be a closure returning the appropriate kernel handler (to avoid autoloading issues)
+        if ( isset( $legacyKernelHandler ) )
         {
-            eZExecution::setCleanExit();
+            $legacyKernelHandler = $legacyKernelHandler instanceof \Closure ? $legacyKernelHandler() : $legacyKernelHandler;
         }
-    );
+        else
+        {
+            $legacyKernelHandler = new LegacyKernelCLI;
+        }
+        $legacyKernel = new LegacyKernel( $legacyKernelHandler, $settings['legacy_dir'], getcwd() );
 
-    // Exposing in env variables in order be able to use them in test cases.
-    $_ENV['legacyKernel'] = $legacyKernel;
-    $_ENV['legacyPath'] = $settings['legacy_dir'];
+        // Exposing in env variables in order be able to use them in test cases.
+        $_ENV['legacyKernel'] = $legacyKernel;
+        $_ENV['legacyPath'] = $settings['legacy_dir'];
+    }
+
     $_ENV['imagemagickConvertPath'] = $settings['imagemagick_convert_path'];
 }

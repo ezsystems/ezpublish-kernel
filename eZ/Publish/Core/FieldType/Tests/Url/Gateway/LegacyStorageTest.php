@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository\Tests\FieldType\Url\Gateway;
+namespace eZ\Publish\Core\FieldType\Tests\Url\Gateway;
 
 use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
