@@ -44,7 +44,7 @@ class Subtree extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
-        $table = $this->getUniqueTableName();
+        $table = 'contentobject_subtree';
 
         $statements = array();
         foreach ( $criterion->value as $pattern )
@@ -55,8 +55,15 @@ class Subtree extends CriterionHandler
             );
         }
 
-        $query
-            ->leftJoin(
+        $joinAlias = $query->alias(
+            $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
+            $this->dbHandler->quoteTable( $table )
+        );
+
+        // only perform LEFT JOIN with ezcontentobject_tree once for this query
+        if ( !strpos( $query->getQuery(), $joinAlias ) )
+        {
+            $query->leftJoin(
                 $query->alias(
                     $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
                     $this->dbHandler->quoteIdentifier( $table )
@@ -66,6 +73,7 @@ class Subtree extends CriterionHandler
                     $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
                 )
             );
+        }
 
         return $query->expr->lOr(
             $statements
