@@ -192,7 +192,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             'stash' => array(
                 'caches' => array(
                     'default' => array(
-                        'handlers' => array( 'FileSystem' ),// If this fails then APC or Memcached is enabled on PHP-CLI
+                        'drivers' => array( 'FileSystem' ),// If this fails then APC or Memcached is enabled on PHP-CLI
                         'inMemory' => true,
                         'registerDoctrineAdapter' => false,
                     )
