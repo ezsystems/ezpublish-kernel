@@ -32,6 +32,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
     public function testObjectStateLimitationAllow()
     {
         $repository = $this->getRepository();
+        $notLockedState = $this->generateId( 'objectstate', 2 );
 
         $contentService = $repository->getContentService();
         /* BEGIN: Use Case */
@@ -63,8 +64,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
             new ObjectStateLimitation(
                 array(
                     'limitationValues' => array(
-                        // 'not_locked' state
-                        2
+                        $notLockedState
                     )
                 )
             )
@@ -99,6 +99,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
     public function testObjectStateLimitationForbid()
     {
         $repository = $this->getRepository();
+        $lockedState = $this->generateId( 'objectstate', 1 );
 
         $contentService = $repository->getContentService();
         /* BEGIN: Use Case */
@@ -130,8 +131,7 @@ class ObjectStateLimitationTest extends BaseLimitationTest
             new ObjectStateLimitation(
                 array(
                     'limitationValues' => array(
-                        // 'locked' state
-                        1
+                        $lockedState
                     )
                 )
             )

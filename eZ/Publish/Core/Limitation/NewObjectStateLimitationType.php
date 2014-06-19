@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation class.
+ * File containing the eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitationType class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -10,24 +10,26 @@
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
-use eZ\Publish\API\Repository\Values\User\Limitation\NewSectionLimitation as APINewSectionLimitation;
+use eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation as APINewObjectStateLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
+use eZ\Publish\SPI\Persistence\Content\ObjectState as SPIObjectState;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
 
 /**
- * NewSectionLimitation is a Content Limitation used on 'section' 'assign' function
+ * NewObjectStateLimitationType is a Content Limitation used on 'state' 'assign' function
  */
-class NewSectionLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
+class NewObjectStateLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
 {
     /**
      * Accepts a Limitation value and checks for structural validity.
@@ -40,9 +42,9 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
      */
     public function acceptValue( APILimitationValue $limitationValue )
     {
-        if ( !$limitationValue instanceof APINewSectionLimitation )
+        if ( !$limitationValue instanceof APINewObjectStateLimitation )
         {
-            throw new InvalidArgumentType( "\$limitationValue", "APINewSectionLimitation", $limitationValue );
+            throw new InvalidArgumentType( "\$limitationValue", "NewObjectStateLimitation", $limitationValue );
         }
         else if ( !is_array( $limitationValue->limitationValues ) )
         {
@@ -74,7 +76,7 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
         {
             try
             {
-                $this->persistence->sectionHandler()->load( $id );
+                $this->persistence->objectStateHandler()->load( $id );
             }
             catch ( APINotFoundException $e )
             {
@@ -100,7 +102,7 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
      */
     public function buildValue( array $limitationValues )
     {
-        return new APINewSectionLimitation( array( 'limitationValues' => $limitationValues ) );
+        return new APINewObjectStateLimitation( array( 'limitationValues' => $limitationValues ) );
     }
 
     /**
@@ -120,9 +122,9 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
      */
     public function evaluate( APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null )
     {
-        if ( !$value instanceof APINewSectionLimitation )
+        if ( !$value instanceof APINewObjectStateLimitation )
         {
-            throw new InvalidArgumentException( '$value', 'Must be of type: APINewSectionLimitation' );
+            throw new InvalidArgumentException( '$value', 'Must be of type: NewObjectStateLimitation' );
         }
 
         if ( !$object instanceof ContentInfo && !$object instanceof Content && !$object instanceof VersionInfo )
@@ -132,7 +134,7 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
 
         if ( empty( $targets ) )
         {
-            throw new InvalidArgumentException( '$targets', 'Must contain objects of type: Section' );
+            throw new InvalidArgumentException( '$targets', 'Must contain objects of type: ObjectState' );
         }
 
         if ( empty( $value->limitationValues ) )
@@ -142,9 +144,9 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
 
         foreach ( $targets as $target )
         {
-            if ( !$target instanceof Section && !$target instanceof SPISection )
+            if ( !$target instanceof ObjectState && !$target instanceof SPIObjectState )
             {
-                throw new InvalidArgumentException( '$targets', 'Must contain objects of type: Section' );
+                throw new InvalidArgumentException( '$targets', 'Must contain objects of type: ObjectState' );
             }
 
             if ( !in_array( $target->id, $value->limitationValues ) )
@@ -162,12 +164,12 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException Not applicable, needs context of new section.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException Not applicable, needs context of new state.
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
     public function getCriterion( APILimitationValue $value, APIUser $currentUser )
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        throw new NotImplementedException( __METHOD__ );
     }
 
     /**
@@ -178,6 +180,6 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
      */
     public function valueSchema()
     {
-        throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException( __METHOD__ );
+        throw new NotImplementedException( __METHOD__ );
     }
 }

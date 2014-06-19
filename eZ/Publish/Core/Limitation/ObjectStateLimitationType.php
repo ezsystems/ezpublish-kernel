@@ -169,10 +169,12 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
                 }
 
                 if ( $defaultStateId === null )
+                {
                     throw new BadStateException(
                         '$defaultStateId',
                         "Could not find a default state for object state group {$stateGroup->id}"
                     );
+                }
 
                 $objectStateIdArray[] = $defaultStateId;
             }

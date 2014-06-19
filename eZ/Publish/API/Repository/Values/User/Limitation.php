@@ -28,6 +28,7 @@ abstract class Limitation extends ValueObject
     const NEWSECTION = "NewSection";
     const SITEACCESS = "SiteAccess";
     const STATE = "State";
+    const NEWSTATE = "NewState";
     const SUBTREE = "Subtree";
     const USERGROUP = "Group";
     const PARENTUSERGROUP = "ParentGroup";

@@ -98,7 +98,6 @@ class RoleService implements RoleServiceInterface
                     'assign' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'NewSection' => true ),
                 ),
                 'state' => array(
-                    // @todo 'NewState' Limitation and Limitation type is missing (like 'NewSection')
                     'assign' => array( 'Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true, 'NewState' => true ),
                 ),
                 'user' => array(

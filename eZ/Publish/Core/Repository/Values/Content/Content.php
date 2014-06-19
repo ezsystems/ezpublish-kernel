@@ -36,7 +36,7 @@ class Content extends APIContent
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
      */
-    private $internalFields;
+    private $internalFields = array();
 
     function __construct( array $data = array() )
     {
