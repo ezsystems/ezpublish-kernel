@@ -21,19 +21,19 @@ class LegacyStorage extends Gateway
     protected $dbHandler;
 
     /**
-     * Default values for user fielfs
+     * Default values for user fields
      *
      * @var array
      */
     protected $defaultValues = array(
-        'hasStoredLogin'   => false,
-        'contentId'   => null,
-        'login'              => null,
-        'email'              => null,
-        'passwordHash'      => null,
+        'hasStoredLogin' => false,
+        'contentId' => null,
+        'login' => null,
+        'email' => null,
+        'passwordHash' => null,
         'passwordHashType' => null,
-        'enabled'         => false,
-        'maxLogin'          => null,
+        'enabled' => false,
+        'maxLogin' => null,
     );
 
     /**
