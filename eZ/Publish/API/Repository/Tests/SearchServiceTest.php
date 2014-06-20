@@ -135,6 +135,13 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
+                    'filter' => new Criterion\MatchNone(),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'MatchNone.php',
+            ),
+            array(
+                array(
                     'filter' => new Criterion\ContentTypeGroupId(
                         2
                     ),

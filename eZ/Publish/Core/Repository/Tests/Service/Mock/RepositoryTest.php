@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\SPI\Persistence\User\RoleAssignment;
 use eZ\Publish\SPI\Persistence\User\Role;
@@ -221,6 +221,9 @@ class RepositoryTest extends BaseServiceMockTest
         self::assertEquals( true, $result );
     }
 
+    /**
+     * @return array
+     */
     public function providerForTestHasAccessReturnsPermissionSets()
     {
         return array(
@@ -245,13 +248,13 @@ class RepositoryTest extends BaseServiceMockTest
                 array(
                     31 => $this->createRole(
                         array(
-                            array( "test-module", "test-function", "notfound" )
+                            array( "test-module", "test-function", "test-limitation" )
                         ),
                         31
                     ),
                     32 => $this->createRole(
                         array(
-                            array( "test-module", "test-function", "test-limitation" )
+                            array( "test-module", "test-function", "test-limitation2" )
                         ),
                         32
                     ),
@@ -332,7 +335,8 @@ class RepositoryTest extends BaseServiceMockTest
                 $policyName = "policy-" . $i . "-" . $k;
                 if ( $policy->limitations === 'notfound' )
                 {
-                    $return = $this->throwException( new NotFoundException( "Limitation", "notfound" ) );
+                    $return = $this->throwException( new LimitationNotFoundException( "notfound" ) );
+                    $this->setExpectedException( 'eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException' );
                 }
                 else
                 {
@@ -355,6 +359,146 @@ class RepositoryTest extends BaseServiceMockTest
             $permissionSets,
             $repositoryMock->hasAccess( "test-module", "test-function" )
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function providerForTestHasAccessReturnsException()
+    {
+        return array(
+            array(
+                array(
+                    31 => $this->createRole(
+                        array(
+                            array( "test-module", "test-function", "notfound" )
+                        ),
+                        31
+                    ),
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 31,
+                        )
+                    )
+                ),
+            ),
+            array(
+                array(
+                    31 => $this->createRole(
+                        array(
+                            array( "test-module", "test-function", "test-limitation" )
+                        ),
+                        31
+                    ),
+                    32 => $this->createRole(
+                        array(
+                            array( "test-module", "test-function", "notfound" )
+                        ),
+                        32
+                    ),
+                ),
+                array(
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 31,
+                        )
+                    ),
+                    new RoleAssignment(
+                        array(
+                            "roleId" => 32,
+                        )
+                    ),
+                ),
+            )
+        );
+    }
+
+    /**
+     * Test for the hasAccess() method.
+     *
+     * @covers \eZ\Publish\API\Repository\Repository::hasAccess
+     * @dataProvider providerForTestHasAccessReturnsException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException
+     */
+    public function testHasAccessReturnsException( array $roles, array $roleAssignments )
+    {
+        /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
+        $userHandlerMock = $this->getPersistenceMock()->userHandler();
+        $roleServiceMock = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\RoleService",
+            array(),
+            array(),
+            '',
+            false
+        );
+        $repositoryMock = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\Repository",
+            array( "getRoleService", "getCurrentUser" ),
+            array(
+                $this->getPersistenceMock(),
+            )
+        );
+
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "getRoleService" )
+            ->will( $this->returnValue( $roleServiceMock ) );
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "getCurrentUser" )
+            ->will( $this->returnValue( $this->getStubbedUser( 14 ) ) );
+
+        $userHandlerMock
+            ->expects( $this->once() )
+            ->method( "loadRoleAssignmentsByGroupId" )
+            ->with( $this->isType( "integer" ), $this->equalTo( true ) )
+            ->will( $this->returnValue( $roleAssignments ) );
+
+        foreach ( $roleAssignments as $at => $roleAssignment )
+        {
+            $userHandlerMock
+                ->expects( $this->at( $at + 1 ) )
+                ->method( "loadRole" )
+                ->with( $roleAssignment->roleId )
+                ->will( $this->returnValue( $roles[$roleAssignment->roleId] ) );
+        }
+
+        $permissionSets = array();
+        /** @var $roleAssignments \eZ\Publish\SPI\Persistence\User\RoleAssignment[] */
+        $count = 0;
+        foreach ( $roleAssignments as $i => $roleAssignment )
+        {
+            $permissionSet = array( "limitation" => null );
+            foreach ( $roles[$roleAssignment->roleId]->policies as $k => $policy )
+            {
+                $policyName = "policy-" . $i . "-" . $k;
+                if ( $policy->limitations === 'notfound' )
+                {
+                    $return = $this->throwException( new LimitationNotFoundException( "notfound" ) );
+                }
+                else
+                {
+                    $return = $this->returnValue( $policyName );
+                    $permissionSet["policies"][] = $policyName;
+                }
+
+                $roleServiceMock
+                    ->expects( $this->at( $count++ ) )
+                    ->method( "buildDomainPolicyObject" )
+                    ->with( $policy )
+                    ->will( $return );
+
+                if ( $policy->limitations === 'notfound' )
+                {
+                    break 2;// no more execution after exception
+                }
+            }
+        }
+
+        /** @var $repositoryMock \eZ\Publish\Core\Repository\Repository */
+        $repositoryMock->hasAccess( "test-module", "test-function" );
     }
 
     public function providerForTestHasAccessReturnsPermissionSetsWithRoleLimitation()

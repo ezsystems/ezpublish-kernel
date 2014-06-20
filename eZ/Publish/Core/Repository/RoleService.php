@@ -36,7 +36,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\User\Handler;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
@@ -1021,7 +1021,7 @@ class RoleService implements RoleServiceInterface
     public function getLimitationType( $identifier )
     {
         if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
-            throw new NotFoundException( 'Limitation', $identifier );
+            throw new LimitationNotFoundException( $identifier );
 
         return $this->settings['limitationTypes'][$identifier];
     }
