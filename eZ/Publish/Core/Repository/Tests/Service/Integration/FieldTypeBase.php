@@ -97,7 +97,7 @@ abstract class FieldTypeBase extends BaseServiceTest
      * Test for the getFieldType() method.
      *
      * @covers \eZ\Publish\Core\Repository\FieldTypeService::getFieldType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException
      * @dataProvider providerForTestGetFieldTypeThrowsNotFoundException
      */
     public function testGetFieldTypeThrowsNotFoundException( $identifier )
@@ -179,7 +179,7 @@ abstract class FieldTypeBase extends BaseServiceTest
      * Test for the buildFieldType() method.
      *
      * @covers \eZ\Publish\Core\Repository\FieldTypeService::buildFieldType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException
      * @dataProvider providerForTestBuildFieldTypeThrowsNotFoundException
      */
     public function testBuildFieldTypeThrowsNotFoundException( $identifier )

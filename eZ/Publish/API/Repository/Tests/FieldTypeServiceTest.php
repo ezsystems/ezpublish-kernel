@@ -82,7 +82,7 @@ class FieldTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\FieldTypeService::getFieldType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \RuntimeException
      */
     public function testGetFieldTypeThrowsNotFoundException()
     {
