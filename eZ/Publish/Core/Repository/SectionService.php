@@ -303,7 +303,7 @@ class SectionService implements SectionServiceInterface
         $loadedSection = $this->loadSection( $section->id );
 
         if ( $this->repository->canUser( 'section', 'edit', $loadedSection ) !== true )
-            throw new UnauthorizedException( 'section', 'edit', array( 'name' => $loadedSection->name ) );
+            throw new UnauthorizedException( 'section', 'edit', array( 'sectionId' => $loadedSection->id ) );
 
         if ( $this->countAssignedContents( $loadedSection ) > 0 )
             throw new BadStateException( "section", 'section is still assigned to content' );

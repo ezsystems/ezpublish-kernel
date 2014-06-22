@@ -89,7 +89,7 @@ class EmbedToHtml5 implements Converter
                     && !$this->repository->canUser( 'content', 'view_embed', $content )
                 )
                 {
-                    throw new UnauthorizedException( 'content', 'read' );
+                    throw new UnauthorizedException( 'content', 'read', array( 'contentId' => $contentId ) );
                 }
 
                 // Check published status of the Content
@@ -98,7 +98,7 @@ class EmbedToHtml5 implements Converter
                     && !$this->repository->canUser( 'content', 'versionread', $content )
                 )
                 {
-                    throw new UnauthorizedException( 'content', 'versionread' );
+                    throw new UnauthorizedException( 'content', 'versionread', array( 'contentId' => $contentId ) );
                 }
 
                 $embedContent = $this->viewManager->renderContent( $content, $view, $parameters );
@@ -118,7 +118,7 @@ class EmbedToHtml5 implements Converter
                     && !$this->repository->canUser( 'content', 'view_embed', $location->getContentInfo(), $location )
                 )
                 {
-                    throw new UnauthorizedException( 'content', 'read' );
+                    throw new UnauthorizedException( 'content', 'read', array( 'locationId' => $location->id ) );
                 }
 
                 $embedContent = $this->viewManager->renderLocation( $location, $view, $parameters );

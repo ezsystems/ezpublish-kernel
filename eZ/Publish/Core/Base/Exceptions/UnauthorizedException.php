@@ -16,18 +16,18 @@ use Exception;
  * UnauthorizedException Exception implementation
  *
  * Use:
- *   throw new UnauthorizedException( 'content', 'read', 42 );
+ *   throw new UnauthorizedException( 'content', 'read', array( 'contentId' => 42 ) );
  */
 class UnauthorizedException extends APIUnauthorizedException implements Httpable
 {
     /**
-     * Generates: User does not have access to '{$function}' '{$module}'[ with identifier '{$identifier}']
+     * Generates: User does not have access to '{$function}' '{$module}'[ with: %property.key% '%property.value%']
      *
-     * Example: User does not have access to 'read' 'content' with identifier '42'
+     * Example: User does not have access to 'read' 'content' with: id '44', type 'article'
      *
      * @param string $module The module name should be in sync with the name of the domain object in question
      * @param string $function
-     * @param string|null $identifier
+     * @param array $properties Key value pair with non sensitive data on what kind of data user does not have access to
      * @param \Exception|null $previous
      */
     public function __construct( $module, $function, array $properties = null, Exception $previous = null )
@@ -37,7 +37,7 @@ class UnauthorizedException extends APIUnauthorizedException implements Httpable
         {
             foreach ( $properties as $name => $value )
             {
-                $identificationString .= $identificationString === '' ? ' with' : ' and';
+                $identificationString .= $identificationString === '' ? ' with:' : ',';
                 $identificationString .= " {$name} '{$value}'";
             }
         }
