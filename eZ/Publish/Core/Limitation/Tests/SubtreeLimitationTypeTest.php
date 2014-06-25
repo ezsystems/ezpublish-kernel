@@ -542,7 +542,7 @@ class SubtreeLimitationTypeTest extends Base
             $object,
             $targets
         );
-        var_dump( $v );
+        var_dump( $v );// intentional, debug in case no exception above
     }
 
     /**

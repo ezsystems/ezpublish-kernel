@@ -328,7 +328,6 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $anonymousUserId = $this->generateId( 'user', 10 );
         $ezLockObjectStateGroupId = $this->generateId( 'objectstategroup', 2 );
         $lockedObjectStateId = $this->generateId( 'objectstate', 2 );
-        $anonymousUserId = $this->generateId( 'user', 10 );
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.

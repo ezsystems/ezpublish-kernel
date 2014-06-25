@@ -11,6 +11,7 @@ parameters:
     ezpublish.api.role.limitation_type.new_section.class: eZ\Publish\Core\Limitation\NewSectionLimitationType
     ezpublish.api.role.limitation_type.siteaccess.class: eZ\Publish\Core\Limitation\SiteAccessLimitationType
     ezpublish.api.role.limitation_type.state.class: eZ\Publish\Core\Limitation\ObjectStateLimitationType
+    ezpublish.api.role.limitation_type.new_state.class: eZ\Publish\Core\Limitation\NewObjectStateLimitationType
     ezpublish.api.role.limitation_type.subtree.class: eZ\Publish\Core\Limitation\SubtreeLimitationType
     ezpublish.api.role.limitation_type.user_group.class: eZ\Publish\Core\Limitation\UserGroupLimitationType
     ezpublish.api.role.limitation_type.status.class: eZ\Publish\Core\Limitation\StatusLimitationType
@@ -86,6 +87,12 @@ services:
         arguments: [@ezpublish.api.persistence_handler]
         tags:
             - {name: ezpublish.limitationType, alias: State}
+
+    ezpublish.api.role.limitation_type.new_state:
+        class: %ezpublish.api.role.limitation_type.new_state.class%
+        arguments: [@ezpublish.api.persistence_handler]
+        tags:
+            - {name: ezpublish.limitationType, alias: NewState}
 
     ezpublish.api.role.limitation_type.subtree:
         class: %ezpublish.api.role.limitation_type.subtree.class%
