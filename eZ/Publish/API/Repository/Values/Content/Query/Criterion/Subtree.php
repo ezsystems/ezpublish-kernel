@@ -31,14 +31,10 @@ class Subtree extends Criterion implements CriterionInterface
      */
     public function __construct( $value )
     {
-        if ( is_array( $value ) )
+        foreach ( (array)$value as $pathString )
         {
-            if ( !isset( $value[0][0] ) || $value[0][0] !== '/' )
-                throw new InvalidArgumentException( "\$value array values must follow the pathString format, eg /1/2/" );
-        }
-        else if ( !isset( $value[0] ) || $value[0] !== '/' )
-        {
-            throw new InvalidArgumentException( "\$value array values must follow the pathString format, eg /1/2/" );
+            if ( preg_match( '/^(\/\w+)+\/$/', $pathString ) !== 1 )
+                throw new InvalidArgumentException( "value '$pathString' must follow the pathString format, eg /1/2/" );
         }
 
         parent::__construct( null, null, $value );

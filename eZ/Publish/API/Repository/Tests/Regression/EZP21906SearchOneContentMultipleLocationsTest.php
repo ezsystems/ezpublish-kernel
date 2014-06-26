@@ -79,7 +79,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'feedback_form' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
@@ -93,7 +93,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'feedback_form' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
@@ -108,7 +108,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'feedback_form' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
@@ -123,7 +123,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'feedback_form' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
@@ -138,7 +138,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'feedback_form' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
@@ -153,7 +153,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'folder' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
@@ -168,7 +168,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'folder' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
@@ -183,7 +183,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'folder' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
@@ -198,7 +198,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'folder' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
@@ -213,7 +213,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
                     array(
                         'criterion' => new Criterion\LogicalAnd(
                             array(
-                                new Criterion\Subtree( '/1/2' ),
+                                new Criterion\Subtree( '/1/2/' ),
                                 new Criterion\ContentTypeIdentifier( 'product' ),
                                 new Criterion\Visibility( Criterion\Visibility::VISIBLE )
                             )
