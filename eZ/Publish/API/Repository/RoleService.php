@@ -114,6 +114,7 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException On missing Policy Limitation
      *
      * @param mixed $id
      *
@@ -126,6 +127,7 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException On missing Policy Limitation
      *
      * @param string $identifier
      *
@@ -137,6 +139,7 @@ interface RoleService
      * Loads all roles
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException On missing Policy Limitation
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role[]
      */
@@ -155,6 +158,7 @@ interface RoleService
      * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException On missing Policy Limitation
      *
      * @param mixed $userId
      *
@@ -212,6 +216,7 @@ interface RoleService
      * Returns the assigned user and user groups to this role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException On missing Policy Limitation
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      *
@@ -223,6 +228,7 @@ interface RoleService
      * Returns the roles assigned to the given user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException On missing Policy Limitation
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
@@ -234,6 +240,7 @@ interface RoleService
      * Returns the roles assigned to the given user group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException On missing Policy Limitation
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
@@ -281,7 +288,7 @@ interface RoleService
      *
      * @return \eZ\Publish\SPI\Limitation\Type
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException On missing Limitation
      */
     public function getLimitationType( $identifier );
 

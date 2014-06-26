@@ -1,5 +1,6 @@
 parameters:
     ezpublish.persistence.solr.search.content.criterion_visitor.match_all.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\MatchAll
+    ezpublish.persistence.solr.search.content.criterion_visitor.match_none.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\MatchNone
     ezpublish.persistence.solr.search.content.criterion_visitor.content_id_in.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\ContentIdIn
     ezpublish.persistence.solr.search.content.criterion_visitor.logical_and.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\LogicalAnd
     ezpublish.persistence.solr.search.content.criterion_visitor.logical_or.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\LogicalOr
@@ -31,6 +32,11 @@ parameters:
 services:
     ezpublish.persistence.solr.search.content.criterion_visitor.match_all:
         class: %ezpublish.persistence.solr.search.content.criterion_visitor.match_all.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.criterion_visitor}
+
+    ezpublish.persistence.solr.search.content.criterion_visitor.match_none:
+        class: %ezpublish.persistence.solr.search.content.criterion_visitor.match_none.class%
         tags:
             - {name: ezpublish.persistence.solr.search.content.criterion_visitor}
 

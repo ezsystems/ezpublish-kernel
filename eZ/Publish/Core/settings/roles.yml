@@ -1,4 +1,5 @@
 parameters:
+    ezpublish.api.role.limitation_type.blocking.class: eZ\Publish\Core\Limitation\BlockingLimitationType
     ezpublish.api.role.limitation_type.content_type.class: eZ\Publish\Core\Limitation\ContentTypeLimitationType
     ezpublish.api.role.limitation_type.language.class: eZ\Publish\Core\Limitation\LanguageLimitationType
     ezpublish.api.role.limitation_type.location.class: eZ\Publish\Core\Limitation\LocationLimitationType
@@ -17,6 +18,17 @@ parameters:
     ezpublish.api.role.limitation_type.status.class: eZ\Publish\Core\Limitation\StatusLimitationType
 
 services:
+    ## Non implemented Limitations
+
+    # FunctionList is a ezjscore limitations, it only applies to ezjscore policies not used by
+    # platform stack so configuring it as blocking to avoid exceptions about missing implementation
+    ezpublish.api.role.limitation_type.function_list:
+        class: %ezpublish.api.role.limitation_type.blocking.class%
+        arguments: ['FunctionList']
+        tags:
+            - {name: ezpublish.limitationType, alias: FunctionList}
+
+    ## Implemented Limitations
     ezpublish.api.role.limitation_type.content_type:
         class: %ezpublish.api.role.limitation_type.content_type.class%
         arguments: [@ezpublish.api.persistence_handler]
