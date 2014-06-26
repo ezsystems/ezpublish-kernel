@@ -100,6 +100,7 @@ class SubtreeLimitationTypeTest extends Base
             array( new SubtreeLimitation( array( 'limitationValues' => array( true ) ) ) ),
             array( new SubtreeLimitation( array( 'limitationValues' => array( 1 ) ) ) ),
             array( new SubtreeLimitation( array( 'limitationValues' => array( 0 ) ) ) ),
+            array( new SubtreeLimitation( array( 'limitationValues' => '/1/2/' ) ) ),
         );
     }
 
