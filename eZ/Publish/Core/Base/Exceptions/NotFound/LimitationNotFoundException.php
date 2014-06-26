@@ -8,14 +8,14 @@
 
 namespace eZ\Publish\Core\Base\Exceptions\NotFound;
 
-use eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException as APILimitationNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\Httpable;
 use Exception;
+use RuntimeException;
 
 /**
  * Limitation Not Found Exception implementation
  */
-class LimitationNotFoundException extends APILimitationNotFoundException implements Httpable
+class LimitationNotFoundException extends RuntimeException implements Httpable
 {
     /**
      * Creates a Limitation Not Found exception with info on how to fix
