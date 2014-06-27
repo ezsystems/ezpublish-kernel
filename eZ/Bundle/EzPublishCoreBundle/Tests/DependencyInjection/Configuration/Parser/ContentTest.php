@@ -155,6 +155,62 @@ class ContentTest extends AbstractParserTestCase
                     ),
                 )
             ),
+            array(
+                array(
+                    'content' => array(),
+                    'fieldtypes' => array(
+                        'ezrichtext' => array(
+                            'tags' => array(
+                                'default' => array(
+                                    'template' => 'MyBundle:FieldType/RichText/tag:default.html.twig',
+                                ),
+                                'math_equation' => array(
+                                    'template' => 'MyBundle:FieldType/RichText/tag:math_equation.html.twig',
+                                ),
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'content.view_cache' => true,
+                    'content.ttl_cache' => true,
+                    'content.default_ttl' => 60,
+                    'fieldtypes.ezrichtext.tags.default' => array(
+                        'template' => 'MyBundle:FieldType/RichText/tag:default.html.twig',
+                    ),
+                    'fieldtypes.ezrichtext.tags.math_equation' => array(
+                        'template' => 'MyBundle:FieldType/RichText/tag:math_equation.html.twig',
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'content' => array(),
+                    'fieldtypes' => array(
+                        'ezrichtext' => array(
+                            'embed' => array(
+                                'content' => array(
+                                    'template' => 'MyBundle:FieldType/RichText/embed:content.html.twig',
+                                ),
+                                'location_inline_denied' => array(
+                                    'template' => 'MyBundle:FieldType/RichText/embed:location_inline_denied.html.twig',
+                                ),
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'content.view_cache' => true,
+                    'content.ttl_cache' => true,
+                    'content.default_ttl' => 60,
+                    'fieldtypes.ezrichtext.embed.content' => array(
+                        'template' => 'MyBundle:FieldType/RichText/embed:content.html.twig',
+                    ),
+                    'fieldtypes.ezrichtext.embed.location_inline_denied' => array(
+                        'template' => 'MyBundle:FieldType/RichText/embed:location_inline_denied.html.twig',
+                    ),
+                )
+            ),
         );
     }
 }
