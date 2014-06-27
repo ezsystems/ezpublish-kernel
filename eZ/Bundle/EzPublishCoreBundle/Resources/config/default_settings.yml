@@ -64,31 +64,32 @@ parameters:
     ezsettings.default.fieldtypes.ezrichtext.input_custom_xsl: []
 
     # RichText field type template tag settings
-    ezsettings.default.fieldtypes.ezrichtext.tag.default:
+    # 'default' and 'default_inline' tag identifiers are reserved for fallback
+    ezsettings.default.fieldtypes.ezrichtext.tags.default:
         template: EzPublishCoreBundle:FieldType/RichText/tag:default.html.twig
-    ezsettings.default.fieldtypes.ezrichtext.tag.inline.default:
+    ezsettings.default.fieldtypes.ezrichtext.tags.default_inline:
         template: EzPublishCoreBundle:FieldType/RichText/tag:default_inline.html.twig
 
     # RichText field type embed settings
     ezsettings.default.fieldtypes.ezrichtext.embed.default:
         template: EzPublishCoreBundle:FieldType/RichText/embed:default.html.twig
-    ezsettings.default.fieldtypes.ezrichtext.embed.inline.default:
+    ezsettings.default.fieldtypes.ezrichtext.embed.default_inline:
         template: EzPublishCoreBundle:FieldType/RichText/embed:default_inline.html.twig
     ezsettings.default.fieldtypes.ezrichtext.embed.content:
         template: EzPublishCoreBundle:FieldType/RichText/embed:content.html.twig
-    ezsettings.default.fieldtypes.ezrichtext.embed.content.denied:
+    ezsettings.default.fieldtypes.ezrichtext.embed.content_denied:
         template: EzPublishCoreBundle:FieldType/RichText/embed:content_denied.html.twig
-    ezsettings.default.fieldtypes.ezrichtext.embed.content.inline:
+    ezsettings.default.fieldtypes.ezrichtext.embed.content_inline:
         template: EzPublishCoreBundle:FieldType/RichText/embed:content_inline.html.twig
-    ezsettings.default.fieldtypes.ezrichtext.embed.content.inline.denied:
+    ezsettings.default.fieldtypes.ezrichtext.embed.content_inline_denied:
         template: EzPublishCoreBundle:FieldType/RichText/embed:content_inline_denied.html.twig
     ezsettings.default.fieldtypes.ezrichtext.embed.location:
         template: EzPublishCoreBundle:FieldType/RichText/embed:location.html.twig
-    ezsettings.default.fieldtypes.ezrichtext.embed.location.denied:
+    ezsettings.default.fieldtypes.ezrichtext.embed.location_denied:
         template: EzPublishCoreBundle:FieldType/RichText/embed:location_denied.html.twig
-    ezsettings.default.fieldtypes.ezrichtext.embed.location.inline:
+    ezsettings.default.fieldtypes.ezrichtext.embed.location_inline:
         template: EzPublishCoreBundle:FieldType/RichText/embed:location_inline.html.twig
-    ezsettings.default.fieldtypes.ezrichtext.embed.location.inline.denied:
+    ezsettings.default.fieldtypes.ezrichtext.embed.location_inline_denied:
         template: EzPublishCoreBundle:FieldType/RichText/embed:location_inline_denied.html.twig
 
     # Cache settings
