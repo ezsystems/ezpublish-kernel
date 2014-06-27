@@ -29,10 +29,9 @@ class NotFoundException extends APINotFoundException implements Httpable
      */
     public function __construct( $what, $identifier, Exception $previous = null )
     {
+        $identifierStr = is_string( $identifier ) ? $identifier : var_export( $identifier, true );
         parent::__construct(
-            "Could not find '{$what}' with identifier '" .
-            ( is_array( $identifier ) ? var_export( $identifier, true ) : $identifier ) .
-            "'",
+            "Could not find '{$what}' with identifier '{$identifierStr}'",
             self::NOT_FOUND,
             $previous
         );
