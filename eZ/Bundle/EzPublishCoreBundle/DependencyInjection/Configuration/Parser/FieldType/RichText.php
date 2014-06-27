@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\AbstractFieldTypeParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition;
 
 /**
  * Configuration parser handling RichText field type related config
@@ -113,12 +114,12 @@ class RichText extends AbstractFieldTypeParser
                     )
                     ->example( "math_equation" )
                     ->children()
-                        ->scalarNode( 'template' )
-                            ->info( 'Template to use for rendering RichText template tag.' )
-                            ->example( 'MyBundle:FieldType/RichText/tag:math_equation.html.twig' )
-                            ->isRequired()
-                            ->cannotBeEmpty()
-                        ->end()
+                        ->append(
+                            $this->getTemplateNodeDefinition(
+                                'Template used for rendering RichText template tag.',
+                                'MyBundle:FieldType/RichText/tag:math_equation.html.twig'
+                            )
+                        )
                     ->end()
                 ->end()
             ->end()
@@ -128,93 +129,111 @@ class RichText extends AbstractFieldTypeParser
                     ->arrayNode( 'content' )
                         ->info( 'Configuration for RichText block-level Content embed tags.' )
                         ->children()
-                            ->scalarNode( 'template' )
-                                ->info( 'Default template to use for rendering RichText block-level embed tags.' )
-                                ->example( 'MyBundle:FieldType/RichText/embed:content.html.twig' )
-                                ->isRequired()
-                                ->cannotBeEmpty()
-                            ->end()
+                            ->append(
+                                $this->getTemplateNodeDefinition(
+                                    'Template used for rendering RichText block-level Content embed tags.',
+                                    'MyBundle:FieldType/RichText/embed:content.html.twig'
+                                )
+                            )
                         ->end()
                     ->end()
                     ->arrayNode( 'content_denied' )
                         ->info( 'Configuration for RichText block-level Content embed tags when embed is not permitted.' )
                         ->children()
-                            ->scalarNode( 'template' )
-                                ->info( 'Default template to use for rendering RichText block-level embed tags.' )
-                                ->example( 'MyBundle:FieldType/RichText/embed:content_denied.html.twig' )
-                                ->isRequired()
-                                ->cannotBeEmpty()
-                            ->end()
+                            ->append(
+                                $this->getTemplateNodeDefinition(
+                                    'Template used for rendering RichText block-level Content embed tags when embed is not permitted.',
+                                    'MyBundle:FieldType/RichText/embed:content_denied.html.twig'
+                                )
+                            )
                         ->end()
                     ->end()
                     ->arrayNode( 'content_inline' )
                         ->info( 'Configuration for RichText inline-level Content embed tags.' )
                         ->children()
-                            ->scalarNode( 'template' )
-                                ->info( 'Default template to use for rendering RichText block-level embed tags.' )
-                                ->example( 'MyBundle:FieldType/RichText/embed:content_inline.html.twig' )
-                                ->isRequired()
-                                ->cannotBeEmpty()
-                            ->end()
+                            ->append(
+                                $this->getTemplateNodeDefinition(
+                                    'Template used for rendering RichText inline-level Content embed tags.',
+                                    'MyBundle:FieldType/RichText/embed:content_inline.html.twig'
+                                )
+                            )
                         ->end()
                     ->end()
                     ->arrayNode( 'content_inline_denied' )
                         ->info( 'Configuration for RichText inline-level Content embed tags when embed is not permitted.' )
                         ->children()
-                            ->scalarNode( 'template' )
-                                ->info( 'Default template to use for rendering RichText block-level embed tags.' )
-                                ->example( 'MyBundle:FieldType/RichText/embed:content_inline_denied.html.twig' )
-                                ->isRequired()
-                                ->cannotBeEmpty()
-                            ->end()
+                            ->append(
+                                $this->getTemplateNodeDefinition(
+                                    'Template used for rendering RichText inline-level Content embed tags when embed is not permitted.',
+                                    'MyBundle:FieldType/RichText/embed:content_inline_denied.html.twig'
+                                )
+                            )
                         ->end()
                     ->end()
                     ->arrayNode( 'location' )
                         ->info( 'Configuration for RichText block-level Location embed tags.' )
                         ->children()
-                            ->scalarNode( 'template' )
-                                ->info( 'Default template to use for rendering RichText block-level embed tags.' )
-                                ->example( 'MyBundle:FieldType/RichText/embed:location.html.twig' )
-                                ->isRequired()
-                                ->cannotBeEmpty()
-                            ->end()
+                            ->append(
+                                $this->getTemplateNodeDefinition(
+                                    'Template used for rendering RichText block-level Location embed tags.',
+                                    'MyBundle:FieldType/RichText/embed:location.html.twig'
+                                )
+                            )
                         ->end()
                     ->end()
                     ->arrayNode( 'location_denied' )
                         ->info( 'Configuration for RichText block-level Location embed tags when embed is not permitted.' )
                         ->children()
-                            ->scalarNode( 'template' )
-                                ->info( 'Default template to use for rendering RichText block-level embed tags.' )
-                                ->example( 'MyBundle:FieldType/RichText/embed:location_denied.html.twig' )
-                                ->isRequired()
-                                ->cannotBeEmpty()
-                            ->end()
+                            ->append(
+                                $this->getTemplateNodeDefinition(
+                                    'Template used for rendering RichText block-level Location embed tags when embed is not permitted.',
+                                    'MyBundle:FieldType/RichText/embed:location_denied.html.twig'
+                                )
+                            )
                         ->end()
                     ->end()
                     ->arrayNode( 'location_inline' )
                         ->info( 'Configuration for RichText inline-level Location embed tags.' )
                         ->children()
-                            ->scalarNode( 'template' )
-                                ->info( 'Default template to use for rendering RichText block-level embed tags.' )
-                                ->example( 'MyBundle:FieldType/RichText/embed:location_inline.html.twig' )
-                                ->isRequired()
-                                ->cannotBeEmpty()
-                            ->end()
+                            ->append(
+                                $this->getTemplateNodeDefinition(
+                                    'Template used for rendering RichText inline-level Location embed tags.',
+                                    'MyBundle:FieldType/RichText/embed:location_inline.html.twig'
+                                )
+                            )
                         ->end()
                     ->end()
                     ->arrayNode( 'location_inline_denied' )
                         ->info( 'Configuration for RichText inline-level Location embed tags when embed is not permitted.' )
                         ->children()
-                            ->scalarNode( 'template' )
-                                ->info( 'Default template to use for rendering RichText block-level embed tags.' )
-                                ->example( 'MyBundle:FieldType/RichText/embed:location_inline_denied.html.twig' )
-                                ->isRequired()
-                                ->cannotBeEmpty()
-                            ->end()
+                            ->append(
+                                $this->getTemplateNodeDefinition(
+                                    'Template used for rendering RichText inline-level Location embed tags when embed is not permitted.',
+                                    'MyBundle:FieldType/RichText/embed:location_inline_denied.html.twig'
+                                )
+                            )
                         ->end()
                     ->end()
                 ->end()
             ->end();
+    }
+
+    /**
+     * @param string $info
+     * @param string $example
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
+     */
+    protected function getTemplateNodeDefinition( $info, $example )
+    {
+        $templateNodeDefinition = new ScalarNodeDefinition( "template" );
+        $templateNodeDefinition
+            ->info( $info )
+            ->example( $example )
+            ->isRequired()
+            ->cannotBeEmpty();
+
+        return $templateNodeDefinition;
     }
 
     public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
