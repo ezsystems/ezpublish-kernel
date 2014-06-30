@@ -100,7 +100,11 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             ->scalarNode( 'index_page' )
                 ->info( "The page that the index page will show. Default value is null." )
                 ->example( '/Getting-Started' )
-                ->end()
+            ->end()
+            ->scalarNode( 'default_page' )
+                ->info( 'The default page to show, e.g. after user login this will be used for default redirection. Defaults to root location.' )
+                ->example( '/Getting-Started' )
+            ->end()
             ->arrayNode( 'http_cache' )
                 ->info( 'Settings related to Http cache' )
                 ->cannotBeEmpty()
@@ -187,6 +191,8 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                 $container->setParameter( "ezsettings.$sa.security.login_template", $settings['user']['login_template'] );
             if ( isset( $settings['index_page'] ) )
                 $container->setParameter( "ezsettings.$sa.index_page", $settings['index_page'] );
+            if ( isset( $settings['default_page'] ) )
+                $container->setParameter( "ezsettings.$sa.default_page", '/' . ltrim( $settings['default_page'], '/' ) );
         }
     }
 
