@@ -420,8 +420,15 @@ class Repository implements RepositoryInterface
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets ) )
-                    continue;// Continue to next policy set, all limitations must pass
+                try
+                {
+                    if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets ) )
+                        continue;// Continue to next policy set, all limitations must pass
+                }
+                catch ( InvalidArgumentException $e )
+                {
+                    // limitation may be used as role limitation, where $object may not apply.
+                }
             }
 
             /**
