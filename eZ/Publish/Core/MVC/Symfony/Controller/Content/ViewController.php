@@ -269,6 +269,7 @@ class ViewController extends Controller
                 return $response;
             }
 
+            $response->headers->set( 'X-Location-Id', $content->contentInfo->mainLocationId );
             $response->setContent(
                 $this->renderContent( $content, $viewType, $layout, $params )
             );
