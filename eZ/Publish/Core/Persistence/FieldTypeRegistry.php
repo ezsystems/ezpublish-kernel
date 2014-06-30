@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence;
 
+use eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException;
 use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
 use RuntimeException;
 
@@ -52,7 +53,7 @@ class FieldTypeRegistry
      *
      * @param string $identifier
      *
-     * @throws \RuntimeException If field type for given $identifier is not found.
+     * @throws FieldTypeNotFoundException If field type for given $identifier is not found.
      * @throws \RuntimeException If field type for given $identifier is not instance or callable.
      *
      * @return \eZ\Publish\SPI\Persistence\FieldType
@@ -87,7 +88,7 @@ class FieldTypeRegistry
     /**
      * Instantiates a FieldType object.
      *
-     * @throws \RuntimeException If field type for given $identifier is not found.
+     * @throws FieldTypeNotFoundException If field type for given $identifier is not found.
      * @throws \RuntimeException If field type for given $identifier is not instance or callable.
      *
      * @param string $identifier
@@ -98,10 +99,7 @@ class FieldTypeRegistry
     {
         if ( !isset( $this->coreFieldTypeMap[$identifier] ) )
         {
-            throw new RuntimeException(
-                "Provided \$identifier is unknown: '{$identifier}', have: "
-                . var_export( array_keys( $this->coreFieldTypeMap ), true )
-            );
+            throw new FieldTypeNotFoundException( $identifier );
         }
 
         $fieldType = $this->coreFieldTypeMap[$identifier];

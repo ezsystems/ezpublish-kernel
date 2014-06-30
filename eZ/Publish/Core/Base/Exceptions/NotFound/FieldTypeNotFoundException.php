@@ -13,21 +13,21 @@ use Exception;
 use RuntimeException;
 
 /**
- * Limitation Not Found Exception implementation
+ * FieldType Not Found Exception
  */
-class LimitationNotFoundException extends RuntimeException implements Httpable
+class FieldTypeNotFoundException extends RuntimeException implements Httpable
 {
     /**
-     * Creates a Limitation Not Found exception with info on how to fix
+     * Creates a FieldType Not Found exception with info on how to fix
      *
-     * @param string $limitation
+     * @param string $fieldType
      * @param \Exception|null $previous
      */
-    public function __construct( $limitation, Exception $previous = null )
+    public function __construct( $fieldType, Exception $previous = null )
     {
         parent::__construct(
-            "Limitation '{$limitation}' not found, needs to be implemented or configured to use "
-            . "Limitation\\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%)",
+            "FieldType '{$fieldType}' not found, needs to be implemented or configured to use "
+            . "FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%)",
             self::INTERNAL_ERROR,
             $previous
         );

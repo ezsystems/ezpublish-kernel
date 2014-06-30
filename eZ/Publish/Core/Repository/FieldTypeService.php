@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
 
@@ -128,10 +128,7 @@ class FieldTypeService implements FieldTypeServiceInterface
     {
         if ( !isset( $this->settings[$identifier] ) )
         {
-            throw new NotFoundException(
-                "FieldType",
-                "Provided \$identifier is unknown: '{$identifier}', has: " . var_export( array_keys( $this->settings ), true )
-            );
+            throw new FieldTypeNotFoundException( $identifier );
         }
 
         if ( $this->settings[$identifier] instanceof SPIFieldType )
