@@ -180,19 +180,22 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
             $settings + (array)$event->getParameters()->get( "injected-settings" )
         );
 
-        // Inject csrf protection settings to make sure legacy & symfony stack work together
-        if (
-            $this->container->hasParameter( 'form.type_extension.csrf.enabled' ) &&
-            $this->container->getParameter( 'form.type_extension.csrf.enabled' )
-        )
+        if ( class_exists( 'ezxFormToken' ) )
         {
-            ezxFormToken::setSecret( $this->container->getParameter( 'kernel.secret' ) );
-            ezxFormToken::setFormField( $this->container->getParameter( 'form.type_extension.csrf.field_name' ) );
-        }
-        // csrf protection is disabled, disable it in legacy extension as well.
-        else
-        {
-            ezxFormToken::setIsEnabled( false );
+            // Inject csrf protection settings to make sure legacy & symfony stack work together
+            if (
+                $this->container->hasParameter( 'form.type_extension.csrf.enabled' ) &&
+                $this->container->getParameter( 'form.type_extension.csrf.enabled' )
+            )
+            {
+                ezxFormToken::setSecret( $this->container->getParameter( 'kernel.secret' ) );
+                ezxFormToken::setFormField( $this->container->getParameter( 'form.type_extension.csrf.field_name' ) );
+            }
+            // csrf protection is disabled, disable it in legacy extension as well.
+            else
+            {
+                ezxFormToken::setIsEnabled( false );
+            }
         }
 
         // Register http cache content/cache event listener
