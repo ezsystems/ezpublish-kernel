@@ -102,7 +102,7 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                 ->example( '/Getting-Started' )
             ->end()
             ->scalarNode( 'default_page' )
-                ->info( 'The default page to show, e.g. after user login this will be used for default redirection. Defaults to root location.' )
+                ->info( 'The default page to show, e.g. after user login this will be used for default redirection. If provided, will override "default_target_path" from security.yml.' )
                 ->example( '/Getting-Started' )
             ->end()
             ->arrayNode( 'http_cache' )

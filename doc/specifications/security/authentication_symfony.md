@@ -65,6 +65,12 @@ ezpublish:
                 login_template: "AcmeTestBundle:User:login.html.twig"
 ```
 
+#### Redirection after login
+By default, Symfony redirects to the [URI configured in `security.yml` as `default_target_path`](http://symfony.com/doc/2.3/reference/configuration/security.html).
+If not set, it will default to `/`.
+
+This setting can be set by SiteAccess, via [`default_page` setting](../misc/default_page.md).
+
 ### Configuration
 
 To use Symfony authentication with eZ Publish, the configuration goes as follows:
