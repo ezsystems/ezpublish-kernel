@@ -61,6 +61,13 @@ EOT
             $GLOBALS['argv'][] = '--help';
         }
 
+        $siteAccess = $input->getOption( 'siteaccess' );
+        if ( $siteAccess && !in_array( "--siteaccess=$siteAccess", $_SERVER['argv'] ) )
+        {
+            $_SERVER['argv'][] = "--siteaccess=$siteAccess";
+            $GLOBALS['argv'][] = "--siteaccess=$siteAccess";
+        }
+
         $output->writeln( "<comment>Running script '$legacyScript' in eZ Publish legacy context</comment>" );
 
         /** @var $legacyCLIHandlerClosure \Closure */
