@@ -44,28 +44,14 @@ class Subtree extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
-        $table = $this->getUniqueTableName();
-
         $statements = array();
         foreach ( $criterion->value as $pattern )
         {
             $statements[] = $query->expr->like(
-                $this->dbHandler->quoteColumn( 'path_string', $table ),
+                $this->dbHandler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
                 $query->bindValue( $pattern . '%' )
             );
         }
-
-        $query
-            ->leftJoin(
-                $query->alias(
-                    $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
-                    $this->dbHandler->quoteIdentifier( $table )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'contentobject_id', $table ),
-                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
-                )
-            );
 
         return $query->expr->lOr(
             $statements

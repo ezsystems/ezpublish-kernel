@@ -201,6 +201,11 @@ class DoctrineDatabase extends Gateway
                 'ezcontentobject_version',
                 'ezcontentobject.id',
                 'ezcontentobject_version.contentobject_id'
+            )
+            ->leftJoin(
+                'ezcontentobject_tree',
+                'ezcontentobject_tree.contentobject_id',
+                'ezcontentobject.id'
             );
 
         if ( $sort !== null )
@@ -234,6 +239,7 @@ class DoctrineDatabase extends Gateway
         $query = $this->handler->createSelectQuery();
 
         $query->select(
+            'DISTINCT ' .
             $this->handler->quoteColumn( 'id', 'ezcontentobject' )
         );
 
@@ -242,14 +248,20 @@ class DoctrineDatabase extends Gateway
             $this->sortClauseConverter->applySelect( $query, $sort );
         }
 
-        $query->from(
-            $this->handler->quoteTable( 'ezcontentobject' )
-        );
-        $query->innerJoin(
-            'ezcontentobject_version',
-            'ezcontentobject.id',
-            'ezcontentobject_version.contentobject_id'
-        );
+        $query
+            ->from(
+                $this->handler->quoteTable( 'ezcontentobject' )
+            )
+            ->innerJoin(
+                'ezcontentobject_version',
+                'ezcontentobject.id',
+                'ezcontentobject_version.contentobject_id'
+            )
+            ->leftJoin(
+                'ezcontentobject_tree',
+                'ezcontentobject_tree.contentobject_id',
+                'ezcontentobject.id'
+            );
 
         if ( $sort !== null )
         {
