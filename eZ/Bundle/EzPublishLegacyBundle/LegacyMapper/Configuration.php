@@ -254,6 +254,7 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
     private function getMultiSiteSettings()
     {
         $rootLocationId = $this->configResolver->getParameter( 'content.tree_root.location_id' );
+        $defaultPage = $this->configResolver->getParameter( 'default_page' );
         if ( $rootLocationId === null )
         {
             return array();
@@ -273,7 +274,7 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
             'site.ini/SiteAccessSettings/PathPrefixExclude' => $pathPrefixExcludeItems,
             'logfile.ini/AccessLogFileSettings/PathPrefix'  => $pathPrefix,
             'site.ini/SiteSettings/IndexPage'               => "/content/view/full/$rootLocationId/",
-            'site.ini/SiteSettings/DefaultPage'             => "/content/view/full/$rootLocationId/",
+            'site.ini/SiteSettings/DefaultPage'             => $defaultPage !== null ? $defaultPage : "/content/view/full/$rootLocationId/",
             'content.ini/NodeSettings/RootNode'             => $rootLocationId,
         );
     }

@@ -60,6 +60,25 @@ class CommonTest extends AbstractExtensionTestCase
         $this->assertSame( $indexPage2, $this->container->getParameter( 'ezsettings.ezdemo_site_admin.index_page' ) );
     }
 
+    public function testDefaultPage()
+    {
+        $defaultPage1 = '/Getting-Started';
+        $defaultPage2 = '/Foo/bar';
+        $config = array(
+            'system' => array(
+                'ezdemo_site' => array( 'default_page' => $defaultPage1 ),
+                'ezdemo_site_admin' => array( 'default_page' => $defaultPage2 ),
+            )
+        );
+        $this->load( $config );
+
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.default_page' ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.default_page' ) );
+        $this->assertFalse( $this->container->hasParameter( 'ezsettings.global.default_page' ) );
+        $this->assertSame( $defaultPage1, $this->container->getParameter( 'ezsettings.ezdemo_site.default_page' ) );
+        $this->assertSame( $defaultPage2, $this->container->getParameter( 'ezsettings.ezdemo_site_admin.default_page' ) );
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */

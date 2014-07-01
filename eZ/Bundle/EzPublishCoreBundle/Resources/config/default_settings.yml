@@ -20,6 +20,7 @@ parameters:
     ezsettings.default.legacy_mode: false
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
     ezsettings.default.index_page: ~                    # The page to show when accessing IndexPage (/)
+    ezsettings.default.default_page: ~                  # The default page to show, e.g. after user login this will be used for default redirection
     ezsettings.default.languages: []
     ezsettings.default.translation_siteaccesses: []
     ezsettings.default.related_siteaccesses: []
