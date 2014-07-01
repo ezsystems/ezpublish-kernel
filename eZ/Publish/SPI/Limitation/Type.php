@@ -15,9 +15,28 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 
 /**
  * This interface represent the Limitation Type
+ *
+ * A Limitation is a lot like a Symfony voter, telling the permission system if user has
+ * access or not. It consists of a Limitation Value which is persisted, and this Limitation
+ * Type which contains the business logic for evaluate ("vote"), as well as accepting and
+ * validating the Value object and to generate criteria for content/location searches.
  */
 interface Type
 {
+    /**
+     * Constants for return value of {@see evaluate()}
+     *
+     * Currently ACCESS_ABSTAIN must mean that evaluate does not support the provided $object or $targets,
+     * this is currently only supported by role limitations as policy limitations should not allow this.
+     *
+     * @note In future version constant values might change to 1, 0 and -1 as used in Symfony.
+     *
+     * @since 5.3.2
+     */
+    const ACCESS_GRANTED = true;
+    const ACCESS_ABSTAIN = null;
+    const ACCESS_DENIED  = false;
+
     /**
      * Constants for valueSchema() return values
      *
@@ -62,10 +81,11 @@ interface Type
     public function buildValue( array $limitationValues );
 
     /**
-     * Evaluate permission against content and placement
+     * Evaluate ("Vote") against a main value object and targets for the context
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
+     *         However if $object or $targets is unsupported by ROLE limitation, ACCESS_ABSTAIN should be returned!
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
      *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
@@ -75,7 +95,7 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets An array of location, parent or "assignment"
      *                                                                 objects, if null: none where provided by caller
      *
-     * @return boolean
+     * @return boolean|null Returns one of ACCESS_* constants
      */
     public function evaluate( APILimitationValue $value, APIUser $currentUser, APIValueObject $object, array $targets = null );
 

@@ -9,13 +9,14 @@
 
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use Exception;
 use RuntimeException;
 
@@ -415,29 +416,59 @@ class Repository implements RepositoryInterface
         foreach ( $permissionSets as $permissionSet )
         {
             /**
+             * First deal with Role limitation if any
+             *
+             * Here we accept ACCESS_GRANTED and ACCESS_ABSTAIN, the latter in cases where $object and $targets
+             * are not supported by limitation.
+             *
              * @var \eZ\Publish\API\Repository\Values\User\Limitation[] $permissionSet
              */
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
                 $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
-                if ( !$type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets ) )
-                    continue;// Continue to next policy set, all limitations must pass
+                $accessVote = $type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets );
+                if ( $accessVote === LimitationType::ACCESS_DENIED )
+                    continue;
             }
 
             /**
+             * Loop over all policies
+             *
+             * These are already filtered by hasAccess and given hasAccess did not return boolean
+             * there must be some, so only return true if one of them says yes.
+             *
              * @var \eZ\Publish\API\Repository\Values\User\Policy $policy
              */
             foreach ( $permissionSet['policies'] as $policy )
             {
                 $limitations = $policy->getLimitations();
+
+                /**
+                 * Return true if policy gives full access (aka no limitations)
+                 */
                 if ( $limitations === '*' )
                     return true;
 
+                /**
+                 * Loop over limitations, all must return ACCESS_GRANTED for policy to pass.
+                 * If limitations was empty array this means same as '*'
+                 */
                 $limitationsPass = true;
                 foreach ( $limitations as $limitation )
                 {
                     $type = $roleService->getLimitationType( $limitation->getIdentifier() );
-                    if ( !$type->evaluate( $limitation, $currentUser, $object, $targets ) )
+                    $accessVote = $type->evaluate( $limitation, $currentUser, $object, $targets );
+                    /**
+                     * For policy limitation atm only support ACCESS_GRANTED
+                     *
+                     * Reasoning: Right now, use of a policy limitation not valid for a policy is per definition a
+                     * BadState. To reach this you would have to configure the "limitationMap" wrongly, like using
+                     * Node (Location) limitation on state/assign. So in this case Role Limitations will return
+                     * ACCESS_ABSTAIN (== no access here), and other limitations will throw InvalidArgument above,
+                     * both cases forcing dev to investigate to find miss configuration. This might be relaxed in
+                     * the future if valid use cases for ACCESS_ABSTAIN on policy limitations becomes known.
+                     */
+                    if ( $accessVote !== LimitationType::ACCESS_GRANTED )
                     {
                         $limitationsPass = false;
                         break;// Break to next policy, all limitations must pass

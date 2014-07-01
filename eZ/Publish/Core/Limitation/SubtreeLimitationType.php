@@ -149,10 +149,8 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         }
         else if ( !$object instanceof ContentInfo )
         {
-            throw new InvalidArgumentException(
-                '$object',
-                'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
-            );
+            // As this is Role limitation we need to signal abstain on unsupported $object
+            return self::ACCESS_ABSTAIN;
         }
 
         // Load locations if no specific placement was provided
@@ -168,8 +166,8 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         {
             if ( !$target instanceof Location && !$target instanceof SPILocation )
             {
-                // Since this limitation is used as role limitation, "wrong" $target simply returns false
-                return false;
+                // As this is Role limitation we need to signal abstain on unsupported $targets
+                return self::ACCESS_ABSTAIN;
             }
 
             foreach ( $value->limitationValues as $limitationPathString )

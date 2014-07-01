@@ -76,7 +76,6 @@ class EZP22840RoleLimitations extends BaseTest
         // set as current user
         $repository->setCurrentUser( $user );
 
-
         // try to login
         $this->assertTrue(
             $repository->canUser( 'user', 'login', new SiteAccess ),
