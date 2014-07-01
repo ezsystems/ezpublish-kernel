@@ -69,6 +69,52 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
     }
 
     /**
+     * Tests a NewObjectStateLimitationAssignedToGroup
+     *
+     * @return void
+     * @see eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation
+     * @throws \ErrorException if a mandatory test fixture not exists.
+     */
+    public function testNewObjectStateLimitationAllowAssignedToGroup()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        $notLockedState = $this->generateId( 'objectstate', 2 );
+
+        $objectStateService = $repository->getObjectStateService();
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+        $draft = $this->createWikiPageDraft();
+
+        $roleService = $repository->getRoleService();
+
+        // Create and assign limited state:assign policy
+        $policyCreate = $roleService->newPolicyCreateStruct( 'state', 'assign' );
+        $policyCreate->addLimitation(
+            new NewObjectStateLimitation(
+                array(
+                    'limitationValues' => array(
+                        $notLockedState
+                    )
+                )
+            )
+        );
+
+        $role = $roleService->addPolicy(
+            $roleService->loadRoleByIdentifier( 'Editor' ),
+            $policyCreate
+        );
+
+        $repository->setCurrentUser( $user );
+
+        $objectState = $objectStateService->loadObjectState( $notLockedState );
+
+        $objectStateService->setContentState( $draft->contentInfo, $objectState->getObjectStateGroup(), $objectState );
+        /* END: Use Case */
+    }
+
+    /**
      * Tests a NewObjectStateLimitation
      *
      * @return void
