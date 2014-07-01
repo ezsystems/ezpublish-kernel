@@ -61,9 +61,11 @@ class LegacyHelper extends ParameterBag
                 {
                     $that->set(
                         'css_files',
-                        ezjscPacker::buildStylesheetFiles(
-                            $moduleResult['content_info']['persistent_variable']['css_files'],
-                            0
+                        array_unique(
+                            ezjscPacker::buildStylesheetFiles(
+                                $moduleResult['content_info']['persistent_variable']['css_files'],
+                                0
+                            )
                         )
                     );
                 }
@@ -71,9 +73,11 @@ class LegacyHelper extends ParameterBag
                 {
                     $that->set(
                         'js_files',
-                        ezjscPacker::buildJavascriptFiles(
-                            $moduleResult['content_info']['persistent_variable']['js_files'],
-                            0
+                        array_unique(
+                            ezjscPacker::buildJavascriptFiles(
+                                $moduleResult['content_info']['persistent_variable']['js_files'],
+                                0
+                            )
                         )
                     );
                 }
@@ -83,16 +87,20 @@ class LegacyHelper extends ParameterBag
                 $designINI = eZINI::instance( 'design.ini' );
                 $that->set(
                     'css_files_configured',
-                    ezjscPacker::buildStylesheetFiles(
-                        $designINI->variable( 'StylesheetSettings', 'FrontendCSSFileList' ),
-                        0
+                    array_unique(
+                        ezjscPacker::buildStylesheetFiles(
+                            $designINI->variable( 'StylesheetSettings', 'FrontendCSSFileList' ),
+                            0
+                        )
                     )
                 );
                 $that->set(
                     'js_files_configured',
-                    ezjscPacker::buildJavascriptFiles(
-                        $designINI->variable( 'JavaScriptSettings', 'FrontendJavaScriptList' ),
-                        0
+                    array_unique(
+                        ezjscPacker::buildJavascriptFiles(
+                            $designINI->variable( 'JavaScriptSettings', 'FrontendJavaScriptList' ),
+                            0
+                        )
                     )
                 );
             },
