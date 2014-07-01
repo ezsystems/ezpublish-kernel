@@ -12,6 +12,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use PHPUnit_Framework_TestCase;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 use eZ\Publish\Core\REST\Client\Sessionable;
 use DateTime;
@@ -303,7 +304,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create a user fixture in a variable named <b>$user</b>,
+     * Create a user in editor user group
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -341,38 +342,53 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Create a user fixture in a variable named <b>$user</b>,
+     * Create a user in new user group with editor rights limited to Media Library (/1/48/)
      *
+     * @uses createCustomUserVersion1()
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     protected function createMediaUserVersion1()
+    {
+        return $this->createCustomUserVersion1(
+            'Media Editor',
+            'Editor',
+            new SubtreeLimitation( array( 'limitationValues' => array( '/1/48/' ) ) )
+        );
+    }
+
+    /**
+     * Create a user with new user group and assign a existing role (optionally with RoleLimitation)
+     *
+     * @param string $userGroupName Name of the new user group to create
+     * @param string $roleIdentifier Role identifier to assign to the new group
+     * @param RoleLimitation|null $roleLimitation
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected function createCustomUserVersion1( $userGroupName, $roleIdentifier, RoleLimitation $roleLimitation = null )
     {
         $repository = $this->getRepository();
 
         /* BEGIN: Inline */
         // ID of the "Users" user group in an eZ Publish demo installation
-        $usersGroupId = 4;
+        $rootUsersGroupId = $this->generateId( 'location', 4 );
 
         $roleService = $repository->getRoleService();
         $userService = $repository->getUserService();
 
         // Get a group create struct
         $userGroupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
-        $userGroupCreate->setField( 'name', 'Media Editor' );
+        $userGroupCreate->setField( 'name', $userGroupName );
 
         // Create new group with media editor rights
         $userGroup = $userService->createUserGroup(
             $userGroupCreate,
-            $userService->loadUserGroup( $usersGroupId )
+            $userService->loadUserGroup( $rootUsersGroupId )
         );
         $roleService->assignRoleToUserGroup(
-            $roleService->loadRoleByIdentifier( 'Editor' ),
+            $roleService->loadRoleByIdentifier( $roleIdentifier ),
             $userGroup,
-            new SubtreeLimitation(
-                array(
-                    'limitationValues' => array( '/1/48/' )
-                )
-            )
+            $roleLimitation
         );
 
         // Instantiate a create struct with mandatory properties
