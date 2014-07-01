@@ -167,8 +167,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
         {
             if ( !$target instanceof Location && !$target instanceof SPILocation )
             {
-                // Since this limitation is used as role limitation, "wrong" $target simply returns false
-                return false;
+                throw new InvalidArgumentException( '$targets', 'Must contain objects of type: Location' );
             }
 
             foreach ( $value->limitationValues as $limitationPathString )
