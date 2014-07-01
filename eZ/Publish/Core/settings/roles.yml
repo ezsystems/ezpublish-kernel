@@ -21,7 +21,7 @@ services:
     ## Non implemented Limitations
 
     # FunctionList is a ezjscore limitations, it only applies to ezjscore policies not used by
-    # platform stack so configuring it as blocking to avoid exceptions about missing implementation
+    # API/platform stack so configuring to use "blocking" limitation to avoid LimitationNotFoundException
     ezpublish.api.role.limitation_type.function_list:
         class: %ezpublish.api.role.limitation_type.blocking.class%
         arguments: ['FunctionList']
