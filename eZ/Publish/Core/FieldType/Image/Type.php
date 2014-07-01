@@ -106,11 +106,11 @@ class Type extends FieldType
     protected function checkValueStructure( BaseValue $value )
     {
         // Required parameter $path
-        if ( !isset( $value->id ) || !file_exists( $value->id ) )
+        if ( !isset( $value->id ) )
         {
             throw new InvalidArgumentValue(
-                '$value->path',
-                $value->path
+                '$value->id',
+                null
             );
         }
 
