@@ -90,7 +90,7 @@ class AliasGenerator implements VariationHandler
                 $imageAliasHandler = $allAliasHandlers[$aliasHandlerIdentifier];
                 $aliasArray = $imageAliasHandler->imageAlias( $variationName );
                 if ( $aliasArray === null )
-                    throw new InvalidVariationException( $variationName, 'image' );
+                    return null;
 
                 $allVariations[$variationIdentifier] = new ImageVariation(
                     array(
