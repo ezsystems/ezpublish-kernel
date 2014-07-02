@@ -295,7 +295,7 @@ class Manager implements ViewManagerInterface
         $versionInfo = $content->getVersionInfo();
         $languages = $this->configResolver->getParameter( 'languages' );
         $commonLanguages = array_intersect( $languages, $versionInfo->languageCodes );
-        if ( !$versionInfo->getContentInfo()->alwaysAvailable || !empty( $commonLanguages ) )
+        if ( !$versionInfo->getContentInfo()->alwaysAvailable && empty( $commonLanguages ) )
         {
             throw new TranslationNotFoundException( $content->id, $languages );
         }
