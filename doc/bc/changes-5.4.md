@@ -5,13 +5,14 @@ Changes affecting version compatibility with former or future versions.
 ## Changes
 
 * Stash update brings a slight change to the configuration format.
-  Instead of referring to 'handlers', it is now using the term 'drivers'
+  Instead of referring to `handlers`, it is now using the term `drivers`.
 
   ```yaml
 # Stash is used for persistence cache
 stash:
     caches:
         default:
+            # Was before 'handlers'
             drivers:
                 # When using multiple webservers, you must use Memcache or Redis
                 - FileSystem
