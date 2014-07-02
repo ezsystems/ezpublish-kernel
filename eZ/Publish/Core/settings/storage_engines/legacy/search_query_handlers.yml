@@ -28,6 +28,7 @@ parameters:
     ezpublish.persistence.legacy.search.gateway.criterion_handler.content.location_remote_id.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LocationRemoteId
     ezpublish.persistence.legacy.search.gateway.criterion_handler.content.parent_location_id.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ParentLocationId
     ezpublish.persistence.legacy.search.gateway.criterion_handler.content.subtree.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Subtree
+    ezpublish.persistence.legacy.search.gateway.criterion_handler.content.permission_subtree.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\PermissionSubtree
     ezpublish.persistence.legacy.search.gateway.criterion_handler.content.visibility.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Visibility
     # Location
     ezpublish.persistence.legacy.search.gateway.criterion_handler.location.depth.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\CriterionHandler\Location\Depth
@@ -300,6 +301,12 @@ services:
     ezpublish.persistence.legacy.search.gateway.criterion_handler.content.subtree:
         parent: ezpublish.persistence.legacy.search.gateway.criterion_handler.base
         class: %ezpublish.persistence.legacy.search.gateway.criterion_handler.content.subtree.class%
+        tags:
+            - {name: ezpublish.persistence.legacy.search.gateway.criterion_handler.content}
+
+    ezpublish.persistence.legacy.search.gateway.criterion_handler.content.permission_subtree:
+        parent: ezpublish.persistence.legacy.search.gateway.criterion_handler.base
+        class: %ezpublish.persistence.legacy.search.gateway.criterion_handler.content.permission_subtree.class%
         tags:
             - {name: ezpublish.persistence.legacy.search.gateway.criterion_handler.content}
 
