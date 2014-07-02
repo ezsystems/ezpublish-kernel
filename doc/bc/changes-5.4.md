@@ -7,24 +7,21 @@ Changes affecting version compatibility with former or future versions.
 * Stash update brings a slight change to the configuration format.
   Instead of referring to `handlers`, it is now using the term `drivers`.
 
-  ```yaml
-# Stash is used for persistence cache
+  ```diff
 stash:
     caches:
         default:
-            # Was before 'handlers'
-            drivers:
+-       handlers:
++       drivers:
                 # When using multiple webservers, you must use Memcache or Redis
                 - FileSystem
-            # Additionally caches data locally, must be disabled for import/export scripts
             inMemory: true
-            registerDoctrineAdapter: false
-            # On Windows, using FileSystem, to avoid hitting filesystem limitations
-            # you need to change the keyHashFunction used to generate cache directories to "crc32"
-            # FileSystem
-            #    keyHashFunction: crc32
+        registerDoctrineAdapter: false
+        # On Windows, using FileSystem, to avoid hitting filesystem limitations
+        # you need to change the keyHashFunction used to generate cache directories to "crc32"
+        # FileSystem
+        #    keyHashFunction: crc32
   ```
-
 
 
 ## Deprecations
