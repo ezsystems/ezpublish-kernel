@@ -731,7 +731,7 @@ class RepositoryTest extends BaseTest
         // This call will throw "InvalidArgumentException" because $userGroupContentType
         // is an instance of \eZ\Publish\API\Repository\Values\ContentType\ContentType,
         // which can not be checked for user access
-        $canUser = $repository->canUser( "content", "remove", $userGroupContentType );
+        $canUser = $repository->canUser( "content", "create", $userGroupContentType );
         /* END: Use Case */
     }
 

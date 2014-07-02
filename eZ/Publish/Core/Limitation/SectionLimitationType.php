@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation as APISectionLimitation;
@@ -125,7 +126,21 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
             throw new InvalidArgumentException( '$value', 'Must be of type: APISectionLimitation' );
         }
 
-        if ( $object instanceof Content )
+        if ( empty( $value->limitationValues ) )
+        {
+            return false;
+        }
+
+        /**
+         * Two cases supported:
+         * 1. $object is Section, for possible future support on Section limitations, i.e. be able to limit section/edit
+         * 2. $object is Content[Info]/VersionInfo, for all existing content policies, to limit by Section
+         */
+        if ( $object instanceof Section )
+        {
+            return in_array( $object->id, $value->limitationValues );
+        }
+        else if ( $object instanceof Content )
         {
             $object = $object->getVersionInfo()->getContentInfo();
         }
@@ -135,18 +150,14 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
         }
         else if ( !$object instanceof ContentInfo && !$object instanceof ContentCreateStruct )
         {
-            throw new InvalidArgumentException(
-                '$object',
-                'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
-            );
-        }
-
-        if ( empty( $value->limitationValues ) )
-        {
-            return false;
+            // As this is Role limitation we need to signal abstain on unsupported $object
+            return self::ACCESS_ABSTAIN;
         }
 
         /**
+         * We ignore Targets here, they are only interesting in NewState limitation as we on this one is more interested
+         * the section already assigned to object.
+         *
          * @var $object ContentInfo|ContentCreateStruct
          */
         return in_array( $object->sectionId, $value->limitationValues );

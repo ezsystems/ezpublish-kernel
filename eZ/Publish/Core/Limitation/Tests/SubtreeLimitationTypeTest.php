@@ -21,6 +21,7 @@ use eZ\Publish\Core\Limitation\SubtreeLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
+use eZ\Publish\SPI\Limitation\Type as LimitationType;
 
 /**
  * Test Case for LimitationType
@@ -315,7 +316,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentInfo( array( 'published' => true ) ),
                 'targets' => array( new Location() ),
                 'persistence' => array(),
-                'expected' => false
+                'expected' => LimitationType::ACCESS_DENIED
             ),
             // ContentInfo, with targets, no access
             array(
@@ -323,7 +324,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentInfo( array( 'published' => true ) ),
                 'targets' => array( new Location( array( 'pathString' => '/1/55/' ) ) ),
                 'persistence' => array(),
-                'expected' => false
+                'expected' => LimitationType::ACCESS_DENIED
             ),
             // ContentInfo, with targets, with access
             array(
@@ -331,7 +332,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentInfo( array( 'published' => true ) ),
                 'targets' => array( new Location( array( 'pathString' => '/1/2/' ) ) ),
                 'persistence' => array(),
-                'expected' => true
+                'expected' => LimitationType::ACCESS_GRANTED
             ),
             // ContentInfo, no targets, with access
             array(
@@ -339,7 +340,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentInfo( array( 'published' => true ) ),
                 'targets' => null,
                 'persistence' => array( new Location( array( 'pathString' => '/1/2/' ) ) ),
-                'expected' => true
+                'expected' => LimitationType::ACCESS_GRANTED
             ),
             // ContentInfo, no targets, no access
             array(
@@ -347,7 +348,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentInfo( array( 'published' => true ) ),
                 'targets' => null,
                 'persistence' => array( new Location( array( 'pathString' => '/1/55/' ) ) ),
-                'expected' => false
+                'expected' => LimitationType::ACCESS_DENIED
             ),
             // ContentInfo, no targets, un-published, with access
             array(
@@ -355,7 +356,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentInfo( array( 'published' => false ) ),
                 'targets' => null,
                 'persistence' => array( new Location( array( 'pathString' => '/1/2/' ) ) ),
-                'expected' => true
+                'expected' => LimitationType::ACCESS_GRANTED
             ),
             // ContentInfo, no targets, un-published, no access
             array(
@@ -363,7 +364,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentInfo( array( 'published' => false ) ),
                 'targets' => null,
                 'persistence' => array( new Location( array( 'pathString' => '/1/55/' ) ) ),
-                'expected' => false
+                'expected' => LimitationType::ACCESS_DENIED
             ),
             // Content, with targets, with access
             array(
@@ -371,7 +372,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => $contentMock,
                 'targets' => array( new Location( array( 'pathString' => '/1/2/' ) ) ),
                 'persistence' => array(),
-                'expected' => true
+                'expected' => LimitationType::ACCESS_GRANTED
             ),
             // VersionInfo, with targets, with access
             array(
@@ -379,7 +380,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => $versionInfoMock2,
                 'targets' => array( new Location( array( 'pathString' => '/1/2/' ) ) ),
                 'persistence' => array(),
-                'expected' => true
+                'expected' => LimitationType::ACCESS_GRANTED
             ),
             // ContentCreateStruct, no targets, no access
             array(
@@ -387,7 +388,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentCreateStruct(),
                 'targets' => array(),
                 'persistence' => array(),
-                'expected' => false
+                'expected' => LimitationType::ACCESS_DENIED
             ),
             // ContentCreateStruct, with targets, no access
             array(
@@ -395,7 +396,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentCreateStruct(),
                 'targets' => array( new LocationCreateStruct( array( 'parentLocationId' => 55 ) ) ),
                 'persistence' => array( new Location( array( 'pathString' => '/1/55/' ) ) ),
-                'expected' => false
+                'expected' => LimitationType::ACCESS_DENIED
             ),
             // ContentCreateStruct, with targets, with access
             array(
@@ -403,7 +404,15 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentCreateStruct(),
                 'targets' => array( new LocationCreateStruct( array( 'parentLocationId' => 43 ) ) ),
                 'persistence' => array( new Location( array( 'pathString' => '/1/43/' ) ) ),
-                'expected' => true
+                'expected' => LimitationType::ACCESS_GRANTED
+            ),
+            // invalid object
+            array(
+                'limitation' => new SubtreeLimitation(),
+                'object' => new ObjectStateLimitation(),
+                'targets' => array( new LocationCreateStruct( array( 'parentLocationId' => 43 ) ) ),
+                'persistence' => array(),
+                'expected' => LimitationType::ACCESS_ABSTAIN
             ),
             // invalid target
             array(
@@ -411,7 +420,7 @@ class SubtreeLimitationTypeTest extends Base
                 'object' => new ContentInfo( array( 'published' => true ) ),
                 'targets' => array( new ObjectStateLimitation() ),
                 'persistence' => array(),
-                'expected' => false
+                'expected' => LimitationType::ACCESS_ABSTAIN
             ),
         );
     }
@@ -479,7 +488,6 @@ class SubtreeLimitationTypeTest extends Base
             $targets
         );
 
-        self::assertInternalType( 'boolean', $value );
         self::assertEquals( $expected, $value );
     }
 
@@ -493,13 +501,6 @@ class SubtreeLimitationTypeTest extends Base
             array(
                 'limitation' => new ObjectStateLimitation(),
                 'object' => new ContentInfo(),
-                'targets' => array( new Location() ),
-                'persistence' => array(),
-            ),
-            // invalid object
-            array(
-                'limitation' => new SubtreeLimitation(),
-                'object' => new ObjectStateLimitation(),
                 'targets' => array( new Location() ),
                 'persistence' => array(),
             ),
