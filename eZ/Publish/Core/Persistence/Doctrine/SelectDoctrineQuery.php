@@ -39,6 +39,18 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
     private $offset;
 
     /**
+     * Holds the state of permission subtree join, which is LEFT JOIN on 'ezcontentobject_tree' table
+     * with alias 'permission_subtree'.
+     *
+     * @internal This is intended for use by PermissionSubtree criterion handler only
+     * @see \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\PermissionSubtree
+     * @see https://jira.ez.no/browse/EZP-23037
+     *
+     * @var boolean
+     */
+    public $permissionSubtreeJoinAdded = false;
+
+    /**
      * Opens the query and selects which columns you want to return with
      * the query.
      *
