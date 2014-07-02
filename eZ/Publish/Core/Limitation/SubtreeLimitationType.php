@@ -26,6 +26,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
+use eZ\Publish\Core\Repository\Values\Content\Query\Criterion\PermissionSubtree;
 
 /**
  * SubtreeLimitation is a Content Limitation & a Role Limitation
@@ -252,10 +253,10 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
             throw new \RuntimeException( "\$value->limitationValues is empty, it should not have been stored in the first place" );
 
         if ( !isset( $value->limitationValues[1] ) )// 1 limitation value: EQ operation
-            return new Criterion\Subtree( $value->limitationValues[0] );
+            return new PermissionSubtree( $value->limitationValues[0] );
 
         // several limitation values: IN operation
-        return new Criterion\Subtree( $value->limitationValues );
+        return new PermissionSubtree( $value->limitationValues );
     }
 
     /**
