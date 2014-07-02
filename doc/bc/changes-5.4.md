@@ -11,8 +11,8 @@ Changes affecting version compatibility with former or future versions.
   stash:
       caches:
           default:
-  -       handlers:
-  +       drivers:
+  -           handlers:
+  +           drivers:
                   # When using multiple webservers, you must use Memcache or Redis
                   - FileSystem
               inMemory: true
