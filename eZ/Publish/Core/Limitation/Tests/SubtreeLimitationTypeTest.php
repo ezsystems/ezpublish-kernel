@@ -572,7 +572,10 @@ class SubtreeLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree', $criterion );
+        self::assertInstanceOf(
+            'eZ\\Publish\\Core\\Repository\\Values\\Content\\Query\\Criterion\\PermissionSubtree',
+            $criterion
+        );
         self::assertInternalType( 'array', $criterion->value );
         self::assertInternalType( 'string', $criterion->operator );
         self::assertEquals( Operator::EQ, $criterion->operator );
@@ -591,7 +594,10 @@ class SubtreeLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree', $criterion );
+        self::assertInstanceOf(
+            'eZ\\Publish\\Core\\Repository\\Values\\Content\\Query\\Criterion\\PermissionSubtree',
+            $criterion
+        );
         self::assertInternalType( 'array', $criterion->value );
         self::assertInternalType( 'string', $criterion->operator );
         self::assertEquals( Operator::IN, $criterion->operator );
