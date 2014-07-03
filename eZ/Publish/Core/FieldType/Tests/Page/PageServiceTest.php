@@ -9,8 +9,15 @@
 
 namespace eZ\Publish\Core\FieldType\Tests\Page;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
+use eZ\Publish\Core\FieldType\Page\Parts\Page;
+use eZ\Publish\Core\FieldType\Page\Parts\Zone;
+use eZ\Publish\Core\FieldType\Page\Value;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 
 class PageServiceTest extends PHPUnit_Framework_TestCase
@@ -40,6 +47,11 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
      */
     protected $blockDefinition;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\ContentService
+     */
+    protected $contentService;
+
     protected function setUp()
     {
         parent::setUp();
@@ -47,8 +59,13 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
         $this->blockDefinition = $this->getBlockDefinition();
 
         $this->storageGateway = $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\FieldType\\Page\\PageStorage\\Gateway' );
+        $this->contentService = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentService" );
         $pageServiceClass = static::PAGESERVICE_CLASS;
-        $this->pageService = new $pageServiceClass( $this->zoneDefinition, $this->blockDefinition );
+        $this->pageService = new $pageServiceClass(
+            $this->contentService,
+            $this->zoneDefinition,
+            $this->blockDefinition
+        );
     }
 
     /**
@@ -366,5 +383,36 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
         // Calling assertion twice to test cache (comes along with storage gateway's getArchivedBlockItems() that should be called only once. See above)
         $this->assertSame( $items, $this->pageService->getArchivedBlockItems( $block ) );
         $this->assertSame( $items, $this->pageService->getArchivedBlockItems( $block ) );
+    }
+
+    public function testLoadBlock()
+    {
+        $contentId = 12;
+        $blockId = "abc0123";
+        $block = new Block( array( "id" => $blockId ) );
+        $zone = new Zone( array( "blocks" => array( $block ) ) );
+        $page = new Page( array( "zones" => array( $zone ) ) );
+        $value = new Value( $page );
+        $field = new Field( array( "value" => $value ) );
+        $content = new Content( array( "internalFields" => array( $field ) ) );
+
+        $this->pageService->setStorageGateway( $this->storageGateway );
+        $this->storageGateway
+            ->expects( $this->once() )
+            ->method( 'getContentIdByBlockId' )
+            ->with( $blockId )
+            ->will( $this->returnValue( $contentId ) );
+
+        $this->contentService
+            ->expects( $this->once() )
+            ->method( "loadContent" )
+            ->with( $contentId )
+            ->will( $this->returnValue( $content ) );
+
+        // Calling assertion twice to test cache (comes along with storage gateway's
+        // getLocationIdByBlockId() that should be called only once. See above)
+        $this->assertSame( $block, $this->pageService->loadBlock( $blockId ) );
+        $this->assertSame( $block, $this->pageService->loadBlock( $blockId ) );
+
     }
 }
