@@ -47,7 +47,7 @@ class EZP22408DeleteRelatedObjectTest extends BaseTest
          * @var RelationListValue $relationListValue
          */
         $relationListValue = $reloadedReferenceObject->getFieldValue( 'relation_list' );
-        $this->assertSame( array( $targetObject2->id ), $relationListValue->destinationContentIds );
+        $this->assertSame( array( $targetObject2->id ), array_values( $relationListValue->destinationContentIds ) );
     }
 
     public function testSingleRelationIsUpdatedWhenRelatedObjectIsDeleted()

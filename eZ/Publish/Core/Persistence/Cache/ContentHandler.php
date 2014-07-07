@@ -181,6 +181,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     public function deleteContent( $contentId )
     {
         $this->logger->logCall( __METHOD__, array( 'content' => $contentId ) );
+
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $contentId );
+        foreach ( $reverseRelations as $relation )
+        {
+            $this->cache->clear( 'content', $relation->sourceContentId );
+        }
+
         $return = $this->persistenceHandler->contentHandler()->deleteContent( $contentId );
 
         $this->cache->clear( 'content', $contentId );
