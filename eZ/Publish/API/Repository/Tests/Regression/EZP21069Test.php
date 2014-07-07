@@ -18,6 +18,16 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
  * Test case for issue EZP-21069
  *
  * @issue EZP-21069
+ *
+ *     Search Service : when using the field criterion the query checks object attributes for all versions,
+ *     it should use only attributes of the current version
+ *
+ *     Steps to reproduce :
+ *     1 - Create a simple article with title : "foo"
+ *     2 - Make a search with a field criterion : field.title = "foo", the new article is in the results
+ *     3 - Change the name of your article from "foo" to "bar", your article is part of the result again, it should not
+ *     4 - In the admin interface, delete the first version of the article, the article is no longer a part of the results
+ *
  */
 class EZP21069Test extends BaseTest
 {

@@ -16,6 +16,11 @@ use DateTime;
  * Test case for issue EZP-21089
  *
  * @issue EZP-21089
+ *
+ *     Creating an article with public api throw warning on xmltext in regards to relations
+ *
+ *     Creating an article with the public api will throw the following warning
+ *     Warning: array_flip(): Can only flip STRING and INTEGER values! in eZ/Publish/Core/Repository/RelationProcessor.php on line 108
  */
 class EZP21089Test extends BaseTest
 {
