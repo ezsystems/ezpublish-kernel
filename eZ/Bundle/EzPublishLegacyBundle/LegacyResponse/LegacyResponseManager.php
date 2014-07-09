@@ -84,9 +84,9 @@ class LegacyResponseManager
         // Handling error codes sent by the legacy stack
         if ( isset( $moduleResult['errorCode'] ) )
         {
-            // If having an "Unauthorized" or "Forbidden" error code, we send an AccessDeniedException
-            // to be able to trigger redirection to login in Symfony stack.
-            if ( $moduleResult['errorCode'] == 401 || $moduleResult['errorCode'] == 403 )
+            // If having an "Unauthorized" or "Forbidden" error code in non-legacy mode,
+            // we send an AccessDeniedException to be able to trigger redirection to login in Symfony stack.
+            if ( !$this->legacyMode && ( $moduleResult['errorCode'] == 401 || $moduleResult['errorCode'] == 403 ) )
             {
                 $errorMessage = isset( $moduleResult['errorMessage'] ) ? $moduleResult['errorMessage'] : 'Access denied';
                 throw new AccessDeniedException( $errorMessage );
