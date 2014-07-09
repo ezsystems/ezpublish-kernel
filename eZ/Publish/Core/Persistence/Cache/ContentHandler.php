@@ -25,6 +25,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 {
     const FIELD_VALUE_DOM_DOCUMENT_KEY = '§:DomDocument:§';
 
+    const ALL_TRANSLATIONS_KEY = '0';
+
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::create
      */
@@ -58,18 +60,13 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function load( $contentId, $version, array $translations = null )
     {
-        if ( null !== $translations )
-        {
-            $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $version, 'translations' => $translations ) );
-            return $this->persistenceHandler->contentHandler()->load( $contentId, $version, $translations );
-        }
-
-        $cache = $this->cache->getItem( 'content', $contentId, $version );
+        $translationsKey = empty( $translations ) ? self::ALL_TRANSLATIONS_KEY : implode( '|', $translations );
+        $cache = $this->cache->getItem( 'content', $contentId, $version, $translationsKey );
         $content = $cache->get();
         if ( $cache->isMiss() )
         {
-            $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $version ) );
-            $content = $this->persistenceHandler->contentHandler()->load( $contentId, $version );
+            $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $version, 'translations' => $translations ) );
+            $content = $this->persistenceHandler->contentHandler()->load( $contentId, $version, $translations );
             $cache->set( $this->cloneAndSerializeXMLFields( $content ) );
         }
         else
@@ -169,8 +166,9 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'version' => $versionNo, 'struct' => $struct ) );
         $content = $this->persistenceHandler->contentHandler()->updateContent( $contentId, $versionNo, $struct );
+        $this->cache->clear( 'content', $contentId, $versionNo );
         $this->cache
-            ->getItem( 'content', $contentId, $versionNo )
+            ->getItem( 'content', $contentId, $versionNo, self::ALL_TRANSLATIONS_KEY )
             ->set( $this->cloneAndSerializeXMLFields( $content ) );
         return $content;
     }
@@ -274,7 +272,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         // warm up cache
         $contentInfo = $content->versionInfo->contentInfo;
         $this->cache
-            ->getItem( 'content', $contentInfo->id, $content->versionInfo->versionNo )
+            ->getItem( 'content', $contentInfo->id, $content->versionInfo->versionNo, self::ALL_TRANSLATIONS_KEY )
             ->set( $this->cloneAndSerializeXMLFields( $content ) );
         $this->cache->getItem( 'content', 'info', $contentInfo->id )->set( $contentInfo );
 
