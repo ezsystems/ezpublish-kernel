@@ -56,7 +56,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::load
      */
-    public function load( $contentId, $version, $translations = null )
+    public function load( $contentId, $version, array $translations = null )
     {
         if ( null !== $translations )
         {

@@ -66,7 +66,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    public function load( $id, $version, $translations = null );
+    public function load( $id, $version, array $translations = null );
 
     /**
      * Returns the metadata object for a content identified by $contentId.

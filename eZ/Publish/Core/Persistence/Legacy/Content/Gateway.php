@@ -155,7 +155,7 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function load( $contentId, $version, $translations = null );
+    abstract public function load( $contentId, $version, array $translations = null );
 
     /**
      * Loads info for a content object identified by its remote ID
