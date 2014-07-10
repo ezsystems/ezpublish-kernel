@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
+use eZ\Publish\Core\Persistence\Cache\ContentHandler;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -32,7 +33,7 @@ class ContentHandlerTest extends HandlerTest
             array( 'create', array( new CreateStruct ) ),
             array( 'createDraftFromVersion', array( 2, 1, 14 ) ),
             array( 'copy', array( 2, 1 ) ),
-            array( 'load', array( 2, 1, array( 'eng-GB' ) ) ),
+            //array( 'load', array( 2, 1, array( 'eng-GB' ) ) ),
             //array( 'load', array( 2, 1 ) ),
             //array( 'loadContentInfo', array( 2 ) ),
             array( 'loadVersionInfo', array( 2, 1 ) ),
@@ -95,7 +96,7 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'content', 2, 1 )
+            ->with( 'content', 2, 1, 'eng-GB|eng-US' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -117,7 +118,7 @@ class ContentHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects( $this->once() )
             ->method(  'load' )
-            ->with( 2 )
+            ->with( 2, 1, array( 'eng-GB', 'eng-US' ) )
             ->will(
                 $this->returnValue(
                     new Content(
@@ -140,7 +141,7 @@ class ContentHandlerTest extends HandlerTest
             ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
 
         $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->load( 2, 1 );
+        $handler->load( 2, 1, array( 'eng-GB', 'eng-US' ) );
     }
 
     /**
@@ -153,7 +154,7 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'content', 2, 1 )
+            ->with( 'content', 2, 1, ContentHandler::ALL_TRANSLATIONS_KEY )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -411,11 +412,17 @@ class ContentHandlerTest extends HandlerTest
                 )
             );
 
+        $this->cacheMock
+            ->expects( $this->once() )
+            ->method( 'clear' )
+            ->with( 'content', 2, 1 )
+            ->will( $this->returnValue( null ) );
+
         $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'content', 2, 1 )
+            ->with( 'content', 2, 1, ContentHandler::ALL_TRANSLATIONS_KEY )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -564,7 +571,7 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 3 ) )
             ->method( 'getItem' )
-            ->with( 'content', 2, 1 )
+            ->with( 'content', 2, 1, ContentHandler::ALL_TRANSLATIONS_KEY )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock

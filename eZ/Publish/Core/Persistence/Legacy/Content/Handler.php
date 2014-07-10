@@ -315,7 +315,7 @@ class Handler implements BaseContentHandler
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    public function load( $id, $version, $translations = null )
+    public function load( $id, $version, array $translations = null )
     {
         $rows = $this->contentGateway->load( $id, $version, $translations );
 

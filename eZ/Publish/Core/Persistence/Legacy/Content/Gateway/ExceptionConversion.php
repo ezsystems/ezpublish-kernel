@@ -331,7 +331,7 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function load( $contentId, $version, $translations = null )
+    public function load( $contentId, $version, array $translations = null )
     {
         try
         {
