@@ -1,5 +1,5 @@
 <?php
-/**
+    /**
  * File containing the Image Value class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
@@ -9,50 +9,21 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 
-use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 
 /**
- * Value for Image field type
+ * Repository value for Image field type, as returned when loading content.
  *
  * @property string $path Used for BC with 5.0 (EZP-20948). Equivalent to $id.
- *
- * @todo Mime type?
- * @todo Dimensions?
  */
 class Value extends BaseValue
 {
     /**
      * Image id
-     *
      * @var mixed
-     * @required
      */
     public $id;
-
-    /**
-     * The alternative image text (for example "Picture of an apple.").
-     *
-     * @var string|null
-     */
-    public $alternativeText;
-
-    /**
-     * Display file name of the image
-     *
-     * @var string
-     * @required
-     */
-    public $fileName;
-
-    /**
-     * Size of the image file
-     *
-     * @var int
-     * @required
-     */
-    public $fileSize;
 
     /**
      * The image's HTTP URI
@@ -69,7 +40,9 @@ class Value extends BaseValue
     /**
      * Construct a new Value object.
      *
-     * @param array $imageData
+     * @param array $imageData Associatinve array of properties
+     *
+     * @throws PropertyNotFoundException if the given
      */
     public function __construct( array $imageData = array() )
     {
@@ -89,58 +62,12 @@ class Value extends BaseValue
             catch ( PropertyNotFoundException $e )
             {
                 throw new InvalidArgumentType(
-                    sprintf( '$imageData->%s', $key ),
+                    sprintf( '$imageData[%s]', $key ),
                     'Property not found',
                     $value
                 );
             }
         }
-    }
-
-    /**
-     * Creates a value only from a file path
-     *
-     * @param string $path
-     *
-     * @return Value
-     */
-    public static function fromString( $path )
-    {
-        if ( !file_exists( $path ) )
-        {
-            throw new InvalidArgumentType(
-                '$path',
-                'existing file',
-                $path
-            );
-        }
-        return new static(
-            array(
-                'id' => $path,
-                'fileName' => basename( $path ),
-                'fileSize' => filesize( $path ),
-                'alternativeText' => '',
-                'uri' => '',
-            )
-        );
-    }
-
-    /**
-     * Returns the image file size in byte
-     *
-     * @return integer
-     */
-    public function getFileSize()
-    {
-        return $this->fileSize;
-    }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType\Value
-     */
-    public function __toString()
-    {
-        return (string)$this->fileName;
     }
 
     public function __get( $propertyName )
