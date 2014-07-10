@@ -98,6 +98,17 @@ class DoctrineDatabase extends Gateway
                 )
             );
         $query->prepare()->execute();
+
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( $this->handler->quoteTable( 'ezuser_setting' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'user_id' ),
+                    $query->bindValue( $userId, null, \PDO::PARAM_INT )
+                )
+            );
+        $query->prepare()->execute();
     }
 
     /**
