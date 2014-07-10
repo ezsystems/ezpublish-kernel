@@ -1029,6 +1029,17 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
+                    'filter' => new Criterion\ContentTypeId( array( 1, 3 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-US" ),
+                    )
+                ),
+                $fixtureDir . 'SortFieldMultipleTypes.php',
+            ),
+            array(
+                array(
                     'filter' => new Criterion\SectionId( array( 5 ) ),
                     'offset' => 0,
                     'limit' => null,
