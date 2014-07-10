@@ -60,6 +60,7 @@ parameters:
     ezpublish_legacy.request_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\RequestListener
     ezpublish_legacy.config_scope_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\ConfigScopeListener
     ezpublish_legacy.legacy_kernel_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\LegacyKernelListener
+    ezpublish_legacy.kernel_response_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\KernelResponseListener
 
     ezpublish_legacy.legacy_bundles.extension_locator.class: eZ\Bundle\EzPublishLegacyBundle\LegacyBundles\LegacyExtensionsLocator
 
@@ -296,6 +297,14 @@ services:
         class: %ezpublish_legacy.legacy_kernel_listener.class%
         tags:
             - { name: kernel.event_subscriber }
+
+    ezpublish_legacy.kernel_response_listener:
+        class: %ezpublish_legacy.kernel_response_listener.class%
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+        arguments:
+            - %form.type_extension.csrf.field_name%
+            - @?form.csrf_provider
 
     ezpublish_legacy.legacy_bundles.extension_locator:
         class: %ezpublish_legacy.legacy_bundles.extension_locator.class%
