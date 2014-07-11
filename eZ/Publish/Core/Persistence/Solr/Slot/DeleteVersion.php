@@ -27,6 +27,6 @@ class DeleteVersion extends Slot
         if ( !$signal instanceof Signal\ContentService\DeleteVersionSignal )
             return;
 
-        $this->enqueueDeletion( $signal->contentId, $signal->versionNo );
+        $this->persistenceHandler->searchHandler()->deleteContent( $signal->contentId, $signal->versionNo );
     }
 }

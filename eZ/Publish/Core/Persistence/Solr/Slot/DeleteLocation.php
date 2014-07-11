@@ -27,6 +27,6 @@ class DeleteLocation extends Slot
         if ( !$signal instanceof Signal\LocationService\DeleteLocationSignal )
             return;
 
-        $this->enqueueDeletionLocation( $signal->locationId );
+        $this->persistenceHandler->searchHandler()->deleteLocation( $signal->locationId );
     }
 }

@@ -31,19 +31,4 @@ abstract class SignalDispatcher
      * @return void
      */
     abstract public function emit( Signal $signal );
-
-    /**
-     * Attaches the Slot with $slotIdentifier to the signal with
-     * $signalIdentifier
-     *
-     * @param string $signalIdentifier
-     * @param \eZ\Publish\Core\SignalSlot\Slot $slot
-     *
-     * @return void
-     *
-     * @todo Are we sure we want to expose this method? Might lead to dynamic
-     * attachments at runtime, which can lead to hard debugging. Better only
-     * accept attachments during construction (config).
-     */
-    abstract public function attach( $signalIdentifier, Slot $slot );
 }

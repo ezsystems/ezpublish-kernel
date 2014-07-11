@@ -31,7 +31,7 @@ class SetContentState extends Slot
 
         $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->contentId );
 
-        $this->enqueueIndexing(
+        $this->persistenceHandler->searchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load(
                 $contentInfo->id,
                 $contentInfo->currentVersionNo
