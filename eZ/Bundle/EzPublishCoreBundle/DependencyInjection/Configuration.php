@@ -9,12 +9,12 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ScopeConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-class Configuration implements ConfigurationInterface
+class Configuration extends ScopeConfiguration
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
@@ -46,9 +46,15 @@ class Configuration implements ConfigurationInterface
         $this->addSiteaccessSection( $rootNode );
         $this->addImageMagickSection( $rootNode );
         $this->addHttpCacheSection( $rootNode );
-        $this->addSystemSection( $rootNode );
         $this->addPageSection( $rootNode );
         $this->addRouterSection( $rootNode );
+
+        // Delegate SiteAccess config to configuration parsers
+        $systemNode = $this->generateScopeBaseNode( $rootNode );
+        foreach ( $this->configParsers as $parser )
+        {
+            $parser->addSemanticConfig( $systemNode );
+        }
 
         return $treeBuilder;
     }
@@ -188,47 +194,6 @@ class Configuration implements ConfigurationInterface
                     ->prototype( 'scalar' )->end()
                 ->end()
             ->end();
-    }
-
-    private function addSystemSection( ArrayNodeDefinition $rootNode )
-    {
-        $systemNodeBuilder = $rootNode
-            ->children()
-                ->arrayNode( 'system' )
-                    ->info( 'System configuration. First key is always a siteaccess or siteaccess group name' )
-                    ->example(
-                        array(
-                            'ezdemo_site'      => array(
-                                'languages'        => array( 'eng-GB', 'fre-FR' ),
-                                'content'          => array(
-                                    'view_cache'   => true,
-                                    'ttl_cache'    => true,
-                                    'default_ttl'  => 30
-                                )
-                            ),
-                            'ezdemo_group'     => array(
-                                'database' => array(
-                                    'type'             => 'mysql',
-                                    'server'           => 'localhost',
-                                    'port'             => 3306,
-                                    'user'             => 'root',
-                                    'password'         => 'root',
-                                    'database_name'    => 'ezdemo'
-                                )
-                            )
-                        )
-                    )
-                    ->useAttributeAsKey( 'key' )
-                    ->requiresAtLeastOneElement()
-                    ->normalizeKeys( false )
-                    ->prototype( 'array' )
-                        ->children();
-
-        // Delegate to configuration parsers
-        foreach ( $this->configParsers as $parser )
-        {
-            $parser->addSemanticConfig( $systemNodeBuilder );
-        }
     }
 
     private function addImageMagickSection( ArrayNodeDefinition $rootNode )
