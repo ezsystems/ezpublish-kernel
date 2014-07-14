@@ -31,32 +31,20 @@ abstract class Gateway
     abstract public function findContent( Query $query, array $fieldFilters = array() );
 
     /**
-     * Indexes a content object
+     * Indexes a block of documents, which in our case is a Content preceded by its Locations.
+     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
      *
-     * @param \eZ\Publish\SPI\Search\Field[][] $documents
-     *
-     * @return void
+     * @param \eZ\Publish\SPI\Search\Document[] $documents
      */
-    abstract public function bulkIndexContent( array $documents );
+    abstract public function bulkIndexDocuments( array $documents );
 
     /**
-     * Deletes a content object from the index
+     * Deletes a block of documents, which in our case is a Content preceded by its Locations.
+     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
      *
-     * @param int content id
-     * @param int|null version id
-     *
-     * @return void
+     * @param string $blockId
      */
-    abstract public function deleteContent( $contentId, $versionId = null );
-
-    /**
-     * Deletes a location from the index
-     *
-     * @param mixed $locationId
-     *
-     * @return void
-     */
-    abstract public function deleteLocation( $locationId );
+    abstract public function deleteBlock( $blockId );
 
     /**
      * Purges all contents from the index
@@ -74,4 +62,3 @@ abstract class Gateway
      */
     abstract public function setCommit( $commit );
 }
-

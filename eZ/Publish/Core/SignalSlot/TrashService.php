@@ -88,6 +88,7 @@ class TrashService implements TrashServiceInterface
             new TrashSignal(
                 array(
                     'locationId' => $location->id,
+                    'contentId' => $location->contentId,
                 )
             )
         );

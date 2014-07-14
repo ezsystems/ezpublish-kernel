@@ -43,18 +43,17 @@ class ParentLocationIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        return '(' .
-            implode(
-                ' OR ',
-                array_map(
-                    function ( $value )
-                    {
-                        return 'location_parent_mid:"' . $value . '"';
-                    },
-                    $criterion->value
-                )
-            ) .
-            ')';
+        $condition = implode(
+            ' OR ',
+            array_map(
+                function ( $id )
+                {
+                    return 'parent_id_id:"' . $id . '"';
+                },
+                $criterion->value
+            )
+        );
+
+        return "{!parent which='document_type_id:content' v='{$condition}'}";
     }
 }
-

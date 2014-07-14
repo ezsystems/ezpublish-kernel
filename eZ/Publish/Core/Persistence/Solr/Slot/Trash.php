@@ -28,6 +28,6 @@ class Trash extends Slot
             return;
 
         $this->persistenceHandler->locationSearchHandler()->deleteLocation( $signal->locationId );
-        $this->persistenceHandler->searchHandler()->deleteLocation( $signal->locationId );
+        $this->persistenceHandler->searchHandler()->deleteLocation( $signal->locationId, $signal->contentId );
     }
 }

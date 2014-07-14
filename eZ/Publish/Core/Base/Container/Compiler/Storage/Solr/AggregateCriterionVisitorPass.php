@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Solr;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * This compiler pass will register Solr Storage criterion visitors.
@@ -23,23 +24,46 @@ class AggregateCriterionVisitorPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate' ) )
+        if (
+            !$container->hasDefinition( 'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate' ) &&
+            !$container->hasDefinition( 'ezpublish.persistence.solr.search.location.criterion_visitor.aggregate' )
+        )
         {
             return;
         }
 
-        $aggregateCriterionVisitorDefinition = $container->getDefinition(
-            'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate'
-        );
-
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.persistence.solr.search.content.criterion_visitor' ) as $id => $attributes )
+        if ( $container->hasDefinition( 'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate' ) )
         {
-            $aggregateCriterionVisitorDefinition->addMethodCall(
-                'addVisitor',
-                array(
-                    new Reference( $id ),
-                )
+            $aggregateContentCriterionVisitorDefinition = $container->getDefinition(
+                'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate'
             );
+
+            $visitors = $container->findTaggedServiceIds(
+                'ezpublish.persistence.solr.search.content.criterion_visitor'
+            );
+
+            $this->addHandlers( $aggregateContentCriterionVisitorDefinition, $visitors );
+        }
+
+        if ( $container->hasDefinition( 'ezpublish.persistence.solr.search.location.criterion_visitor.aggregate' ) )
+        {
+            $aggregateLocationCriterionVisitorDefinition = $container->getDefinition(
+                'ezpublish.persistence.solr.search.location.criterion_visitor.aggregate'
+            );
+
+            $visitors = $container->findTaggedServiceIds(
+                'ezpublish.persistence.solr.search.location.criterion_visitor'
+            );
+
+            $this->addHandlers( $aggregateLocationCriterionVisitorDefinition, $visitors );
+        }
+    }
+
+    protected function addHandlers( Definition $definition, $handlers )
+    {
+        foreach ( $handlers as $id => $attributes )
+        {
+            $definition->addMethodCall( 'addVisitor', array( new Reference( $id ) ) );
         }
     }
 }

@@ -188,9 +188,10 @@ class Handler implements SearchHandlerInterface
     /**
      * Deletes a location from the index
      *
-     * @param int|string $locationId
+     * @param mixed $locationId
+     * @param mixed $contentId
      */
-    public function deleteLocation( $locationId )
+    public function deleteLocation( $locationId, $contentId )
     {
         // Not implemented in Legacy Storage Engine
     }

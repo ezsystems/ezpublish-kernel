@@ -207,9 +207,10 @@ class Handler implements SearchHandlerInterface
      * @todo Should we not already support the above?
      * @todo The subtree could potentially be huge, so this implementation should scroll reindex
      *
-     * @param int|string $locationId
+     * @param mixed $locationId
+     * @param mixed $contentId @todo Make use of this, or remove if not needed.
      */
-    public function deleteLocation( $locationId )
+    public function deleteLocation( $locationId, $contentId )
     {
         // 1. Update (reindex) all Content in the subtree with additional Location(s) outside of it
         $ast = array(

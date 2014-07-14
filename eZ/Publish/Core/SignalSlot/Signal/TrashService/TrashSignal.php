@@ -23,4 +23,11 @@ class TrashSignal extends Signal
      * @var mixed
      */
     public $locationId;
+
+    /**
+     * Content id
+     *
+     * @var mixed
+     */
+    public $contentId;
 }
