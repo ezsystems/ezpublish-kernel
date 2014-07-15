@@ -710,6 +710,42 @@ class UserHandlerTest extends TestCase
         );
     }
 
+    public function testMultipleAddRoleToUserWithLimitation()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = $this->createRole();
+        $handler->create( $user = $this->getValidUser() );
+
+        $handler->assignRole(
+            $user->id,
+            $role->id,
+            array(
+                'Subtree' => array( '/1', '/1/2' ),
+                'Foo' => array( 'Bar' ),
+            )
+        );
+
+        $handler->assignRole(
+            $user->id,
+            $role->id,
+            array(
+                'Subtree' => array( '/1/2', '/1/5' ),
+            )
+        );
+
+        $this->assertQueryResult(
+            array(
+                array( 1, 42, 1, 'Subtree', '/1' ),
+                array( 2, 42, 1, 'Subtree', '/1/2' ),
+                array( 3, 42, 1, 'Foo', 'Bar' ),
+                array( 4, 42, 1, 'Subtree', '/1/5' ),
+            ),
+            $this->handler->createSelectQuery()->select( 'id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value' )->from( 'ezuser_role' ),
+            'Expected a new user policy association.'
+        );
+    }
+
     public function testRemoveUserRoleAssociation()
     {
         $handler = $this->getUserHandler();
