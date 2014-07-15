@@ -583,7 +583,7 @@ class UserService implements UserServiceInterface
         if ( !is_string( $login ) || empty( $login ) )
             throw new InvalidArgumentValue( "login", $login );
 
-        if ( !is_string( $password ) || empty( $password ) )
+        if ( !is_string( $password ) )
             throw new InvalidArgumentValue( "password", $password );
 
         // Randomize login time to protect against timing attacks
