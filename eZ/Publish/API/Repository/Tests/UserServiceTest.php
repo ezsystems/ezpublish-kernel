@@ -1168,6 +1168,29 @@ class UserServiceTest extends BaseTest
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByCredentials
      */
+    public function testLoadUserByCredentialsThrowsNotFoundExceptionForUnknownPasswordEmtpy()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $this->createUserVersion1();
+
+        // This call will fail with a "NotFoundException", because the given
+        // login/password combination does not exist.
+        $userService->loadUserByCredentials( 'user', '' );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadUserByCredentials() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUserByCredentials()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByCredentials
+     */
     public function testLoadUserByCredentialsThrowsNotFoundExceptionForUnknownLogin()
     {
         $repository = $this->getRepository();
@@ -1180,6 +1203,29 @@ class UserServiceTest extends BaseTest
         // This call will fail with a "NotFoundException", because the given
         // login/password combination does not exist.
         $userService->loadUserByCredentials( 'USER', 'secret' );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadUserByCredentials() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::loadUserByCredentials()
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserByCredentials
+     */
+    public function testLoadUserByCredentialsThrowsInvalidArgumentValueForEmptyLogin()
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+
+        /* BEGIN: Use Case */
+        $this->createUserVersion1();
+
+        // This call will fail with a "InvalidArgumentValue", because the given
+        // login is empty.
+        $userService->loadUserByCredentials( '', 'secret' );
         /* END: Use Case */
     }
 
