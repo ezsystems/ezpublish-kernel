@@ -40,7 +40,7 @@ abstract class Configuration implements ConfigurationInterface
      * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode Node under which the generated node will be placed.
      * @param string $scopeNodeName
      *
-     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     * @return \Symfony\Component\Config\Definition\Builder\NodeBuilder
      */
     public function generateScopeBaseNode( ArrayNodeDefinition $rootNode, $scopeNodeName = 'system' )
     {
