@@ -93,8 +93,6 @@ class EzPublishCoreExtension extends Extension
         $this->handleLocale( $config, $container, $loader );
         $this->handleHelpers( $config, $container, $loader );
 
-        $processor = new ScopeConfigurationProcessor( $container, 'ezsettings' );
-
         // Map settings
         foreach ( $this->configParsers as $configParser )
         {
