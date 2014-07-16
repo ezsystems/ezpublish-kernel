@@ -9,7 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ScopeConfigurationProcessor;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Formatter\YamlSuggestionFormatter;
@@ -149,7 +149,7 @@ class EzPublishCoreExtension extends Extension
         }
 
         $container->setParameter( 'ezpublish.siteaccess.list', $config['siteaccess']['list'] );
-        ScopeConfigurationProcessor::setScopes( $config['siteaccess']['list'] );
+        ConfigurationProcessor::setScopes( $config['siteaccess']['list'] );
         $container->setParameter( 'ezpublish.siteaccess.default', $config['siteaccess']['default_siteaccess'] );
         $container->setParameter( 'ezpublish.siteaccess.match_config', $config['siteaccess']['match'] );
 
@@ -167,7 +167,7 @@ class EzPublishCoreExtension extends Extension
             }
         }
         $container->setParameter( 'ezpublish.siteaccess.groups_by_siteaccess', $groupsBySiteaccess );
-        ScopeConfigurationProcessor::setGroupsByScope( $groupsBySiteaccess );
+        ConfigurationProcessor::setGroupsByScope( $groupsBySiteaccess );
     }
 
     private function registerImageMagickConfiguration( array $config, ContainerBuilder $container )

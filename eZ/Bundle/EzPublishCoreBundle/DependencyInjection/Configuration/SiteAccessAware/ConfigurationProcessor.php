@@ -7,11 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
+namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Closure;
 
-class ScopeConfigurationProcessor
+class ConfigurationProcessor
 {
     /**
      * With this option, registerInternalConfigArray() will call array_unique() at the end of the merge process.
@@ -89,14 +91,49 @@ class ScopeConfigurationProcessor
         static::$groupsByScope = $groupsByScope;
     }
 
-    public function registerInternalConfig( $configParser, array $config )
+    /**
+     * Returns internal ContainerBuilder instance.
+     *
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    public function getContainer()
     {
-        $configParser->preScopeConfig( $config, $this );
+        return $this->container;
+    }
+
+    /**
+     * @param array $config
+     * @param ConfigurationMapper|callable $mapper
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function mapConfig( array $config, $mapper )
+    {
+        if ( $mapper instanceof HookableMapper )
+        {
+            $mapper->preMap( $config, $this );
+        }
+
         foreach ( $config[$this->scopeNodeName] as $scope => &$settings )
         {
-            $configParser->registerScopeConfig( $settings, $scope, $this );
+            if ( is_callable( $mapper ) )
+            {
+                call_user_func_array( $mapper, array( $settings, $scope, $this ) );
+            }
+            else if ( $mapper instanceof ConfigurationMapper )
+            {
+                $mapper->mapConfig( $settings, $scope, $this );
+            }
+            else
+            {
+                throw new \InvalidArgumentException( 'prout' );
+            }
         }
-        $configParser->postScopeConfig( $config, $this );
+
+        if ( $mapper instanceof HookableMapper )
+        {
+            $mapper->postMap( $config, $this );
+        }
     }
 
     /**
@@ -113,6 +150,25 @@ class ScopeConfigurationProcessor
     }
 
     /**
+     * Returns the value under the $id in the $container. if the container does
+     * not known this $id, returns $default
+     *
+     * @param string $id
+     * @param mixed $default
+     *
+     * @return mixed
+     */
+    protected function getContainerParameter( $id, $default = null )
+    {
+        if ( $this->container->hasParameter( $id ) )
+        {
+            return $this->container->getParameter( $id );
+        }
+
+        return $default;
+    }
+
+    /**
      * Registers and merges the internal scope configuration for array settings.
      * We merge arrays defined in scopes "default", in scope groups, in the scope itself and in the "global" scope.
      * To calculate the precedence of scope groups, they are alphabetically sorted.
@@ -123,9 +179,9 @@ class ScopeConfigurationProcessor
      * @param array $config the full configuration as an array
      * @param int $options bit mask of options (@see constants of this class)
      */
-    public function registerInternalConfigArray( $id, array $config, $options = 0 )
+    public function mapConfigArray( $id, array $config, $options = 0 )
     {
-        $this->registerGlobalConfigArray( $id, $config );
+        $this->mapGlobalConfigArray( $id, $config );
         $defaultSettings = $this->getContainerParameter(
             $this->namespace . '.' . ConfigResolver::SCOPE_DEFAULT . '.' . $id,
             array()
@@ -253,7 +309,7 @@ class ScopeConfigurationProcessor
      * @param string $id
      * @param array $config
      */
-    private function registerGlobalConfigArray( $id, array $config )
+    private function mapGlobalConfigArray( $id, array $config )
     {
         if (
             isset( $config[$this->scopeNodeName][ConfigResolver::SCOPE_GLOBAL][$id] )
@@ -271,24 +327,5 @@ class ScopeConfigurationProcessor
             }
             $this->container->setParameter( $key, $globalValue );
         }
-    }
-
-    /**
-     * Returns the value under the $id in the $container. if the container does
-     * not known this $id, returns $default
-     *
-     * @param string $id
-     * @param mixed $default
-     *
-     * @return mixed
-     */
-    protected function getContainerParameter( $id, $default = null )
-    {
-        if ( $this->container->hasParameter( $id ) )
-        {
-            return $this->container->getParameter( $id );
-        }
-
-        return $default;
     }
 }

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
+namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -32,7 +32,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *                 - eng-GB
  * </code>
  */
-abstract class ScopeConfiguration implements ConfigurationInterface
+abstract class Configuration implements ConfigurationInterface
 {
     /**
      * Generates the context node under which context based configuration will be defined.
