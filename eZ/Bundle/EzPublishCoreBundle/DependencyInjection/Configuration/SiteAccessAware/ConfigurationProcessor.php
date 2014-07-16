@@ -9,26 +9,16 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Closure;
+use InvalidArgumentException;
 
+/**
+ * Processor for SiteAccess aware configuration processing.
+ * Use it when you want to map SiteAccess dependent semantic configuration to internal settings, readable
+ * with the ConfigResolver.
+ */
 class ConfigurationProcessor
 {
-    /**
-     * With this option, registerInternalConfigArray() will call array_unique() at the end of the merge process.
-     * This will only work with normal arrays (i.e. not hashes) containing scalar values.
-     */
-    const UNIQUE = 1;
-
-    /**
-     * With this option, registerInternalConfigArray() will merge the hashes from the second level.
-     * For instance:
-     * array( 'full' => array( 1, 2, 3 ) ) and array( 'full' => array( 4, 5 ) )
-     * will result in array( 'full' => array( 1, 2, 3, 4, 5 ) )
-     */
-    const MERGE_FROM_SECOND_LEVEL = 2;
-
     /**
      * Registered configuration scopes.
      *
@@ -44,31 +34,20 @@ class ConfigurationProcessor
     static protected $groupsByScope;
 
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * Namespace for internal settings.
-     * Registered internal settings always have the format <namespace>.<scope>.<parameter_name>
-     * e.g. ezsettings.default.session
-     *
-     * @var string
-     */
-    protected $namespace;
-
-    /**
      * Name of the node under which scope based (semantic) configuration takes place.
      *
      * @var string
      */
     protected $scopeNodeName;
 
+    /**
+     * @var ContextualizerInterface
+     */
+    protected $contextualizer;
+
     public function __construct( ContainerInterface $containerBuilder, $namespace, $scopeNodeName = 'system' )
     {
-        $this->container = $containerBuilder;
-        $this->namespace = $namespace;
-        $this->scopeNodeName = $scopeNodeName;
+        $this->contextualizer = $this->buildContextualizer( $containerBuilder, $namespace, $scopeNodeName );
     }
 
     /**
@@ -92,240 +71,81 @@ class ConfigurationProcessor
     }
 
     /**
-     * Returns internal ContainerBuilder instance.
+     * Triggers mapping process between semantic and internal configuration.
      *
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    /**
-     * @param array $config
-     * @param ConfigurationMapper|callable $mapper
+     * @param array $config Parsed semantic configuration
+     * @param ConfigurationMapper|callable $mapper Mapper to use. Can be either an instance of ConfigurationMapper or a callable.
+     *                                             HookableConfigurationMapper can also be used. In this case, preMap()
+     *                                             and postMap() will be also called respectively before and after the mapping loop.
+     *
+     *                                             If $mapper is a callable, it will the same arguments as defined in
+     *                                             the signature defined in ConfigurationMapper interface:
+     *                                             `array $scopeSettings, $currentScope, ContextualizerInterface $contextualizer`
      *
      * @throws \InvalidArgumentException
      */
     public function mapConfig( array $config, $mapper )
     {
-        if ( $mapper instanceof HookableMapper )
+        $mapperCallable = is_callable( $mapper );
+        if ( !$mapperCallable && !$mapper instanceof ConfigurationMapper )
         {
-            $mapper->preMap( $config, $this );
+            throw new InvalidArgumentException( 'Configuration mapper must either be a callable or an instance of ConfigurationMapper.' );
         }
 
-        foreach ( $config[$this->scopeNodeName] as $scope => &$settings )
+        if ( $mapper instanceof HookableConfigurationMapper )
         {
-            if ( is_callable( $mapper ) )
+            $mapper->preMap( $config, $this->contextualizer );
+        }
+
+        $scopeNodeName = $this->contextualizer->getScopeNodeName();
+        foreach ( $config[$scopeNodeName] as $currentScope => &$scopeSettings )
+        {
+            if ( $mapperCallable )
             {
-                call_user_func_array( $mapper, array( $settings, $scope, $this ) );
-            }
-            else if ( $mapper instanceof ConfigurationMapper )
-            {
-                $mapper->mapConfig( $settings, $scope, $this );
+                call_user_func_array( $mapper, array( $scopeSettings, $currentScope, $this->contextualizer ) );
             }
             else
             {
-                throw new \InvalidArgumentException( 'prout' );
+                $mapper->mapConfig( $scopeSettings, $currentScope, $this->contextualizer );
             }
         }
 
-        if ( $mapper instanceof HookableMapper )
+        if ( $mapper instanceof HookableConfigurationMapper )
         {
-            $mapper->postMap( $config, $this );
+            $mapper->postMap( $config, $this->contextualizer );
         }
     }
 
     /**
-     * Registers given parameter in container for given scope, in current namespace.
-     * Resulting parameter will have format <namespace>.<scope>.<parameterName> .
+     * Builds configuration contextualizer (I know, sounds obvious...).
+     * Override this method if you want to use your own contextualizer class.
      *
-     * @param string $parameterName
-     * @param mixed $value
-     * @param string $scope
+     * static::$scopes and static::$groupsByScope must be injected first.
+     *
+     * @param ContainerInterface $containerBuilder
+     * @param string $namespace
+     * @param string $scopeNodeName
+     *
+     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface
      */
-    public function setParameter( $parameterName, $value, $scope )
+    protected function buildContextualizer( ContainerInterface $containerBuilder, $namespace, $scopeNodeName )
     {
-        $this->container->setParameter( "$this->namespace.$scope.$parameterName", $value );
+        return new Contextualizer( $containerBuilder, $namespace, $scopeNodeName, static::$scopes, static::$groupsByScope );
     }
 
     /**
-     * Returns the value under the $id in the $container. if the container does
-     * not known this $id, returns $default
-     *
-     * @param string $id
-     * @param mixed $default
-     *
-     * @return mixed
+     * @param \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface $contextualizer
      */
-    protected function getContainerParameter( $id, $default = null )
+    public function setContextualizer( $contextualizer )
     {
-        if ( $this->container->hasParameter( $id ) )
-        {
-            return $this->container->getParameter( $id );
-        }
-
-        return $default;
+        $this->contextualizer = $contextualizer;
     }
 
     /**
-     * Registers and merges the internal scope configuration for array settings.
-     * We merge arrays defined in scopes "default", in scope groups, in the scope itself and in the "global" scope.
-     * To calculate the precedence of scope groups, they are alphabetically sorted.
-     *
-     * One may call this method from inside config parser's preScopeConfig() or postScopeConfig() method.
-     *
-     * @param string $id id of the setting array to register
-     * @param array $config the full configuration as an array
-     * @param int $options bit mask of options (@see constants of this class)
+     * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface
      */
-    public function mapConfigArray( $id, array $config, $options = 0 )
+    public function getContextualizer()
     {
-        $this->mapGlobalConfigArray( $id, $config );
-        $defaultSettings = $this->getContainerParameter(
-            $this->namespace . '.' . ConfigResolver::SCOPE_DEFAULT . '.' . $id,
-            array()
-        );
-        $globalSettings = $this->getContainerParameter(
-            $this->namespace . '.' . ConfigResolver::SCOPE_GLOBAL . '.' . $id,
-            array()
-        );
-
-        foreach ( static::$scopes as $scope )
-        {
-            // for a siteaccess, we have to merge the default value,
-            // the group value(s), the siteaccess value and the global
-            // value of the settings.
-            $groupsSettings = array();
-            if ( isset( static::$groupsByScope[$scope] ) && is_array( static::$groupsByScope[$scope] ) )
-            {
-                $groupsSettings = $this->groupsArraySetting(
-                    static::$groupsByScope[$scope], $id,
-                    $config, $options & static::MERGE_FROM_SECOND_LEVEL
-                );
-            }
-            $scopeSettings = array();
-            if ( isset( $config[$this->scopeNodeName][$scope][$id] ) )
-            {
-                $scopeSettings = $config[$this->scopeNodeName][$scope][$id];
-            }
-            if ( $options & static::MERGE_FROM_SECOND_LEVEL )
-            {
-                // array_merge() has to be used because we don't
-                // know whether we have a hash or a plain array
-                $keys1 = array_unique(
-                    array_merge(
-                        array_keys( $defaultSettings ),
-                        array_keys( $groupsSettings ),
-                        array_keys( $scopeSettings ),
-                        array_keys( $globalSettings )
-                    )
-                );
-                $mergedSettings = array();
-                foreach ( $keys1 as $key )
-                {
-                    $mergedSettings[$key] = array_merge(
-                        isset( $defaultSettings[$key] ) ? $defaultSettings[$key] : array(),
-                        isset( $groupsSettings[$key] ) ? $groupsSettings[$key] : array(),
-                        isset( $scopeSettings[$key] ) ? $scopeSettings[$key] : array(),
-                        isset( $globalSettings[$key] ) ? $globalSettings[$key] : array()
-                    );
-                }
-            }
-            else
-            {
-                $mergedSettings = array_merge(
-                    $defaultSettings,
-                    $groupsSettings,
-                    $scopeSettings,
-                    $globalSettings
-                );
-            }
-            if ( $options & static::UNIQUE )
-            {
-                $mergedSettings = array_values(
-                    array_unique( $mergedSettings )
-                );
-            }
-
-            $this->container->setParameter( "$this->namespace.$scope.$id", $mergedSettings );
-        }
-    }
-
-    /**
-     * Merges setting array for a set of groups.
-     *
-     * @param array $groups array of group name
-     * @param string $id id of the setting array under ezpublish.<base_key>.<group_name>
-     * @param array $config the full configuration array
-     * @param int $options only static::MERGE_FROM_SECOND_LEVEL or static::UNIQUE are recognized
-     *
-     * @return array
-     */
-    private function groupsArraySetting( array $groups, $id, array $config, $options = 0 )
-    {
-        $groupsSettings = array();
-        sort( $groups );
-        foreach ( $groups as $group )
-        {
-            if ( isset( $config[$this->scopeNodeName][$group][$id] ) )
-            {
-                if ( $options & static::MERGE_FROM_SECOND_LEVEL )
-                {
-                    foreach ( array_keys( $config[$this->scopeNodeName][$group][$id] ) as $key )
-                    {
-                        if ( !isset( $groupsSettings[$key] ) )
-                        {
-                            $groupsSettings[$key] = $config[$this->scopeNodeName][$group][$id][$key];
-                        }
-                        else
-                        {
-                            // array_merge() has to be used because we don't
-                            // know whether we have a hash or a plain array
-                            $groupsSettings[$key] = array_merge(
-                                $groupsSettings[$key],
-                                $config[$this->scopeNodeName][$group][$id][$key]
-                            );
-                        }
-                    }
-                }
-                else
-                {
-                    // array_merge() has to be used because we don't
-                    // know whether we have a hash or a plain array
-                    $groupsSettings = array_merge(
-                        $groupsSettings,
-                        $config[$this->scopeNodeName][$group][$id]
-                    );
-                }
-            }
-        }
-        return $groupsSettings;
-    }
-
-    /**
-     * Ensures settings array defined in "global" scope are registered in the internal global scope.
-     *
-     * @param string $id
-     * @param array $config
-     */
-    private function mapGlobalConfigArray( $id, array $config )
-    {
-        if (
-            isset( $config[$this->scopeNodeName][ConfigResolver::SCOPE_GLOBAL][$id] )
-            && !empty( $config[$this->scopeNodeName][ConfigResolver::SCOPE_GLOBAL][$id] )
-        )
-        {
-            $key = $this->namespace . '.' . ConfigResolver::SCOPE_GLOBAL . '.' . $id;
-            $globalValue = $config[$this->scopeNodeName][ConfigResolver::SCOPE_GLOBAL][$id];
-            if ( $this->container->hasParameter( $key ) )
-            {
-                $globalValue = array_merge(
-                    $this->container->getParameter( $key ),
-                    $globalValue
-                );
-            }
-            $this->container->setParameter( $key, $globalValue );
-        }
+        return $this->contextualizer;
     }
 }
