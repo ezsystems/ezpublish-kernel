@@ -29,167 +29,38 @@ class Contextualizer implements ContextualizerInterface
      *
      * @var string
      */
-    private $scopeNodeName;
+    private $siteAccessNodeName;
 
     /**
      * @var array
      */
-    private $availableScopes;
+    private $availableSiteAccesses;
 
     /**
      * @var array
      */
-    private $groupsByScope;
+    private $groupsBySiteAccess;
 
     public function __construct(
         ContainerInterface $containerBuilder,
         $namespace,
-        $scopeNodeName,
-        array $availableScopes,
-        array $groupsByScope
+        $siteAccessNodeName,
+        array $availableSiteAccesses,
+        array $groupsBySiteAccess
     )
     {
         $this->container = $containerBuilder;
         $this->namespace = $namespace;
-        $this->scopeNodeName = $scopeNodeName;
-        $this->availableScopes = $availableScopes;
-        $this->groupsByScope = $groupsByScope;
+        $this->siteAccessNodeName = $siteAccessNodeName;
+        $this->availableSiteAccesses = $availableSiteAccesses;
+        $this->groupsBySiteAccess = $groupsBySiteAccess;
     }
 
-    /**
-     * Defines a contextual parameter in the container, with the appropriate format, i.e. <namespace>.<scope>.<parameter_name>.
-     *
-     * ```php
-     * <?php
-     * namespace Acme\DemoBundle\DependencyInjection;
-     *
-     * use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-     * use Symfony\Component\DependencyInjection\ContainerBuilder;
-     * use Symfony\Component\DependencyInjection\Loader;
-     * use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
-     *
-     * class AcmeDemoExtension extends Extension
-     * {
-     *     public function load( array $configs, ContainerBuilder $container )
-     *     {
-     *         $loader = new Loader\YamlFileLoader( $container, new FileLocator( __DIR__ . '/../Resources/config' ) );
-     *
-     *         $configuration = $this->getConfiguration( $configs, $container );
-     *         $config = $this->processConfiguration( $configuration, $configs );
-     *
-     *         // ...
-     *         $processor = new SiteAccessAware\ConfigurationProcessor( $container, 'acme_demo' );
-     *         $processor->mapConfig(
-     *             $config,
-     *             function ( array $scopeSettings, $currentScope, SiteAccessAware\ContextualizerInterface $contextualizer )
-     *             {
-     *                 $contextualizer->setContextualParameter( 'my_internal_parameter', $currentScope, $scopeSettings['some_semantic_parameter'] );
-     *             }
-     *         );
-     *     }
-     * }
-     * ```
-     *
-     * @param string $parameterName
-     * @param string $scope
-     * @param mixed $value
-     */
     public function setContextualParameter( $parameterName, $scope, $value )
     {
         $this->container->setParameter( "$this->namespace.$scope.$parameterName", $value );
     }
 
-    /**
-     * Maps semantic array settings to internal format, and merges them between scopes.
-     *
-     * This is useful when you have e.g. a hash of settings defined in a siteaccess group and you want an entry of
-     * this hash, defined at the siteaccess or global level, to replace the one in the group.
-     *
-     * Defined arrays are merged in the following scopes:
-     *
-     * * `default`
-     * * siteaccess groups
-     * * siteaccess
-     * * `global`
-     *
-     * To calculate the precedence of siteaccess groups, they are alphabetically sorted.
-     *
-     * Example:
-     *
-     * ```yaml
-     * acme_demo:
-     *     system:
-     *         my_siteaccess_group:
-     *             foo_setting:
-     *                 foo: "bar"
-     *                 some: "thing"
-     *                 an_integer: 123
-     *                 enabled: false
-     *
-     *         # Assuming my_siteaccess is part of my_siteaccess_group
-     *         my_siteaccess:
-     *             foo_setting:
-     *                 an_integer: 456
-     *                 enabled: true
-     * ```
-     *
-     * In your DIC extension
-     *
-     * ```php
-     * namespace Acme\DemoBundle\DependencyInjection;
-     *
-     * use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-     * use Symfony\Component\DependencyInjection\ContainerBuilder;
-     * use Symfony\Component\DependencyInjection\Loader;
-     * use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
-     *
-     * class AcmeDemoExtension extends Extension
-     * {
-     *     public function load( array $configs, ContainerBuilder $container )
-     *     {
-     *         $loader = new Loader\YamlFileLoader( $container, new FileLocator( __DIR__ . '/../Resources/config' ) );
-     *
-     *         $configuration = $this->getConfiguration( $configs, $container );
-     *         $config = $this->processConfiguration( $configuration, $configs );
-     *
-     *         // ...
-     *         $processor = new SiteAccessAware\ConfigurationProcessor( $container, 'acme_demo' );
-     *         $contextualizer = $processor->getContextualizer();
-     *         $contextualizer->mapConfigArray( 'foo_setting', $configs );
-     *
-     *         $processor->mapConfig(
-     *             $config,
-     *             function ( array $scopeSettings, $currentScope, SiteAccessAware\ContextualizerInterface $contextualizer )
-     *             {
-     *                 // ...
-     *             }
-     *         );
-     *     }
-     * }
-     * ```
-     *
-     * This will result with having following parameters in the container:
-     *
-     * ```yaml
-     * acme_demo.my_siteaccess.foo_setting:
-     *     foo: "bar"
-     *     some: "thing"
-     *     an_integer: 456
-     *     enabled: true
-     *
-     * acme_demo.my_siteaccess_gorup.foo_setting
-     *     foo: "bar"
-     *         some: "thing"
-     *         an_integer: 123
-     *         enabled: false
-     * ```
-     *
-     * @param string $id Id of the setting array to map.
-     *                   Note that it will be used to identify the semantic setting in $config and to define the internal
-     *                   setting in the container (<namespace>.<scope>.<$id>)
-     * @param array $config Full semantic configuration array for current bundle.
-     * @param int $options Bit mask of options (@see constants of this class)
-     */
     public function mapConfigArray( $id, array $config, $options = 0 )
     {
         $this->mapGlobalConfigArray( $id, $config );
@@ -202,24 +73,24 @@ class Contextualizer implements ContextualizerInterface
             array()
         );
 
-        foreach ( $this->availableScopes as $scope )
+        foreach ( $this->availableSiteAccesses as $scope )
         {
             // for a siteaccess, we have to merge the default value,
             // the group value(s), the siteaccess value and the global
             // value of the settings.
             $groupsSettings = array();
-            if ( isset( $this->groupsByScope[$scope] ) && is_array( $this->groupsByScope[$scope] ) )
+            if ( isset( $this->groupsBySiteAccess[$scope] ) && is_array( $this->groupsBySiteAccess[$scope] ) )
             {
                 $groupsSettings = $this->groupsArraySetting(
-                    $this->groupsByScope[$scope], $id,
+                    $this->groupsBySiteAccess[$scope], $id,
                     $config, $options & static::MERGE_FROM_SECOND_LEVEL
                 );
             }
 
             $scopeSettings = array();
-            if ( isset( $config[$this->scopeNodeName][$scope][$id] ) )
+            if ( isset( $config[$this->siteAccessNodeName][$scope][$id] ) )
             {
-                $scopeSettings = $config[$this->scopeNodeName][$scope][$id];
+                $scopeSettings = $config[$this->siteAccessNodeName][$scope][$id];
             }
 
             if ( $options & static::MERGE_FROM_SECOND_LEVEL )
@@ -301,15 +172,15 @@ class Contextualizer implements ContextualizerInterface
         sort( $groups );
         foreach ( $groups as $group )
         {
-            if ( isset( $config[$this->scopeNodeName][$group][$id] ) )
+            if ( isset( $config[$this->siteAccessNodeName][$group][$id] ) )
             {
                 if ( $options & static::MERGE_FROM_SECOND_LEVEL )
                 {
-                    foreach ( array_keys( $config[$this->scopeNodeName][$group][$id] ) as $key )
+                    foreach ( array_keys( $config[$this->siteAccessNodeName][$group][$id] ) as $key )
                     {
                         if ( !isset( $groupsSettings[$key] ) )
                         {
-                            $groupsSettings[$key] = $config[$this->scopeNodeName][$group][$id][$key];
+                            $groupsSettings[$key] = $config[$this->siteAccessNodeName][$group][$id][$key];
                         }
                         else
                         {
@@ -317,7 +188,7 @@ class Contextualizer implements ContextualizerInterface
                             // know whether we have a hash or a plain array
                             $groupsSettings[$key] = array_merge(
                                 $groupsSettings[$key],
-                                $config[$this->scopeNodeName][$group][$id][$key]
+                                $config[$this->siteAccessNodeName][$group][$id][$key]
                             );
                         }
                     }
@@ -328,7 +199,7 @@ class Contextualizer implements ContextualizerInterface
                     // know whether we have a hash or a plain array
                     $groupsSettings = array_merge(
                         $groupsSettings,
-                        $config[$this->scopeNodeName][$group][$id]
+                        $config[$this->siteAccessNodeName][$group][$id]
                     );
                 }
             }
@@ -345,12 +216,12 @@ class Contextualizer implements ContextualizerInterface
     private function mapGlobalConfigArray( $id, array $config )
     {
         if (
-            isset( $config[$this->scopeNodeName][ConfigResolver::SCOPE_GLOBAL][$id] )
-            && !empty( $config[$this->scopeNodeName][ConfigResolver::SCOPE_GLOBAL][$id] )
+            isset( $config[$this->siteAccessNodeName][ConfigResolver::SCOPE_GLOBAL][$id] )
+            && !empty( $config[$this->siteAccessNodeName][ConfigResolver::SCOPE_GLOBAL][$id] )
         )
         {
             $key = $this->namespace . '.' . ConfigResolver::SCOPE_GLOBAL . '.' . $id;
-            $globalValue = $config[$this->scopeNodeName][ConfigResolver::SCOPE_GLOBAL][$id];
+            $globalValue = $config[$this->siteAccessNodeName][ConfigResolver::SCOPE_GLOBAL][$id];
             if ( $this->container->hasParameter( $key ) )
             {
                 $globalValue = array_merge(
@@ -362,83 +233,53 @@ class Contextualizer implements ContextualizerInterface
         }
     }
 
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     */
     public function setContainer( ContainerInterface $container )
     {
         $this->container = $container;
     }
 
-    /**
-     * @return \Symfony\Component\DependencyInjection\ContainerInterface
-     */
     public function getContainer()
     {
         return $this->container;
     }
 
-    /**
-     * @param string $scopeNodeName
-     */
-    public function setScopeNodeName( $scopeNodeName )
+    public function setSiteAccessNodeName( $scopeNodeName )
     {
-        $this->scopeNodeName = $scopeNodeName;
+        $this->siteAccessNodeName = $scopeNodeName;
     }
 
-    /**
-     * @return string
-     */
-    public function getScopeNodeName()
+    public function getSiteAccessNodeName()
     {
-        return $this->scopeNodeName;
+        return $this->siteAccessNodeName;
     }
 
-    /**
-     * @param string $namespace
-     */
     public function setNamespace( $namespace )
     {
         $this->namespace = $namespace;
     }
 
-    /**
-     * @return string
-     */
     public function getNamespace()
     {
         return $this->namespace;
     }
 
-    /**
-     * @param array $availableScopes
-     */
-    public function setAvailableScopes( array $availableScopes )
+    public function setAvailableSiteAccesses( array $availableSiteAccesses )
     {
-        $this->availableScopes = $availableScopes;
+        $this->availableSiteAccesses = $availableSiteAccesses;
     }
 
-    /**
-     * @return array
-     */
-    public function getAvailableScopes()
+    public function getAvailableSiteAccesses()
     {
-        return $this->availableScopes;
+        return $this->availableSiteAccesses;
     }
 
-    /**
-     * @param array $groupsByScope
-     */
-    public function setGroupsByScope( array $groupsByScope )
+    public function setGroupsBySiteAccess( array $groupsBySiteAccess )
     {
-        $this->groupsByScope = $groupsByScope;
+        $this->groupsBySiteAccess = $groupsBySiteAccess;
     }
 
-    /**
-     * @return array
-     */
-    public function getGroupsByScope()
+    public function getGroupsBySiteAccess()
     {
-        return $this->groupsByScope;
+        return $this->groupsBySiteAccess;
     }
 }
