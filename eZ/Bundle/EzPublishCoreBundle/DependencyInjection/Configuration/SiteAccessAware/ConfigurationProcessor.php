@@ -24,14 +24,14 @@ class ConfigurationProcessor
      *
      * @var array
      */
-    static protected $availableSiteAccesses;
+    static protected $availableSiteAccesses = array();
 
     /**
      * Registered scope groups names, indexed by scope.
      *
      * @var array
      */
-    static protected $groupsBySiteAccess;
+    static protected $groupsBySiteAccess = array();
 
     /**
      * Name of the node under which scope based (semantic) configuration takes place.
