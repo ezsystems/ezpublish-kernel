@@ -108,12 +108,41 @@ class Contextualizer implements ContextualizerInterface
                 $mergedSettings = array();
                 foreach ( $keys1 as $key )
                 {
-                    $mergedSettings[$key] = array_merge(
-                        isset( $defaultSettings[$key] ) ? $defaultSettings[$key] : array(),
-                        isset( $groupsSettings[$key] ) ? $groupsSettings[$key] : array(),
-                        isset( $scopeSettings[$key] ) ? $scopeSettings[$key] : array(),
-                        isset( $globalSettings[$key] ) ? $globalSettings[$key] : array()
-                    );
+                    // Only merge if actual setting is an array.
+                    // We assume default setting to be a clear reference for this.
+                    // If the setting is not an array, we copy the right value, in respect to the precedence:
+                    // 1. global
+                    // 2. SiteAccess
+                    // 3. Group
+                    // 4. default
+                    if ( array_key_exists( $key, $defaultSettings ) && !is_array( $defaultSettings[$key] ) )
+                    {
+                        if ( array_key_exists( $key, $globalSettings ) )
+                        {
+                            $mergedSettings[$key] = $globalSettings[$key];
+                        }
+                        else if ( array_key_exists( $key, $scopeSettings ) )
+                        {
+                            $mergedSettings[$key] = $scopeSettings[$key];
+                        }
+                        else if ( array_key_exists( $key, $groupsSettings ) )
+                        {
+                            $mergedSettings[$key] = $groupsSettings[$key];
+                        }
+                        else
+                        {
+                            $mergedSettings[$key] = $defaultSettings[$key];
+                        }
+                    }
+                    else
+                    {
+                        $mergedSettings[$key] = array_merge(
+                            isset( $defaultSettings[$key] ) ? $defaultSettings[$key] : array(),
+                            isset( $groupsSettings[$key] ) ? $groupsSettings[$key] : array(),
+                            isset( $scopeSettings[$key] ) ? $scopeSettings[$key] : array(),
+                            isset( $globalSettings[$key] ) ? $globalSettings[$key] : array()
+                        );
+                    }
                 }
             }
             else
