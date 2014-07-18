@@ -61,6 +61,17 @@ class Contextualizer implements ContextualizerInterface
         $this->container->setParameter( "$this->namespace.$scope.$parameterName", $value );
     }
 
+    public function mapSetting( $id, array $config )
+    {
+        foreach ( $config[$this->siteAccessNodeName] as $currentScope => $scopeSettings )
+        {
+            if ( isset( $scopeSettings[$id] ) )
+            {
+                $this->setContextualParameter( $id, $currentScope, $scopeSettings[$id] );
+            }
+        }
+    }
+
     public function mapConfigArray( $id, array $config, $options = 0 )
     {
         $this->mapGlobalConfigArray( $id, $config );

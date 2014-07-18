@@ -209,4 +209,76 @@ class ConfigurationProcessorTest extends PHPUnit_Framework_TestCase
 
         $processor->mapConfig( $config, $mapper );
     }
+
+    public function testMapSetting()
+    {
+        $namespace = 'ez_test';
+        $saNodeName = 'foo';
+        $container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
+        $processor = new ConfigurationProcessor( $container, $namespace, $saNodeName );
+        $contextualizer = $this->getMock( 'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface' );
+        $processor->setContextualizer( $contextualizer );
+
+        $sa1Config = array(
+            'foo' => 'bar',
+            'hello' => 'world',
+            'an_integer' => 123,
+            'a_bool' => true,
+        );
+        $sa2Config = array(
+            'foo' => 'bar2',
+            'hello' => 'universe',
+            'an_integer' => 456,
+            'a_bool' => false,
+        );
+        $config = array(
+            'not_sa_aware' => 'blabla',
+            $saNodeName => array(
+                'sa1' => $sa1Config,
+                'sa2' => $sa2Config,
+            )
+        );
+
+        $contextualizer
+            ->expects( $this->once() )
+            ->method( 'mapSetting' )
+            ->with( 'foo', $config );
+        $processor->mapSetting( 'foo', $config );
+    }
+
+    public function testMapConfigArray()
+    {
+        $namespace = 'ez_test';
+        $saNodeName = 'foo';
+        $container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
+        $processor = new ConfigurationProcessor( $container, $namespace, $saNodeName );
+        $contextualizer = $this->getMock( 'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface' );
+        $processor->setContextualizer( $contextualizer );
+
+        $sa1Config = array(
+            'foo' => 'bar',
+            'hello' => array( 'world' ),
+            'an_integer' => 123,
+            'a_bool' => true,
+        );
+        $sa2Config = array(
+            'foo' => 'bar2',
+            'hello' => array( 'universe' ),
+            'an_integer' => 456,
+            'a_bool' => false,
+        );
+        $config = array(
+            'not_sa_aware' => 'blabla',
+            $saNodeName => array(
+                'sa1' => $sa1Config,
+                'sa2' => $sa2Config,
+            )
+        );
+
+        $contextualizer
+            ->expects( $this->once() )
+            ->method( 'mapConfigArray' )
+            ->with( 'hello', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL );
+        $processor->mapConfigArray( 'hello', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL );
+    }
 }

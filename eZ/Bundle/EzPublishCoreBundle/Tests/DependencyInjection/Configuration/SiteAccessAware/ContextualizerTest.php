@@ -74,6 +74,54 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testMapSetting()
+    {
+        $fooSa1 = 'bar';
+        $planetsSa1 = array( 'Earth' );
+        $intSa1 = 123;
+        $boolSa1 = true;
+        $sa1Config = array(
+            'foo' => $fooSa1,
+            'planets' => $planetsSa1,
+            'an_integer' => $intSa1,
+            'a_bool' => $boolSa1,
+        );
+        $fooSa2 = 'bar2';
+        $planetsSa2 = array( 'Earth', 'Mars', 'Venus' );
+        $intSa2 = 456;
+        $boolSa2 = false;
+        $sa2Config = array(
+            'foo' => $fooSa2,
+            'planets' => $planetsSa2,
+            'an_integer' => $intSa2,
+            'a_bool' => $boolSa2,
+        );
+        $config = array(
+            'not_sa_aware' => 'blabla',
+            $this->saNodeName => array(
+                'sa1' => $sa1Config,
+                'sa2' => $sa2Config,
+            )
+        );
+
+        $container = new ContainerBuilder();
+        $this->contextualizer->setContainer( $container );
+        $this->contextualizer->mapSetting( 'foo', $config );
+        $this->contextualizer->mapSetting( 'planets', $config );
+        $this->contextualizer->mapSetting( 'an_integer', $config );
+        $this->contextualizer->mapSetting( 'a_bool', $config );
+
+        $this->assertSame( $fooSa1, $container->getParameter( "$this->namespace.sa1.foo" ) );
+        $this->assertSame( $planetsSa1, $container->getParameter( "$this->namespace.sa1.planets" ) );
+        $this->assertSame( $intSa1, $container->getParameter( "$this->namespace.sa1.an_integer" ) );
+        $this->assertSame( $boolSa1, $container->getParameter( "$this->namespace.sa1.a_bool" ) );
+
+        $this->assertSame( $fooSa2, $container->getParameter( "$this->namespace.sa2.foo" ) );
+        $this->assertSame( $planetsSa2, $container->getParameter( "$this->namespace.sa2.planets" ) );
+        $this->assertSame( $intSa2, $container->getParameter( "$this->namespace.sa2.an_integer" ) );
+        $this->assertSame( $boolSa2, $container->getParameter( "$this->namespace.sa2.a_bool" ) );
+    }
+
     public function testMapConfigArray()
     {
         $containerBuilder = new ContainerBuilder();

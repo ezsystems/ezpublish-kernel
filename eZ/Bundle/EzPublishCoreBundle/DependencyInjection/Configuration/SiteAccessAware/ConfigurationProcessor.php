@@ -123,6 +123,33 @@ class ConfigurationProcessor
     }
 
     /**
+     * Proxy to `Contextualizer::mapSetting()`.
+     *
+     * @see ContextualizerInterface::mapSetting()
+     *
+     * @param string $id Id of the setting to map.
+     * @param array $config Full semantic configuration array for current bundle.
+     */
+    public function mapSetting( $id, array $config )
+    {
+        $this->contextualizer->mapSetting( $id, $config );
+    }
+
+    /**
+     * Proxy to `Contextualizer::mapConfigArray()`.
+     *
+     * @see ContextualizerInterface::mapConfigArray()
+     *
+     * @param string $id Id of the setting array to map.
+     * @param array $config Full semantic configuration array for current bundle.
+     * @param int $options Bit mask of options (See constants of `ContextualizerInterface`)
+     */
+    public function mapConfigArray( $id, array $config, $options = 0 )
+    {
+        $this->contextualizer->mapConfigArray( $id, $config, $options );
+    }
+
+    /**
      * Builds configuration contextualizer (I know, sounds obvious...).
      * Override this method if you want to use your own contextualizer class.
      *

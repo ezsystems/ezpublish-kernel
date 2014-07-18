@@ -152,11 +152,16 @@ parameters:
 > Instead of passing a callable to `$processor->mapConfig()`, an instance of `eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationMapperInterface`
   can be passed, for example if you have a lot of configuration to map and don't want to *pollute* your DIC extension class.
 
+> **Tip**: You can map *simple settings* by calling `$contextualizer->mapSetting()`, without having to call `$processor->mapConfig()`.
+  This method can also be proxied from the `ConfigurationProcessor` directly, e.g. doing `$processor->mapSetting( 'hello', $config )`
+
 ### Merging hash values between scopes
 When you define a hash as semantic config, you sometimes don't want the SiteAccess settings to replace the default or group
 values, but *enrich* them by appending new entries.
 This is made possible by using `$contextualizer->mapConfigArray()`, which needs to be called outside the closure (before or after),
 in order to be called only once.
+
+> **Tip**: `$contextualizer->mapConfigArray()` can be proxied from the `ConfigurationProcessor` directly.
 
 Consider the following default config:
 

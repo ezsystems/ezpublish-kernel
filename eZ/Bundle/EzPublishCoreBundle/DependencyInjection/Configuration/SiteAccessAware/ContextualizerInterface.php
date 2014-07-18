@@ -71,6 +71,19 @@ interface ContextualizerInterface
     public function setContextualParameter( $parameterName, $scope, $value );
 
     /**
+     * Maps a semantic setting to internal format for all declared scopes.
+     * Resulting parameter will have format <namespace>.<scope>.<id> .
+     *
+     * @param string $id Id of the setting to map.
+     *                   Note that it will be used to identify the semantic setting in $config and to define the internal
+     *                   setting in the container (<namespace>.<scope>.<$id>)
+     * @param array $config Full semantic configuration array for current bundle.
+     *
+     * @return mixed
+     */
+    public function mapSetting( $id, array $config );
+
+    /**
      * Maps semantic array settings to internal format, and merges them between scopes.
      *
      * This is useful when you have e.g. a hash of settings defined in a siteaccess group and you want an entry of
@@ -159,7 +172,7 @@ interface ContextualizerInterface
      *                   Note that it will be used to identify the semantic setting in $config and to define the internal
      *                   setting in the container (<namespace>.<scope>.<$id>)
      * @param array $config Full semantic configuration array for current bundle.
-     * @param int $options Bit mask of options (@see constants of this class)
+     * @param int $options Bit mask of options (see constants of the interface)
      */
     public function mapConfigArray( $id, array $config, $options = 0 );
 
