@@ -77,6 +77,11 @@ class Security implements EventSubscriberInterface
         }
 
         $currentUser = $this->repository->getCurrentUser();
+        if ( $currentUser->id == $this->configResolver->getParameter( "anonymous_user_id" ) )
+        {
+            return;
+        }
+
         $event->getLegacyKernel()->runCallback(
             function () use ( $currentUser )
             {
