@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Formatter\YamlSuggestionFormatter;
@@ -146,6 +147,7 @@ class EzPublishCoreExtension extends Extension
         }
 
         $container->setParameter( 'ezpublish.siteaccess.list', $config['siteaccess']['list'] );
+        ConfigurationProcessor::setAvailableSiteAccesses( $config['siteaccess']['list'] );
         $container->setParameter( 'ezpublish.siteaccess.default', $config['siteaccess']['default_siteaccess'] );
         $container->setParameter( 'ezpublish.siteaccess.match_config', $config['siteaccess']['match'] );
 
@@ -163,6 +165,7 @@ class EzPublishCoreExtension extends Extension
             }
         }
         $container->setParameter( 'ezpublish.siteaccess.groups_by_siteaccess', $groupsBySiteaccess );
+        ConfigurationProcessor::setGroupsBySiteAccess( $groupsBySiteaccess );
     }
 
     private function registerImageMagickConfiguration( array $config, ContainerBuilder $container )
