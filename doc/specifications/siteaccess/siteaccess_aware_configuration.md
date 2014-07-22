@@ -115,7 +115,8 @@ class AcmeDemoExtension extends Extension
             $config,
             // Any kind of callable can be used here.
             // It will be called for each declared scope/SiteAccess.
-            function ( $scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
+            // $scopeSettings is passed by reference, making it possible to alter it for usage after `$processor->mapConfig()` has run.
+            function ( &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
             {
                 // Will map "hello" setting to "acme_demo.<$currentScope>.hello" container parameter
                 // It will then be possible to retrieve this parameter through ConfigResolver in the application code:
@@ -151,6 +152,7 @@ parameters:
 > **Using a dedicated mapper object**
 > Instead of passing a callable to `$processor->mapConfig()`, an instance of `eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationMapperInterface`
   can be passed, for example if you have a lot of configuration to map and don't want to *pollute* your DIC extension class.
+
 
 > **Tip**: You can map *simple settings* by calling `$contextualizer->mapSetting()`, without having to call `$processor->mapConfig()`.
   This method can also be proxied from the `ConfigurationProcessor` directly, e.g. doing `$processor->mapSetting( 'hello', $config )`
