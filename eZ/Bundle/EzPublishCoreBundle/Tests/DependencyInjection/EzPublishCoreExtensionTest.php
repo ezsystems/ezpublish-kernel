@@ -71,9 +71,11 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
     {
         // Injecting needed config parsers.
         $refExtension = new ReflectionObject( $this->extension );
-        $refParsers = $refExtension->getProperty( 'configParsers' );
-        $refParsers->setAccessible( true );
-        $refParsers->setValue( $this->extension, array( new Common(), new Content() ) );
+        $refParser = $refExtension->getProperty( 'configParser' );
+        $refParser->setAccessible( true );
+        /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser $parser */
+        $parser = $refParser->getValue( $this->extension );
+        $parser->setConfigParsers( array( new Common(), new Content() ) );
 
         $this->load( $this->siteaccessConfig );
         $this->assertContainerBuilderHasParameter(
@@ -368,9 +370,11 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
         // Injecting needed config parsers.
         $refExtension = new ReflectionObject( $this->extension );
-        $refParsers = $refExtension->getProperty( 'configParsers' );
-        $refParsers->setAccessible( true );
-        $refParsers->setValue( $this->extension, array( new Common(), new Content() ) );
+        $refParser = $refExtension->getProperty( 'configParser' );
+        $refParser->setAccessible( true );
+        /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser $parser */
+        $parser = $refParser->getValue( $this->extension );
+        $parser->setConfigParsers( array( new Common(), new Content() ) );
 
         $this->load( $config );
 
