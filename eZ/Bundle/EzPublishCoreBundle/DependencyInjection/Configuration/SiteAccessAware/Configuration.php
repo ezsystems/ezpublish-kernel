@@ -50,16 +50,12 @@ abstract class Configuration implements ConfigurationInterface
                     ->info( 'System configuration. First key is always a siteaccess or siteaccess group name' )
                     ->example(
                         array(
-                            'ezdemo_site'      => array(
-                                'languages'        => array( 'eng-GB', 'fre-FR' ),
-                                'content'          => array(
-                                    'view_cache'   => true,
-                                    'ttl_cache'    => true,
-                                    'default_ttl'  => 30
-                                )
+                            'my_siteaccess' => array(
+                                'preferred_quote' => 'Let there be Light!',
+                                'j_aime' => array( 'le_saucisson' )
                             ),
-                            'ezdemo_group'     => array(
-                                'repository' => 'my_repository'
+                            'my_siteaccess_group' => array(
+                                'j_aime' => array( 'la_truite_a_la_vapeur' )
                             )
                         )
                     )
