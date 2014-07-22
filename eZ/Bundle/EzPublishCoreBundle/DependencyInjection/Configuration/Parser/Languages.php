@@ -10,11 +10,14 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class Languages extends AbstractParser
 {
+    private $siteAccessesByLanguages = array();
+
     /**
      * Adds semantic configuration definition.
      *
@@ -38,33 +41,37 @@ class Languages extends AbstractParser
             ->end();
     }
 
-    /**
-     * Translates parsed semantic config values from $config to internal key/value pairs.
-     *
-     * @param array $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @return void
-     */
-    public function registerInternalConfig( array $config, ContainerBuilder $container )
+    public function preMap( array $config, ContextualizerInterface $contextualizer )
     {
-        $this->registerInternalConfigArray( 'languages', $config, $container, self::UNIQUE );
-        $this->registerInternalConfigArray( 'translation_siteaccesses', $config, $container, self::UNIQUE );
+        $contextualizer->mapConfigArray( 'languages', $config, ContextualizerInterface::UNIQUE );
+        $contextualizer->mapConfigArray( 'translation_siteaccesses', $config, ContextualizerInterface::UNIQUE );
 
-        $siteAccessesByLanguage = $container->hasParameter( 'ezpublish.siteaccesses_by_language' ) ? $container->getParameter( 'ezpublish.siteaccesses_by_language' ) : array();
-        foreach ( $config[$this->baseKey] as $sa => $settings )
+        $container = $contextualizer->getContainer();
+        if ( $container->hasParameter( 'ezpublish.siteaccesses_by_language' ) )
         {
-            if ( $container->hasParameter( "ezsettings.$sa.languages" ) )
+            $this->siteAccessesByLanguages = $container->getParameter( 'ezpublish.siteaccesses_by_language' );
+        }
+    }
+
+    public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
+    {
+        $container = $contextualizer->getContainer();
+        if ( $container->hasParameter( "ezsettings.$currentScope.languages" ) )
+        {
+            $languages = $container->getParameter( "ezsettings.$currentScope.languages" );
+            $mainLanguage = array_shift( $languages );
+            if ( $mainLanguage )
             {
-                $languages = $container->getParameter( "ezsettings.$sa.languages" );
-                $mainLanguage = array_shift( $languages );
-                if ( $mainLanguage )
-                {
-                    $siteAccessesByLanguage[$mainLanguage][] = $sa;
-                }
+                $this->siteAccessesByLanguages[$mainLanguage][] = $currentScope;
             }
         }
+    }
 
-        $container->setParameter( 'ezpublish.siteaccesses_by_language', $siteAccessesByLanguage );
+    public function postMap( array $config, ContextualizerInterface $contextualizer )
+    {
+        $contextualizer->getContainer()->setParameter(
+            'ezpublish.siteaccesses_by_language',
+            $this->siteAccessesByLanguages
+        );
     }
 }
