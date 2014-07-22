@@ -13,11 +13,12 @@
         override it, you can use the following configuration:
     </p>
     <pre>
-        # for instance in ezpublish.yml
-        # The "default" scope can be replaced by any available scope
-        # https://confluence.ez.no/display/EZP/Configuration#Configuration-Scope
-        parameters:
-            ezpublish_legacy.default.view_default_layout: YourBundle::pagelayout.html.twig
+        # In ezpublish.yml or any imported config file.
+        # Replace "my_siteaccess" to a valid SiteAccess or SiteAccess group name.
+        ezpublish_legacy:
+            system:
+                my_siteaccess:
+                    view_layout: YourBundle::pagelayout.html.twig
     </pre>
 
     <h1>The legacy generated content</h1>

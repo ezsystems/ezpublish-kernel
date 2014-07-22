@@ -9,6 +9,8 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -16,48 +18,57 @@ use Symfony\Component\Config\FileLocator;
 
 class EzPublishLegacyExtension extends Extension
 {
-    /**
-     * Loads a specific configuration.
-     *
-     * @param array $configs An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws InvalidArgumentException When provided tag is not defined in this extension
-     *
-     * @api
-     */
     public function load( array $configs, ContainerBuilder $container )
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration( $configuration, $configs );
 
         $container->setParameter( 'ezpublish_legacy.enabled', $config['enabled'] );
-        if ( $config['enabled'] )
+        if ( !$config['enabled'] )
         {
-            $loader = new Loader\YamlFileLoader(
-                $container,
-                new FileLocator( __DIR__ . '/../Resources/config' )
-            );
-            $loader->load( 'services.yml' );
-            // Security services
-            $loader->load( 'security.yml' );
-
-            $container->setParameter( 'ezpublish_legacy.root_dir', $config['root_dir'] );
-
-            // Templating
-            $loader->load( 'templating.yml' );
-
-            // View
-            $loader->load( 'view.yml' );
-
-            // IO Services
-            $loader->load( 'io.yml' );
-
-            // Default settings
-            $loader->load( 'default_settings.yml' );
-
-            // SignalSlot settings
-            $loader->load( 'slot.yml' );
+            return;
         }
+
+        $loader = new Loader\YamlFileLoader(
+            $container,
+            new FileLocator( __DIR__ . '/../Resources/config' )
+        );
+        $loader->load( 'services.yml' );
+        // Security services
+        $loader->load( 'security.yml' );
+
+        $container->setParameter( 'ezpublish_legacy.root_dir', $config['root_dir'] );
+
+        // Templating
+        $loader->load( 'templating.yml' );
+
+        // View
+        $loader->load( 'view.yml' );
+
+        // IO Services
+        $loader->load( 'io.yml' );
+
+        // SignalSlot settings
+        $loader->load( 'slot.yml' );
+
+        // Default settings
+        $loader->load( 'default_settings.yml' );
+
+        $processor = new ConfigurationProcessor( $container, 'ezpublish_legacy' );
+        $processor->mapConfig(
+            $config,
+            function ( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizerInterface )
+            {
+                if ( isset( $scopeSettings['templating']['view_layout'] ) )
+                {
+                    $contextualizerInterface->setContextualParameter( 'view_default_layout', $currentScope, $scopeSettings['templating']['view_layout'] );
+                }
+
+                if ( isset( $scopeSettings['templating']['module_layout'] ) )
+                {
+                    $contextualizerInterface->setContextualParameter( 'module_default_layout', $currentScope, $scopeSettings['templating']['module_layout'] );
+                }
+            }
+        );
     }
 }
