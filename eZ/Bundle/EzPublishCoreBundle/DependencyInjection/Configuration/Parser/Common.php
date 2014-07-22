@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
@@ -194,6 +195,60 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             if ( isset( $settings['default_page'] ) )
                 $container->setParameter( "ezsettings.$sa.default_page", '/' . ltrim( $settings['default_page'], '/' ) );
         }
+    }
+
+    public function preMap( array $config, ContextualizerInterface $contextualizer )
+    {
+        $contextualizer->mapConfigArray( 'session', $config );
+    }
+
+    public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
+    {
+        if ( isset( $scopeSettings['database'] ) )
+            $this->addDatabaseConfigSuggestion( $currentScope, $scopeSettings['database'] );
+        if ( isset( $scopeSettings['repository'] ) )
+            $contextualizer->setContextualParameter( 'repository', $currentScope, $scopeSettings['repository'] );
+        if ( isset( $scopeSettings['legacy_mode'] ) )
+        {
+            $contextualizer->setContextualParameter( 'legacy_mode', $currentScope, $scopeSettings['legacy_mode'] );
+            $contextualizer->setContextualParameter( 'url_alias_router', $currentScope, !$scopeSettings['legacy_mode'] );
+        }
+        if ( isset( $scopeSettings['cache_pool_name'] ) )
+            $contextualizer->setContextualParameter( 'cache_pool_name', $currentScope, $scopeSettings['cache_pool_name'] );
+        if ( isset( $scopeSettings['var_dir'] ) )
+            $contextualizer->setContextualParameter( 'var_dir', $currentScope, $scopeSettings['var_dir'] );
+        if ( isset( $scopeSettings['storage_dir'] ) )
+            $contextualizer->setContextualParameter( 'storage_dir', $currentScope, $scopeSettings['storage_dir'] );
+        if ( isset( $scopeSettings['binary_dir'] ) )
+            $contextualizer->setContextualParameter( 'binary_dir', $currentScope, $scopeSettings['binary_dir'] );
+
+        // session_name setting is deprecated in favor of session.name
+        $container = $contextualizer->getContainer();
+        $sessionOptions = $container->hasParameter( "ezsettings.$currentScope.session" ) ? $container->getParameter( "ezsettings.$currentScope.session" ) : array();
+        if ( isset( $sessionOptions['name'] ) )
+        {
+            $contextualizer->setContextualParameter( 'session_name', $currentScope, $sessionOptions['name'] );
+        }
+        // @deprecated session_name is deprecated, but if present, in addition to session.name, consider it instead (BC).
+        if ( isset( $scopeSettings['session_name'] ) )
+        {
+            $sessionOptions['name'] = $scopeSettings['session_name'];
+            $contextualizer->setContextualParameter( 'session_name', $currentScope, $scopeSettings['session_name'] );
+            $contextualizer->setContextualParameter( 'session', $currentScope, $sessionOptions );
+        }
+
+        if ( isset( $scopeSettings['http_cache']['purge_servers'] ) )
+            $contextualizer->setContextualParameter( 'http_cache.purge_servers', $currentScope, $scopeSettings['http_cache']['purge_servers'] );
+        if ( isset( $scopeSettings['anonymous_user_id'] ) )
+            $contextualizer->setContextualParameter( 'anonymous_user_id', $currentScope, $scopeSettings['anonymous_user_id'] );
+        if ( isset( $scopeSettings['user']['layout'] ) )
+            $contextualizer->setContextualParameter( 'security.base_layout', $currentScope, $scopeSettings['user']['layout'] );
+        if ( isset( $scopeSettings['user']['login_template'] ) )
+            $contextualizer->setContextualParameter( 'security.login_template', $currentScope, $scopeSettings['user']['login_template'] );
+        if ( isset( $scopeSettings['index_page'] ) )
+            $contextualizer->setContextualParameter( 'index_page', $currentScope, $scopeSettings['index_page'] );
+        if ( isset( $scopeSettings['default_page'] ) )
+            $contextualizer->setContextualParameter( 'default_page', $currentScope, '/' . ltrim( $scopeSettings['default_page'], '/' ) );
     }
 
     /**
