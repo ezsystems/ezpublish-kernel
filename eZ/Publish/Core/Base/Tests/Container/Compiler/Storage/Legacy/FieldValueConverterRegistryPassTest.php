@@ -10,12 +10,12 @@
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Legacy;
 
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTest
+class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp()
     {

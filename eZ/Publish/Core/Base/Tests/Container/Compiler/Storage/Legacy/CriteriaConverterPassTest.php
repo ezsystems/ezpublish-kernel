@@ -10,12 +10,12 @@
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Legacy;
 
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\CriteriaConverterPass;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class CriteriaConverterPassTest extends AbstractCompilerPassTest
+class CriteriaConverterPassTest extends AbstractCompilerPassTestCase
 {
     /**
      * Register the compiler pass under test, just like you would do inside a bundle's load()

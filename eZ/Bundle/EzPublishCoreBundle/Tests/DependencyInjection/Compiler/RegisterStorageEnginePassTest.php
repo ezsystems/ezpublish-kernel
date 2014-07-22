@@ -9,12 +9,12 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class RegisterStorageEnginePassTest extends AbstractCompilerPassTest
+class RegisterStorageEnginePassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp()
     {

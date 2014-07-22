@@ -10,12 +10,12 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocalePass;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class LocalePassTest extends AbstractCompilerPassTest
+class LocalePassTest extends AbstractCompilerPassTestCase
 {
     /**
      * Register the compiler pass under test, just like you would do inside a bundle's load()

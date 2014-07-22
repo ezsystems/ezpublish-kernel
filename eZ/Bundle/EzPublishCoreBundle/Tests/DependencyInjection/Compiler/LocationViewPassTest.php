@@ -10,12 +10,12 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LocationViewPass;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class LocationViewPassTest extends AbstractCompilerPassTest
+class LocationViewPassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp()
     {
