@@ -129,7 +129,7 @@ class LegacyExtension extends Twig_Extension
         $jsFiles = array();
         $jsCodeLines = array();
 
-        foreach ( $this->legacyHelper->get( 'js_files' ) as $jsItem )
+        foreach ( $this->legacyHelper->get( 'js_files', array() ) as $jsItem )
         {
             // List of items can contain empty elements, path to files or code
             if ( !empty( $jsItem ) )
@@ -164,7 +164,7 @@ class LegacyExtension extends Twig_Extension
         $cssFiles = array();
         $cssCodeLines = array();
 
-        foreach ( $this->legacyHelper->get( 'css_files' ) as $cssItem )
+        foreach ( $this->legacyHelper->get( 'css_files', array() ) as $cssItem )
         {
             // List of items can contain empty elements, path to files or code
             if ( !empty( $cssItem ) )

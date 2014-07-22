@@ -24,6 +24,7 @@ class LegacyHelper extends ParameterBag
     public function __construct( \Closure $legacyKernelClosure )
     {
         $this->legacyKernelClosure = $legacyKernelClosure;
+        parent::__construct();
     }
 
     /**
