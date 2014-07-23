@@ -128,12 +128,21 @@ class SecurityTest extends PHPUnit_Framework_TestCase
         $event = new PostBuildKernelEvent( $legacyKernel, $kernelHandler );
 
         $userId = 123;
-        $user = $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\User\User' );
+        $user = $this->getMockForAbstractClass(
+            'eZ\Publish\API\Repository\Values\User\User',
+            array(),
+            '',
+            false,
+            false,
+            false,
+            array( '__get' )
+        );
         $user
             ->expects( $this->any() )
             ->method( '__get' )
             ->with( 'id' )
             ->will( $this->returnValue( $userId ) );
+
         $this->repository
             ->expects( $this->once() )
             ->method( 'getCurrentUser' )
