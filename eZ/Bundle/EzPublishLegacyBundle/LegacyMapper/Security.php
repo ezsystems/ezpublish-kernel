@@ -16,6 +16,7 @@ use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelWebHandlerEvent;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use ezpWebBasedKernelHandler;
 use eZUser;
+use eZSession;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -76,11 +77,16 @@ class Security implements EventSubscriberInterface
             return;
         }
 
-        $currentUser = $this->repository->getCurrentUser();
+        $currentUserId = $this->repository->getCurrentUser()->id;
+
         $event->getLegacyKernel()->runCallback(
-            function () use ( $currentUser )
+            function () use ( $currentUserId )
             {
-                $legacyUser = eZUser::fetch( $currentUser->id );
+                if ( $currentUserId == eZUser::anonymousId() && !eZSession::hasStarted() )
+                {
+                    return;
+                }
+                $legacyUser = eZUser::fetch( $currentUserId );
                 eZUser::setCurrentlyLoggedInUser( $legacyUser, $legacyUser->attribute( 'contentobject_id' ), eZUser::NO_SESSION_REGENERATE );
             },
             false
