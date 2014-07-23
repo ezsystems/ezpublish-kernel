@@ -473,20 +473,20 @@ class User extends RestController
      */
     public function loadUsersAssignedToRole()
     {
-        $roleId = $this->request->query->get('roleId');
-        if ( is_numeric($roleId) )
+        $roleId = $this->request->query->get( 'roleId' );
+        if ( is_numeric( $roleId ) )
         {
             try
             {
-                $role = $this->roleService->loadRole($roleId);
+                $role = $this->roleService->loadRole( $roleId );
             }
-            catch(NotFoundException $exception)
+            catch ( NotFoundException $exception )
             {
             }
         }
         if ( !isset( $role ) )
         {
-            $role = $this->roleService->loadRoleByIdentifier($roleId);
+            $role = $this->roleService->loadRoleByIdentifier( $roleId );
         }
         $roleAssignments = $this->roleService->getRoleAssignments( $role );
 
@@ -497,7 +497,7 @@ class User extends RestController
         {
             if ( $roleAssignment instanceof UserRoleAssignment )
             {
-                if (!in_array($roleAssignment->user->id, $restUserIds))
+                if ( !in_array( $roleAssignment->user->id, $restUserIds ) )
                 {
                     $user = $roleAssignment->getUser();
 
@@ -505,7 +505,7 @@ class User extends RestController
                     $restUsers[] = $user;
                 }
             }
-            elseif ( $roleAssignment instanceof UserGroupRoleAssignment )
+            else if ( $roleAssignment instanceof UserGroupRoleAssignment )
             {
                 $users = $this->userService->loadUsersOfUserGroup( $roleAssignment->getUserGroup() );
 
@@ -513,7 +513,7 @@ class User extends RestController
                 {
                     if ( $user instanceof Content\Content )
                     {
-                        if (!in_array($user->id, $restUserIds))
+                        if ( !in_array( $user->id, $restUserIds ) )
                         {
                             $restUserIds[] = $user->id;
                             $restUsers[] = $user;
