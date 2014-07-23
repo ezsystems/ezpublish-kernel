@@ -36,6 +36,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
+use eZ\Publish\API\Repository\Values\Content;
+
 /**
  * User controller
  */
@@ -96,6 +98,7 @@ class User extends RestController
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\RoleService $roleService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
+     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\SectionService $sectionService
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -446,7 +449,7 @@ class User extends RestController
         $restUsers = array();
         if ( $this->request->query->has( 'roleId' ) )
         {
-             $restUsers = $this->loadUsersAssignedToRole();
+            $restUsers = $this->loadUsersAssignedToRole();
         }
         else if ( $this->request->query->has( 'remoteId' ) )
         {
@@ -470,30 +473,69 @@ class User extends RestController
      */
     public function loadUsersAssignedToRole()
     {
-        $role = $this->roleService->loadRole(
-            $this->requestParser->parseHref( $this->request->query->get( 'roleId' ), 'roleId' )
-        );
+        $roleId = $this->request->query->get('roleId');
+        if ( is_numeric($roleId) )
+        {
+            try
+            {
+                $role = $this->roleService->loadRole($roleId);
+            }
+            catch(NotFoundException $exception)
+            {
+            }
+        }
+        if ( !isset( $role ) )
+        {
+            $role = $this->roleService->loadRoleByIdentifier($roleId);
+        }
         $roleAssignments = $this->roleService->getRoleAssignments( $role );
 
-        $restUsers = array();
+        $restUserIds = array();
+        $restUsers   = array();
 
         foreach ( $roleAssignments as $roleAssignment )
         {
             if ( $roleAssignment instanceof UserRoleAssignment )
             {
-                $user = $roleAssignment->getUser();
-                $userContentInfo = $user->getVersionInfo()->getContentInfo();
-                $userLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
-                $contentType = $this->contentTypeService->loadContentType( $userContentInfo->contentTypeId );
+                if (!in_array($roleAssignment->user->id, $restUserIds))
+                {
+                    $user = $roleAssignment->getUser();
 
-                $restUsers[] = new Values\RestUser(
-                    $user,
-                    $contentType,
-                    $userContentInfo,
-                    $userLocation,
-                    $this->contentService->loadRelations( $user->getVersionInfo() )
-                );
+                    $restUserIds[] = $user->id;
+                    $restUsers[] = $user;
+                }
             }
+            elseif ( $roleAssignment instanceof UserGroupRoleAssignment )
+            {
+                $users = $this->userService->loadUsersOfUserGroup( $roleAssignment->getUserGroup() );
+
+                foreach ( $users as $user )
+                {
+                    if ( $user instanceof Content\Content )
+                    {
+                        if (!in_array($user->id, $restUserIds))
+                        {
+                            $restUserIds[] = $user->id;
+                            $restUsers[] = $user;
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ( $restUsers as $key => $restUser )
+        {
+            $userContentInfo = $restUser->versionInfo->getContentInfo();
+            $userLocation = $this->locationService->loadLocation( $userContentInfo->mainLocationId );
+            $contentType = $this->contentTypeService->loadContentType( $userContentInfo->contentTypeId );
+
+            $restUsers[$key] = new Values\RestUser(
+                $restUser,
+                $contentType,
+                $userContentInfo,
+                $userLocation,
+                $this->contentService->loadRelations( $restUser->getVersionInfo() )
+            );
         }
 
         return $restUsers;
@@ -547,7 +589,7 @@ class User extends RestController
         }
         else if ( $this->request->query->has( 'roleId' ) )
         {
-             $restUserGroups = $this->loadUserGroupsAssignedToRole();
+            $restUserGroups = $this->loadUserGroupsAssignedToRole();
         }
         else if ( $this->request->query->has( 'remoteId' ) )
         {
