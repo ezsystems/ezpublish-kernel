@@ -131,10 +131,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
             'enabled' => false,
             'j_adore' => 'les_sushis'
         );
-        $containerBuilder->setParameter( "$this->namespace.default.foo_setting", $defaultConfig );
 
         $config = array(
             $this->saNodeName => array(
+                'default' => array(
+                    'foo_setting' => $defaultConfig
+                ),
                 'sa_group1' => array(
                     'foo_setting' => array(
                         'foo' => 'bar',
@@ -219,10 +221,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
             'enabled' => false,
             'j_adore' => array( 'les_sushis' )
         );
-        $containerBuilder->setParameter( "$this->namespace.default.foo_setting", $defaultConfig );
 
         $config = array(
             $this->saNodeName => array(
+                'default' => array(
+                    'foo_setting' => $defaultConfig
+                ),
                 'sa_group1' => array(
                     'foo_setting' => array(
                         'foo' => 'bar',
@@ -305,10 +309,12 @@ class ContextualizerTest extends PHPUnit_Framework_TestCase
         $containerBuilder = new ContainerBuilder();
         $this->contextualizer->setContainer( $containerBuilder );
         $defaultConfig = array( 'Earth' );
-        $containerBuilder->setParameter( "$this->namespace.default.foo_setting", $defaultConfig );
 
         $config = array(
             $this->saNodeName => array(
+                'default' => array(
+                    'foo_setting' => $defaultConfig
+                ),
                 'sa_group1' => array(
                     'foo_setting' => array( 'Mars' )
                 ),
