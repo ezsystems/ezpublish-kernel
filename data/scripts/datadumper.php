@@ -15,7 +15,6 @@
  */
 
 require "./vendor/autoload.php";
-//spl_autoload_register( 'ezcBase::autoload' );
 
 if ( false === isset( $argv[1] ) || false === isset( $argv[2] ) )
 {
