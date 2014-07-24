@@ -74,7 +74,8 @@ class Contextualizer implements ContextualizerInterface
 
     public function mapConfigArray( $id, array $config, $options = 0 )
     {
-        $this->mapGlobalConfigArray( $id, $config );
+        $this->mapReservedScopeArray( $id, $config, ConfigResolver::SCOPE_DEFAULT );
+        $this->mapReservedScopeArray( $id, $config, ConfigResolver::SCOPE_GLOBAL );
         $defaultSettings = $this->getContainerParameter(
             $this->namespace . '.' . ConfigResolver::SCOPE_DEFAULT . '.' . $id,
             array()
@@ -248,28 +249,30 @@ class Contextualizer implements ContextualizerInterface
     }
 
     /**
-     * Ensures settings array defined in "global" scope are registered in the internal global scope.
+     * Ensures settings array defined in a given "reserved scope" are registered properly.
+     * "Reserved scope" can typically be ConfigResolver::SCOPE_DEFAULT or ConfigResolver::SCOPE_GLOBAL.
      *
      * @param string $id
      * @param array $config
+     * @param string $scope
      */
-    private function mapGlobalConfigArray( $id, array $config )
+    private function mapReservedScopeArray( $id, array $config, $scope )
     {
         if (
-            isset( $config[$this->siteAccessNodeName][ConfigResolver::SCOPE_GLOBAL][$id] )
-            && !empty( $config[$this->siteAccessNodeName][ConfigResolver::SCOPE_GLOBAL][$id] )
+            isset( $config[$this->siteAccessNodeName][$scope][$id] )
+            && !empty( $config[$this->siteAccessNodeName][$scope][$id] )
         )
         {
-            $key = $this->namespace . '.' . ConfigResolver::SCOPE_GLOBAL . '.' . $id;
-            $globalValue = $config[$this->siteAccessNodeName][ConfigResolver::SCOPE_GLOBAL][$id];
+            $key = "$this->namespace.$scope.$id";
+            $value = $config[$this->siteAccessNodeName][$scope][$id];
             if ( $this->container->hasParameter( $key ) )
             {
-                $globalValue = array_merge(
+                $value = array_merge(
                     $this->container->getParameter( $key ),
-                    $globalValue
+                    $value
                 );
             }
-            $this->container->setParameter( $key, $globalValue );
+            $this->container->setParameter( $key, $value );
         }
     }
 
