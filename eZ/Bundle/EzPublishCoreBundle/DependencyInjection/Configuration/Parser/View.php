@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -70,17 +71,14 @@ EOT
             ->end();
     }
 
-    /**
-     * Translates parsed semantic config values from $config to internal key/value pairs.
-     *
-     * @param array $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @return void
-     */
-    public function registerInternalConfig( array $config, ContainerBuilder $container )
+    public function preMap( array $config, ContextualizerInterface $contextualizer )
     {
-        $this->registerInternalConfigArray( static::NODE_KEY, $config, $container, self::MERGE_FROM_SECOND_LEVEL );
+        $contextualizer->mapConfigArray( static::NODE_KEY, $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL );
+    }
+
+    public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
+    {
+        // Nothing to do here.
     }
 }
 

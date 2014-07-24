@@ -10,11 +10,11 @@
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler;
 
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class FieldTypeCollectionPassTest extends AbstractCompilerPassTest
+class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp()
     {

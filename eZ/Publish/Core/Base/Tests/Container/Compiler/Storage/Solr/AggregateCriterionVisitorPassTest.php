@@ -10,12 +10,12 @@
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Solr;
 
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\AggregateCriterionVisitorPass;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class AggregateCriterionVisitorPassTest extends AbstractCompilerPassTest
+class AggregateCriterionVisitorPassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp()
     {

@@ -10,13 +10,13 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\XmlTextConverterPass;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class XmlTextConverterPassTest extends AbstractCompilerPassTest
+class XmlTextConverterPassTest extends AbstractCompilerPassTestCase
 {
     public function testProcess()
     {

@@ -25,8 +25,9 @@ interface ConfigurationMapperInterface
      * This method is called by the `ConfigurationProcessor`, for each available scopes (e.g. SiteAccess, SiteAccess groups or "global").
      *
      * @param array $scopeSettings Parsed semantic configuration for current scope.
+     *                             It is passed by reference, making it possible to alter it for usage after `mapConfig()` has run.
      * @param string $currentScope
      * @param ContextualizerInterface $contextualizer
      */
-    public function mapConfig( array $scopeSettings, $currentScope, ContextualizerInterface $contextualizer );
+    public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer );
 }

@@ -11,14 +11,13 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Compiler\LegacyBundlesPass;
 use eZ\Bundle\EzPublishLegacyBundle\LegacyBundles\LegacyExtensionsLocatorInterface;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class AddFieldTypePassTest extends AbstractCompilerPassTest
+class AddFieldTypePassTest extends AbstractCompilerPassTestCase
 {
     protected $kernelMock;
 

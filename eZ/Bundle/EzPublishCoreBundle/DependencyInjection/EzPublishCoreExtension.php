@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
@@ -28,21 +29,21 @@ class EzPublishCoreExtension extends Extension
     private $suggestionCollector;
 
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface
      */
-    private $configParsers;
+    private $configParser;
 
     public function __construct( array $configParsers = array() )
     {
         $this->suggestionCollector = new SuggestionCollector();
-        $this->configParsers = $configParsers;
-        foreach ( $this->configParsers as $parser )
+        foreach ( $configParsers as $parser )
         {
             if ( $parser instanceof SuggestionCollectorAwareInterface )
             {
                 $parser->setSuggestionCollector( $this->suggestionCollector );
             }
         }
+        $this->configParser = new ConfigParser( $configParsers );
     }
 
     public function getAlias()
@@ -94,10 +95,8 @@ class EzPublishCoreExtension extends Extension
         $this->handleHelpers( $config, $container, $loader );
 
         // Map settings
-        foreach ( $this->configParsers as $configParser )
-        {
-            $configParser->registerInternalConfig( $config, $container );
-        }
+        $processor = new ConfigurationProcessor( $container, 'ezsettings' );
+        $processor->mapConfig( $config, $this->configParser );
 
         if ( $this->suggestionCollector->hasSuggestions() )
         {
@@ -122,7 +121,7 @@ class EzPublishCoreExtension extends Extension
      */
     public function getConfiguration( array $config, ContainerBuilder $container )
     {
-        return new Configuration( $this->configParsers, $this->suggestionCollector );
+        return new Configuration( $this->configParser, $this->suggestionCollector );
     }
 
     private function registerRepositoriesConfiguration( array $config, ContainerBuilder $container )

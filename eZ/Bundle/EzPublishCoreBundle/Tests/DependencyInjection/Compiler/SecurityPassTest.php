@@ -10,12 +10,12 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTest;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class SecurityPassTest extends AbstractCompilerPassTest
+class SecurityPassTest extends AbstractCompilerPassTestCase
 {
     protected function setUp()
     {

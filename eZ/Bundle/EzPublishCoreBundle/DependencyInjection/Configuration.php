@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Configuration as SiteAccessConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -17,19 +18,19 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 class Configuration extends SiteAccessConfiguration
 {
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser[]
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface
      */
-    private $configParsers;
+    private $mainConfigParser;
 
     /**
      * @var Configuration\Suggestion\Collector\SuggestionCollectorInterface
      */
     private $suggestionCollector;
 
-    public function __construct( array $configParsers, SuggestionCollectorInterface $suggestionCollector )
+    public function __construct( ParserInterface $mainConfigParser, SuggestionCollectorInterface $suggestionCollector )
     {
         $this->suggestionCollector = $suggestionCollector;
-        $this->configParsers = $configParsers;
+        $this->mainConfigParser = $mainConfigParser;
     }
 
     /**
@@ -50,11 +51,7 @@ class Configuration extends SiteAccessConfiguration
         $this->addRouterSection( $rootNode );
 
         // Delegate SiteAccess config to configuration parsers
-        $systemNode = $this->generateScopeBaseNode( $rootNode );
-        foreach ( $this->configParsers as $parser )
-        {
-            $parser->addSemanticConfig( $systemNode );
-        }
+        $this->mainConfigParser->addSemanticConfig( $this->generateScopeBaseNode( $rootNode ) );
 
         return $treeBuilder;
     }

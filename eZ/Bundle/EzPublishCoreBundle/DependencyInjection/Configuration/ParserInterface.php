@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Parser interface.
+ * File containing the ParserInterface interface.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\HookableConfigurationMapperInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-interface Parser
+interface ParserInterface extends HookableConfigurationMapperInterface
 {
     /**
      * Adds semantic configuration definition.
@@ -22,14 +22,4 @@ interface Parser
      * @return void
      */
     public function addSemanticConfig( NodeBuilder $nodeBuilder );
-
-    /**
-     * Translates parsed semantic config values from $config to internal key/value pairs.
-     *
-     * @param array $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @return void
-     */
-    public function registerInternalConfig( array $config, ContainerBuilder $container );
 }

@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -41,28 +42,25 @@ class Templates extends AbstractParser
             ->end();
     }
 
-    /**
-     * Translates parsed semantic config values from $config to internal key/value pairs
-     *
-     * @param array $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @return void
-     */
-    public function registerInternalConfig( array $config, ContainerBuilder $container )
+    public function preMap( array $config, ContextualizerInterface $contextualizer )
     {
         foreach ( $config['siteaccess']['groups'] as $group => $saArray )
         {
-            if ( isset( $config[$this->baseKey][$group][static::NODE_KEY] ) )
+            if ( isset( $config['system'][$group][static::NODE_KEY] ) )
             {
-                $container->setParameter(
-                    "ezsettings.$group." . static::NODE_KEY,
-                    $config[$this->baseKey][$group][static::NODE_KEY]
+                $contextualizer->setContextualParameter(
+                    static::NODE_KEY,
+                    $group,
+                    $config[$contextualizer->getSiteAccessNodeName()][$group][static::NODE_KEY]
                 );
             }
-        };
-        $this->registerInternalConfigArray(
-            static::NODE_KEY, $config, $container
-        );
+        }
+
+        $contextualizer->mapConfigArray( static::NODE_KEY, $config );
+    }
+
+    public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
+    {
+        // Nothing to do here.
     }
 }
