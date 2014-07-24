@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\IO\Tests\Handler;
 use eZ\Publish\Core\IO\Handler\Legacy as Legacy;
 use eZ\Publish\Core\IO\Tests\Handler\Base as BaseHandlerTest;
 use eZ\Publish\Core\MVC\Legacy\Kernel;
-use ezcBaseFile;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Handler test
@@ -49,7 +49,8 @@ class LegacyTest extends BaseHandlerTest
         chdir( $this->legacyPath );
         if ( file_exists( 'var/test' ) )
         {
-            ezcBaseFile::removeRecursive( 'var/test' );
+            $fs = new Filesystem();
+            $fs->remove( 'var/test' );
         }
         /** @var $legacyKernel Kernel */
         $legacyKernel = $_ENV['legacyKernel'];
