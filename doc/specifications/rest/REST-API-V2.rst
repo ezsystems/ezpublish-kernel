@@ -4864,8 +4864,8 @@ List Users
 :Method: GET
 :Description: Load users either for a given remoteId or role
 :Parameters:
-    :roleId: lists users assigned to the given role
-    :remoteId: retrieves the user for the given remoteId
+    :roleId: lists users assigned to the given role (ex: ``GET /user/users?roleId=/user/roles/1``)
+    :remoteId: retrieves the user for the given remoteId (ex: ``GET /user/users?remoteId=55dd9713db75145f374bbd0b4f60ad29``)
 :Headers:
     :Accept:
          :application/vnd.ez.api.UserList+xml:  if set the user list returned in xml format (see User_)
