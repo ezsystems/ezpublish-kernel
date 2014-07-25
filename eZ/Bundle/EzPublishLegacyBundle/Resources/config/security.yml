@@ -11,7 +11,7 @@ services:
 
     ezpublish_legacy.security_mapper:
         class: %ezpublish_legacy.security_mapper.class%
-        arguments: [@ezpublish.api.repository, @ezpublish.config.resolver]
+        arguments: [@ezpublish.api.repository, @ezpublish.config.resolver, @security.context]
         tags:
             - { name: kernel.event_subscriber }
 

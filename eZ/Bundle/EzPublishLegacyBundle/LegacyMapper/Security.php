@@ -17,6 +17,7 @@ use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use ezpWebBasedKernelHandler;
 use eZUser;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 /**
  * This listener injects current user into legacy kernel once built.
@@ -24,7 +25,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class Security implements EventSubscriberInterface
 {
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     * @var \eZ\Publish\API\Repository\Repository
      */
     private $repository;
 
@@ -33,12 +34,18 @@ class Security implements EventSubscriberInterface
      */
     private $configResolver;
 
+    /**
+     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     */
+    private $securityContext;
+
     private $enabled = true;
 
-    public function __construct( Repository $repository, ConfigResolverInterface $configResolver )
+    public function __construct( Repository $repository, ConfigResolverInterface $configResolver, SecurityContextInterface $securityContext )
     {
         $this->repository = $repository;
         $this->configResolver = $configResolver;
+        $this->securityContext = $securityContext;
     }
 
     /**
@@ -66,11 +73,12 @@ class Security implements EventSubscriberInterface
      */
     public function onKernelBuilt( PostBuildKernelEvent $event )
     {
-        // Ignore if not in web context or if legacy_mode is active.
+        // Ignore if not in web context, if legacy_mode is active or if user is not authenticated
         if (
-            !$event->getKernelHandler() instanceof ezpWebBasedKernelHandler
+            $this->enabled === false
+            || !$event->getKernelHandler() instanceof ezpWebBasedKernelHandler
             || $this->configResolver->getParameter( 'legacy_mode' ) === true
-            || $this->enabled === false
+            || !$this->isUserAuthenticated()
         )
         {
             return;
@@ -85,6 +93,17 @@ class Security implements EventSubscriberInterface
             },
             false
         );
+    }
+
+    /**
+     * @return bool
+     */
+    private function isUserAuthenticated()
+    {
+        // IS_AUTHENTICATED_FULLY inherits from IS_AUTHENTICATED_REMEMBERED.
+        // User can be either authenticated by providing credentials during current session
+        // or by "remember me" if available.
+        return $this->securityContext->isGranted( 'IS_AUTHENTICATED_REMEMBERED' );
     }
 
     /**
