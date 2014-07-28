@@ -1,0 +1,30 @@
+parameters:
+    ezpublish.persistence.solr.search.content.gateway.client.http.stream.class: eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient\Stream
+    #ezpublish.persistence.solr.search.content.facet_builder_visitor.aggregate.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor\Aggregate
+    ezpublish.persistence.solr.search.content.field_value_mapper.aggregate.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\Aggregate
+    ezpublish.persistence.solr.search.content.field_name_generator.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
+    ezpublish.persistence.solr.search.field_registry.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
+
+services:
+    ezpublish.persistence.solr.search.content.gateway.client.http.stream:
+        class: %ezpublish.persistence.solr.search.content.gateway.client.http.stream.class%
+        arguments:
+            - %ezpublish.elasticsearch_server%
+
+    # Note: services tagged with 'ezpublish.persistence.solr.search.content.facet_builder_visitor'
+    # are registered to this one using compilation pass
+    #ezpublish.persistence.solr.search.content.facet_builder_visitor.aggregate:
+    #    class: %ezpublish.persistence.solr.search.content.facet_builder_visitor.aggregate.class%
+
+    # Note: services tagged with 'ezpublish.persistence.solr.search.content.field_value_mapper'
+    # are registered to this one using compilation pass
+    ezpublish.persistence.solr.search.content.field_value_mapper.aggregate:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.aggregate.class%
+
+    # Note: services tagged with 'ezpublish.fieldType.indexable'
+    # are registered to this one using compilation pass
+    ezpublish.persistence.solr.search.field_registry:
+        class: %ezpublish.persistence.solr.search.field_registry.class%
+
+    ezpublish.persistence.solr.search.content.field_name_generator:
+        class: %ezpublish.persistence.solr.search.content.field_name_generator.class%

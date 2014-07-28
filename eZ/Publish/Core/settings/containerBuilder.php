@@ -39,6 +39,7 @@ $loader->load( 'storage_engines/common.yml' );
 $loader->load( 'storage_engines/cache.yml' );
 $loader->load( 'storage_engines/legacy.yml' );
 $loader->load( 'storage_engines/legacy_solr.yml' );
+$loader->load( 'storage_engines/legacy_elasticsearch.yml' );
 $loader->load( 'settings.yml' );
 $loader->load( 'utils.yml' );
 

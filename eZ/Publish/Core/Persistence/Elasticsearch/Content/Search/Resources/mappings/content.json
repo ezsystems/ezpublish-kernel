@@ -1,0 +1,40 @@
+{
+    "content": {
+        "properties": {
+            "locations_doc": { "type": "nested" },
+            "fields_doc": { "type": "nested" }
+        },
+        "dynamic_templates": [
+            {
+                "field_string": {
+                    "match": "*_ms",
+                    "match_mapping_type": "string",
+                    "mapping": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            {
+                "field_id": {
+                    "match": "*_id",
+                    "match_mapping_type": "string",
+                    "mapping": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            {
+                "field_integer": {
+                    "match": "*_i",
+                    "match_mapping_type": "integer",
+                    "mapping": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
+                }
+            }
+        ]
+    }
+}

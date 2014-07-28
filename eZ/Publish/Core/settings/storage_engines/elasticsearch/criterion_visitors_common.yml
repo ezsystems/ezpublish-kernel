@@ -1,0 +1,30 @@
+parameters:
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.logical_and.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LogicalAnd
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.logical_not.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LogicalNot
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.logical_or.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LogicalOr
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.match_all.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\MatchAll
+
+services:
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.logical_and:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.logical_and.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.logical_not:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.logical_not.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.logical_or:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.logical_or.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.match_all:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.match_all.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}

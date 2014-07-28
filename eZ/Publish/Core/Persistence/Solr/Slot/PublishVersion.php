@@ -30,5 +30,11 @@ class PublishVersion extends Slot
         $this->persistenceHandler->searchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load( $signal->contentId, $signal->versionNo )
         );
+
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $signal->contentId );
+        foreach ( $locations as $location )
+        {
+            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+        }
     }
 }

@@ -1,0 +1,113 @@
+# Depends on some of the 'legacy' storage handlers, see 'ezpublish.spi.persistence.legacy_solr'
+# service definition below for details
+imports:
+    - {resource: storage_engines/elasticsearch/criterion_visitors_common.yml}
+    - {resource: storage_engines/elasticsearch/criterion_visitors_content.yml}
+    - {resource: storage_engines/elasticsearch/criterion_visitors_location.yml}
+    #- {resource: storage_engines/elasticsearch/facet_builder_visitors.yml}
+    - {resource: storage_engines/solr/field_value_mappers.yml}
+    - {resource: storage_engines/elasticsearch/field_value_mappers.yml}
+    - {resource: storage_engines/elasticsearch/services.yml}
+    - {resource: storage_engines/solr/slots.yml}
+    - {resource: storage_engines/elasticsearch/sort_clause_visitors_content.yml}
+    - {resource: storage_engines/elasticsearch/sort_clause_visitors_location.yml}
+
+parameters:
+    ezpublish.elasticsearch_server: http://localhost:9200/
+    ezpublish.persistence.elasticsearch.search.serializer.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer
+    ezpublish.persistence.elasticsearch.search.mapper.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper
+    ezpublish.persistence.elasticsearch.search.content.gateway.native.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Native
+    ezpublish.persistence.elasticsearch.search.location.gateway.native.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Gateway\Native
+    ezpublish.spi.persistence.elasticsearch.search.handler.content.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler
+    ezpublish.spi.persistence.elasticsearch.search.handler.location.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler
+    ezpublish.persistence.solr.search.content.field_map.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap
+
+services:
+    ezpublish.persistence.elasticsearch.search.serializer:
+        class: %ezpublish.persistence.elasticsearch.search.serializer.class%
+        arguments:
+            - @ezpublish.persistence.solr.search.content.field_value_mapper.aggregate
+            - @ezpublish.persistence.solr.search.content.field_name_generator
+
+    ezpublish.persistence.elasticsearch.search.mapper:
+        class: %ezpublish.persistence.elasticsearch.search.mapper.class%
+        arguments:
+            - @ezpublish.persistence.solr.search.field_registry
+            - @ezpublish.persistence.solr.search.content.field_name_generator
+            - @ezpublish.spi.persistence.legacy.content.handler
+            - @ezpublish.spi.persistence.legacy.location.handler
+            - @ezpublish.spi.persistence.legacy.content_type.handler
+            - @ezpublish.spi.persistence.legacy.object_state.handler
+            - @ezpublish.spi.persistence.legacy.section.handler
+
+    ezpublish.persistence.legacy_elasticsearch.search.content.gateway.native:
+        class: %ezpublish.persistence.elasticsearch.search.content.gateway.native.class%
+        arguments:
+            - @ezpublish.persistence.solr.search.content.gateway.client.http.stream
+            - @ezpublish.persistence.elasticsearch.search.serializer
+            - @ezpublish.persistence.elasticsearch.search.content.criterion_visitor.aggregate
+            - @ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.aggregate
+            #- @ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate
+            - @ezpublish.spi.persistence.legacy.content.handler
+
+    ezpublish.persistence.legacy_elasticsearch.search.content.gateway:
+        alias: ezpublish.persistence.legacy_elasticsearch.search.content.gateway.native
+
+    ezpublish.persistence.legacy_elasticsearch.search.location.gateway.native:
+        class: %ezpublish.persistence.elasticsearch.search.location.gateway.native.class%
+        arguments:
+            - @ezpublish.persistence.solr.search.content.gateway.client.http.stream
+            - @ezpublish.persistence.elasticsearch.search.serializer
+            - @ezpublish.persistence.elasticsearch.search.location.criterion_visitor.aggregate
+            - @ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.aggregate
+            #- @ezpublish.persistence.elasticsearch.search.location.facet_builder_visitor.aggregate
+            - @ezpublish.spi.persistence.legacy.location.handler
+
+    ezpublish.persistence.legacy_elasticsearch.search.location.gateway:
+        alias: ezpublish.persistence.legacy_elasticsearch.search.location.gateway.native
+
+    ezpublish.persistence.legacy_elasticsearch.search.content.field_map:
+        class: %ezpublish.persistence.solr.search.content.field_map.class%
+        arguments:
+            - @ezpublish.persistence.solr.search.field_registry
+            - @ezpublish.spi.persistence.legacy.content_type.handler
+            - @ezpublish.persistence.solr.search.content.field_name_generator
+
+    # TODO: when Solr storage is enabled and multiple Solr storage engines are used simultaneously
+    # this service will need to be set through factory, see https://jira.ez.no/browse/EZP-22846
+    ezpublish.persistence.elasticsearch.search.content.field_map:
+        alias: ezpublish.persistence.legacy_elasticsearch.search.content.field_map
+
+    ezpublish.spi.persistence.legacy_elasticsearch.search.handler.content:
+        class: %ezpublish.spi.persistence.elasticsearch.search.handler.content.class%
+        arguments:
+            - @ezpublish.persistence.legacy_elasticsearch.search.content.gateway
+            - @ezpublish.persistence.elasticsearch.search.mapper
+        lazy: true
+
+    ezpublish.spi.persistence.legacy_elasticsearch.search.handler.location:
+        class: %ezpublish.spi.persistence.elasticsearch.search.handler.location.class%
+        arguments:
+            - @ezpublish.persistence.legacy_elasticsearch.search.location.gateway
+            - @ezpublish.persistence.elasticsearch.search.mapper
+        lazy: true
+
+    ezpublish.spi.persistence.legacy_elasticsearch:
+        class: %ezpublish.spi.persistence.legacy.class%
+        arguments:
+            - @ezpublish.spi.persistence.legacy.content.handler
+            - @ezpublish.spi.persistence.legacy_elasticsearch.search.handler.content
+            - @ezpublish.spi.persistence.legacy.content_type.handler
+            - @ezpublish.spi.persistence.legacy.language.handler
+            - @ezpublish.spi.persistence.legacy.location.handler
+            - @ezpublish.spi.persistence.legacy_elasticsearch.search.handler.location
+            - @ezpublish.spi.persistence.legacy.object_state.handler
+            - @ezpublish.spi.persistence.legacy.section.handler
+            - @ezpublish.spi.persistence.legacy.transactionhandler
+            - @ezpublish.spi.persistence.legacy.trash.handler
+            - @ezpublish.spi.persistence.legacy.url_alias.handler
+            - @ezpublish.spi.persistence.legacy.url_wildcard.handler
+            - @ezpublish.spi.persistence.legacy.user.handler
+        tags:
+            - {name: ezpublish.storageEngine, alias: legacy_elasticsearch}
+        lazy: true
