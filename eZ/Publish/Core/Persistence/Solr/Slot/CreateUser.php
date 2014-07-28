@@ -29,7 +29,7 @@ class CreateUser extends Slot
 
         $userContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->userId );
 
-        $this->enqueueIndexing(
+        $this->persistenceHandler->searchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load(
                 $userContentInfo->id,
                 $userContentInfo->currentVersionNo

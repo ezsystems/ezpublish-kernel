@@ -22,6 +22,7 @@ parameters:
     # Signal Slot API wrapper
     ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
     ezpublish.signalslot.signal_dispatcher.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\DefaultSignalDispatcher
+    ezpublish.signalslot.signal_dispatcher_transaction_wrapper.class: eZ\Publish\Core\SignalSlot\SignalDispatcher\SignalDispatcherTransactionWrapper
 
 services:
     # API
@@ -136,8 +137,13 @@ services:
     # Signal Slot API wrapper
     ezpublish.signalslot.repository:
         class: %ezpublish.signalslot.repository.class%
-        arguments: [@ezpublish.api.inner_repository, @ezpublish.signalslot.signal_dispatcher]
+        arguments: [@ezpublish.api.inner_repository, @ezpublish.signalslot.signal_dispatcher_transaction_wrapper]
         lazy: true
+
+    ezpublish.signalslot.signal_dispatcher_transaction_wrapper:
+        class: %ezpublish.signalslot.signal_dispatcher_transaction_wrapper.class%
+        arguments: [@ezpublish.signalslot.signal_dispatcher]
 
     ezpublish.signalslot.signal_dispatcher:
         class: %ezpublish.signalslot.signal_dispatcher.class%
+

@@ -34,7 +34,9 @@ class Recover extends Slot
         )
         {
             $contentInfo = $contentHandler->loadContentInfo( $contentId );
-            $this->enqueueIndexing( $contentHandler->load( $contentInfo->id, $contentInfo->currentVersionNo ) );
+            $this->persistenceHandler->searchHandler()->indexContent(
+                $contentHandler->load( $contentInfo->id, $contentInfo->currentVersionNo )
+            );
         }
     }
 }

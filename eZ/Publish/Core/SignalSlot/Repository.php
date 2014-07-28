@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\SignalSlot;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\SPI\Persistence\TransactionHandler;
 
 /**
  * Repository class
@@ -438,7 +439,14 @@ class Repository implements RepositoryInterface
      */
     public function beginTransaction()
     {
-        return $this->repository->beginTransaction();
+        $return = $this->repository->beginTransaction();
+
+        if ( $this->signalDispatcher instanceof TransactionHandler )
+        {
+            $this->signalDispatcher->beginTransaction();
+        }
+
+        return $return;
     }
 
     /**
@@ -450,7 +458,14 @@ class Repository implements RepositoryInterface
      */
     public function commit()
     {
-        return $this->repository->commit();
+        $return = $this->repository->commit();
+
+        if ( $this->signalDispatcher instanceof TransactionHandler )
+        {
+            $this->signalDispatcher->commit();
+        }
+
+        return $return;
     }
 
     /**
@@ -462,17 +477,23 @@ class Repository implements RepositoryInterface
      */
     public function rollback()
     {
+        if ( $this->signalDispatcher instanceof TransactionHandler )
+        {
+            $this->signalDispatcher->rollback();
+        }
+
         return $this->repository->rollback();
     }
 
     /**
      * Enqueue an event to be triggered at commit or directly if no transaction has started
      *
+     * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
      * @param Callable $event
      */
     public function commitEvent( $event )
     {
-        $this->repository->commitEvent( $event );
+        return $this->repository->commitEvent( $event );
     }
 
     /**

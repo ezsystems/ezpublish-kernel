@@ -29,7 +29,7 @@ class CreateUserGroup extends Slot
 
         $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->userGroupId );
 
-        $this->enqueueIndexing(
+        $this->persistenceHandler->searchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load(
                 $userGroupContentInfo->id,
                 $userGroupContentInfo->currentVersionNo

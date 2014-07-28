@@ -27,6 +27,6 @@ class DeleteContent extends Slot
         if ( !$signal instanceof Signal\ContentService\DeleteContentSignal )
             return;
 
-        $this->enqueueDeletion( $signal->contentId );
+        $this->persistenceHandler->searchHandler()->deleteContent( $signal->contentId );
     }
 }

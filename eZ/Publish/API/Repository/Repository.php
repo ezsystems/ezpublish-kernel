@@ -205,6 +205,7 @@ interface Repository
     /**
      * Enqueue an event to be triggered at commit or directly if no transaction has started
      *
+     * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
      * @param Callable $event
      */
     public function commitEvent( $event );

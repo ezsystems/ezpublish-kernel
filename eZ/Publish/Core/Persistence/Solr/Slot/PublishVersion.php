@@ -27,7 +27,7 @@ class PublishVersion extends Slot
         if ( !$signal instanceof Signal\ContentService\PublishVersionSignal )
             return;
 
-        $this->enqueueIndexing(
+        $this->persistenceHandler->searchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load( $signal->contentId, $signal->versionNo )
         );
     }

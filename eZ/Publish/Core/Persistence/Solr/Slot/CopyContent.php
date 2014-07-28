@@ -27,7 +27,7 @@ class CopyContent extends Slot
         if ( !$signal instanceof Signal\ContentService\CopyContentSignal )
             return;
 
-        $this->enqueueIndexing(
+        $this->persistenceHandler->searchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load( $signal->dstContentId, $signal->dstVersionNo )
         );
     }
