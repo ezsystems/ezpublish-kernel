@@ -112,9 +112,9 @@ Short:
   "Implement EZP-201xx: Add support for X in Y"
 * If you want to contribute implementation specification proposals, place them in [doc/](doc/) folder.
 * Keep different changes in different commits in case cherry-pick is preferred instead of a merge later.
-  * A Pull Request should only cover one issue
-  * A commit should not contain code changes at the some time as doing coding standards/whitespace/typo fixes
-* TDD: Write/Change the test(s) for the change you do and commit it before you do the actual code change
+  * A Pull Request should only cover one issue.
+  * A commit should not contain code changes at the same time as doing coding standards/whitespace/typo fixes.
+* TDD: Write/Change the test(s) for the change you do and commit it before you do the actual code change.
   * If a bug affects Public API, write or enhance a integration test to make sure the bug is covered.
   * Unit tests should only use mocks/stubs and never test the full stack like integrations tests does.
 * Please test/check your commits before pushing even if we have automated checks in place on pull requests:
