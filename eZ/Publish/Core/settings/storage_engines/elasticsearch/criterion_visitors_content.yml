@@ -1,0 +1,36 @@
+parameters:
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.aggregate.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Aggregate
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ContentIdIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ContentTypeIdIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Field\FieldIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Field\FieldRange
+
+services:
+    # Note: services tagged with 'ezpublish.persistence.elasticsearch.search.content.criterion_visitor'
+    # are registered to this one using compilation pass
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.aggregate:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.aggregate.class%
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_id_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_id_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_in.class%
+        arguments:
+            - @ezpublish.persistence.solr.search.content.field_map
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_range:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_range.class%
+        arguments:
+            - @ezpublish.persistence.solr.search.content.field_map
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}

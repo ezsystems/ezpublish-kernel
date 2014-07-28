@@ -1,0 +1,8 @@
+parameters:
+    ezpublish.persistence.solr.search.content.field_value_mapper.document.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\DocumentMapper
+
+services:
+    ezpublish.persistence.solr.search.content.field_value_mapper.document:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.document.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}

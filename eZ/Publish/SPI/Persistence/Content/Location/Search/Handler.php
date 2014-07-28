@@ -10,6 +10,7 @@
 namespace eZ\Publish\SPI\Persistence\Content\Location\Search;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  * The Location Search Handler interface defines search operations on Location elements in the storage engine.
@@ -24,4 +25,9 @@ interface Handler
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With Location as SearchHit->valueObject
      */
     public function findLocations( LocationQuery $query );
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     */
+    public function indexLocation( Location $location );
 }
