@@ -40,6 +40,7 @@ $loader->load( 'storage_engines/cache.yml' );
 $loader->load( 'storage_engines/legacy.yml' );
 $loader->load( 'storage_engines/legacy_solr.yml' );
 $loader->load( 'settings.yml' );
+$loader->load( 'utils.yml' );
 
 $containerBuilder->setParameter( "ezpublish.kernel.root_dir", $installDir );
 
