@@ -80,15 +80,23 @@ class Type extends FieldType
      */
     protected function createValueFromInput( $inputValue )
     {
-        // default construction from array
-        if ( is_array( $inputValue ) )
-        {
-            $inputValue = new Value( $inputValue );
-        }
-        // just given the file path as a string
-        else if ( is_string( $inputValue ) )
+        if ( is_string( $inputValue ) )
         {
             $inputValue = Value::fromString( $inputValue );
+        }
+
+        if ( is_array( $inputValue ) )
+        {
+            if ( isset( $inputValue['inputUri'] ) && file_exists( $inputValue['inputUri'] ) )
+            {
+                $inputValue['fileSize'] = filesize( $inputValue['inputUri'] );
+                if ( !isset( $inputValue['fileName'] ) )
+                {
+                    $inputValue['fileName'] = basename( $inputValue['inputUri'] );
+                }
+            }
+
+            $inputValue = new Value( $inputValue );
         }
 
         return $inputValue;
@@ -105,32 +113,20 @@ class Type extends FieldType
      */
     protected function checkValueStructure( BaseValue $value )
     {
-        // Required parameter $path
-        if ( !isset( $value->id ) || !file_exists( $value->id ) )
+        if ( isset( $value->inputUri ) && !is_string( $value->inputUri ) )
         {
-            throw new InvalidArgumentValue(
-                '$value->path',
-                $value->path
-            );
+            throw new InvalidArgumentType( '$value->inputUri', 'string', $value->inputUri );
         }
 
-        // Required parameter $fileSize
-        if ( !isset( $value->fileSize ) || !is_int( $value->fileSize ) )
+        if ( isset( $value->id ) && !is_string( $value->id ) )
         {
-            throw new InvalidArgumentValue(
-                '$value->fileSize',
-                $value->fileSize
-            );
+            throw new InvalidArgumentType( '$value->id', 'string', $value->id );
         }
 
         // Required parameter $fileName
         if ( !isset( $value->fileName ) || !is_string( $value->fileName ) )
         {
-            throw new InvalidArgumentType(
-                '$value->fileName',
-                'integer',
-                $value->fileName
-            );
+            throw new InvalidArgumentType( '$value->fileName', 'string', $value->fileName );
         }
 
         // Optional parameter $alternativeText
@@ -139,6 +135,15 @@ class Type extends FieldType
             throw new InvalidArgumentType(
                 '$value->alternativeText',
                 'string',
+                $value->alternativeText
+            );
+        }
+
+        if ( isset( $value->fileSize ) && ( !is_int( $value->fileSize ) || $value->fileSize < 0 ) )
+        {
+            throw new InvalidArgumentType(
+                '$value->fileSize',
+                'int',
                 $value->alternativeText
             );
         }
@@ -163,7 +168,13 @@ class Type extends FieldType
             return $errors;
         }
 
-        if ( !getimagesize( $fieldValue->id ) )
+        if ( isset( $fieldValue->inputUri ) && !getimagesize( $fieldValue->inputUri ) )
+        {
+            $errors[] = new ValidationError( "A valid image file is required." );
+        }
+
+        // BC: Check if file is a valid image if the value of 'id' matches a local file
+        if ( isset( $fieldValue->id ) && file_exists( $fieldValue->id ) && !getimagesize( $fieldValue->id ) )
         {
             $errors[] = new ValidationError( "A valid image file is required." );
         }
@@ -178,6 +189,7 @@ class Type extends FieldType
                         // No file size limit
                         break;
                     }
+
                     // Database stores maxFileSize in MB
                     if ( ( $parameters['maxFileSize'] * 1024 * 1024 ) < $fieldValue->fileSize )
                     {
@@ -297,12 +309,13 @@ class Type extends FieldType
 
         return array(
             'id' => $value->id,
-            'path' => $value->id,
+            'path' => $value->inputUri ?: $value->id,
             'alternativeText' => $value->alternativeText,
             'fileName' => $value->fileName,
             'fileSize' => $value->fileSize,
             'imageId' => $value->imageId,
-            'uri' => $value->uri
+            'uri' => $value->uri,
+            'inputUri' => $value->inputUri
         );
     }
 
@@ -365,5 +378,4 @@ class Type extends FieldType
         );
         return $result;
     }
-
 }

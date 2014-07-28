@@ -45,19 +45,16 @@ class ImageStorage extends GatewayBasedStorage
      */
     protected $pathGenerator;
 
-    /** @var  */
+    /** @var MetadataHandler */
     protected $imageSizeMetadataHandler;
 
-    /**
-     * Construct from gateways
-     *
-     * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
-     * @param IOServiceInterface                          $IOService
-     * @param \eZ\Publish\Core\IO\MetadataHandler         $pathGenerator
-     * @param \eZ\Publish\Core\IO\MetadataHandler         $imageSizeMetadataHandler
-     * @param \Psr\Log\LoggerInterface                    $logger
-     */
-    public function __construct( array $gateways, IOServiceInterface $IOService, PathGenerator $pathGenerator, MetadataHandler $imageSizeMetadataHandler, LoggerInterface $logger = null )
+    public function __construct(
+        array $gateways,
+        IOServiceInterface $IOService,
+        PathGenerator $pathGenerator,
+        MetadataHandler $imageSizeMetadataHandler,
+        LoggerInterface $logger = null
+    )
     {
         parent::__construct( $gateways );
         $this->IOService = $IOService;
@@ -134,9 +131,16 @@ class ImageStorage extends GatewayBasedStorage
             }
             else
             {
-                $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile(
-                    $field->value->externalData['id']
-                );
+                if ( isset( $field->value->externalData['inputUri'] ) )
+                {
+                    $localFilePath = $field->value->externalData['inputUri'];
+                    unset( $field->value->externalData['inputUri'] );
+                }
+                else
+                {
+                    $localFilePath = $field->value->externalData['id'];
+                }
+                $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $localFilePath );
                 $binaryFileCreateStruct->id = $targetPath;
                 $binaryFile = $this->IOService->createBinaryFile( $binaryFileCreateStruct );
             }
