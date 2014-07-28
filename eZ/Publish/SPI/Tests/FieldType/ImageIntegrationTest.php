@@ -40,6 +40,8 @@ use FileSystemIterator;
  */
 class ImageIntegrationTest extends FileBaseIntegrationTest
 {
+    private $deprecationWarnerMock;
+
     /**
      * Returns the storage identifier prefix used by the file service
      *
@@ -80,9 +82,19 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 ),
                 self::$container->get( "ezpublish.fieldType.ezimage.io" ),
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
-                new IO\MetadataHandler\ImageSize()
+                new IO\MetadataHandler\ImageSize(),
+                $this->getDeprecationWarnerMock()
             )
         );
+    }
+
+    public function getDeprecationWarnerMock()
+    {
+        if ( !isset( $this->deprecationWarnerMock ) )
+        {
+            $this->deprecationWarnerMock = $this->getMock( 'eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface' );
+        }
+        return $this->deprecationWarnerMock;
     }
 
     /**
@@ -249,10 +261,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         }*/
     }
 
-    public function testCreateContentUsingIdPropertyWorks()
+    public function testCreateContentUsingIdPropertyWorksAndThrowsWarning()
     {
         $this->testCreateContentType();
         $contentType = $this->testLoadContentTypeField();
+        $this->getDeprecationWarnerMock()
+            ->expects( $this->once() )
+            ->method( 'log' )
+            ->with( $this->stringContains( 'id property' ) );
+
         $this->createContent( $contentType, $this->getDeprecatedIdPropertyValue() );
     }
 

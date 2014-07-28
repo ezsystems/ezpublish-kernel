@@ -16,6 +16,7 @@ use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use Psr\Log\LoggerInterface;
+use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface as DeprecationWarner;
 
 /**
  * Converter for Image field type external storage
@@ -48,11 +49,17 @@ class ImageStorage extends GatewayBasedStorage
     /** @var MetadataHandler */
     protected $imageSizeMetadataHandler;
 
+    /**
+     * @var DeprecationWarner
+     */
+    private $deprecationWarner;
+
     public function __construct(
         array $gateways,
         IOServiceInterface $IOService,
         PathGenerator $pathGenerator,
         MetadataHandler $imageSizeMetadataHandler,
+        DeprecationWarner $deprecationWarner,
         LoggerInterface $logger = null
     )
     {
@@ -61,6 +68,7 @@ class ImageStorage extends GatewayBasedStorage
         $this->pathGenerator = $pathGenerator;
         $this->imageSizeMetadataHandler = $imageSizeMetadataHandler;
         $this->logger = $logger;
+        $this->deprecationWarner = $deprecationWarner;
     }
 
     /**
@@ -138,6 +146,9 @@ class ImageStorage extends GatewayBasedStorage
                 }
                 else
                 {
+                    $this->deprecationWarner->log(
+                        "Using the Image\\Value::\$id property to create images is deprecated. Use 'inputUri'"
+                    );
                     $localFilePath = $field->value->externalData['id'];
                 }
                 $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $localFilePath );
