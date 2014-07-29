@@ -10,19 +10,11 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\Parser;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Content as ContentConfigParser;
 use Symfony\Component\Yaml\Yaml;
 
-class ContentTest extends AbstractExtensionTestCase
+class ContentTest extends AbstractParserTestCase
 {
-    /**
-     * Return an array of container extensions you need to be registered for each test (usually just the container
-     * extension you are testing.
-     *
-     * @return ExtensionInterface[]
-     */
     protected function getContainerExtensions()
     {
         return array(
@@ -39,9 +31,9 @@ class ContentTest extends AbstractExtensionTestCase
     {
         $this->load();
 
-        $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.content.view_cache' ) );
-        $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.content.ttl_cache' ) );
-        $this->assertFalse( $this->container->hasParameter( 'ezsettings.ezdemo_site.content.default_ttl' ) );
+        $this->assertConfigResolverParameterValue( 'content.view_cache', true, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue( 'content.ttl_cache', true, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue( 'content.default_ttl', 60, 'ezdemo_site' );
     }
 
     /**
@@ -59,7 +51,7 @@ class ContentTest extends AbstractExtensionTestCase
 
         foreach ( $expected as $key => $val )
         {
-            $this->assertSame( $val, $this->container->getParameter( $key ) );
+            $this->assertConfigResolverParameterValue( $key, $val, 'ezdemo_site' );
         }
     }
 
@@ -75,9 +67,9 @@ class ContentTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.content.view_cache' => true,
-                    'ezsettings.ezdemo_site.content.ttl_cache' => true,
-                    'ezsettings.ezdemo_site.content.default_ttl' => 100,
+                    'content.view_cache' => true,
+                    'content.ttl_cache' => true,
+                    'content.default_ttl' => 100,
                 )
             ),
             array(
@@ -89,9 +81,9 @@ class ContentTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.content.view_cache' => false,
-                    'ezsettings.ezdemo_site.content.ttl_cache' => false,
-                    'ezsettings.ezdemo_site.content.default_ttl' => 123,
+                    'content.view_cache' => false,
+                    'content.ttl_cache' => false,
+                    'content.default_ttl' => 123,
                 )
             ),
             array(
@@ -101,9 +93,9 @@ class ContentTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.content.view_cache' => false,
-                    'ezsettings.ezdemo_site.content.ttl_cache' => true,
-                    'ezsettings.ezdemo_site.content.default_ttl' => 60,
+                    'content.view_cache' => false,
+                    'content.ttl_cache' => true,
+                    'content.default_ttl' => 60,
                 )
             ),
             array(
@@ -113,10 +105,10 @@ class ContentTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.content.view_cache' => true,
-                    'ezsettings.ezdemo_site.content.ttl_cache' => true,
-                    'ezsettings.ezdemo_site.content.default_ttl' => 60,
-                    'ezsettings.ezdemo_site.content.tree_root.location_id' => 123,
+                    'content.view_cache' => true,
+                    'content.ttl_cache' => true,
+                    'content.default_ttl' => 60,
+                    'content.tree_root.location_id' => 123,
                 )
             ),
             array(
@@ -129,11 +121,11 @@ class ContentTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.content.view_cache' => true,
-                    'ezsettings.ezdemo_site.content.ttl_cache' => true,
-                    'ezsettings.ezdemo_site.content.default_ttl' => 60,
-                    'ezsettings.ezdemo_site.content.tree_root.location_id' => 456,
-                    'ezsettings.ezdemo_site.content.tree_root.excluded_uri_prefixes' => array( '/media/images', '/products' ),
+                    'content.view_cache' => true,
+                    'content.ttl_cache' => true,
+                    'content.default_ttl' => 60,
+                    'content.tree_root.location_id' => 456,
+                    'content.tree_root.excluded_uri_prefixes' => array( '/media/images', '/products' ),
                 )
             ),
             array(
@@ -150,10 +142,10 @@ class ContentTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.content.view_cache' => true,
-                    'ezsettings.ezdemo_site.content.ttl_cache' => true,
-                    'ezsettings.ezdemo_site.content.default_ttl' => 60,
-                    'ezsettings.ezdemo_site.fieldtypes.ezxml.custom_xsl' => array(
+                    'content.view_cache' => true,
+                    'content.ttl_cache' => true,
+                    'content.default_ttl' => 60,
+                    'fieldtypes.ezxml.custom_xsl' => array(
                         // Default settings will be added
                         array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl', 'priority' => 0 ),
                         array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl', 'priority' => 0 ),

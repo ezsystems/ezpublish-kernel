@@ -11,18 +11,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Languages;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class LanguagesTest extends AbstractExtensionTestCase
+class LanguagesTest extends AbstractParserTestCase
 {
-    /**
-     * Return an array of container extensions you need to be registered for each test (usually just the container
-     * extension you are testing.
-     *
-     * @return ExtensionInterface[]
-     */
     protected function getContainerExtensions()
     {
         return array( new EzPublishCoreExtension( array( new Languages() ) ) );
@@ -49,14 +41,9 @@ class LanguagesTest extends AbstractExtensionTestCase
         );
         $this->load( $config );
 
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.languages' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.fre.languages' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.fre2.languages' ) );
-        $this->assertFalse( $this->container->hasParameter( 'ezsettings.global.languages' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.languages' ) );
-        $this->assertSame( $langDemoSite, $this->container->getParameter( 'ezsettings.ezdemo_site.languages' ) );
-        $this->assertSame( $langFre, $this->container->getParameter( 'ezsettings.fre.languages' ) );
-        $this->assertSame( $langFre, $this->container->getParameter( 'ezsettings.fre2.languages' ) );
+        $this->assertConfigResolverParameterValue( 'languages', $langDemoSite, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue( 'languages', $langFre, 'fre' );
+        $this->assertConfigResolverParameterValue( 'languages', $langFre, 'fre2' );
         $this->assertSame(
             array(
                 'eng-GB' => array( 'ezdemo_site' ),
@@ -65,7 +52,7 @@ class LanguagesTest extends AbstractExtensionTestCase
             $this->container->getParameter( 'ezpublish.siteaccesses_by_language' )
         );
         // languages for ezdemo_site_admin will take default value (empty array)
-        $this->assertEmpty( $this->container->getParameter( 'ezsettings.ezdemo_site_admin.languages' ) );
+        $this->assertConfigResolverParameterValue( 'languages', array(), 'ezdemo_site_admin' );
     }
 
     public function testLanguagesSiteaccessGroup()
@@ -80,12 +67,8 @@ class LanguagesTest extends AbstractExtensionTestCase
         );
         $this->load( $config );
 
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.languages' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.fre.languages' ) );
-        $this->assertFalse( $this->container->hasParameter( 'ezsettings.global.languages' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.languages' ) );
-        $this->assertSame( $langDemoSite, $this->container->getParameter( 'ezsettings.ezdemo_site.languages' ) );
-        $this->assertSame( $langDemoSite, $this->container->getParameter( 'ezsettings.fre.languages' ) );
+        $this->assertConfigResolverParameterValue( 'languages', $langDemoSite, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue( 'languages', $langDemoSite, 'fre' );
         $this->assertSame(
             array(
                 'eng-US' => array( 'ezdemo_site', 'fre' ),
@@ -93,7 +76,7 @@ class LanguagesTest extends AbstractExtensionTestCase
             $this->container->getParameter( 'ezpublish.siteaccesses_by_language' )
         );
         // languages for ezdemo_site_admin will take default value (empty array)
-        $this->assertEmpty( $this->container->getParameter( 'ezsettings.ezdemo_site_admin.languages' ) );
+        $this->assertConfigResolverParameterValue( 'languages', array(), 'ezdemo_site_admin' );
     }
 
     public function testTranslationSiteAccesses()
@@ -108,13 +91,9 @@ class LanguagesTest extends AbstractExtensionTestCase
         );
         $this->load( $config );
 
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.translation_siteaccesses' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.fre.translation_siteaccesses' ) );
-        $this->assertFalse( $this->container->hasParameter( 'ezsettings.global.translation_siteaccesses' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.translation_siteaccesses' ) );
-        $this->assertSame( $translationSAsDemoSite, $this->container->getParameter( 'ezsettings.ezdemo_site.translation_siteaccesses' ) );
-        $this->assertSame( $translationSAsFre, $this->container->getParameter( 'ezsettings.fre.translation_siteaccesses' ) );
-        $this->assertEmpty( $this->container->getParameter( 'ezsettings.ezdemo_site_admin.translation_siteaccesses' ) );
+        $this->assertConfigResolverParameterValue( 'translation_siteaccesses', $translationSAsDemoSite, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue( 'translation_siteaccesses', $translationSAsFre, 'fre' );
+        $this->assertConfigResolverParameterValue( 'translation_siteaccesses', array(), 'ezdemo_site_admin' );
     }
 
     public function testTranslationSiteAccessesWithGroup()
@@ -129,12 +108,8 @@ class LanguagesTest extends AbstractExtensionTestCase
         );
         $this->load( $config );
 
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site.translation_siteaccesses' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.fre.translation_siteaccesses' ) );
-        $this->assertFalse( $this->container->hasParameter( 'ezsettings.global.translation_siteaccesses' ) );
-        $this->assertTrue( $this->container->hasParameter( 'ezsettings.ezdemo_site_admin.translation_siteaccesses' ) );
-        $this->assertSame( $translationSAsDemoSite, $this->container->getParameter( 'ezsettings.ezdemo_site.translation_siteaccesses' ) );
-        $this->assertSame( $translationSAsDemoSite, $this->container->getParameter( 'ezsettings.fre.translation_siteaccesses' ) );
-        $this->assertEmpty( $this->container->getParameter( 'ezsettings.ezdemo_site_admin.translation_siteaccesses' ) );
+        $this->assertConfigResolverParameterValue( 'translation_siteaccesses', $translationSAsDemoSite, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue( 'translation_siteaccesses', $translationSAsDemoSite, 'fre' );
+        $this->assertConfigResolverParameterValue( 'translation_siteaccesses', array(), 'ezdemo_site_admin' );
     }
 }

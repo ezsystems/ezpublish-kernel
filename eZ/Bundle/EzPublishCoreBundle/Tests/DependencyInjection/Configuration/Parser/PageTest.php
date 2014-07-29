@@ -11,20 +11,12 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Page;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class PageTest extends AbstractExtensionTestCase
+class PageTest extends AbstractParserTestCase
 {
     private $config;
 
-    /**
-     * Return an array of container extensions you need to be registered for each test (usually just the container
-     * extension you are testing.
-     *
-     * @return ExtensionInterface[]
-     */
     protected function getContainerExtensions()
     {
         return array(
@@ -51,8 +43,8 @@ class PageTest extends AbstractExtensionTestCase
 
         // For each siteaccess we expect to only have enabled layout/blocks
         $pageConfigForSiteaccess = $this->getPageConfigForSiteaccessFromDefaults( $defaultConfig );
-        $this->assertSame( $pageConfigForSiteaccess, $this->container->getParameter( 'ezsettings.ezdemo_site.ezpage' ) );
-        $this->assertSame( $pageConfigForSiteaccess, $this->container->getParameter( 'ezsettings.fre.ezpage' ) );
+        $this->assertConfigResolverParameterValue( 'ezpage', $pageConfigForSiteaccess, 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue( 'ezpage', $pageConfigForSiteaccess, 'fre' );
     }
 
     public function testSiteaccessPageConfig()
@@ -88,7 +80,7 @@ class PageTest extends AbstractExtensionTestCase
         );
 
         $expected = $this->getPageConfigForSiteaccessFromDefaults( $defaultConfig, $siteaccessConfig );
-        $this->assertSame( $expected, $this->container->getParameter( 'ezsettings.fre.ezpage' ) );
+        $this->assertConfigResolverParameterValue( 'ezpage', $expected, 'fre' );
     }
 
     /**

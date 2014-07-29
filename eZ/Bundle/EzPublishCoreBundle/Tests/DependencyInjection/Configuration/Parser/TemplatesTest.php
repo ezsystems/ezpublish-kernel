@@ -12,20 +12,12 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\FieldDefinitionSettingsTemplates;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\FieldTemplates;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class TemplatesTest extends AbstractExtensionTestCase
+class TemplatesTest extends AbstractParserTestCase
 {
     private $config;
 
-    /**
-     * Return an array of container extensions you need to be registered for each test (usually just the container
-     * extension you are testing.
-     *
-     * @return ExtensionInterface[]
-     */
     protected function getContainerExtensions()
     {
         return array(
@@ -46,26 +38,32 @@ class TemplatesTest extends AbstractExtensionTestCase
         $fixedUpConfig = $this->getExpectedConfigFieldTemplates( $this->config );
         $groupFieldTemplates = $fixedUpConfig['system']['ezdemo_frontend_group']['field_templates'];
         $demoSiteFieldTemplates = $fixedUpConfig['system']['ezdemo_site']['field_templates'];
-        $this->assertEquals(
+        $this->assertConfigResolverParameterValue(
+            'field_templates',
             array_merge(
                 // Adding default kernel value.
                 array( array( 'template' => 'EzPublishCoreBundle::content_fields.html.twig', 'priority' => 0 ) ),
                 $groupFieldTemplates,
                 $demoSiteFieldTemplates
             ),
-            $this->container->getParameter( 'ezsettings.ezdemo_site.field_templates' )
+            'ezdemo_site',
+            false
         );
-        $this->assertEquals(
+        $this->assertConfigResolverParameterValue(
+            'field_templates',
             array_merge(
                 // Adding default kernel value.
                 array( array( 'template' => 'EzPublishCoreBundle::content_fields.html.twig', 'priority' => 0 ) ),
                 $groupFieldTemplates
             ),
-            $this->container->getParameter( 'ezsettings.fre.field_templates' )
+            'fre',
+            false
         );
-        $this->assertEquals(
+        $this->assertConfigResolverParameterValue(
+            'field_templates',
             array( array( 'template' => 'EzPublishCoreBundle::content_fields.html.twig', 'priority' => 0 ) ),
-            $this->container->getParameter( 'ezsettings.ezdemo_site_admin.field_templates' )
+            'ezdemo_site_admin',
+            false
         );
     }
 
@@ -95,26 +93,33 @@ class TemplatesTest extends AbstractExtensionTestCase
         $fixedUpConfig = $this->getExpectedConfigFieldDefinitionSettingsTemplates( $this->config );
         $groupFieldTemplates = $fixedUpConfig['system']['ezdemo_frontend_group']['fielddefinition_settings_templates'];
         $demoSiteFieldTemplates = $fixedUpConfig['system']['ezdemo_site']['fielddefinition_settings_templates'];
-        $this->assertEquals(
+
+        $this->assertConfigResolverParameterValue(
+            'fielddefinition_settings_templates',
             array_merge(
                 // Adding default kernel value.
                 array( array( 'template' => 'EzPublishCoreBundle::fielddefinition_settings.html.twig', 'priority' => 0 ) ),
                 $groupFieldTemplates,
                 $demoSiteFieldTemplates
             ),
-            $this->container->getParameter( 'ezsettings.ezdemo_site.fielddefinition_settings_templates' )
+            'ezdemo_site',
+            false
         );
-        $this->assertEquals(
+        $this->assertConfigResolverParameterValue(
+            'fielddefinition_settings_templates',
             array_merge(
                 // Adding default kernel value.
                 array( array( 'template' => 'EzPublishCoreBundle::fielddefinition_settings.html.twig', 'priority' => 0 ) ),
                 $groupFieldTemplates
             ),
-            $this->container->getParameter( 'ezsettings.fre.fielddefinition_settings_templates' )
+            'fre',
+            false
         );
-        $this->assertEquals(
+        $this->assertConfigResolverParameterValue(
+            'fielddefinition_settings_templates',
             array( array( 'template' => 'EzPublishCoreBundle::fielddefinition_settings.html.twig', 'priority' => 0 ) ),
-            $this->container->getParameter( 'ezsettings.ezdemo_site_admin.fielddefinition_settings_templates' )
+            'ezdemo_site_admin',
+            false
         );
     }
 

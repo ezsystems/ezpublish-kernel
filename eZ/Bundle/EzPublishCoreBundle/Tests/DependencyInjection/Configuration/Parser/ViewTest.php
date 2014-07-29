@@ -13,20 +13,12 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Block
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\ContentView;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\LocationView;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class ViewTest extends AbstractExtensionTestCase
+class ViewTest extends AbstractParserTestCase
 {
     private $config;
 
-    /**
-     * Return an array of container extensions you need to be registered for each test (usually just the container
-     * extension you are testing.
-     *
-     * @return ExtensionInterface[]
-     */
     protected function getContainerExtensions()
     {
         return array(
@@ -53,15 +45,10 @@ class ViewTest extends AbstractExtensionTestCase
                 }
             }
         }
-        $this->assertEquals(
-            $expectedLocationView,
-            $this->container->getParameter( 'ezsettings.ezdemo_site.location_view' )
-        );
-        $this->assertEquals(
-            $expectedLocationView,
-            $this->container->getParameter( 'ezsettings.fre.location_view' )
-        );
-        $this->assertSame( array(), $this->container->getParameter( 'ezsettings.ezdemo_site_admin.location_view' ) );
+
+        $this->assertConfigResolverParameterValue( 'location_view', $expectedLocationView, 'ezdemo_site', false );
+        $this->assertConfigResolverParameterValue( 'location_view', $expectedLocationView, 'fre', false );
+        $this->assertConfigResolverParameterValue( 'location_view', array(), 'ezdemo_site_admin', false );
     }
 
     public function testContentView()
@@ -78,28 +65,32 @@ class ViewTest extends AbstractExtensionTestCase
                 }
             }
         }
-        $this->assertEquals(
-            $expectedContentView,
-            $this->container->getParameter( 'ezsettings.ezdemo_site.content_view' )
-        );
-        $this->assertEquals(
-            $expectedContentView,
-            $this->container->getParameter( 'ezsettings.fre.content_view' )
-        );
-        $this->assertSame( array(), $this->container->getParameter( 'ezsettings.ezdemo_site_admin.location_view' ) );
+
+        $this->assertConfigResolverParameterValue( 'content_view', $expectedContentView, 'ezdemo_site', false );
+        $this->assertConfigResolverParameterValue( 'content_view', $expectedContentView, 'fre', false );
+        $this->assertConfigResolverParameterValue( 'content_view', array(), 'ezdemo_site_admin', false );
     }
 
     public function testBlockView()
     {
         $this->load();
-        $this->assertEquals(
+        $this->assertConfigResolverParameterValue(
+            'block_view',
             array( 'block' => $this->config['system']['ezdemo_frontend_group']['block_view'] ),
-            $this->container->getParameter( 'ezsettings.ezdemo_site.block_view' )
+            'ezdemo_site',
+            false
         );
-        $this->assertEquals(
+        $this->assertConfigResolverParameterValue(
+            'block_view',
             array( 'block' => $this->config['system']['ezdemo_frontend_group']['block_view'] ),
-            $this->container->getParameter( 'ezsettings.fre.block_view' )
+            'fre',
+            false
         );
-        $this->assertSame( array(), $this->container->getParameter( 'ezsettings.ezdemo_site_admin.block_view' ) );
+        $this->assertConfigResolverParameterValue(
+            'block_view',
+            array(),
+            'ezdemo_site_admin',
+            false
+        );
     }
 }

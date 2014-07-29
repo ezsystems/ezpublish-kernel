@@ -11,11 +11,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Image;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
-use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class ImageTest extends AbstractExtensionTestCase
+class ImageTest extends AbstractParserTestCase
 {
     private $config;
 
@@ -42,12 +40,6 @@ class ImageTest extends AbstractExtensionTestCase
         return $this->config;
     }
 
-    /**
-     * Return an array of container extensions you need to be registered for each test (usually just the container
-     * extension you are testing.
-     *
-     * @return ExtensionInterface[]
-     */
     protected function getContainerExtensions()
     {
         return array(
@@ -60,11 +52,13 @@ class ImageTest extends AbstractExtensionTestCase
         $this->load();
 
         $expected = $this->config['system']['ezdemo_group']['image_variations'] + $this->container->getParameter( 'ezsettings.default.image_variations' );
-        $this->assertEquals( $expected, $this->container->getParameter( 'ezsettings.ezdemo_site.image_variations' ) );
-        $this->assertEquals( $expected, $this->container->getParameter( 'ezsettings.ezdemo_site_admin.image_variations' ) );
-        $this->assertEquals(
+        $this->assertConfigResolverParameterValue( 'image_variations', $expected, 'ezdemo_site', false );
+        $this->assertConfigResolverParameterValue( 'image_variations', $expected, 'ezdemo_site_admin', false );
+        $this->assertConfigResolverParameterValue(
+            'image_variations',
             $expected + $this->config['system']['fre']['image_variations'],
-            $this->container->getParameter( 'ezsettings.fre.image_variations' )
+            'fre',
+            false
         );
     }
 
@@ -74,15 +68,11 @@ class ImageTest extends AbstractExtensionTestCase
     public function testPrePostParameters( array $config, array $expected )
     {
         $this->load( array( 'system' => $config ) );
-        foreach ( $expected as $name => $value )
+        foreach ( $expected as $name => $values )
         {
-            if ( $value === null )
+            foreach ( $values as $sa => $expectedValue )
             {
-                $this->assertFalse( $this->container->hasParameter( $name ) );
-            }
-            else
-            {
-                $this->assertSame( $value, $this->container->getParameter( $name ) );
+                $this->assertConfigResolverParameterValue( $name, $expectedValue, $sa );
             }
         }
     }
@@ -100,10 +90,14 @@ class ImageTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.imagemagick.pre_parameters' => '-foo -bar',
-                    'ezsettings.ezdemo_site.imagemagick.post_parameters' => '-baz',
-                    'ezsettings.fre.imagemagick.pre_parameters' => null,
-                    'ezsettings.fre.imagemagick.post_parameters' => null,
+                    'imagemagick.pre_parameters' => array(
+                        'ezdemo_site' => '-foo -bar',
+                        'fre' => null
+                    ),
+                    'imagemagick.post_parameters' => array(
+                        'ezdemo_site' => '-baz',
+                        'fre' => null
+                    )
                 )
             ),
             array(
@@ -115,10 +109,14 @@ class ImageTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.imagemagick.pre_parameters' => '-foo -bar',
-                    'ezsettings.ezdemo_site.imagemagick.post_parameters' => null,
-                    'ezsettings.fre.imagemagick.pre_parameters' => null,
-                    'ezsettings.fre.imagemagick.post_parameters' => null,
+                    'imagemagick.pre_parameters' => array(
+                        'ezdemo_site' => '-foo -bar',
+                        'fre' => null
+                    ),
+                    'imagemagick.post_parameters' => array(
+                        'ezdemo_site' => null,
+                        'fre' => null
+                    )
                 )
             ),
             array(
@@ -130,10 +128,14 @@ class ImageTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.imagemagick.pre_parameters' => null,
-                    'ezsettings.ezdemo_site.imagemagick.post_parameters' => '-baz',
-                    'ezsettings.fre.imagemagick.pre_parameters' => null,
-                    'ezsettings.fre.imagemagick.post_parameters' => null,
+                    'imagemagick.pre_parameters' => array(
+                        'ezdemo_site' => null,
+                        'fre' => null
+                    ),
+                    'imagemagick.post_parameters' => array(
+                        'ezdemo_site' => '-baz',
+                        'fre' => null
+                    )
                 )
             ),
             array(
@@ -146,10 +148,14 @@ class ImageTest extends AbstractExtensionTestCase
                     )
                 ),
                 array(
-                    'ezsettings.ezdemo_site.imagemagick.pre_parameters' => null,
-                    'ezsettings.ezdemo_site.imagemagick.post_parameters' => null,
-                    'ezsettings.fre.imagemagick.pre_parameters' => '-fre',
-                    'ezsettings.fre.imagemagick.post_parameters' => '-baz -fre',
+                    'imagemagick.pre_parameters' => array(
+                        'ezdemo_site' => null,
+                        'fre' => '-fre'
+                    ),
+                    'imagemagick.post_parameters' => array(
+                        'ezdemo_site' => null,
+                        'fre' => '-baz -fre'
+                    )
                 )
             ),
         );
