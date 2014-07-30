@@ -25,6 +25,11 @@ interface RestSentences
     public function iCreateRequest( $requestType, $resourceUrl );
 
     /**
+     * @When /^I send a "(?P<requestType>[^"]*)" request to "(?P<resourceUrl>[^"]*)"$/
+     */
+    public function iCreateAndSendRequest( $requestType, $resourceUrl );
+
+    /**
      * @When /^I add "(?P<header>[^"]*)" header (?:to|with) "(?P<action>[^"]*)" (?:an|a|for|to|the|of) "(?P<object>[^"]*)"$/
      *
      * Sentences examples:
