@@ -1169,7 +1169,7 @@ class ContentService implements ContentServiceInterface
      */
     public function translateVersion( TranslationInfo $translationInfo, APITranslationValues $translationValues, User $modifier = null )
     {
-        throw new NotImplementedException( 'ContentService::translateVersion' );
+        throw new NotImplementedException( __METHOD__ );
     }
 
     /**
@@ -1901,7 +1901,7 @@ class ContentService implements ContentServiceInterface
      */
     public function addTranslationInfo( TranslationInfo $translationInfo )
     {
-        throw new NotImplementedException( 'ContentService::addTranslationInfo()' );
+        throw new NotImplementedException( __METHOD__ );
     }
 
     /**
