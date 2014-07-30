@@ -273,6 +273,7 @@ class EzPublishCoreExtension extends Extension
         $coreLoader->load( 'storage_engines/common.yml' );
         $coreLoader->load( 'storage_engines/cache.yml' );
         $coreLoader->load( 'storage_engines/legacy.yml' );
+        $coreLoader->load( 'utils.yml' );
 
         // Public API services
         $loader->load( 'papi.yml' );

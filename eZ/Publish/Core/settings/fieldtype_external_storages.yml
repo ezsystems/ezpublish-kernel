@@ -28,6 +28,7 @@ services:
             - @ezpublish.fieldType.ezimage.io
             - @ezpublish.fieldType.ezimage.pathGenerator
             - @ezpublish.fieldType.metadataHandler.imagesize
+            - @ezpublish.utils.deprecation_warner
             - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezimage}

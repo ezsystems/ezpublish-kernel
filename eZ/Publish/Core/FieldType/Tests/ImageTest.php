@@ -217,11 +217,10 @@ class ImageTest extends FieldTypeTest
                 $this->getImageInputPath(),
                 new ImageValue(
                     array(
-                        'id' => $this->getImageInputPath(),
+                        'inputUri' => $this->getImageInputPath(),
                         'fileName' => basename( $this->getImageInputPath() ),
                         'fileSize' => filesize( $this->getImageInputPath() ),
-                        'alternativeText' => null,
-                        'uri' => ''
+                        'alternativeText' => null
                     )
                 ),
             ),
@@ -243,6 +242,20 @@ class ImageTest extends FieldTypeTest
                     )
                 ),
             ),
+            array(
+                array(
+                    'inputUri' => $this->getImageInputPath(),
+                    'fileName' => 'My Fancy Filename',
+                    'fileSize' => 123
+                ),
+                new ImageValue(
+                    array(
+                        'inputUri' => $this->getImageInputPath(),
+                        'fileName' => 'My Fancy Filename',
+                        'fileSize' => filesize( $this->getImageInputPath() )
+                    )
+                )
+            )
         );
     }
 
@@ -307,9 +320,10 @@ class ImageTest extends FieldTypeTest
                     'alternativeText' => 'This is so Sindelfingen!',
                     'imageId' => '123-12345',
                     'uri' => 'http://' . $this->getImageInputPath(),
+                    'inputUri' => null,
                 ),
             ),
-            // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
+            // BC with 5.0 (EZP-20948). Path can be used as input instead of $inputUri.
             array(
                 new ImageValue(
                     array(
@@ -322,13 +336,14 @@ class ImageTest extends FieldTypeTest
                     )
                 ),
                 array(
-                    'id' => $this->getImageInputPath(),
+                    'id' => null,
                     'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
                     'imageId' => '123-12345',
                     'uri' => 'http://' . $this->getImageInputPath(),
+                    'inputUri' => $this->getImageInputPath(),
                 ),
             )
         );
@@ -405,7 +420,7 @@ class ImageTest extends FieldTypeTest
                 ),
                 new ImageValue(
                     array(
-                        'id' => $this->getImageInputPath(),
+                        'inputUri' => $this->getImageInputPath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
@@ -588,6 +603,7 @@ class ImageTest extends FieldTypeTest
     public function provideInvalidDataForValidate()
     {
         return array(
+            // File is too large
             array(
                 array(
                     "validatorConfiguration" => array(
@@ -615,6 +631,8 @@ class ImageTest extends FieldTypeTest
                     ),
                 )
             ),
+
+            // file is not an image file
             array(
                 array(
                     "validatorConfiguration" => array(
@@ -638,6 +656,8 @@ class ImageTest extends FieldTypeTest
                     ),
                 ),
             ),
+
+            // file is too large and invalid
             array(
                 array(
                     "validatorConfiguration" => array(

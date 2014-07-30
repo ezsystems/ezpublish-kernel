@@ -16,7 +16,8 @@ use eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException;
 /**
  * Value for Image field type
  *
- * @property string $path Used for BC with 5.0 (EZP-20948). Equivalent to $id.
+ * @property string $path @deprecated BC with 5.0 (EZP-20948). Equivalent to $id or $inputUri, depending on which one is set
+ * .
  *
  * @todo Mime type?
  * @todo Dimensions?
@@ -67,19 +68,18 @@ class Value extends BaseValue
     public $imageId;
 
     /**
+     * Input image file URI
+     * @var string
+     */
+    public $inputUri;
+
+    /**
      * Construct a new Value object.
      *
      * @param array $imageData
      */
     public function __construct( array $imageData = array() )
     {
-        // BC with 5.0 (EZP-20948)
-        if ( isset( $imageData['path'] ) )
-        {
-            $imageData['id'] = $imageData['path'];
-            unset( $imageData['path'] );
-        }
-
         foreach ( $imageData as $key => $value )
         {
             try
@@ -89,8 +89,8 @@ class Value extends BaseValue
             catch ( PropertyNotFoundException $e )
             {
                 throw new InvalidArgumentType(
-                    sprintf( '$imageData->%s', $key ),
-                    'Property not found',
+                    sprintf( 'Image\Value::$%s', $key ),
+                    'Existing property',
                     $value
                 );
             }
@@ -102,7 +102,9 @@ class Value extends BaseValue
      *
      * @param string $path
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      * @return Value
+     * @deprecated Starting with 5.3.3, handled by Image\Type::acceptValue()
      */
     public static function fromString( $path )
     {
@@ -116,11 +118,9 @@ class Value extends BaseValue
         }
         return new static(
             array(
-                'id' => $path,
+                'inputUri' => $path,
                 'fileName' => basename( $path ),
-                'fileSize' => filesize( $path ),
-                'alternativeText' => '',
-                'uri' => '',
+                'fileSize' => filesize( $path )
             )
         );
     }
@@ -146,7 +146,9 @@ class Value extends BaseValue
     public function __get( $propertyName )
     {
         if ( $propertyName == 'path' )
-            return $this->id;
+        {
+            return $this->inputUri ?: $this->id;
+        }
 
         throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
     }
@@ -154,7 +156,10 @@ class Value extends BaseValue
     public function __set( $propertyName, $propertyValue )
     {
         if ( $propertyName == 'path' )
-            $this->id = $propertyValue;
+        {
+            $this->inputUri = $propertyValue;
+            return;
+        }
 
         throw new PropertyNotFoundException( $propertyName, get_class( $this ) );
     }

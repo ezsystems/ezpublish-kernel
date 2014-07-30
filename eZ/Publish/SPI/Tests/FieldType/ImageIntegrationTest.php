@@ -9,10 +9,8 @@
 
 namespace eZ\Publish\SPI\Tests\FieldType;
 
-use eZ\Publish\Core\FieldType\Image\IO\Legacy as LegacyImageIOService;
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\IO;
-use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\FieldType;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -42,6 +40,8 @@ use FileSystemIterator;
  */
 class ImageIntegrationTest extends FileBaseIntegrationTest
 {
+    private $deprecationWarnerMock;
+
     /**
      * Returns the storage identifier prefix used by the file service
      *
@@ -82,9 +82,19 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 ),
                 self::$container->get( "ezpublish.fieldType.ezimage.io" ),
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
-                new IO\MetadataHandler\ImageSize()
+                new IO\MetadataHandler\ImageSize(),
+                $this->getDeprecationWarnerMock()
             )
         );
+    }
+
+    public function getDeprecationWarnerMock()
+    {
+        if ( !isset( $this->deprecationWarnerMock ) )
+        {
+            $this->deprecationWarnerMock = $this->getMock( 'eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface' );
+        }
+        return $this->deprecationWarnerMock;
     }
 
     /**
@@ -145,7 +155,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
                 ),
@@ -186,10 +196,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data'         => null,
                 'externalData' => array(
-                    'id' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                    'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                     'fileName' => 'Blueish-Blue.jpg',
-                    'alternativeText' => 'This blue is so blueish.',
-                    'uri' => $path
+                    'alternativeText' => 'This blue is so blueish.'
                 ),
                 'sortKey'      => '',
             )
@@ -240,6 +249,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         /*foreach ( $iterator as $path => $fileInfo )
         {
             if ( $fileInfo->isFile() )
+
             {
                 $this->fail(
                     sprintf(
@@ -249,6 +259,38 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 );
             }
         }*/
+    }
+
+    public function testCreateContentUsingIdPropertyWorksAndThrowsWarning()
+    {
+        $this->testCreateContentType();
+        $contentType = $this->testLoadContentTypeField();
+        $this->getDeprecationWarnerMock()
+            ->expects( $this->once() )
+            ->method( 'log' )
+            ->with( $this->stringContains( 'id property' ) );
+
+        $this->createContent( $contentType, $this->getDeprecatedIdPropertyValue() );
+    }
+
+    /**
+     * Get initial field value
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\FieldValue
+     */
+    public function getDeprecatedIdPropertyValue()
+    {
+        return new Content\FieldValue(
+            array(
+                'data' => null,
+                'externalData' => array(
+                    'id' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                    'fileName' => 'Ice-Flower.jpg',
+                    'alternativeText' => 'An icy flower.',
+                ),
+                'sortKey' => '',
+            )
+        );
     }
 }
 

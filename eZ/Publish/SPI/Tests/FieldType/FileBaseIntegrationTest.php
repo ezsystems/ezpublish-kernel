@@ -121,6 +121,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         $loader->load( 'storage_engines/cache.yml' );
         $loader->load( 'settings.yml' );
         $loader->load( 'fieldtype_services.yml' );
+        $loader->load( 'utils.yml' );
 
         $containerBuilder->setParameter( "ezpublish.kernel.root_dir", $installDir );
 
