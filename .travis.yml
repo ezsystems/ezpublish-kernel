@@ -90,11 +90,12 @@ before_script:
   - composer install --dev --prefer-source
   - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl -L https://raw.github.com/moliware/travis-solr/master/travis-solr.sh | SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
  # Detecting timezone issues by testing on random timezone
-  - declare -a TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
-  - declare -a TIMEZONE=${TIMEZONES["`shuf -i 0-2 -n 1`"]}
+  - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
+  - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
+  - echo "$TEST_TIMEZONE"
 
 # execute phpunit as the script command
-script: "phpunit -d date.timezone=$TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG"
+script: "phpunit -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG"
 
 # disable mail notifications
 notification:
