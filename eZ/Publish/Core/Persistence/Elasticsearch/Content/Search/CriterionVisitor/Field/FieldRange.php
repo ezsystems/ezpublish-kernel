@@ -14,9 +14,10 @@ use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Fi
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use RuntimeException;
 
 /**
- * Visits the Field criterion
+ * Visits the Field criterion with range operators (LT, LTE, GT, GTE and BETWEEN)
  */
 class FieldRange extends Field
 {
@@ -52,16 +53,6 @@ class FieldRange extends Field
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $start = $criterion->value[0];
-        $end   = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
-
-        if ( ( $criterion->operator === Operator::LT ) ||
-             ( $criterion->operator === Operator::LTE ) )
-        {
-            $end = $start;
-            $start = null;
-        }
-
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
         $fieldTypes = $this->getFieldTypes( $criterion );
         $criterion->value = (array)$criterion->value;
@@ -74,22 +65,64 @@ class FieldRange extends Field
             );
         }
 
-        $queries = array();
+        switch ( $criterion->operator )
+        {
+            case Operator::GT:
+                $range = array(
+                    "gt" => $criterion->value[0],
+                );
+                break;
+
+            case Operator::GTE:
+                $range = array(
+                    "gte" => $criterion->value[0],
+                );
+                break;
+
+            case Operator::LT:
+                $range = array(
+                    "lt" => $criterion->value[0],
+                );
+                break;
+
+            case Operator::LTE:
+                $range = array(
+                    "lte" => $criterion->value[0],
+                );
+                break;
+
+            case Operator::BETWEEN:
+                $range = array(
+                    "gte" => $criterion->value[0],
+                    "lte" => $criterion->value[1],
+                );
+                break;
+
+            default:
+                throw new RuntimeException( "Unknown operator '{$criterion->operator}'" );
+        }
+
+        $ranges = array();
         foreach ( $fieldTypes[$criterion->target] as $names )
         {
             foreach ( $names as $name )
             {
-                $queries[] = $name . ':' . $this->getRange( $criterion->operator, $start, $end );
+                $ranges[] = array(
+                    "range" => array(
+                        "fields_doc.". $name => $range,
+                    ),
+                );
             }
         }
 
         return array(
-            "or" => array(
-                "term"
-            )
+            "nested" => array(
+                "path" => "fields_doc",
+                "filter" => array(
+                    "or" => $ranges,
+                ),
+            ),
         );
-
-        return '(' . implode( ' OR ', $queries ) . ')';
     }
 }
 
