@@ -479,7 +479,6 @@ class ElasticsearchTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @group xxx
      */
     public function testMultilingualFieldSortWithNonTranslatableField()
     {
@@ -730,6 +729,310 @@ class ElasticsearchTest extends BaseTest
                 $contentIdList[4],
                 $contentIdList[2],
                 $contentIdList[3],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @todo move to main suite
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFieldLt()
+    {
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 4 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 3 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 3, 2 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 4, 1 )->id;
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\Field(
+                            "integer",
+                            Criterion\Operator::LT,
+                            2
+                        ),
+                    )
+                ),
+                'sortClauses' => array(
+                    new SortClause\ContentId(),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 2, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value ger-DE
+         *
+         * Content 1, 1, 4
+         * Content 4, 4, 1
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[1],
+                $contentIdList[4],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @todo move to main suite
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFieldLte()
+    {
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 4, 4 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 3 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 3, 4 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 4, 1 )->id;
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\Field(
+                            "integer",
+                            Criterion\Operator::LTE,
+                            2
+                        ),
+                    )
+                ),
+                'sortClauses' => array(
+                    new SortClause\ContentId(),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 2, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value ger-DE
+         *
+         * Content 2, 2, 3
+         * Content 4, 4, 1
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[2],
+                $contentIdList[4],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @todo move to main suite
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFieldGt()
+    {
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 3 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 4, 2 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 3, 1 )->id;
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\Field(
+                            "integer",
+                            Criterion\Operator::GT,
+                            3
+                        ),
+                    )
+                ),
+                'sortClauses' => array(
+                    new SortClause\ContentId(),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 2, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value ger-DE
+         *
+         * Content 2, 2, 4
+         * Content 3, 4, 2
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[2],
+                $contentIdList[3],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @todo move to main suite
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFieldGte()
+    {
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 3 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 4 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 1, 2 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 3, 1 )->id;
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\Field(
+                            "integer",
+                            Criterion\Operator::GTE,
+                            3
+                        ),
+                    )
+                ),
+                'sortClauses' => array(
+                    new SortClause\ContentId(),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 3, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value ger-DE
+         *
+         * Content 1, 1, 3
+         * Content 2, 2, 4
+         * Content 4, 3, 1
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[1],
+                $contentIdList[2],
+                $contentIdList[4],
+            ),
+            $this->mapResultContentIds( $result )
+        );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @todo move to main suite
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFieldBetween()
+    {
+        $contentType = $this->createTestContentType();
+
+        // Create a draft to account for behaviour with ContentType in different states
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        $contentIdList = array();
+        $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 4 )->id;
+        $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 3 )->id;
+        $contentIdList[3] = $this->createMultilingualContent( $contentType, 3, 4 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 3 )->id;
+
+        $query = new Query(
+            array(
+                'filter' => new Criterion\LogicalAnd(
+                    array(
+                        new Criterion\ContentTypeId( $contentType->id ),
+                        new Criterion\Field(
+                            "integer",
+                            Criterion\Operator::BETWEEN,
+                            array( 2, 3 )
+                        ),
+                    )
+                ),
+                'sortClauses' => array(
+                    new SortClause\ContentId(),
+                )
+            )
+        );
+
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent( $query );
+
+        $this->assertEquals( 3, $result->totalCount );
+
+        /**
+         * Expected order, Value eng-GB, Value ger-DE
+         *
+         * Content 2, 2, 3
+         * Content 3, 3, 4
+         * Content 4, 1, 3
+         */
+
+        $this->assertEquals(
+            array(
+                $contentIdList[2],
+                $contentIdList[3],
+                $contentIdList[4],
             ),
             $this->mapResultContentIds( $result )
         );
