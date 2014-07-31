@@ -13,34 +13,50 @@ use eZ\Publish\Core\MVC\Symfony\Security\HttpUtils;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpFoundation\Request;
 use PHPUnit_Framework_TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class HttpUtilsTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider generateUriStandardProvider
      */
-    public function testGenerateUriStandard( $uri, $expected )
+    public function testGenerateUriStandard( $uri, $isUriRouteName, $expected )
     {
-        $httpUtils = new HttpUtils();
+        $urlGenerator = $this->getMock( 'Symfony\Component\Routing\Generator\UrlGeneratorInterface' );
+        $httpUtils = new HttpUtils( $urlGenerator );
         $httpUtils->setSiteAccess( new SiteAccess );
         $request = Request::create( 'http://ezpublish.dev/' );
+        $request->attributes->set( 'siteaccess', new SiteAccess( 'test' ) );
+        $requestAttributes = array( 'foo' => 'bar', 'some' => 'thing' );
+        $request->attributes->add( $requestAttributes );
+
+        if ( $isUriRouteName )
+        {
+            $urlGenerator
+                ->expects( $this->once() )
+                ->method( 'generate' )
+                ->with( $uri, $requestAttributes, UrlGeneratorInterface::ABSOLUTE_URL )
+                ->will( $this->returnValue( $expected . '?' . http_build_query( $requestAttributes ) ) );
+        }
+
         $this->assertSame( $expected, $httpUtils->generateUri( $request, $uri ) );
     }
 
     public function generateUriStandardProvider()
     {
         return array(
-            array( 'http://localhost/foo/bar', 'http://localhost/foo/bar' ),
-            array( 'http://localhost/foo/bar?some=thing&toto=tata', 'http://localhost/foo/bar?some=thing&toto=tata' ),
-            array( '/foo/bar?some=thing&toto=tata', 'http://ezpublish.dev/foo/bar?some=thing&toto=tata' ),
-            array( '/foo/bar', 'http://ezpublish.dev/foo/bar' ),
+            array( 'http://localhost/foo/bar', false, 'http://localhost/foo/bar' ),
+            array( 'http://localhost/foo/bar?some=thing&toto=tata', false, 'http://localhost/foo/bar?some=thing&toto=tata' ),
+            array( '/foo/bar?some=thing&toto=tata', false, 'http://ezpublish.dev/foo/bar?some=thing&toto=tata' ),
+            array( '/foo/bar', false, 'http://ezpublish.dev/foo/bar' ),
+            array( 'some_route_name', true, 'http://ezpublish.dev/some/route' ),
         );
     }
 
     /**
      * @dataProvider generateUriProvider
      */
-    public function testGenerateUri( $uri, $siteAccessUri, $expected )
+    public function testGenerateUri( $uri, $isUriRouteName, $siteAccessUri, $expected )
     {
         $siteAccess = new SiteAccess( 'test', 'test' );
         if ( $uri[0] === '/' )
@@ -54,19 +70,35 @@ class HttpUtilsTest extends PHPUnit_Framework_TestCase
             $siteAccess->matcher = $matcher;
         }
 
-        $httpUtils = new HttpUtils();
+        $urlGenerator = $this->getMock( 'Symfony\Component\Routing\Generator\UrlGeneratorInterface' );
+        $httpUtils = new HttpUtils( $urlGenerator );
         $httpUtils->setSiteAccess( $siteAccess );
         $request = Request::create( 'http://ezpublish.dev/' );
-        $this->assertSame( $expected, $httpUtils->generateUri( $request, $uri ) );
+        $request->attributes->set( 'siteaccess', $siteAccess );
+        $requestAttributes = array( 'foo' => 'bar', 'some' => 'thing' );
+        $request->attributes->add( $requestAttributes );
+
+        if ( $isUriRouteName )
+        {
+            $urlGenerator
+                ->expects( $this->once() )
+                ->method( 'generate' )
+                ->with( $uri, $requestAttributes, UrlGeneratorInterface::ABSOLUTE_URL )
+                ->will( $this->returnValue( $expected . '?' . http_build_query( $requestAttributes ) ) );
+        }
+
+        $res = $httpUtils->generateUri( $request, $uri );
+        $this->assertSame( $expected, $res );
     }
 
     public function generateUriProvider()
     {
         return array(
-            array( 'http://localhost/foo/bar', null, 'http://localhost/foo/bar' ),
-            array( 'http://localhost/foo/bar?some=thing&toto=tata', null, 'http://localhost/foo/bar?some=thing&toto=tata' ),
-            array( '/foo/bar?some=thing&toto=tata', '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata' ),
-            array( '/foo/bar', '/blabla', 'http://ezpublish.dev/blabla/foo/bar' ),
+            array( 'http://localhost/foo/bar', false, null, 'http://localhost/foo/bar' ),
+            array( 'http://localhost/foo/bar?some=thing&toto=tata', false, null, 'http://localhost/foo/bar?some=thing&toto=tata' ),
+            array( '/foo/bar?some=thing&toto=tata', false, '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata' ),
+            array( '/foo/bar', false, '/blabla', 'http://ezpublish.dev/blabla/foo/bar' ),
+            array( 'some_route_name', true, null, 'http://ezpublish.dev/some/route' ),
         );
     }
 
