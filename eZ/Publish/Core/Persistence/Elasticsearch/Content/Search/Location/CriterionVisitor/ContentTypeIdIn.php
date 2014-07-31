@@ -45,7 +45,7 @@ class ContentTypeIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        if ( count( $criterion->value) > 1 )
+        if ( count( $criterion->value ) > 1 )
         {
             $filter = array(
                 "terms" => array(

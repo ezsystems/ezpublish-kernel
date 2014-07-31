@@ -42,7 +42,6 @@ class Field extends SortClauseVisitor
      */
     protected $fieldNameGenerator;
 
-
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
