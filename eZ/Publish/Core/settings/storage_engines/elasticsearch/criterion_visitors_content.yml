@@ -4,6 +4,10 @@ parameters:
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ContentTypeIdIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Field\FieldIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Field\FieldRange
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\ModifiedIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\ModifiedRange
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\PublishedRange
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\PublishedRange
 
 services:
     # Note: services tagged with 'ezpublish.persistence.elasticsearch.search.content.criterion_visitor'
@@ -32,5 +36,25 @@ services:
         class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_range.class%
         arguments:
             - @ezpublish.persistence.solr.search.content.field_map
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_range:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_range.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
