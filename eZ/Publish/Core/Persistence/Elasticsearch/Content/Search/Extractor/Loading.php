@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Elasticsearch Loader Extractor class
+ * File containing the Elasticsearch Loading Extractor class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -15,10 +15,10 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use RuntimeException;
 
 /**
- * The Loader Extractor extracts the value object from the Elasticsearch search hit data
+ * The Loading Extractor extracts the value object from the Elasticsearch search hit data
  * by loading it from the database.
  */
-class Loader extends Extractor
+class Loading extends Extractor
 {
     /**
      * Content handler
@@ -64,6 +64,8 @@ class Loader extends Extractor
             return $this->locationHandler->load( $hit->_id );
         }
 
-        throw new RuntimeException( "Could not extract: document of type '{$hit->_type}' is not handled." );
+        throw new RuntimeException(
+            "Could not extract: document of type '{$hit->_type}' is not handled."
+        );
     }
 }
