@@ -80,7 +80,7 @@ class Native extends Gateway
                 array(
                     "Content-Type" => "application/json",
                 ),
-                $json = $this->serializer->getJson( $document )
+                $json = $this->serializer->getIndexDocument( $document )
             )
         );
 
@@ -102,8 +102,8 @@ class Native extends Gateway
         $payload = "";
         foreach ( $documents as $document )
         {
-            $payload .= $this->getBulkIndexMetadataJson( $document ) . "\n";
-            $payload .= $this->serializer->getJson( $document ) . "\n";
+            $payload .= $this->serializer->getIndexMetadata( $document ) . "\n";
+            $payload .= $this->serializer->getIndexDocument( $document ) . "\n";
         }
 
         $result = $this->client->request(
@@ -125,18 +125,6 @@ class Native extends Gateway
         }
 
         $this->flush();
-    }
-
-    protected function getBulkIndexMetadataJson( Document $document )
-    {
-        $metadataHash = array(
-            "index" => array(
-                "_type" => $document->type,
-                "_id" => $document->id,
-            ),
-        );
-
-        return json_encode( $metadataHash );
     }
 
     public function find( Query $query, $type )
