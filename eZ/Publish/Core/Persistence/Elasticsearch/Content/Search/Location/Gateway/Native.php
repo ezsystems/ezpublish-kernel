@@ -17,9 +17,6 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
-use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use RuntimeException;
 
 /**
@@ -53,13 +50,6 @@ class Native extends Gateway
      */
     protected $sortClauseVisitor;
 
-    /**
-     * Location Handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
-     */
-    protected $locationHandler;
-
     protected $indexName;
 
     public function __construct(
@@ -67,7 +57,6 @@ class Native extends Gateway
         Serializer $serializer,
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
-        LocationHandler $locationHandler,
         $indexName = "ezpublish"
     )
     {
@@ -75,7 +64,6 @@ class Native extends Gateway
         $this->serializer = $serializer;
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
-        $this->locationHandler = $locationHandler;
         $this->indexName = $indexName;
     }
 
@@ -142,31 +130,7 @@ class Native extends Gateway
         // TODO: error handling
         $data = json_decode( $response->body );
 
-        return $this->extractResult( $data );
-    }
-
-    protected function extractResult( $data )
-    {
-        $result = new SearchResult(
-            array(
-                "time" => $data->took,
-                "maxScore" => $data->hits->max_score,
-                "totalCount" => $data->hits->total,
-            )
-        );
-
-        foreach ( $data->hits->hits as $hit )
-        {
-            $searchHit = new SearchHit(
-                array(
-                    "score" => $hit->_score,
-                    "valueObject" => $this->locationHandler->load( $hit->_id )
-                )
-            );
-            $result->searchHits[] = $searchHit;
-        }
-
-        return $result;
+        return $data;
     }
 
     public function purgeIndex()
