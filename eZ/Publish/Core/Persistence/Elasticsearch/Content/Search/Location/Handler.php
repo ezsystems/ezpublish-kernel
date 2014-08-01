@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
 
 /**
  *
@@ -27,7 +28,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Content locator gateway.
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Gateway
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway
      */
     protected $gateway;
 
@@ -48,7 +49,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Creates a new content handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Gateway $gateway
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper $mapper
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor $extractor
      */
@@ -75,7 +76,7 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        $data = $this->gateway->findLocations( $query );
+        $data = $this->gateway->find( $query, "location" );
 
         return $this->extractor->extract( $data );
     }
@@ -107,7 +108,7 @@ class Handler implements SearchHandlerInterface
      */
     public function purgeIndex()
     {
-        $this->gateway->purgeIndex();
+        $this->gateway->purgeIndex( "location" );
     }
 
     /**

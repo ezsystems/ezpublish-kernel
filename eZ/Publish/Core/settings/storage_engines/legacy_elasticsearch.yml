@@ -16,7 +16,7 @@ parameters:
     ezpublish.elasticsearch_server: http://localhost:9200/
     ezpublish.persistence.elasticsearch.search.serializer.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer
     ezpublish.persistence.elasticsearch.search.mapper.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper
-    ezpublish.persistence.elasticsearch.search.content.gateway.native.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Native
+    ezpublish.persistence.elasticsearch.search.gateway.native.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Native
     ezpublish.persistence.elasticsearch.search.location.gateway.native.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Gateway\Native
     ezpublish.spi.persistence.elasticsearch.search.handler.content.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler
     ezpublish.spi.persistence.elasticsearch.search.handler.location.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler
@@ -42,7 +42,7 @@ services:
             - @ezpublish.spi.persistence.legacy.section.handler
 
     ezpublish.persistence.legacy_elasticsearch.search.content.gateway.native:
-        class: %ezpublish.persistence.elasticsearch.search.content.gateway.native.class%
+        class: %ezpublish.persistence.elasticsearch.search.gateway.native.class%
         arguments:
             - @ezpublish.persistence.solr.search.content.gateway.client.http.stream
             - @ezpublish.persistence.elasticsearch.search.serializer
@@ -54,7 +54,7 @@ services:
         alias: ezpublish.persistence.legacy_elasticsearch.search.content.gateway.native
 
     ezpublish.persistence.legacy_elasticsearch.search.location.gateway.native:
-        class: %ezpublish.persistence.elasticsearch.search.location.gateway.native.class%
+        class: %ezpublish.persistence.elasticsearch.search.gateway.native.class%
         arguments:
             - @ezpublish.persistence.solr.search.content.gateway.client.http.stream
             - @ezpublish.persistence.elasticsearch.search.serializer

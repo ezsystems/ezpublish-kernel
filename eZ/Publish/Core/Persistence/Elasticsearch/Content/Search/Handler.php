@@ -66,7 +66,9 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        $data = $this->gateway->findContent( $query, $fieldFilters );
+        // TODO add field filters to the query
+
+        $data = $this->gateway->find( $query, "content" );
 
         return $this->extractor->extract( $data );
     }
@@ -167,7 +169,7 @@ class Handler implements SearchHandlerInterface
      */
     public function purgeIndex()
     {
-        $this->gateway->purgeIndex();
+        $this->gateway->purgeIndex( "content" );
     }
 
     /**
