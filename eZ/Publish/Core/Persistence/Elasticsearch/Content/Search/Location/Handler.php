@@ -88,15 +88,18 @@ class Handler implements SearchHandlerInterface
     {
         $document = $this->mapper->mapContentLocation( $location );
 
-        $this->gateway->indexDocument( $document );
+        $this->gateway->index( $document );
     }
 
     public function bulkIndexLocations( array $locations )
     {
+        $documents = array();
         foreach ( $locations as $location )
         {
-            $this->indexLocation( $location );
+            $documents[] = $this->mapper->mapContentLocation( $location );
         }
+
+        $this->gateway->bulkIndex( $documents );
     }
 
     /**

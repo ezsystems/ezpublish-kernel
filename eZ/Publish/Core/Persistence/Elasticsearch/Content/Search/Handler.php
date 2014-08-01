@@ -115,7 +115,7 @@ class Handler implements SearchHandlerInterface
     {
         $document = $this->mapper->mapContent( $content );
 
-        $this->gateway->indexDocument( $document );
+        $this->gateway->index( $document );
     }
 
     /**
@@ -131,10 +131,13 @@ class Handler implements SearchHandlerInterface
      */
     public function bulkIndexContent( array $contentObjects )
     {
+        $documents = array();
         foreach ( $contentObjects as $content )
         {
-            $this->indexContent( $content );
+            $documents[] = $this->mapper->mapContent( $content );
         }
+
+        $this->gateway->bulkIndex( $documents );
     }
 
     /**

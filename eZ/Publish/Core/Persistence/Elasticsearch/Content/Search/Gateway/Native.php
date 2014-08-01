@@ -71,7 +71,7 @@ class Native extends Gateway
     /**
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
      */
-    public function indexDocument( Document $document )
+    public function index( Document $document )
     {
         $result = $this->client->request(
             "POST",
@@ -92,6 +92,51 @@ class Native extends Gateway
                 "Wrong HTTP status received from Elasticsearch: " . $result->headers["status"]
             );
         }
+    }
+
+    /**
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document[] $documents
+     */
+    public function bulkIndex( array $documents )
+    {
+        $payload = "";
+        foreach ( $documents as $document )
+        {
+            $payload .= $this->getBulkIndexMetadataJson( $document ) . "\n";
+            $payload .= $this->serializer->getJson( $document ) . "\n";
+        }
+
+        $result = $this->client->request(
+            "POST",
+            "/{$this->indexName}/_bulk",
+            new Message(
+                array(
+                    "Content-Type" => "application/json",
+                ),
+                $payload
+            )
+        );
+
+        if ( $result->headers["status"] !== 201 && $result->headers["status"] !== 200 )
+        {
+            throw new RuntimeException(
+                "Wrong HTTP status received from Elasticsearch: " . $result->headers["status"]
+            );
+        }
+
+        $this->flush();
+    }
+
+    protected function getBulkIndexMetadataJson( Document $document )
+    {
+        $metadataHash = array(
+            "index" => array(
+                "_type" => $document->type,
+                "_id" => $document->id,
+            ),
+        );
+
+        return json_encode( $metadataHash );
     }
 
     public function find( Query $query, $type )
