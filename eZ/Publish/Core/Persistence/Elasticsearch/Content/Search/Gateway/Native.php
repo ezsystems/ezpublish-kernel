@@ -68,6 +68,9 @@ class Native extends Gateway
         $this->indexName = $indexName;
     }
 
+    /**
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
+     */
     public function indexDocument( Document $document )
     {
         $result = $this->client->request(
@@ -91,7 +94,7 @@ class Native extends Gateway
         }
     }
 
-    public function findContent( Query $query )
+    public function find( Query $query, $type )
     {
         $ast = array(
             "query" => $this->criterionVisitor->visit( $query->query ),
@@ -116,7 +119,7 @@ class Native extends Gateway
 
         $response = $this->client->request(
             "GET",
-            "/{$this->indexName}/content/_search",
+            "/{$this->indexName}/{$type}/_search",
             new Message(
                 array(
                     "Content-Type" => "application/json",
@@ -131,9 +134,9 @@ class Native extends Gateway
         return $data;
     }
 
-    public function purgeIndex()
+    public function purgeIndex( $type )
     {
-        $result = $this->client->request( "DELETE", "/{$this->indexName}/_query?q=id:*" );
+        $result = $this->client->request( "DELETE", "/{$this->indexName}/{$type}/_query?q=id:*" );
         $this->flush();
 
         if ( $result->headers["status"] !== 200 )
@@ -146,6 +149,6 @@ class Native extends Gateway
 
     public function flush()
     {
-        $this->client->request( "POST", "/_flush?full=true&force=true" );
+        $this->client->request( "POST", "/_flush?full=false&force=false" );
     }
 }

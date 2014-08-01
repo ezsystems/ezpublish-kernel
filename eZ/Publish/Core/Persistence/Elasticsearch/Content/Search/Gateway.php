@@ -19,9 +19,9 @@ abstract class Gateway
 {
     abstract public function indexDocument( Document $document );
 
-    abstract public function findContent( Query $query );
+    abstract public function find( Query $query, $type );
 
-    abstract public function purgeIndex();
+    abstract public function purgeIndex( $type );
 
     abstract public function flush();
 }
