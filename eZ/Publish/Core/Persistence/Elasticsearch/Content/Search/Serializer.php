@@ -46,9 +46,21 @@ class Serializer
      *
      * @return string
      */
-    public function getJson( Document $document )
+    public function getIndexDocument( Document $document )
     {
-        return json_encode( $this->getHash( $document ) );
+        return json_encode( $this->getDocumentHash( $document ) );
+    }
+
+    public function getIndexMetadata( Document $document )
+    {
+        $metadataHash = array(
+            "index" => array(
+                "_type" => $document->type,
+                "_id" => $document->id,
+            ),
+        );
+
+        return json_encode( $metadataHash );
     }
 
     /**
@@ -58,7 +70,7 @@ class Serializer
      *
      * @return array
      */
-    public function getHash( Document $document )
+    protected function getDocumentHash( Document $document )
     {
         $hash = array();
 
@@ -71,7 +83,7 @@ class Serializer
 
                 foreach ( $documents as $document )
                 {
-                    $values[] = $this->getHash( $document );
+                    $values[] = $this->getDocumentHash( $document );
                 }
             }
             else
