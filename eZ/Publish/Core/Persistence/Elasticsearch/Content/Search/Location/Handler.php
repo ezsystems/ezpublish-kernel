@@ -17,9 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor;
 
 /**
  *
@@ -36,33 +34,33 @@ class Handler implements SearchHandlerInterface
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper
      */
-    protected $fieldNameGenerator;
+    protected $mapper;
 
     /**
-     * Location Handler
+     * Search result extractor
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor
      */
-    protected $locationHandler;
+    protected $extractor;
 
     /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper $mapper
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor $extractor
      */
     public function __construct(
         Gateway $gateway,
         Mapper $mapper,
-        LocationHandler $locationHandler
+        Extractor $extractor
     )
     {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
-        $this->locationHandler = $locationHandler;
+        $this->extractor = $extractor;
     }
 
     /**
@@ -77,33 +75,9 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        return $this->extractResult(
-            $this->gateway->findLocations( $query )
-        );
-    }
+        $data = $this->gateway->findLocations( $query );
 
-    protected function extractResult( $data )
-    {
-        $result = new SearchResult(
-            array(
-                "time" => $data->took,
-                "maxScore" => $data->hits->max_score,
-                "totalCount" => $data->hits->total,
-            )
-        );
-
-        foreach ( $data->hits->hits as $hit )
-        {
-            $searchHit = new SearchHit(
-                array(
-                    "score" => $hit->_score,
-                    "valueObject" => $this->locationHandler->load( $hit->_id )
-                )
-            );
-            $result->searchHits[] = $searchHit;
-        }
-
-        return $result;
+        return $this->extractor->extract( $data );
     }
 
     /**

@@ -21,6 +21,7 @@ parameters:
     ezpublish.spi.persistence.elasticsearch.search.handler.content.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler
     ezpublish.spi.persistence.elasticsearch.search.handler.location.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler
     ezpublish.persistence.solr.search.content.field_map.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap
+    ezpublish.persistence.elasticsearch.search.extractor.loader.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor\Loader
 
 services:
     ezpublish.persistence.elasticsearch.search.serializer:
@@ -76,12 +77,21 @@ services:
     ezpublish.persistence.elasticsearch.search.content.field_map:
         alias: ezpublish.persistence.legacy_elasticsearch.search.content.field_map
 
+    ezpublish.persistence.elasticsearch.search.extractor.loader:
+        class: %ezpublish.persistence.elasticsearch.search.extractor.loader.class%
+        arguments:
+            - @ezpublish.spi.persistence.legacy.content.handler
+            - @ezpublish.spi.persistence.legacy.location.handler
+
+    ezpublish.persistence.elasticsearch.search.extractor:
+        alias: ezpublish.persistence.elasticsearch.search.extractor.loader
+
     ezpublish.spi.persistence.legacy_elasticsearch.search.handler.content:
         class: %ezpublish.spi.persistence.elasticsearch.search.handler.content.class%
         arguments:
             - @ezpublish.persistence.legacy_elasticsearch.search.content.gateway
             - @ezpublish.persistence.elasticsearch.search.mapper
-            - @ezpublish.spi.persistence.legacy.content.handler
+            - @ezpublish.persistence.elasticsearch.search.extractor
         lazy: true
 
     ezpublish.spi.persistence.legacy_elasticsearch.search.handler.location:
@@ -89,7 +99,7 @@ services:
         arguments:
             - @ezpublish.persistence.legacy_elasticsearch.search.location.gateway
             - @ezpublish.persistence.elasticsearch.search.mapper
-            - @ezpublish.spi.persistence.legacy.location.handler
+            - @ezpublish.persistence.elasticsearch.search.extractor
         lazy: true
 
     ezpublish.spi.persistence.legacy_elasticsearch:
