@@ -17,7 +17,9 @@ use eZ\Publish\API\Repository\Values\Content\Query;
  */
 abstract class Gateway
 {
-    abstract public function indexDocument( Document $document );
+    abstract public function index( Document $document );
+
+    abstract public function bulkIndex( array $documents );
 
     abstract public function find( Query $query, $type );
 
