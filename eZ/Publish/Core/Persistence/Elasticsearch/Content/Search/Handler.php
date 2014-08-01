@@ -17,9 +17,6 @@ use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Section;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 
 class Handler implements SearchHandlerInterface
 {
@@ -34,28 +31,21 @@ class Handler implements SearchHandlerInterface
     protected $mapper;
 
     /**
-     * Content Handler
+     * Search result extractor
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor
      */
-    protected $contentHandler;
-
-    /**
-     * Field name generator
-     *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
-     */
-    protected $fieldNameGenerator;
+    protected $extractor;
 
     public function __construct(
         Gateway $gateway,
         Mapper $mapper,
-        ContentHandler $contentHandler
+        Extractor $extractor
     )
     {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
-        $this->contentHandler = $contentHandler;
+        $this->extractor = $extractor;
     }
 
     /**
@@ -76,36 +66,9 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        return $this->extractResult(
-            $this->gateway->findContent( $query, $fieldFilters )
-        );
-    }
+        $data = $this->gateway->findContent( $query, $fieldFilters );
 
-    protected function extractResult( $data )
-    {
-        $result = new SearchResult(
-            array(
-                "time" => $data->took,
-                "maxScore" => $data->hits->max_score,
-                "totalCount" => $data->hits->total,
-            )
-        );
-
-        foreach ( $data->hits->hits as $hit )
-        {
-            $searchHit = new SearchHit(
-                array(
-                    "score" => $hit->_score,
-                    "valueObject" => $this->contentHandler->load(
-                        $hit->_id,
-                        $hit->_source->version_id
-                    )
-                )
-            );
-            $result->searchHits[] = $searchHit;
-        }
-
-        return $result;
+        return $this->extractor->extract( $data );
     }
 
     /**
