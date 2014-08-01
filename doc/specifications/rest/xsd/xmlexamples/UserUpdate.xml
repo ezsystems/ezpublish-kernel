@@ -3,7 +3,7 @@
   <email>john.doe@mooglemail.com</email>
   <fields>
     <field>
-      <fieldDefinitionIdentifer>signature</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>signature</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
       <value>
       John Doe

@@ -25,13 +25,13 @@
     <Fields>
       <field>
         <id>1234</id>
-        <fieldDefinitionIdentifer>name</fieldDefinitionIdentifer>
+        <fieldDefinitionIdentifier>name</fieldDefinitionIdentifier>
         <languageCode>eng-UK</languageCode>
         <value>UserGroup</value>
       </field>
       <field>
         <id>1235</id>
-        <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+        <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
         <languageCode>eng-UK</languageCode>
         <value>This is the description of the user group</value>
       </field>

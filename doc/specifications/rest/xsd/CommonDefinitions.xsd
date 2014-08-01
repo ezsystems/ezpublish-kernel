@@ -61,7 +61,7 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:all>
-      <xsd:element name="fieldDefinitionIdentifer" type="xsd:string" />
+      <xsd:element name="fieldDefinitionIdentifier" type="xsd:string" />
       <xsd:element name="languageCode" type="xsd:string" />
       <xsd:element name="fieldValue" type="fieldValueType" />
     </xsd:all>

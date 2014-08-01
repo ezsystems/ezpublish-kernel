@@ -2,7 +2,7 @@
 <UserGroupUpdate>
   <fields>
     <field>
-      <fieldDefinitionIdentifer>description</fieldDefinitionIdentifer>
+      <fieldDefinitionIdentifier>description</fieldDefinitionIdentifier>
       <languageCode>eng-US</languageCode>
       <value>This is another description</value>
     </field>
