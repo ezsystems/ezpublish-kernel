@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use RuntimeException;
 
 /**
  * Visits the criterion tree into a Elasticsearch query
@@ -37,7 +38,7 @@ abstract class CriterionVisitor
     abstract public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null );
 
     /**
-     * Get Solr range
+     * Get Elasticsearch range filter
      *
      * Start and end are optional, depending on the respective operator. Pass
      * null in this case. The operator may be one of:
@@ -48,6 +49,8 @@ abstract class CriterionVisitor
      * - case Operator::LTE:
      * - case Operator::BETWEEN:
      *
+     * @throws \RuntimeException If operator is no recognized
+     *
      * @param mixed $operator
      * @param mixed $start
      * @param mixed $end
@@ -56,41 +59,50 @@ abstract class CriterionVisitor
      */
     protected function getRange( $operator, $start, $end )
     {
-        $startBrace = '[';
-        $startValue = '*';
-        $endValue   = '*';
-        $endBrace   = ']';
+        if ( ( $operator === Operator::LT ) || ( $operator === Operator::LTE ) )
+        {
+            $end = $start;
+            $start = null;
+        }
 
         switch ( $operator )
         {
             case Operator::GT:
-                $startBrace = '{';
-                $endBrace   = '}';
-                // Intentionally omitted break
+                $range = array(
+                    "gt" => $start,
+                );
+                break;
 
             case Operator::GTE:
-                $startValue = $start;
+                $range = array(
+                    "gte" => $start,
+                );
                 break;
 
             case Operator::LT:
-                $startBrace = '{';
-                $endBrace   = '}';
-                // Intentionally omitted break
+                $range = array(
+                    "lt" => $end,
+                );
+                break;
 
             case Operator::LTE:
-                $endValue = $end;
+                $range = array(
+                    "lte" => $end,
+                );
                 break;
 
             case Operator::BETWEEN:
-                $startValue = $start;
-                $endValue   = $end;
+                $range = array(
+                    "gte" => $start,
+                    "lte" => $end,
+                );
                 break;
 
             default:
-                throw new \RuntimeException( "Unknown operator: $operator" );
+                throw new RuntimeException( "Unknown operator '{$operator}'" );
         }
 
-        return "$startBrace$startValue TO $endValue$endBrace";
+        return $range;
     }
 }
 

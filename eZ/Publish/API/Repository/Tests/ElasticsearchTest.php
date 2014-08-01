@@ -163,6 +163,73 @@ class ElasticsearchTest extends BaseTest
                 ),
                 $fixtureDir . 'FieldIn.php',
             ),
+            array(
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::GT,
+                        1343140540
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DateMetadataGt.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::GTE,
+                        1311154215
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DateMetadataGte.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::LTE,
+                        1311154215
+                    ),
+                    'limit' => 10,
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DateMetadataLte.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::IN,
+                        array( 1033920794, 1060695457, 1343140540 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DateMetadataIn.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::MODIFIED,
+                        Criterion\Operator::BETWEEN,
+                        array( 1033920776, 1072180276 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DateMetadataBetween.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\DateMetadata(
+                        Criterion\DateMetadata::CREATED,
+                        Criterion\Operator::BETWEEN,
+                        array( 1033920776, 1072180278 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'DateMetadataCreated.php',
+            ),
         );
     }
 

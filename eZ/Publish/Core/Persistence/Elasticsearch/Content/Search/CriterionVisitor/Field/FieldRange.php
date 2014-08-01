@@ -65,42 +65,9 @@ class FieldRange extends Field
             );
         }
 
-        switch ( $criterion->operator )
-        {
-            case Operator::GT:
-                $range = array(
-                    "gt" => $criterion->value[0],
-                );
-                break;
-
-            case Operator::GTE:
-                $range = array(
-                    "gte" => $criterion->value[0],
-                );
-                break;
-
-            case Operator::LT:
-                $range = array(
-                    "lt" => $criterion->value[0],
-                );
-                break;
-
-            case Operator::LTE:
-                $range = array(
-                    "lte" => $criterion->value[0],
-                );
-                break;
-
-            case Operator::BETWEEN:
-                $range = array(
-                    "gte" => $criterion->value[0],
-                    "lte" => $criterion->value[1],
-                );
-                break;
-
-            default:
-                throw new RuntimeException( "Unknown operator '{$criterion->operator}'" );
-        }
+        $start = $criterion->value[0];
+        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
+        $range = $this->getRange( $criterion->operator, $start, $end );
 
         $ranges = array();
         foreach ( $fieldTypes[$criterion->target] as $names )
