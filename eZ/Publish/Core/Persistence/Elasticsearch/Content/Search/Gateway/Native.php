@@ -17,9 +17,6 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
-use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use RuntimeException;
 
 /**
@@ -54,13 +51,6 @@ class Native extends Gateway
      */
     protected $sortClauseVisitor;
 
-    /**
-     * Content Handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
-    protected $contentHandler;
-
     protected $indexName;
 
     public function __construct(
@@ -68,7 +58,6 @@ class Native extends Gateway
         Serializer $serializer,
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
-        ContentHandler $contentHandler,
         $indexName = "ezpublish"
     )
     {
@@ -76,7 +65,6 @@ class Native extends Gateway
         $this->serializer = $serializer;
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
-        $this->contentHandler = $contentHandler;
         $this->indexName = $indexName;
     }
 
@@ -140,34 +128,7 @@ class Native extends Gateway
         // TODO: error handling
         $data = json_decode( $response->body );
 
-        return $this->extractResult( $data );
-    }
-
-    protected function extractResult( $data )
-    {
-        $result = new SearchResult(
-            array(
-                "time" => $data->took,
-                "maxScore" => $data->hits->max_score,
-                "totalCount" => $data->hits->total,
-            )
-        );
-
-        foreach ( $data->hits->hits as $hit )
-        {
-            $searchHit = new SearchHit(
-                array(
-                    "score" => $hit->_score,
-                    "valueObject" => $this->contentHandler->load(
-                        $hit->_id,
-                        $hit->_source->version_id
-                    )
-                )
-            );
-            $result->searchHits[] = $searchHit;
-        }
-
-        return $result;
+        return $data;
     }
 
     public function purgeIndex()
