@@ -856,7 +856,7 @@ class ElasticsearchTest extends BaseTest
                     )
                 ),
                 'sortClauses' => array(
-                    new SortClause\ContentId(),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
                 )
             )
         );
@@ -916,7 +916,7 @@ class ElasticsearchTest extends BaseTest
                     )
                 ),
                 'sortClauses' => array(
-                    new SortClause\ContentId(),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
                 )
             )
         );
@@ -976,7 +976,7 @@ class ElasticsearchTest extends BaseTest
                     )
                 ),
                 'sortClauses' => array(
-                    new SortClause\ContentId(),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
                 )
             )
         );
@@ -1036,7 +1036,7 @@ class ElasticsearchTest extends BaseTest
                     )
                 ),
                 'sortClauses' => array(
-                    new SortClause\ContentId(),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_ASC, "eng-GB" ),
                 )
             )
         );
@@ -1083,7 +1083,7 @@ class ElasticsearchTest extends BaseTest
         $contentIdList[1] = $this->createMultilingualContent( $contentType, 1, 4 )->id;
         $contentIdList[2] = $this->createMultilingualContent( $contentType, 2, 3 )->id;
         $contentIdList[3] = $this->createMultilingualContent( $contentType, 3, 4 )->id;
-        $contentIdList[4] = $this->createMultilingualContent( $contentType, 1, 3 )->id;
+        $contentIdList[4] = $this->createMultilingualContent( $contentType, 4, 3 )->id;
 
         $query = new Query(
             array(
@@ -1098,7 +1098,7 @@ class ElasticsearchTest extends BaseTest
                     )
                 ),
                 'sortClauses' => array(
-                    new SortClause\ContentId(),
+                    new SortClause\Field( "test-type", "integer", Query::SORT_DESC, "eng-GB" ),
                 )
             )
         );
@@ -1118,9 +1118,9 @@ class ElasticsearchTest extends BaseTest
 
         $this->assertEquals(
             array(
-                $contentIdList[2],
-                $contentIdList[3],
                 $contentIdList[4],
+                $contentIdList[3],
+                $contentIdList[2],
             ),
             $this->mapResultContentIds( $result )
         );
