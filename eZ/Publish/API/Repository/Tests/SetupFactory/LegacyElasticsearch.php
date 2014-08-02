@@ -119,17 +119,11 @@ class LegacyElasticsearch extends Legacy
         $searchHandler->setCommit( true );
         $searchHandler->bulkIndexContent( $contentObjects );
 
-        // TODO: implement commit control
-        $searchHandler->flush();
-
         /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler $locationSearchHandler */
         $locationSearchHandler = $persistenceHandler->locationSearchHandler();
         $locationSearchHandler->setCommit( false );
         $locationSearchHandler->purgeIndex();
         $locationSearchHandler->setCommit( true );
         $locationSearchHandler->bulkIndexLocations( $locations );
-
-        // TODO: implement commit control
-        $locationSearchHandler->flush();
     }
 }
