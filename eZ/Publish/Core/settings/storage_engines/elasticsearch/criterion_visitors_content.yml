@@ -8,6 +8,7 @@ parameters:
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\ModifiedRange
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\PublishedRange
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\PublishedRange
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.section_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\SectionIdIn
 
 services:
     # Note: services tagged with 'ezpublish.persistence.elasticsearch.search.content.criterion_visitor'
@@ -56,5 +57,10 @@ services:
 
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range:
         class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.section_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.section_id_in.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}

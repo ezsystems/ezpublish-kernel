@@ -230,6 +230,27 @@ class ElasticsearchTest extends BaseTest
                 ),
                 $fixtureDir . 'DateMetadataCreated.php',
             ),
+            array(
+                array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array(
+                        new SortClause\DatePublished(),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortDatePublished.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\SectionId(
+                        array( 2 )
+                    ),
+                    'sortClauses' => array( new SortClause\ContentId() )
+                ),
+                $fixtureDir . 'SectionId.php',
+            ),
         );
     }
 
