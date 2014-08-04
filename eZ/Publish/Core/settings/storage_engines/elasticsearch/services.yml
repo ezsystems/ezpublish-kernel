@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.persistence.solr.search.content.gateway.client.http.stream.class: eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient\Stream
+    ezpublish.persistence.elasticsearch.search.content.gateway.client.http.stream.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\HttpClient\Stream
     #ezpublish.persistence.solr.search.content.facet_builder_visitor.aggregate.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor\Aggregate
     ezpublish.persistence.solr.search.content.field_value_mapper.aggregate.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\Aggregate
     ezpublish.persistence.solr.search.content.field_name_generator.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
@@ -7,7 +7,7 @@ parameters:
 
 services:
     ezpublish.persistence.elasticsearch.search.content.gateway.client.http.stream:
-        class: %ezpublish.persistence.solr.search.content.gateway.client.http.stream.class%
+        class: %ezpublish.persistence.elasticsearch.search.content.gateway.client.http.stream.class%
         arguments:
             - %ezpublish.elasticsearch_server%
 

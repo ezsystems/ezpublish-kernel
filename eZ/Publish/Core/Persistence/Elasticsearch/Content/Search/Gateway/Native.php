@@ -13,8 +13,6 @@ use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
 use RuntimeException;
@@ -26,7 +24,7 @@ use RuntimeException;
 class Native extends Gateway
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\HttpClient
      */
     protected $client;
 
