@@ -128,7 +128,11 @@ class Native extends Gateway
     public function find( Query $query, $type )
     {
         $ast = array(
-            "query" => $this->criterionVisitor->visit( $query->query ),
+            "query" => array(
+                "filtered" => array(
+                    "filter" => $this->criterionVisitor->visit( $query->query ),
+                ),
+            ),
             "filter" => $this->criterionVisitor->visit( $query->filter ),
             "sort" => array_map(
                 array( $this->sortClauseVisitor, "visit" ),
