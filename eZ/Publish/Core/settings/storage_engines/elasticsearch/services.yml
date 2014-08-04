@@ -6,7 +6,7 @@ parameters:
     ezpublish.persistence.solr.search.field_registry.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
 
 services:
-    ezpublish.persistence.solr.search.content.gateway.client.http.stream:
+    ezpublish.persistence.elasticsearch.search.content.gateway.client.http.stream:
         class: %ezpublish.persistence.solr.search.content.gateway.client.http.stream.class%
         arguments:
             - %ezpublish.elasticsearch_server%

@@ -44,7 +44,7 @@ services:
     ezpublish.persistence.legacy_elasticsearch.search.content.gateway.native:
         class: %ezpublish.persistence.elasticsearch.search.gateway.native.class%
         arguments:
-            - @ezpublish.persistence.solr.search.content.gateway.client.http.stream
+            - @ezpublish.persistence.elasticsearch.search.content.gateway.client.http.stream
             - @ezpublish.persistence.elasticsearch.search.serializer
             - @ezpublish.persistence.elasticsearch.search.content.criterion_visitor.aggregate
             - @ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.aggregate
@@ -56,7 +56,7 @@ services:
     ezpublish.persistence.legacy_elasticsearch.search.location.gateway.native:
         class: %ezpublish.persistence.elasticsearch.search.gateway.native.class%
         arguments:
-            - @ezpublish.persistence.solr.search.content.gateway.client.http.stream
+            - @ezpublish.persistence.elasticsearch.search.content.gateway.client.http.stream
             - @ezpublish.persistence.elasticsearch.search.serializer
             - @ezpublish.persistence.elasticsearch.search.location.criterion_visitor.aggregate
             - @ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.aggregate
