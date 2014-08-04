@@ -14,14 +14,14 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
- * Visits the criterion tree into a Solr query
+ * Visits the criterion tree into a Elasticsearch query AST
  */
 class Aggregate extends CriterionVisitor
 {
     /**
      * Array of available visitors
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor[]
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor[]
      */
     protected $visitors = array();
 
@@ -66,7 +66,7 @@ class Aggregate extends CriterionVisitor
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor $subVisitor
      *
      * @return string
      */

@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use RuntimeException;
 
 /**
- * Visits the criterion tree into a Elasticsearch query
+ * Visits the criterion tree into a Elasticsearch query AST
  */
 abstract class CriterionVisitor
 {
@@ -28,7 +28,7 @@ abstract class CriterionVisitor
     abstract public function canVisit( Criterion $criterion );
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Elasticsearch representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor $subVisitor
