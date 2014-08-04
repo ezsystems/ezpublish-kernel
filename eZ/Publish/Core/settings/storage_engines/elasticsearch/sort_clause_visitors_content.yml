@@ -1,6 +1,7 @@
 parameters:
     ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.aggregate.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\Aggregate
     ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.content_id.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\ContentId
+    ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.content_name.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\ContentName
     ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.date_modified.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\DateModified
     ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.date_published.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\DatePublished
     ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.field.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\Field
@@ -13,6 +14,11 @@ services:
 
     ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.content_id:
         class: %ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.content_id.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.content_name:
+        class: %ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.content_name.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor}
 

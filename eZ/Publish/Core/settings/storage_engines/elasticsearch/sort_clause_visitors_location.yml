@@ -1,8 +1,16 @@
 parameters:
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.aggregate.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\Aggregate
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.content_id.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\ContentId
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.content_name.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\ContentName
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_modified.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\DateModified
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_published.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\DatePublished
+
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.depth.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\Location\Depth
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.id.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\Location\Id
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.is_main_location.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\Location\IsMainLocation
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.path.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\Location\Path
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.priority.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\Location\Priority
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.visibility.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\Location\Visibility
 
 services:
     # Note: services tagged with 'ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor'
@@ -15,6 +23,11 @@ services:
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
 
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.content_name:
+        class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.content_name.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
+
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_modified:
         class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_modified.class%
         tags:
@@ -22,5 +35,36 @@ services:
 
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_published:
         class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_published.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
+
+
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.depth:
+        class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.depth.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.id:
+        class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.id.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.is_main_location:
+        class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.is_main_location.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.path:
+        class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.path.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.priority:
+        class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.priority.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.visibility:
+        class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.visibility.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
