@@ -1,0 +1,16 @@
+{
+    "location": {
+        "dynamic_templates": [
+            {
+                "location_path_string": {
+                    "match": "path_string_id",
+                    "match_mapping_type": "string",
+                    "mapping": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    }
+                }
+            }
+        ]
+    }
+}

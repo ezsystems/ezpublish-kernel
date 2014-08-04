@@ -8,7 +8,15 @@ parameters:
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\ModifiedRange
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\PublishedRange
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\PublishedRange
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.language_code_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LanguageCodeIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LocationIdIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_remote_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LocationRemoteIdIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.object_state_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ObjectStateIdIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.parent_location_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ParentLocationIdIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.remote_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\RemoteIdIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.section_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\SectionIdIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.subtree_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\SubtreeIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.visibility.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Visibility
 
 services:
     # Note: services tagged with 'ezpublish.persistence.elasticsearch.search.content.criterion_visitor'
@@ -60,7 +68,47 @@ services:
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.language_code_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.language_code_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_id_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_remote_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_remote_id_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.object_state_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.object_state_id_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.parent_location_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.parent_location_id_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.remote_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.remote_id_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.section_id_in:
         class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.section_id_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.subtree_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.subtree_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.visibility:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.visibility.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}

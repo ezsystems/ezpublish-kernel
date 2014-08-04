@@ -131,7 +131,7 @@ class Field extends SortClauseVisitor
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Solr representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
