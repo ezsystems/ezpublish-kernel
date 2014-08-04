@@ -31,7 +31,7 @@ class LogicalNot extends CriterionVisitor
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Elasticsearch representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor $subVisitor

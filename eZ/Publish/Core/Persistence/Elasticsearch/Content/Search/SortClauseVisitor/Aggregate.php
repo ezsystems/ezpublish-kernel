@@ -63,7 +63,7 @@ class Aggregate extends SortClauseVisitor
     }
 
     /**
-     * Map field value to a proper Solr representation
+     * Map field value to a proper Elasticsearch representation
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
