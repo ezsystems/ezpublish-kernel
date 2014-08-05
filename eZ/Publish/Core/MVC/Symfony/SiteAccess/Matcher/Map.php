@@ -50,6 +50,19 @@ abstract class Map implements VersatileMatcher
         $this->map = $map;
     }
 
+    /**
+     * Do not serialize the Siteaccess configuration in order to reduce ESI request URL size
+     * @see https://jira.ez.no/browse/EZP-23168
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        $this->map = array();
+        $this->reverseMap = array();
+        return array( 'map', 'reverseMap', 'key' );
+    }
+
     public function setRequest( SimplifiedRequest $request )
     {
         $this->request = $request;
