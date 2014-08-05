@@ -38,6 +38,9 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
             new SimplifiedRequest( array( 'pathinfo' => $uri ) )
         );
         $this->assertSame( $expectedFixedUpURI, $matcher->analyseURI( $uri ) );
+        // Unserialized matcher should have the same behavior
+        $unserializedMatcher = unserialize( serialize( $matcher ) );
+        $this->assertSame( $expectedFixedUpURI, $unserializedMatcher->analyseURI( $uri ) );
     }
 
     /**
@@ -53,6 +56,9 @@ class RouterMapURITest extends PHPUnit_Framework_TestCase
             new SimplifiedRequest( array( 'pathinfo' => $fullUri ) )
         );
         $this->assertSame( $fullUri, $matcher->analyseLink( $linkUri ) );
+        // Unserialized matcher should have the same behavior
+        $unserializedMatcher = unserialize( serialize( $matcher ) );
+        $this->assertSame( $fullUri, $unserializedMatcher->analyseLink( $linkUri ) );
     }
 
     public function fixupURIProvider()
