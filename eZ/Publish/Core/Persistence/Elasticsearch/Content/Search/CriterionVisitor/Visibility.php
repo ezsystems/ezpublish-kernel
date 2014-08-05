@@ -45,7 +45,7 @@ class Visibility extends CriterionVisitor
                 "path" => "locations_doc",
                 "filter" => array(
                     "term" => array(
-                        "invisible_mb" => ( $criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false ),
+                        "invisible_b" => ( $criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false ),
                     ),
                 ),
             ),

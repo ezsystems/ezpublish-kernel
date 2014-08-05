@@ -45,20 +45,11 @@ class LanguageCodeIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        // TODO: fix normalization
-        $values = array_map(
-            function ( $languageCode )
-            {
-                return str_replace( "-", "", $languageCode );
-            },
-            $criterion->value
-        );
-
-        if ( count( $values ) > 1 )
+        if ( count( $criterion->value ) > 1 )
         {
             $filter = array(
                 "terms" => array(
-                    "language_code_ms" => $values,
+                    "language_code_ms" => $criterion->value,
                 ),
             );
         }
@@ -66,7 +57,7 @@ class LanguageCodeIn extends CriterionVisitor
         {
             $filter = array(
                 "term" => array(
-                    "language_code_ms" => $values[0],
+                    "language_code_ms" => $criterion->value[0],
                 ),
             );
         }
