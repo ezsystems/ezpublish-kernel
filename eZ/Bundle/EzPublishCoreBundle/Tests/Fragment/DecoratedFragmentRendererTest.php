@@ -108,4 +108,58 @@ class DecoratedFragmentRendererTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( isset( $reference->attributes['serialized_siteaccess'] ) );
         $this->assertSame( serialize( $siteAccess ), $reference->attributes['serialized_siteaccess'] );
     }
+
+    /**
+     * @dataProvider siteAccessProvider
+     */
+    public function testFragmentContainsSiteaccessMatcher( $siteAccess, $isMatcherExpected )
+    {
+        $reference = new ControllerReference( 'FooBundle:bar:baz' );
+        $request = new Request();
+        $request->attributes->set( 'siteaccess', $siteAccess );
+        $renderer = new DecoratedFragmentRenderer( $this->innerRenderer );
+
+        $expectedMatcherObject = $isMatcherExpected ? $siteAccess->matcher : null;
+
+        $renderer->render( $reference, $request );
+
+        $unserializedSiteaccess = unserialize( $reference->attributes['serialized_siteaccess'] );
+        $this->assertEquals( $expectedMatcherObject, $unserializedSiteaccess->matcher );
+    }
+
+    /**
+     * @return array
+     */
+    public function siteAccessProvider()
+    {
+        $uriLexerMock = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer' );
+        return array(
+            'host:map'      => array( $this->buildSiteAccess( 'host:map', 'Map\\Host' ), false ),
+            'host:text'     => array( $this->buildSiteAccess( 'host:text', 'HostText' ), false ),
+            'uri:text'      => array( $this->buildSiteAccess( 'uri:text', 'URIText' ), true ),
+            'host:regexp'   => array( $this->buildSiteAccess( 'host:regexp', 'Regex\\Host' ), false ),
+            'uri:regexp'    => array( $this->buildSiteAccess( 'uri:regexp', 'Regex\\URI' ), false ),
+            // URILexers:
+            'uri:map'       => array( $this->buildSiteAccess( 'uri:map', 'Map\\URI' ), true ),
+            'uri:element'   => array( $this->buildSiteAccess( 'uri:element', 'URIElement' ), true ),
+            'compound:logicalAnd' => array( $this->buildSiteAccess( 'compound:logicalAnd', 'Compound\\LogicalAnd' ), true ),
+            'compound:logicalOr'  => array( $this->buildSiteAccess( 'compound:logicalOr', 'Compound\\LogicalOr' ), true ),
+            'URILexerMock'  => array( $this->buildSiteAccess( 'URILexerMock', $uriLexerMock  ), true ),
+        );
+    }
+
+    /**
+     * @param string $type     siteaccess type identifier
+     * @param string $matcher  siteaccess matcher class
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    private function buildSiteAccess( $type, $matcher )
+    {
+        if ( !is_object( $matcher ) )
+        {
+            $class = "eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher\\$matcher";
+            $matcher = new $class( array() );
+        }
+        return new SiteAccess( 'ezdemo_site', $type, $matcher );
+    }
 }

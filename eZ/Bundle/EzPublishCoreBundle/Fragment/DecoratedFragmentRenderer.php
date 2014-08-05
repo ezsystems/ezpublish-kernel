@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface;
 use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 
 class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccessAware
 {
@@ -71,7 +72,14 @@ class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccess
         {
             // Serialize the siteaccess to get it back after.
             // @see eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
-            $uri->attributes['serialized_siteaccess'] = serialize( $request->attributes->get( 'siteaccess' ) );
+            $siteaccess = clone $request->attributes->get( 'siteaccess' );
+            if ( !$siteaccess->matcher instanceof URILexer )
+            {
+                // Do not include matcher in the serialized siteaccess if it does not implement URILexer,
+                // which prevents the serialized siteaccess / fragment from becoming too large.
+                $siteaccess->matcher = null;
+            }
+            $uri->attributes['serialized_siteaccess'] = serialize( $siteaccess );
         }
 
         return $this->innerRenderer->render( $uri, $request, $options );
