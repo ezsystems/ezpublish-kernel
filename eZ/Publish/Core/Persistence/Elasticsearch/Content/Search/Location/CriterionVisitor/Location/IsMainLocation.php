@@ -1,22 +1,22 @@
 <?php
 /**
- * File containing the ContentId criterion visitor class
+ * File containing the IsMainLocation criterion visitor class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor;
+namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Location;
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
- * Visits the ContentId criterion
+ * Visits the IsMainLocation criterion
  */
-class ContentIdIn extends CriterionVisitor
+class IsMainLocation extends CriterionVisitor
 {
     /**
      * Check if visitor is applicable to current criterion
@@ -28,11 +28,7 @@ class ContentIdIn extends CriterionVisitor
     public function canVisit( Criterion $criterion )
     {
         return
-            $criterion instanceof Criterion\ContentId &&
-            (
-                ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
-                $criterion->operator === Operator::EQ
-            );
+            $criterion instanceof Criterion\Location\IsMainLocation && $criterion->operator === Operator::EQ;
     }
 
     /**
@@ -46,9 +42,9 @@ class ContentIdIn extends CriterionVisitor
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
         return array(
-            "terms" => array(
-                "content_id_id" => $criterion->value
-            )
+            "term" => array(
+                "is_main_location_b" => ( $criterion->value[0] === Criterion\Location\IsMainLocation::MAIN ? true : false ),
+            ),
         );
     }
 }
