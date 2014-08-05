@@ -33,15 +33,13 @@ class LegacyUpdateUserSlot extends AbstractLegacySlot
             return;
         }
 
-        $kernel = $this->getLegacyKernel();
-        $kernel->runCallback(
+        $this->runLegacyKernelCallback(
             function () use ( $signal )
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->userId );
                 eZContentOperationCollection::registerSearchObject( $signal->userId );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
-            },
-            false
+            }
         );
     }
 }

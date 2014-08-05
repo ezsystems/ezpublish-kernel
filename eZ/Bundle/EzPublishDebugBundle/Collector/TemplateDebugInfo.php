@@ -79,22 +79,15 @@ class TemplateDebugInfo
             return $templateList;
         }
 
-        $formTokenWasEnabled = false;
         try
         {
-            // Deactivate ezxFormToken to avoid double checks on it.
-            // Checking on ezxFormToken existence since might not be loadable if eZ is not yet installed
-            // (ezp_extension.php not yet generated in legacy).
-            if ( class_exists( 'ezxFormToken' ) && ( $formTokenWasEnabled = ezxFormToken::isEnabled() ) )
-            {
-                ezxFormToken::setIsEnabled( false );
-            }
-
             $templateStats = $legacyKernel()->runCallback(
                 function ()
                 {
                     return eZTemplate::templatesUsageStatistics();
-                }
+                },
+                true,
+                false
             );
         }
         catch ( RuntimeException $e )
@@ -102,10 +95,6 @@ class TemplateDebugInfo
             // Ignore the exception thrown by legacy kernel as this would break debug toolbar (and thus debug info display).
             // Furthermore, some legacy kernel handlers don't support runCallback (e.g. ezpKernelTreeMenu)
             $templateStats = array();
-            if ( $formTokenWasEnabled )
-            {
-                ezxFormToken::setIsEnabled( true );
-            }
         }
 
         foreach ( $templateStats as $tplInfo )

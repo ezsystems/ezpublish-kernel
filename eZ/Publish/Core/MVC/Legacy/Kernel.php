@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Legacy;
 use Exception;
 use ezpKernel;
 use ezpKernelHandler;
+use ezxFormToken;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 
@@ -144,11 +145,13 @@ class Kernel extends ezpKernel
      *                               If set to false, the kernel environment will not be reinitialized.
      *                               This can be useful to optimize several calls to the kernel within the same context.
      *
-     * @throws \RuntimeException
+     * @param bool|null $formTokenEnable Force ezxFormToken to be enabled or disabled, use system settings when null
      *
+     * @throws \RuntimeException
+     * @throws \Exception
      * @return mixed The result of the callback
      */
-    public function runCallback( \Closure $callback, $postReinitialize = true )
+    public function runCallback( \Closure $callback, $postReinitialize = true, $formTokenEnable = null )
     {
         if ( $this->runningCallback )
         {
@@ -157,6 +160,13 @@ class Kernel extends ezpKernel
 
         $this->runningCallback = true;
         $this->enterLegacyRootDir();
+
+        if ( $formTokenEnable !== null && class_exists( 'ezxFormToken' ) )
+        {
+            $formTokenWasEnabled = ezxFormToken::isEnabled();
+            ezxFormToken::setIsEnabled( $formTokenEnable );
+        }
+
         try
         {
             $return = parent::runCallback( $callback, $postReinitialize );
@@ -167,6 +177,12 @@ class Kernel extends ezpKernel
             $this->runningCallback = false;
             throw $e;
         }
+
+        if ( isset( $formTokenWasEnabled ) )
+        {
+            ezxFormToken::setIsEnabled( $formTokenWasEnabled );
+        }
+
         $this->leaveLegacyRootDir();
         $this->runningCallback = false;
         return $return;

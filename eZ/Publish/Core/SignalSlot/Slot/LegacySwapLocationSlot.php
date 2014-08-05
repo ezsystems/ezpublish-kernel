@@ -31,16 +31,14 @@ class LegacySwapLocationSlot extends AbstractLegacySlot
         if ( !$signal instanceof Signal\LocationService\SwapLocationSignal )
             return;
 
-        $kernel = $this->getLegacyKernel();
-        $kernel->runCallback(
+        $this->runLegacyKernelCallback(
             function () use ( $signal )
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->content1Id );
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->content2Id );
                 eZSearch::swapNode( $signal->location1Id, $signal->location2Id );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
-            },
-            false
+            }
         );
     }
 }

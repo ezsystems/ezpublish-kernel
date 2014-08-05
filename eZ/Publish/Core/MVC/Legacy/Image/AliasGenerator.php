@@ -109,6 +109,7 @@ class AliasGenerator implements VariationHandler
 
                 return $allVariations[$variationIdentifier];
             },
+            false,
             false
         );
     }

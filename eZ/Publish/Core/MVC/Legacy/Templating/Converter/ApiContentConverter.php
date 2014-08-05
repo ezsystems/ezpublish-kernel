@@ -69,6 +69,7 @@ class ApiContentConverter implements MultipleObjectConverter
                     return eZContentObjectTreeNode::fetch( $object->id );
                 }
             },
+            false,
             false
         );
     }
@@ -123,6 +124,7 @@ class ApiContentConverter implements MultipleObjectConverter
 
                 return $convertedObjects;
             },
+            false,
             false
         );
     }

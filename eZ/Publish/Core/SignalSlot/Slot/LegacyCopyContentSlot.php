@@ -31,15 +31,13 @@ class LegacyCopyContentSlot extends AbstractLegacySlot
         if ( !$signal instanceof Signal\ContentService\CopyContentSignal )
             return;
 
-        $kernel = $this->getLegacyKernel();
-        $kernel->runCallback(
+        $this->runLegacyKernelCallback(
             function () use ( $signal )
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->dstContentId );
                 eZContentOperationCollection::registerSearchObject( $signal->dstContentId );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
-            },
-            false
+            }
         );
     }
 }

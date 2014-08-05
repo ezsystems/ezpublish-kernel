@@ -77,6 +77,7 @@ class UrlGenerator extends Generator
 
                 return "/$legacyModuleUri$unorderedParams";
             },
+            false,
             false
         );
     }

@@ -36,24 +36,18 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
     public function testAbstractLegacySlot()
     {
         $ezpKernelHandlerMock = $this->ezpKernelHandlerMock;
-        $legacySlot = $this->getMock(
+        $legacySlotMock = $this->getMock(
             '\\eZ\\Publish\\Core\\SignalSlot\\Slot\\AbstractLegacySlot',
             // methods
             array(),
             // ctor arguments
-            array(
-                function () use ( $ezpKernelHandlerMock )
-                {
-                    return $ezpKernelHandlerMock;
-                }
-            )
+            array( $ezpKernelHandlerMock )
         );
 
-        $reflectionLegacySlot = new \ReflectionObject( $legacySlot );
-        $reflectionLegacySlotMethod = $reflectionLegacySlot->getMethod( 'getLegacyKernel' );
-        $reflectionLegacySlotMethod->setAccessible( true );
+        $reflectionProperty = new \ReflectionProperty( '\\eZ\\Publish\\Core\\SignalSlot\\Slot\\AbstractLegacySlot', 'legacyKernel' );
+        $reflectionProperty->setAccessible( true );
 
-        $this->assertSame( $ezpKernelHandlerMock, $reflectionLegacySlotMethod->invoke( $legacySlot ) );
+        $this->assertSame( $ezpKernelHandlerMock, $reflectionProperty->getValue( $legacySlotMock ) );
     }
 
     public function providerForTestLegacySlots()

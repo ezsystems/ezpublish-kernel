@@ -45,7 +45,9 @@ class eZDFSFileHandler extends BaseHandler implements FileResourceProvider
                     throw new NotFoundException( "dfsPath", $dfsPath );
                 }
                 return fopen( $dfsPath, 'rb' );
-            }
+            },
+            true,
+            false
         );
 
         $this->legacyKernel->leaveLegacyRootDir();
