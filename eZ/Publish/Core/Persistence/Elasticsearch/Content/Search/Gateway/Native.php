@@ -151,6 +151,10 @@ class Native extends Gateway
         {
             $ast["size"] = $query->limit;
         }
+        if ( $query->limit == 1073741824 )
+        {
+            $ast["size"] = 1000;
+        }
 
         $response = $this->client->request(
             "GET",
