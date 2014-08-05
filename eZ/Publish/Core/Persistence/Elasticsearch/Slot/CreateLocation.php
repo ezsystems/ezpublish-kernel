@@ -31,11 +31,14 @@ class CreateLocation extends Slot
 
         $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->contentId );
 
-        $this->enqueueIndexing(
+        $this->persistenceHandler->searchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load(
-                $contentInfo->id,
+                $signal->contentId,
                 $contentInfo->currentVersionNo
             )
+        );
+        $this->persistenceHandler->locationSearchHandler()->indexLocation(
+            $this->persistenceHandler->locationHandler()->load( $signal->locationId )
         );
     }
 }
