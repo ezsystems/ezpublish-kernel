@@ -12,6 +12,17 @@ parameters:
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.subtree_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\SubtreeIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.visibility.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Visibility
 
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.depth_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Location\DepthIn
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.depth_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Location\DepthRange
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.is_main_location.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Location\IsMainLocation
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.priority_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Location\PriorityIn
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.priority_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Location\PriorityRange
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\DateMetadata\ModifiedIn
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\DateMetadata\ModifiedRange
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\DateMetadata\PublishedRange
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\DateMetadata\PublishedRange
+
 services:
     # Note: services tagged with 'ezpublish.persistence.elasticsearch.search.location.criterion_visitor'
     # are registered to this one using compilation pass
@@ -72,3 +83,50 @@ services:
         class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.visibility.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.depth_in:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.depth_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.depth_range:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.depth_range.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.is_main_location:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.is_main_location.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.priority_in:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.priority_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.priority_range:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.priority_range.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_in:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_range:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_range.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_in:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_range:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_range.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
