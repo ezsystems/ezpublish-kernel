@@ -46,19 +46,13 @@ class SubtreeIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        if ( count( $criterion->value ) > 1 )
+        $filters = array();
+
+        foreach ( $criterion->value as $value )
         {
-            $filter = array(
-                "terms" => array(
-                    "path_string_id" => $criterion->value,
-                ),
-            );
-        }
-        else
-        {
-            $filter = array(
-                "term" => array(
-                    "path_string_id" => $criterion->value[0],
+            $filters[] = array(
+                "prefix" => array(
+                    "path_string_id" => $value,
                 ),
             );
         }
@@ -66,7 +60,9 @@ class SubtreeIn extends CriterionVisitor
         return array(
             "nested" => array(
                 "path" => "locations_doc",
-                "filter" => $filter,
+                "filter" => array(
+                    "or" => $filters,
+                ),
             ),
         );
     }
