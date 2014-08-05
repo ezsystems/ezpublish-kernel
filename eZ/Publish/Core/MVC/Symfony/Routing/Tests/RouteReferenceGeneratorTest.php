@@ -104,6 +104,25 @@ class RouteReferenceGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $params, $reference->getParams() );
     }
 
+    public function testGenerateNullResourceWithoutRoute( )
+    {
+        $currentRouteName = 'my_route';
+        $currentRouteParams = array( 'foo' => 'bar' );
+
+        $request = new Request();
+
+        $event = new RouteReferenceGenerationEvent( new RouteReference( null, array() ), $request );
+        $this->dispatcher
+            ->expects( $this->once() )
+            ->method( 'dispatch' )
+            ->with( MVCEvents::ROUTE_REFERENCE_GENERATION, $this->equalTo( $event ) );
+
+        $generator = new RouteReferenceGenerator( $this->dispatcher );
+        $generator->setRequest( $request );
+        $reference = $generator->generate();
+        $this->assertInstanceOf( 'eZ\Publish\Core\MVC\Symfony\Routing\RouteReference', $reference );
+    }
+
     public function generateGenerator()
     {
         return array(

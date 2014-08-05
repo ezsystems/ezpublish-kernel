@@ -51,7 +51,7 @@ class RouteReferenceGenerator implements RouteReferenceGeneratorInterface
         if ( $resource === null )
         {
             $resource = $this->request->attributes->get( '_route' );
-            $params += $this->request->attributes->get( '_route_params' );
+            $params += $this->request->attributes->get( '_route_params', array() );
         }
 
         $event = new RouteReferenceGenerationEvent( new RouteReference( $resource, $params ), $this->request );
