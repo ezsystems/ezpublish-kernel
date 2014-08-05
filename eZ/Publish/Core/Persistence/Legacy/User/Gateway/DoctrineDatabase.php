@@ -266,7 +266,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Assigns role to user with given limitation
+     * Assigns role to user/group with given limitation
      *
      * @param mixed $contentId
      * @param mixed $roleId
@@ -278,6 +278,9 @@ class DoctrineDatabase extends Gateway
         {
             foreach ( $values as $value )
             {
+                if ( $this->hasRoleAssignment( $contentId, $roleId, $identifier, $value ) )
+                    continue;
+
                 $query = $this->handler->createInsertQuery();
                 $query
                     ->insertInto( $this->handler->quoteTable( 'ezuser_role' ) )
@@ -323,5 +326,38 @@ class DoctrineDatabase extends Gateway
                 )
             );
         $query->prepare()->execute();
+    }
+
+    /**
+     * Verify if role assignment to user/group exists with given limitation
+     *
+     * @param mixed $contentId
+     * @param mixed $roleId
+     * @param array $limitation
+     *
+     * @return boolean
+     */
+    private function hasRoleAssignment( $contentId, $roleId, $limitationIdentifier, $limitationValue )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select(
+                $query->alias( $query->expr->count( '*' ), 'count' )
+            )
+            ->from( $this->handler->quoteTable( 'ezuser_role' ) )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq( $this->handler->quoteColumn( 'contentobject_id' ), $query->bindValue( $contentId ) ),
+                    $query->expr->eq( $this->handler->quoteColumn( 'role_id' ), $query->bindValue( $roleId ) ),
+                    $query->expr->eq( $this->handler->quoteColumn( 'limit_identifier' ), $query->bindValue( $limitationIdentifier ) ),
+                    $query->expr->eq( $this->handler->quoteColumn( 'limit_value' ), $query->bindValue( $limitationValue ) )
+                )
+            );
+        $statement = $query->prepare();
+        $statement->execute();
+        $res = $statement->fetchAll( \PDO::FETCH_ASSOC );
+
+        $hasRoleAssignment = $res[0]['count'] > 0;
+        return $hasRoleAssignment;
     }
 }
