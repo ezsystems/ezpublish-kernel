@@ -17,6 +17,7 @@ use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -113,6 +114,11 @@ class PreviewController
             null, null,
             array(
                 '_controller' => 'ez_content:viewLocation',
+                // specify a route for RouteReference generator
+                '_route' => UrlAliasGenerator::INTERNAL_LOCATION_ROUTE,
+                '_route_params' => array(
+                    'locationId' => $location->id,
+                ),
                 'location' => $location,
                 'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
                 'layout' => true,
