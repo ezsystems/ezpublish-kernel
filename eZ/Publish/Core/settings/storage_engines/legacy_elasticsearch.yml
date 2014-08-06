@@ -1,4 +1,4 @@
-# Depends on some of the 'legacy' storage handlers, see 'ezpublish.spi.persistence.legacy_solr'
+# Depends on some of the 'legacy' storage handlers, see 'ezpublish.spi.persistence.legacy_elasticsearch'
 # service definition below for details
 imports:
     - {resource: storage_engines/elasticsearch/criterion_visitors_common.yml}
@@ -20,7 +20,7 @@ parameters:
     ezpublish.persistence.elasticsearch.search.location.gateway.native.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Gateway\Native
     ezpublish.spi.persistence.elasticsearch.search.handler.content.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler
     ezpublish.spi.persistence.elasticsearch.search.handler.location.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler
-    ezpublish.persistence.solr.search.content.field_map.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap
+    ezpublish.persistence.elasticsearch.search.content.field_map.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap
     ezpublish.persistence.elasticsearch.search.extractor.loading.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor\Loading
 
 services:
@@ -28,13 +28,13 @@ services:
         class: %ezpublish.persistence.elasticsearch.search.serializer.class%
         arguments:
             - @ezpublish.persistence.elasticsearch.search.content.field_value_mapper.aggregate
-            - @ezpublish.persistence.solr.search.content.field_name_generator
+            - @ezpublish.persistence.elasticsearch.search.content.field_name_generator
 
     ezpublish.persistence.elasticsearch.search.mapper:
         class: %ezpublish.persistence.elasticsearch.search.mapper.class%
         arguments:
             - @ezpublish.persistence.solr.search.field_registry
-            - @ezpublish.persistence.solr.search.content.field_name_generator
+            - @ezpublish.persistence.elasticsearch.search.content.field_name_generator
             - @ezpublish.spi.persistence.legacy.content.handler
             - @ezpublish.spi.persistence.legacy.location.handler
             - @ezpublish.spi.persistence.legacy.content_type.handler
@@ -66,13 +66,13 @@ services:
         alias: ezpublish.persistence.legacy_elasticsearch.search.location.gateway.native
 
     ezpublish.persistence.legacy_elasticsearch.search.content.field_map:
-        class: %ezpublish.persistence.solr.search.content.field_map.class%
+        class: %ezpublish.persistence.elasticsearch.search.content.field_map.class%
         arguments:
             - @ezpublish.persistence.solr.search.field_registry
             - @ezpublish.spi.persistence.legacy.content_type.handler
-            - @ezpublish.persistence.solr.search.content.field_name_generator
+            - @ezpublish.persistence.elasticsearch.search.content.field_name_generator
 
-    # TODO: when Solr storage is enabled and multiple Solr storage engines are used simultaneously
+    # TODO: when Elasticsearch storage is enabled and multiple Elasticsearch storage engines are used simultaneously
     # this service will need to be set through factory, see https://jira.ez.no/browse/EZP-22846
     ezpublish.persistence.elasticsearch.search.content.field_map:
         alias: ezpublish.persistence.legacy_elasticsearch.search.content.field_map
