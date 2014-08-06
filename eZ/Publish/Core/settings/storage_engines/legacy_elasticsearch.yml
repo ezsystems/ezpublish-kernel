@@ -5,7 +5,6 @@ imports:
     - {resource: storage_engines/elasticsearch/criterion_visitors_content.yml}
     - {resource: storage_engines/elasticsearch/criterion_visitors_location.yml}
     #- {resource: storage_engines/elasticsearch/facet_builder_visitors.yml}
-    - {resource: storage_engines/solr/field_value_mappers.yml}
     - {resource: storage_engines/elasticsearch/field_value_mappers.yml}
     - {resource: storage_engines/elasticsearch/services.yml}
     - {resource: storage_engines/solr/slots.yml}
