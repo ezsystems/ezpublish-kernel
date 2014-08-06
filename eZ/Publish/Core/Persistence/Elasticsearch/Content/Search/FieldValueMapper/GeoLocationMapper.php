@@ -39,6 +39,9 @@ class GeoLocationMapper extends FieldValueMapper
      */
     public function map( Field $field )
     {
-        return $field->value["latitude"] . "," . $field->value["longitude"];
+        return array(
+            "lat" => $field->value["latitude"],
+            "lon" => $field->value["longitude"],
+        );
     }
 }
