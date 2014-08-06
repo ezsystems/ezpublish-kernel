@@ -34,6 +34,14 @@
                         "index": "not_analyzed"
                     }
                 }
+            },
+            {
+                "field_geo_point": {
+                    "match": "*_gl",
+                    "mapping": {
+                        "type": "geo_point"
+                    }
+                }
             }
         ]
     }
