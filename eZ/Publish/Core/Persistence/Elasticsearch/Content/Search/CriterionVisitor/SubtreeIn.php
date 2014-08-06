@@ -52,7 +52,7 @@ class SubtreeIn extends CriterionVisitor
         {
             $filters[] = array(
                 "prefix" => array(
-                    "path_string_id" => $value,
+                    "locations_doc.path_string_id" => $value,
                 ),
             );
         }
