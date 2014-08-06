@@ -27,6 +27,7 @@ run() {
         ./elasticsearch > /dev/null 2>&1 &
     fi
     wait_for_elasticsearch
+    sleep 60
     cd ../../
     echo "Started."
 }
