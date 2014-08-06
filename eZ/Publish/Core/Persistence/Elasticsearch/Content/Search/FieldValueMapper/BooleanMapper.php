@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the DocumentMapper document field value mapper class
+ * File containing the BooleanMapper document field value mapper class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -10,13 +10,13 @@
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType\DocumentField;
+use eZ\Publish\SPI\Persistence\Content\Search\FieldType\BooleanField;
 use eZ\Publish\SPI\Persistence\Content\Search\Field;
 
 /**
- * Maps DocumentField document field values to something Elasticsearch can index.
+ * Maps BooleanField document field values to something Elasticsearch can index.
  */
-class DocumentMapper extends FieldValueMapper
+class BooleanMapper extends FieldValueMapper
 {
     /**
      * Check if field can be mapped
@@ -27,7 +27,7 @@ class DocumentMapper extends FieldValueMapper
      */
     public function canMap( Field $field )
     {
-        return $field->type instanceof DocumentField;
+        return $field->type instanceof BooleanField;
     }
 
     /**
@@ -39,7 +39,7 @@ class DocumentMapper extends FieldValueMapper
      */
     public function map( Field $field )
     {
-        return $field->value;
+        return (boolean)$field->value;
     }
 }
 

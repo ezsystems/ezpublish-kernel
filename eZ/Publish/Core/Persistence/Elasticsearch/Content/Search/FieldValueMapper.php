@@ -1,22 +1,20 @@
 <?php
 /**
- * File containing the DocumentMapper document field value mapper class
+ * File containing the FieldValueMapper class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
+namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType\DocumentField;
 use eZ\Publish\SPI\Persistence\Content\Search\Field;
 
 /**
- * Maps DocumentField document field values to something Elasticsearch can index.
+ * Maps raw document field values to something Elasticsearch can index.
  */
-class DocumentMapper extends FieldValueMapper
+abstract class FieldValueMapper
 {
     /**
      * Check if field can be mapped
@@ -25,10 +23,7 @@ class DocumentMapper extends FieldValueMapper
      *
      * @return boolean
      */
-    public function canMap( Field $field )
-    {
-        return $field->type instanceof DocumentField;
-    }
+    abstract public function canMap( Field $field );
 
     /**
      * Map field value to a proper Elasticsearch representation
@@ -37,9 +32,6 @@ class DocumentMapper extends FieldValueMapper
      *
      * @return mixed
      */
-    public function map( Field $field )
-    {
-        return $field->value;
-    }
+    abstract public function map( Field $field );
 }
 

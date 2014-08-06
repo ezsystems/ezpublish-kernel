@@ -27,7 +27,7 @@ services:
     ezpublish.persistence.elasticsearch.search.serializer:
         class: %ezpublish.persistence.elasticsearch.search.serializer.class%
         arguments:
-            - @ezpublish.persistence.solr.search.content.field_value_mapper.aggregate
+            - @ezpublish.persistence.elasticsearch.search.content.field_value_mapper.aggregate
             - @ezpublish.persistence.solr.search.content.field_name_generator
 
     ezpublish.persistence.elasticsearch.search.mapper:
