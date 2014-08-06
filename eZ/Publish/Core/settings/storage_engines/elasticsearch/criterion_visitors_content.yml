@@ -11,6 +11,7 @@ parameters:
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.language_code_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LanguageCodeIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LocationIdIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_remote_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LocationRemoteIdIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.map_location_distance_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Field\MapLocationDistanceRange
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.object_state_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ObjectStateIdIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.parent_location_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ParentLocationIdIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.remote_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\RemoteIdIn
@@ -81,6 +82,13 @@ services:
 
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_remote_id_in:
         class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_remote_id_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.map_location_distance_range:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.map_location_distance_range.class%
+        arguments:
+            - @ezpublish.persistence.solr.search.content.field_map
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 
