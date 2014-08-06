@@ -49,7 +49,7 @@ class LocationIdIn extends CriterionVisitor
         {
             $filter = array(
                 "terms" => array(
-                    "id" => $criterion->value,
+                    "locations_doc.id" => $criterion->value,
                 ),
             );
         }
@@ -57,7 +57,7 @@ class LocationIdIn extends CriterionVisitor
         {
             $filter = array(
                 "term" => array(
-                    "id" => $criterion->value[0],
+                    "locations_doc.id" => $criterion->value[0],
                 ),
             );
         }

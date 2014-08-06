@@ -49,7 +49,7 @@ class LocationRemoteIdIn extends CriterionVisitor
         {
             $filter = array(
                 "terms" => array(
-                    "remote_id_id" => $criterion->value,
+                    "locations_doc.remote_id_id" => $criterion->value,
                 ),
             );
         }
@@ -57,7 +57,7 @@ class LocationRemoteIdIn extends CriterionVisitor
         {
             $filter = array(
                 "term" => array(
-                    "remote_id_id" => $criterion->value[0],
+                    "locations_doc.remote_id_id" => $criterion->value[0],
                 ),
             );
         }

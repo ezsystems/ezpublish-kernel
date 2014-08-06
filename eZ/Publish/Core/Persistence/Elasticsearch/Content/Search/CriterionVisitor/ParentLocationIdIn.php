@@ -49,7 +49,7 @@ class ParentLocationIdIn extends CriterionVisitor
         {
             $filter = array(
                 "terms" => array(
-                    "parent_id_id" => $criterion->value,
+                    "locations_doc.parent_id_id" => $criterion->value,
                 ),
             );
         }
@@ -57,7 +57,7 @@ class ParentLocationIdIn extends CriterionVisitor
         {
             $filter = array(
                 "term" => array(
-                    "parent_id_id" => $criterion->value[0],
+                    "locations_doc.parent_id_id" => $criterion->value[0],
                 ),
             );
         }
