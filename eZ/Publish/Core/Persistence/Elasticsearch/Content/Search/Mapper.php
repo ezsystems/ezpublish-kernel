@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
 use eZ\Publish\SPI\Persistence\Content\Search\Field;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
