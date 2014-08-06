@@ -10,6 +10,7 @@ parameters:
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.remote_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\RemoteIdIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.section_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\SectionIdIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.subtree_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\SubtreeIn
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.user_metadata.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\UserMetadataIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.visibility.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Visibility
 
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.depth_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Location\DepthIn
@@ -76,6 +77,11 @@ services:
 
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.subtree_in:
         class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.subtree_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.user_metadata:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.user_metadata.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
 
