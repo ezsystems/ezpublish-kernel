@@ -2,6 +2,16 @@
     "location": {
         "dynamic_templates": [
             {
+                "content_language_code": {
+                    "match": "*_ms",
+                    "match_mapping_type": "string",
+                    "mapping": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    }
+                }
+            },
+            {
                 "location_path_string": {
                     "match": "path_string_id",
                     "match_mapping_type": "string",
