@@ -1,8 +1,68 @@
 parameters:
-    ezpublish.persistence.solr.search.content.field_value_mapper.document.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\DocumentMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.boolean.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\BooleanMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.date.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\DateMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.document.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\DocumentMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.geo_location.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\GeoLocationMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.identifier.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\IdentifierMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.integer.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\IntegerMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.multiple_boolean.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\MultipleBooleanMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.multiple_identifier.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\MultipleIdentifierMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.multiple_string.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\MultipleStringMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.price.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\PriceMapper
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.string.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper\StringMapper
 
 services:
-    ezpublish.persistence.solr.search.content.field_value_mapper.document:
-        class: %ezpublish.persistence.solr.search.content.field_value_mapper.document.class%
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.boolean:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.boolean.class%
         tags:
-            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.date:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.date.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.document:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.document.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.geo_location:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.geo_location.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.identifier:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.identifier.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.integer:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.integer.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.multiple_boolean:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.multiple_boolean.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.multiple_identifier:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.multiple_identifier.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.multiple_string:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.multiple_string.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.price:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.price.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}
+
+    ezpublish.persistence.elasticsearch.search.content.field_value_mapper.string:
+        class: %ezpublish.persistence.elasticsearch.search.content.field_value_mapper.string.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.field_value_mapper}

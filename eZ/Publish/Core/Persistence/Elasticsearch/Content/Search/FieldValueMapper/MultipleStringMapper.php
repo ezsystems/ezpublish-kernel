@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the DocumentMapper document field value mapper class
+ * File containing the MultipleStringMapper document field value mapper class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,25 +9,24 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType\DocumentField;
+use eZ\Publish\SPI\Persistence\Content\Search\FieldType\MultipleStringField;
 use eZ\Publish\SPI\Persistence\Content\Search\Field;
 
 /**
- * Maps DocumentField document field values to something Elasticsearch can index.
+ * Maps MultipleStringField document field values to something Elasticsearch can index.
  */
-class DocumentMapper extends FieldValueMapper
+class MultipleStringMapper extends StringMapper
 {
     /**
      * Check if field can be mapped
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Search\Field $field
      *
-     * @return boolean
+     * @return bool
      */
     public function canMap( Field $field )
     {
-        return $field->type instanceof DocumentField;
+        return $field->type instanceof MultipleStringField;
     }
 
     /**
@@ -35,11 +34,18 @@ class DocumentMapper extends FieldValueMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Search\Field $field
      *
-     * @return mixed
+     * @return array
      */
     public function map( Field $field )
     {
-        return $field->value;
+        $values = array();
+
+        foreach ( (array)$field->value as $value )
+        {
+            $values[] = $this->convert( $value );
+        }
+
+        return $values;
     }
 }
 

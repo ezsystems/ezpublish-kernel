@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the DocumentMapper document field value mapper class
+ * File containing the IdentifierMapper document field value mapper class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -10,13 +10,13 @@
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType\DocumentField;
+use eZ\Publish\SPI\Persistence\Content\Search\FieldType\IdentifierField;
 use eZ\Publish\SPI\Persistence\Content\Search\Field;
 
 /**
- * Maps DocumentField document field values to something Elasticsearch can index.
+ * Maps IdentifierField document field values to something Elasticsearch can index.
  */
-class DocumentMapper extends FieldValueMapper
+class IdentifierMapper extends FieldValueMapper
 {
     /**
      * Check if field can be mapped
@@ -27,19 +27,32 @@ class DocumentMapper extends FieldValueMapper
      */
     public function canMap( Field $field )
     {
-        return $field->type instanceof DocumentField;
+        return $field->type instanceof IdentifierField;
     }
 
     /**
      * Map field value to a proper Elasticsearch representation
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field $field
+     * @param Field $field
      *
      * @return mixed
      */
     public function map( Field $field )
     {
-        return $field->value;
+        return $this->convert( $field->value );
+    }
+
+    /**
+     * Convert to a proper Elasticsearch representation
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function convert( $value )
+    {
+        // Remove non-printable characters
+        return preg_replace( '([^A-Za-z0-9/]+)', '', $value );
     }
 }
 

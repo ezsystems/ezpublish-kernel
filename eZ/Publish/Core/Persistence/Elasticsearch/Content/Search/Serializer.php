@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
 use eZ\Publish\SPI\Persistence\Content\Search\FieldType\DocumentField;
 
 /**
@@ -21,14 +21,14 @@ class Serializer
     /**
      * Field value mapper
      *
-     * @var FieldValueMapper
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper
      */
     protected $fieldValueMapper;
 
     /**
      * Field name generator
      *
-     * @var FieldNameGenerator
+     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
      */
     protected $nameGenerator;
 
