@@ -150,17 +150,89 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteContent( $contentId, $versionId = null )
     {
-        // TODO: Implement deleteContent() method.
+        if ( $versionId === null )
+        {
+            $query = array(
+                "filter" => array(
+                    "and" => array(
+                        array(
+                            "ids" => array(
+                                "type" => "content",
+                                "values" => $contentId,
+                            )
+                        ),
+                        array(
+                            "term" => array(
+                                "version_id" => $versionId,
+                            ),
+                        ),
+                    ),
+                ),
+            );
+
+            $this->gateway->deleteByQuery( $query, "content" );
+        }
+        else
+        {
+            $this->gateway->delete( $contentId, "content" );
+        }
     }
 
     /**
-     * Deletes a location from the index
      *
-     * @param mixed $locationId
+     *
+     * @todo When we support Location-less Content, we will have to reindex instead of removing
+     * @todo Should we not already support the above?
+     * @todo The subtree could potentially be huge, so this implementation should scroll reindex
+     *
+     * @param int|string $locationId
      */
     public function deleteLocation( $locationId )
     {
-        // TODO: Implement deleteLocation() method.
+        // 1. Update all Content in the subtree with additional Location(s) outside of it
+        $query = array(
+            "filter" => array(
+                "nested" => array(
+                    "path" => "locations_doc",
+                    "filter" => array(
+                        "and" => array(
+                            0 => array(
+                                "regexp" => array(
+                                    "locations_doc.path_string_id" => ".*/{$locationId}/.*",
+                                ),
+                            ),
+                            1 => array(
+                                "regexp" => array(
+                                    "locations_doc.path_string_id" => array(
+                                        // Matches anything (@) and (&) not (~) <expression>
+                                        "value" => "@&~(.*/{$locationId}/.*)",
+                                        "flags" => "INTERSECTION|COMPLEMENT|ANYSTRING",
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        );
+
+        $response = $this->gateway->findRaw( $query, "content" );
+        $result = json_decode( $response->body );
+
+        $documents = array();
+        foreach ( $result->hits->hits as $hit )
+        {
+            $documents[] = $this->mapper->mapContentById( $hit->_id );
+        }
+
+        $this->gateway->bulkIndex( $documents );
+
+        // 2. Delete all Content in the subtree with no other Location(s) outside of it
+        $query["filter"]["nested"]["filter"]["and"][1] = array(
+            "not" => $query["filter"]["nested"]["filter"]["and"][1],
+        );
+
+        $this->gateway->deleteByQuery( $query, "content" );
     }
 
     /**
