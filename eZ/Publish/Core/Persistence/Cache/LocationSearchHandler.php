@@ -37,4 +37,22 @@ class LocationSearchHandler extends AbstractHandler implements LocationSearchHan
         $this->logger->logCall( __METHOD__, array( 'location' => $location->id ) );
         $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
     }
+
+    /**
+     * @param int|string $locationId
+     */
+    public function deleteLocation( $locationId )
+    {
+        $this->logger->logCall( __METHOD__, array( 'locationId' => $locationId ) );
+        $this->persistenceHandler->locationSearchHandler()->deleteLocation( $locationId );
+    }
+
+    /**
+     * @param int|string $contentId
+     */
+    public function deleteContent( $contentId )
+    {
+        $this->logger->logCall( __METHOD__, array( 'contentId' => $contentId ) );
+        $this->persistenceHandler->locationSearchHandler()->deleteContent( $contentId );
+    }
 }

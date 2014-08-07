@@ -103,6 +103,30 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * @param int|string $locationId
+     */
+    public function deleteLocation( $locationId )
+    {
+        $this->gateway->delete( $locationId, "location" );
+    }
+
+    /**
+     * @param $contentId
+     */
+    public function deleteContent( $contentId )
+    {
+        $query = array(
+            "filter" => array(
+                "term" => array(
+                    "content_id" => $contentId,
+                ),
+            ),
+        );
+
+        $this->gateway->deleteByQuery( $query, "location" );
+    }
+
+    /**
      * Purges all contents from the index
      *
      * @todo: Make this public API?

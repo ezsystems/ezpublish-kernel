@@ -30,4 +30,14 @@ interface Handler
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      */
     public function indexLocation( Location $location );
+
+    /**
+     * @param int|string $locationId
+     */
+    public function deleteLocation( $locationId );
+
+    /**
+     * @param $contentId
+     */
+    public function deleteContent( $contentId );
 }
