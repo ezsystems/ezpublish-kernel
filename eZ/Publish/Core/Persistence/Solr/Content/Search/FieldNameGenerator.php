@@ -41,6 +41,7 @@ class FieldNameGenerator
         "ez_point"    => "p",
         "ez_currency" => "c",
         "ez_geolocation" => "gl",
+        "ez_document" => "doc",
     );
 
     /**

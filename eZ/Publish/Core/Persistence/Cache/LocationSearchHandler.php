@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as LocationSearchHandlerInterface;
 
 /**
@@ -26,5 +27,32 @@ class LocationSearchHandler extends AbstractHandler implements LocationSearchHan
     {
         $this->logger->logCall( __METHOD__, array( 'query' => $query ) );
         return $this->persistenceHandler->locationSearchHandler()->findLocations( $query );
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     */
+    public function indexLocation( Location $location )
+    {
+        $this->logger->logCall( __METHOD__, array( 'location' => $location->id ) );
+        $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+    }
+
+    /**
+     * @param int|string $locationId
+     */
+    public function deleteLocation( $locationId )
+    {
+        $this->logger->logCall( __METHOD__, array( 'locationId' => $locationId ) );
+        $this->persistenceHandler->locationSearchHandler()->deleteLocation( $locationId );
+    }
+
+    /**
+     * @param int|string $contentId
+     */
+    public function deleteContent( $contentId )
+    {
+        $this->logger->logCall( __METHOD__, array( 'contentId' => $contentId ) );
+        $this->persistenceHandler->locationSearchHandler()->deleteContent( $contentId );
     }
 }
