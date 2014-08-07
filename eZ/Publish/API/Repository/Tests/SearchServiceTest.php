@@ -1915,7 +1915,11 @@ class SearchServiceTest extends BaseTest
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
-                            new FacetBuilder\ContentTypeFacetBuilder()
+                            new FacetBuilder\ContentTypeFacetBuilder(
+                                array(
+                                    "name" => "type",
+                                )
+                            )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
                     )
@@ -1931,6 +1935,7 @@ class SearchServiceTest extends BaseTest
                         'facetBuilders' => array(
                             new FacetBuilder\ContentTypeFacetBuilder(
                                 array(
+                                    "name" => "type",
                                     'minCount' => 3,
                                 )
                             )
@@ -1949,6 +1954,7 @@ class SearchServiceTest extends BaseTest
                         'facetBuilders' => array(
                             new FacetBuilder\ContentTypeFacetBuilder(
                                 array(
+                                    "name" => "type",
                                     'limit' => 5,
                                 )
                             )
@@ -1965,7 +1971,11 @@ class SearchServiceTest extends BaseTest
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
-                            new FacetBuilder\SectionFacetBuilder()
+                            new FacetBuilder\SectionFacetBuilder(
+                                array(
+                                    "name" => "section",
+                                )
+                            )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
                     )
@@ -1979,7 +1989,11 @@ class SearchServiceTest extends BaseTest
                         'offset'      => 0,
                         'limit'       => 10,
                         'facetBuilders' => array(
-                            new FacetBuilder\UserFacetBuilder()
+                            new FacetBuilder\UserFacetBuilder(
+                                array(
+                                    "name" => "creator",
+                                )
+                            )
                         ),
                         'sortClauses' => array( new SortClause\ContentId() )
                     )
