@@ -100,6 +100,24 @@ class Mapper
      *
      * A document is an array of fields
      *
+     * @param int|string $contentId
+     *
+     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     */
+    public function mapContentById( $contentId )
+    {
+        $contentInfo = $this->contentHandler->loadContentInfo( $contentId );
+
+        return $this->mapContent(
+            $this->contentHandler->load( $contentId, $contentInfo->currentVersionNo )
+        );
+    }
+
+    /**
+     * Map content to document.
+     *
+     * A document is an array of fields
+     *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
      * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
