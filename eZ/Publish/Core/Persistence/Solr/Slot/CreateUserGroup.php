@@ -35,5 +35,11 @@ class CreateUserGroup extends Slot
                 $userGroupContentInfo->currentVersionNo
             )
         );
+
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $userGroupContentInfo->id );
+        foreach ( $locations as $location )
+        {
+            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+        }
     }
 }

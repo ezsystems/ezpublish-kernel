@@ -37,6 +37,7 @@ class CreateLocation extends Slot
                 $contentInfo->currentVersionNo
             )
         );
+
         $this->persistenceHandler->locationSearchHandler()->indexLocation(
             $this->persistenceHandler->locationHandler()->load( $signal->locationId )
         );
