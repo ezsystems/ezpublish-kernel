@@ -425,7 +425,7 @@ class ConfigurationConverter
                 eZINI::injectSettings( array() );
                 return eZSiteAccess::getIni( $siteaccess, $file )->group( $groupName );
             },
-            true,
+            false,
             false
         );
     }
@@ -459,7 +459,7 @@ class ConfigurationConverter
                 return eZSiteAccess::getIni( $siteaccess, $file )
                     ->variable( $groupName, $parameterName );
             },
-            true,
+            false,
             false
         );
     }

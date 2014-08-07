@@ -86,7 +86,7 @@ class TemplateDebugInfo
                 {
                     return eZTemplate::templatesUsageStatistics();
                 },
-                true,
+                false,
                 false
             );
         }

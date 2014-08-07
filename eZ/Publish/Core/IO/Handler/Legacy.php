@@ -411,7 +411,7 @@ class Legacy implements IOHandlerInterface
                 $clusterHandler->fileDeleteLocal( $temporaryFileName );
                 return $metadata;
             },
-            true,
+            false,
             false
         );
     }

@@ -59,7 +59,7 @@ class LegacyTest extends BaseHandlerTest
             {
                 \eZClusterFileHandler::instance()->fileDelete( 'var/test', true );
             },
-            true,
+            false,
             false
         );
 

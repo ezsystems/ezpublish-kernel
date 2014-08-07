@@ -46,7 +46,7 @@ class eZDFSFileHandler extends BaseHandler implements FileResourceProvider
                 }
                 return fopen( $dfsPath, 'rb' );
             },
-            true,
+            false,
             false
         );
 
