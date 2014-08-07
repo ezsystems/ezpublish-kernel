@@ -109,6 +109,11 @@ class Native extends Gateway
      */
     public function bulkIndex( array $documents )
     {
+        if ( empty( $documents ) )
+        {
+            return;
+        }
+
         $payload = "";
         foreach ( $documents as $document )
         {
@@ -186,6 +191,16 @@ class Native extends Gateway
             $ast["size"] = 1000;
         }
 
+        $response = $this->findRaw( $ast, $type );
+
+        // TODO: error handling
+        $data = json_decode( $response->body );
+
+        return $data;
+    }
+
+    public function findRaw( $query, $type )
+    {
         $response = $this->client->request(
             "GET",
             "/{$this->indexName}/{$type}/_search",
@@ -193,14 +208,11 @@ class Native extends Gateway
                 array(
                     "Content-Type" => "application/json",
                 ),
-                $json = json_encode( $ast, JSON_PRETTY_PRINT )
+                $json = json_encode( $query, JSON_PRETTY_PRINT )
             )
         );
 
-        // TODO: error handling
-        $data = json_decode( $response->body );
-
-        return $data;
+        return $response;
     }
 
     public function purgeIndex( $type )
@@ -214,6 +226,32 @@ class Native extends Gateway
             //    "Wrong HTTP status received from Elasticsearch: " . $result->headers["status"]
             //);
         }
+    }
+
+    /**
+     *
+     * @param $id
+     * @param $type
+     */
+    public function delete( $id, $type )
+    {
+        $result = $this->client->request( "DELETE", "/{$this->indexName}/{$type}/{$id}" );
+        $this->flush();
+    }
+
+    public function deleteByQuery( $query, $type )
+    {
+        $result = $this->client->request(
+            "DELETE",
+            "/{$this->indexName}/{$type}/_query",
+            new Message(
+                array(
+                    "Content-Type" => "application/json",
+                ),
+                $json = json_encode( $query )
+            )
+        );
+        $this->flush();
     }
 
     public function flush()
