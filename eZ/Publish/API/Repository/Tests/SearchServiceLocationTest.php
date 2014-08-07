@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -34,6 +35,11 @@ class SearchServiceLocationTest extends BaseTest
         if ( $setupFactory instanceof LegacySolr )
         {
             $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+        }
+
+        if ( $setupFactory instanceof LegacyElasticsearch )
+        {
+            $this->markTestSkipped( "Field search is not yet implemented for Elasticsearch storage" );
         }
 
         parent::setUp();
