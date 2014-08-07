@@ -17,6 +17,8 @@ use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Section;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class Handler implements SearchHandlerInterface
 {
@@ -90,7 +92,28 @@ class Handler implements SearchHandlerInterface
      */
     public function findSingle( Criterion $filter, array $fieldFilters = array() )
     {
-        // TODO: Implement findSingle() method.
+        $query = new Query();
+        $query->filter = $filter;
+        $query->offset = 0;
+        $query->limit  = 1;
+        $result = $this->findContent( $query, $fieldFilters );
+
+        if ( !$result->totalCount )
+        {
+            throw new NotFoundException(
+                "Content",
+                "findSingle() found no content for given \$filter"
+            );
+        }
+        else if ( $result->totalCount > 1 )
+        {
+            throw new InvalidArgumentException(
+                "totalCount",
+                "findSingle() found more then one item for given \$filter"
+            );
+        }
+
+        return $result->searchHits[0]->valueObject;
     }
 
     /**
