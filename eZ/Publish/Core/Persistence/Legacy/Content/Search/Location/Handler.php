@@ -92,4 +92,20 @@ class Handler implements LocationSearchHandler
     {
         // TODO: Implement indexLocation() method.
     }
+
+    /**
+     * @param int|string $locationId
+     */
+    public function deleteLocation( $locationId )
+    {
+        // This method does nothing in Legacy Storage Engine
+    }
+
+    /**
+     * @param int|string $contentId
+     */
+    public function deleteContent( $contentId )
+    {
+        // This method does nothing in Legacy Storage Engine
+    }
 }
