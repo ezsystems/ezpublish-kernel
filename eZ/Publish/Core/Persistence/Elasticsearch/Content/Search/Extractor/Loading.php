@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor;
 use RuntimeException;
 
 /**
@@ -34,10 +35,16 @@ class Loading extends Extractor
      */
     protected $locationHandler;
 
-    public function __construct( ContentHandler $contentHandler, LocationHandler $locationHandler )
+    public function __construct(
+        ContentHandler $contentHandler,
+        LocationHandler $locationHandler,
+        FacetBuilderVisitor $facetBuilderVisitor
+    )
     {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
+
+        parent::__construct( $facetBuilderVisitor );
     }
 
     /**

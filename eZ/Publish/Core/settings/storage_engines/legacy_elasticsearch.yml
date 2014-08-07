@@ -4,7 +4,7 @@ imports:
     - {resource: storage_engines/elasticsearch/criterion_visitors_common.yml}
     - {resource: storage_engines/elasticsearch/criterion_visitors_content.yml}
     - {resource: storage_engines/elasticsearch/criterion_visitors_location.yml}
-    #- {resource: storage_engines/elasticsearch/facet_builder_visitors.yml}
+    - {resource: storage_engines/elasticsearch/facet_builder_visitors.yml}
     - {resource: storage_engines/elasticsearch/field_value_mappers.yml}
     - {resource: storage_engines/elasticsearch/services.yml}
     - {resource: storage_engines/solr/slots.yml}
@@ -47,7 +47,7 @@ services:
             - @ezpublish.persistence.elasticsearch.search.serializer
             - @ezpublish.persistence.elasticsearch.search.content.criterion_visitor.aggregate
             - @ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.aggregate
-            #- @ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate
+            - @ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate
 
     ezpublish.persistence.legacy_elasticsearch.search.content.gateway:
         alias: ezpublish.persistence.legacy_elasticsearch.search.content.gateway.native
@@ -59,7 +59,7 @@ services:
             - @ezpublish.persistence.elasticsearch.search.serializer
             - @ezpublish.persistence.elasticsearch.search.location.criterion_visitor.aggregate
             - @ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.aggregate
-            #- @ezpublish.persistence.elasticsearch.search.location.facet_builder_visitor.aggregate
+            - @ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate
 
     ezpublish.persistence.legacy_elasticsearch.search.location.gateway:
         alias: ezpublish.persistence.legacy_elasticsearch.search.location.gateway.native
@@ -81,6 +81,7 @@ services:
         arguments:
             - @ezpublish.spi.persistence.legacy.content.handler
             - @ezpublish.spi.persistence.legacy.location.handler
+            - @ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate
 
     ezpublish.persistence.elasticsearch.search.extractor:
         alias: ezpublish.persistence.elasticsearch.search.extractor.loading

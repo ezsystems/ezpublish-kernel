@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Search Loader Extractor class
+ * File containing the Elasticsearch base Extractor class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor;
 
 /**
  * The Search Extractor extracts the search result from the data returned
@@ -18,6 +19,18 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
  */
 abstract class Extractor
 {
+    /**
+     * Facet builder visitor
+     *
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor
+     */
+    protected $facetBuilderVisitor;
+
+    public function __construct( FacetBuilderVisitor $facetBuilderVisitor )
+    {
+        $this->facetBuilderVisitor = $facetBuilderVisitor;
+    }
+
     /**
      *
      *
@@ -35,12 +48,20 @@ abstract class Extractor
             )
         );
 
+        if ( isset( $data->aggregations ) )
+        {
+            foreach ( $data->aggregations as $name => $aggregationData )
+            {
+                $result->facets[] = $this->facetBuilderVisitor->map( $name, $aggregationData );
+            }
+        }
+
         foreach ( $data->hits->hits as $hit )
         {
             $searchHit = new SearchHit(
                 array(
                     "score" => $hit->_score,
-                    "valueObject" => $this->extractHit( $hit )
+                    "valueObject" => $this->extractHit( $hit ),
                 )
             );
             $result->searchHits[] = $searchHit;
