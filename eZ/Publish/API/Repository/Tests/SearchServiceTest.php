@@ -2544,7 +2544,7 @@ class SearchServiceTest extends BaseTest
                         new Criterion\MapLocationDistance(
                             "maplocation",
                             Criterion\Operator::BETWEEN,
-                            array( 222, 350 ),
+                            array( 221, 350 ),
                             89,
                             16
                         )
