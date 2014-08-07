@@ -15,6 +15,8 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor;
+use ArrayObject;
 use RuntimeException;
 
 /**
@@ -49,6 +51,13 @@ class Native extends Gateway
      */
     protected $sortClauseVisitor;
 
+    /**
+     * Query facet builder visitor
+     *
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor
+     */
+    protected $facetBuilderVisitor;
+
     protected $indexName;
 
     public function __construct(
@@ -56,6 +65,8 @@ class Native extends Gateway
         Serializer $serializer,
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
+        FacetBuilderVisitor $facetBuilderVisitor,
+        // todo move up
         $indexName = "ezpublish"
     )
     {
@@ -63,6 +74,7 @@ class Native extends Gateway
         $this->serializer = $serializer;
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
+        $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->indexName = $indexName;
     }
 
@@ -127,13 +139,31 @@ class Native extends Gateway
 
     public function find( Query $query, $type )
     {
+        $aggregationList = array_map(
+            array( $this->facetBuilderVisitor, 'visit' ),
+            $query->facetBuilders
+        );
+
+        $aggregations = array();
+        foreach ( $aggregationList as $aggregation )
+        {
+            $aggregations[key( $aggregation )] = reset( $aggregation );
+        }
+
         $ast = array(
             "query" => array(
                 "filtered" => array(
-                    "filter" => $this->criterionVisitor->visit( $query->query ),
+                    "filter" => array(
+                        "and" => array(
+                            // todo dispatch visitor by query/filter context to get scoring
+                            $this->criterionVisitor->visit( $query->query ),
+                            $this->criterionVisitor->visit( $query->filter ),
+                        ),
+                    ),
                 ),
             ),
-            "filter" => $this->criterionVisitor->visit( $query->filter ),
+            //"filter" => $this->criterionVisitor->visit( $query->filter ),
+            "aggregations" => empty( $aggregations ) ? new ArrayObject : $aggregations,
             "sort" => array_map(
                 array( $this->sortClauseVisitor, "visit" ),
                 $query->sortClauses
