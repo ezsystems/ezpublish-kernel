@@ -231,10 +231,8 @@ services:
 
     # Image
     # Image alias generator
-    # @todo: Implement a new one not to rely only on legacy
-    # See @EzPublishLegacyBundle/config/services.yml
-    #ezpublish.fieldType.ezimage.variation_service:
-    #    alias: ezpublish.fieldType.ezimage.variation_service.default
+    ezpublish.fieldType.ezimage.variation_service:
+        alias: ezpublish.image_alias.imagine.alias_generator
 
     ezpublish.fieldType.ezimage.io_service:
         class: %ezpublish.core.io.service.class%

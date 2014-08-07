@@ -271,9 +271,6 @@ services:
         class: %ezpublish_legacy.fieldType.ezimage.variation_service.class%
         arguments: [@ezpublish_legacy.kernel]
 
-    ezpublish.fieldType.ezimage.variation_service:
-        alias: ezpublish_legacy.fieldType.ezimage.variation_service
-
     ezpublish_legacy.rest_listener:
         class: %ezpublish_legacy.rest_listener.class%
         arguments: [%ezpublish_rest.csrf_token_intention%]
