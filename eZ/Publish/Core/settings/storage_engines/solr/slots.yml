@@ -5,6 +5,7 @@ parameters:
     ezpublish.persistence.solr.slot.delete_content.class: eZ\Publish\Core\Persistence\Solr\Slot\DeleteContent
     ezpublish.persistence.solr.slot.delete_version.class: eZ\Publish\Core\Persistence\Solr\Slot\DeleteVersion
     ezpublish.persistence.solr.slot.delete_location.class: eZ\Publish\Core\Persistence\Solr\Slot\DeleteLocation
+    ezpublish.persistence.solr.slot.create_location.class: eZ\Publish\Core\Persistence\Elasticsearch\Slot\CreateLocation
     ezpublish.persistence.solr.slot.create_user.class: eZ\Publish\Core\Persistence\Solr\Slot\CreateUser
     ezpublish.persistence.solr.slot.create_user_group.class: eZ\Publish\Core\Persistence\Solr\Slot\CreateUserGroup
     ezpublish.persistence.solr.slot.move_user_group.class: eZ\Publish\Core\Persistence\Solr\Slot\MoveUserGroup
@@ -53,6 +54,12 @@ services:
         class: %ezpublish.persistence.solr.slot.delete_location.class%
         tags:
             - {name: ezpublish.persistence.solr.slot, signal: LocationService\DeleteLocationSignal}
+
+    ezpublish.persistence.solr.slot.create_location:
+        parent: ezpublish.persistence.solr.slot
+        class: %ezpublish.persistence.solr.slot.create_location.class%
+        tags:
+            - {name: ezpublish.persistence.solr.slot, signal: LocationService\CreateLocationSignal}
 
     ezpublish.persistence.solr.slot.create_user:
         parent: ezpublish.persistence.solr.slot
