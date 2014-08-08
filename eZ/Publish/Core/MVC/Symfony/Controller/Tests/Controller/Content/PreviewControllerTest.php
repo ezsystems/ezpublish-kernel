@@ -41,6 +41,11 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $globalHelper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $securityContext;
 
     protected function setUp()
@@ -51,6 +56,10 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $this->httpKernel = $this->getMock( 'Symfony\Component\HttpKernel\HttpKernelInterface' );
         $this->previewHelper = $this
             ->getMockBuilder( 'eZ\Publish\Core\Helper\ContentPreviewHelper' )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->globalHelper = $this
+            ->getMockBuilder( 'eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper' )
             ->disableOriginalConstructor()
             ->getMock();
         $this->securityContext = $this->getMock( 'Symfony\Component\Security\Core\SecurityContextInterface' );
@@ -65,6 +74,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             $this->contentService,
             $this->httpKernel,
             $this->previewHelper,
+            $this->globalHelper,
             $this->securityContext
         );
 
