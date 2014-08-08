@@ -120,19 +120,19 @@ services:
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_in:
         class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_in.class%
         tags:
-            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
 
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_range:
         class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_modified_range.class%
         tags:
-            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
 
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_in:
         class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_in.class%
         tags:
-            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
 
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_range:
         class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.date_published_range.class%
         tags:
-            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
