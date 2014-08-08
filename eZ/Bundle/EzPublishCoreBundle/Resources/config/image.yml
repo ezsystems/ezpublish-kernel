@@ -5,21 +5,21 @@ parameters:
 
 services:
     ezpublish.image_alias.imagine.binary_loader:
-    	class: %ezpublish.image_alias.imagine.binary_loader.class%
-    	arguments: [@ezpublish.core.io.service, @liip_imagine.extension_guesser]
-    	tags:
-    	    - { name: liip_imagine.binary.loader, loader: ezpublish }
+        class: %ezpublish.image_alias.imagine.binary_loader.class%
+        arguments: [@ezpublish.core.io.service, @liip_imagine.extension_guesser]
+        tags:
+            - { name: liip_imagine.binary.loader, loader: ezpublish }
 
     ezpublish.image_alias.imagine.cache_resolver:
-    	class: %ezpublish.image_alias.imagine.cache_resolver.class%
-    	arguments: [@ezpublish.core.io.service, @router.request_context]
-    	tags:
+        class: %ezpublish.image_alias.imagine.cache_resolver.class%
+        arguments: [@ezpublish.core.io.service, @router.request_context]
+        tags:
             - { name: liip_imagine.cache.resolver, resolver: ezpublish }
 
     ezpublish.image_alias.imagine.alias_generator:
-    	class: %ezpublish.image_alias.imagine.alias_generator.class%
-    	arguments:
-    	    - @ezpublish.image_alias.imagine.binary_loader
-    	    - @liip_imagine.filter.manager
-    	    - @ezpublish.image_alias.imagine.cache_resolver
-    	    - @logger
+        class: %ezpublish.image_alias.imagine.alias_generator.class%
+        arguments:
+            - @ezpublish.image_alias.imagine.binary_loader
+            - @liip_imagine.filter.manager
+            - @ezpublish.image_alias.imagine.cache_resolver
+            - @logger
