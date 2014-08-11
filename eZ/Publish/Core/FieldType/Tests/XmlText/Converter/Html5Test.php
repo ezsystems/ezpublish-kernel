@@ -153,6 +153,96 @@ class Html5Test extends PHPUnit_Framework_TestCase
         $checkClosure( $xpath->query( $xpathCheck ) );
     }
 
+    public function dataProviderLiteral()
+    {
+        $that = $this;
+        return array(
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal>This is a &lt;em&gt;emphasized&lt;/em&gt; text</literal></paragraph></section>',
+                '//pre',
+                function ( DOMNodeList $xpathResult ) use ( $that )
+                {
+                    $that->assertEquals( $xpathResult->length, 1 );
+                    $doc = $xpathResult->item( 0 )->ownerDocument;
+                    $that->assertEquals(
+                        trim( $doc->saveXML( $doc->documentElement ) ),
+                        '<pre>This is a &lt;em&gt;emphasized&lt;/em&gt; text</pre>'
+                    );
+                }
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">&lt;iframe src="http://www.ez.no" width="500"/&gt;</literal></paragraph></section>',
+                '//iframe',
+                function ( DOMNodeList $xpathResult ) use ( $that )
+                {
+                    $that->assertEquals( $xpathResult->length, 1 );
+                    $doc = $xpathResult->item( 0 )->ownerDocument;
+                    $that->assertEquals(
+                        $doc->saveXML( $doc->documentElement ),
+                        '<iframe src="http://www.ez.no" width="500"/>'
+                    );
+                }
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">&lt;div class="dummy"&gt;&lt;p&gt;First paragraph&lt;/p&gt;&lt;p&gt;Second paragraph with &lt;strong&gt;strong&lt;/strong&gt;&lt;/p&gt;&lt;/div&gt;</literal></paragraph></section>',
+                '//div',
+                function ( DOMNodeList $xpathResult ) use ( $that )
+                {
+                    $that->assertEquals( $xpathResult->length, 1 );
+                    $doc = $xpathResult->item( 0 )->ownerDocument;
+                    $that->assertEquals(
+                        $doc->saveXML( $doc->documentElement ),
+                        '<div class="dummy"><p>First paragraph</p><p>Second paragraph with <strong>strong</strong></p></div>'
+                    );
+                }
+            )
+        );
+    }
+
+    /**
+     * @dataProvider dataProviderLiteral
+     */
+    public function testLiteralRendering( $xml, $xpathCheck, $checkClosure )
+    {
+        $dom = new DomDocument();
+        $dom->loadXML( $xml );
+        $html5 = new Html5( $this->getDefaultStylesheet(), array() );
+
+        $result = new DomDocument();
+        $result->loadXML( $html5->convert( $dom ) );
+        $xpath = new DOMXPath( $result );
+        $checkClosure( $xpath->query( $xpathCheck ) );
+    }
+
+    public function testConvertReturnsNotValidXml()
+    {
+        $dom = new DomDocument();
+        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">This is only a literal with &lt;strong&gt;strong&lt;/strong&gt; text</literal></paragraph></section>' );
+        $html5 = new Html5( $this->getDefaultStylesheet(), array() );
+        $result = $html5->convert( $dom );
+
+        $this->assertEquals(
+             $result,
+             'This is only a literal with <strong>strong</strong> text
+'
+        );
+
+        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">This is text followed by an iframe &lt;iframe src="http://www.ez.no" /&gt;</literal></paragraph></section>' );
+        $html5 = new Html5( $this->getDefaultStylesheet(), array() );
+        $result = $html5->convert( $dom );
+
+        $this->assertEquals(
+             $result,
+             'This is text followed by an iframe <iframe src="http://www.ez.no" />
+'
+        );
+    }
+
     public function testAddPreConverter()
     {
         $html5Converter = new Html5( 'foo.xsl' );

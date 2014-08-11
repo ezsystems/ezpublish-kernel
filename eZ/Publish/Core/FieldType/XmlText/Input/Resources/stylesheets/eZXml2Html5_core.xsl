@@ -192,10 +192,17 @@
     </xsl:template>
 
     <xsl:template match="literal">
-        <pre>
-            <xsl:copy-of select="@*"/>
-            <xsl:apply-templates/>
-        </pre>
+        <xsl:choose>
+            <xsl:when test="@class='html'">
+                <xsl:value-of select="." disable-output-escaping="yes"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <pre>
+                    <xsl:copy-of select="@*"/>
+                    <xsl:apply-templates/>
+                </pre>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="anchor">
