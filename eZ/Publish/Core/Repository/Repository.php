@@ -160,6 +160,13 @@ class Repository implements RepositoryInterface
     protected $serviceSettings;
 
     /**
+     * Instance of role service
+     *
+     * @var \eZ\Publish\Core\Repository\LimitationService
+     */
+    protected $limitationService;
+
+    /**
      * Instance of domain mapper
      *
      * @var \eZ\Publish\Core\Repository\DomainMapper
@@ -326,6 +333,7 @@ class Repository implements RepositoryInterface
         // Uses SPI to avoid triggering permission checks in Role/User service
         $permissionSets = array();
         $roleService = $this->getRoleService();
+        $limitationService = $this->getLimitationService();
         $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId( $user->id, true );
         foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
@@ -355,7 +363,7 @@ class Repository implements RepositoryInterface
             if ( !empty( $permissionSet['policies'] ) )
             {
                 if ( $spiRoleAssignment->limitationIdentifier !== null )
-                    $permissionSet['limitation'] = $roleService
+                    $permissionSet['limitation'] = $limitationService
                         ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
                         ->buildValue( $spiRoleAssignment->values );
 
@@ -406,7 +414,7 @@ class Repository implements RepositoryInterface
             );
         }
 
-        $roleService = $this->getRoleService();
+        $limitationService = $this->getLimitationService();
         $currentUser = $this->getCurrentUser();
         foreach ( $permissionSets as $permissionSet )
         {
@@ -420,7 +428,7 @@ class Repository implements RepositoryInterface
              */
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
-                $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
+                $type = $limitationService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
                 $accessVote = $type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets );
                 if ( $accessVote === LimitationType::ACCESS_DENIED )
                     continue;
@@ -451,7 +459,7 @@ class Repository implements RepositoryInterface
                 $limitationsPass = true;
                 foreach ( $limitations as $limitation )
                 {
-                    $type = $roleService->getLimitationType( $limitation->getIdentifier() );
+                    $type = $limitationService->getLimitationType( $limitation->getIdentifier() );
                     $accessVote = $type->evaluate( $limitation, $currentUser, $object, $targets );
                     /**
                      * For policy limitation atm only support ACCESS_GRANTED
@@ -692,9 +700,24 @@ class Repository implements RepositoryInterface
         $this->roleService = new RoleService(
             $this,
             $this->persistenceHandler->userHandler(),
+            $this->getLimitationService(),
             $this->serviceSettings['role']
         );
         return $this->roleService;
+    }
+
+    /**
+     * Get LimitationService
+     *
+     * @return \eZ\Publish\Core\Repository\LimitationService
+     */
+    protected function getLimitationService()
+    {
+        if ( $this->limitationService !== null )
+            return $this->limitationService;
+
+        $this->limitationService = new LimitationService( $this->serviceSettings['role'] );
+        return $this->limitationService;
     }
 
     /**

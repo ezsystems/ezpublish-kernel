@@ -60,6 +60,11 @@ class RoleService implements RoleServiceInterface
     protected $userHandler;
 
     /**
+     * @var \eZ\Publish\Core\Repository\LimitationService
+     */
+    protected $limitationService;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -69,15 +74,21 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
+     * @param \eZ\Publish\Core\Repository\LimitationService $limitationService
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $userHandler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $userHandler,
+        LimitationService $limitationService,
+        array $settings = array()
+    )
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
+        $this->limitationService = $limitationService;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
-            'limitationTypes' => array(),
             'limitationMap' => array(
                 // @todo Inject these dynamically by activated eZ Controllers, see PR #252
                 'content' => array(
@@ -552,7 +563,7 @@ class RoleService implements RoleServiceInterface
         }
         else
         {
-            $limitationValidationErrors = $this->validateLimitation( $roleLimitation );
+            $limitationValidationErrors = $this->limitationService->validateLimitation( $roleLimitation );
             if ( !empty( $limitationValidationErrors ) )
             {
                 throw new LimitationValidationException( $limitationValidationErrors );
@@ -652,7 +663,7 @@ class RoleService implements RoleServiceInterface
         }
         else
         {
-            $limitationValidationErrors = $this->validateLimitation( $roleLimitation );
+            $limitationValidationErrors = $this->limitationService->validateLimitation( $roleLimitation );
             if ( !empty( $limitationValidationErrors ) )
             {
                 throw new LimitationValidationException( $limitationValidationErrors );
@@ -1023,14 +1034,11 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\SPI\Limitation\Type
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
+     * @throws \RuntimeException if there is no LimitationType with $identifier
      */
     public function getLimitationType( $identifier )
     {
-        if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
-            throw new LimitationNotFoundException( $identifier );
-
-        return $this->settings['limitationTypes'][$identifier];
+        return $this->limitationService->getLimitationType( $identifier );
     }
 
     /**
@@ -1054,17 +1062,22 @@ class RoleService implements RoleServiceInterface
             return array();
 
         $types = array();
-        foreach ( array_keys( $this->settings['limitationMap'][$module][$function] ) as $identifier )
+        try
         {
-            if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
+            foreach ( array_keys( $this->settings['limitationMap'][$module][$function] ) as $identifier )
             {
-                throw new BadStateException(
-                    '$identifier',
-                    "limitationType[{$identifier}] is not configured but was configured on limitationMap[{$module}][{$function}]"
-                );
+                $types[$identifier] = $this->limitationService->getLimitationType( $identifier );
             }
-            $types[$identifier] = $this->settings['limitationTypes'][$identifier];
         }
+        catch ( LimitationNotFoundException $e )
+        {
+            throw new BadStateException(
+                "{$module}/{$function}",
+                "limitationMap configuration is referring to non existing identifier: {$identifier}",
+                $e
+            );
+        }
+
         return $types;
     }
 
@@ -1157,8 +1170,6 @@ class RoleService implements RoleServiceInterface
     /**
      * Validates Policy context: Limitations on a module and function.
      *
-     * @uses validateLimitations()
-     *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the same limitation is repeated or if
      *                                                                   limitation is not allowed on module/function
      *
@@ -1195,63 +1206,7 @@ class RoleService implements RoleServiceInterface
             }
         }
 
-        return $this->validateLimitations( $limitations );
-    }
-
-    /**
-     * Validates an array of Limitations.
-     *
-     * @uses validateLimitation()
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
-     *
-     * @return \eZ\Publish\Core\FieldType\ValidationError[][]
-     */
-    protected function validateLimitations( array $limitations )
-    {
-        $allErrors = array();
-        foreach ( $limitations as $limitation )
-        {
-            $errors = $this->validateLimitation( $limitation );
-            if ( !empty( $errors ) )
-            {
-                $allErrors[$limitation->getIdentifier()] = $errors;
-            }
-        }
-
-        return $allErrors;
-    }
-
-    /**
-     * Validates single Limitation.
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException If the Role settings is in a bad state
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
-     *
-     * @return \eZ\Publish\Core\FieldType\ValidationError[]
-     */
-    protected function validateLimitation( Limitation $limitation )
-    {
-        $identifier = $limitation->getIdentifier();
-        if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
-        {
-            throw new BadStateException(
-                '$identifier',
-                "limitationType[{$identifier}] is not configured"
-            );
-        }
-
-        /**
-         * @var $type \eZ\Publish\SPI\Limitation\Type
-         */
-        $type = $this->settings['limitationTypes'][$identifier];
-
-        // This will throw if it does not pass
-        $type->acceptValue( $limitation );
-
-        // This return array of validation errors
-        return $type->validate( $limitation );
+        return $this->limitationService->validateLimitations( $limitations );
     }
 
     /**
