@@ -304,6 +304,7 @@ class Handler implements BaseUserHandler
 
         $this->roleGateway->addPolicy( $roleId, $legacyPolicy );
         $policy->id = $legacyPolicy->id;
+        $policy->roleId = $legacyPolicy->roleId;
 
         return $policy;
     }

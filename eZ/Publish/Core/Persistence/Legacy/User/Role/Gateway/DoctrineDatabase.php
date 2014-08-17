@@ -553,6 +553,8 @@ class DoctrineDatabase extends Gateway
             $this->handler->getSequenceName( 'ezpolicy', 'id' )
         );
 
+        $policy->roleId = $roleId;
+
         // Handle the only valid non-array value "*" by not inserting
         // anything. Still has not been documented by eZ Systems. So we
         // assume this is the right way to handle it.
