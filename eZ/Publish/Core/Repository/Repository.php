@@ -167,6 +167,11 @@ class Repository implements RepositoryInterface
     protected $limitationService;
 
     /**
+     * @var \eZ\Publish\Core\Repository\RoleDomainMapper
+     */
+    protected $roleDomainMapper;
+
+    /**
      * Instance of domain mapper
      *
      * @var \eZ\Publish\Core\Repository\DomainMapper
@@ -337,7 +342,7 @@ class Repository implements RepositoryInterface
 
         // Uses SPI to avoid triggering permission checks in Role/User service
         $permissionSets = array();
-        $roleService = $this->getRoleService();
+        $roleDomainMapper = $this->getRoleDomainMapper();
         $limitationService = $this->getLimitationService();
         $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId( $user->id, true );
         foreach ( $spiRoleAssignments as $spiRoleAssignment )
@@ -362,7 +367,7 @@ class Repository implements RepositoryInterface
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
+                $permissionSet['policies'][] = $roleDomainMapper->buildDomainPolicyObject( $spiPolicy );
             }
 
             if ( !empty( $permissionSet['policies'] ) )
@@ -706,6 +711,7 @@ class Repository implements RepositoryInterface
             $this,
             $this->persistenceHandler->userHandler(),
             $this->getLimitationService(),
+            $this->getRoleDomainMapper(),
             $this->serviceSettings['role']
         );
         return $this->roleService;
@@ -723,6 +729,20 @@ class Repository implements RepositoryInterface
 
         $this->limitationService = new LimitationService( $this->serviceSettings['role'] );
         return $this->limitationService;
+    }
+
+    /**
+     * Get RoleDomainMapper
+     *
+     * @return \eZ\Publish\Core\Repository\RoleDomainMapper
+     */
+    protected function getRoleDomainMapper()
+    {
+        if ( $this->roleDomainMapper !== null )
+            return $this->roleDomainMapper;
+
+        $this->roleDomainMapper = new RoleDomainMapper( $this->getLimitationService() );
+        return $this->roleDomainMapper;
     }
 
     /**
