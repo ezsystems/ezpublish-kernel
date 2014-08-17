@@ -285,16 +285,16 @@ class RepositoryTest extends BaseServiceMockTest
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
-        $roleServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleService",
-            array(),
+        $roleDomainMapper = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
+            array( "buildDomainPolicyObject" ),
             array(),
             '',
             false
         );
         $repositoryMock = $this->getMock(
             "eZ\\Publish\\Core\\Repository\\Repository",
-            array( "getRoleService", "getCurrentUser" ),
+            array( "getRoleDomainMapper", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
             )
@@ -302,8 +302,8 @@ class RepositoryTest extends BaseServiceMockTest
 
         $repositoryMock
             ->expects( $this->once() )
-            ->method( "getRoleService" )
-            ->will( $this->returnValue( $roleServiceMock ) );
+            ->method( "getRoleDomainMapper" )
+            ->will( $this->returnValue( $roleDomainMapper ) );
         $repositoryMock
             ->expects( $this->once() )
             ->method( "getCurrentUser" )
@@ -344,7 +344,7 @@ class RepositoryTest extends BaseServiceMockTest
                     $permissionSet["policies"][] = $policyName;
                 }
 
-                $roleServiceMock
+                $roleDomainMapper
                     ->expects( $this->at( $count++ ) )
                     ->method( "buildDomainPolicyObject" )
                     ->with( $policy )
@@ -426,16 +426,16 @@ class RepositoryTest extends BaseServiceMockTest
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
-        $roleServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleService",
-            array(),
+        $roleDomainMapper = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
+            array( "buildDomainPolicyObject" ),
             array(),
             '',
             false
         );
         $repositoryMock = $this->getMock(
             "eZ\\Publish\\Core\\Repository\\Repository",
-            array( "getRoleService", "getCurrentUser" ),
+            array( "getRoleDomainMapper", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
             )
@@ -443,8 +443,8 @@ class RepositoryTest extends BaseServiceMockTest
 
         $repositoryMock
             ->expects( $this->once() )
-            ->method( "getRoleService" )
-            ->will( $this->returnValue( $roleServiceMock ) );
+            ->method( "getRoleDomainMapper" )
+            ->will( $this->returnValue( $roleDomainMapper ) );
         $repositoryMock
             ->expects( $this->once() )
             ->method( "getCurrentUser" )
@@ -484,7 +484,7 @@ class RepositoryTest extends BaseServiceMockTest
                     $permissionSet["policies"][] = $policyName;
                 }
 
-                $roleServiceMock
+                $roleDomainMapper
                     ->expects( $this->at( $count++ ) )
                     ->method( "buildDomainPolicyObject" )
                     ->with( $policy )
@@ -553,30 +553,27 @@ class RepositoryTest extends BaseServiceMockTest
         $limitationTypeMock = $this->getMock( "eZ\\Publish\\SPI\\Limitation\\Type" );
         $repositoryMock = $this->getMock(
             "eZ\\Publish\\Core\\Repository\\Repository",
-            array( "getRoleService", "getCurrentUser", "getLimitationService" ),
+            array( "getRoleDomainMapper", "getCurrentUser", "getLimitationService" ),
             array(
                 $this->getPersistenceMock(),
             )
         );
-        $roleServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleService",
+        $limitationService = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\LimitationService",
+            array( "getLimitationType" )
+        );
+        $roleDomainMapper = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
             array( "buildDomainPolicyObject" ),
-            array(
-                $this->getRepositoryMock(),
-                $this->getPersistenceMockHandler( "User\\Handler" ),
-                $limitationService = $this->getMock(
-                    "eZ\\Publish\\Core\\Repository\\LimitationService",
-                    array( "getLimitationType" )
-                )
-            ),
+            array(),
             '',
             false
         );
 
         $repositoryMock
             ->expects( $this->once() )
-            ->method( "getRoleService" )
-            ->will( $this->returnValue( $roleServiceMock ) );
+            ->method( "getRoleDomainMapper" )
+            ->will( $this->returnValue( $roleDomainMapper ) );
         $repositoryMock
             ->expects( $this->once() )
             ->method( "getLimitationService" )
@@ -610,7 +607,7 @@ class RepositoryTest extends BaseServiceMockTest
             {
                 $policyName = "policy-{$i}-{$k}";
                 $permissionSet["policies"][] = $policyName;
-                $roleServiceMock
+                $roleDomainMapper
                     ->expects( $this->at( $k ) )
                     ->method( "buildDomainPolicyObject" )
                     ->with( $policy )
@@ -913,7 +910,12 @@ class RepositoryTest extends BaseServiceMockTest
                 $limitationService = $this->getMock(
                     "eZ\\Publish\\Core\\Repository\\LimitationService",
                     array( "getLimitationType" )
-                )
+                ),
+                $this->getMock(
+                    "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
+                    array(),
+                    array( $limitationService )
+                ),
             ),
             "",
             false

@@ -1202,7 +1202,12 @@ class RoleTest extends BaseServiceMockTest
                 array(
                     $this->getRepositoryMock(),
                     $this->getPersistenceMockHandler( "User\\Handler" ),
-                    $this->getPartlyMockedLimitationService( $methods, $settings ),
+                    $limitationService = $this->getPartlyMockedLimitationService( $methods, $settings ),
+                    $this->getMock(
+                        "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
+                        array(),
+                        array( $limitationService )
+                    ),
                     $settings
                 )
             );
