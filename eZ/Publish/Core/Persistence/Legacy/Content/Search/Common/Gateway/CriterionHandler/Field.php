@@ -95,6 +95,7 @@ class Field extends CriterionHandler
      * identifier and the sort column, which should be used.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
+     * @throws \RuntimeException if no converter is found
      *
      * @caching
      * @param string $fieldIdentifier
@@ -167,7 +168,7 @@ class Field extends CriterionHandler
      *
      * accept() must be called before calling this method.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException If no searchable fields are found for the given criterion target.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
