@@ -48,7 +48,7 @@ class SetupWizardContext extends LegacyContext
     }
 
     /**
-     * @When /^I select "([^"]*)" package version "([^"]*)"$/
+     * @When /^I select "(?P<packageName>[^"]*)" package version "(?P<version>[^"]*)"$/
      */
     public function iSelectPackage( $packageName, $version )
     {
@@ -70,7 +70,7 @@ class SetupWizardContext extends LegacyContext
     }
 
     /**
-     * @Then /^I see "([^"]*)" package version "([^"]*)" imported$/
+     * @Then /^I see "(?P<packageName>[^"]*)" package version "(?P<version>[^"]*)" imported$/
      */
     public function iSeeImported( $packageName, $version )
     {
@@ -93,7 +93,7 @@ class SetupWizardContext extends LegacyContext
     }
 
     /**
-     * @Then /^I see following packages for version "([^"]*)" imported(?:|\:)$/
+     * @Then /^I see following packages for version "(?P<version>[^"]*)" imported(?:|\:)$/
      */
     public function iSeeFollowingPackagesForVersionImported( $version, TableNode $packagesTable )
     {

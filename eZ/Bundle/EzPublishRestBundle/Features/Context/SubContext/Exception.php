@@ -15,7 +15,7 @@ use Behat\Behat\Context\Step;
 class Exception extends Base implements ExceptionSentences
 {
     /**
-     * Then I see (?:an |)invalid field (?:exception|error)
+     * Then I see an invalid field exception|error
      */
     public function iSeeAnInvalidFieldError()
     {
@@ -30,7 +30,7 @@ class Exception extends Base implements ExceptionSentences
     }
 
     /**
-     * Then I see (?:a |)forbidden (?:exception|error)
+     * Then I see a forbidden exception|error
      */
     public function iSeeAForbiddenError()
     {
@@ -43,7 +43,7 @@ class Exception extends Base implements ExceptionSentences
     }
 
     /**
-     * Then I see (?:a |)forbidden (?:exception|error) with "<message>" message
+     * Then I see a forbidden exception|error with "<message>" message
      */
     public function iSeeAForbiddenErrorWithMessage( $message )
     {
@@ -57,8 +57,8 @@ class Exception extends Base implements ExceptionSentences
     }
 
     /**
-     * Then I see (?:a |)not authorized (?:exception|error)
-     * Then I see (?:an |)unauthorized (?:exception|error)
+     * Then I see a |not authorized exception|error
+     * Then I see an unauthorized exception|error
      */
     public function iSeeNotAuthorizedError()
     {
@@ -69,7 +69,7 @@ class Exception extends Base implements ExceptionSentences
     }
 
     /**
-     * Then I see (?:a |)not found (?:exception|error)
+     * Then I see a not found exception|error
      */
     public function iSeeNotFoundError()
     {

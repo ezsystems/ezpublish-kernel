@@ -107,8 +107,8 @@ class ContentTypeGroup extends Base implements ContentTypeGroupSentences
     }
 
     /**
-     * Then I see (?:a |)Content Type Group with identifier "<identifier>"
-     * Then response contains (?:a |)Content Type Group with identifier "<identifier>"
+     * Then I see a Content Type Group with identifier "<identifier>"
+     * Then response contains a Content Type Group with identifier "<identifier>"
      */
     public function iSeeContentTypeGroup( $identifier )
     {
