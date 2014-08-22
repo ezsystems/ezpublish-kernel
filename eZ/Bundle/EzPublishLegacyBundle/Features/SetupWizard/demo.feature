@@ -1,8 +1,8 @@
-@javascript @travis @demo
-Feature: Install eZ Publish Demo with/without content for the Travis environment
+@javascript @demo
+Feature: Install eZ Publish Demo with/without content
     As an anonymous user
     I need to be able to install eZ Publish Demo through Setup Wizard
-    In order to install eZ Publish Demo
+    In order to interact with eZ Demo installation
 
     Scenario: Choose english UK as setup wizard language
         Given I am on the "Setup Wizard" page
@@ -11,12 +11,21 @@ Feature: Install eZ Publish Demo with/without content for the Travis environment
         And I press "Next"
         Then I see "Outgoing Email" step
 
+    @uniqueDatabaseSystem
+    Scenario: Choose Sendmail/MTA
+        Given I am on "Outgoing Email" step
+        When I select "Sendmail/MTA" radio button
+        And I press "Next"
+        Then I see "Database initialization" step
+
+    @nonUniqueDatabaseSystem @skipByDefault
     Scenario: Choose Sendmail/MTA
         Given I am on "Outgoing Email" step
         When I select "Sendmail/MTA" radio button
         And I press "Next"
         Then I see "Choose database system" step
 
+    @nonUniqueDatabaseSystem @skipByDefault
     Scenario: Choose which database system to use
         Given I am on "Choose database system" step
         When I select "MySQL Improved" radio button
@@ -113,6 +122,8 @@ Feature: Install eZ Publish Demo with/without content for the Travis environment
         And I select "behattestdb"
         And I press "Next"
         Then I see "Site administrator" step
+
+    # @todo: Make the non empty DB step
 
     Scenario: Define master administrator user
         Given I am on "Site administrator" step
