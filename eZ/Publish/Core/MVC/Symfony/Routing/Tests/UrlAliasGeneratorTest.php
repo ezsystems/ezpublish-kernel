@@ -79,7 +79,7 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         $this->locationService = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
         $this->repository
             ->expects( $this->any() )
-            ->method( 'getUrlAliasService' )
+            ->method( 'getURLAliasService' )
             ->will( $this->returnValue( $this->urlAliasService ) );
         $this->repository
             ->expects( $this->any() )

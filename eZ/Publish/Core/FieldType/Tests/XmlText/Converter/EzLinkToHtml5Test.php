@@ -161,7 +161,7 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockUrlAliasService()
+    protected function getMockURLAliasService()
     {
         return $this->getMockBuilder( 'eZ\Publish\Core\Repository\URLAliasService' )
             ->disableOriginalConstructor()

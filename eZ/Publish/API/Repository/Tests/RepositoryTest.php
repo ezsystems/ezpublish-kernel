@@ -154,11 +154,11 @@ class RepositoryTest extends BaseTest
     }
 
     /**
-     * Test for the getUrlAliasService() method.
+     * Test for the getURLAliasService() method.
      *
      * @return void
      * @group url-alias
-     * @see \eZ\Publish\API\Repository\Repository::getUrlAliasService()
+     * @see \eZ\Publish\API\Repository\Repository::getURLAliasService()
      */
     public function testGetURLAliasService()
     {

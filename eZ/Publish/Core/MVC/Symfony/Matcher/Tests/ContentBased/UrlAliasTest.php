@@ -95,7 +95,7 @@ class UrlAliasTest extends BaseTest
         $repository = $this->getRepositoryMock();
         $repository
             ->expects( $this->once() )
-            ->method( 'getUrlAliasService' )
+            ->method( 'getURLAliasService' )
             ->will( $this->returnValue( $urlAliasServiceMock ) );
 
         return $repository;
