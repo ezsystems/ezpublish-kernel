@@ -121,7 +121,7 @@ class Repository implements RepositoryInterface
     /**
      * Instance of URL alias service
      *
-     * @var \eZ\Publish\Core\Repository\UrlAliasService
+     * @var \eZ\Publish\Core\Repository\URLAliasService
      */
     protected $urlAliasService;
 

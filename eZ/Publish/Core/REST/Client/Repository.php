@@ -395,7 +395,7 @@ class Repository implements APIRepository
      *
      * @return \eZ\Publish\API\Repository\URLAliasService
      */
-    public function getUrlAliasService()
+    public function getURLAliasService()
     {
         if ( null === $this->urlAliasService )
         {
