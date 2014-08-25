@@ -53,14 +53,17 @@ class RestContext extends ApiContext implements RestSentences
         // set parent parameters
         parent::__construct( $parameters );
 
+        // prepare defaults
         $rest_url = !empty( $parameters['rest_url'] ) ?
             $parameters['rest_url'] :
             null;
 
-        $this->setRestClient(
-            $parameters['rest_client'],
-            $rest_url
-        );
+        $rest_client = !empty( $parameters['rest_client'] ) ?
+            $parameters['rest_client'] :
+            'GuzzleDriver';
+
+        // set/create REST client
+        $this->setRestClient( $rest_client, $rest_url );
 
         // sub contexts
         $this->useContext( 'Authentication', new SubContext\Authentication( $this->restClient ) );
