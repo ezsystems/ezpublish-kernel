@@ -23,6 +23,6 @@ abstract class Base extends BehatContext
 
     public function __construct( RestClient $restClient )
     {
-        $this->restClient = $restClient;
+        $this->restDriver = $restClient;
     }
 }

@@ -23,11 +23,11 @@ use PHPUnit_Framework_Assert as Assertion;
 class RestContext extends ApiContext implements RestSentences
 {
     /**
-     * Rest client for all requests and responses
+     * Rest driver for all requests and responses
      *
      * @var \eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\RestClient
      */
-    public $restClient;
+    public $restDriver;
 
     /**
      * Since there is a need to prepare an object in several steps it needs to be
@@ -54,46 +54,46 @@ class RestContext extends ApiContext implements RestSentences
         parent::__construct( $parameters );
 
         // prepare defaults
-        $rest_url = !empty( $parameters['rest_url'] ) ?
+        $restUrl = !empty( $parameters['rest_url'] ) ?
             $parameters['rest_url'] :
             null;
 
-        $rest_client = !empty( $parameters['rest_client'] ) ?
-            $parameters['rest_client'] :
+        $restDriver = !empty( $parameters['rest_driver'] ) ?
+            $parameters['rest_driver'] :
             'GuzzleDriver';
 
-        // set/create REST client
-        $this->setRestClient( $rest_client, $rest_url );
+        // set/create REST driver
+        $this->setRestDriver( $restDriver, $restUrl );
 
         // sub contexts
-        $this->useContext( 'Authentication', new SubContext\Authentication( $this->restClient ) );
-        $this->useContext( 'ContentTypeGroup', new SubContext\ContentTypeGroup( $this->restClient ) );
-        $this->useContext( 'Exception', new SubContext\Exception( $this->restClient ) );
+        $this->useContext( 'Authentication', new SubContext\Authentication( $this->restDriver ) );
+        $this->useContext( 'ContentTypeGroup', new SubContext\ContentTypeGroup( $this->restDriver ) );
+        $this->useContext( 'Exception', new SubContext\Exception( $this->restDriver ) );
     }
 
     /**
-     * Create and set the REST client to be used
+     * Create and set the REST driver to be used
      *
-     * @param string $restClient REST client/driver class name
+     * @param string $restDriver REST driver class name
      * @param string|null $restUrl Base URL for the REST calls
      */
-    public function setRestClient( $restClient, $restUrl )
+    public function setRestDriver( $restDriver, $restUrl )
     {
         $namespace = '\\' . __NAMESPACE__ .  '\\RestClient\\';
-        $client = $namespace . $restClient;
+        $driver = $namespace . $restDriver;
         $parent = $namespace . "RestClient";
 
         if (
-            empty( $restClient )
-            || !class_exists( $client )
-            || !is_subclass_of( $client, $parent )
+            empty( $restDriver )
+            || !class_exists( $driver )
+            || !is_subclass_of( $driver, $parent )
         )
         {
-            throw new InvalidArgumentException( 'rest_client', $client );
+            throw new InvalidArgumentException( 'rest_driver', $driver );
         }
 
-        // create a new REST Client
-        $this->restClient = new $client( $restUrl );
+        // create a new REST Driver
+        $this->restDriver = new $driver( $restUrl );
     }
 
     /**
@@ -162,8 +162,8 @@ class RestContext extends ApiContext implements RestSentences
         if ( empty( $this->responseObject ) )
         {
             $this->responseObject = $this->convertResponseBodyToObject(
-                $this->restClient->responseBody,
-                $this->restClient->getResponseHeader( 'content-type' )
+                $this->restDriver->responseBody,
+                $this->restDriver->getResponseHeader( 'content-type' )
             );
         }
 
@@ -209,7 +209,7 @@ class RestContext extends ApiContext implements RestSentences
         // if no type is defined go get it from the request
         if ( empty( $type ) )
         {
-            $type = $this->restClient->bodyType;
+            $type = $this->restDriver->bodyType;
         }
 
         // if there is no passed object go get it trough the request object
@@ -220,7 +220,7 @@ class RestContext extends ApiContext implements RestSentences
 
         $request = $this->convertObjectTo( $object, $type );
 
-        $this->restClient->setBody( $request->getContent() );
+        $this->restDriver->setBody( $request->getContent() );
     }
 
     /**
@@ -276,10 +276,10 @@ class RestContext extends ApiContext implements RestSentences
      */
     public function iCreateRequest( $requestType, $resourceUrl )
     {
-        $this->restClient->setResourceUrl(
+        $this->restDriver->setResourceUrl(
             $this->changeMappedValuesOnUrl( $resourceUrl )
         );
-        $this->restClient->setRequestType( $requestType );
+        $this->restDriver->setRequestType( $requestType );
     }
 
     /**
@@ -308,7 +308,7 @@ class RestContext extends ApiContext implements RestSentences
      */
     public function iAddHeaderToObjectAction( $header, $action, $object )
     {
-        $this->restClient->addSpecialHeader( $header, $object, $action );
+        $this->restDriver->addSpecialHeader( $header, $object, $action );
     }
 
     /**
@@ -356,7 +356,7 @@ class RestContext extends ApiContext implements RestSentences
      */
     public function iAddHeaderWithValue( $header, $value )
     {
-        $this->restClient->setHeader( $header, $value );
+        $this->restDriver->setHeader( $header, $value );
     }
 
     /**
@@ -378,14 +378,14 @@ class RestContext extends ApiContext implements RestSentences
     public function iSendRequest()
     {
         if (
-            empty( $this->restClient->body )
+            empty( $this->restDriver->body )
             && !empty( $this->requestObject )
-            && !empty( $this->restClient->headers['content-type'] )
+            && !empty( $this->restDriver->headers['content-type'] )
         )
         {
             $this->addObjectToRequestBody();
         }
-        $this->restClient->sendRequest();
+        $this->restDriver->sendRequest();
     }
 
     /**
@@ -394,7 +394,7 @@ class RestContext extends ApiContext implements RestSentences
     public function iSeeResponseHeader( $header )
     {
         Assertion::assertNotNull(
-            $this->restClient->getResponseHeader( $header ),
+            $this->restDriver->getResponseHeader( $header ),
             "Expected '$header' header not found"
         );
     }
@@ -405,8 +405,8 @@ class RestContext extends ApiContext implements RestSentences
     public function iDonTSeeResponseHeader( $header )
     {
         Assertion::assertNull(
-            $this->restClient->getResponseHeader( $header ),
-            "Unexpected '$header' header found with '{$this->restClient->getResponseHeader( $header )}' value"
+            $this->restDriver->getResponseHeader( $header ),
+            "Unexpected '$header' header found with '{$this->restDriver->getResponseHeader( $header )}' value"
         );
     }
 
@@ -417,8 +417,8 @@ class RestContext extends ApiContext implements RestSentences
     {
         Assertion::assertEquals(
             $value,
-            $this->restClient->getResponseHeader( $header ),
-            "Expected '$header' header with '$value' found it with '{$this->restClient->getResponseHeader( $header )}' value"
+            $this->restDriver->getResponseHeader( $header ),
+            "Expected '$header' header with '$value' found it with '{$this->restDriver->getResponseHeader( $header )}' value"
         );
     }
 
@@ -429,8 +429,8 @@ class RestContext extends ApiContext implements RestSentences
     {
         Assertion::assertNotEquals(
             $value,
-            $this->restClient->getResponseHeader( $header ),
-            "Unexpected '$header' header found with '{$this->restClient->getResponseHeader( $header )}' value"
+            $this->restDriver->getResponseHeader( $header ),
+            "Unexpected '$header' header found with '{$this->restDriver->getResponseHeader( $header )}' value"
         );
     }
 
@@ -440,7 +440,7 @@ class RestContext extends ApiContext implements RestSentences
     public function iOnlySeeResponseHeaders( TableNode $table )
     {
         $expectHeaders = $this->getSubContext( 'Common' )->convertTableToArrayOfData( $table );
-        $actualHeaders = $this->restClient->getResponseHeaders();
+        $actualHeaders = $this->restDriver->getResponseHeaders();
 
         foreach ( $expectHeaders as $header => $value )
         {
@@ -478,7 +478,7 @@ class RestContext extends ApiContext implements RestSentences
     public function iSeeResponseHeaders( TableNode $table )
     {
         $expectHeaders = $this->getSubContext( 'Common' )->convertTableToArrayOfData( $table );
-        $actualHeaders = $this->restClient->getResponseHeaders();
+        $actualHeaders = $this->restDriver->getResponseHeaders();
 
         foreach ( $expectHeaders as $header => $value )
         {
@@ -555,12 +555,12 @@ class RestContext extends ApiContext implements RestSentences
     {
         Assertion::assertEquals(
             $value,
-            $this->restClient->getResponseBody(),
+            $this->restDriver->getResponseBody(),
             "Expected body isn't equal to the actual one."
             . "\nExpected: "
             . print_r( $value, true )
             . "\nActual: "
-            . print_r( $this->restClient->getResponseBody(), true )
+            . print_r( $this->restDriver->getResponseBody(), true )
         );
     }
 
@@ -577,9 +577,9 @@ class RestContext extends ApiContext implements RestSentences
      */
     public function iSeeResponseHeaderToObjectAction( $header, $action, $object )
     {
-        $expected = $this->restClient->constructSpecialHeader( $object, $action );
+        $expected = $this->restDriver->constructSpecialHeader( $object, $action );
         $expected = substr( $expected, 0, strpos( $expected, '+' ) );
-        $actual = $this->restClient->getResponseHeader( $header );
+        $actual = $this->restDriver->getResponseHeader( $header );
         $actual = substr( $actual, 0, strpos( $actual, '+' ) );
         Assertion::assertEquals(
             $expected,
@@ -595,8 +595,8 @@ class RestContext extends ApiContext implements RestSentences
     {
         Assertion::assertEquals(
             $statusCode,
-            $this->restClient->getResponseStatusCode(),
-            "Expected status code '$statusCode' found '{$this->restClient->getResponseStatusCode()}'"
+            $this->restDriver->getResponseStatusCode(),
+            "Expected status code '$statusCode' found '{$this->restDriver->getResponseStatusCode()}'"
         );
     }
 
@@ -607,8 +607,8 @@ class RestContext extends ApiContext implements RestSentences
     {
         Assertion::assertEquals(
             strtolower( $statusMessage ),
-            strtolower( $this->restClient->getResponseStatusMessage() ),
-            "Expected status message '$statusMessage' found '{$this->restClient->getResponseStatusMessage()}'"
+            strtolower( $this->restDriver->getResponseStatusMessage() ),
+            "Expected status message '$statusMessage' found '{$this->restDriver->getResponseStatusMessage()}'"
         );
     }
 

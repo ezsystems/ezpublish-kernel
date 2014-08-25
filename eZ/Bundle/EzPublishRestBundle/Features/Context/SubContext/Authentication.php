@@ -31,16 +31,15 @@ class Authentication extends Base implements AuthenticationSentences
                 throw new PendingException( "Login with '$role' role not implemented yet" );
         }
 
-        $this->restClient->setAuthentication( $user, $password );
+        $this->restDriver->setAuthentication( $user, $password );
     }
-
 
     /**
      * Given I am logged in as "<user>" with password "<password>"
      */
     public function iAmLoggedInAsWithPassword( $user, $password )
     {
-        $this->restClient->setAuthentication( $user, $password );
+        $this->restDriver->setAuthentication( $user, $password );
     }
 
     /**
@@ -49,6 +48,6 @@ class Authentication extends Base implements AuthenticationSentences
      */
     public function iAmNotLoggedIn()
     {
-        $this->restClient->setAuthentication( '', '' );
+        $this->restDriver->setAuthentication( '', '' );
     }
 }
