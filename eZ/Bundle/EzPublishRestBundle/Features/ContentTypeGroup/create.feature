@@ -1,4 +1,4 @@
-@contentTypeGroup @adminFeature
+@contentTypeGroup
 Feature: Create Content Type Group
     As a developer
     I need to create a Content Type Group

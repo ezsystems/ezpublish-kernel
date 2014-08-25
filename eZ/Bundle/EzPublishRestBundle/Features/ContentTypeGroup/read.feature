@@ -1,4 +1,4 @@
-@contentTypeGroup @adminFeature
+@contentTypeGroup
 Feature: Read a Content Type Groups
     As a developer
     I need to be able to read a Content Type Group

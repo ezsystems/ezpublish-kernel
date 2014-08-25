@@ -1,4 +1,4 @@
-@contentTypeGroup @adminFeature
+@contentTypeGroup
 Feature: Delete a Content Type Group
     As a developer
     I need to delete a Content Type Group

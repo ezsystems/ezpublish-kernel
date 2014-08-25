@@ -1,4 +1,4 @@
-@contentTypeGroup @adminFeature
+@contentTypeGroup
 Feature: Read all Content Type Groups
     As a developer
     I need to list all exiting Content Type Groups

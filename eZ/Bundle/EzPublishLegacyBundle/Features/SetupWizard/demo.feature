@@ -1,31 +1,37 @@
+@javascript @demo
 Feature: Install eZ Publish Demo with/without content
-    In order to install eZ Publish Demo
     As an anonymous user
     I need to be able to install eZ Publish Demo through Setup Wizard
+    In order to interact with eZ Demo installation
 
-    @javascript @democontent_install @democlean_install
-    Scenario: Choose english UK for installation
+    Scenario: Choose english UK as setup wizard language
         Given I am on the "Setup Wizard" page
         And I am on "Welcome to eZ Publish Community Project 5.4.0alpha1" step
         When I select "English (United Kingdom)"
         And I press "Next"
         Then I see "Outgoing Email" step
 
-    @javascript @democontent_install @democlean_install
+    @uniqueDatabaseSystem
+    Scenario: Choose Sendmail/MTA
+        Given I am on "Outgoing Email" step
+        When I select "Sendmail/MTA" radio button
+        And I press "Next"
+        Then I see "Database initialization" step
+
+    @nonUniqueDatabaseSystem @skipByDefault
     Scenario: Choose Sendmail/MTA
         Given I am on "Outgoing Email" step
         When I select "Sendmail/MTA" radio button
         And I press "Next"
         Then I see "Choose database system" step
 
-    @javascript @democontent_install @democlean_install
+    @nonUniqueDatabaseSystem @skipByDefault
     Scenario: Choose which database system to use
         Given I am on "Choose database system" step
         When I select "MySQL Improved" radio button
         And I press "Next"
         Then I see "Database initialization" step
 
-    @javascript @democontent_install @democlean_install
     Scenario: Setup database connection
         Given I am on "Database initialization" step
         When I fill form with:
@@ -37,7 +43,6 @@ Feature: Install eZ Publish Demo with/without content
         And I press "Next"
         Then I see "Language support" step
 
-    @javascript @democontent_install @democlean_install
     Scenario: Choose English UK and German as languages for installation
         Given I am on "Language support" step
         When I select "English (United Kingdom)" radio button
@@ -45,7 +50,7 @@ Feature: Install eZ Publish Demo with/without content
         And I press "Next"
         Then I see "Site package" step
 
-    @javascript @democontent_install
+    @content
     Scenario: Choose Demo Site (with content) for installation
         Given I am on "Site package" step
         When I select "eZ Publish Demo Site" package version "5.4.0alpha1"
@@ -63,8 +68,8 @@ Feature: Install eZ Publish Demo with/without content
             | ezdemo_democontent        |
         And I don't see "Not Imported" message
 
-    @javascript @democlean_install
-    Scenario: Choose Demo Site (with content) for installation
+    @clean
+    Scenario: Choose Demo Site (without content) for installation
         Given I am on "Site package" step
         When I select "eZ Publish Demo Site (without demo content)" package version "5.4.0alpha1"
         And I press "Next"
@@ -81,20 +86,18 @@ Feature: Install eZ Publish Demo with/without content
             | ezdemo_democontent_clean  |
         And I don't see "Not Imported" message
 
-    @javascript @democontent_install @democlean_install
     Scenario: See that all was successfully imported
         Given I am on "Site package" step
         When I click at "Next" button
         Then I see "Site access configuration" step
 
-    @javascript @democontent_install @democlean_install
     Scenario: Choose the recommended URL site access configuration
         Given I am on "Site access configuration" step
         When I select "URL" radio button
         And I press "Next"
         Then I see "Site details" step
 
-    @javascript @democontent_install
+    @content
     Scenario: Define site details
         Given I am on "Site details" step
         When I fill form with:
@@ -107,7 +110,7 @@ Feature: Install eZ Publish Demo with/without content
         And I press "Next"
         Then I see "Site administrator" step
 
-    @javascript @democlean_install
+    @clean
     Scenario: Define site details
         Given I am on "Site details" step
         When I fill form with:
@@ -120,7 +123,8 @@ Feature: Install eZ Publish Demo with/without content
         And I press "Next"
         Then I see "Site administrator" step
 
-    @javascript @democontent_install @democlean_install
+    # @todo: Make the non empty DB step
+
     Scenario: Define master administrator user
         Given I am on "Site administrator" step
         When I fill form with:
@@ -133,7 +137,6 @@ Feature: Install eZ Publish Demo with/without content
         And I press "Next"
         Then I see "Open source software is nothing without a vibrant community!" step
 
-    @javascript @democontent_install @democlean_install
     Scenario: Show open source information
         Given I am on "Open source software is nothing without a vibrant community!" step
         When I press "Next"

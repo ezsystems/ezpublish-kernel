@@ -36,6 +36,17 @@ class SetupWizardContext extends LegacyContext
     }
 
     /**
+     * Enables the possibility to run all the setup wizard features without the
+     * need to make a clean installation for each
+     *
+     * @AfterSuite
+     */
+    static public function clearInstallation()
+    {
+        // @todo: implementation
+    }
+
+    /**
      * @Given /^I am (?:at|on) (?:|the )"(?P<stepTitle>[^"]*)" step/
      * @Then /^I see "(?P<stepTitle>[^"]*)" step$/
      */
