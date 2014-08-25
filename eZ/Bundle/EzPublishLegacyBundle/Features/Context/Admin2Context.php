@@ -11,4 +11,15 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context;
 
 class Admin2Context extends LegacyContext
 {
+    public function __construct( array $parameters )
+    {
+        parent::__construct( $parameters );
+
+        $this->pageIdentifierMap += array(
+            'content structure' => '/'
+        );
+
+        $this->pageIdentifierMap['login'] = '/user/login';
+        $this->pageIdentifierMap['logout'] = '/user/logout';
+    }
 }
