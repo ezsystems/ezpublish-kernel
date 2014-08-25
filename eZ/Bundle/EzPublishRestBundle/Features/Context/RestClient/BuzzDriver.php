@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the BuzzClient class for RestBundle.
+ * File containing the BuzzDriver class for RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -13,7 +13,7 @@ use Buzz\Message\Request;
 use Buzz\Message\Response;
 use Buzz\Client\Curl;
 
-class BuzzClient extends RestClient
+class BuzzDriver extends RestClient
 {
     /**
      * @var \Buzz\Message\Request

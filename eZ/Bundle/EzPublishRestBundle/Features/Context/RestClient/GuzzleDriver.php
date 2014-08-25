@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the GuzzleClient class for RestBundle.
+ * File containing the GuzzleDriver class for RestBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -11,7 +11,7 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
 use Guzzle\Http\Client;
 
-class GuzzleClient extends RestClient
+class GuzzleDriver extends RestClient
 {
     /**
      * @var \Guzzle\Http\Message\Request
