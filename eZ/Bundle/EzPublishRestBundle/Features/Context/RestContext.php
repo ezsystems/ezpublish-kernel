@@ -71,6 +71,12 @@ class RestContext extends ApiContext implements RestSentences
         $this->useContext( 'Exception', new SubContext\Exception( $this->restClient ) );
     }
 
+    /**
+     * Create and set the REST client to be used
+     *
+     * @param string $restClient REST client/driver class name
+     * @param string|null $restUrl Base URL for the REST calls
+     */
     public function setRestClient( $restClient, $restUrl )
     {
         $namespace = '\\' . __NAMESPACE__ .  '\\RestClient\\';
