@@ -283,7 +283,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * When I add "<header>" header (?:to|with) "<action>" (?:an|a|for|to|the|of) "<object>"
+     * When I add "<header>" header to|with "<action>" an|a|for|to|the|of "<object>"
      *
      * Sentences examples:
      *  - I add content-type header to "Create" an "ContentType"
@@ -303,7 +303,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * When I add "<header>" header (?:for|with) (?:an|a|to|the|of) "<object>"
+     * When I add "<header>" header for|with an|a|to|the|of "<object>"
      *
      * Sentences examples:
      *  - I add accept header for "ContentType"
@@ -322,7 +322,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * When I make (?:an |a |)"<objectType>" object
+     * When I make an|a "<objectType>" object
      *
      * This will create an object of the type passed for step by step be filled
      */
@@ -332,7 +332,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * When I add (?:the |)"<value>" value to "<field>" field
+     * When I add the "<value>" value to "<field>" field
      */
     public function iAddValueToField( $value, $field )
     {
@@ -364,7 +364,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * When I send (?:the |)request
+     * When I send the request
      */
     public function iSendRequest()
     {
@@ -391,7 +391,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * Then I (?:don\'t|do not) see "<header>" header
+     * Then I don\'t|do not see "<header>" header
      */
     public function iDonTSeeResponseHeader( $header )
     {
@@ -414,7 +414,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * Then I (?:don\'t|do not) see "<header>" header with "<value>" value
+     * Then I don't|do not see "<header>" header with "<value>" value
      */
     public function iDonTSeeResponseHeaderWithValue( $header, $value )
     {
@@ -556,7 +556,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * Then I see "<header>" header (?:for|with) (?:an|a|to|the) "<object>"
+     * Then I see "<header>" header for|with an|a|to|the "<object>"
      */
     public function iSeeResponseHeaderForObject( $header, $object )
     {
@@ -580,7 +580,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * Then I see <statusCode> status code$/
+     * Then I see <statusCode> status code
      */
     public function iSeeResponseStatusCode( $statusCode )
     {
@@ -592,7 +592,7 @@ class RestContext extends ApiContext implements RestSentences
     }
 
     /**
-     * Then I see "<statusMessage>" status (?:reason phrase|message)$/
+     * Then I see "<statusMessage>" status reason phrase|message
      */
     public function iSeeResponseStatusMessage( $statusMessage )
     {
