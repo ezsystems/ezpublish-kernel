@@ -224,6 +224,11 @@ class Type extends FieldType
      */
     protected function checkValueStructure( BaseValue $value )
     {
+        if ( is_numeric( $value->text ) )
+        {
+            $value->text = (string)$value->text;
+        }
+
         if ( !is_string( $value->text ) )
         {
             throw new InvalidArgumentType(
