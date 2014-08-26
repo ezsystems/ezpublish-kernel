@@ -413,7 +413,7 @@
 {% if not ez_is_field_empty( content, field ) %}
 <figure {{ block( 'field_attributes' ) }}>
     {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
-    <img src="{{ asset( imageAlias.uri ) }}"{% if imageAlias.width is defined %} width="{{ imageAlias.width }}"{% endif %}{% if imageAlias.height is defined %} height="{{ imageAlias.height }}"{% endif %} alt="{{ field.value.alternativeText }}" />
+    {% if imageAlias %}<img src="{{ asset( imageAlias.uri ) }}"{% if imageAlias.width is defined %} width="{{ imageAlias.width }}"{% endif %}{% if imageAlias.height is defined %} height="{{ imageAlias.height }}"{% endif %} alt="{{ field.value.alternativeText }}" />{% endif %}
 </figure>
 {% endif %}
 {% endspaceless %}
