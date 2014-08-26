@@ -1297,6 +1297,12 @@ class ContentServiceTest extends BaseContentServiceTest
             $draftVersion2
         );
 
+        $this->assertEquals(
+            $this->generateId( 'user', 10 ),
+            $draftVersion2->versionInfo->creatorId,
+            "creatorId is not properly set on new Version"
+        );
+
         return $draftVersion2;
     }
 

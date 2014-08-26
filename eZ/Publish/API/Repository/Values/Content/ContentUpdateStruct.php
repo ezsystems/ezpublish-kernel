@@ -28,6 +28,16 @@ abstract class ContentUpdateStruct extends ValueObject
     public $initialLanguageCode;
 
     /**
+     * Creator user ID.
+     *
+     * Creator of the version, in the search API this is referred to as the modifier of the published content.
+     *
+     * @since 5.4
+     * @var mixed Optional creator of version, current user will be used if null
+     */
+    public $creatorId;
+
+    /**
      * Adds a field to the field collection.
      * This method could also be implemented by ArrayAccess so that
      * $fields[$fieldDefIdentifier][$language] = $value or without language $fields[$fieldDefIdentifier] = $value

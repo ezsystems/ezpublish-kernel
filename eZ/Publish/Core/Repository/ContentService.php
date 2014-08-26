@@ -1328,7 +1328,7 @@ class ContentService implements ContentServiceInterface
                     $languageCodes,
                     $contentType
                 ),
-                "creatorId" => $this->repository->getCurrentUser()->id,
+                "creatorId" => $contentUpdateStruct->creatorId ?: $this->repository->getCurrentUser()->id,
                 "fields" => $spiFields,
                 "modificationDate" => time(),
                 "initialLanguageId" => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
