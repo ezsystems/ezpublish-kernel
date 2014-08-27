@@ -334,7 +334,7 @@ class ContentType extends RestController
 
         if ( $publish )
         {
-            $this->contentTypeService->publishContentTypeDraft( $contentTypeDraft, 'bla' );
+            $this->contentTypeService->publishContentTypeDraft( $contentTypeDraft );
 
             $contentType = $this->contentTypeService->loadContentType( $contentTypeDraft->id );
             return new Values\CreatedContentType(
