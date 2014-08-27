@@ -59,6 +59,7 @@ services:
             - @ezpublish.api.service.content
             - @http_kernel
             - @ezpublish.content_preview_helper
+            - @ezpublish.templating.global_helper
             - @security.context
         calls:
             - [setRequest, [@?request=]]

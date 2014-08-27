@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
+use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
@@ -41,6 +42,11 @@ class PreviewController
     private $previewHelper;
 
     /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
+     */
+    private $globalHelper;
+
+    /**
      * @var \Symfony\Component\Security\Core\SecurityContextInterface
      */
     private $securityContext;
@@ -54,12 +60,14 @@ class PreviewController
         ContentService $contentService,
         HttpKernelInterface $kernel,
         ContentPreviewHelper $previewHelper,
+        GlobalHelper $globalHelper,
         SecurityContextInterface $securityContext
     )
     {
         $this->contentService = $contentService;
         $this->kernel = $kernel;
         $this->previewHelper = $previewHelper;
+        $this->globalHelper = $globalHelper;
         $this->securityContext = $securityContext;
     }
 
@@ -117,7 +125,7 @@ class PreviewController
                 // specify a route for RouteReference generator
                 '_route' => UrlAliasGenerator::INTERNAL_LOCATION_ROUTE,
                 '_route_params' => array(
-                    'locationId' => $location->id,
+                    'locationId' => $location->id ?: $this->globalHelper->getRootLocation()->id,
                 ),
                 'location' => $location,
                 'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
