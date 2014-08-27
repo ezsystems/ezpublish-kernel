@@ -60,6 +60,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function load( $contentId, $version, array $translations = null )
     {
+        // Sort translations to make sure cache key is similar no matter what order user provided translations in
+        sort( $translations );
         $translationsKey = empty( $translations ) ? self::ALL_TRANSLATIONS_KEY : implode( '|', $translations );
         $cache = $this->cache->getItem( 'content', $contentId, $version, $translationsKey );
         $content = $cache->get();
