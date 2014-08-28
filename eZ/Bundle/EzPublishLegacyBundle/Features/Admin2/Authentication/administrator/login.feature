@@ -8,4 +8,4 @@ Feature: Login into administration
         When I fill in "Username" with "admin"
         And I fill in "Password" with "publish"
         And I click at "Log in" button
-        Then I see "Content structure" page
+        Then I see homepage
