@@ -50,6 +50,9 @@ class UrlAliasRouter extends BaseUrlAliasRouter
      * Will return the right UrlAlias in regards to configured root location.
      *
      * @param string $pathinfo
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
     protected function getUrlAlias( $pathinfo )

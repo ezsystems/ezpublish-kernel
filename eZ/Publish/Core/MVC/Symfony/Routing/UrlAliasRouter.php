@@ -95,7 +95,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         try
         {
             $urlAlias = $this->getUrlAlias(
-                $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() )
+                rawurldecode( $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() ) )
             );
 
             $params = array(
@@ -157,6 +157,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      * Returns the UrlAlias object to use, starting from the request.
      *
      * @param $pathinfo
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
+     *
      * @return URLAlias
      */
     protected function getUrlAlias( $pathinfo )
