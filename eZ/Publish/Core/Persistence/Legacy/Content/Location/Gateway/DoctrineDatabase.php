@@ -1022,9 +1022,8 @@ class DoctrineDatabase extends Gateway
                 )
             );
         $statement = $query->prepare();
-        $statement->execute();
 
-        if ( $statement->rowCount() < 1 )
+        if ( $statement->execute() === false )
         {
             throw new NotFound( 'location', $locationId );
         }
