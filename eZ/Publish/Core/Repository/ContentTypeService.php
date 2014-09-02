@@ -1361,10 +1361,11 @@ class ContentTypeService implements ContentTypeServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there is already a draft assigned to another user
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\API\Repository\Values\User\User $modifier If null the current-user is used instead {@since 5.4}
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentTypeDraft( APIContentType $contentType )
+    public function createContentTypeDraft( APIContentType $contentType, User $modifier = null )
     {
         if ( $this->repository->hasAccess( 'class', 'create' ) !== true )
             throw new UnauthorizedException( 'ContentType', 'create' );
@@ -1387,7 +1388,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             try
             {
                 $spiContentType = $this->contentTypeHandler->createDraft(
-                    $this->repository->getCurrentUser()->id,
+                    $modifier !== null ? $modifier->id : $this->repository->getCurrentUser()->id,
                     $contentType->id
                 );
                 $this->repository->commit();

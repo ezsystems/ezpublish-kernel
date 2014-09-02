@@ -170,6 +170,7 @@ abstract class BaseContentServiceTest extends BaseTest
         // Create an update struct and modify some fields
         $contentUpdate = $contentService->newContentUpdateStruct();
         $contentUpdate->initialLanguageCode = 'eng-US';
+        $contentUpdate->creatorId = $this->generateId( 'user', 10 );
         $contentUpdate->setField( 'name', 'An awesome forum²' );
         $contentUpdate->setField( 'name', 'An awesome forum²³', 'eng-GB' );
 
