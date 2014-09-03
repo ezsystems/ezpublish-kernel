@@ -133,10 +133,11 @@ class SearchService implements SearchServiceInterface
 
         $result = $this->searchHandler->findContent( $query, $fieldFilters );
 
+        $contentService = $this->repository->getContentService();
         foreach ( $result->searchHits as $hit )
         {
-            $hit->valueObject = $this->domainMapper->buildContentDomainObject(
-                $hit->valueObject
+            $hit->valueObject = $contentService->loadContent(
+                $hit->valueObject->id
             );
         }
 
@@ -258,8 +259,10 @@ class SearchService implements SearchServiceInterface
             throw new NotFoundException( 'Content', '*' );
         }
 
-        return $this->domainMapper->buildContentDomainObject(
-            $this->searchHandler->findSingle( $filter, $fieldFilters )
+        $contentInfo = $this->searchHandler->findSingle( $filter, $fieldFilters );
+        return $this->repository->getContentService()->loadContent(
+            $contentInfo->id,
+            ( !empty( $fieldFilters['languages'] ) ? $fieldFilters['languages'] : null )
         );
     }
 

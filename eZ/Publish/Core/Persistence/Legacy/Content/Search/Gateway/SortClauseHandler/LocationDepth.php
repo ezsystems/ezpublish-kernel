@@ -49,38 +49,13 @@ class LocationDepth extends SortClauseHandler
                 $query->alias(
                     $this->dbHandler->quoteColumn(
                         'depth',
-                        $this->getSortTableName( $number )
+                        'main_tree'
                     ),
                     $column = $this->getSortColumnName( $number )
                 )
             );
 
         return $column;
-    }
-
-    /**
-     * Applies joins to the query, required to fetch sort data
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
-     * @param int $number
-     *
-     * @return void
-     */
-    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number )
-    {
-        $table = $this->getSortTableName( $number );
-        $query
-            ->leftJoin(
-                $query->alias(
-                    $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
-                    $this->dbHandler->quoteIdentifier( $table )
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn( 'contentobject_id', $table ),
-                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
-                )
-            );
     }
 }
 

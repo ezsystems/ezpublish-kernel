@@ -39,6 +39,7 @@ services:
             - @ezpublish.persistence.legacy.content.gateway
             - @ezpublish.persistence.legacy.field_value_converter.registry
             - @ezpublish.persistence.legacy.external_storage_handler
+            - @ezpublish.persistence.legacy.content.mapper
 
     ezpublish.persistence.legacy.content_type.update_handler.base:
         abstract: true

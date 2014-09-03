@@ -69,7 +69,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         $result = array_map(
             function ( $hit )
             {
-                return $hit->valueObject->versionInfo->contentInfo->id;
+                return $hit->valueObject->id;
             },
             $searchResult->searchHits
         );
@@ -235,8 +235,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
                 $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             ),
-            $this->getContentMapperMock(),
-            $this->getContentFieldHandlerMock()
+            $this->getContentMapperMock()
         );
     }
 
@@ -249,32 +248,30 @@ class SearchHandlerTest extends LanguageAwareTestCase
     {
         $mapperMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-            array( 'extractContentFromRows' ),
+            array( 'extractContentInfoFromRows' ),
             array(
                 $this->fieldRegistry,
                 $this->getLanguageHandler()
             )
         );
         $mapperMock->expects( $this->any() )
-            ->method( 'extractContentFromRows' )
+            ->method( 'extractContentInfoFromRows' )
             ->with( $this->isType( 'array' ) )
             ->will(
                 $this->returnCallback(
                     function ( $rows )
                     {
-                        $contentObjs = array();
+                        $contentInfoObjs = array();
                         foreach ( $rows as $row )
                         {
-                            $contentId = (int)$row['ezcontentobject_id'];
-                            if ( !isset( $contentObjs[$contentId] ) )
+                            $contentId = (int)$row['id'];
+                            if ( !isset( $contentInfoObjs[$contentId] ) )
                             {
-                                $contentObjs[$contentId] = new ContentObject();
-                                $contentObjs[$contentId]->versionInfo = new VersionInfo;
-                                $contentObjs[$contentId]->versionInfo->contentInfo = new ContentInfo;
-                                $contentObjs[$contentId]->versionInfo->contentInfo->id = $contentId;
+                                $contentInfoObjs[$contentId] = new ContentInfo();
+                                $contentInfoObjs[$contentId]->id = $contentId;
                             }
                         }
-                        return array_values( $contentObjs );
+                        return array_values( $contentInfoObjs );
                     }
                 )
             );
@@ -449,9 +446,9 @@ class SearchHandlerTest extends LanguageAwareTestCase
     {
         $locator = $this->getContentSearchHandler();
 
-        $content = $locator->findSingle( new Criterion\ContentId( 10 ) );
+        $contentInfo = $locator->findSingle( new Criterion\ContentId( 10 ) );
 
-        $this->assertEquals( 10, $content->versionInfo->contentInfo->id );
+        $this->assertEquals( 10, $contentInfo->id );
     }
 
     /**
@@ -597,7 +594,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         foreach ( $result->searchHits as $hit )
         {
             $this->assertContains(
-                $hit->valueObject->versionInfo->contentInfo->id,
+                $hit->valueObject->id,
                 $expectedContentIds
             );
         }
@@ -1254,7 +1251,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
                 array_map(
                     function ( $hit )
                     {
-                        return $hit->valueObject->versionInfo->contentInfo->id;
+                        return $hit->valueObject->id;
                     },
                     $result->searchHits
                 )

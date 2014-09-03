@@ -20,6 +20,8 @@ interface Handler
      * Finds locations for the given $query
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With Location as SearchHit->valueObject
      */
     public function findLocations( LocationQuery $query );
 }

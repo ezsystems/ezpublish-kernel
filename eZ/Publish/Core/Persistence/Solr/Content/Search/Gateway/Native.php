@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
-use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -19,6 +18,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use RuntimeException;
 
 /**
@@ -63,13 +63,6 @@ class Native extends Gateway
     protected $fieldValueMapper;
 
     /**
-     * Content Handler
-     *
-     * @var ContentHandler
-     */
-    protected $contentHandler;
-
-    /**
      * Field name generator
      *
      * @var FieldNameGenerator
@@ -89,18 +82,15 @@ class Native extends Gateway
      * @param SortClauseVisitor $sortClauseVisitor
      * @param FacetBuilderVisitor $facetBuilderVisitor
      * @param FieldValueMapper $fieldValueMapper
-     * @param ContentHandler $contentHandler
-     *
-     * @return void
+     * @param FieldNameGenerator $nameGenerator
      */
-    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, ContentHandler $contentHandler, FieldNameGenerator $nameGenerator )
+    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, FieldNameGenerator $nameGenerator )
     {
         $this->client              = $client;
         $this->criterionVisitor    = $criterionVisitor;
         $this->sortClauseVisitor   = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->fieldValueMapper    = $fieldValueMapper;
-        $this->contentHandler      = $contentHandler;
         $this->nameGenerator       = $nameGenerator;
     }
 
@@ -172,7 +162,23 @@ class Native extends Gateway
             $searchHit = new SearchHit(
                 array(
                     'score'       => $doc->score,
-                    'valueObject' => $this->contentHandler->load( $doc->id, $doc->version_id )
+                    'valueObject' => new SPIContentInfo(
+                        array(
+                            'id' => $doc->id,
+                            'name' => $doc->name_s,
+                            'contentTypeId' => $doc->type_id,
+                            'sectionId' => $doc->section_id,
+                            'currentVersionNo' => $doc->version_id,
+                            'isPublished' => $doc->status_id === SPIContentInfo::STATUS_PUBLISHED,
+                            'ownerId' => $doc->owner_id,
+                            'modificationDate' => $doc->modified_dt,
+                            'publicationDate' => $doc->published_dt,
+                            'alwaysAvailable' => $doc->always_available_b,
+                            'remoteId' => $doc->remote_id_id,
+                            'mainLanguageCode' => $doc->main_language_code_s,
+                            'mainLocationId' => ( isset( $doc->main_location_id ) ? $doc->main_location_id : null )
+                        )
+                    )
                 )
             );
             $result->searchHits[] = $searchHit;

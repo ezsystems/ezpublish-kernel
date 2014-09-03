@@ -30,7 +30,7 @@ interface Handler
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With ContentInfo as SearchHit->valueObject
      */
     public function findContent( Query $query, array $fieldFilters = array() );
 
@@ -46,7 +46,7 @@ interface Handler
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @return \eZ\Publish\SPI\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function findSingle( Criterion $filter, array $fieldFilters = array() );
 

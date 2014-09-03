@@ -10,9 +10,10 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
-use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -35,32 +36,44 @@ class RemoveField extends Action
     protected $storageHandler;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected $contentMapper;
+
+    /**
      * Creates a new action
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      */
     public function __construct(
         ContentGateway $contentGateway,
         FieldDefinition $fieldDef,
-        StorageHandler $storageHandler )
+        StorageHandler $storageHandler,
+        ContentMapper $contentMapper )
     {
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
         $this->storageHandler = $storageHandler;
+        $this->contentMapper = $contentMapper;
     }
 
     /**
      * Applies the action to the given $content
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo
      *
      * @return void
      */
-    public function apply( Content $content )
+    public function apply( ContentInfo $contentInfo )
     {
         $fieldIdsToRemoveMap = array();
+
+        $contentRows = $this->contentGateway->load( $contentInfo->id, $contentInfo->currentVersionNo );
+        $contentList = $this->contentMapper->extractContentFromRows( $contentRows );
+        $content = $contentList[0];
 
         foreach ( $content->fields as $field )
         {

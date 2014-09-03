@@ -233,10 +233,11 @@ class Mapper
      *
      * @param array $row
      * @param string $prefix Prefix for row keys, which are initially mapped by ezcontentobject fields
+     * @param string $treePrefix Prefix for tree row key, which are initially mapped by ezcontentobject_tree_ fields
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function extractContentInfoFromRow( array $row, $prefix = '' )
+    public function extractContentInfoFromRow( array $row, $prefix = '', $treePrefix = 'ezcontentobject_tree_' )
     {
         $contentInfo = new ContentInfo;
         $contentInfo->id = (int)$row["{$prefix}id"];
@@ -251,9 +252,29 @@ class Mapper
         $contentInfo->alwaysAvailable = (int)$row["{$prefix}language_mask"] & 1;
         $contentInfo->mainLanguageCode = $this->languageHandler->load( $row["{$prefix}initial_language_id"] )->languageCode;
         $contentInfo->remoteId = $row["{$prefix}remote_id"];
-        $contentInfo->mainLocationId = $row["ezcontentobject_tree_main_node_id"];
+        $contentInfo->mainLocationId = $row["{$treePrefix}main_node_id"];
 
         return $contentInfo;
+    }
+
+    /**
+     * Extracts ContentInfo objects from $rows
+     *
+     * @param array $rows
+     * @param string $prefix Prefix for row keys, which are initially mapped by ezcontentobject fields
+     * @param string $treePrefix Prefix for tree row key, which are initially mapped by ezcontentobject_tree_ fields
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[]
+     */
+    public function extractContentInfoFromRows( array $rows, $prefix = '', $treePrefix = 'ezcontentobject_tree_'  )
+    {
+        $contentInfoObjects = array();
+        foreach ( $rows as  $row )
+        {
+            $contentInfoObjects[] = $this->extractContentInfoFromRow( $row, $prefix, $treePrefix );
+        }
+
+        return $contentInfoObjects;
     }
 
     /**
