@@ -173,4 +173,4 @@ services:
         class: %ezpublish.signalslot.event_converter_slot.class%
         arguments: [@event_dispatcher]
         tags:
-            - { name: ezpublish.api.slot, signal: * }
+            - { name: ezpublish.api.slot, signal: '*' }
