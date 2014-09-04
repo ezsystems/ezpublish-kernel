@@ -290,7 +290,7 @@ abstract class LocationBase extends BaseServiceTest
         self::assertEquals( '769380b7aa94541679167eab817ca893', $location->remoteId );
     }
 
-   /**
+    /**
      * Test loading location by remote ID
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @covers \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId
