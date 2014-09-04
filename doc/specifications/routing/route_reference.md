@@ -102,13 +102,13 @@ class MyRouteReferenceListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // Let's say we want to change the route name if "some_parameter" param is present
-        if ( $routeReference->has( 'some_parameter' )
+        if ( $routeReference->has( 'some_parameter' ) )
         {
             $routeReference->setRoute( 'a_specific_route' );
             // We remove "some_parameter", as we don't need it any more
             $routeReference->remove( 'some_parameter' );
             // We add another parameter, just because it's fun :-)
-            $routeReference->set( 'another_parameter', array( 'parameters', 'are', 'fun' );
+            $routeReference->set( 'another_parameter', array( 'parameters', 'are', 'fun' ) );
         }
     }
 }
