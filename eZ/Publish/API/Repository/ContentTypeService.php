@@ -173,6 +173,9 @@ interface ContentTypeService
      * This is a complete copy of the content
      * type which has the state STATUS_DRAFT.
      *
+     * WARNING on $modifier: Standard permission rules applies, only the user set here will be able to change the draft
+     * afterwards, and only if (s)he has access to edit the content types in the first place.
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there is already a draft assigned to another user
      *

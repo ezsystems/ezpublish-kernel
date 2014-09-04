@@ -32,6 +32,9 @@ abstract class ContentUpdateStruct extends ValueObject
      *
      * Creator of the version, in the search API this is referred to as the modifier of the published content.
      *
+     * WARNING: Standard permission rules applies, only the user set here will be able to change the draft after being
+     *          set as modifier, and only if (s)he has access to edit the draft in the first place.
+     *
      * @since 5.4
      * @var mixed Optional creator of version, current user will be used if null
      */
