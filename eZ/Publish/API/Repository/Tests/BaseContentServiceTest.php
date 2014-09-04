@@ -185,6 +185,52 @@ abstract class BaseContentServiceTest extends BaseTest
     }
 
     /**
+     * Creates an updated content draft named <b>$draftVersion2</b> from
+     * a currently published content object with a user different from the
+     * creator.
+     *
+     * @return array \eZ\Publish\API\Repository\Values\Content\Content, id
+     */
+    protected function createUpdatedDraftVersion2_NotAdmin()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $userService = $repository->getUserService();
+        $mainLanguageCode = 'eng-US';
+
+        // Create a new user that belongs to the Administrator users group
+        $newUserCreateStruct = $userService->newUserCreateStruct( 'admin2', 'admin2@ez.no', "admin2", $mainLanguageCode );
+        $newUserCreateStruct->setField( 'first_name', 'Admin2', $mainLanguageCode );
+        $newUserCreateStruct->setField( 'last_name', 'Admin2', $mainLanguageCode );
+
+        // Load the Admin Group
+        $userAdminGroup = $userService->loadUserGroup( '12' );
+        
+        $userAdmin2 = $userService->createUser( $newUserCreateStruct, array ( $userAdminGroup ) );
+        
+        /* BEGIN: Inline */
+        $draftVersion2 = $this->createContentDraftVersion2();
+
+        // Create an update struct and modify some fields
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->initialLanguageCode = $mainLanguageCode;
+    
+        $contentUpdate->creatorId = $this->generateId( 'user', $userAdmin2->id );
+        $contentUpdate->setField( 'name', 'An awesome forum²' );
+        $contentUpdate->setField( 'name', 'An awesome forum²³', 'eng-GB' );
+
+        // Update the content draft
+        $draftVersion2 = $contentService->updateContent(
+            $draftVersion2->getVersionInfo(),
+            $contentUpdate
+        );
+        /* END: Inline */
+
+        return array( $draftVersion2, $userAdmin2->id );
+    }
+
+    /**
      * Creates an updated content object named <b>$contentVersion2</b> from
      * a currently published content object.
      *
