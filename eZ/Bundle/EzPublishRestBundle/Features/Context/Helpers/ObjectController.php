@@ -1,4 +1,11 @@
 <?php
+/**
+ * File containing the ObjectController trait for RestBundle.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ * @version //autogentag//
+ */
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\Helpers;
 
@@ -8,6 +15,9 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Behat\Behat\Tester\Exception\PendingException;
 use PHPUnit_Framework_Assert as Assertion;
 
+/**
+ * ObjectController should manage all actions that will interact with API objects
+ */
 trait ObjectController
 {
     /**
@@ -161,7 +171,6 @@ trait ObjectController
 
         $this->setValueObjectProperty( $this->requestObject, $field, $value );
     }
-
 
     /**
      * @Then response object has field :field with :value

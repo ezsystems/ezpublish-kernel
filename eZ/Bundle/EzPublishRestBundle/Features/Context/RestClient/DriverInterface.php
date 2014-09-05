@@ -1,11 +1,20 @@
 <?php
+/**
+ * File containing the DriverInterface for RestDrivers.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ * @version //autogentag//
+ */
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
 /**
- * REST Drivers need to implement this interface for a seamless interaction
+ * DriverInterface has the definition of the methods needed for our REST tests
+ * so Drivers need to implement this interface for a seamless interaction
  *
- * Notice that Setters are for request and Getters for response
+ * Notice: Setters are for request and Getters for response since no assertion is 
+ *      done on requests, and no set is done onto responses
  */
 interface DriverInterface
 {

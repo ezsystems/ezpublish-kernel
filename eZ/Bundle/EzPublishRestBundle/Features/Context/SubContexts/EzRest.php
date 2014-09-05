@@ -1,9 +1,19 @@
 <?php
+/**
+ * File containing the EzRest for RestContext.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ * @version //autogentag//
+ */
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContexts;
 
 use PHPUnit_Framework_Assert as Assertion;
 
+/**
+ * EzRest is the responsible to have all the specific REST actions of eZ Publish
+ */
 trait EzRest
 {
     /**

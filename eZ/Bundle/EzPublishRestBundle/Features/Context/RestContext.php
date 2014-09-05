@@ -1,4 +1,11 @@
 <?php
+/**
+ * File containing the RestContext for RestBundle.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ * @version //autogentag//
+ */
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
@@ -8,6 +15,12 @@ use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContexts;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use PHPUnit_Framework_Assert as Assertion;
 
+/**
+ * RestContext is the core of the REST testing
+ *   All SubContexts (traits), helpers are loaded here
+ *   Settings and client initializations is done here
+ *   Also it contains all REST generic actions
+ */
 class RestContext extends ApiContext
 {
     use SubContexts\EzRest;
