@@ -229,6 +229,10 @@ class ContentExtension extends Twig_Extension
                 'ez_is_field_empty',
                 array( $this, 'isFieldEmpty' )
             ),
+            new Twig_SimpleFunction(
+                'ez_field_name',
+                array( $this, 'getTranslatedFieldDefinitionName' )
+            ),
         );
     }
 
@@ -646,6 +650,26 @@ class ContentExtension extends Twig_Extension
     public function getTranslatedFieldValue( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
     {
         return $this->translationHelper->getTranslatedField( $content, $fieldDefIdentifier, $forcedLanguage )->value;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $content Must be a valid Content object.
+     * @param string $fieldIdentifier Identifier of the field to translate
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content object.
+     *
+     * @return string
+     */
+    public function getTranslatedFieldDefinitionName( ValueObject $content, $fieldIdentifier, $forcedLanguage = null )
+    {
+        if ( $content instanceof ValueObject )
+        {
+            $contentType = $this->repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
+            $fieldDefinitionName = $this->translationHelper->getTranslatedFieldDefinitionName( $contentType, $fieldIdentifier, $forcedLanguage );
+            return $fieldDefinitionName;
+        }
+        throw new InvalidArgumentType( '$content', 'eZ\Publish\API\Repository\Values\Content\Content', $content );
     }
 
     /**
