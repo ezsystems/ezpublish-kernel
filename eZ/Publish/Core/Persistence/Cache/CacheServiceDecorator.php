@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use Stash\Interfaces\PoolInterface;
+use Tedivm\StashBundle\Service\CacheService;
 
 /**
  * Class CacheServiceDecorator
@@ -28,9 +28,9 @@ class CacheServiceDecorator
     /**
      * Constructs the cache service decorator
      *
-     * @param \Stash\Interfaces\PoolInterface $cachePool
+     * @param \Tedivm\StashBundle\Service\CacheService $cachePool
      */
-    public function __construct( PoolInterface $cachePool )
+    public function __construct( CacheService $cachePool )
     {
         $this->cachePool = $cachePool;
     }

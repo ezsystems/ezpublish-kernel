@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.cache_pool.class: Stash\Pool
+    ezpublish.cache_pool.class: Tedivm\StashBundle\Service\CacheService
     ezpublish.cache_pool.spi.cache.decorator.class: eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
 
     ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler

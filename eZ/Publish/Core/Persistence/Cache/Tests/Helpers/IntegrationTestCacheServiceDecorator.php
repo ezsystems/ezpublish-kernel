@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests\Helpers;
 
 use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
-use Stash\Pool;
+use Tedivm\StashBundle\Service\CacheService;
 use Stash\Driver\Ephemeral;
 
 /**
@@ -25,7 +25,7 @@ class IntegrationTestCacheServiceDecorator extends CacheServiceDecorator
      */
     public function __construct()
     {
-        $this->cachePool = new Pool( new Ephemeral() );
+        parent::__construct( new CacheService( 'testPool', new Ephemeral() ) );
     }
 
     /**
@@ -34,5 +34,13 @@ class IntegrationTestCacheServiceDecorator extends CacheServiceDecorator
     public function clearAllTestData()
     {
         $this->cachePool->flush();
+    }
+
+    /**
+     * @return \Tedivm\StashBundle\Service\CacheService
+     */
+    public function getPool()
+    {
+        return $this->cachePool;
     }
 }
