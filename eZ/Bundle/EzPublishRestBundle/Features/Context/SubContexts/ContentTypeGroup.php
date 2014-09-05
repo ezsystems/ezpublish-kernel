@@ -14,8 +14,6 @@ use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 use PHPUnit_Framework_Assert as Assertion;
 
-#class ContentTypeGroup extends Base implements ContentTypeGroupSentences
-
 trait ContentTypeGroup
 {
     /**

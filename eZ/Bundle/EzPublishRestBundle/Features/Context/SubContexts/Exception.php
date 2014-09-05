@@ -12,7 +12,6 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContexts;
 use EzSystems\BehatBundle\Sentence\Exception as ExceptionSentences;
 use Behat\Behat\Context\Step;
 
-#class Exception extends Base implements ExceptionSentences
 trait Exception
 {
     /**
@@ -63,36 +62,4 @@ trait Exception
         $this->assertResponseErrorStatusCode( 404 );
         $this->assertResponseErrorDescription( "/^Could not find '([^']+)' with identifier '([^']+)'\$/" );
     }
-
-
-
-
-
-//    /**
-//     * Then I see an invalid field exception|error
-//     */
-//    public function iSeeAnInvalidFieldException()
-//    {
-//        return array(
-//            new Step\Then( 'I see 403 status code' ),
-//            new Step\Then( 'I see "Forbidden" status message' ),
-//            new Step\Then( 'I see "content-type" header with an "ErrorMessage"' ),
-//            new Step\Then( 'I see response body with "eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException" object' ),
-//            new Step\Then( 'I see response error 403 status code' ),
-//            new Step\Then( 'I see response error description with "' . self::REGEX_INVALID_FIELD_MESSAGE . '"' ),
-//        );
-//    }
-//
-//    /**
-//     * Then I see a forbidden exception|error
-//     */
-//    public function iSeeAForbiddenException()
-//    {
-//        return array(
-//            new Step\Then( 'I see 403 status code' ),
-//            new Step\Then( 'I see "Forbidden" status message' ),
-//            new Step\Then( 'I see "content-type" header with an "ErrorMessage"' ),
-//            new Step\Then( 'I see response error 403 status code' ),
-//        );
-//    }
 }
