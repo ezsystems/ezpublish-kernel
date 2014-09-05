@@ -47,8 +47,8 @@ class SetupWizardContext extends LegacyContext
     }
 
     /**
-     * @Given /^I am (?:at|on) (?:|the )"(?P<stepTitle>[^"]*)" step/
-     * @Then /^I see "(?P<stepTitle>[^"]*)" step$/
+     * @Given I am at/on (the) ":stepTitle step
+     * @Then  I see :stepTitle step
      */
     public function iAmOnStep( $stepTitle )
     {
@@ -59,7 +59,7 @@ class SetupWizardContext extends LegacyContext
     }
 
     /**
-     * @When /^I select "(?P<packageName>[^"]*)" package version "(?P<version>[^"]*)"$/
+     * @When I select :packageName package version :version
      */
     public function iSelectPackage( $packageName, $version )
     {
@@ -81,7 +81,7 @@ class SetupWizardContext extends LegacyContext
     }
 
     /**
-     * @Then /^I see "(?P<packageName>[^"]*)" package version "(?P<version>[^"]*)" imported$/
+     * @Then I see :packageName package version :version imported
      */
     public function iSeeImported( $packageName, $version )
     {
@@ -104,7 +104,7 @@ class SetupWizardContext extends LegacyContext
     }
 
     /**
-     * @Then /^I see following packages for version "(?P<version>[^"]*)" imported(?:|\:)$/
+     * @Then I see following packages for version :version imported:
      */
     public function iSeeFollowingPackagesForVersionImported( $version, TableNode $packagesTable )
     {
