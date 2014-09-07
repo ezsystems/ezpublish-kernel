@@ -130,6 +130,7 @@ class DomainMapperTest extends BaseServiceMockTest
     {
         return new DomainMapper(
             $this->getRepositoryMock(),
+            $this->getTypeHandlerMock(),
             $this->getLanguageHandlerMock()
         );
     }
@@ -140,5 +141,13 @@ class DomainMapperTest extends BaseServiceMockTest
     protected function getLanguageHandlerMock()
     {
         return $this->getPersistenceMockHandler( 'Content\\Language\\Handler' );
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getTypeHandlerMock()
+    {
+        return $this->getPersistenceMockHandler( 'Content\\Type\\Handler' );
     }
 }

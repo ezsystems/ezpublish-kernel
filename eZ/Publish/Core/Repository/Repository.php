@@ -733,7 +733,7 @@ class Repository implements RepositoryInterface
         if ( $this->fieldTypeService !== null )
             return $this->fieldTypeService;
 
-        $this->fieldTypeService = new FieldTypeService( $this, $this->persistenceHandler, $this->serviceSettings['fieldType'] );
+        $this->fieldTypeService = new FieldTypeService( $this->serviceSettings['fieldType'] );
         return $this->fieldTypeService;
     }
 
@@ -789,6 +789,7 @@ class Repository implements RepositoryInterface
 
         $this->domainMapper = new DomainMapper(
             $this,
+            $this->persistenceHandler->contentTypeHandler(),
             $this->persistenceHandler->contentLanguageHandler()
         );
         return $this->domainMapper;

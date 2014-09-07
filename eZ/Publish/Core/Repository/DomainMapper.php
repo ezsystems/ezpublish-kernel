@@ -10,7 +10,8 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\SPI\Persistence\Content\Language\Handler;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as TypeHandler;
 
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
@@ -27,6 +28,7 @@ use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
+use eZ\Publish\SPI\Persistence\Content\Type as SPIType;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as SPILocationCreateStruct;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -54,14 +56,21 @@ class DomainMapper
     protected $repository;
 
     /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
      * Setups service with reference to repository.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
      */
-    public function __construct( RepositoryInterface $repository, Handler $contentLanguageHandler )
+    public function __construct( RepositoryInterface $repository, TypeHandler $contentTypeHandler, LanguageHandler $contentLanguageHandler )
     {
         $this->repository = $repository;
+        $this->contentTypeHandler = $contentTypeHandler;
         $this->contentLanguageHandler = $contentLanguageHandler;
     }
 
@@ -69,7 +78,7 @@ class DomainMapper
      * Builds a Content domain object from value object returned from persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param ContentType|SPIType $contentType
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
@@ -77,7 +86,7 @@ class DomainMapper
     {
         if ( $contentType === null )
         {
-            $contentType = $this->repository->getContentTypeService()->loadContentType(
+            $contentType = $this->contentTypeHandler->load(
                 $spiContent->versionInfo->contentInfo->contentTypeId
             );
         }
@@ -94,19 +103,23 @@ class DomainMapper
      * Returns an array of domain fields created from given array of SPI fields
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param ContentType|SPIType $contentType
      *
      * @return array
      */
-    public function buildDomainFields( array $spiFields, ContentType $contentType )
+    public function buildDomainFields( array $spiFields, $contentType )
     {
         $fieldIdentifierMap = array();
-        foreach ( $contentType->getFieldDefinitions() as $fieldDefinitions )
+        if ( !$contentType instanceof SPIType && !$contentType instanceof ContentType )
+        {
+            throw new InvalidArgumentType( "\$contentType", "SPI ContentType | API ContentType" );
+        }
+
+        foreach ( $contentType->fieldDefinitions as $fieldDefinitions )
         {
             $fieldIdentifierMap[$fieldDefinitions->id] = $fieldDefinitions->identifier;
         }
 
-        /** @var \eZ\Publish\Core\Repository\FieldTypeService $fieldTypeService */
         $fieldTypeService = $this->repository->getFieldTypeService();
 
         $fields = array();
@@ -223,12 +236,15 @@ class DomainMapper
         $sourceFieldDefinitionIdentifier = null;
         if ( $spiRelation->sourceFieldDefinitionId !== null )
         {
-            /** @var \eZ\Publish\Core\Repository\Values\ContentType\ContentType $contentType */
-            $contentType = $this->repository->getContentTypeService()
-                ->loadContentType( $sourceContentInfo->contentTypeId );
-            // Note: getFieldDefinitionById() is not part of API
-            $sourceFieldDefinitionIdentifier = $contentType
-                ->getFieldDefinitionById( $spiRelation->sourceFieldDefinitionId )->identifier;
+            $contentType = $this->contentTypeHandler->load( $sourceContentInfo->contentTypeId  );
+            foreach ( $contentType->fieldDefinitions as $fieldDefinition )
+            {
+                if ( $fieldDefinition->id !== $spiRelation->sourceFieldDefinitionId )
+                    continue;
+
+                $sourceFieldDefinitionIdentifier = $fieldDefinition->identifier;
+                break;
+            }
         }
 
         return new Relation(
