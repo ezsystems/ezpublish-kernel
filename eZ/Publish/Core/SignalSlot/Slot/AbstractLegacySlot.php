@@ -35,16 +35,27 @@ abstract class AbstractLegacySlot extends Slot
     }
 
     /**
-     * Returns the legacy kernel object.
+     * Executes a legacy kernel callback
      *
-     * @return \ezpKernelHandler
+     * Does the callback with both post-reinitialize and formtoken checks disabled.
+     *
+     * @param callable $callback
+     *
+     * @return mixed
      */
-    protected function getLegacyKernel()
+    protected function runLegacyKernelCallback( $callback )
     {
-        if ( $this->legacyKernel instanceof ezpKernelHandler )
-            return $this->legacyKernel;
+        // Initialize legacy kernel if not already done
+        if ( $this->legacyKernel instanceof Closure )
+        {
+            $legacyKernelClosure = $this->legacyKernel;
+            $this->legacyKernel = $legacyKernelClosure();
+        }
 
-        $legacyKernelClosure = $this->legacyKernel;
-        return $legacyKernelClosure();
+        return $this->legacyKernel->runCallback(
+            $callback,
+            false,
+            false
+        );
     }
 }

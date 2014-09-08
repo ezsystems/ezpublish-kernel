@@ -29,8 +29,7 @@ class LegacyPublishContentTypeDraftSlot extends AbstractLegacySlot
         if ( !$signal instanceof Signal\ContentTypeService\PublishContentTypeDraftSignal )
             return;
 
-        $kernel = $this->getLegacyKernel();
-        $kernel->runCallback(
+        $this->runLegacyKernelCallback(
             function () use ( $signal )
             {
                 eZExpiryHandler::registerShutdownFunction();
@@ -40,8 +39,7 @@ class LegacyPublishContentTypeDraftSlot extends AbstractLegacySlot
                 $handler->setTimestamp( 'class-identifier-cache', $time );
                 $handler->setTimestamp( 'sort-key-cache', $time );
                 $handler->store();
-            },
-            false
+            }
         );
     }
 }

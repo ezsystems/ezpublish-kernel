@@ -58,7 +58,9 @@ class LegacyTest extends BaseHandlerTest
             function ()
             {
                 \eZClusterFileHandler::instance()->fileDelete( 'var/test', true );
-            }
+            },
+            false,
+            false
         );
 
         chdir( $this->originalDir );

@@ -424,7 +424,9 @@ class ConfigurationConverter
                 // and make sure to restore the previous injected settings
                 eZINI::injectSettings( array() );
                 return eZSiteAccess::getIni( $siteaccess, $file )->group( $groupName );
-            }
+            },
+            false,
+            false
         );
     }
 
@@ -456,7 +458,9 @@ class ConfigurationConverter
                 eZINI::injectSettings( array() );
                 return eZSiteAccess::getIni( $siteaccess, $file )
                     ->variable( $groupName, $parameterName );
-            }
+            },
+            false,
+            false
         );
     }
 

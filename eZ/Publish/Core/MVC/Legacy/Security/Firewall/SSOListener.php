@@ -87,6 +87,7 @@ class SSOListener extends AbstractPreAuthenticatedListener
                     return $ssoUser;
                 }
             },
+            false,
             false
         );
 

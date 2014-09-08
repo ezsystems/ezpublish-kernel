@@ -91,6 +91,7 @@ class Security implements EventSubscriberInterface
                 $legacyUser = eZUser::fetch( $currentUser->id );
                 eZUser::setCurrentlyLoggedInUser( $legacyUser, $legacyUser->attribute( 'contentobject_id' ), eZUser::NO_SESSION_REGENERATE );
             },
+            false,
             false
         );
     }

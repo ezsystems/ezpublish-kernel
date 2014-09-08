@@ -30,14 +30,12 @@ class LegacyUpdateLocationSlot extends AbstractLegacySlot
         if ( !$signal instanceof Signal\LocationService\UpdateLocationSignal )
             return;
 
-        $kernel = $this->getLegacyKernel();
-        $kernel->runCallback(
+        $this->runLegacyKernelCallback(
             function () use ( $signal )
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
-            },
-            false
+            }
         );
     }
 }

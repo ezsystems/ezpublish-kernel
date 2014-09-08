@@ -32,14 +32,12 @@ class LegacyUnassignUserFromUserGroupSlot extends AbstractLegacySlot
             return;
         }
 
-        $kernel = $this->getLegacyKernel();
-        $kernel->runCallback(
+        $this->runLegacyKernelCallback(
             function ()
             {
                 eZContentCacheManager::clearAllContentCache();
                 eZRole::expireCache();
-            },
-            false
+            }
         );
     }
 }

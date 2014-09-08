@@ -31,13 +31,11 @@ class LegacyCreateLanguageSlot extends AbstractLegacySlot
             return;
         }
 
-        $kernel = $this->getLegacyKernel();
-        $kernel->runCallback(
+        $this->runLegacyKernelCallback(
             function ()
             {
                 eZContentLanguage::expireCache();
-            },
-            false
+            }
         );
     }
 }

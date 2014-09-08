@@ -31,16 +31,14 @@ class LegacyMoveSubtreeSlot extends AbstractLegacySlot
         if ( !$signal instanceof Signal\LocationService\MoveSubtreeSignal )
             return;
 
-        $kernel = $this->getLegacyKernel();
-        $kernel->runCallback(
+        $this->runLegacyKernelCallback(
             function () use ( $signal )
             {
                 $node = eZContentObjectTreeNode::fetch( $signal->locationId );
                 eZContentObjectTreeNode::clearViewCacheForSubtree( $node );
                 eZContentOperationCollection::registerSearchObject( $node->attribute( 'contentobject_id' ) );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
-            },
-            false
+            }
         );
     }
 }

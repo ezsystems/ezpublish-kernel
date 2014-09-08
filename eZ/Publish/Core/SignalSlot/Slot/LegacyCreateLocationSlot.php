@@ -31,16 +31,14 @@ class LegacyCreateLocationSlot extends AbstractLegacySlot
         if ( !$signal instanceof Signal\LocationService\CreateLocationSignal )
             return;
 
-        $kernel = $this->getLegacyKernel();
-        $kernel->runCallback(
+        $this->runLegacyKernelCallback(
             function () use ( $signal )
             {
                 eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId, true, array( $signal->locationId ) );
                 $object = eZContentObject::fetch( $signal->contentId );
                 eZSearch::addNodeAssignment( $object->mainNodeID(), $signal->contentId, $signal->locationId );
                 eZContentObject::clearCache();// Clear all object memory cache to free memory
-            },
-            false
+            }
         );
     }
 }

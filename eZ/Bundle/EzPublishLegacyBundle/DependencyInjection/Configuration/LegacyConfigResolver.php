@@ -92,6 +92,7 @@ class LegacyConfigResolver implements ConfigResolverInterface
 
                 return $ini->variable( $iniGroup, $paramName );
             },
+            false,
             false
         );
     }
@@ -131,6 +132,7 @@ class LegacyConfigResolver implements ConfigResolverInterface
 
                 return $ini->group( $groupName );
             },
+            false,
             false
         );
     }
@@ -164,6 +166,7 @@ class LegacyConfigResolver implements ConfigResolverInterface
 
                 return $ini->hasVariable( $iniGroup, $paramName );
             },
+            false,
             false
         );
     }
