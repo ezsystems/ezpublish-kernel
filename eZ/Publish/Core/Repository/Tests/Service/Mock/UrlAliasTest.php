@@ -2946,6 +2946,88 @@ class UrlAliasTest extends BaseServiceMockTest
         );
     }
 
+    public function providerForTestLookupWithSharedTranslation()
+    {
+        return array(
+            // showAllTranslations setting is true
+            array( array( "ger-DE" ), true, false, null ),
+            // alias is always available
+            array( array( "ger-DE" ), false, true, null ),
+            // works with available language codes
+            array( array( "cro-HR" ), false, false, "eng-GB" ),
+            array( array( "eng-GB" ), false, false, "cro-HR" ),
+            // works with cro-HR only
+            array( array( "cro-HR" ), false, false, null ),
+            // works with eng-GB only
+            array( array( "eng-GB" ), false, false, null ),
+            // works with cro-HR first
+            array( array( "cro-HR", "eng-GB" ), false, false, null ),
+            // works with eng-GB first
+            array( array( "eng-GB", "cro-HR" ), false, false, null ),
+        );
+    }
+
+    /**
+     * Test for the lookup() method.
+     *
+     * @dataProvider providerForTestLookupWithSharedTranslation
+     */
+    public function testLookupWithSharedTranslation(
+        $prioritizedLanguageList,
+        $showAllTranslations,
+        $alwaysAvailable,
+        $languageCode
+    )
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $configuration = array(
+            "prioritizedLanguageList" => $prioritizedLanguageList,
+            "showAllTranslations" => $showAllTranslations,
+        );
+        $this->setConfiguration( $urlAliasService, $configuration );
+        $urlAliasHandler = $this->getPersistenceMockHandler( 'Content\\UrlAlias\\Handler' );
+
+        $urlAliasHandler->expects(
+            $this->once()
+        )->method(
+            "lookup"
+        )->with(
+            $this->equalTo( "jedan/two" )
+        )->will(
+            $this->returnValue(
+                new SPIUrlAlias(
+                    array(
+                        "pathData" => array(
+                            array(
+                                "always-available" => $alwaysAvailable,
+                                "translations" => array(
+                                    "cro-HR" => "jedan",
+                                    "eng-GB" => "jedan",
+                                ),
+                            ),
+                            array(
+                                "always-available" => $alwaysAvailable,
+                                "translations" => array(
+                                    "cro-HR" => "two",
+                                    "eng-GB" => "two",
+                                ),
+                            ),
+                        ),
+                        "languageCodes" => array( "eng-GB", "cro-HR" ),
+                        "alwaysAvailable" => $alwaysAvailable,
+                    )
+                )
+            )
+        );
+
+        $urlAlias = $urlAliasService->lookup( "jedan/two", $languageCode );
+
+        self::assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias",
+            $urlAlias
+        );
+    }
+
     /**
      * Test for the reverseLookup() method.
      *
