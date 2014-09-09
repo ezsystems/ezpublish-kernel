@@ -117,13 +117,6 @@ class TemplateDebugInfo
             }
         }
 
-        // Re-activate ezxFormToken if it was before, as we might be inside an inline sub-request.
-        // See https://jira.ez.no/browse/EZP-22643
-        if ( $formTokenWasEnabled )
-        {
-            ezxFormToken::setIsEnabled( true );
-        }
-
         return $templateList;
     }
 }
