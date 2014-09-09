@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\FieldTypeParserInterface;
 
 /**
  * Main configuration parser/mapper.
@@ -83,9 +84,21 @@ class ConfigParser implements ParserInterface
 
     public function addSemanticConfig( NodeBuilder $nodeBuilder )
     {
+        $fieldTypeNodeBuilder = $nodeBuilder
+            ->arrayNode( "fieldtypes" )
+            ->children();
+
+        // Delegate to configuration parsers
         foreach ( $this->configParsers as $parser )
         {
-            $parser->addSemanticConfig( $nodeBuilder );
+            if ( $parser instanceof FieldTypeParserInterface )
+            {
+                $parser->addSemanticConfig( $fieldTypeNodeBuilder );
+            }
+            else
+            {
+                $parser->addSemanticConfig( $nodeBuilder );
+            }
         }
     }
 }
