@@ -32,12 +32,18 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
      */
     private $eventDispatcher;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $configResolver;
+
     protected function setUp()
     {
         parent::setUp();
         $this->contentService = $this->getMock( 'eZ\Publish\API\Repository\ContentService' );
         $this->locationService = $this->getMock( 'eZ\Publish\API\Repository\LocationService' );
         $this->eventDispatcher = $this->getMock( 'Symfony\Component\EventDispatcher\EventDispatcherInterface' );
+        $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
     }
 
     public function testChangeConfigScope()
@@ -51,7 +57,12 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
             ->with( MVCEvents::CONFIG_SCOPE_CHANGE, $this->equalTo( $event ) );
 
         $originalSiteAccess = new SiteAccess( 'foo', 'bar' );
-        $helper = new ContentPreviewHelper( $this->contentService, $this->locationService, $this->eventDispatcher );
+        $helper = new ContentPreviewHelper(
+            $this->contentService,
+            $this->locationService,
+            $this->eventDispatcher,
+            $this->configResolver
+        );
         $helper->setSiteAccess( $originalSiteAccess );
         $this->assertEquals(
             $newSiteAccess,
@@ -68,7 +79,12 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
             ->method( 'dispatch' )
             ->with( MVCEvents::CONFIG_SCOPE_RESTORE, $this->equalTo( $event ) );
 
-        $helper = new ContentPreviewHelper( $this->contentService, $this->locationService, $this->eventDispatcher );
+        $helper = new ContentPreviewHelper(
+            $this->contentService,
+            $this->locationService,
+            $this->eventDispatcher,
+            $this->configResolver
+        );
         $helper->setSiteAccess( $originalSiteAccess );
         $this->assertEquals(
             $originalSiteAccess,
@@ -79,6 +95,7 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
     public function testGetPreviewLocationNoMainLocation()
     {
         $contentId = 123;
+        $rootLocationId = 456;
         $contentInfo = $this
             ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\ContentInfo' )
             ->setConstructorArgs( array( array( 'id' => $contentId ) ) )
@@ -91,11 +108,22 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
         $this->locationService
             ->expects( $this->never() )
             ->method( 'loadLocation' );
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'content.tree_root.location_id' )
+            ->will( $this->returnValue( $rootLocationId ) );
 
-        $helper = new ContentPreviewHelper( $this->contentService, $this->locationService, $this->eventDispatcher );
+        $helper = new ContentPreviewHelper(
+            $this->contentService,
+            $this->locationService,
+            $this->eventDispatcher,
+            $this->configResolver
+        );
         $location = $helper->getPreviewLocation( $contentId );
         $this->assertInstanceOf( 'eZ\Publish\API\Repository\Values\Content\Location', $location );
         $this->assertSame( $contentInfo, $location->contentInfo );
+        $this->assertSame( $rootLocationId, $location->id );
     }
 
     public function testGetPreviewLocation()
@@ -121,7 +149,12 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
             ->with( $locationId )
             ->will( $this->returnValue( $location ) );
 
-        $helper = new ContentPreviewHelper( $this->contentService, $this->locationService, $this->eventDispatcher );
+        $helper = new ContentPreviewHelper(
+            $this->contentService,
+            $this->locationService,
+            $this->eventDispatcher,
+            $this->configResolver
+        );
         $returnedLocation = $helper->getPreviewLocation( $contentId );
         $this->assertSame( $location, $returnedLocation );
         $this->assertSame( $contentInfo, $returnedLocation->contentInfo );
