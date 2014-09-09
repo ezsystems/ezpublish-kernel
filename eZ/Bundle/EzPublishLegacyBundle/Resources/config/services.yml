@@ -56,7 +56,6 @@ parameters:
     ezpublish.fieldType.ezpage.pageService.class: eZ\Bundle\EzPublishLegacyBundle\FieldType\Page\PageService
 
     ezpublish_legacy.rest_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\RestListener
-    ezpublish_legacy.siteaccess_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\SiteAccessListener
     ezpublish_legacy.request_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\RequestListener
     ezpublish_legacy.response_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\CsrfTokenResponseListener
     ezpublish_legacy.config_scope_listener.class: eZ\Bundle\EzPublishLegacyBundle\EventListener\ConfigScopeListener
