@@ -61,6 +61,71 @@ class RichTextTest extends AbstractParserTestCase
                 array(
                     'fieldtypes' => array(
                         'ezrichtext' => array(
+                            'output_custom_tags' => array(
+                                array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
+                                array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
+                                array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'fieldtypes.ezrichtext.output_custom_xsl' => array(
+                        // Default settings will be added
+                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl', 'priority' => 0 ),
+                        array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
+                        array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
+                        array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'fieldtypes' => array(
+                        'ezrichtext' => array(
+                            'edit_custom_tags' => array(
+                                array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
+                                array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
+                                array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'fieldtypes.ezrichtext.edit_custom_xsl' => array(
+                        // Default settings will be added
+                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/edit/core.xsl', 'priority' => 0 ),
+                        array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
+                        array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
+                        array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'fieldtypes' => array(
+                        'ezrichtext' => array(
+                            'input_custom_tags' => array(
+                                array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
+                                array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
+                                array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
+                            )
+                        )
+                    )
+                ),
+                array(
+                    'fieldtypes.ezrichtext.input_custom_xsl' => array(
+                        // No default settings for input
+                        array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
+                        array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
+                        array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'fieldtypes' => array(
+                        'ezrichtext' => array(
                             'tags' => array(
                                 'default' => array(
                                     'template' => 'MyBundle:FieldType/RichText/tag:default.html.twig',
