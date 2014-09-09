@@ -66,7 +66,7 @@ class XmlText extends AbstractFieldTypeParser
     {
         if ( !empty( $scopeSettings['fieldtypes'] ) )
         {
-            // Workaround to be able to use registerInternalConfigArray() which only supports first level entries.
+            // Workaround to be able to use Contextualizer::mapConfigArray() which only supports first level entries.
             if ( isset( $scopeSettings['fieldtypes']['ezxml']['custom_tags'] ) )
             {
                 $scopeSettings['fieldtypes.ezxml.custom_xsl'] = $scopeSettings['fieldtypes']['ezxml']['custom_tags'];

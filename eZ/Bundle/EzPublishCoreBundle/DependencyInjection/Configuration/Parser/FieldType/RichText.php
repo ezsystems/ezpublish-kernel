@@ -240,7 +240,7 @@ class RichText extends AbstractFieldTypeParser
     {
         if ( !empty( $scopeSettings['fieldtypes'] ) )
         {
-            // Workaround to be able to use registerInternalConfigArray() which only supports first level entries.
+            // Workaround to be able to use Contextualizer::mapConfigArray() which only supports first level entries.
             if ( isset( $scopeSettings['fieldtypes']['ezrichtext']['output_custom_tags'] ) )
             {
                 $scopeSettings['fieldtypes.ezrichtext.output_custom_xsl'] = $scopeSettings['fieldtypes']['ezrichtext']['output_custom_tags'];
