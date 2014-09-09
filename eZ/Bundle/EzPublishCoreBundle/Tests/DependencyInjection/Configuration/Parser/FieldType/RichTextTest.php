@@ -35,6 +35,33 @@ class RichTextTest extends AbstractParserTestCase
         return Yaml::parse( __DIR__ . '/../../../Fixtures/ezpublish_minimal.yml' );
     }
 
+    public function testDefaultContentSettings()
+    {
+        $this->load();
+
+        $this->assertConfigResolverParameterValue(
+            'fieldtypes.ezrichtext.tags.default',
+            array(
+                'template' => 'EzPublishCoreBundle:FieldType/RichText/tag:default.html.twig',
+            ),
+            'ezdemo_site'
+        );
+        $this->assertConfigResolverParameterValue(
+            'fieldtypes.ezxml.custom_xsl',
+            array(
+                0 => array(
+                    'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl',
+                    'priority' => 0,
+                ),
+                1 => array(
+                    'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl',
+                    'priority' => 0,
+                ),
+            ),
+            'ezdemo_site'
+        );
+    }
+
     /**
      * @dataProvider richTextSettingsProvider
      */
