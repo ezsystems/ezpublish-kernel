@@ -128,33 +128,6 @@ class ContentTest extends AbstractParserTestCase
                     'content.tree_root.excluded_uri_prefixes' => array( '/media/images', '/products' ),
                 )
             ),
-            array(
-                array(
-                    'content' => array(),
-                    'fieldtypes' => array(
-                        'ezxml' => array(
-                            'custom_tags' => array(
-                                array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
-                                array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
-                                array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
-                            )
-                        )
-                    )
-                ),
-                array(
-                    'content.view_cache' => true,
-                    'content.ttl_cache' => true,
-                    'content.default_ttl' => 60,
-                    'fieldtypes.ezxml.custom_xsl' => array(
-                        // Default settings will be added
-                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_core.xsl', 'priority' => 0 ),
-                        array( 'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/XmlText/Input/Resources/stylesheets/eZXml2Html5_custom.xsl', 'priority' => 0 ),
-                        array( 'path' => '/foo/bar.xsl', 'priority' => 123 ),
-                        array( 'path' => '/foo/custom.xsl', 'priority' => -10 ),
-                        array( 'path' => '/another/custom.xsl', 'priority' => 27 ),
-                    ),
-                )
-            ),
         );
     }
 }

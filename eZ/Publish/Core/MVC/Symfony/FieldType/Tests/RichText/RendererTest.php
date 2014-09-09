@@ -178,7 +178,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 $tagName = "tag4",
                 array(
                     array( "hasParameter", "test.name.space.tag.{$tagName}", false ),
-                    array( "hasParameter", $namespace = "test.name.space.tag.inline.default", true ),
+                    array( "hasParameter", $namespace = "test.name.space.tag.default_inline", true ),
                     array( "getParameter", $namespace, array( "template" => $templateName = "templateName4" ) ),
                 ),
                 array(
@@ -209,7 +209,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 $tagName = "tag6",
                 array(
                     array( "hasParameter", "test.name.space.tag.{$tagName}", false ),
-                    array( "hasParameter", $namespace = "test.name.space.tag.inline.default", false ),
+                    array( "hasParameter", $namespace = "test.name.space.tag.default_inline", false ),
                 ),
                 array(
                     array( "warning", "Template tag '{$tagName}' configuration was not found" ),
@@ -568,7 +568,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 false,
                 new AccessDeniedException,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.content.denied", true ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.content_denied", true ),
                     array( "getParameter", $namespace, array( "template" => $templateName = "templateName1" ) ),
                 ),
                 array(
@@ -582,7 +582,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 true,
                 new AccessDeniedException,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.content.inline.denied", true ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.content_inline_denied", true ),
                     array( "getParameter", $namespace, array( "template" => $templateName = "templateName2" ) ),
                 ),
                 array(
@@ -608,7 +608,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 true,
                 null,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.content.inline", true ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.content_inline", true ),
                     array( "getParameter", $namespace, array( "template" => $templateName = "templateName4" ) ),
                 ),
                 array(),
@@ -635,8 +635,8 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 true,
                 null,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.content.inline", false ),
-                    array( "hasParameter", $namespace2 = "test.name.space.embed.inline.default", true ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.content_inline", false ),
+                    array( "hasParameter", $namespace2 = "test.name.space.embed.default_inline", true ),
                     array( "getParameter", $namespace2, array( "template" => $templateName = "templateName6" ) ),
                 ),
                 array(
@@ -665,8 +665,8 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 true,
                 null,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.content.inline", false ),
-                    array( "hasParameter", $namespace2 = "test.name.space.embed.inline.default", false ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.content_inline", false ),
+                    array( "hasParameter", $namespace2 = "test.name.space.embed.default_inline", false ),
                 ),
                 array(
                     array( "warning", "Embed tag configuration '{$namespace}' was not found" ),
@@ -1109,7 +1109,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 false,
                 new AccessDeniedException,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.location.denied", true ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.location_denied", true ),
                     array( "getParameter", $namespace, array( "template" => $templateName = "templateName1" ) ),
                 ),
                 array(
@@ -1123,7 +1123,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 true,
                 new AccessDeniedException,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.location.inline.denied", true ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.location_inline_denied", true ),
                     array( "getParameter", $namespace, array( "template" => $templateName = "templateName2" ) ),
                 ),
                 array(
@@ -1149,7 +1149,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 true,
                 null,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.location.inline", true ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.location_inline", true ),
                     array( "getParameter", $namespace, array( "template" => $templateName = "templateName4" ) ),
                 ),
                 array(),
@@ -1176,8 +1176,8 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 true,
                 null,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.location.inline", false ),
-                    array( "hasParameter", $namespace2 = "test.name.space.embed.inline.default", true ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.location_inline", false ),
+                    array( "hasParameter", $namespace2 = "test.name.space.embed.default_inline", true ),
                     array( "getParameter", $namespace2, array( "template" => $templateName = "templateName6" ) ),
                 ),
                 array(
@@ -1206,8 +1206,8 @@ class RendererTest extends PHPUnit_Framework_TestCase
                 true,
                 null,
                 array(
-                    array( "hasParameter", $namespace = "test.name.space.embed.location.inline", false ),
-                    array( "hasParameter", $namespace2 = "test.name.space.embed.inline.default", false ),
+                    array( "hasParameter", $namespace = "test.name.space.embed.location_inline", false ),
+                    array( "hasParameter", $namespace2 = "test.name.space.embed.default_inline", false ),
                 ),
                 array(
                     array( "warning", "Embed tag configuration '{$namespace}' was not found" ),

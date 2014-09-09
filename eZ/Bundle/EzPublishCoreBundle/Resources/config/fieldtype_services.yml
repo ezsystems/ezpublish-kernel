@@ -30,7 +30,7 @@ parameters:
     ezpublish.fieldType.ezrichtext.converter.template.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Template
     ezpublish.fieldType.ezrichtext.embed_renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\EmbedRenderer
     ezpublish.fieldType.ezrichtext.renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\Renderer
-    ezpublish.fieldType.ezrichtext.tag.namespace: fieldtypes.ezrichtext.tag
+    ezpublish.fieldType.ezrichtext.tag.namespace: fieldtypes.ezrichtext.tags
     ezpublish.fieldType.ezrichtext.embed.namespace: fieldtypes.ezrichtext.embed
     ezpublish.fieldType.ezrichtext.converter.dispatcher.class: eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
     ezpublish.fieldType.ezrichtext.validator.xml.class: eZ\Publish\Core\FieldType\RichText\Validator

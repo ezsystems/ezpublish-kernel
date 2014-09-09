@@ -315,7 +315,7 @@ class Renderer implements RendererInterface
 
         if ( $isInline )
         {
-            $configurationReference = $this->tagConfigurationNamespace . ".inline.default";
+            $configurationReference = $this->tagConfigurationNamespace . ".default_inline";
         }
         else
         {
@@ -362,12 +362,12 @@ class Renderer implements RendererInterface
 
         if ( $isInline )
         {
-            $configurationReference .= ".inline";
+            $configurationReference .= "_inline";
         }
 
         if ( $isDenied )
         {
-            $configurationReference .= ".denied";
+            $configurationReference .= "_denied";
         }
 
         if ( $this->configResolver->hasParameter( $configurationReference ) )
@@ -385,12 +385,12 @@ class Renderer implements RendererInterface
 
         $configurationReference = $this->embedConfigurationNamespace;
 
+        $configurationReference .= ".default";
+
         if ( $isInline )
         {
-            $configurationReference .= ".inline";
+            $configurationReference .= "_inline";
         }
-
-        $configurationReference .= ".default";
 
         if ( $this->configResolver->hasParameter( $configurationReference ) )
         {
