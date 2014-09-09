@@ -46,10 +46,17 @@ class EZP22612URLAliasTranslations extends BaseTest
         return $createStruct;
     }
 
+    /**
+     * Test that alias is found (ie. NotFoundException is not thrown).
+     */
     public function testURLAliasLoadedInRightLanguage()
     {
         $aliasService = $this->getRepository()->getURLAliasService();
         $alias = $aliasService->lookup( 'common/alias' );
-        $this->assertContains( 'eng-GB', $alias->languageCodes );
+
+        $this->assertInstanceOf(
+            "eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias",
+            $alias
+        );
     }
 }

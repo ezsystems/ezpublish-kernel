@@ -466,7 +466,11 @@ class URLAliasService implements URLAliasServiceInterface
     }
 
     /**
+     * Needed when translations for the part of the alias are the same for multiple languages.
+     * In that case we need to ensure that more prioritized language is chosen.
+     *
      * @param array $translations
+     *
      * @return array
      */
     private function sortTranslationsByPrioritizedLanguages( array $translations )
