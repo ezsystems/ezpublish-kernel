@@ -17,16 +17,16 @@ use PHPUnit_Framework_Assert as Assertion;
 
 /**
  * RestContext is the core of the REST testing
- *   All SubContexts (traits), helpers are loaded here
+ *   All SubContext (traits), helpers are loaded here
  *   Settings and client initializations is done here
  *   Also it contains all REST generic actions
  */
 class RestContext extends Context
 {
-    use SubContexts\EzRest;
-    use SubContexts\Authentication;
-    use SubContexts\ContentTypeGroup;
-    use SubContexts\Exception;
+    use SubContext\EzRest;
+    use SubContext\Authentication;
+    use SubContext\ContentTypeGroup;
+    use SubContext\Exception;
 
     const DEFAULT_URL = 'http://localhost/';
     const DEFAULT_DRIVER = 'GuzzleDriver';

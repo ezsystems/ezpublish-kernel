@@ -134,10 +134,10 @@ Feature: Install eZ Publish Demo with/without content
             | Email address     | foo@example.com   |
             | Password          | publish           |
             | Confirm password  | publish           |
-        And I press "Next"
+#        And I press "Next"
         Then I see "Open source software is nothing without a vibrant community!" step
 
     Scenario: Show open source information
         Given I am on "Open source software is nothing without a vibrant community!" step
-        When I press "Next"
+#        When I press "Next"
         Then I see "Finished" step

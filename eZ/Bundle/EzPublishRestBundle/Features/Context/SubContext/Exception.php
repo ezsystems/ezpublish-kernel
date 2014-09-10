@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContexts;
+namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use EzSystems\BehatBundle\Sentence\Exception as ExceptionSentences;
 use Behat\Behat\Context\Step;

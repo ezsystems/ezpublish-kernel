@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContexts;
+namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use EzSystems\BehatBundle\Helper\ValueObject as ValueObjectHelper;
 use eZ\Bundle\EzPublishRestBundle\Features\Context\Helper;

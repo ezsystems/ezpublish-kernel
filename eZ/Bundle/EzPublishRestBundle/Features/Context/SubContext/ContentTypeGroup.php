@@ -7,9 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContexts;
+namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use EzSystems\BehatBundle\Sentence\ContentTypeGroup as ContentTypeGroupSentences;
+use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
 use PHPUnit_Framework_Assert as Assertion;
@@ -94,7 +95,7 @@ trait ContentTypeGroup
     public function responseHasFollowingContentTypeGroups( TableNode $table )
     {
         // get groups
-        $groups = $this->convertTableToArrayOfData( $table );
+        $groups = GherkinHelper::convertTableToArrayOfData( $table );
 
         // verify if the expects objects are in the list
         foreach ( $this->getResponseObject() as $ContentTypeGroup )

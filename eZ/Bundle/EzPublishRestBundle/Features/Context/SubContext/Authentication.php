@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContexts;
+namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use Behat\Behat\Tester\Exception\PendingException;
 

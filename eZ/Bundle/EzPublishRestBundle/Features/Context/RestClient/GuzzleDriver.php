@@ -115,7 +115,6 @@ class GuzzleDriver implements DriverInterface
         try
         {
             // finally send the request
-#            $this->response = $this->request->send();
             $this->response = $this->client->send( $this->request );
         }
         // if the response is an 40x or a 50x then it will throw an exception
