@@ -27,16 +27,6 @@ use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
 class FieldTypeService implements FieldTypeServiceInterface
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
-
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
-    protected $persistenceHandler;
-
-    /**
      * @var array Hash of SPI FieldTypes or callable callbacks to generate one.
      */
     protected $settings;
@@ -51,14 +41,10 @@ class FieldTypeService implements FieldTypeServiceInterface
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param array $settings Hash of SPI FieldTypes or callable callbacks to generate one.
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler, array $settings = array() )
+    public function __construct( array $settings = array() )
     {
-        $this->repository = $repository;
-        $this->persistenceHandler = $handler;
         $this->settings = $settings;
     }
 
