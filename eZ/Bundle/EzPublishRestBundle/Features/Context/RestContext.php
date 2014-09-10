@@ -9,9 +9,9 @@
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
-use EzSystems\BehatBundle\Context\ApiContext;
-use eZ\Bundle\EzPublishRestBundle\Features\Context\Helpers;
-use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContexts;
+use EzSystems\BehatBundle\Context\Api\Context;
+use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
+use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use PHPUnit_Framework_Assert as Assertion;
 
@@ -21,13 +21,16 @@ use PHPUnit_Framework_Assert as Assertion;
  *   Settings and client initializations is done here
  *   Also it contains all REST generic actions
  */
-class RestContext extends ApiContext
+class RestContext extends Context
 {
     use SubContexts\EzRest;
     use SubContexts\Authentication;
     use SubContexts\ContentTypeGroup;
     use SubContexts\Exception;
-    use Helpers\ObjectController;
+
+    const DEFAULT_URL = 'http://localhost/';
+    const DEFAULT_DRIVER = 'GuzzleDriver';
+    const DEFAULT_BODY_TYPE = 'json';
 
     /**
      * Rest driver for all requests and responses
@@ -37,13 +40,18 @@ class RestContext extends ApiContext
     protected $restDriver;
 
     /**
-     * @param string $url   Base URL for REST calls
-     * @param string $driver    REST Driver to be used
+     * Initialize class
+     *
+     * @param string $url    Base URL for REST calls
+     * @param string $driver REST Driver to be used
+     * @param string $json   
+     *
+     * @return void
      */
     public function __construct(
-        $url = 'http://localhost/',
-        $driver = 'GuzzleDriver',
-        $type = 'json'
+        $url = self::DEFAULT_URL,
+        $driver = self::DEFAULT_DRIVER,
+        $type = self::DEFAULT_BODY_TYPE
     )
     {
         $this->setRestDriver( $driver, $url );
@@ -109,7 +117,7 @@ class RestContext extends ApiContext
      */
     public function setHeaders( TableNode $table )
     {
-        $headers = $this->convertTableToArrayOfData( $table );
+        $headers = GherkinHelper::convertTableToArrayOfData( $table );
 
         foreach ( $headers as $header => $value )
         {
@@ -122,10 +130,11 @@ class RestContext extends ApiContext
      */
     public function sendRequest()
     {
-        if ( !empty( $this->requestObject ) )
+        $requestObject = $this->getRequestObject();
+        if ( ! empty( $requestObject ) )
         {
             $this->addObjectToRequestBody(
-                $this->requestObject,
+                $requestObject,
                 $this->restBodyType
             );
         }
