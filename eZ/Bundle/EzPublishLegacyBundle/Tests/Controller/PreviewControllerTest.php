@@ -37,7 +37,6 @@ class PreviewControllerTest extends BasePreviewControllerTest
             $this->contentService,
             $this->httpKernel,
             $this->previewHelper,
-            $this->globalHelper,
             $this->securityContext
         );
         $controller->setConfigResolver( $this->configResolver );

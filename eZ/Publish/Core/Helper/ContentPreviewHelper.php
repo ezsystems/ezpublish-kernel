@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Helper;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
@@ -40,16 +41,23 @@ class ContentPreviewHelper implements SiteAccessAware
      */
     protected $originalSiteAccess;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    private $configResolver;
+
     public function __construct(
         ContentService $contentService,
         LocationService $locationService,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        ConfigResolverInterface $configResolver
     )
     {
         $this->contentService = $contentService;
         $this->locationService = $locationService;
 
         $this->eventDispatcher = $eventDispatcher;
+        $this->configResolver = $configResolver;
     }
 
     public function setSiteAccess( SiteAccess $siteAccess = null )
@@ -110,6 +118,8 @@ class ContentPreviewHelper implements SiteAccessAware
             // but for now we can't detect that so we return a virtual draft location
             $location = new Location(
                 array(
+                    // Faking using root locationId
+                    'id' => $this->configResolver->getParameter( 'content.tree_root.location_id' ),
                     'contentInfo' => $contentInfo,
                     'status' => Location::STATUS_DRAFT
                 )
