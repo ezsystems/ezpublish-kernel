@@ -8,28 +8,28 @@ Feature: Install eZ Publish Demo with/without content
         Given I am on the "Setup Wizard" page
         And I am on "Welcome to eZ Publish Community Project 5.4.0alpha1" step
         When I select "English (United Kingdom)"
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Outgoing Email" step
 
     @uniqueDatabaseSystem
     Scenario: Choose Sendmail/MTA
         Given I am on "Outgoing Email" step
         When I select "Sendmail/MTA" radio button
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Database initialization" step
 
     @nonUniqueDatabaseSystem @skipByDefault
     Scenario: Choose Sendmail/MTA
         Given I am on "Outgoing Email" step
         When I select "Sendmail/MTA" radio button
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Choose database system" step
 
     @nonUniqueDatabaseSystem @skipByDefault
     Scenario: Choose which database system to use
         Given I am on "Choose database system" step
         When I select "MySQL Improved" radio button
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Database initialization" step
 
     Scenario: Setup database connection
@@ -40,21 +40,21 @@ Feature: Install eZ Publish Demo with/without content
             | Port       |           |
             | Username   | ezp       |
             | Password   | ezp       |
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Language support" step
 
     Scenario: Choose English UK and German as languages for installation
         Given I am on "Language support" step
         When I select "English (United Kingdom)" radio button
         And I check "German" checkbox
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Site package" step
 
     @content
     Scenario: Choose Demo Site (with content) for installation
         Given I am on "Site package" step
         When I select "eZ Publish Demo Site" package version "5.4.0alpha1"
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Site package" step
         And I see "eZ Publish Demo Site" package version "5.4-0-alpha1" imported
         And I see following packages for version "5.4.0-alpha1" imported:
@@ -72,7 +72,7 @@ Feature: Install eZ Publish Demo with/without content
     Scenario: Choose Demo Site (without content) for installation
         Given I am on "Site package" step
         When I select "eZ Publish Demo Site (without demo content)" package version "5.4.0alpha1"
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Site package" step
         And I see "eZ Publish Demo Site (without demo content)" package version "5.4-0-alpha1" imported
         And I see following packages for version "5.4.0-alpha1" imported:
@@ -94,7 +94,7 @@ Feature: Install eZ Publish Demo with/without content
     Scenario: Choose the recommended URL site access configuration
         Given I am on "Site access configuration" step
         When I select "URL" radio button
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Site details" step
 
     @content
@@ -107,7 +107,7 @@ Feature: Install eZ Publish Demo with/without content
             | User path     | behat_site                        |
             | Admin path    | behat_site_admin                  |
         And I select "behattestdb"
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Site administrator" step
 
     @clean
@@ -120,7 +120,7 @@ Feature: Install eZ Publish Demo with/without content
             | User path     | behat_site                           |
             | Admin path    | behat_site_admin                     |
         And I select "behattestdb"
-        And I press "Next"
+        And I click at "Next" button
         Then I see "Site administrator" step
 
     # @todo: Make the non empty DB step
@@ -134,10 +134,10 @@ Feature: Install eZ Publish Demo with/without content
             | Email address     | foo@example.com   |
             | Password          | publish           |
             | Confirm password  | publish           |
-#        And I press "Next"
+        And I click at "Next" button
         Then I see "Open source software is nothing without a vibrant community!" step
 
     Scenario: Show open source information
         Given I am on "Open source software is nothing without a vibrant community!" step
-#        When I press "Next"
+        When I click at "Next" button
         Then I see "Finished" step
