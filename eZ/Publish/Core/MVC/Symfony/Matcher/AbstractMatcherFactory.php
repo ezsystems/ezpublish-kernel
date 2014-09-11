@@ -133,6 +133,7 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
         foreach ( $this->matchConfig[$viewType] as $configHash )
         {
             $hasMatched = true;
+            $matcher = null;
             foreach ( $configHash['match'] as $matcherIdentifier => $value )
             {
                 $matcher = $this->getMatcher( $matcherIdentifier );

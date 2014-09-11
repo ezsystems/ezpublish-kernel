@@ -46,6 +46,7 @@ EOT
                             ->end()
                             ->arrayNode( "match" )
                                 ->info( "Condition matchers configuration" )
+                                ->isRequired()
                                 ->useAttributeAsKey( "key" )
                                 ->prototype( "variable" )->end()
                             ->end()
