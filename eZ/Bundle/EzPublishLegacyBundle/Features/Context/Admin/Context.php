@@ -7,9 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context;
+namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context\Admin;
 
-class Admin2Context extends LegacyContext
+use eZ\Bundle\EzPublishLegacyBundle\Features\Context\Legacy;
+
+class Context extends Legacy
 {
     public function __construct()
     {

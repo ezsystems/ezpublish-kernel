@@ -7,14 +7,15 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context;
+namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context\SetupWizard;
 
-use PHPUnit_Framework_Assert as Assertion;
+use eZ\Bundle\EzPublishLegacyBundle\Features\Context\Legacy;
 use Behat\Behat\Context\BehatContext;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
+use PHPUnit_Framework_Assert as Assertion;
 
-class SetupWizardContext extends LegacyContext
+class Context extends Legacy
 {
     /**
      * @var array This var should have the association between title in setup and package
