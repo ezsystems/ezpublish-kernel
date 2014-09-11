@@ -13,6 +13,7 @@ use Symfony\Component\Templating\EngineInterface;
 use eZ\Publish\Core\MVC\Legacy\Templating\Converter\MultipleObjectConverter;
 use eZTemplate;
 use ezpEvent;
+use Symfony\Component\Templating\TemplateReference;
 
 class LegacyEngine implements EngineInterface
 {
@@ -133,6 +134,11 @@ class LegacyEngine implements EngineInterface
      */
     public function supports( $name )
     {
+        if ( $name instanceof TemplateReference )
+        {
+            $name = $name->getLogicalName();
+        }
+
         if ( isset( $this->supportedTemplates[$name] ) )
         {
             return $this->supportedTemplates[$name];
