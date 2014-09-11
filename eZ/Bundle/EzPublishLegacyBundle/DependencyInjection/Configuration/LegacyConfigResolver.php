@@ -71,6 +71,11 @@ class LegacyConfigResolver implements ConfigResolverInterface
      */
     public function getParameter( $paramName, $namespace = null, $scope = null )
     {
+        if ( !$this->isValidParameterName( $paramName ) )
+        {
+            throw new ParameterNotFoundException( $paramName, "$namespace.ini" );
+        }
+
         $namespace = $namespace ?: $this->defaultNamespace;
         $namespace = str_replace( '.ini', '', $namespace );
         list( $iniGroup, $paramName ) = explode( '.', $paramName, 2 );
@@ -105,8 +110,6 @@ class LegacyConfigResolver implements ConfigResolverInterface
      * @param string $scope A specific siteaccess to look into. Defaults to the current siteaccess.
      *
      * @throws \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
-     *
-     * @todo Implement in ConfigResolver interface
      *
      * @return array
      */
@@ -148,6 +151,13 @@ class LegacyConfigResolver implements ConfigResolverInterface
      */
     public function hasParameter( $paramName, $namespace = null, $scope = null )
     {
+        // $paramName must have a '.' as it separates INI section and actual parameter name.
+        // e.g. DebugSettings.DebugOutput
+        if ( !$this->isValidParameterName( $paramName ) )
+        {
+            return false;
+        }
+
         $namespace = $namespace ?: $this->defaultNamespace;
         $namespace = str_replace( '.ini', '', $namespace );
         list( $iniGroup, $paramName ) = explode( '.', $paramName, 2 );
@@ -189,5 +199,19 @@ class LegacyConfigResolver implements ConfigResolverInterface
     public function getDefaultNamespace()
     {
         return $this->defaultNamespace;
+    }
+
+    /**
+     * Checks $paramName validity.
+     * $paramName must have a '.' as it separates INI section and actual parameter name.
+     * e.g. DebugSettings.DebugOutput
+     *
+     * @param string $paramName
+     *
+     * @return int
+     */
+    private function isValidParameterName( $paramName )
+    {
+        return strpos( $paramName, '.' ) !== false;
     }
 }
