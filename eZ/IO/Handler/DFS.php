@@ -10,10 +10,9 @@ namespace EzSystems\DFSIOBundle\eZ\IO\Handler;
 
 use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
 use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions;
 use eZ\Publish\Core\IO\Handler as IOHandler;
-use eZ\Publish\Core\IO\MetadataHandler;
+use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
@@ -21,24 +20,24 @@ use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
 class DFS implements IOHandler
 {
     /** @var BinaryDataHandler */
-    protected $fs;
+    protected $binaryDataHandler;
 
     /** @var MetadataHandler */
-    protected $db;
+    protected $metaDataHandler;
 
     /** @var string */
     protected $storagePrefix;
 
     /**
      * @param string $storagePrefix
-     * @param MetadataHandler $db
-     * @param MetadataHandler $fs
+     * @param MetadataHandler $metaDataHandler
+     * @param MetadataHandler $binaryDataHandler
      */
-    public function construct( $storagePrefix, MetadataHandler $db, BinaryDataHandler $fs )
+    public function __construct( $storagePrefix, MetadataHandler $metaDataHandler, BinaryDataHandler $binaryDataHandler )
     {
         $this->storagePrefix = $storagePrefix;
-        $this->db = $db;
-        $this->fs = $fs;
+        $this->metaDataHandler = $metaDataHandler;
+        $this->binaryDataHandler = $binaryDataHandler;
     }
 
     /**
@@ -53,29 +52,29 @@ class DFS implements IOHandler
     public function create( BinaryFileCreateStruct $createStruct )
     {
         $path = $this->addStoragePrefix( $createStruct->id );
-        $this->db->insert( $path, $createStruct->mtime );
-        $this->fs->createFromStream( $path, $createStruct->getInputStream() );
+        $this->metaDataHandler->insert( $path, $createStruct->mtime );
+        $this->binaryDataHandler->createFromStream( $path, $createStruct->getInputStream() );
     }
 
     /**
      * Deletes the existing BinaryFile with path $path
      *
-     * @throws NotFoundException If the file doesn't exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
      *
      * @param string $spiBinaryFileId
      */
     public function delete( $spiBinaryFileId )
     {
         $path = $this->addStoragePrefix( $spiBinaryFileId );
-        $this->db->delete( $path );
-        $this->fs->delete( $path );
+        $this->metaDataHandler->delete( $path );
+        $this->binaryDataHandler->delete( $path );
     }
 
     /**
      * Updates the file identified by $path with data from $updateFile
      *
-     * @throws NotFoundException If the source path doesn't exist
-     * @throws InvalidArgumentException If the target path already exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the source path doesn't exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
      * @param string $spiBinaryFileId
      * @param BinaryFileUpdateStruct $updateFileStruct
@@ -86,43 +85,43 @@ class DFS implements IOHandler
     {
         if ( !$this->exists( $spiBinaryFileId ) )
         {
-            throw new \eZ\Publish\Core\Base\Exceptions\NotFoundException( 'BinaryFile', $spiBinaryFileId );
+            throw new Exceptions\NotFoundException( 'BinaryFile', $spiBinaryFileId );
         }
 
-        $sourceStoragePath = $this->getStoragePath( $spiBinaryFileId );
+        $sourceStoragePath = $this->addStoragePrefix( $spiBinaryFileId );
 
         if ( !isset( $updateFileStruct->id ) || $updateFileStruct->id == $spiBinaryFileId )
         {
-            $destinationStoragePath = $this->getStoragePath( $spiBinaryFileId );
+            $destinationStoragePath = $this->addStoragePrefix( $spiBinaryFileId );
         }
         else
         {
-            if ( $this->exists( $updateFileStruct->id ) )
+            $destinationStoragePath = $this->addStoragePrefix( $updateFileStruct->id );
+
+            if ( $this->metaDataHandler->exists( $destinationStoragePath ) )
             {
-                throw new \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException(
+                throw new Exceptions\InvalidArgumentException(
                     "\$updateFileStruct->id",
                     "File '{$updateFileStruct->id}' already exists"
                 );
             }
-
-            $destinationStoragePath = $this->getStoragePath( $updateFileStruct->id );
         }
 
         if ( $destinationStoragePath != $sourceStoragePath )
         {
-            $this->db->rename( $sourceStoragePath, $destinationStoragePath );
-            $this->fs->rename( $sourceStoragePath, $destinationStoragePath );
+            $this->metaDataHandler->rename( $sourceStoragePath, $destinationStoragePath );
+            $this->binaryDataHandler->rename( $sourceStoragePath, $destinationStoragePath );
         }
 
         if ( $updateFileStruct->getInputStream() !== null )
         {
-            $this->fs->updateFileContents(
+            $this->binaryDataHandler->updateFileContents(
                 $destinationStoragePath,
                 $updateFileStruct->getInputStream()
             );
         }
 
-        return $this->load( $destinationStoragePath );
+        return $this->load( $updateFileStruct->id );
     }
 
     /**
@@ -134,7 +133,7 @@ class DFS implements IOHandler
      */
     public function exists( $spiBinaryFileId )
     {
-        return $this->db->exists(
+        return $this->metaDataHandler->exists(
             $this->addStoragePrefix( $spiBinaryFileId )
         );
     }
@@ -150,7 +149,7 @@ class DFS implements IOHandler
      */
     public function load( $spiBinaryFileId )
     {
-        $metadata = $this->db->loadMetadata(
+        $metadata = $this->metaDataHandler->loadMetadata(
             $this->addStoragePrefix( $spiBinaryFileId )
         );
 
@@ -166,7 +165,7 @@ class DFS implements IOHandler
     /**
      * Returns a read only, binary file resource to the BinaryFile identified by $path
      *
-     * @throws NotFoundException If no file identified by $path exists
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
      *
      * @param string $spiBinaryFileId
      *
@@ -174,13 +173,17 @@ class DFS implements IOHandler
      */
     public function getFileResource( $spiBinaryFileId )
     {
-        return $this->fs->getFileResource( $this->addStoragePrefix( $spiBinaryFileId ) );
+        if ( !$this->exists( $spiBinaryFileId ) )
+        {
+            throw new Exceptions\NotFoundException( 'BinaryFile', $spiBinaryFileId );
+        }
+        return $this->binaryDataHandler->getFileResource( $this->addStoragePrefix( $spiBinaryFileId ) );
     }
 
     /**
      * Returns the contents of the BinaryFile identified by $path
      *
-     * @throws NotFoundException if the file couldn't be found
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
      *
      * @param string $spiBinaryFileId
      *
@@ -188,7 +191,7 @@ class DFS implements IOHandler
      */
     public function getFileContents( $spiBinaryFileId )
     {
-        return $this->fs->getFileContents(
+        return $this->binaryDataHandler->getFileContents(
             $this->addStoragePrefix( $spiBinaryFileId )
         );
     }
@@ -223,15 +226,15 @@ class DFS implements IOHandler
      * @param MetadataHandler $metadataHandler
      * @param string $spiBinaryFileId
      *
-     * @throws NotFoundException If $spiBinaryFileId isn't
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $spiBinaryFileId isn't
      *
      * @return array
      *
      * @todo Consider having specific metadatahandler interfaces: FileMetadataHandler, PathMetadataHandler...
      */
-    public function getMetadata( MetadataHandler $metadataHandler, $spiBinaryFileId )
+    public function getMetadata( IOMetadataHandler $metadataHandler, $spiBinaryFileId )
     {
-        return $this->fs->getMetadata(
+        return $this->binaryDataHandler->getMetadata(
             $metadataHandler,
             $this->addStoragePrefix( $spiBinaryFileId )
         );
@@ -244,6 +247,8 @@ class DFS implements IOHandler
      * @param string $spiBinaryFileId
      *
      * @return string
+     *
+     * @todo Make it depend on the BinaryDataHandler (right ?)
      */
     public function getUri( $spiBinaryFileId )
     {
@@ -265,7 +270,7 @@ class DFS implements IOHandler
      *
      * @param $path
      *
-     * @throws InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @return string
      */
     protected function removeStoragePrefix( $path )
@@ -275,14 +280,14 @@ class DFS implements IOHandler
             return $path;
         }
 
-        if ( strpos( $path, $this->storagePrefix . '/' ) !== 0 )
+        if ( strpos( $path, $this->storagePrefix ) !== 0 )
         {
-            throw new \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException(
+            throw new Exceptions\InvalidArgumentException(
                 '$uri',
                 "Prefix {$this->storagePrefix} not found in {$path}"
             );
         }
 
-        return substr( $path, strlen( $this->storagePrefix ) + 1 );
+        return substr( $path, strlen( $this->storagePrefix ) );
     }
 }
