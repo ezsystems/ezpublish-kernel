@@ -6,10 +6,10 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace BD\Bundle\DFSBundle\eZ\IO\Handler;
+namespace EzSystems\DFSIOBundle\eZ\IO\Handler;
 
-use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\MetadataHandler;
-use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
+use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
+use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Handler as IOHandler;

@@ -6,12 +6,23 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\MetadataHandler;
+namespace EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
 
-use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS\MetadataHandler;
+use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
+use Doctrine\DBAL\Connection;
 
 class DoctrineDBAL implements MetadataHandler
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $db;
+
+    public function __construct( Connection $db )
+    {
+        $this->db = $db;
+    }
+
     /**
      * Inserts a new reference to file $path
      *
@@ -22,7 +33,7 @@ class DoctrineDBAL implements MetadataHandler
      */
     public function insert( $path, $mtime )
     {
-        // TODO: Implement insert() method.
+        $this->db->prepare( "INSERT INTO ezdfsfile ()" )
     }
 
     /**
@@ -34,7 +45,19 @@ class DoctrineDBAL implements MetadataHandler
      */
     public function delete( $path )
     {
-        // TODO: Implement delete() method.
+        $qb = $this->db->createQueryBuilder();
+        $qb->update( 'ezdfsfile')
+           ->set( 'expired', 1 )
+           ->set( '-ABS( mtime )')
+           ->where( $qb->expr()->eq( 'f.name', $path ) );
+        try
+        {
+            $qb->execute();
+        }
+        catch ( DBALException $e )
+        {
+            throw $e;
+        }
     }
 
     /**
@@ -46,7 +69,11 @@ class DoctrineDBAL implements MetadataHandler
      */
     public function loadMetadata( $path )
     {
-        // TODO: Implement loadMetadata() method.
+        $qb = $this->db->createQueryBuilder();
+
+        $qb->select( '*' )
+           ->from( 'ezdfsfile' )
+           ->where( $qb->expr()->eq( 'name_hash', md5( $path ) )
     }
 
     /**
@@ -76,4 +103,3 @@ class DoctrineDBAL implements MetadataHandler
     }
 
 }
- 

@@ -1,6 +1,6 @@
 <?php
 
-namespace BD\Bundle\DFSBundle\DependencyInjection;
+namespace EzSystems\DFSIOBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;

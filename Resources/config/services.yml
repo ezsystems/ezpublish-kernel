@@ -1,7 +1,9 @@
 parameters:
-    dfs.io_handler.class: BD\Bundle\DFSBundle\eZ\IO\Handler\DFS
-    dfs.io_handler.db.class: BD\Bundle\DFSBundle\eZ\IO\Handler\DBInterface
-    dfs.io_handler.fs.class: BD\Bundle\DFSBundle\eZ\IO\Handler\FSInterface
+    dfs.io_handler.class: EzSystems\DFSIOBundle\eZ\IO\Handler\DFS
+    dfs.io_handler.metadata_handler.class: EzSystems\DFSIOBundle\eZ\IO\Handler\DBInterface
+    dfs.io_handler.metadata_handler.doctrine_dbal.class:
+    dfs.io_handler.binarydata_handler.class: EzSystems\DFSIOBundle\eZ\IO\Handler\FSInterface
+    dfs.io_handler.binarydata_handler.filesystem.class:
 
 services:
     dfs.io_handler:
@@ -9,8 +11,17 @@ services:
         arguments:
             [ @dfs.io_handler.db, @dfs.io_handler.fs ]
 
-    dfs.io_handler.db:
+    dfs.io_handler.metadata_handler:
         class: %dfs.io_handler.db.class%
 
-    dfs.io_handler.fs:
+    dfs.io_handler.metadata_handler.doctrine_dbal:
+        class: %dfs.io_handler.metadata_handler.doctrine_dbal.class%
+        arguments:
+            # @todo Clarify
+            - @doctrine.dbal.connection.cluster
+
+    dfs.io_handler.binarydata_handler:
         class: %dfs.io_handler.fs.class%
+
+    dfs.io_handler.binarydata_handler.filesystem:
+        class: %dfs.io_handler.binarydata_handler.filesystem.class%

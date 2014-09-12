@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace BD\Bundle\DFSBundle\eZ\IO\Handler\DFS;
+namespace EzSystems\DFSIOBundle\eZ\IO\Handler\DFS;
 
 interface MetadataHandler
 {

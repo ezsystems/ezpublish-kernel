@@ -7,16 +7,16 @@
  * @version //autogentag//
  */
 
-namespace BD\Bundle\DFSBundle\Tests;
+namespace EzSystems\DFSIOBundle\Tests;
 
-use BD\Bundle\DFSBundle\eZ\IO\Handler\DFS;
+use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS;
 
 class DFSTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \BD\Bundle\DFSBundle\eZ\IO\Handler\DBInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \EzSystems\DFSIOBundle\eZ\IO\Handler\DBInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $DBMock;
 
-    /** @var \BD\Bundle\DFSBundle\eZ\IO\Handler\FSInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \EzSystems\DFSIOBundle\eZ\IO\Handler\FSInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $FSMock;
 
     /** @var DFS */
@@ -118,7 +118,7 @@ class DFSTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \BD\Bundle\DFSBundle\eZ\IO\Handler\DFS
+     * @return \EzSystems\DFSIOBundle\eZ\IO\Handler\DFS
      */
     protected function getDFSIOHandler()
     {
@@ -135,7 +135,7 @@ class DFSTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \BD\Bundle\DFSBundle\eZ\IO\Handler\FSInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \EzSystems\DFSIOBundle\eZ\IO\Handler\FSInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFSMock()
     {
@@ -146,7 +146,7 @@ class DFSTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \BD\Bundle\DFSBundle\eZ\IO\Handler\DBInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \EzSystems\DFSIOBundle\eZ\IO\Handler\DBInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getDBMock()
     {

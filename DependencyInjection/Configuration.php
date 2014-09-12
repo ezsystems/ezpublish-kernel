@@ -1,6 +1,6 @@
 <?php
 
-namespace BD\Bundle\DFSBundle\DependencyInjection;
+namespace EzSystems\DFSIOBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
