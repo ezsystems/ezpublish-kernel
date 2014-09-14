@@ -87,6 +87,8 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\BlockView,
                     new ConfigParser\Common,
                     new ConfigParser\Content,
+                    new ConfigParser\FieldType\RichText,
+                    new ConfigParser\FieldType\XmlText,
                     new ConfigParser\FieldTemplates,
                     new ConfigParser\FieldDefinitionSettingsTemplates,
                     new ConfigParser\Image,
