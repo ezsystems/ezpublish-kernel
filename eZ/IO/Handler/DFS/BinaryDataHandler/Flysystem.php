@@ -8,10 +8,20 @@
  */
 namespace EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
 
+use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
+use League\Flysystem\FilesystemInterface;
 
 class Filesystem implements BinaryDataHandler
 {
+    /** @var FilesystemInterface */
+    private $filesystem;
+
+    public function __construct(FilesystemInterface $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
+
     /**
      * Creates the file $path with data from $resource
      *
@@ -22,9 +32,9 @@ class Filesystem implements BinaryDataHandler
      *
      * @return void
      */
-    public function createFromStream( $path, $resource )
+    public function createFromStream($path, $resource)
     {
-        // TODO: Implement createFromStream() method.
+        $this->filesystem->writeStream($path, $resource);
     }
 
     /**
@@ -34,22 +44,23 @@ class Filesystem implements BinaryDataHandler
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $path isn't found
      */
-    public function delete( $path )
+    public function delete($path)
     {
-        // TODO: Implement delete() method.
+        $this->filesystem->delete($path);
     }
 
     /**
      * Retrieves metadata from $path using $metadataHandler
      *
-     * @param \eZ\Publish\Core\IO\MetadataHandler $metadataHandler
-     * @param string          $path
+     * @param IOMetadataHandler $metadataHandler
+     * @param string $path
      *
      * @return array
      */
-    public function getMetadata( \eZ\Publish\Core\IO\MetadataHandler $metadataHandler, $path )
+    public function getMetadata(IOMetadataHandler $metadataHandler, $path)
     {
-        // TODO: Implement getMetadata() method.
+        // @todo
+        return array();
     }
 
     /**
@@ -63,7 +74,7 @@ class Filesystem implements BinaryDataHandler
      */
     public function getFileContents( $path )
     {
-        // TODO: Implement getFileContents() method.
+        return $this->filesystem->read($path);
     }
 
     /**
@@ -73,9 +84,9 @@ class Filesystem implements BinaryDataHandler
      *
      * @return resource A read-only binary resource to $path
      */
-    public function getFileResource( $path )
+    public function getFileResource($path)
     {
-        // TODO: Implement getFileResource() method.
+        return $this->filesystem->readStream($path);
     }
 
     /**
@@ -86,7 +97,7 @@ class Filesystem implements BinaryDataHandler
      */
     public function updateFileContents( $path, $resource )
     {
-        // TODO: Implement updateFileContents() method.
+        $this->filesystem->writeStream($path, $resource);
     }
 
     /**
@@ -98,9 +109,9 @@ class Filesystem implements BinaryDataHandler
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $toPath already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $fromPath does not exist
      */
-    public function rename( $fromPath, $toPath )
+    public function rename($fromPath, $toPath)
     {
-        // TODO: Implement rename() method.
+        $this->filesystem->rename($fromPath, $toPath);
     }
 
 }

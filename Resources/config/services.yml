@@ -9,7 +9,7 @@ services:
     dfs.io_handler:
         class: %dfs.io_handler.class%
         arguments:
-            [ @dfs.io_handler.db, @dfs.io_handler.fs ]
+            [ @dfs.io_handler.db, @dfs.io_handler.binaryDataHandler ]
 
     dfs.io_handler.metadata_handler:
         class: %dfs.io_handler.db.class%
@@ -21,7 +21,7 @@ services:
             - @doctrine.dbal.connection.cluster
 
     dfs.io_handler.binarydata_handler:
-        class: %dfs.io_handler.fs.class%
+        class: %dfs.io_handler.binaryDataHandler.class%
 
     dfs.io_handler.binarydata_handler.filesystem:
         class: %dfs.io_handler.binarydata_handler.filesystem.class%

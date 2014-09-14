@@ -8,19 +8,25 @@
  */
 namespace EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
-use Doctrine\DBAL\Connection;
 
 class DoctrineDBAL implements MetadataHandler
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var DoctrineDBAL\QueryRunnerInterface
      */
-    private $db;
+    private $queryRunner;
 
-    public function __construct( Connection $db )
+    /**
+     * @var DoctrineDBAL\QueryProviderInterface
+     */
+    private $queryProvider;
+
+    public function __construct( DoctrineDBAL\QueryRunnerInterface $queryRunner, DoctrineDBAL\QueryProviderInterface $queryProvider)
     {
-        $this->db = $db;
+        $this->queryRunner = $queryRunner;
+        $this->queryProvider = $queryProvider;
     }
 
     /**
@@ -33,7 +39,13 @@ class DoctrineDBAL implements MetadataHandler
      */
     public function insert( $path, $mtime )
     {
-        $this->db->prepare( "INSERT INTO ezdfsfile ()" )
+        try {
+            $this->queryRunner->runInsertOne(
+                $this->queryProvider->insertQuery($path, $mtime)
+            );
+        } catch (\Exception $e) {
+
+        }
     }
 
     /**
@@ -46,10 +58,6 @@ class DoctrineDBAL implements MetadataHandler
     public function delete( $path )
     {
         $qb = $this->db->createQueryBuilder();
-        $qb->update( 'ezdfsfile')
-           ->set( 'expired', 1 )
-           ->set( '-ABS( mtime )')
-           ->where( $qb->expr()->eq( 'f.name', $path ) );
         try
         {
             $qb->execute();
@@ -62,18 +70,19 @@ class DoctrineDBAL implements MetadataHandler
 
     /**
      * Loads and returns metadata for $path
-     *
      * @param string $path
-     *
      * @return array A hash with metadata for $path. Keys: mtime, size.
+     * @throws NotFoundException if no row is found for $path
      */
-    public function loadMetadata( $path )
+    public function loadMetadata($path)
     {
-        $qb = $this->db->createQueryBuilder();
-
-        $qb->select( '*' )
-           ->from( 'ezdfsfile' )
-           ->where( $qb->expr()->eq( 'name_hash', md5( $path ) )
+        try {
+            $this->queryRunner->selectOne(
+                $this->queryProvider->createSelectByPath($path)
+            );
+        } catch (\Exception $e) {
+            throw new NotFoundException('file', $path);
+        }
     }
 
     /**
