@@ -9,11 +9,23 @@
         }
     ],
     "require": {
-        "league/flysystem": "0.5.*"
+        "league/flysystem": "0.5.*",
+        "ezsystems/ezpublish-api": "2014.07.1",
+        "ezsystems/ezpublish-spi": "2014.07.1",
+        "doctrine/dbal": "~2.5@beta",
+        "doctrine/doctrine-bundle": "~1.3@beta"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "~2.0",
+        "mikey179/vfsStream": "~1.3"
     },
     "autoload": {
         "psr-4": {
-            "EzSystems\\DFSIOBundle\\": ""
+            "EzSystems\\DFSIOBundle\\": "",
+            "eZ\\Publish\\": "eZ/Publish/"
         }
+    },
+    "config": {
+        "bin-dir": "bin"
     }
 }
