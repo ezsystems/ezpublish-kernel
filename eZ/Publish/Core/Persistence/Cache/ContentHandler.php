@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
@@ -179,7 +180,20 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     public function deleteContent( $contentId )
     {
         $this->logger->logCall( __METHOD__, array( 'content' => $contentId ) );
+
+        // Load reverse field relations first
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
+            $contentId,
+            APIRelation::FIELD
+        );
+
         $return = $this->persistenceHandler->contentHandler()->deleteContent( $contentId );
+
+        // Clear cache of the reversely related Content after main action has executed
+        foreach ( $reverseRelations as $relation )
+        {
+            $this->cache->clear( 'content', $relation->sourceContentId );
+        }
 
         $this->cache->clear( 'content', $contentId );
         $this->cache->clear( 'content', 'info', $contentId );
