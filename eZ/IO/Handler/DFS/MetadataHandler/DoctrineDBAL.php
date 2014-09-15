@@ -8,25 +8,23 @@
  */
 namespace EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
 
+/**
+ * @todo Describe
+ * @todo Rename to LegacyStorage ?
+ */
 class DoctrineDBAL implements MetadataHandler
 {
-    /**
-     * @var DoctrineDBAL\QueryRunnerInterface
-     */
-    private $queryRunner;
+    /** @var Connection */
+    private $db;
 
-    /**
-     * @var DoctrineDBAL\QueryProviderInterface
-     */
-    private $queryProvider;
-
-    public function __construct( DoctrineDBAL\QueryRunnerInterface $queryRunner, DoctrineDBAL\QueryProviderInterface $queryProvider)
+    public function __construct(Connection $connection)
     {
-        $this->queryRunner = $queryRunner;
-        $this->queryProvider = $queryProvider;
+        $this->db = $connection;
     }
 
     /**
@@ -37,14 +35,34 @@ class DoctrineDBAL implements MetadataHandler
      * @param string  $path
      * @param integer $mtime
      */
-    public function insert( $path, $mtime )
+    public function insert($path, $size)
     {
+        $nameTrunk = $path;
         try {
-            $this->queryRunner->runInsertOne(
-                $this->queryProvider->insertQuery($path, $mtime)
+            /**
+             * @todo what might go wrong here ? Can another process be trying to insert the same image ?
+             *       what happens if somebody did ?
+             **/
+            $stmt = $this->db->prepare(<<<SQL
+INSERT INTO dfsfile
+(name, name_hash, name_trunk, mtime, size, scope, datatype)
+VALUES (:name, :name_hash, :name_trunk, :mtime, :size, :scope, :datatype)
+SQL
             );
-        } catch (\Exception $e) {
+            $stmt->bindValue('name', $path);
+            $stmt->bindValue('name_hash', md5($path));
+            $stmt->bindValue('name_trunk', $nameTrunk);
+            $stmt->bindValue('mtime', time());
+            $stmt->bindValue('size', $size);
+            $stmt->bindValue('scope', '');
+            $stmt->bindValue('datatype', '');
+            $stmt->execute();
+        } catch (DBALException $e) {
 
+        }
+
+        if ($stmt->rowCount() != 1) {
+            throw new \Exception("@todo");
         }
     }
 
@@ -57,14 +75,22 @@ class DoctrineDBAL implements MetadataHandler
      */
     public function delete( $path )
     {
-        $qb = $this->db->createQueryBuilder();
         try
         {
-            $qb->execute();
+            /**
+             * @todo delete or expire ?
+             */
+            $stmt = $this->db->prepare('DELETE FROM ezdfsfile WHERE name_hash LIKE ?');
+            $stmt->bindValue(1, md5($path));
+            $stmt->execute();
         }
         catch ( DBALException $e )
         {
             throw $e;
+        }
+
+        if ($stmt->rowCount() != 1) {
+            throw new \Exception("@todo");
         }
     }
 
@@ -77,12 +103,18 @@ class DoctrineDBAL implements MetadataHandler
     public function loadMetadata($path)
     {
         try {
-            $this->queryRunner->selectOne(
-                $this->queryProvider->createSelectByPath($path)
-            );
+            $stmt = $this->db->prepare('SELECT * FROM ezdfsfile WHERE name_hash LIKE ?');
+            $stmt->bindValue(1, md5($path));
+            $stmt->execute();
         } catch (\Exception $e) {
             throw new NotFoundException('file', $path);
         }
+
+        if ($stmt->rowCount() != 1) {
+            throw new \Exception("@todo");
+        }
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -94,7 +126,14 @@ class DoctrineDBAL implements MetadataHandler
      */
     public function exists( $path )
     {
-        // TODO: Implement exists() method.
+        try {
+            $stmt = $this->db->prepare('SELECT name FROM ezdfsfile WHERE name_hash LIKE ?');
+            $stmt->bindValue(1, md5($path));
+            $stmt->execute();
+        } catch (\Exception $e) {
+            throw new NotFoundException('file', $path);
+        }
+        return ($stmt->rowCount() == 1);
     }
 
     /**
@@ -106,9 +145,20 @@ class DoctrineDBAL implements MetadataHandler
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $toPath already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $fromPath does not exist
      */
-    public function rename( $fromPath, $toPath )
+    public function rename($fromPath, $toPath)
     {
-        // TODO: Implement rename() method.
-    }
+        try {
+            $stmt = $this->db->prepare('UPDATE ezdfsfile SET name = ?, name_hash = ? WHERE name_hash LIKE ?');
+            $stmt->bindValue(1, $toPath);
+            $stmt->bindValue(2, md5($toPath));
+            $stmt->bindValue(3, $fromPath);
+            $stmt->execute();
+        } catch (\Exception $e) {
+            throw new \Exception("@todo");
+        }
 
+        if ($stmt->rowCount()!=1) {
+            throw new NotFoundException("@todo", $fromPath);
+        }
+    }
 }
