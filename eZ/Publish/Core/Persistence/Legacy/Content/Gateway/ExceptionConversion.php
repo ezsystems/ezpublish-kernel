@@ -595,6 +595,27 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Removes relations to Content with $contentId from Relation and RelationList field type fields.
+     *
+     * @param int $contentId
+     */
+    public function removeReverseFieldRelations( $contentId )
+    {
+        try
+        {
+            return $this->innerGateway->removeReverseFieldRelations( $contentId );
+        }
+        catch ( DBALException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+    }
+
+    /**
      * Deletes the field with the given $fieldId
      *
      * @param int $fieldId

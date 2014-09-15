@@ -106,6 +106,8 @@ class TreeHandler
         {
             $this->fieldHandler->deleteFields( $contentId, $versionInfo );
         }
+        // Must be called before deleteRelations()
+        $this->contentGateway->removeReverseFieldRelations( $contentId );
         $this->contentGateway->deleteRelations( $contentId );
         $this->contentGateway->deleteVersions( $contentId );
         $this->contentGateway->deleteNames( $contentId );
