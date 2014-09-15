@@ -142,8 +142,9 @@ services:
 
     ezpublish.fieldType.ezobjectrelation.converter:
         class: %ezpublish.fieldType.ezobjectrelation.converter.class%
+        arguments: [@ezpublish.api.storage_engine.legacy.dbhandler]
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelation, lazy: true, callback: '::create'}
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezobjectrelationlist.converter:
         class: %ezpublish.fieldType.ezobjectrelationlist.converter.class%

@@ -49,12 +49,19 @@ class RelationList implements Converter
         $doc->appendChild( $root );
 
         $relationList = $doc->createElement( 'relation-list' );
-        $data = $this->getRelationXmlHashFromDB( $value->data['destinationContentIds'] );
+        $validDestinationContentsData = $this->getRelationXmlHashFromDB( $value->data['destinationContentIds'] );
         $priority = 0;
 
         foreach ( $value->data['destinationContentIds'] as $id )
         {
-            $row = $data[$id][0];
+            //Destination content may have been deleted without updating XML data
+            //reference to this content should not be kept
+            if ( !isset( $validDestinationContentsData[$id] ) )
+            {
+                continue;
+            }
+
+            $row = $validDestinationContentsData[$id][0];
             $row["ezcontentobject_id"] = $id;
             $row["priority"] = ( $priority += 1 );
 
@@ -88,6 +95,7 @@ class RelationList implements Converter
         if ( $value->dataText === null )
             return;
 
+        //First, list destination content ids referenced in the xml data
         $priorityByContentId = array();
 
         $dom = new DOMDocument( '1.0', 'utf-8' );
@@ -103,7 +111,19 @@ class RelationList implements Converter
 
         asort( $priorityByContentId, SORT_NUMERIC );
 
-        $fieldValue->data['destinationContentIds'] = array_keys( $priorityByContentId );
+        $destinationContentIds = array_keys( $priorityByContentId );
+
+        //Then, try to load basic data about those contents
+        //destination contents may have been deleted without updating XML data
+        $validDestinationContentsData = $this->getRelationXmlHashFromDB( $destinationContentIds );
+
+        $fieldValue->data['destinationContentIds'] = array_filter(
+            $destinationContentIds,
+            function( $id ) use( $validDestinationContentsData )
+            {
+                return isset( $validDestinationContentsData[$id] );
+            }
+        );
     }
 
     /**
@@ -293,11 +313,6 @@ class RelationList implements Converter
         $stmt = $q->prepare();
         $stmt->execute();
         $rows = $stmt->fetchAll( PDO::FETCH_ASSOC | PDO::FETCH_GROUP );
-
-        if ( empty( $rows ) )
-            throw new \Exception( "Could find Content with id's" . var_export( $destinationContentIds, true ) );
-        else if ( count( $rows ) !== count( $destinationContentIds ) )
-            throw new \Exception( "Miss match of rows & id count:" . var_export( $destinationContentIds, true ) );
 
         return $rows;
     }
