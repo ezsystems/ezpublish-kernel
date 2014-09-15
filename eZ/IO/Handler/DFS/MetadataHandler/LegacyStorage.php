@@ -17,7 +17,7 @@ use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
  * @todo Describe
  * @todo Rename to LegacyStorage ?
  */
-class DoctrineDBAL implements MetadataHandler
+class LegacyStorage implements MetadataHandler
 {
     /** @var Connection */
     private $db;
