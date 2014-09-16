@@ -3,6 +3,7 @@ parameters:
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ContentIdIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ContentTypeIdIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_identifier_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ContentTypeIdentifierIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_group_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\ContentTypeGroupIdIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Field\FieldIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\Field\FieldRange
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\ModifiedIn
@@ -43,6 +44,11 @@ services:
         class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_identifier_in.class%
         arguments:
             - @ezpublish.spi.persistence.legacy.content_type.handler
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_group_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.content_type_group_id_in.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 

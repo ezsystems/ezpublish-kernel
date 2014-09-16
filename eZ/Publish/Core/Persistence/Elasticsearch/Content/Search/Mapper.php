@@ -491,6 +491,13 @@ class Mapper
             new FieldType\BooleanField()
         );
 
+        $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
+        $fields[] = new Field(
+            'content_group',
+            $contentType->groupIds,
+            new FieldType\MultipleIdentifierField()
+        );
+
         return $document;
     }
 }

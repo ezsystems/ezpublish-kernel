@@ -3,6 +3,7 @@ parameters:
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\ContentIdIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_type_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\ContentTypeIdIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_type_identifier_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\ContentTypeIdentifierIn
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_type_group_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\ContentTypeGroupIdIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.language_code_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\LanguageCodeIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.location_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\LocationIdIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.location_remote_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\LocationRemoteIdIn
@@ -47,6 +48,11 @@ services:
         class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_type_identifier_in.class%
         arguments:
             - @ezpublish.spi.persistence.legacy.content_type.handler
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_type_group_id_in:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_type_group_id_in.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.location.criterion_visitor}
 
