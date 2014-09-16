@@ -495,4 +495,58 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         self::assertEquals( $initialValueImageUri, $updatedImageValue->uri );
         self::assertEquals( __METHOD__, $updatedImageValue->alternativeText );
     }
+
+    /**
+     * covers EZP-23152
+     */
+    public function testThatRemovingDraftDoesntRemovePublishedImages()
+    {
+        $repository = $this->getRepository();
+
+        // Load services
+        $contentService  = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        // create content and publish image
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( 'image' ),
+            'eng-GB'
+        );
+        $contentCreateStruct->setField( 'name', 'EZP23152_1' );
+        $contentCreateStruct->setField( 'image', $this->getValidCreationFieldData() );
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 2 );
+        $content = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
+        $content = $contentService->publishVersion( $content->getVersionInfo() );
+
+        $originalFile = $content->fields['image']['eng-GB']->id;
+
+        $this->assertTrue(
+            $exists = file_exists( $path = $this->getInstallDir() . '/' .  $originalFile ),
+            "Asserting image file $path exists."
+        );
+
+        // Create a new draft and update it
+        $updatedDraft = $contentService->createContentDraft( $content->contentInfo );
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->initialLanguageCode = 'eng-GB';
+        $contentUpdateStruct->setField( 'name', 'EZP23152_2' );
+        $updatedDraft = $contentService->updateContent( $updatedDraft->versionInfo, $contentUpdateStruct );
+
+        // remove the newly published content version, verify that the original file exists
+        $contentService->deleteVersion( $updatedDraft->versionInfo, 2 );
+        $this->assertTrue(
+            $exists = file_exists( $path = $this->getInstallDir() . '/' .  $originalFile ),
+            "Asserting original image file $path exists."
+        );
+
+        // delete content
+        $contentService->deleteContent( $content->contentInfo );
+        $this->assertFalse(
+            $exists = file_exists( $path = $this->getInstallDir() . '/' .  $originalFile ),
+            "Asserting image file $path exists."
+        );
+    }
+
 }

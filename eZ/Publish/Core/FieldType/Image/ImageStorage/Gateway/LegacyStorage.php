@@ -185,12 +185,16 @@ class LegacyStorage extends Gateway
      * Removes all references from $fieldId to a path that starts with $path
      *
      * @param string $path
+     * @param int $versionNo
      * @param mixed $fieldId
      *
      * @return void
      */
     public function removeImageReferences( $path, $versionNo, $fieldId )
     {
+        if ( !$this->canRemoveImageReference( $path, $versionNo, $fieldId ) )
+            return;
+
         $connection = $this->getConnection();
 
         $deleteQuery = $connection->createDeleteQuery();
@@ -242,6 +246,54 @@ class LegacyStorage extends Gateway
         $statement->execute();
 
         return (int)$statement->fetchColumn();
+    }
+
+    /**
+     * Checks if image $path can be removed when deleting $versionNo and $fieldId
+     *
+     * @param string $path
+     * @param int $versionNo
+     * @param mixed $fieldId
+     *
+     * @return boolean
+     */
+    protected function canRemoveImageReference( $path, $versionNo, $fieldId )
+    {
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $selectQuery->expr->count(
+                $connection->quoteColumn( 'id', 'ezcontentobject_attribute' )
+            )
+        )->from(
+            $connection->quoteTable( 'ezcontentobject_attribute' )
+        )->innerJoin(
+            $connection->quoteTable( 'ezimagefile' ),
+            $selectQuery->expr->eq(
+                $connection->quoteColumn( 'contentobject_attribute_id', 'ezimagefile' ),
+                $connection->quoteColumn( 'id', 'ezcontentobject_attribute' )
+            )
+        )->where(
+            $selectQuery->expr->lAnd(
+                $selectQuery->expr->eq(
+                    $connection->quoteColumn( 'contentobject_attribute_id' ),
+                    $selectQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
+                ),
+                $selectQuery->expr->neq(
+                    $connection->quoteColumn( 'version' ),
+                    $selectQuery->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                ),
+                $selectQuery->expr->like(
+                    $connection->quoteColumn( 'filepath' ),
+                    $selectQuery->bindValue( $path . '%' )
+                )
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+        return (int)$statement->fetchColumn() === 0;
     }
 }
 
