@@ -113,11 +113,11 @@ class IORepositoryResolver implements ResolverInterface
     {
         $info = pathinfo( $path );
         return sprintf(
-            '%s/%s_%s.%s',
+            '%s/%s_%s%s',
             $info['dirname'],
             $info['filename'],
             $filter,
-            $info['extension'] ?: ''
+            empty( $info['extension'] ) ? '' : '.' . $info['extension']
         );
     }
 
