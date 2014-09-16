@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\Core\IO\IOServiceInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Symfony\Component\Routing\RequestContext;
@@ -29,10 +30,16 @@ class IORepositoryResolver implements ResolverInterface
      */
     private $requestContext;
 
-    public function __construct( IOServiceInterface $ioService, RequestContext $requestContext )
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    private $configResolver;
+
+    public function __construct( IOServiceInterface $ioService, RequestContext $requestContext, ConfigResolverInterface $configResolver )
     {
         $this->ioService = $ioService;
         $this->requestContext = $requestContext;
+        $this->configResolver = $configResolver;
     }
 
     public function isStored( $path, $filter )
@@ -115,13 +122,18 @@ class IORepositoryResolver implements ResolverInterface
 
     /**
      * Returns base URL, with scheme, host and port, for current request context.
-     *
-     * @todo Allow to use a custom domain.
+     * It no delivery URL is configured for current SiteAccess, will return base URL from current RequestContext.
      *
      * @return string
      */
     protected function getBaseUrl()
     {
+        // Return configured delivery URL if any.
+        if ( $deliveryUrl = $this->configResolver->getParameter( 'image.delivery_url' ) )
+        {
+            return $deliveryUrl;
+        }
+
         $port = '';
         if ( $this->requestContext->getScheme() === 'https' && $this->requestContext->getHttpsPort() != 443 )
         {

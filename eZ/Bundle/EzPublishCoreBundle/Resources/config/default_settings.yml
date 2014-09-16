@@ -197,6 +197,7 @@ parameters:
         flatten: "-flatten"
         resize: "-resize {1}"
         optimize: "-strip"
+    ezsettings.default.image.delivery_url: ~
 
     ###
     # default ezpage settings
