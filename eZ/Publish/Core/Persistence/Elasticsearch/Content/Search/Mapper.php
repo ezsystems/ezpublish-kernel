@@ -492,7 +492,7 @@ class Mapper
         );
 
         $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
-        $fields[] = new Field(
+        $document->fields[] = new Field(
             'content_group',
             $contentType->groupIds,
             new FieldType\MultipleIdentifierField()
