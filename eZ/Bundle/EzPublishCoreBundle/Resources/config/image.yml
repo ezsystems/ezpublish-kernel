@@ -6,13 +6,13 @@ parameters:
 services:
     ezpublish.image_alias.imagine.binary_loader:
         class: %ezpublish.image_alias.imagine.binary_loader.class%
-        arguments: [@ezpublish.core.io.service, @liip_imagine.extension_guesser]
+        arguments: [@ezpublish.fieldType.ezimage.io, @liip_imagine.extension_guesser]
         tags:
             - { name: liip_imagine.binary.loader, loader: ezpublish }
 
     ezpublish.image_alias.imagine.cache_resolver:
         class: %ezpublish.image_alias.imagine.cache_resolver.class%
-        arguments: [@ezpublish.core.io.service, @router.request_context]
+        arguments: [@ezpublish.fieldType.ezimage.io, @router.request_context]
         tags:
             - { name: liip_imagine.cache.resolver, resolver: ezpublish }
 
