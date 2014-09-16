@@ -186,7 +186,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            $exists = file_exists( $path = $this->getInstallDir() . '/' . $field->value->id ),
+            $exists = file_exists( $path = $this->getInstallDir() . $field->value->uri ),
             "Asserting that $path exists."
         );
 
@@ -520,7 +520,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $content = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
         $content = $contentService->publishVersion( $content->getVersionInfo() );
 
-        $originalFile = $content->fields['image']['eng-GB']->id;
+        $originalFile = $content->fields['image']['eng-GB']->uri;
 
         $this->assertTrue(
             $exists = file_exists( $path = $this->getInstallDir() . '/' .  $originalFile ),

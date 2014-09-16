@@ -239,6 +239,7 @@ class ImageStorage extends GatewayBasedStorage
                 return;
             }
 
+            $field->value->data['id'] = $binaryFile->id;
             $field->value->data['fileSize'] = $binaryFile->size;
             $field->value->data['uri'] = $binaryFile->uri;
         }

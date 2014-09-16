@@ -23,6 +23,11 @@ Changes affecting version compatibility with former or future versions.
           #    keyHashFunction: crc32
   ```
 
+* Property `id` for `eZ\Publish\Core\FieldType\Image\Value` (value object for `ezimage` FieldType) has changed.
+  It wrongly contained the full image path, including the storage directory (e.g. `var/ezdemo_site/storage/images/`.
+  To get the full path, use `uri` property.
+  Ref: [EZP-23349](https://jira.ez.no/browse/EZP-23349)
+
 
 ## Deprecations
 
