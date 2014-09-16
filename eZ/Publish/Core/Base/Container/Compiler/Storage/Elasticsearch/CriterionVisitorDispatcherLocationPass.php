@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the AggregateCriterionVisitorLocationPass class.
+ * File containing the CriterionVisitorDispatcherLocationPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -14,22 +14,22 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This compiler pass will register Elasticsearch Storage criterion visitors.
+ * This compiler pass will register Elasticsearch Storage criterion visitors for Location Search.
  */
-class AggregateCriterionVisitorLocationPass implements CompilerPassInterface
+class CriterionVisitorDispatcherLocationPass implements CompilerPassInterface
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.elasticsearch.search.location.criterion_visitor.aggregate' ) )
+        if ( !$container->hasDefinition( 'ezpublish.persistence.elasticsearch.search.location.criterion_visitor_dispatcher' ) )
         {
             return;
         }
 
         $aggregateCriterionVisitorDefinition = $container->getDefinition(
-            'ezpublish.persistence.elasticsearch.search.location.criterion_visitor.aggregate'
+            'ezpublish.persistence.elasticsearch.search.location.criterion_visitor_dispatcher'
         );
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish.persistence.elasticsearch.search.location.criterion_visitor' ) as $id => $attributes )

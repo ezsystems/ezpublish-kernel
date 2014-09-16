@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor;
 
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
@@ -40,11 +41,11 @@ class SubtreeIn extends CriterionVisitor
      * Map field value to a proper Elasticsearch representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor $subVisitor
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
         $filters = array();
 
@@ -60,6 +61,19 @@ class SubtreeIn extends CriterionVisitor
         return array(
             "or" => $filters,
         );
+    }
+
+    /**
+     * Map field value to a proper Elasticsearch query representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     *
+     * @return string
+     */
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
+    {
+        return $this->visitFilter( $criterion, $dispatcher );
     }
 }
 

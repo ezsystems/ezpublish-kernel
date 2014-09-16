@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
 
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -38,11 +39,11 @@ class Native extends Gateway
     protected $mapper;
 
     /**
-     * Query criterion visitor
+     * Query criterion visitor dispatcher
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher
      */
-    protected $criterionVisitor;
+    protected $criterionVisitorDispatcher;
 
     /**
      * Query sort clause visitor
@@ -63,7 +64,7 @@ class Native extends Gateway
     public function __construct(
         HttpClient $client,
         Serializer $serializer,
-        CriterionVisitor $criterionVisitor,
+        CriterionVisitorDispatcher $criterionVisitorDispatcher,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
         // todo move up
@@ -72,7 +73,7 @@ class Native extends Gateway
     {
         $this->client = $client;
         $this->serializer = $serializer;
-        $this->criterionVisitor = $criterionVisitor;
+        $this->criterionVisitorDispatcher = $criterionVisitorDispatcher;
         $this->sortClauseVisitor = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->indexName = $indexName;
@@ -160,9 +161,15 @@ class Native extends Gateway
                 "filtered" => array(
                     "filter" => array(
                         "and" => array(
-                            // todo dispatch visitor by query/filter context to get scoring
-                            $this->criterionVisitor->visit( $query->query ),
-                            $this->criterionVisitor->visit( $query->filter ),
+                            // todo proper visitQuery implementation in visitors
+                            $this->criterionVisitorDispatcher->dispatch(
+                                $query->query,
+                                CriterionVisitorDispatcher::CONTEXT_FILTER
+                            ),
+                            $this->criterionVisitorDispatcher->dispatch(
+                                $query->filter,
+                                CriterionVisitorDispatcher::CONTEXT_QUERY
+                            ),
                         ),
                     ),
                 ),

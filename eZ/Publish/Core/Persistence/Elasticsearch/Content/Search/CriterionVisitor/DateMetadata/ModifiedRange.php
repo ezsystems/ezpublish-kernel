@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata;
 
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -41,14 +42,14 @@ class ModifiedRange extends DateMetadata
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch filter representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor $subVisitor
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
         $start = $this->getNativeTime( $criterion->value[0] );
         $end = isset( $criterion->value[1] ) ? $this->getNativeTime( $criterion->value[1] ) : null;
@@ -58,5 +59,18 @@ class ModifiedRange extends DateMetadata
                 "modified_dt" => $this->getRange( $criterion->operator, $start, $end ),
             ),
         );
+    }
+
+    /**
+     * Map field value to a proper Elasticsearch query representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     *
+     * @return string
+     */
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
+    {
+        return $this->visitFilter( $criterion, $dispatcher );
     }
 }

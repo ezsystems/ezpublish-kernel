@@ -1,5 +1,5 @@
 parameters:
-    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.aggregate.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\Aggregate
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor_dispatcher.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\ContentIdIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_type_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\ContentTypeIdIn
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_type_identifier_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\CriterionVisitor\ContentTypeIdentifierIn
@@ -29,8 +29,8 @@ parameters:
 services:
     # Note: services tagged with 'ezpublish.persistence.elasticsearch.search.location.criterion_visitor'
     # are registered to this one using compilation pass
-    ezpublish.persistence.elasticsearch.search.location.criterion_visitor.aggregate:
-        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.aggregate.class%
+    ezpublish.persistence.elasticsearch.search.location.criterion_visitor_dispatcher:
+        class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor_dispatcher.class%
 
     ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_id_in:
         class: %ezpublish.persistence.elasticsearch.search.location.criterion_visitor.content_id_in.class%

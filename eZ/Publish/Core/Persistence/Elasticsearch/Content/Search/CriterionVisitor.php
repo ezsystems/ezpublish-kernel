@@ -28,14 +28,24 @@ abstract class CriterionVisitor
     abstract public function canVisit( Criterion $criterion );
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch filter representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor $subVisitor
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
      * @return string
      */
-    abstract public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null );
+    abstract public function visitFilter( Criterion $criterion, CriterionVisitorDispatcher $dispatcher = null );
+
+    /**
+     * Map field value to a proper Elasticsearch query representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     *
+     * @return string
+     */
+    abstract public function visitQuery( Criterion $criterion, CriterionVisitorDispatcher $dispatcher = null );
 
     /**
      * Get Elasticsearch range filter

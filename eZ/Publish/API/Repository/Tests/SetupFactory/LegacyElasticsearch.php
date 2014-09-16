@@ -52,8 +52,8 @@ class LegacyElasticsearch extends Legacy
             /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
             $loader->load( 'tests/integration_legacy_elasticsearch.yml' );
 
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateCriterionVisitorContentPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateCriterionVisitorLocationPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\CriterionVisitorDispatcherContentPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\CriterionVisitorDispatcherLocationPass() );
             $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateFacetBuilderVisitorPass() );
             $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateFieldValueMapperPass() );
             $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateSortClauseVisitorContentPass() );

@@ -39,14 +39,18 @@ class ContentTypeGroupId extends Criterion implements CriterionInterface
 
     public function getSpecifications()
     {
+        $types = Specifications::TYPE_INTEGER | Specifications::TYPE_STRING;
+
         return array(
             new Specifications(
                 Operator::IN,
-                Specifications::FORMAT_ARRAY
+                Specifications::FORMAT_ARRAY,
+                $types
             ),
             new Specifications(
                 Operator::EQ,
-                Specifications::FORMAT_SINGLE
+                Specifications::FORMAT_SINGLE,
+                $types
             )
         );
     }

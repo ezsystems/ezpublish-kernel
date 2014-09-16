@@ -45,7 +45,7 @@ services:
         arguments:
             - @ezpublish.persistence.elasticsearch.search.content.gateway.client.http.stream
             - @ezpublish.persistence.elasticsearch.search.serializer
-            - @ezpublish.persistence.elasticsearch.search.content.criterion_visitor.aggregate
+            - @ezpublish.persistence.elasticsearch.search.content.criterion_visitor_dispatcher
             - @ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.aggregate
             - @ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate
 
@@ -57,7 +57,7 @@ services:
         arguments:
             - @ezpublish.persistence.elasticsearch.search.content.gateway.client.http.stream
             - @ezpublish.persistence.elasticsearch.search.serializer
-            - @ezpublish.persistence.elasticsearch.search.location.criterion_visitor.aggregate
+            - @ezpublish.persistence.elasticsearch.search.location.criterion_visitor_dispatcher
             - @ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.aggregate
             - @ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate
 

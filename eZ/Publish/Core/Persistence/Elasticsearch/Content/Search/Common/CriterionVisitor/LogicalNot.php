@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Common\CriterionVisitor;
 
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use RuntimeException;
@@ -31,14 +32,14 @@ class LogicalNot extends CriterionVisitor
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch filter representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor $subVisitor
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
         /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         if ( !isset( $criterion->criteria[0] ) || ( count( $criterion->criteria ) > 1 ) )
@@ -47,7 +48,20 @@ class LogicalNot extends CriterionVisitor
         }
 
         return array(
-            "not" => $subVisitor->visit( $criterion->criteria[0] )
+            "not" => $dispatcher->dispatch( $criterion->criteria[0], Dispatcher::CONTEXT_FILTER )
         );
+    }
+
+    /**
+     * Map field value to a proper Elasticsearch query representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     *
+     * @return string
+     */
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
+    {
+        return $this->visitFilter( $criterion, $dispatcher );
     }
 }

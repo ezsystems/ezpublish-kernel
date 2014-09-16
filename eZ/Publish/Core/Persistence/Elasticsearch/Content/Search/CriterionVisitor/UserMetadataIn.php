@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -37,16 +38,16 @@ class UserMetadataIn extends CriterionVisitor
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map field value to a proper Elasticsearch filter representation
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor $subVisitor
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
         switch ( $criterion->target )
         {
@@ -85,6 +86,19 @@ class UserMetadataIn extends CriterionVisitor
         }
 
         return $filter;
+    }
+
+    /**
+     * Map field value to a proper Elasticsearch query representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     *
+     * @return string
+     */
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
+    {
+        return $this->visitFilter( $criterion, $dispatcher );
     }
 }
 
