@@ -535,6 +535,7 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If assignment already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
@@ -560,15 +561,18 @@ class RoleService implements RoleServiceInterface
             $limitation = array( $roleLimitation->getIdentifier() => $roleLimitation->limitationValues );
         }
 
-        $loadedRole = $this->loadRole( $role->id );
+        // Check if objects exists
+        $spiRole = $this->userHandler->loadRole( $role->id );
         $loadedUserGroup = $this->repository->getUserService()->loadUserGroup( $userGroup->id );
+
+        $limitation = $this->checkAssignmentAndFilterLimitationValues( $loadedUserGroup->id, $spiRole, $limitation );
 
         $this->repository->beginTransaction();
         try
         {
             $this->userHandler->assignRole(
                 $loadedUserGroup->id,
-                $loadedRole->id,
+                $spiRole->id,
                 $limitation
             );
             $this->repository->commit();
@@ -631,6 +635,7 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
      * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException if $roleLimitation is not valid
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If assignment already exists
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -656,15 +661,18 @@ class RoleService implements RoleServiceInterface
             $limitation = array( $roleLimitation->getIdentifier() => $roleLimitation->limitationValues );
         }
 
-        $loadedRole = $this->loadRole( $role->id );
-        $loadedUser = $this->repository->getUserService()->loadUser( $user->id );
+        // Check if objects exists
+        $spiRole = $this->userHandler->loadRole( $role->id );
+        $spiUser = $this->userHandler->load( $user->id );
+
+        $limitation = $this->checkAssignmentAndFilterLimitationValues( $spiUser->id, $spiRole, $limitation );
 
         $this->repository->beginTransaction();
         try
         {
             $this->userHandler->assignRole(
-                $loadedUser->id,
-                $loadedRole->id,
+                $spiUser->id,
+                $spiRole->id,
                 $limitation
             );
             $this->repository->commit();
@@ -1244,5 +1252,58 @@ class RoleService implements RoleServiceInterface
 
         // This return array of validation errors
         return $type->validate( $limitation );
+    }
+
+    /**
+     * Validate that assignments not already exists and filter validations against existing
+     *
+     * @param mixed $contentId
+     * @param SPIRole $spiRole
+     * @param array|null $limitation
+     *
+     * @return array[]|null Filtered version of $limitation
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If assignment already exists
+     */
+    protected function checkAssignmentAndFilterLimitationValues( $contentId, SPIRole $spiRole, array $limitation = null )
+    {
+        $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $contentId );
+        foreach ( $spiRoleAssignments as $spiAssignment )
+        {
+            // Ignore assignments to other roles
+            if ( $spiAssignment->roleId !== $spiRole->id )
+                continue;
+
+            // Throw if Role is already assigned without limitations
+            if ( $spiAssignment->limitationIdentifier === null )
+            {
+                throw new InvalidArgumentException(
+                    "\$role",
+                    "Role '{$spiRole->id}' already assigned without limitations"
+                );
+            }
+
+            // Ignore if we are going to assign without limitations
+            if ( $limitation === null )
+                continue;
+
+            // Ignore if not assigned with same limitation identifier
+            if ( !isset($limitation[$spiAssignment->limitationIdentifier]) )
+                continue;
+
+            // Throw if Role is already assigned with all the same limitations
+            $newValues = array_diff( $limitation[$spiAssignment->limitationIdentifier], $spiAssignment->values );
+            if ( empty($newValues) )
+            {
+                throw new InvalidArgumentException(
+                    "\$role",
+                    "Role '{$spiRole->id}' already assigned with same '{$spiAssignment->limitationIdentifier}' value"
+                );
+            }
+
+            // Continue using the filtered list of limitations
+            $limitation[$spiAssignment->limitationIdentifier] = $newValues;
+        }
+
+        return $limitation;
     }
 }
