@@ -12,10 +12,12 @@ use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
 use League\Flysystem\FilesystemInterface;
 
-class Filesystem implements BinaryDataHandler
+class FlySystem implements BinaryDataHandler
 {
     /** @var FilesystemInterface */
     private $filesystem;
+
+    private $options = ['overwrite' => true];
 
     public function __construct(FilesystemInterface $filesystem)
     {
@@ -34,7 +36,11 @@ class Filesystem implements BinaryDataHandler
      */
     public function createFromStream($path, $resource)
     {
-        $this->filesystem->writeStream($path, $resource);
+        try {
+            $this->filesystem->writeStream($path, $resource);
+        } catch ( \League\Flysystem\FileExistsException $e ) {
+            $this->filesystem->updateStream($path, $resource);
+        }
     }
 
     /**

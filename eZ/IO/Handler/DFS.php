@@ -52,8 +52,9 @@ class DFS implements IOHandler
     public function create( BinaryFileCreateStruct $createStruct )
     {
         $path = $this->addStoragePrefix( $createStruct->id );
-        $this->metaDataHandler->insert( $path, $createStruct->mtime );
+        $this->metaDataHandler->insert( $path, $createStruct->size );
         $this->binaryDataHandler->createFromStream( $path, $createStruct->getInputStream() );
+        return $this->load( $createStruct->id );
     }
 
     /**

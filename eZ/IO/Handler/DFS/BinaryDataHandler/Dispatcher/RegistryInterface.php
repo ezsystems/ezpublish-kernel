@@ -17,10 +17,4 @@ interface RegistryInterface
      * @return BinaryDataHandler
      */
     public function getHandler( $path );
-
-    /**
-     * Returns all the registered BinaryDataHandlers
-     * @return BinaryDataHandler[]
-     */
-    public function getAllHandlers();
 }

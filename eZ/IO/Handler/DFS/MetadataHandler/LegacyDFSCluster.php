@@ -17,7 +17,7 @@ use EzSystems\DFSIOBundle\eZ\IO\Handler\DFS\MetadataHandler;
  * @todo Describe
  * @todo Rename to LegacyStorage ?
  */
-class LegacyStorage implements MetadataHandler
+class LegacyDFSCluster implements MetadataHandler
 {
     /** @var Connection */
     private $db;
@@ -44,9 +44,12 @@ class LegacyStorage implements MetadataHandler
              *       what happens if somebody did ?
              **/
             $stmt = $this->db->prepare(<<<SQL
-INSERT INTO dfsfile
-(name, name_hash, name_trunk, mtime, size, scope, datatype)
-VALUES (:name, :name_hash, :name_trunk, :mtime, :size, :scope, :datatype)
+INSERT INTO ezdfsfile
+  (name, name_hash, name_trunk, mtime, size, scope, datatype)
+  VALUES (:name, :name_hash, :name_trunk, :mtime, :size, :scope, :datatype)
+ON DUPLICATE KEY UPDATE
+  datatype=VALUES(datatype), scope=VALUES(scope), size=VALUES(size),
+  mtime=VALUES(mtime), expired=VALUES(expired)
 SQL
             );
             $stmt->bindValue('name', $path);
@@ -58,11 +61,11 @@ SQL
             $stmt->bindValue('datatype', '');
             $stmt->execute();
         } catch (DBALException $e) {
-
+            throw $e;
         }
 
-        if ($stmt->rowCount() != 1) {
-            throw new \Exception("@todo");
+        if ($stmt->rowCount() == 0) {
+            throw new \Exception("@TODO: unexpected rowCount " . $stmt->rowCount());
         }
     }
 
@@ -78,10 +81,10 @@ SQL
         try
         {
             /**
-             * @todo delete or expire ?
+             * @todo delete or expire ? legacy_mode option ?
              */
-            $stmt = $this->db->prepare('DELETE FROM ezdfsfile WHERE name_hash LIKE ?');
-            $stmt->bindValue(1, md5($path));
+            $stmt = $this->db->prepare('DELETE FROM ezdfsfile WHERE name_hash LIKE :name_hash');
+            $stmt->bindValue('name_hash', md5($path));
             $stmt->execute();
         }
         catch ( DBALException $e )
