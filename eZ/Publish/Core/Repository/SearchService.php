@@ -261,8 +261,7 @@ class SearchService implements SearchServiceInterface
 
         $contentInfo = $this->searchHandler->findSingle( $filter, $fieldFilters );
         return $this->repository->getContentService()->loadContent(
-            $contentInfo->id,
-            ( !empty( $fieldFilters['languages'] ) ? $fieldFilters['languages'] : null )
+            $contentInfo->id
         );
     }
 
