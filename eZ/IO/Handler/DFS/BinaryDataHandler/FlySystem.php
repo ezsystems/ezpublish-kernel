@@ -37,9 +37,9 @@ class FlySystem implements BinaryDataHandler
     public function createFromStream($path, $resource)
     {
         try {
-            $this->filesystem->writeStream($path, $resource);
+            $this->filesystem->writeStream($path, $resource, ['visibility' => 'public']);
         } catch ( \League\Flysystem\FileExistsException $e ) {
-            $this->filesystem->updateStream($path, $resource);
+            $this->filesystem->updateStream($path, $resource, ['visibility' => 'public']);
         }
     }
 
@@ -103,7 +103,7 @@ class FlySystem implements BinaryDataHandler
      */
     public function updateFileContents( $path, $resource )
     {
-        $this->filesystem->writeStream($path, $resource);
+        $this->filesystem->writeStream($path, $resource, ['visibility' => 'public']);
     }
 
     /**
