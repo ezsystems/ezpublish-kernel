@@ -23,7 +23,6 @@ services:
             - @ezpublish.persistence.solr.search.content.sort_clause_visitor.aggregate
             - @ezpublish.persistence.solr.search.content.facet_builder_visitor.aggregate
             - @ezpublish.persistence.solr.search.content.field_value_mapper.aggregate
-            - @ezpublish.spi.persistence.legacy.content.handler
             - @ezpublish.persistence.solr.search.content.field_name_generator
 
     ezpublish.persistence.legacy_solr.search.content.gateway:

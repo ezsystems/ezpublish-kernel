@@ -124,11 +124,11 @@ class DoctrineDatabase extends Gateway
             return array( 'count' => $count, 'rows' => array() );
         }
 
-        $contentIds = $this->getContentIds( $filter, $sort, $offset, $limit, $translations );
+        $contentInfoList = $this->getContentInfoList( $filter, $sort, $offset, $limit, $translations );
 
         return array(
             'count' => $count,
-            'rows' => $this->loadContent( $contentIds, $translations ),
+            'rows' => $contentInfoList,
         );
     }
 
@@ -229,12 +229,13 @@ class DoctrineDatabase extends Gateway
      *
      * @return int[]
      */
-    protected function getContentIds( Criterion $filter, $sort, $offset, $limit, $translations )
+    protected function getContentInfoList( Criterion $filter, $sort, $offset, $limit, $translations )
     {
         $query = $this->handler->createSelectQuery();
-
         $query->select(
-            $this->handler->quoteColumn( 'id', 'ezcontentobject' )
+            'DISTINCT ezcontentobject.id',
+            'ezcontentobject.*',
+            $this->handler->aliasedColumn( $query, 'main_node_id', 'main_tree' )
         );
 
         if ( $sort !== null )
@@ -244,11 +245,25 @@ class DoctrineDatabase extends Gateway
 
         $query->from(
             $this->handler->quoteTable( 'ezcontentobject' )
-        );
-        $query->innerJoin(
+        )->innerJoin(
             'ezcontentobject_version',
             'ezcontentobject.id',
             'ezcontentobject_version.contentobject_id'
+        )->leftJoin(
+            $this->handler->alias(
+                $this->handler->quoteTable( 'ezcontentobject_tree' ),
+                $this->handler->quoteIdentifier( 'main_tree' )
+            ),
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( "contentobject_id", "main_tree" ),
+                    $this->handler->quoteColumn( "id", "ezcontentobject" )
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( "main_node_id", "main_tree" ),
+                    $this->handler->quoteColumn( "node_id", "main_tree" )
+                )
+            )
         );
 
         if ( $sort !== null )
@@ -270,56 +285,7 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $statement->fetchAll( \PDO::FETCH_COLUMN );
-    }
-
-    /**
-     * Loads the actual content based on the provided IDs
-     *
-     * @param array $contentIds
-     * @param mixed $translations
-     *
-     * @return mixed[]
-     */
-    protected function loadContent( array $contentIds, $translations )
-    {
-        $loadQuery = $this->queryBuilder->createFindQuery( $translations );
-        $loadQuery->where(
-            $loadQuery->expr->eq(
-                'ezcontentobject_version.status',
-                VersionInfo::STATUS_PUBLISHED
-            ),
-            $loadQuery->expr->in(
-                $this->handler->quoteColumn( 'id', 'ezcontentobject' ),
-                $contentIds
-            )
-        );
-
-        $statement = $loadQuery->prepare();
-        $statement->execute();
-
-        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-
-        // Sort array, as defined in the $contentIds array
-        $contentIdOrder = array_flip( $contentIds );
-        usort(
-            $rows,
-            function ( $current, $next ) use ( $contentIdOrder )
-            {
-                return $contentIdOrder[$current['ezcontentobject_id']] -
-                    $contentIdOrder[$next['ezcontentobject_id']];
-            }
-        );
-
-        foreach ( $rows as &$row )
-        {
-            $row['ezcontentobject_always_available'] = $this->languageMaskGenerator->isAlwaysAvailable( $row['ezcontentobject_language_mask'] );
-            $row['ezcontentobject_main_language_code'] = $this->languageHandler->load( $row['ezcontentobject_initial_language_id'] )->languageCode;
-            $row['ezcontentobject_version_languages'] = $this->languageMaskGenerator->extractLanguageIdsFromMask( $row['ezcontentobject_version_language_mask'] );
-            $row['ezcontentobject_version_initial_language_code'] = $this->languageHandler->load( $row['ezcontentobject_version_initial_language_id'] )->languageCode;
-        }
-
-        return $rows;
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 }
 

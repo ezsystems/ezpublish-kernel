@@ -11,11 +11,13 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -45,36 +47,46 @@ class AddField extends Action
     protected $fieldValueConverter;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected $contentMapper;
+
+    /**
      * Creates a new action
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter $converter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      */
     public function __construct(
         Gateway $contentGateway,
         FieldDefinition $fieldDef,
         Converter $converter,
-        StorageHandler $storageHandler )
+        StorageHandler $storageHandler,
+        ContentMapper $contentMapper)
     {
         $this->contentGateway = $contentGateway;
         $this->fieldDefinition = $fieldDef;
         $this->fieldValueConverter = $converter;
         $this->storageHandler = $storageHandler;
+        $this->contentMapper = $contentMapper;
     }
 
     /**
      * Applies the action to the given $content
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo
      */
-    public function apply( Content $content )
+    public function apply( ContentInfo $contentInfo )
     {
         $languageCodeSet = array();
-        $versionNumbers = $this->contentGateway->listVersionNumbers(
-            $content->versionInfo->contentInfo->id
-        );
+        $versionNumbers = $this->contentGateway->listVersionNumbers( $contentInfo->id );
+
+        $contentRows = $this->contentGateway->load( $contentInfo->id, $contentInfo->currentVersionNo );
+        $contentList = $this->contentMapper->extractContentFromRows( $contentRows );
+        $content = $contentList[0];
 
         foreach ( $content->fields as $field )
         {

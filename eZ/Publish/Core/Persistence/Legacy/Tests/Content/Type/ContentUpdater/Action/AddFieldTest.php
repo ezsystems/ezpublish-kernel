@@ -41,6 +41,11 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
     protected $fieldValueConverterMock;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected $contentMapperMock;
+
+    /**
      * AddField action to test
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField
@@ -81,6 +86,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
     public function testApply()
     {
         $action = $this->getAddFieldAction();
+        $contentInfo = $this->getContentInfoFixture();
         $content = $this->getContentFixture();
         $versionNumbers = array( 1 );
         $field = $this->getFieldReference( 1, "eng-GB" );
@@ -89,6 +95,16 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
             ->method( 'listVersionNumbers' )
             ->with( $this->equalTo( "contentId" ) )
             ->will( $this->returnValue( $versionNumbers ) );
+
+        $this->getContentGatewayMock()->expects( $this->once() )
+            ->method( 'load' )
+            ->with( $contentInfo->id, $contentInfo->currentVersionNo )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()->expects( $this->once() )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content ) ) );
 
         $this->getFieldValueConverterMock()
             ->expects( $this->once() )
@@ -117,7 +133,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( $field )
             )->will( $this->returnValue( false ) );
 
-        $action->apply( $content );
+        $action->apply( $contentInfo );
 
         $this->assertEquals(
             2,
@@ -136,6 +152,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
     public function testApplyUpdatingStorageHandler()
     {
         $action = $this->getAddFieldAction();
+        $contentInfo = $this->getContentInfoFixture();
         $content = $this->getContentFixture();
         $versionNumbers = array( 1 );
         $field = $this->getFieldReference( 1, "eng-GB" );
@@ -144,6 +161,16 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
             ->method( 'listVersionNumbers' )
             ->with( $this->equalTo( "contentId" ) )
             ->will( $this->returnValue( $versionNumbers ) );
+
+        $this->getContentGatewayMock()->expects( $this->once() )
+            ->method( 'load' )
+            ->with( $contentInfo->id, $contentInfo->currentVersionNo )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()->expects( $this->once() )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content ) ) );
 
         $this->getFieldValueConverterMock()
             ->expects( $this->exactly( 2 ) )
@@ -181,7 +208,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( "contentId" )
             );
 
-        $action->apply( $content );
+        $action->apply( $contentInfo );
 
         $this->assertEquals(
             2,
@@ -201,6 +228,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
     {
         // Prepare action for translatable field
         $action = $this->getAddFieldAction( true );
+        $contentInfo = $this->getContentInfoFixture();
         $content = $this->getContentFixture();
         $versionNumbers = array( 1 );
         $field = $this->getFieldReference( 1, "eng-GB" );
@@ -209,6 +237,16 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
             ->method( 'listVersionNumbers' )
             ->with( $this->equalTo( "contentId" ) )
             ->will( $this->returnValue( $versionNumbers ) );
+
+        $this->getContentGatewayMock()->expects( $this->once() )
+            ->method( 'load' )
+            ->with( $contentInfo->id, $contentInfo->currentVersionNo )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()->expects( $this->once() )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content ) ) );
 
         $this->getFieldValueConverterMock()
             ->expects( $this->exactly( 2 ) )
@@ -245,7 +283,7 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
                 $this->isInstanceOf( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue" )
             );
 
-        $action->apply( $content );
+        $action->apply( $contentInfo );
 
         $this->assertEquals(
             2,
@@ -254,6 +292,20 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
         );
         $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field', $content->fields[1] );
         $this->assertEquals( 23, $content->fields[1]->id );
+    }
+
+    /**
+     * Returns a ContentInfo  fixture
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    protected function getContentInfoFixture()
+    {
+        $contentInfo = new Content\ContentInfo();
+        $contentInfo->id = "contentId";
+        $contentInfo->currentVersionNo = "versionNo";
+
+        return $contentInfo;
     }
 
     /**
@@ -329,6 +381,26 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a Content mapper mock
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected function getContentMapperMock()
+    {
+        if ( !isset( $this->contentMapperMock ) )
+        {
+            $this->contentMapperMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->contentMapperMock;
+    }
+
+    /**
      * Returns a FieldDefinition fixture
      *
      * @param bool $isTranslatable
@@ -381,7 +453,8 @@ class AddFieldTest extends PHPUnit_Framework_TestCase
                 $this->getContentGatewayMock(),
                 $this->getFieldDefinitionFixture( $isTranslatable ),
                 $this->getFieldValueConverterMock(),
-                $this->getContentStorageHandlerMock()
+                $this->getContentStorageHandlerMock(),
+                $this->getContentMapperMock()
             );
         }
         return $this->addFieldAction;

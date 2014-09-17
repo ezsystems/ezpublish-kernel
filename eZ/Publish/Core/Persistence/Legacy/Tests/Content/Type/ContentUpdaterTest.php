@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
-use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
@@ -57,6 +57,11 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected $contentUpdater;
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected $contentMapperMock;
 
     /**
      * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
@@ -112,13 +117,15 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
                 new ContentUpdater\Action\RemoveField(
                     $this->getContentGatewayMock(),
                     $fromType->fieldDefinitions[0],
-                    $this->getContentStorageHandlerMock()
+                    $this->getContentStorageHandlerMock(),
+                    $this->getContentMapperMock()
                 ),
                 new ContentUpdater\Action\AddField(
                     $this->getContentGatewayMock(),
                     $toType->fieldDefinitions[2],
                     $converterMock,
-                    $this->getContentStorageHandlerMock()
+                    $this->getContentStorageHandlerMock(),
+                    $this->getContentMapperMock()
                 )
             ),
             $actions
@@ -139,7 +146,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
             ->method( 'apply' )
             ->with(
                 $this->isInstanceOf(
-                    '\\eZ\\Publish\\SPI\\Persistence\\Content'
+                    '\\eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'
                 )
             );
         $actionB = $this->getMockForAbstractClass(
@@ -152,22 +159,22 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
             ->method( 'apply' )
             ->with(
                 $this->isInstanceOf(
-                    '\\eZ\\Publish\\SPI\\Persistence\\Content'
+                    '\\eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'
                 )
             );
 
         $actions = array( $actionA, $actionB );
 
-        $content = new Content();
+        $contentInfo = new ContentInfo();
 
         $result = new SearchResult();
 
         $hit    = new SearchHit();
-        $hit->valueObject = $content;
+        $hit->valueObject = $contentInfo;
         $result->searchHits[] = $hit;
 
         $hit    = new SearchHit();
-        $hit->valueObject = clone $content;
+        $hit->valueObject = clone $contentInfo;
         $result->searchHits[] = $hit;
 
         $this->getSearchHandlerMock()
@@ -307,6 +314,26 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a Content mapper mock
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected function getContentMapperMock()
+    {
+        if ( !isset( $this->contentMapperMock ) )
+        {
+            $this->contentMapperMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->contentMapperMock;
+    }
+
+    /**
      * Returns the content updater to test
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
@@ -319,7 +346,8 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
                 $this->getSearchHandlerMock(),
                 $this->getContentGatewayMock(),
                 $this->getConverterRegistryMock(),
-                $this->getContentStorageHandlerMock()
+                $this->getContentStorageHandlerMock(),
+                $this->getContentMapperMock()
             );
         }
         return $this->contentUpdater;

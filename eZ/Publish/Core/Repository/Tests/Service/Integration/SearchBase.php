@@ -106,7 +106,7 @@ abstract class SearchBase extends BaseServiceTest
         // Throws an exception because content with given id does not exist
         $searchResult = $searchService->findSingle(
             new Criterion\ContentId( array( APIBaseTest::DB_INT_MAX ) ),
-            array( "languages" => array( "eng-GB" ) ),
+            array( "languages" => array( "eng-US" ) ),
             false
         );
         /* END: Use Case */
@@ -126,7 +126,7 @@ abstract class SearchBase extends BaseServiceTest
         // Throws an exception because more than one result was returned for the given query
         $searchResult = $searchService->findSingle(
             new Criterion\ContentId( array( 4, 10 ) ),
-            array( "languages" => array( "eng-GB" ) )
+            array( "languages" => array( "eng-US" ) )
         );
         /* END: Use Case */
     }

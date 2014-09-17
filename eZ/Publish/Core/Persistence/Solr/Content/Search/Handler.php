@@ -403,6 +403,11 @@ class Handler implements SearchHandlerInterface
                 new FieldType\MultipleStringField()
             ),
             new Field(
+                'main_language_code',
+                $content->versionInfo->contentInfo->mainLanguageCode,
+                new FieldType\StringField()
+            ),
+            new Field(
                 'invisible',
                 array_map(
                     function ( $location )

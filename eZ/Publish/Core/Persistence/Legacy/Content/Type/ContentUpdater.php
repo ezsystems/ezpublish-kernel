@@ -13,6 +13,7 @@ use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -52,23 +53,32 @@ class ContentUpdater
     protected $storageHandler;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected $contentMapper;
+
+    /**
      * Creates a new content updater
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      */
     public function __construct(
         SearchHandler $searchHandler,
         ContentGateway $contentGateway,
         Registry $converterRegistry,
-        StorageHandler $storageHandler )
+        StorageHandler $storageHandler,
+        ContentMapper $contentMapper )
     {
         $this->searchHandler = $searchHandler;
         $this->contentGateway = $contentGateway;
         $this->converterRegistry = $converterRegistry;
         $this->storageHandler = $storageHandler;
+        $this->storageHandler = $storageHandler;
+        $this->contentMapper = $contentMapper;
     }
 
     /**
@@ -89,7 +99,8 @@ class ContentUpdater
                 $actions[] = new ContentUpdater\Action\RemoveField(
                     $this->contentGateway,
                     $fieldDef,
-                    $this->storageHandler
+                    $this->storageHandler,
+                    $this->contentMapper
                 );
             }
         }
@@ -103,7 +114,8 @@ class ContentUpdater
                     $this->converterRegistry->getConverter(
                         $fieldDef->fieldType
                     ),
-                    $this->storageHandler
+                    $this->storageHandler,
+                    $this->contentMapper
                 );
             }
         }
@@ -140,11 +152,11 @@ class ContentUpdater
      */
     public function applyUpdates( $contentTypeId, array $actions )
     {
-        foreach ( $this->loadContentObjects( $contentTypeId ) as $content )
+        foreach ( $this->loadContentObjects( $contentTypeId ) as $contentInfo )
         {
             foreach ( $actions as $action )
             {
-                $action->apply( $content );
+                $action->apply( $contentInfo );
             }
         }
     }
@@ -154,7 +166,7 @@ class ContentUpdater
      *
      * @param mixed $contentTypeId
      *
-     * @return \eZ\Publish\SPI\Persistence\Content[]
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[]
      */
     protected function loadContentObjects( $contentTypeId )
     {
@@ -166,12 +178,12 @@ class ContentUpdater
             )
         );
 
-        $content = array();
+        $contentInfo = array();
         foreach ( $result->searchHits as $hit )
         {
-            $content[] = $hit->valueObject;
+            $contentInfo[] = $hit->valueObject;
         }
 
-        return $content;
+        return $contentInfo;
     }
 }

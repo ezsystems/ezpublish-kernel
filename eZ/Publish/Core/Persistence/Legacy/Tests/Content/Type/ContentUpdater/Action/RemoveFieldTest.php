@@ -33,6 +33,11 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     protected $contentStorageHandlerMock;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected $contentMapperMock;
+
+    /**
      * RemoveField action to test
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField
@@ -68,7 +73,18 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     public function testApply()
     {
         $action = $this->getRemoveFieldAction();
+        $contentInfo = $this->getContentInfoFixture();
         $content = $this->getContentFixture();
+
+        $this->getContentGatewayMock()->expects( $this->once() )
+            ->method( 'load' )
+            ->with( $contentInfo->id, $contentInfo->currentVersionNo )
+            ->will( $this->returnValue( array() ) );
+
+        $this->getContentMapperMock()->expects( $this->once() )
+            ->method( 'extractContentFromRows' )
+            ->with( array() )
+            ->will( $this->returnValue( array( $content ) ) );
 
         $this->getContentGatewayMock()->expects( $this->once() )
             ->method( 'deleteField' )
@@ -82,7 +98,21 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( array( 3 ) )
             );
 
-        $action->apply( $content );
+        $action->apply( $contentInfo );
+    }
+
+    /**
+     * Returns a ContentInfo  fixture
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
+     */
+    protected function getContentInfoFixture()
+    {
+        $contentInfo = new Content\ContentInfo();
+        $contentInfo->id = "contentId";
+        $contentInfo->currentVersionNo = "versionNo";
+
+        return $contentInfo;
     }
 
     /**
@@ -151,6 +181,26 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a Content mapper mock
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     */
+    protected function getContentMapperMock()
+    {
+        if ( !isset( $this->contentMapperMock ) )
+        {
+            $this->contentMapperMock = $this->getMock(
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->contentMapperMock;
+    }
+
+    /**
      * Returns a FieldDefinition fixture
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
@@ -176,7 +226,8 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
             $this->removeFieldAction = new RemoveField(
                 $this->getContentGatewayMock(),
                 $this->getFieldDefinitionFixture(),
-                $this->getContentStorageHandlerMock()
+                $this->getContentStorageHandlerMock(),
+                $this->getContentMapperMock()
             );
         }
         return $this->removeFieldAction;

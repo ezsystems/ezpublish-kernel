@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\SPI\Persistence\Content as SPIContent;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 use eZ\Publish\API\Repository\Values\User\Limitation;
@@ -277,10 +277,22 @@ class SearchTest extends BaseServiceMockTest
 
         $repositoryMock->expects( $this->never() )->method( "hasAccess" );
 
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "getContentService" )
+            ->will(
+                $this->returnValue(
+                    $contentServiceMock = $this
+                        ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
+                        ->disableOriginalConstructor()
+                        ->getMock()
+                )
+            );
+
         $serviceQuery = new Query;
         $handlerQuery = new Query( array( "filter" => new Criterion\MatchAll(), "limit" => SearchService::MAX_LIMIT ) );
         $fieldFilters = array();
-        $spiContent = new SPIContent;
+        $spiContentInfo = new SPIContentInfo;
         $contentMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content" );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
@@ -291,16 +303,16 @@ class SearchTest extends BaseServiceMockTest
                 $this->returnValue(
                     new SearchResult(
                         array(
-                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiContent ) ) ),
+                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiContentInfo ) ) ),
                             "totalCount" => 1
                         )
                     )
                 )
             );
 
-        $domainMapperMock->expects( $this->once() )
-            ->method( "buildContentDomainObject" )
-            ->with( $this->equalTo( $spiContent ) )
+        $contentServiceMock
+            ->expects( $this->once() )
+            ->method( "loadContent" )
             ->will( $this->returnValue( $contentMock ) );
 
         $result = $service->findContent( $serviceQuery, $fieldFilters, false );
@@ -341,13 +353,25 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "getContentService" )
+            ->will(
+                $this->returnValue(
+                    $contentServiceMock = $this
+                        ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
+                        ->disableOriginalConstructor()
+                        ->getMock()
+                )
+            );
+
         $criterionMock = $this
             ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
             ->disableOriginalConstructor()
             ->getMock();
         $query = new Query( array( "filter" => $criterionMock, "limit" => 10 ) );
         $fieldFilters = array();
-        $spiContent = new SPIContent;
+        $spiContentInfo = new SPIContentInfo;
         $contentMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content" );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
@@ -358,16 +382,19 @@ class SearchTest extends BaseServiceMockTest
                 $this->returnValue(
                     new SearchResult(
                         array(
-                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiContent ) ) ),
+                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiContentInfo ) ) ),
                             "totalCount" => 1
                         )
                     )
                 )
             );
 
-        $domainMapperMock->expects( $this->once() )
-            ->method( "buildContentDomainObject" )
-            ->with( $this->equalTo( $spiContent ) )
+        $domainMapperMock->expects( $this->never() )
+            ->method( $this->anything() );
+
+        $contentServiceMock
+            ->expects( $this->once() )
+            ->method( "loadContent" )
             ->will( $this->returnValue( $contentMock ) );
 
         $permissionsCriterionHandlerMock->expects( $this->once() )
@@ -568,12 +595,27 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "getContentService" )
+            ->will(
+                $this->returnValue(
+                    $contentServiceMock = $this
+                        ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
+                        ->disableOriginalConstructor()
+                        ->getMock()
+                )
+            );
+
         $fieldFilters = array();
-        $spiContent = new SPIContent;
+        $spiContentInfo = new SPIContentInfo;
         $contentMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content" );
-        $domainMapperMock->expects( $this->once() )
-            ->method( "buildContentDomainObject" )
-            ->with( $this->equalTo( $spiContent ) )
+        $domainMapperMock->expects( $this->never() )
+            ->method( $this->anything() );
+
+        $contentServiceMock
+            ->expects( $this->once() )
+            ->method( "loadContent" )
             ->will( $this->returnValue( $contentMock ) );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
@@ -593,7 +635,7 @@ class SearchTest extends BaseServiceMockTest
                 $this->returnValue(
                     new SearchResult(
                         array(
-                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiContent ) ) ),
+                            "searchHits" => array( new SearchHit( array( "valueObject" => $spiContentInfo ) ) ),
                             "totalCount" => 1
                         )
                     )
@@ -711,6 +753,18 @@ class SearchTest extends BaseServiceMockTest
             array()
         );
 
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "getContentService" )
+            ->will(
+                $this->returnValue(
+                    $contentServiceMock = $this
+                        ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\ContentService" )
+                        ->disableOriginalConstructor()
+                        ->getMock()
+                )
+            );
+
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterionMock */
         $criterionMock = $this
             ->getMockBuilder( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" )
@@ -723,18 +777,21 @@ class SearchTest extends BaseServiceMockTest
             ->will( $this->returnValue( true ) );
 
         $fieldFilters = array();
-        $spiContent = new SPIContent;
+        $spiContentInfo = new SPIContentInfo;
         $contentMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\Content" );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
         $searchHandlerMock->expects( $this->once() )
             ->method( "findSingle" )
             ->with( $this->equalTo( $criterionMock ), $this->equalTo( $fieldFilters ) )
-            ->will( $this->returnValue( $spiContent ) );
+            ->will( $this->returnValue( $spiContentInfo ) );
 
-        $domainMapperMock->expects( $this->once() )
-            ->method( "buildContentDomainObject" )
-            ->with( $this->equalTo( $spiContent ) )
+        $domainMapperMock->expects( $this->never() )
+            ->method( $this->anything() );
+
+        $contentServiceMock
+            ->expects( $this->once() )
+            ->method( "loadContent" )
             ->will( $this->returnValue( $contentMock ) );
 
         $result = $service->findSingle( $criterionMock, $fieldFilters, true );

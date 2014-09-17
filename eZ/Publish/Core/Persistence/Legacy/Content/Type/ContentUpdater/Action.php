@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 
-use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 
 /**
@@ -37,9 +37,9 @@ abstract class Action
     /**
      * Applies the action to the given $content
      *
-     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo
      *
      * @return void
      */
-    abstract public function apply( Content $content );
+    abstract public function apply( ContentInfo $contentInfo );
 }

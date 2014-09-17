@@ -59,24 +59,15 @@ class Handler implements SearchHandlerInterface
     protected $contentMapper;
 
     /**
-     * FieldHandler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\FieldHandler
-     */
-    protected $fieldHandler;
-
-    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
      */
-    public function __construct( Gateway $gateway, ContentMapper $contentMapper, FieldHandler $fieldHandler )
+    public function __construct( Gateway $gateway, ContentMapper $contentMapper )
     {
         $this->gateway = $gateway;
         $this->contentMapper = $contentMapper;
-        $this->fieldHandler = $fieldHandler;
     }
 
     /**
@@ -113,11 +104,10 @@ class Handler implements SearchHandlerInterface
         $result->time = microtime( true ) - $start;
         $result->totalCount = $data['count'];
 
-        foreach ( $this->contentMapper->extractContentFromRows( $data['rows'] ) as $content )
+        foreach ( $this->contentMapper->extractContentInfoFromRows( $data['rows'], '', 'main_tree_' ) as $contentInfo )
         {
-            $this->fieldHandler->loadExternalFieldData( $content );
             $searchHit = new SearchHit();
-            $searchHit->valueObject = $content;
+            $searchHit->valueObject = $contentInfo;
 
             $result->searchHits[] = $searchHit;
         }
@@ -137,7 +127,7 @@ class Handler implements SearchHandlerInterface
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @return \eZ\Publish\SPI\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function findSingle( Criterion $filter, array $fieldFilters = array() )
     {

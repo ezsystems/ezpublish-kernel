@@ -47,7 +47,6 @@ services:
         arguments:
             - @ezpublish.persistence.legacy.search.gateway.content
             - @ezpublish.persistence.legacy.content.mapper
-            - @ezpublish.persistence.legacy.field_handler
         lazy: true
 
     ezpublish.spi.persistence.legacy.search.handler.location:

@@ -95,8 +95,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                 $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             ),
-            $this->getContentMapperMock(),
-            $this->getContentFieldHandlerMock()
+            $this->getContentMapperMock()
         );
     }
 
@@ -116,7 +115,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             )
         );
         $mapperMock->expects( $this->any() )
-            ->method( 'extractContentFromRows' )
+            ->method( 'extractContentInfoFromRows' )
             ->with( $this->isType( 'array' ) )
             ->will(
                 $this->returnCallback(
@@ -193,7 +192,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $ids = array_map(
             function ( $hit )
             {
-                return $hit->valueObject->versionInfo->contentInfo->id;
+                return $hit->valueObject->id;
             },
             $result->searchHits
         );
@@ -224,7 +223,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             array_map(
                 function ( $hit )
                 {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
+                    return $hit->valueObject->id;
                 },
                 $result->searchHits
             )
@@ -249,7 +248,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $ids = array_map(
             function ( $hit )
             {
-                return $hit->valueObject->versionInfo->contentInfo->id;
+                return $hit->valueObject->id;
             },
             $result->searchHits
         );
@@ -297,7 +296,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             array_map(
                 function ( $hit )
                 {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
+                    return $hit->valueObject->id;
                 },
                 $result->searchHits
             )
@@ -325,7 +324,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $ids = array_map(
             function ( $hit )
             {
-                return $hit->valueObject->versionInfo->contentInfo->id;
+                return $hit->valueObject->id;
             },
             $result->searchHits
         );
@@ -358,7 +357,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             array_map(
                 function ( $hit )
                 {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
+                    return $hit->valueObject->id;
                 },
                 $result->searchHits
             )
@@ -387,7 +386,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             array_map(
                 function ( $hit )
                 {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
+                    return $hit->valueObject->id;
                 },
                 $result->searchHits
             )
@@ -424,7 +423,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $contentIds = array_map(
             function ( $hit )
             {
-                return $hit->valueObject->versionInfo->contentInfo->id;
+                return $hit->valueObject->id;
             },
             $result->searchHits
         );
@@ -473,7 +472,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $contentIds = array_map(
             function ( $hit )
             {
-                return $hit->valueObject->versionInfo->contentInfo->id;
+                return $hit->valueObject->id;
             },
             $result->searchHits
         );
@@ -513,7 +512,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             array_map(
                 function ( $hit )
                 {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
+                    return $hit->valueObject->id;
                 },
                 $result->searchHits
             )
@@ -569,7 +568,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $contentIds = array_map(
             function ( $hit )
             {
-                return $hit->valueObject->versionInfo->contentInfo->id;
+                return $hit->valueObject->id;
             },
             $result->searchHits
         );
@@ -609,7 +608,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             array_map(
                 function ( $hit )
                 {
-                    return $hit->valueObject->versionInfo->contentInfo->id;
+                    return $hit->valueObject->id;
                 },
                 $result->searchHits
             )
