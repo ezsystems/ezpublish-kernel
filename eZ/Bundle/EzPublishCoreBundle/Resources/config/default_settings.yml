@@ -115,60 +115,60 @@ parameters:
         reference:
             reference: ~
             filters:
-                - {name: geometry/scaledownonly, params: [600, 600]}
+                geometry/scaledownonly: [600, 600]
         small:
             reference: reference
             filters:
-                - {name: geometry/scaledownonly, params: [100, 100]}
+                geometry/scaledownonly: [100, 100]
         tiny:
             reference: reference
             filters:
-                - {name: geometry/scaledownonly, params: [30, 30]}
+                geometry/scaledownonly: [30, 30]
         medium:
             reference: reference
             filters:
-                - {name: geometry/scaledownonly, params: [200, 200]}
+                geometry/scaledownonly: [200, 200]
         large:
             reference: reference
             filters:
-                - {name: geometry/scaledownonly, params: [300, 300]}
+                geometry/scaledownonly: [300, 300]
         rss:
             reference: reference
             filters:
-                - {name: geometry/scale, params: [88, 31]}
+                geometry/scale: [88, 31]
         campaign:
             reference: ~
             filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [770, 390, 0, 0]}
+                geometry/scalewidthdownonly: [770]
+                geometry/crop: [770, 390, 0, 0]
         backgroundimage:
             reference: ~
             filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [770, 390, 0, 0]}
+                geometry/scalewidthdownonly: [770]
+                geometry/crop: [770, 390, 0, 0]
         highlighted:
             reference: ~
             filters:
-                - {name: geometry/scalewidthdownonly, params: [300]}
-                - {name: geometry/crop, params: [300, 300, 0, 0]}
+                geometry/scalewidthdownonly: [300]
+                geometry/crop: [300, 300, 0, 0]
         galleryfull:
             reference: ~
             filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
+                geometry/scalewidthdownonly: [770]
         contentgrid:
             reference: ~
             filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [370, 160, 0, 0]}
+                geometry/scalewidthdownonly: [770]
+                geometry/crop: [370, 160, 0, 0]
         gallery:
             reference: ~
             filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
-                - {name: geometry/crop, params: [770, 390, 0, 0]}
+                geometry/scalewidthdownonly: [770]
+                geometry/crop: [770, 390, 0, 0]
         imagefull:
             reference: ~
             filters:
-                - {name: geometry/scalewidthdownonly, params: [770]}
+                geometry/scalewidthdownonly: [770]
 
     # ImageMagick
     ezpublish.image.imagemagick.enabled: false

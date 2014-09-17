@@ -231,15 +231,16 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
         );
 
         // Aliases configuration
-        foreach ( $this->configResolver->getParameter( 'image_variations' ) as $aliasName => $aliasSettings )
+        $imageVariations = $this->configResolver->getParameter( 'image_variations' );
+        foreach ( $imageVariations as $aliasName => $aliasSettings )
         {
             $imageSettings['image.ini/AliasSettings/AliasList'][] = $aliasName;
             if ( isset( $aliasSettings['reference'] ) )
                 $imageSettings["image.ini/$aliasName/Reference"] = $aliasSettings['reference'];
 
-            foreach ( $aliasSettings['filters'] as $filter )
+            foreach ( $aliasSettings['filters'] as $filterName => $filter )
             {
-                $imageSettings["image.ini/$aliasName/Filters"][] = $filter['name'] . '=' . implode( ';', $filter['params'] );
+                $imageSettings["image.ini/$aliasName/Filters"][] = $filterName . '=' . implode( ';', $filter );
             }
         }
 

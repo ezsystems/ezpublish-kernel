@@ -47,7 +47,7 @@ class Image extends AbstractParser
                             )
                         ),
                         'my_cropped_variation' => array(
-                            'reference'    => 'my_cropped_variation',
+                            'reference'    => 'my_image_variation',
                             'filters'      => array(
                                 array(
                                     'name'     => 'geometry/scalewidthdownonly',
@@ -61,7 +61,7 @@ class Image extends AbstractParser
                         )
                     )
                 )
-                ->useAttributeAsKey( 'key' )
+                ->useAttributeAsKey( 'variation_name' )
                 ->normalizeKeys( false )
                 ->prototype( 'array' )
                     ->children()
@@ -71,17 +71,28 @@ class Image extends AbstractParser
                         ->end()
                         ->arrayNode( 'filters' )
                             ->info( 'A list of filters to run, each filter must be supported by the active image converters' )
+                            ->useAttributeAsKey( 'name' )
+                            ->normalizeKeys( false )
                             ->prototype( 'array' )
-                                ->children()
-                                    ->scalarNode( 'name' )
-                                        ->info( 'The filter name, as defined in ImageMagick configuration, or a GD supported filter name' )
-                                        ->isRequired()
-                                    ->end()
-                                    ->arrayNode( 'params' )
-                                        ->info( 'Array of parameters to pass to the filter, if needed' )
-                                        ->prototype( 'scalar' )->end()
-                                    ->end()
+                                ->info( 'Array/Hash of parameters to pass to the filter' )
+                                ->useAttributeAsKey( 'options' )
+                                ->beforeNormalization()
+                                    ->ifTrue(
+                                        function ( $v )
+                                        {
+                                            // Check if passed array only contains a "params" key (BC with <=5.3).
+                                            return is_array( $v ) && count( $v ) === 1 && isset( $v['params'] );
+                                        }
+                                    )
+                                    ->then(
+                                        function ( $v )
+                                        {
+                                            // If we have the "params" key, just use the value.
+                                            return $v['params'];
+                                        }
+                                    )
                                 ->end()
+                                ->prototype( 'variable' )->end()
                             ->end()
                         ->end()
                     ->end()
