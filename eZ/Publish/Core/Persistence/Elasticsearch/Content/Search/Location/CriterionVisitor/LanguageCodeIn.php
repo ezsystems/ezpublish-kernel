@@ -91,7 +91,42 @@ class LanguageCodeIn extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        if ( count( $criterion->value ) > 1 )
+        {
+            $filter = array(
+                "terms" => array(
+                    "content_language_code_ms" => $criterion->value,
+                ),
+            );
+        }
+        else
+        {
+            $filter = array(
+                "term" => array(
+                    "content_language_code_ms" => $criterion->value[0],
+                ),
+            );
+        }
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode $criterion */
+        if ( $criterion->matchAlwaysAvailable )
+        {
+            $filter = array(
+                "bool" => array(
+                    "should" => array(
+                        $filter,
+                        array(
+                            "term" => array(
+                                "content_always_available_b" => true,
+                            ),
+                        ),
+                    ),
+                    "minimum_should_match" => 1,
+                ),
+            );
+        }
+
+        return $filter;
     }
 }
 

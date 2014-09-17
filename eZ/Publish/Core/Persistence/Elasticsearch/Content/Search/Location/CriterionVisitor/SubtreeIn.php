@@ -73,7 +73,23 @@ class SubtreeIn extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        $filters = array();
+
+        foreach ( $criterion->value as $value )
+        {
+            $filters[] = array(
+                "prefix" => array(
+                    "path_string_id" => $value,
+                ),
+            );
+        }
+
+        return array(
+            "bool" => array(
+                "should" => $filters,
+                "minimum_should_match" => 1,
+            ),
+        );
     }
 }
 

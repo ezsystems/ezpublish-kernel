@@ -111,6 +111,56 @@ class FieldIn extends Field
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
+        $fieldTypes = $this->getFieldTypes( $criterion );
+
+        $criterion->value = (array)$criterion->value;
+
+        if ( !isset( $fieldTypes[$criterion->target] ) )
+        {
+            throw new InvalidArgumentException(
+                "\$criterion->target",
+                "No searchable fields found for the given criterion target '{$criterion->target}'."
+            );
+        }
+
+        $terms = array();
+        foreach ( $fieldTypes[$criterion->target] as $names )
+        {
+            foreach ( $names as $name )
+            {
+                if ( count( $criterion->value ) > 1 )
+                {
+                    $term = array(
+                        "terms" => array(
+                            "fields_doc.". $name => $criterion->value,
+                            //"execution" => "bool",
+                        ),
+                    );
+                }
+                else
+                {
+                    $term = array(
+                        "term" => array(
+                            "fields_doc.". $name => reset( $criterion->value ),
+                        ),
+                    );
+                }
+
+                $terms[] = $term;
+            }
+        }
+
+        return array(
+            "nested" => array(
+                "path" => "fields_doc",
+                "query" => array(
+                    "bool" => array(
+                        "should" => $terms,
+                        "minimum_should_match" => 1,
+                    ),
+                ),
+            ),
+        );
     }
 }

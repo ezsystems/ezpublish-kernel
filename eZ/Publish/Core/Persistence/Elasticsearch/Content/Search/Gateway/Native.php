@@ -159,22 +159,22 @@ class Native extends Gateway
         $ast = array(
             "query" => array(
                 "filtered" => array(
+                    "query" => array(
+                        $this->criterionVisitorDispatcher->dispatch(
+                            $query->query,
+                            CriterionVisitorDispatcher::CONTEXT_QUERY
+                        ),
+                    ),
                     "filter" => array(
-                        "and" => array(
-                            // todo proper visitQuery implementation in visitors
-                            $this->criterionVisitorDispatcher->dispatch(
-                                $query->query,
-                                CriterionVisitorDispatcher::CONTEXT_FILTER
-                            ),
-                            $this->criterionVisitorDispatcher->dispatch(
-                                $query->filter,
-                                CriterionVisitorDispatcher::CONTEXT_QUERY
-                            ),
+                        $this->criterionVisitorDispatcher->dispatch(
+                            $query->filter,
+                            CriterionVisitorDispatcher::CONTEXT_FILTER
                         ),
                     ),
                 ),
             ),
-            //"filter" => $this->criterionVisitor->visit( $query->filter ),
+            // Filters are added through 'filtered' query, because aggregations operate in query scope
+            //"filter" => ...
             "aggregations" => empty( $aggregations ) ? new ArrayObject : $aggregations,
             "sort" => array_map(
                 array( $this->sortClauseVisitor, "visit" ),

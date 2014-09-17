@@ -62,6 +62,19 @@ class LogicalAnd extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+        return array(
+            "bool" => array(
+                "must" => array(
+                    array_map(
+                        function ( $value ) use ( $dispatcher )
+                        {
+                            return $dispatcher->dispatch( $value, Dispatcher::CONTEXT_QUERY );
+                        },
+                        $criterion->criteria
+                    ),
+                ),
+            ),
+        );
     }
 }

@@ -63,6 +63,15 @@ class Visibility extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        return array(
+            "nested" => array(
+                "path" => "locations_doc",
+                "query" => array(
+                    "term" => array(
+                        "invisible_b" => ( $criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false ),
+                    ),
+                ),
+            ),
+        );
     }
 }

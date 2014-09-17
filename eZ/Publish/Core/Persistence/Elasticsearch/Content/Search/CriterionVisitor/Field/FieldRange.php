@@ -103,7 +103,46 @@ class FieldRange extends Field
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
+        $fieldTypes = $this->getFieldTypes( $criterion );
+        $criterion->value = (array)$criterion->value;
+
+        if ( !isset( $fieldTypes[$criterion->target] ) )
+        {
+            throw new InvalidArgumentException(
+                "\$criterion->target",
+                "No searchable fields found for the given criterion target '{$criterion->target}'."
+            );
+        }
+
+        $start = $criterion->value[0];
+        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
+        $range = $this->getRange( $criterion->operator, $start, $end );
+
+        $ranges = array();
+        foreach ( $fieldTypes[$criterion->target] as $names )
+        {
+            foreach ( $names as $name )
+            {
+                $ranges[] = array(
+                    "range" => array(
+                        "fields_doc.". $name => $range,
+                    ),
+                );
+            }
+        }
+
+        return array(
+            "nested" => array(
+                "path" => "fields_doc",
+                "query" => array(
+                    "bool" => array(
+                        "should" => $ranges,
+                        "minimum_should_match" => 1,
+                    ),
+                ),
+            ),
+        );
     }
 }
 

@@ -62,6 +62,18 @@ class LogicalOr extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+        return array(
+            "bool" => array(
+                "should" => array_map(
+                    function ( $value ) use ( $dispatcher )
+                    {
+                        return $dispatcher->dispatch( $value, Dispatcher::CONTEXT_FILTER );
+                    },
+                    $criterion->criteria
+                ),
+                "minimum_should_match" => 1,
+            ),
+        );
     }
 }

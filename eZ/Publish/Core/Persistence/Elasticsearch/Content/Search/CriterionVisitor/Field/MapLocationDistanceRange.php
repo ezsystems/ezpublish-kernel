@@ -127,6 +127,63 @@ class MapLocationDistanceRange extends Field
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        $criterion->value = (array)$criterion->value;
+
+        $start = $criterion->value[0];
+        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : 63510;
+
+        // Converting kilometers to meters, which is default distance unit in Elasticsearch
+        $start *= 1000;
+        $end *= 1000;
+
+        $fieldTypes = $this->getFieldTypes( $criterion );
+
+        if ( !isset( $fieldTypes[$criterion->target][$this->typeName] ) &&
+            !isset( $fieldTypes[$criterion->target]["custom"] ) )
+        {
+            throw new InvalidArgumentException(
+                "\$criterion->target",
+                "No searchable fields found for the given criterion target '{$criterion->target}'."
+            );
+        }
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
+        $location = $criterion->valueData;
+        $range = $this->getRange( $criterion->operator, $start, $end );
+
+        if ( isset( $fieldTypes[$criterion->target]["custom"] ) )
+        {
+            $names = $fieldTypes[$criterion->target]["custom"];
+        }
+        else
+        {
+            $names = $fieldTypes[$criterion->target][$this->typeName];
+        }
+
+        $filters = array();
+        foreach ( $names as $name )
+        {
+            $filter = $range;
+            $filter["fields_doc.{$name}"] = array(
+                "lat" => $location->latitude,
+                "lon" => $location->longitude,
+            );
+
+            $filters[] = array(
+                "geo_distance_range" => $filter,
+            );
+        }
+
+        return array(
+            "nested" => array(
+                "path" => "fields_doc",
+                "query" => array(
+                    "bool" => array(
+                        "should" => $filters,
+                        "minimum_should_match" => 1,
+                    ),
+                ),
+            ),
+        );
     }
 }

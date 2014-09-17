@@ -57,6 +57,11 @@ class MatchNone extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        return array(
+            "terms" => array(
+                "_id" => array(),
+                "minimum_should_match" => 1,
+            ),
+        );
     }
 }

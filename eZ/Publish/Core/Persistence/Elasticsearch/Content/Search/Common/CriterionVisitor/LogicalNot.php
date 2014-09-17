@@ -62,6 +62,16 @@ class LogicalNot extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+        if ( !isset( $criterion->criteria[0] ) || ( count( $criterion->criteria ) > 1 ) )
+        {
+            throw new RuntimeException( "Invalid aggregation in LogicalNot criterion." );
+        }
+
+        return array(
+            "bool" => array(
+                "must_not" => $dispatcher->dispatch( $criterion->criteria[0], Dispatcher::CONTEXT_FILTER ),
+            ),
+        );
     }
 }
