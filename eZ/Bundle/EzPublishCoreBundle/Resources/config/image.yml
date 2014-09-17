@@ -5,6 +5,7 @@ parameters:
     ezpublish.image_alias.imagine.cache_resolver.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver
     ezpublish.image_alias.imagine.alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator
 
+    ezpublish.image_alias.imagine.filter.loader.scaledownonly.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleDownOnlyFilterLoader
     ezpublish.image_alias.imagine.filter.loader.scalewidth.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthFilterLoader
 
 services:
@@ -27,6 +28,12 @@ services:
             - @liip_imagine.filter.manager
             - @ezpublish.image_alias.imagine.cache_resolver
             - @logger
+
+    ezpublish.image_alias.imagine.filter.loader.scaledownonly:
+        class: %ezpublish.image_alias.imagine.filter.loader.scaledownonly.class%
+        arguments: [@liip_imagine.filter.loader.thumbnail]
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "geometry/scaledownonly" }
 
     ezpublish.image_alias.imagine.filter.loader.scalewidth:
         class: %ezpublish.image_alias.imagine.filter.loader.scalewidth.class%
