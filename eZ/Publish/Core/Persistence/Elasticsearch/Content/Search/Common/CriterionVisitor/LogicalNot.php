@@ -32,6 +32,22 @@ class LogicalNot extends CriterionVisitor
     }
 
     /**
+     * Validates criterion
+     *
+     * @throws \RuntimeException
+     *
+     * @param Criterion $criterion
+     */
+    protected function validateCriterionInput( Criterion $criterion )
+    {
+        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
+        if ( !isset( $criterion->criteria[0] ) || ( count( $criterion->criteria ) > 1 ) )
+        {
+            throw new RuntimeException( "Invalid aggregation in LogicalNot criterion." );
+        }
+    }
+
+    /**
      * Map field value to a proper Elasticsearch filter representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
@@ -41,12 +57,9 @@ class LogicalNot extends CriterionVisitor
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
-        if ( !isset( $criterion->criteria[0] ) || ( count( $criterion->criteria ) > 1 ) )
-        {
-            throw new RuntimeException( "Invalid aggregation in LogicalNot criterion." );
-        }
+        $this->validateCriterionInput( $criterion );
 
+        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         return array(
             "not" => $dispatcher->dispatch( $criterion->criteria[0], Dispatcher::CONTEXT_FILTER )
         );
@@ -62,12 +75,9 @@ class LogicalNot extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
-        if ( !isset( $criterion->criteria[0] ) || ( count( $criterion->criteria ) > 1 ) )
-        {
-            throw new RuntimeException( "Invalid aggregation in LogicalNot criterion." );
-        }
+        $this->validateCriterionInput( $criterion );
 
+        /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         return array(
             "bool" => array(
                 "must_not" => $dispatcher->dispatch( $criterion->criteria[0], Dispatcher::CONTEXT_FILTER ),

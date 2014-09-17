@@ -40,6 +40,60 @@ class FieldIn extends Field
     }
 
     /**
+     * Returns nested condition common for filter and query contexts.
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return array
+     */
+    protected function getCondition( Criterion $criterion )
+    {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
+        $fieldTypes = $this->getFieldTypes( $criterion );
+
+        $criterion->value = (array)$criterion->value;
+
+        if ( !isset( $fieldTypes[$criterion->target] ) )
+        {
+            throw new InvalidArgumentException(
+                "\$criterion->target",
+                "No searchable fields found for the given criterion target '{$criterion->target}'."
+            );
+        }
+
+        $terms = array();
+        foreach ( $fieldTypes[$criterion->target] as $names )
+        {
+            foreach ( $names as $name )
+            {
+                if ( count( $criterion->value ) > 1 )
+                {
+                    $term = array(
+                        "terms" => array(
+                            "fields_doc.". $name => $criterion->value,
+                            //"execution" => "bool",
+                        ),
+                    );
+                }
+                else
+                {
+                    $term = array(
+                        "term" => array(
+                            "fields_doc.". $name => reset( $criterion->value ),
+                        ),
+                    );
+                }
+
+                $terms[] = $term;
+            }
+        }
+
+        return $terms;
+    }
+
+    /**
      * Map field value to a proper Elasticsearch filter representation
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
@@ -51,51 +105,11 @@ class FieldIn extends Field
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
-        $fieldTypes = $this->getFieldTypes( $criterion );
-
-        $criterion->value = (array)$criterion->value;
-
-        if ( !isset( $fieldTypes[$criterion->target] ) )
-        {
-            throw new InvalidArgumentException(
-                "\$criterion->target",
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
-        }
-
-        $terms = array();
-        foreach ( $fieldTypes[$criterion->target] as $names )
-        {
-            foreach ( $names as $name )
-            {
-                if ( count( $criterion->value ) > 1 )
-                {
-                    $term = array(
-                        "terms" => array(
-                            "fields_doc.". $name => $criterion->value,
-                            //"execution" => "bool",
-                        ),
-                    );
-                }
-                else
-                {
-                    $term = array(
-                        "term" => array(
-                            "fields_doc.". $name => reset( $criterion->value ),
-                        ),
-                    );
-                }
-
-                $terms[] = $term;
-            }
-        }
-
         return array(
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
-                    "or" => $terms,
+                    "or" => $this->getCondition( $criterion ),
                 ),
             ),
         );
@@ -104,6 +118,8 @@ class FieldIn extends Field
     /**
      * Map field value to a proper Elasticsearch query representation
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
@@ -111,52 +127,12 @@ class FieldIn extends Field
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
-        $fieldTypes = $this->getFieldTypes( $criterion );
-
-        $criterion->value = (array)$criterion->value;
-
-        if ( !isset( $fieldTypes[$criterion->target] ) )
-        {
-            throw new InvalidArgumentException(
-                "\$criterion->target",
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
-        }
-
-        $terms = array();
-        foreach ( $fieldTypes[$criterion->target] as $names )
-        {
-            foreach ( $names as $name )
-            {
-                if ( count( $criterion->value ) > 1 )
-                {
-                    $term = array(
-                        "terms" => array(
-                            "fields_doc.". $name => $criterion->value,
-                            //"execution" => "bool",
-                        ),
-                    );
-                }
-                else
-                {
-                    $term = array(
-                        "term" => array(
-                            "fields_doc.". $name => reset( $criterion->value ),
-                        ),
-                    );
-                }
-
-                $terms[] = $term;
-            }
-        }
-
         return array(
             "nested" => array(
                 "path" => "fields_doc",
                 "query" => array(
                     "bool" => array(
-                        "should" => $terms,
+                        "should" => $this->getCondition( $criterion ),
                         "minimum_should_match" => 1,
                     ),
                 ),

@@ -49,6 +49,67 @@ class MapLocationDistanceRange extends Field
     }
 
     /**
+     * Returns nested condition common for filter and query contexts.
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return array
+     */
+    protected function getCondition( Criterion $criterion )
+    {
+        $criterion->value = (array)$criterion->value;
+
+        $start = $criterion->value[0];
+        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : 63510;
+
+        // Converting kilometers to meters, which is default distance unit in Elasticsearch
+        $start *= 1000;
+        $end *= 1000;
+
+        $fieldTypes = $this->getFieldTypes( $criterion );
+
+        if ( !isset( $fieldTypes[$criterion->target][$this->typeName] ) &&
+            !isset( $fieldTypes[$criterion->target]["custom"] ) )
+        {
+            throw new InvalidArgumentException(
+                "\$criterion->target",
+                "No searchable fields found for the given criterion target '{$criterion->target}'."
+            );
+        }
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
+        $location = $criterion->valueData;
+        $range = $this->getRange( $criterion->operator, $start, $end );
+
+        if ( isset( $fieldTypes[$criterion->target]["custom"] ) )
+        {
+            $names = $fieldTypes[$criterion->target]["custom"];
+        }
+        else
+        {
+            $names = $fieldTypes[$criterion->target][$this->typeName];
+        }
+
+        $filters = array();
+        foreach ( $names as $name )
+        {
+            $filter = $range;
+            $filter["fields_doc.{$name}"] = array(
+                "lat" => $location->latitude,
+                "lon" => $location->longitude,
+            );
+
+            $filters[] = array(
+                "geo_distance_range" => $filter,
+            );
+        }
+
+        return $filters;
+    }
+
+    /**
      * Map field value to a proper Elasticsearch filter representation
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
@@ -60,58 +121,11 @@ class MapLocationDistanceRange extends Field
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        $criterion->value = (array)$criterion->value;
-
-        $start = $criterion->value[0];
-        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : 63510;
-
-        // Converting kilometers to meters, which is default distance unit in Elasticsearch
-        $start *= 1000;
-        $end *= 1000;
-
-        $fieldTypes = $this->getFieldTypes( $criterion );
-
-        if ( !isset( $fieldTypes[$criterion->target][$this->typeName] ) &&
-            !isset( $fieldTypes[$criterion->target]["custom"] ) )
-        {
-            throw new InvalidArgumentException(
-                "\$criterion->target",
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
-        }
-
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
-        $location = $criterion->valueData;
-        $range = $this->getRange( $criterion->operator, $start, $end );
-
-        if ( isset( $fieldTypes[$criterion->target]["custom"] ) )
-        {
-            $names = $fieldTypes[$criterion->target]["custom"];
-        }
-        else
-        {
-            $names = $fieldTypes[$criterion->target][$this->typeName];
-        }
-
-        $filters = array();
-        foreach ( $names as $name )
-        {
-            $filter = $range;
-            $filter["fields_doc.{$name}"] = array(
-                "lat" => $location->latitude,
-                "lon" => $location->longitude,
-            );
-
-            $filters[] = array(
-                "geo_distance_range" => $filter,
-            );
-        }
-
         return array(
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
-                    "or" => $filters,
+                    "or" => $this->getCondition( $criterion ),
                 ),
             ),
         );
@@ -120,6 +134,8 @@ class MapLocationDistanceRange extends Field
     /**
      * Map field value to a proper Elasticsearch query representation
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
@@ -127,59 +143,12 @@ class MapLocationDistanceRange extends Field
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        $criterion->value = (array)$criterion->value;
-
-        $start = $criterion->value[0];
-        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : 63510;
-
-        // Converting kilometers to meters, which is default distance unit in Elasticsearch
-        $start *= 1000;
-        $end *= 1000;
-
-        $fieldTypes = $this->getFieldTypes( $criterion );
-
-        if ( !isset( $fieldTypes[$criterion->target][$this->typeName] ) &&
-            !isset( $fieldTypes[$criterion->target]["custom"] ) )
-        {
-            throw new InvalidArgumentException(
-                "\$criterion->target",
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
-        }
-
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
-        $location = $criterion->valueData;
-        $range = $this->getRange( $criterion->operator, $start, $end );
-
-        if ( isset( $fieldTypes[$criterion->target]["custom"] ) )
-        {
-            $names = $fieldTypes[$criterion->target]["custom"];
-        }
-        else
-        {
-            $names = $fieldTypes[$criterion->target][$this->typeName];
-        }
-
-        $filters = array();
-        foreach ( $names as $name )
-        {
-            $filter = $range;
-            $filter["fields_doc.{$name}"] = array(
-                "lat" => $location->latitude,
-                "lon" => $location->longitude,
-            );
-
-            $filters[] = array(
-                "geo_distance_range" => $filter,
-            );
-        }
-
         return array(
             "nested" => array(
                 "path" => "fields_doc",
                 "query" => array(
                     "bool" => array(
-                        "should" => $filters,
+                        "should" => $this->getCondition( $criterion ),
                         "minimum_should_match" => 1,
                     ),
                 ),

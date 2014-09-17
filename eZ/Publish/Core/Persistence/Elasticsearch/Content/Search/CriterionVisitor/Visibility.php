@@ -32,6 +32,18 @@ class Visibility extends CriterionVisitor
     }
 
     /**
+     * Map Criterion visibility value to a proper Elasticsearch representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return bool
+     */
+    protected function getInternalValue( Criterion $criterion )
+    {
+        return ( $criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false );
+    }
+
+    /**
      * Map field value to a proper Elasticsearch filter representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
@@ -46,7 +58,7 @@ class Visibility extends CriterionVisitor
                 "path" => "locations_doc",
                 "filter" => array(
                     "term" => array(
-                        "invisible_b" => ( $criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false ),
+                        "invisible_b" => $this->getInternalValue( $criterion ),
                     ),
                 ),
             ),
@@ -68,7 +80,7 @@ class Visibility extends CriterionVisitor
                 "path" => "locations_doc",
                 "query" => array(
                     "term" => array(
-                        "invisible_b" => ( $criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false ),
+                        "invisible_b" => $this->getInternalValue( $criterion ),
                     ),
                 ),
             ),

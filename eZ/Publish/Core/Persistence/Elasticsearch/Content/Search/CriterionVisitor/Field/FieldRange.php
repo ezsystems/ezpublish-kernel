@@ -43,6 +43,49 @@ class FieldRange extends Field
     }
 
     /**
+     * Returns nested condition common for filter and query contexts.
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return array
+     */
+    protected function getCondition( Criterion $criterion )
+    {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
+        $fieldTypes = $this->getFieldTypes( $criterion );
+        $criterion->value = (array)$criterion->value;
+
+        if ( !isset( $fieldTypes[$criterion->target] ) )
+        {
+            throw new InvalidArgumentException(
+                "\$criterion->target",
+                "No searchable fields found for the given criterion target '{$criterion->target}'."
+            );
+        }
+
+        $start = $criterion->value[0];
+        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
+        $range = $this->getRange( $criterion->operator, $start, $end );
+
+        $ranges = array();
+        foreach ( $fieldTypes[$criterion->target] as $names )
+        {
+            foreach ( $names as $name )
+            {
+                $ranges[] = array(
+                    "range" => array(
+                        "fields_doc.". $name => $range,
+                    ),
+                );
+            }
+        }
+
+        return $ranges;
+    }
+
+    /**
      * Map field value to a proper Elasticsearch filter representation
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
@@ -54,40 +97,11 @@ class FieldRange extends Field
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
-        $fieldTypes = $this->getFieldTypes( $criterion );
-        $criterion->value = (array)$criterion->value;
-
-        if ( !isset( $fieldTypes[$criterion->target] ) )
-        {
-            throw new InvalidArgumentException(
-                "\$criterion->target",
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
-        }
-
-        $start = $criterion->value[0];
-        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
-        $range = $this->getRange( $criterion->operator, $start, $end );
-
-        $ranges = array();
-        foreach ( $fieldTypes[$criterion->target] as $names )
-        {
-            foreach ( $names as $name )
-            {
-                $ranges[] = array(
-                    "range" => array(
-                        "fields_doc.". $name => $range,
-                    ),
-                );
-            }
-        }
-
         return array(
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
-                    "or" => $ranges,
+                    "or" => $this->getCondition( $criterion ),
                 ),
             ),
         );
@@ -96,6 +110,8 @@ class FieldRange extends Field
     /**
      * Map field value to a proper Elasticsearch query representation
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
@@ -103,41 +119,12 @@ class FieldRange extends Field
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
-        $fieldTypes = $this->getFieldTypes( $criterion );
-        $criterion->value = (array)$criterion->value;
-
-        if ( !isset( $fieldTypes[$criterion->target] ) )
-        {
-            throw new InvalidArgumentException(
-                "\$criterion->target",
-                "No searchable fields found for the given criterion target '{$criterion->target}'."
-            );
-        }
-
-        $start = $criterion->value[0];
-        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
-        $range = $this->getRange( $criterion->operator, $start, $end );
-
-        $ranges = array();
-        foreach ( $fieldTypes[$criterion->target] as $names )
-        {
-            foreach ( $names as $name )
-            {
-                $ranges[] = array(
-                    "range" => array(
-                        "fields_doc.". $name => $range,
-                    ),
-                );
-            }
-        }
-
         return array(
             "nested" => array(
                 "path" => "fields_doc",
                 "query" => array(
                     "bool" => array(
-                        "should" => $ranges,
+                        "should" => $this->getCondition( $criterion ),
                         "minimum_should_match" => 1,
                     ),
                 ),
@@ -145,4 +132,3 @@ class FieldRange extends Field
         );
     }
 }
-

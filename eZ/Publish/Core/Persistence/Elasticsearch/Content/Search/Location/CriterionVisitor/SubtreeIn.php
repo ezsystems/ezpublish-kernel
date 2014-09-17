@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Subtree criterion visitor class
+ * File containing the SubtreeIn criterion visitor class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -38,14 +38,13 @@ class SubtreeIn extends CriterionVisitor
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Returns condition common for filter and query contexts.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
-     * @return string
+     * @return array
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    protected function getCondition( Criterion $criterion )
     {
         $filters = array();
 
@@ -58,8 +57,21 @@ class SubtreeIn extends CriterionVisitor
             );
         }
 
+        return $filters;
+    }
+
+    /**
+     * Map field value to a proper Elasticsearch representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     *
+     * @return string
+     */
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    {
         return array(
-            "or" => $filters,
+            "or" => $this->getCondition( $criterion ),
         );
     }
 
@@ -73,23 +85,11 @@ class SubtreeIn extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        $filters = array();
-
-        foreach ( $criterion->value as $value )
-        {
-            $filters[] = array(
-                "prefix" => array(
-                    "path_string_id" => $value,
-                ),
-            );
-        }
-
         return array(
             "bool" => array(
-                "should" => $filters,
+                "should" => $this->getCondition( $criterion ),
                 "minimum_should_match" => 1,
             ),
         );
     }
 }
-

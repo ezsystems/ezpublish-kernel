@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LocationRemoteId criterion visitor class
+ * File containing the LocationRemoteIdIn criterion visitor class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -37,6 +37,33 @@ class LocationRemoteIdIn extends CriterionVisitor
     }
 
     /**
+     * Returns nested condition common for filter and query contexts.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return array
+     */
+    protected function getCondition( Criterion $criterion )
+    {
+        if ( count( $criterion->value ) > 1 )
+        {
+            return array(
+                "terms" => array(
+                    "locations_doc.remote_id_id" => $criterion->value,
+                ),
+            );
+        }
+        else
+        {
+            return array(
+                "term" => array(
+                    "locations_doc.remote_id_id" => $criterion->value[0],
+                ),
+            );
+        }
+    }
+
+    /**
      * Map field value to a proper Elasticsearch filter representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
@@ -46,27 +73,10 @@ class LocationRemoteIdIn extends CriterionVisitor
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        if ( count( $criterion->value ) > 1 )
-        {
-            $filter = array(
-                "terms" => array(
-                    "locations_doc.remote_id_id" => $criterion->value,
-                ),
-            );
-        }
-        else
-        {
-            $filter = array(
-                "term" => array(
-                    "locations_doc.remote_id_id" => $criterion->value[0],
-                ),
-            );
-        }
-
         return array(
             "nested" => array(
                 "path" => "locations_doc",
-                "filter" => $filter,
+                "filter" => $this->getCondition( $criterion ),
             ),
         );
     }
@@ -81,29 +91,11 @@ class LocationRemoteIdIn extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        if ( count( $criterion->value ) > 1 )
-        {
-            $filter = array(
-                "terms" => array(
-                    "locations_doc.remote_id_id" => $criterion->value,
-                ),
-            );
-        }
-        else
-        {
-            $filter = array(
-                "term" => array(
-                    "locations_doc.remote_id_id" => $criterion->value[0],
-                ),
-            );
-        }
-
         return array(
             "nested" => array(
                 "path" => "locations_doc",
-                "query" => $filter,
+                "query" => $this->getCondition( $criterion ),
             ),
         );
     }
 }
-

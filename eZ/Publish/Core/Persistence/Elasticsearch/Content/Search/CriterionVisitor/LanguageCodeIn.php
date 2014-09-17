@@ -37,6 +37,33 @@ class LanguageCodeIn extends CriterionVisitor
     }
 
     /**
+     * Returns nested condition common for filter and query contexts.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     *
+     * @return array
+     */
+    protected function getCondition( Criterion $criterion )
+    {
+        if ( count( $criterion->value ) > 1 )
+        {
+            return array(
+                "terms" => array(
+                    "language_code_ms" => $criterion->value,
+                ),
+            );
+        }
+        else
+        {
+            return array(
+                "term" => array(
+                    "language_code_ms" => $criterion->value[0],
+                ),
+            );
+        }
+    }
+
+    /**
      * Map field value to a proper Elasticsearch filter representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
@@ -46,22 +73,7 @@ class LanguageCodeIn extends CriterionVisitor
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        if ( count( $criterion->value ) > 1 )
-        {
-            $filter = array(
-                "terms" => array(
-                    "language_code_ms" => $criterion->value,
-                ),
-            );
-        }
-        else
-        {
-            $filter = array(
-                "term" => array(
-                    "language_code_ms" => $criterion->value[0],
-                ),
-            );
-        }
+        $filter = $this->getCondition( $criterion );
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode $criterion */
         if ( $criterion->matchAlwaysAvailable )
@@ -91,22 +103,7 @@ class LanguageCodeIn extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-        if ( count( $criterion->value ) > 1 )
-        {
-            $filter = array(
-                "terms" => array(
-                    "language_code_ms" => $criterion->value,
-                ),
-            );
-        }
-        else
-        {
-            $filter = array(
-                "term" => array(
-                    "language_code_ms" => $criterion->value[0],
-                ),
-            );
-        }
+        $filter = $this->getCondition( $criterion );
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode $criterion */
         if ( $criterion->matchAlwaysAvailable )
@@ -129,4 +126,3 @@ class LanguageCodeIn extends CriterionVisitor
         return $filter;
     }
 }
-
