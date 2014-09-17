@@ -47,17 +47,4 @@ class Visibility extends CriterionVisitor
             ),
         );
     }
-
-    /**
-     * Map field value to a proper Elasticsearch query representation
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
-     *
-     * @return string
-     */
-    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
-    {
-        return $this->visitFilter( $criterion, $dispatcher );
-    }
 }

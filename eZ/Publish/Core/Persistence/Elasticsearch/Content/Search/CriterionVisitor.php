@@ -40,12 +40,17 @@ abstract class CriterionVisitor
     /**
      * Map field value to a proper Elasticsearch query representation
      *
+     * By default this method fallbacks on {@link self::visitFilter()}, override it as needed.
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
      * @return string
      */
-    abstract public function visitQuery( Criterion $criterion, CriterionVisitorDispatcher $dispatcher = null );
+    public function visitQuery( Criterion $criterion, CriterionVisitorDispatcher $dispatcher = null )
+    {
+        return $this->visitFilter( $criterion, $dispatcher );
+    }
 
     /**
      * Get Elasticsearch range filter
