@@ -14,6 +14,15 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
 
+/**
+ * This class represents a UserWrapped object.
+ *
+ * It's used when working with multiple user providers
+ *
+ * It has two properties:
+ *     - wrappedUser: containing the originally matched user.
+ *     - apiUser: containing the API User (the one from the eZ Repository )
+ */
 class UserWrapped implements UserInterface, EquatableInterface
 {
     /**
@@ -71,6 +80,22 @@ class UserWrapped implements UserInterface, EquatableInterface
     public function getAPIUser()
     {
         return $this->apiUser;
+    }
+
+    /**
+     * @param \Symfony\Component\Security\Core\User\UserInterface $wrappedUser
+     */
+    public function setWrappedUser( CoreUserInterface $wrappedUser )
+    {
+        $this->wrappedUser = $wrappedUser;
+    }
+
+    /**
+     * @return \Symfony\Component\Security\Core\User\UserInterface
+     */
+    public function getWrappedUser()
+    {
+        return $this->wrappedUser;
     }
 
     public function getRoles()

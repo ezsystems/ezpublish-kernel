@@ -37,6 +37,17 @@ class UserWrappedTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $newApiUser, $userWrapped->getAPIUser() );
     }
 
+    public function testGetSetWrappedUser()
+    {
+        $originalUser = $this->getMock( 'Symfony\Component\Security\Core\User\UserInterface' );
+        $userWrapped = new UserWrapped( $originalUser, $this->apiUser );
+        $this->assertSame( $originalUser, $userWrapped->getWrappedUser() );
+
+        $newWrappedUser = $this->getMock( 'Symfony\Component\Security\Core\User\UserInterface' );
+        $userWrapped->setWrappedUser( $newWrappedUser );
+        $this->assertSame( $newWrappedUser, $userWrapped->getWrappedUser() );
+    }
+
     /**
      * @dataProvider advancedUserProvider
      */
@@ -53,6 +64,9 @@ class UserWrappedTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $credentialsNonExpired, $user->isCredentialsNonExpired() );
         $this->assertSame( $userNonLocked, $user->isAccountNonLocked() );
         $this->assertSame( $originalUser->getSalt(), $user->getSalt() );
+        $this->assertSame( $originalUser->getUsername(), $user->getWrappedUser()->getUsername() );
+        $this->assertSame( $originalUser->isEnabled(), $user->getWrappedUser()->isEnabled() );
+        $this->assertSame( $originalUser, $user->getWrappedUser() );
     }
 
     public function advancedUserProvider()
@@ -109,6 +123,7 @@ class UserWrappedTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $password, $user->getPassword() );
         $this->assertSame( $roles, $user->getRoles() );
         $this->assertSame( $salt, $user->getSalt() );
+        $this->assertSame( $originalUser, $user->getWrappedUser() );
     }
 
     public function testIsEqualTo()
