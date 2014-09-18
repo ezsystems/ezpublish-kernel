@@ -1,26 +1,35 @@
 {
     "location": {
-        "dynamic_templates": [
-            {
-                "content_language_code": {
-                    "match": "*_ms",
-                    "match_mapping_type": "string",
-                    "mapping": {
-                        "type": "string",
-                        "index": "not_analyzed"
-                    }
-                }
-            },
-            {
-                "location_path_string": {
-                    "match": "path_string_id",
-                    "match_mapping_type": "string",
-                    "mapping": {
-                        "type": "string",
-                        "index": "not_analyzed"
-                    }
-                }
-            }
-        ]
+        "properties": {
+            "id": { "type": "string", "index": "not_analyzed" },
+            "priority_i": { "type": "integer", "index": "not_analyzed" },
+            "hidden_b": { "type": "boolean", "index": "not_analyzed" },
+            "invisible_b": { "type": "boolean", "index": "not_analyzed" },
+            "remote_id_id": { "type": "string", "index": "not_analyzed" },
+            "content_id_id": { "type": "string", "index": "not_analyzed" },
+            "parent_id_id": { "type": "string", "index": "not_analyzed" },
+            "path_string_id": { "type": "string", "index": "not_analyzed" },
+            "depth_i": { "type": "integer", "index": "not_analyzed" },
+            "sort_field_id": { "type": "string", "index": "not_analyzed" },
+            "sort_order_id": { "type": "string", "index": "not_analyzed" },
+            "is_main_location_b": { "type": "boolean", "index": "not_analyzed" },
+            "content_id": { "type": "string", "index": "not_analyzed" },
+            "content_type_id": { "type": "string", "index": "not_analyzed" },
+            "content_group_mid": { "type": "string", "index": "not_analyzed" },
+            "content_version_id": { "type": "integer", "index": "not_analyzed" },
+            "content_status_id": { "type": "string", "index": "not_analyzed" },
+            "content_name_s": { "type": "string", "index": "not_analyzed" },
+            "content_creator_id": { "type": "string", "index": "not_analyzed" },
+            "content_owner_id": { "type": "string", "index": "not_analyzed" },
+            "content_section_id": { "type": "string", "index": "not_analyzed" },
+            "content_section_identifier_id": { "type": "string", "index": "not_analyzed" },
+            "content_section_name_s": { "type": "string", "index": "not_analyzed" },
+            "content_remote_id_id": { "type": "string", "index": "not_analyzed" },
+            "content_modified_dt": { "type": "date", "index": "not_analyzed" },
+            "content_published_dt": { "type": "date", "index": "not_analyzed" },
+            "content_language_code_ms": { "type": "string", "index": "not_analyzed" },
+            "content_always_available_b": { "type": "boolean", "index": "not_analyzed" },
+            "content_object_state_mid": { "type": "string", "index": "not_analyzed" }
+        }
     }
 }

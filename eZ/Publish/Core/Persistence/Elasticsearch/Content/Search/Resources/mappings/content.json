@@ -1,46 +1,101 @@
 {
     "content": {
         "properties": {
-            "locations_doc": { "type": "nested" },
-            "fields_doc": { "type": "nested" }
+            "id": { "type": "string", "index": "not_analyzed" },
+            "type_id": { "type": "string", "index": "not_analyzed" },
+            "group_mid": { "type": "string", "index": "not_analyzed" },
+            "version_id": { "type": "integer", "index": "not_analyzed" },
+            "status_id": { "type": "string", "index": "not_analyzed" },
+            "name_s": { "type": "string", "index": "not_analyzed" },
+            "creator_id": { "type": "string", "index": "not_analyzed" },
+            "owner_id": { "type": "string", "index": "not_analyzed" },
+            "section_id": { "type": "string", "index": "not_analyzed" },
+            "section_identifier_id": { "type": "string", "index": "not_analyzed" },
+            "section_name_s": { "type": "string", "index": "not_analyzed" },
+            "remote_id_id": { "type": "string", "index": "not_analyzed" },
+            "modified_dt": { "type": "date", "index": "not_analyzed" },
+            "published_dt": { "type": "date", "index": "not_analyzed" },
+            "language_code_ms": { "type": "string", "index": "not_analyzed" },
+            "always_available_b": { "type": "boolean", "index": "not_analyzed" },
+            "object_state_mid": { "type": "string", "index": "not_analyzed" },
+            "locations_doc": {
+                "type": "nested",
+                "properties": {
+                    "id": { "type": "string", "index": "not_analyzed" },
+                    "priority_i": { "type": "integer", "index": "not_analyzed" },
+                    "hidden_b": { "type": "boolean", "index": "not_analyzed" },
+                    "invisible_b": { "type": "boolean", "index": "not_analyzed" },
+                    "remote_id_id": { "type": "string", "index": "not_analyzed" },
+                    "content_id_id": { "type": "string", "index": "not_analyzed" },
+                    "parent_id_id": { "type": "string", "index": "not_analyzed" },
+                    "path_string_id": { "type": "string", "index": "not_analyzed" },
+                    "depth_i": { "type": "integer", "index": "not_analyzed" },
+                    "sort_field_id": { "type": "string", "index": "not_analyzed" },
+                    "sort_order_id": { "type": "string", "index": "not_analyzed" },
+                    "is_main_location_b": { "type": "boolean", "index": "not_analyzed" }
+                }
+            },
+            "fields_doc": {
+                "type": "nested",
+                "properties": {
+                    "meta_language_code_id" : { "type": "string", "index": "not_analyzed" }
+                }
+            }
         },
         "dynamic_templates": [
             {
                 "field_string": {
-                    "match": "*_ms",
+                    "path_match": "fields_doc.*_*s",
                     "match_mapping_type": "string",
-                    "mapping": {
-                        "type": "string",
-                        "index": "not_analyzed"
-                    }
+                    "mapping": { "type": "string", "index": "not_analyzed" }
                 }
             },
             {
                 "field_id": {
-                    "match": "*_id",
+                    "path_match": "fields_doc.*_id",
                     "match_mapping_type": "string",
-                    "mapping": {
-                        "type": "string",
-                        "index": "not_analyzed"
-                    }
+                    "mapping": { "type": "string", "index": "not_analyzed" }
                 }
             },
             {
                 "field_integer": {
-                    "match": "*_i",
+                    "path_match": "fields_doc.*_i",
                     "match_mapping_type": "integer",
-                    "mapping": {
-                        "type": "integer",
-                        "index": "not_analyzed"
-                    }
+                    "mapping": { "type": "integer", "index": "not_analyzed" }
+                }
+            },
+            {
+                "field_integer": {
+                    "path_match": "fields_doc.*_f",
+                    "match_mapping_type": "float",
+                    "mapping": { "type": "integer", "index": "not_analyzed" }
+                }
+            },
+            {
+                "field_integer": {
+                    "path_match": "fields_doc.*_l",
+                    "match_mapping_type": "long",
+                    "mapping": { "type": "integer", "index": "not_analyzed" }
+                }
+            },
+            {
+                "field_integer": {
+                    "path_match": "fields_doc.*_d",
+                    "match_mapping_type": "double",
+                    "mapping": { "type": "integer", "index": "not_analyzed" }
+                }
+            },
+            {
+                "field_integer": {
+                    "path_match": "fields_doc.*_b",
+                    "match_mapping_type": "boolean",
+                    "mapping": { "type": "boolean", "index": "not_analyzed" }
                 }
             },
             {
                 "field_geo_point": {
-                    "match": "*_gl",
-                    "mapping": {
-                        "type": "geo_point"
-                    }
+                    "path_match": "fields_doc.*_gl",
+                    "mapping": { "type": "geo_point" }
                 }
             }
         ]
