@@ -7,6 +7,7 @@ parameters:
 
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleDownOnlyFilterLoader
     ezpublish.image_alias.imagine.filter.loader.scalewidth.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthFilterLoader
+    ezpublish.image_alias.imagine.filter.loader.scaleheight.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleHeightFilterLoader
 
 services:
     ezpublish.image_alias.imagine.binary_loader:
@@ -47,3 +48,9 @@ services:
         class: %ezpublish.image_alias.imagine.filter.loader.scalewidth.class%
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scalewidth" }
+
+    ezpublish.image_alias.imagine.filter.loader.scaleheight:
+        parent: ezpublish.image_alias.imagine.filter.loader.relative_scale
+        class: %ezpublish.image_alias.imagine.filter.loader.scaleheight.class%
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "geometry/scaleheight" }
