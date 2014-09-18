@@ -10,6 +10,7 @@ parameters:
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.height.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleHeightDownOnlyFilterLoader
     ezpublish.image_alias.imagine.filter.loader.scalewidth.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthFilterLoader
     ezpublish.image_alias.imagine.filter.loader.scaleheight.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleHeightFilterLoader
+    ezpublish.image_alias.imagine.filter.loader.scale.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleFilterLoader
 
 services:
     ezpublish.image_alias.imagine.binary_loader:
@@ -32,26 +33,26 @@ services:
             - @ezpublish.image_alias.imagine.cache_resolver
             - @logger
 
-    ezpublish.image_alias.imagine.filter.loader.scaledownonly:
+    ezpublish.image_alias.imagine.filter.loader.scaledown.base:
         abstract: true
         public: false
         calls:
             - [setInnerLoader, [@liip_imagine.filter.loader.thumbnail]]
 
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.width_height:
-        parent: ezpublish.image_alias.imagine.filter.loader.scaledownonly
+        parent: ezpublish.image_alias.imagine.filter.loader.scaledown.base
         class: %ezpublish.image_alias.imagine.filter.loader.scaledownonly.width_height.class%
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scaledownonly" }
 
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.width:
-        parent: ezpublish.image_alias.imagine.filter.loader.scaledownonly
+        parent: ezpublish.image_alias.imagine.filter.loader.scaledown.base
         class: %ezpublish.image_alias.imagine.filter.loader.scaledownonly.width.class%
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scalewidthdownonly" }
 
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.height:
-        parent: ezpublish.image_alias.imagine.filter.loader.scaledownonly
+        parent: ezpublish.image_alias.imagine.filter.loader.scaledown.base
         class: %ezpublish.image_alias.imagine.filter.loader.scaledownonly.height.class%
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scaleheightdownonly" }
@@ -73,3 +74,9 @@ services:
         class: %ezpublish.image_alias.imagine.filter.loader.scaleheight.class%
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scaleheight" }
+            
+    ezpublish.image_alias.imagine.filter.loader.scale:
+        parent: ezpublish.image_alias.imagine.filter.loader.relative_scale
+        class: %ezpublish.image_alias.imagine.filter.loader.scale.class%
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "geometry/scale" }
