@@ -13,6 +13,10 @@ use Imagine\Image\ImageInterface;
 use Imagine\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
+/**
+ * Filter loader for geometry/scaledownonly filter.
+ * Proxy to ThumbnailFilterLoader
+ */
 class ScaleDownOnlyFilterLoader implements LoaderInterface
 {
     /**
