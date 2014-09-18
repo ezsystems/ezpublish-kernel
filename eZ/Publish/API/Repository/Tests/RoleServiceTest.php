@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use Exception;
 
 /**
  * Test case for operations in the RoleService using in memory storage.
@@ -1198,6 +1199,47 @@ class RoleServiceTest extends BaseTest
             ),
             $roleLimitation
         );
+
+        // Test again to see values being merged
+        $roleService->assignRoleToUser(
+            $role,
+            $user,
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( '/1/43/', '/1/2/' )
+                )
+            )
+        );
+
+        // The assignments array will contain the new role<->user assignment
+        $roleAssignments = $roleService->getRoleAssignments( $role );
+
+        // Members + Partners + Anonymous + Example User
+        $this->assertEquals( 4, count( $roleAssignments ) );
+
+        // Get the role limitation
+        $roleLimitation = null;
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            $roleLimitation = $roleAssignment->getRoleLimitation();
+            if ( $roleLimitation )
+            {
+                $this->assertInstanceOf(
+                    "\\eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment",
+                    $roleAssignment
+                );
+                break;
+            }
+        }
+
+        $this->assertEquals(
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( '/1/43/', '/1/2/' )
+                )
+            ),
+            $roleLimitation
+        );
     }
 
     /**
@@ -1231,6 +1273,108 @@ class RoleServiceTest extends BaseTest
             new SubtreeLimitation(
                 array(
                     'limitationValues' => array( '/lorem/ipsum/42/' )
+                )
+            )
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the assignRoleToUser() method.
+     *
+     * Makes sure assigning role several times throws.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     */
+    public function testAssignRoleToUserThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        // Load the existing "Anonymous" role
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
+
+        // Get current user
+        $currentUser = $repository->getCurrentUser();
+
+        // Assign the "Anonymous" role to the current user
+        try
+        {
+            $roleService->assignRoleToUser(
+                $role,
+                $currentUser
+            );
+        }
+        catch ( Exception $e )
+        {
+            $this->fail( "Got exception at first valid attempt to assign role" );
+        }
+
+        // Re-Assign the "Anonymous" role to the current user
+        // This call will fail with an InvalidArgumentException, because limitation is already assigned
+        $roleService->assignRoleToUser(
+            $role,
+            $currentUser
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the assignRoleToUser() method.
+     *
+     * Makes sure assigning role several times with same limitations throws.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     */
+    public function testAssignRoleToUserWithRoleLimitationThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+
+        // Load the existing "Anonymous" role
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
+
+        // Get current user
+        $currentUser = $repository->getCurrentUser();
+
+        // Assign the "Anonymous" role to the current user
+        try
+        {
+            $roleService->assignRoleToUser(
+                $role,
+                $currentUser,
+                new SubtreeLimitation(
+                    array(
+                        'limitationValues' => array( '/1/43/', '/1/2/' )
+                    )
+                )
+            );
+        }
+        catch ( Exception $e )
+        {
+            $this->fail( "Got exception at first valid attempt to assign role" );
+        }
+
+        // Re-Assign the "Anonymous" role to the current user
+        // This call will fail with an InvalidArgumentException, because limitation is already assigned
+        $roleService->assignRoleToUser(
+            $role,
+            $currentUser,
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( '/1/43/' )
                 )
             )
         );
@@ -1428,6 +1572,47 @@ class RoleServiceTest extends BaseTest
             ),
             $roleLimitation
         );
+
+        // Test again to see values being merged
+        $roleService->assignRoleToUserGroup(
+            $role,
+            $userGroup,
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( '/1/43/', '/1/2/' )
+                )
+            )
+        );
+
+        // The assignments array will contain the new role<->user assignment
+        $roleAssignments = $roleService->getRoleAssignments( $role );
+
+        // Members + Partners + Anonymous + Example User
+        $this->assertEquals( 4, count( $roleAssignments ) );
+
+        // Get the role limitation
+        $roleLimitation = null;
+        foreach ( $roleAssignments as $roleAssignment )
+        {
+            $roleLimitation = $roleAssignment->getRoleLimitation();
+            if ( $roleLimitation )
+            {
+                $this->assertInstanceOf(
+                    "\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment",
+                    $roleAssignment
+                );
+                break;
+            }
+        }
+
+        $this->assertEquals(
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( '/1/43/', '/1/2/' )
+                )
+            ),
+            $roleLimitation
+        );
     }
 
     /**
@@ -1465,6 +1650,116 @@ class RoleServiceTest extends BaseTest
             new SubtreeLimitation(
                 array(
                     'limitationValues' => array( '/lorem/ipsum/42/' )
+                )
+            )
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the assignRoleToUserGroup() method.
+     *
+     * Makes sure assigning role several times throws.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
+     */
+    public function testAssignRoleToUserGroupThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $mainGroupId = $this->generateId( 'group', 4 );
+        /* BEGIN: Use Case */
+        // $mainGroupId is the ID of the main "Users" group
+
+        $userService = $repository->getUserService();
+        $roleService = $repository->getRoleService();
+
+        $userGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Load the existing "Anonymous" role
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
+
+        // Assign the "Anonymous" role to the newly created user group
+        try
+        {
+            $roleService->assignRoleToUserGroup(
+                $role,
+                $userGroup
+            );
+        }
+        catch ( Exception $e )
+        {
+            $this->fail( "Got exception at first valid attempt to assign role" );
+        }
+
+        // Re-Assign the "Anonymous" role to the newly created user group
+        // This call will fail with an InvalidArgumentException, because role is already assigned
+        $roleService->assignRoleToUserGroup(
+            $role,
+            $userGroup
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the assignRoleToUserGroup() method.
+     *
+     * Makes sure assigning role several times with same limitations throws.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
+     */
+    public function testAssignRoleToUserGroupWithRoleLimitationThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+
+        $mainGroupId = $this->generateId( 'group', 4 );
+        /* BEGIN: Use Case */
+        // $mainGroupId is the ID of the main "Users" group
+
+        $userService = $repository->getUserService();
+        $roleService = $repository->getRoleService();
+
+        $userGroup = $userService->loadUserGroup( $mainGroupId );
+
+        // Load the existing "Anonymous" role
+        $role = $roleService->loadRoleByIdentifier( 'Anonymous' );
+
+        // Assign the "Anonymous" role to the newly created user group
+        try
+        {
+            $roleService->assignRoleToUserGroup(
+                $role,
+                $userGroup,
+                new SubtreeLimitation(
+                    array(
+                        'limitationValues' => array( '/1/43/', '/1/2/' )
+                    )
+                )
+            );
+        }
+        catch ( Exception $e )
+        {
+            $this->fail( "Got exception at first valid attempt to assign role" );
+        }
+
+        // Re-Assign the "Anonymous" role to the newly created user group
+        // This call will fail with an InvalidArgumentException, because limitation is already assigned
+        $roleService->assignRoleToUserGroup(
+            $role,
+            $userGroup,
+            new SubtreeLimitation(
+                array(
+                    'limitationValues' => array( '/1/43/' )
                 )
             )
         );
