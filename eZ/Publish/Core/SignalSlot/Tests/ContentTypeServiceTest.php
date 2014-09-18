@@ -176,7 +176,7 @@ class ContentTypeServiceTest extends ServiceTest
             ),
             array(
                 'createContentTypeDraft',
-                array( $contentType, $user ),
+                array( $contentType ),
                 $contentTypeDraft,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeDraftSignal',

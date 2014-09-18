@@ -173,18 +173,14 @@ interface ContentTypeService
      * This is a complete copy of the content
      * type which has the state STATUS_DRAFT.
      *
-     * WARNING on $modifier: Standard permission rules applies, only the user set here will be able to change the draft
-     * afterwards, and only if (s)he has access to edit the content types in the first place.
-     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to edit a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there is already a draft assigned to another user
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param \eZ\Publish\API\Repository\Values\User\User $modifier If null the current-user is used instead {@since 5.4}
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentTypeDraft( ContentType $contentType, User $modifier = null );
+    public function createContentTypeDraft( ContentType $contentType );
 
     /**
      * Update a Content Type object

@@ -2608,11 +2608,9 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
-        $user = $this->createUserVersion1();
-
         $commentType = $contentTypeService->loadContentTypeByIdentifier( 'comment' );
 
-        $commentTypeDraft = $contentTypeService->createContentTypeDraft( $commentType, $user );
+        $commentTypeDraft = $contentTypeService->createContentTypeDraft( $commentType );
         /* END: Use Case */
 
         $this->assertInstanceOf(
@@ -2623,7 +2621,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         return array(
             'originalType' => $commentType,
             'typeDraft' => $commentTypeDraft,
-            'modifier' => $user
         );
     }
 
@@ -2638,7 +2635,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     {
         $originalType = $data['originalType'];
         $typeDraft = $data['typeDraft'];
-        $modifier = $data['modifier'];
 
         // Names and descriptions tested in corresponding language test
         $this->assertEquals(
@@ -2648,7 +2644,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
                 'descriptions' => $originalType->descriptions,
                 'identifier' => $originalType->identifier,
                 'creatorId' => $originalType->creatorId,
-                'modifierId' => $modifier->id,
+                'modifierId' => $originalType->modifierId,
                 'remoteId' => $originalType->remoteId,
                 'urlAliasSchema' => $originalType->urlAliasSchema,
                 'nameSchema' => $originalType->nameSchema,
