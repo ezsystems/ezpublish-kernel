@@ -51,12 +51,27 @@ class ImageTest extends AbstractParserTestCase
     {
         $this->load();
 
-        $expected = $this->config['system']['ezdemo_group']['image_variations'] + $this->container->getParameter( 'ezsettings.default.image_variations' );
+        $expectedParsedVariations = array();
+        foreach ( $this->config['system'] as $sa => $saConfig )
+        {
+            $expectedParsedVariations[$sa] = array();
+            foreach ( $saConfig['image_variations'] as $variationName => $imageVariationConfig )
+            {
+                foreach ( $imageVariationConfig['filters'] as $i => $filter )
+                {
+                    $imageVariationConfig['filters'][$filter['name']] = $filter['params'];
+                    unset( $imageVariationConfig['filters'][$i] );
+                }
+                $expectedParsedVariations[$sa][$variationName] = $imageVariationConfig;
+            }
+        }
+
+        $expected = $expectedParsedVariations['ezdemo_group'] + $this->container->getParameter( 'ezsettings.default.image_variations' );
         $this->assertConfigResolverParameterValue( 'image_variations', $expected, 'ezdemo_site', false );
         $this->assertConfigResolverParameterValue( 'image_variations', $expected, 'ezdemo_site_admin', false );
         $this->assertConfigResolverParameterValue(
             'image_variations',
-            $expected + $this->config['system']['fre']['image_variations'],
+            $expected + $expectedParsedVariations['fre'],
             'fre',
             false
         );
