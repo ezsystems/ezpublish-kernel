@@ -42,14 +42,14 @@ class ScaleHeightFilterLoaderTest extends PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $width = 123;
+        $height = 123;
         $image = $this->getMock( '\Imagine\Image\ImageInterface' );
         $this->innerLoader
             ->expects( $this->once() )
             ->method( 'load' )
-            ->with( $image, $this->equalTo( array( 'heighten' => $width ) ) )
+            ->with( $image, $this->equalTo( array( 'heighten' => $height ) ) )
             ->will( $this->returnValue( $image ) );
 
-        $this->assertSame( $image, $this->loader->load( $image, array( $width ) ) );
+        $this->assertSame( $image, $this->loader->load( $image, array( $height ) ) );
     }
 }
