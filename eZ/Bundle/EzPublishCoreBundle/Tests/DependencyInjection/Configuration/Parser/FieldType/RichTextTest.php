@@ -156,9 +156,28 @@ class RichTextTest extends AbstractParserTestCase
                             'tags' => array(
                                 'default' => array(
                                     'template' => 'MyBundle:FieldType/RichText/tag:default.html.twig',
+                                    'config' => array(
+                                        'watch' => 'out',
+                                        'only' => 'first level',
+                                        'can' => 'be mapped to ezxml',
+                                    ),
                                 ),
                                 'math_equation' => array(
                                     'template' => 'MyBundle:FieldType/RichText/tag:math_equation.html.twig',
+                                    'config' => array(
+                                        'some' => 'arbitrary',
+                                        'hash' => array(
+                                            'structure' => 12345,
+                                            'works' => array(
+                                                'drink' => 'beer',
+                                                'explode' => false,
+                                            ),
+                                            'does not work' => array(
+                                                'drink' => 'whiskey',
+                                                'deeble' => true,
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             )
                         )
@@ -167,11 +186,30 @@ class RichTextTest extends AbstractParserTestCase
                 array(
                     'fieldtypes.ezrichtext.tags.default' => array(
                         'template' => 'MyBundle:FieldType/RichText/tag:default.html.twig',
+                        'config' => array(
+                            'watch' => 'out',
+                            'only' => 'first level',
+                            'can' => 'be mapped to ezxml',
+                        ),
                     ),
                     'fieldtypes.ezrichtext.tags.math_equation' => array(
                         'template' => 'MyBundle:FieldType/RichText/tag:math_equation.html.twig',
+                        'config' => array(
+                            'some' => 'arbitrary',
+                            'hash' => array(
+                                'structure' => 12345,
+                                'works' => array(
+                                    'drink' => 'beer',
+                                    'explode' => false,
+                                ),
+                                'does not work' => array(
+                                    'drink' => 'whiskey',
+                                    'deeble' => true,
+                                ),
+                            ),
+                        ),
                     ),
-                )
+                ),
             ),
             array(
                 array(
@@ -180,9 +218,23 @@ class RichTextTest extends AbstractParserTestCase
                             'embed' => array(
                                 'content' => array(
                                     'template' => 'MyBundle:FieldType/RichText/embed:content.html.twig',
+                                    'config' => array(
+                                        'have' => array(
+                                            'spacesuit' => array(
+                                                'travel' => true,
+                                            ),
+                                        ),
+                                    ),
                                 ),
                                 'location_inline_denied' => array(
                                     'template' => 'MyBundle:FieldType/RichText/embed:location_inline_denied.html.twig',
+                                    'config' => array(
+                                        'have' => array(
+                                            'location' => array(
+                                                'index' => true,
+                                            ),
+                                        ),
+                                    ),
                                 ),
                             )
                         )
@@ -191,9 +243,23 @@ class RichTextTest extends AbstractParserTestCase
                 array(
                     'fieldtypes.ezrichtext.embed.content' => array(
                         'template' => 'MyBundle:FieldType/RichText/embed:content.html.twig',
+                        'config' => array(
+                            'have' => array(
+                                'spacesuit' => array(
+                                    'travel' => true,
+                                ),
+                            ),
+                        ),
                     ),
                     'fieldtypes.ezrichtext.embed.location_inline_denied' => array(
                         'template' => 'MyBundle:FieldType/RichText/embed:location_inline_denied.html.twig',
+                        'config' => array(
+                            'have' => array(
+                                'location' => array(
+                                    'index' => true,
+                                ),
+                            ),
+                        ),
                     ),
                 )
             ),
