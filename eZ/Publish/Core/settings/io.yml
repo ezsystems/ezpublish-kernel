@@ -17,6 +17,7 @@ services:
             -
                 storage_dir: %storage_dir%
                 root_dir: %io_root_dir%
+          - {name: ezpublish.io_handler, alias: filesystem}
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%

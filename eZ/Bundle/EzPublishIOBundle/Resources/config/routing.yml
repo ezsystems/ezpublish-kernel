@@ -1,0 +1,3 @@
+ez_publish_io_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: EzPublishIOBundle:Default:index }

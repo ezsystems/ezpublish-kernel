@@ -22,6 +22,8 @@ services:
         factory_service: ezpublish.core.io.factory
         factory_method: getHandler
         arguments: [%ezpublish.core.io.handler.in_memory.class%]
+        tags:
+          - {name: ezpublish.io_handler, alias: in_memory}
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
