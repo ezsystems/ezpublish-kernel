@@ -14,7 +14,7 @@ use Imagine\Exception\InvalidArgumentException;
 
 /**
  * Filter loader for geometry/scale filter.
- * Proxy to ThumbnailFilterLoader
+ * Proxy to RelativeResizeFilterLoader
  */
 class ScaleFilterLoader extends FilterLoaderWrapped
 {
