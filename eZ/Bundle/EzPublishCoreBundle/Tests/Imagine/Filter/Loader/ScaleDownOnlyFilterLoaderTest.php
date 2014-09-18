@@ -18,7 +18,7 @@ class ScaleDownOnlyFilterLoaderTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $thumbnailLoader;
+    private $innerLoader;
 
     /**
      * @var ScaleDownOnlyFilterLoader
@@ -28,8 +28,9 @@ class ScaleDownOnlyFilterLoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->thumbnailLoader = $this->getMock( 'Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface' );
-        $this->loader = new ScaleDownOnlyFilterLoader( $this->thumbnailLoader );
+        $this->innerLoader = $this->getMock( 'Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface' );
+        $this->loader = new ScaleDownOnlyFilterLoader();
+        $this->loader->setInnerLoader( $this->innerLoader );
     }
 
     /**
@@ -54,7 +55,7 @@ class ScaleDownOnlyFilterLoaderTest extends PHPUnit_Framework_TestCase
     {
         $options = array( 123, 456 );
         $image = $this->getMock( '\Imagine\Image\ImageInterface' );
-        $this->thumbnailLoader
+        $this->innerLoader
             ->expects( $this->once() )
             ->method( 'load' )
             ->with( $image, $this->equalTo( array( 'size' => $options, 'mode' => ImageInterface::THUMBNAIL_INSET ) ) )

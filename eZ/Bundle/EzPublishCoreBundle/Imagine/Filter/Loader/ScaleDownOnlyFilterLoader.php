@@ -11,24 +11,13 @@ namespace eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader;
 
 use Imagine\Image\ImageInterface;
 use Imagine\Exception\InvalidArgumentException;
-use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 /**
  * Filter loader for geometry/scaledownonly filter.
  * Proxy to ThumbnailFilterLoader
  */
-class ScaleDownOnlyFilterLoader implements LoaderInterface
+class ScaleDownOnlyFilterLoader extends FilterLoaderWrapped
 {
-    /**
-     * @var LoaderInterface
-     */
-    private $thumbnailLoader;
-
-    public function __construct( LoaderInterface $thumbnailLoader )
-    {
-        $this->thumbnailLoader = $thumbnailLoader;
-    }
-
     /**
      * Loads and applies a filter on the given image.
      *
@@ -46,7 +35,7 @@ class ScaleDownOnlyFilterLoader implements LoaderInterface
             throw new InvalidArgumentException( 'Missing width and/or height options' );
         }
 
-        return $this->thumbnailLoader->load(
+        return $this->innerLoader->load(
             $image,
             array(
                 'size' => $options,

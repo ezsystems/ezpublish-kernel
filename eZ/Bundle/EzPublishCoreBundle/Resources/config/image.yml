@@ -31,12 +31,19 @@ services:
 
     ezpublish.image_alias.imagine.filter.loader.scaledownonly:
         class: %ezpublish.image_alias.imagine.filter.loader.scaledownonly.class%
-        arguments: [@liip_imagine.filter.loader.thumbnail]
+        calls:
+            - [setInnerLoader, [@liip_imagine.filter.loader.thumbnail]]
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scaledownonly" }
 
+    ezpublish.image_alias.imagine.filter.loader.relative_scale:
+        abstract: true
+        public: false
+        calls:
+            - [setInnerLoader, [@liip_imagine.filter.loader.relative_resize]]
+
     ezpublish.image_alias.imagine.filter.loader.scalewidth:
+        parent: ezpublish.image_alias.imagine.filter.loader.relative_scale
         class: %ezpublish.image_alias.imagine.filter.loader.scalewidth.class%
-        arguments: [@liip_imagine.filter.loader.relative_resize]
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scalewidth" }

@@ -28,7 +28,8 @@ class ScaleWidthFilterLoaderTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->innerLoader = $this->getMock( '\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface' );
-        $this->loader = new ScaleWidthFilterLoader( $this->innerLoader );
+        $this->loader = new ScaleWidthFilterLoader();
+        $this->loader->setInnerLoader( $this->innerLoader );
     }
 
     /**
