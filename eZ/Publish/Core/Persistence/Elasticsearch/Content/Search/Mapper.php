@@ -228,18 +228,9 @@ class Mapper
             new FieldType\DocumentField()
         );
 
-        $objectStateIds = array();
-        foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
-        {
-            $objectStateIds[] = $this->objectStateHandler->getContentState(
-                $content->versionInfo->contentInfo->id,
-                $objectStateGroup->id
-            )->id;
-        }
-
         $fields[] = new Field(
             'object_state',
-            $objectStateIds,
+            $this->getObjectStateIds( $content->versionInfo->contentInfo->id ),
             new FieldType\MultipleIdentifierField()
         );
 
@@ -498,6 +489,27 @@ class Mapper
             new FieldType\MultipleIdentifierField()
         );
 
+        $document->fields[] = new Field(
+            'content_object_state',
+            $this->getObjectStateIds( $content->versionInfo->contentInfo->id ),
+            new FieldType\MultipleIdentifierField()
+        );
+
         return $document;
+    }
+
+    protected function getObjectStateIds( $contentId )
+    {
+        $objectStateIds = array();
+
+        foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
+        {
+            $objectStateIds[] = $this->objectStateHandler->getContentState(
+                $contentId,
+                $objectStateGroup->id
+            )->id;
+        }
+
+        return $objectStateIds;
     }
 }
