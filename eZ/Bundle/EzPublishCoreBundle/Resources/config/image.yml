@@ -11,6 +11,7 @@ parameters:
     ezpublish.image_alias.imagine.filter.loader.scalewidth.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthFilterLoader
     ezpublish.image_alias.imagine.filter.loader.scaleheight.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleHeightFilterLoader
     ezpublish.image_alias.imagine.filter.loader.scale.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleFilterLoader
+    ezpublish.image_alias.imagine.filter.loader.scale_exact.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleExactFilterLoader
 
 services:
     ezpublish.image_alias.imagine.binary_loader:
@@ -80,3 +81,11 @@ services:
         class: %ezpublish.image_alias.imagine.filter.loader.scale.class%
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/scale" }
+
+    ezpublish.image_alias.imagine.filter.loader.scale_exact:
+        public: false
+        class: %ezpublish.image_alias.imagine.filter.loader.scale_exact.class%
+        calls:
+            - [setInnerLoader, [@liip_imagine.filter.loader.resize]]
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "geometry/scaleexact" }
