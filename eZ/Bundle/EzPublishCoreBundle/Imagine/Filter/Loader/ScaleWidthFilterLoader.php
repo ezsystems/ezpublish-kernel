@@ -13,6 +13,10 @@ use Imagine\Image\ImageInterface;
 use Imagine\Exception\InvalidArgumentException;
 use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
+/**
+ * Filter loader for geometry/scalewidth filter.
+ * Proxy to RelativeResizeFilterLoader
+ */
 class ScaleWidthFilterLoader implements LoaderInterface
 {
     /**
