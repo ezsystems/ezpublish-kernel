@@ -50,7 +50,7 @@ class FieldTypeParserTest extends PHPUnit_Framework_TestCase
             false
         );
         $this->fieldTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\FieldTypeService',
+            'eZ\\Publish\\Core\\Repository\\Helper\\FieldTypeService',
             array(),
             array(),
             '',

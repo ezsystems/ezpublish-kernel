@@ -23,8 +23,8 @@ use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 class NameSchemaTest extends BaseServiceMockTest
 {
     /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveUrlAliasSchema
+     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolveUrlAliasSchema
      */
     public function testResolveUrlAliasSchema()
     {
@@ -51,8 +51,8 @@ class NameSchemaTest extends BaseServiceMockTest
     }
 
     /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveUrlAliasSchema
+     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolveUrlAliasSchema
      */
     public function testResolveUrlAliasSchemaFallbackToNameSchema()
     {
@@ -79,8 +79,8 @@ class NameSchemaTest extends BaseServiceMockTest
     }
 
     /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveNameSchema
+     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolveNameSchema
      */
     public function testResolveNameSchema()
     {
@@ -107,8 +107,8 @@ class NameSchemaTest extends BaseServiceMockTest
     }
 
     /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolveNameSchema
+     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolveNameSchema
      */
     public function testResolveNameSchemaWithFields()
     {
@@ -263,15 +263,16 @@ class NameSchemaTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\NameSchemaService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedNameSchemaService( array $methods = null )
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\NameSchemaService",
+            "eZ\\Publish\\Core\\Repository\\Helper\\NameSchemaService",
             $methods,
             array(
-                $this->getRepositoryMock()
+                $this->getPersistenceMock()->contentTypeHandler(),
+                $this->getFieldTypeServiceMock()
             )
         );
     }

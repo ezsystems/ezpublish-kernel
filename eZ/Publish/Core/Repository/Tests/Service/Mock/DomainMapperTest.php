@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
-use eZ\Publish\Core\Repository\DomainMapper;
+use eZ\Publish\Core\Repository\Helper\DomainMapper;
 use eZ\Publish\SPI\Persistence\Content\Language as SPILanguage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
@@ -22,7 +22,7 @@ use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 class DomainMapperTest extends BaseServiceMockTest
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\DomainMapper::buildVersionInfoDomainObject
+     * @covers \eZ\Publish\Core\Repository\Helper\DomainMapper::buildVersionInfoDomainObject
      * @dataProvider providerForBuildVersionInfo
      */
     public function testBuildVersionInfo( SPIVersionInfo $spiVersionInfo, array $languages, array $expected )
@@ -124,14 +124,16 @@ class DomainMapperTest extends BaseServiceMockTest
     /**
      * Returns DomainMapper
      *
-     * @return \eZ\Publish\Core\Repository\DomainMapper
+     * @return \eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected function getDomainMapper()
     {
         return new DomainMapper(
-            $this->getRepositoryMock(),
+            $this->getPersistenceMockHandler( 'Content\\Handler' ),
+            $this->getPersistenceMockHandler( 'Content\\Location\\Handler' ),
             $this->getTypeHandlerMock(),
-            $this->getLanguageHandlerMock()
+            $this->getLanguageHandlerMock(),
+            $this->getFieldTypeServiceMock()
         );
     }
 

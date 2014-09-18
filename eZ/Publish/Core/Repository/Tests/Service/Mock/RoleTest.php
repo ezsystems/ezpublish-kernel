@@ -1204,7 +1204,7 @@ class RoleTest extends BaseServiceMockTest
                     $this->getPersistenceMockHandler( "User\\Handler" ),
                     $limitationService = $this->getPartlyMockedLimitationService( $methods, $settings ),
                     $this->getMock(
-                        "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
+                        "eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper",
                         array(),
                         array( $limitationService )
                     ),
@@ -1227,14 +1227,14 @@ class RoleTest extends BaseServiceMockTest
      * @param string[] $methods
      * @param array $settings
      *
-     * @return \eZ\Publish\Core\Repository\LimitationService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Helper\LimitationService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedLimitationService( array $methods = null, array $settings = array() )
     {
         if ( !isset( $this->partlyMockedLimitationService ) || !empty( $settings ) )
         {
             $this->partlyMockedLimitationService = $this->getMock(
-                "eZ\\Publish\\Core\\Repository\\LimitationService",
+                "eZ\\Publish\\Core\\Repository\\Helper\\LimitationService",
                 $methods,
                 array(
                     $settings

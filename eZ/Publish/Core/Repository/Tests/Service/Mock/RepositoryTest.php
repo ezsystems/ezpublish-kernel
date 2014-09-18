@@ -286,7 +286,7 @@ class RepositoryTest extends BaseServiceMockTest
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $roleDomainMapper = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
+            "eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper",
             array( "buildDomainPolicyObject" ),
             array(),
             '',
@@ -427,7 +427,7 @@ class RepositoryTest extends BaseServiceMockTest
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $roleDomainMapper = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
+            "eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper",
             array( "buildDomainPolicyObject" ),
             array(),
             '',
@@ -559,11 +559,11 @@ class RepositoryTest extends BaseServiceMockTest
             )
         );
         $limitationService = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\LimitationService",
+            "eZ\\Publish\\Core\\Repository\\Helper\\LimitationService",
             array( "getLimitationType" )
         );
         $roleDomainMapper = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
+            "eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper",
             array( "buildDomainPolicyObject" ),
             array(),
             '',
@@ -908,11 +908,11 @@ class RepositoryTest extends BaseServiceMockTest
                 $this->getRepositoryMock(),
                 $this->getPersistenceMockHandler( "User\\Handler" ),
                 $limitationService = $this->getMock(
-                    "eZ\\Publish\\Core\\Repository\\LimitationService",
+                    "eZ\\Publish\\Core\\Repository\\Helper\\LimitationService",
                     array( "getLimitationType" )
                 ),
                 $this->getMock(
-                    "eZ\\Publish\\Core\\Repository\\RoleDomainMapper",
+                    "eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper",
                     array(),
                     array( $limitationService )
                 ),

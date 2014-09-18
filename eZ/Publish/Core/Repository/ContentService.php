@@ -70,17 +70,17 @@ class ContentService implements ContentServiceInterface
     protected $settings;
 
     /**
-     * @var \eZ\Publish\Core\Repository\DomainMapper
+     * @var \eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected $domainMapper;
 
     /**
-     * @var \eZ\Publish\Core\Repository\RelationProcessor
+     * @var \eZ\Publish\Core\Repository\Helper\RelationProcessor
      */
     protected $relationProcessor;
 
     /**
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
     protected $nameSchemaService;
 
@@ -89,17 +89,17 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\RelationProcessor $relationProcessor
-     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
+     * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
+     * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $handler,
-        DomainMapper $domainMapper,
-        RelationProcessor $relationProcessor,
-        NameSchemaService $nameSchemaService,
+        Helper\DomainMapper $domainMapper,
+        Helper\RelationProcessor $relationProcessor,
+        Helper\NameSchemaService $nameSchemaService,
         array $settings = array()
     )
     {

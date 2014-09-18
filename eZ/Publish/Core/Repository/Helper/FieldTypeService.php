@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\FieldTypeService class.
+ * File containing FieldTypeService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -8,7 +8,7 @@
  * @package eZ\Publish\API\Repository
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\Helper;
 
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;

@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
-use eZ\Publish\Core\Repository\NameSchemaService;
+use eZ\Publish\Core\Repository\Helper\NameSchemaService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
@@ -24,14 +24,13 @@ use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 abstract class NameSchemaBase extends BaseServiceTest
 {
     /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolve
+     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolve
      * @dataProvider providerForTestResolve
      */
     public function testResolve( $nameSchema, $expectedName )
     {
-        /** @var $service \eZ\Publish\Core\Repository\NameSchemaService */
-        $service = new NameSchemaService( $this->repository );
+        $service = $this->repository->getNameSchemaService();
 
         list( $content, $contentType ) = $this->buildTestObjects();
 
@@ -46,13 +45,12 @@ abstract class NameSchemaBase extends BaseServiceTest
     }
 
     /**
-     * Test eZ\Publish\Core\Repository\NameSchemaService method
-     * @covers \eZ\Publish\Core\Repository\NameSchemaService::resolve
+     * Test eZ\Publish\Core\Repository\Helper\NameSchemaService method
+     * @covers \eZ\Publish\Core\Repository\Helper\NameSchemaService::resolve
      */
     public function testResolveWithSettings()
     {
-        /** @var $service \eZ\Publish\Core\Repository\NameSchemaService */
-        $service = new NameSchemaService( $this->repository );
+        $service = $this->repository->getNameSchemaService();
 
         $this->setConfiguration(
             $service,
