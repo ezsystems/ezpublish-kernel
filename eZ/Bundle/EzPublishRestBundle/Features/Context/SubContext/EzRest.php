@@ -202,7 +202,7 @@ trait EzRest
 
     /**
      * Decompose the header to get only the object type of the accept/conten-type headers
-     * 
+     *
      * @return false|string Decomposed string if found, false other wise
      */
     protected function decomposeObjectHeader( $header )
@@ -308,6 +308,7 @@ trait EzRest
 
         return $this->responseObject;
     }
+
     /**
      * Create an object of the specified type
      *

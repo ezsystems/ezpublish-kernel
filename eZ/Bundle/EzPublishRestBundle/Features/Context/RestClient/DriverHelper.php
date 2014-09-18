@@ -46,7 +46,7 @@ trait DriverHelper
      *
      * @return void
      */
-    function setAuthentication( $user, $password, $type = self::AUTH_TYPE_BASIC )
+    public function setAuthentication( $user, $password, $type = self::AUTH_TYPE_BASIC )
     {
         $this->setHeader(
             'Authorization',
