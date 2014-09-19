@@ -39,6 +39,7 @@ class EzPublishIOExtension extends Extension
         $config = $this->processConfiguration( $configuration, $configs );
 
         $loader->load( 'services.yml' );
+        $loader->load( 'io.yml' );
         $loader->load( 'default_settings.yml' );
 
         // Map settings

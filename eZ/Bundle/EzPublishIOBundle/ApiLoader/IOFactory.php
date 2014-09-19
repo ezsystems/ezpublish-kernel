@@ -6,11 +6,12 @@
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
+namespace eZ\Bundle\EzPublishIOBundle\ApiLoader;
 
 use eZ\Publish\Core\IO\Handler as IoHandlerInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\IO\MimeTypeDetector;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class IOFactory
 {
@@ -24,15 +25,21 @@ class IOFactory
     protected $mimeTypeDetector;
 
     /**
+     * @var ContainerInterface
+     */
+    private $container;
+
+    /**
      * Constructs a new IOServiceFactory
      *
      * @param ConfigResolverInterface $configResolver
      * @param \eZ\Publish\SPI\IO\MimeTypeDetector $mimeTypeDetector
      */
-    public function __construct( ConfigResolverInterface $configResolver, MimeTypeDetector $mimeTypeDetector )
+    public function __construct( ContainerInterface $container, ConfigResolverInterface $configResolver, MimeTypeDetector $mimeTypeDetector )
     {
         $this->configResolver = $configResolver;
         $this->mimeTypeDetector = $mimeTypeDetector;
+        $this->container = $container;
     }
 
     /**
@@ -45,7 +52,6 @@ class IOFactory
      */
     public function getService( $prefixSetting = false )
     {
-        $IOHandler = $this->configResolver->getParameter( 'io_handler' );
         $settings = array();
 
         if ( $prefixSetting )
@@ -59,7 +65,7 @@ class IOFactory
     /**
      * Returns an IOHandler instance
      *
-     * @param $handlerClass The IOHandler class to instanciate
+     * @param string $handlerClass The IOHandler class to instanciate
      * @param string|array $storageDirectorySetting Setting(s) that build-up the storage directory
      *
      * @return mixed
@@ -80,5 +86,14 @@ class IOFactory
             $storageDirectory = implode( '/', $storageDirectoryParts );
         }
         return new $handlerClass( $storageDirectory );
+    }
+
+    /**
+     * Returns the IO handler configured for the scope
+     * @return IOHandlerInterface
+     */
+    public function getConfiguredHandler()
+    {
+        return $this->conget( $this->configResolver->getParameter( 'handler', 'ez_io' ) );
     }
 }
