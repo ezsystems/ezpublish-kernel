@@ -94,9 +94,8 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     {
         try
         {
-            $urlAlias = $this->getUrlAlias(
-                rawurldecode( $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() ) )
-            );
+            $requestedPath = rawurldecode( $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() ) );
+            $urlAlias = $this->getUrlAlias( $requestedPath );
 
             $params = array(
                 '_route' => self::URL_ALIAS_ROUTE_NAME
@@ -116,6 +115,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                     // For Location alias setup 301 redirect to Location's current URL when:
                     // 1. alias is history
                     // 2. alias is custom with forward flag true
+                    // 3. requested URL is not case-sensitive equal with the one loaded
                     if ( $urlAlias->isHistory === true || ( $urlAlias->isCustom === true && $urlAlias->forward === true ) )
                     {
                         $request->attributes->set(
@@ -128,6 +128,11 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                         // Specify not to prepend siteaccess while redirecting when applicable since it would be already present (see UrlAliasGenerator::doGenerate())
                         $request->attributes->set( 'prependSiteaccessOnRedirect', false );
                     }
+                    else if ( $this->needsCaseRedirect( $urlAlias, $requestedPath ) )
+                    {
+                        $request->attributes->set( 'semanticPathinfo', $urlAlias->path );
+                        $request->attributes->set( 'needsRedirect', true );
+                    }
 
                     if ( isset( $this->logger ) )
                         $this->logger->info( "UrlAlias matched location #{$urlAlias->destination}. Forwarding to ViewController" );
@@ -135,13 +140,40 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                     break;
 
                 case URLAlias::RESOURCE:
-                case URLAlias::VIRTUAL:
-                    $request->attributes->set( 'semanticPathinfo', '/' . trim( $urlAlias->destination, '/' ) );
                     // In URLAlias terms, "forward" means "redirect".
                     if ( $urlAlias->forward )
+                    {
+                        $request->attributes->set( 'semanticPathinfo', '/' . trim( $urlAlias->destination, '/' ) );
                         $request->attributes->set( 'needsRedirect', true );
+                    }
+                    // Handle case-correction redirect
+                    else if ( $this->needsCaseRedirect( $urlAlias, $requestedPath ) )
+                    {
+                        $request->attributes->set( 'semanticPathinfo', $urlAlias->path );
+                        $request->attributes->set( 'needsRedirect', true );
+                    }
                     else
+                    {
+                        $request->attributes->set( 'semanticPathinfo', '/' . trim( $urlAlias->destination, '/' ) );
                         $request->attributes->set( 'needsForward', true );
+                    }
+
+                    break;
+
+                case URLAlias::VIRTUAL:
+                    // Handle case-correction redirect
+                    if ( $this->needsCaseRedirect( $urlAlias, $requestedPath ) )
+                    {
+                        $request->attributes->set( 'semanticPathinfo', $urlAlias->path );
+                        $request->attributes->set( 'needsRedirect', true );
+                    }
+                    else
+                    {
+                        // Virtual aliases should load the Content at homepage URL
+                        $request->attributes->set( 'semanticPathinfo', '/' );
+                        $request->attributes->set( 'needsForward', true );
+                    }
+
                     break;
             }
 
@@ -151,6 +183,22 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         {
             throw new ResourceNotFoundException( $e->getMessage(), $e->getCode(), $e );
         }
+    }
+
+    /**
+     * Returns true of false on comparing $urlAlias->path and $path with case sensitivity.
+     *
+     * Used to determine if redirect is needed because requested path is case-different
+     * from the stored one.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\URLAlias $loadedUrlAlias
+     * @param string $requestedPath
+     *
+     * @return boolean
+     */
+    protected function needsCaseRedirect( URLAlias $loadedUrlAlias, $requestedPath )
+    {
+        return ( strcmp( $loadedUrlAlias->path, $requestedPath ) !== 0 );
     }
 
     /**
