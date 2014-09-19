@@ -43,8 +43,9 @@ class IOFactory
      *
      * @return \eZ\Publish\Core\IO\IOService
      */
-    public function getService( IoHandlerInterface $IOHandler, $prefixSetting = false )
+    public function getService( $prefixSetting = false )
     {
+        $IOHandler = $this->configResolver->getParameter( 'io_handler' );
         $settings = array();
 
         if ( $prefixSetting )
