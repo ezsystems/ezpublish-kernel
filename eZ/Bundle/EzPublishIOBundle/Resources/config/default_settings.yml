@@ -1,2 +1,7 @@
 parameters:
-    ez_io.handlers_map: {}
+    ez_io.handlers_map:
+        # todo : this must be in the compiler pass
+        filesystem: ezpublish.core.io.handler.filesystem
+        legacy_kernel: ezpublish.core.io.handler.legacy_kernel
+        dfs: ezpublish.io.handler.dfs
+    ez_io.default.handler: legacy_kernel
