@@ -120,6 +120,9 @@ class RichText extends AbstractFieldTypeParser
                                 'MyBundle:FieldType/RichText/tag:math_equation.html.twig'
                             )
                         )
+                        ->variableNode( "config" )
+                            ->info( "Tag configuration, arbitrary configuration is allowed here." )
+                        ->end()
                     ->end()
                 ->end()
             ->end()
@@ -135,6 +138,9 @@ class RichText extends AbstractFieldTypeParser
                                     'MyBundle:FieldType/RichText/embed:content.html.twig'
                                 )
                             )
+                            ->variableNode( "config" )
+                                ->info( "Embed configuration, arbitrary configuration is allowed here." )
+                            ->end()
                         ->end()
                     ->end()
                     ->arrayNode( 'content_denied' )
@@ -146,6 +152,9 @@ class RichText extends AbstractFieldTypeParser
                                     'MyBundle:FieldType/RichText/embed:content_denied.html.twig'
                                 )
                             )
+                            ->variableNode( "config" )
+                                ->info( "Embed configuration, arbitrary configuration is allowed here." )
+                            ->end()
                         ->end()
                     ->end()
                     ->arrayNode( 'content_inline' )
@@ -157,6 +166,9 @@ class RichText extends AbstractFieldTypeParser
                                     'MyBundle:FieldType/RichText/embed:content_inline.html.twig'
                                 )
                             )
+                            ->variableNode( "config" )
+                                ->info( "Embed configuration, arbitrary configuration is allowed here." )
+                            ->end()
                         ->end()
                     ->end()
                     ->arrayNode( 'content_inline_denied' )
@@ -168,6 +180,9 @@ class RichText extends AbstractFieldTypeParser
                                     'MyBundle:FieldType/RichText/embed:content_inline_denied.html.twig'
                                 )
                             )
+                            ->variableNode( "config" )
+                                ->info( "Embed configuration, arbitrary configuration is allowed here." )
+                            ->end()
                         ->end()
                     ->end()
                     ->arrayNode( 'location' )
@@ -179,6 +194,9 @@ class RichText extends AbstractFieldTypeParser
                                     'MyBundle:FieldType/RichText/embed:location.html.twig'
                                 )
                             )
+                            ->variableNode( "config" )
+                                ->info( "Embed configuration, arbitrary configuration is allowed here." )
+                            ->end()
                         ->end()
                     ->end()
                     ->arrayNode( 'location_denied' )
@@ -190,6 +208,9 @@ class RichText extends AbstractFieldTypeParser
                                     'MyBundle:FieldType/RichText/embed:location_denied.html.twig'
                                 )
                             )
+                            ->variableNode( "config" )
+                                ->info( "Embed configuration, arbitrary configuration is allowed here." )
+                            ->end()
                         ->end()
                     ->end()
                     ->arrayNode( 'location_inline' )
@@ -201,6 +222,9 @@ class RichText extends AbstractFieldTypeParser
                                     'MyBundle:FieldType/RichText/embed:location_inline.html.twig'
                                 )
                             )
+                            ->variableNode( "config" )
+                                ->info( "Embed configuration, arbitrary configuration is allowed here." )
+                            ->end()
                         ->end()
                     ->end()
                     ->arrayNode( 'location_inline_denied' )
@@ -212,6 +236,9 @@ class RichText extends AbstractFieldTypeParser
                                     'MyBundle:FieldType/RichText/embed:location_inline_denied.html.twig'
                                 )
                             )
+                            ->variableNode( "config" )
+                                ->info( "Embed configuration, arbitrary configuration is allowed here." )
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
