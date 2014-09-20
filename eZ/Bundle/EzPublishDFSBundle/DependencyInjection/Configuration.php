@@ -2,6 +2,8 @@
 
 namespace eZ\Bundle\EzPublishDFSBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -18,12 +20,66 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('bd_test');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $handlersNode = $treeBuilder
+            ->root( 'ez_dfs' )
+                ->useAttributeAsKey('name')
+                ->prototype( 'array' )
+                    ->children()
+                        ->append( $this->getBinaryDataNode() )
+                        ->append( $this->getMetadataNode() )
+                    ->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
+    }
+
+    /**
+     * @return ArrayNodeDefinition
+     */
+    private function getBinaryDataNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root( 'binarydata' );
+
+        $node
+            ->children()
+                ->arrayNode( 'flysystem' )
+                    ->canBeUnset()
+                    ->children()
+                        ->scalarNode( 'adapter' )->info( 'flysystem adapter' )->example( 'nfs' )->end()
+                    ->end()
+                ->end()
+                ->arrayNode( 'filesystem' )
+                    ->canBeUnset()
+                    ->children()
+                        ->scalarNode( 'root' )->info( 'path to the root directory' )->example( '/mnt/nfs' )->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $node;
+    }
+
+    /**
+     * @return ArrayNodeDefinition
+     */
+    private function getMetaDataNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root( 'metadata' );
+
+        $node
+            ->children()
+                ->arrayNode( 'legacy_dfs_cluster' )
+                    ->canBeUnset()
+                    ->children()
+                        ->scalarNode( 'connection' )->info( 'doctrine connection' )->example( 'default' )->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $node;
     }
 }

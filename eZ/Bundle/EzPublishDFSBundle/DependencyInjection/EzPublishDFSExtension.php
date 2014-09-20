@@ -25,4 +25,9 @@ class EzPublishDFSExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
+
+    public function getAlias()
+    {
+        return 'ez_dfs';
+    }
 }
