@@ -3,28 +3,31 @@ parameters:
     dfs.io_handler.metadata_handler.legacy_dfs_cluster.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\MetadataHandler\LegacyDFSCluster
     dfs.io_handler.binarydata_handler.dispatcher.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\BinaryDataHandler\Dispatcher
     dfs.io_handler.binarydata_handler.filesystem.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\BinaryDataHandler\Filesystem
+    dfs.io_handler.binarydata_handler.flysystem.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\BinaryDataHandler\Flysystem
     dfs.io_handler.binarydata_handler.dispatcher.path_based_registry.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\BinaryDataHandler\Dispatcher\PathBasedRegistry
 
 services:
     dfs.io_handler:
         class: %dfs.io_handler.class%
+        abstract: true
         arguments:
-            [ @dfs.io_handler.metadata_handler, @dfs.io_handler.binarydata_handler ]
-
-    dfs.io_handler.metadata_handler:
-        alias: dfs.io_handler.metadata_handler.legacy_dfs_cluster
+            [ ~, ~ ]
 
     dfs.io_handler.metadata_handler.legacy_dfs_cluster:
         class: %dfs.io_handler.metadata_handler.legacy_dfs_cluster.class%
-        arguments:
-            # @todo Should probably be injected by eZ Publish level configuration
-            - @database_connection
-
-    dfs.io_handler.binarydata_handler:
-        alias: dfs.io_handler.binarydata_handler.filesystem
+        abstract: true
 
     dfs.io_handler.binarydata_handler.filesystem:
         class: %dfs.io_handler.binarydata_handler.filesystem.class%
+        abstract: true
+        arguments:
+            - ~
+
+    dfs.io_handler.binarydata_handler.flysystem:
+        class: %dfs.io_handler.binarydata_handler.flysystem.class%
+        abstract: true
+        arguments:
+            - ~
 #
 #    dfs.io_handler.binarydata_handler.dispatcher.path_based_registry:
 #        class: %dfs.io_handler.binarydata_handler.dispatcher.path_basedregistry%

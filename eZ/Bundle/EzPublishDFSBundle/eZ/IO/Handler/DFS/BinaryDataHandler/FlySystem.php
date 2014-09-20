@@ -10,18 +10,18 @@ namespace eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
 
 use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\FilesystemInterface;
+use League\Flysystem\Filesystem;
 
 class FlySystem implements BinaryDataHandler
 {
     /** @var FilesystemInterface */
     private $filesystem;
 
-    private $options = ['overwrite' => true];
-
-    public function __construct(FilesystemInterface $filesystem)
+    public function __construct( AdapterInterface $adapter)
     {
-        $this->filesystem = $filesystem;
+        $this->filesystem = new FileSystem( $adapter );
     }
 
     /**
