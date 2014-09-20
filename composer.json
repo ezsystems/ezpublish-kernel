@@ -1,31 +1,60 @@
 {
-    "name": "ezsystems/iohandler-dfsio-bundle",
-    "description": "IO handler that distinguishes data & metadata, with support for cloud storage",
+    "name": "ezsystems/ezpublish-kernel",
+    "description": "eZ Publish API and kernel. This is the heart of eZ Publish 5.",
+    "homepage": "http://share.ez.no",
     "license": "GPL-2.0",
-    "authors": [
-        {
-            "name": "Bertrand Dunogier",
-            "email": "bd@ez.no"
-        }
-    ],
+    "suggest": {
+        "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
+    },
     "require": {
-        "league/flysystem": "0.5.*",
-        "oneup/flysystem-bundle": "~0.1",
-        "ezsystems/ezpublish-api": "2014.07.1",
-        "ezsystems/ezpublish-spi": "2014.07.1",
-        "doctrine/dbal": "~2.5@beta",
-        "doctrine/doctrine-bundle": "~1.3@beta"
+        "php": ">=5.4.4",
+        "ext-ctype": "*",
+        "ext-fileinfo": "*",
+        "ext-gd": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-PDO": "*",
+        "ext-SPL": "*",
+        "ext-xsl": "*",
+        "zetacomponents/mail": "1.8.*@beta",
+        "zetacomponents/php-generator": "dev-master#b51935e",
+        "symfony/symfony": "~2.3",
+        "symfony-cmf/routing": "1.1.*",
+        "qafoo/rmf": "1.0.*",
+        "kriswallsmith/buzz": ">=0.9",
+        "tedivm/stash-bundle": "0.4.*",
+        "sensio/distribution-bundle": "~2.3",
+        "nelmio/cors-bundle": "1.3.*",
+        "pagerfanta/pagerfanta": "~1.0",
+        "doctrine/dbal": "2.5.*@beta",
+        "ocramius/proxy-manager": "0.5.*",
+        "doctrine/doctrine-bundle": "1.3.*@beta"
     },
     "require-dev": {
-        "phpspec/phpspec": "~2.0"
+        "ezsystems/ezpublish-legacy": "@dev",
+        "mikey179/vfsStream": "1.1.0",
+        "phpunit/phpunit": "~4.1.3",
+        "matthiasnoback/symfony-dependency-injection-test": "0.*",
+        "mockery/mockery": "dev-master"
+    },
+    "replace": {
+        "ezsystems/ezpublish": "*",
+        "ezsystems/ezpublish-api": "self.version",
+        "ezsystems/ezpublish-spi": "self.version"
+    },
+    "conflict": {
+        "zendframework/zend-stdlib": ">=2.3"
     },
     "autoload": {
-        "psr-4": {
-            "EzSystems\\DFSIOBundle\\": "",
-            "eZ\\Publish\\": "eZ/Publish/"
+        "psr-0": {
+            "eZ": ""
         }
     },
     "config": {
-        "bin-dir": "bin"
+        "process-timeout": 3000
+    },
+    "extra": {
+        "ezpublish-legacy-dir": "vendor/ezsystems/ezpublish-legacy"
     }
 }
