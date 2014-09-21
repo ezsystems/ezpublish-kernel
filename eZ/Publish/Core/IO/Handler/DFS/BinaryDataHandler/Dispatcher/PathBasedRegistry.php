@@ -6,9 +6,9 @@
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler\Dispatcher;
+namespace eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler\Dispatcher;
 
-use eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
+use eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler;
 use OutOfRangeException;
 
 class PathBasedRegistry implements RegistryInterface

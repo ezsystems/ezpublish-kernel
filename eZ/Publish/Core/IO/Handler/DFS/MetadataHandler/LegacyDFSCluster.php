@@ -6,12 +6,12 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\MetadataHandler;
+namespace eZ\Publish\Core\IO\Handler\DFS\MetadataHandler;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\MetadataHandler;
+use eZ\Publish\Core\IO\Handler\DFS\MetadataHandler;
 
 /**
  * @todo Describe

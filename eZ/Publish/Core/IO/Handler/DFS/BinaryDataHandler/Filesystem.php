@@ -6,24 +6,12 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
+namespace eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler;
 
-use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
-use eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\FilesystemInterface;
-use League\Flysystem\Filesystem;
+use eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler;
 
-class FlySystem implements BinaryDataHandler
+class Filesystem implements BinaryDataHandler
 {
-    /** @var FilesystemInterface */
-    private $filesystem;
-
-    public function __construct( AdapterInterface $adapter)
-    {
-        $this->filesystem = new FileSystem( $adapter );
-    }
-
     /**
      * Creates the file $path with data from $resource
      *
@@ -34,13 +22,9 @@ class FlySystem implements BinaryDataHandler
      *
      * @return void
      */
-    public function createFromStream($path, $resource)
+    public function createFromStream( $path, $resource )
     {
-        try {
-            $this->filesystem->writeStream($path, $resource, ['visibility' => 'public']);
-        } catch ( \League\Flysystem\FileExistsException $e ) {
-            $this->filesystem->updateStream($path, $resource, ['visibility' => 'public']);
-        }
+        // TODO: Implement createFromStream() method.
     }
 
     /**
@@ -50,23 +34,22 @@ class FlySystem implements BinaryDataHandler
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $path isn't found
      */
-    public function delete($path)
+    public function delete( $path )
     {
-        $this->filesystem->delete($path);
+        // TODO: Implement delete() method.
     }
 
     /**
      * Retrieves metadata from $path using $metadataHandler
      *
-     * @param IOMetadataHandler $metadataHandler
-     * @param string $path
+     * @param \eZ\Publish\Core\IO\MetadataHandler $metadataHandler
+     * @param string          $path
      *
      * @return array
      */
-    public function getMetadata(IOMetadataHandler $metadataHandler, $path)
+    public function getMetadata( \eZ\Publish\Core\IO\MetadataHandler $metadataHandler, $path )
     {
-        // @todo
-        return array();
+        // TODO: Implement getMetadata() method.
     }
 
     /**
@@ -80,7 +63,7 @@ class FlySystem implements BinaryDataHandler
      */
     public function getFileContents( $path )
     {
-        return $this->filesystem->read($path);
+        // TODO: Implement getFileContents() method.
     }
 
     /**
@@ -90,9 +73,9 @@ class FlySystem implements BinaryDataHandler
      *
      * @return resource A read-only binary resource to $path
      */
-    public function getFileResource($path)
+    public function getFileResource( $path )
     {
-        return $this->filesystem->readStream($path);
+        // TODO: Implement getFileResource() method.
     }
 
     /**
@@ -103,7 +86,7 @@ class FlySystem implements BinaryDataHandler
      */
     public function updateFileContents( $path, $resource )
     {
-        $this->filesystem->writeStream($path, $resource, ['visibility' => 'public']);
+        // TODO: Implement updateFileContents() method.
     }
 
     /**
@@ -115,9 +98,9 @@ class FlySystem implements BinaryDataHandler
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $toPath already exists
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $fromPath does not exist
      */
-    public function rename($fromPath, $toPath)
+    public function rename( $fromPath, $toPath )
     {
-        $this->filesystem->rename($fromPath, $toPath);
+        // TODO: Implement rename() method.
     }
 
 }

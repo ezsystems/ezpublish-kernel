@@ -6,9 +6,9 @@
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
+namespace eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler;
 
-use eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
+use eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler;
 
 /**
  * Dispatches BinaryData operations based on the file's path

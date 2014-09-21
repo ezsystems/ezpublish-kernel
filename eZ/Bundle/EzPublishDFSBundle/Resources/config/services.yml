@@ -1,10 +1,10 @@
 parameters:
-    dfs.io_handler.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS
-    dfs.io_handler.metadata_handler.legacy_dfs_cluster.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\MetadataHandler\LegacyDFSCluster
-    dfs.io_handler.binarydata_handler.dispatcher.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\BinaryDataHandler\Dispatcher
-    dfs.io_handler.binarydata_handler.filesystem.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\BinaryDataHandler\Filesystem
-    dfs.io_handler.binarydata_handler.flysystem.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\BinaryDataHandler\Flysystem
-    dfs.io_handler.binarydata_handler.dispatcher.path_based_registry.class: eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\BinaryDataHandler\Dispatcher\PathBasedRegistry
+    dfs.io_handler.class: eZ\Publish\Core\IO\Handler\DFS
+    dfs.io_handler.metadata_handler.legacy_dfs_cluster.class: eZ\Publish\Core\IO\Handler\DFS\MetadataHandler\LegacyDFSCluster
+    dfs.io_handler.binarydata_handler.dispatcher.class: eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler\Dispatcher
+    dfs.io_handler.binarydata_handler.filesystem.class: eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler\Filesystem
+    dfs.io_handler.binarydata_handler.flysystem.class: eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler\Flysystem
+    dfs.io_handler.binarydata_handler.dispatcher.path_based_registry.class: eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler\Dispatcher\PathBasedRegistry
 
 services:
     dfs.io_handler:

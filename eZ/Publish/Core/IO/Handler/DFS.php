@@ -6,16 +6,17 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler;
+namespace eZ\Publish\Core\IO\Handler;
 
-use eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\MetadataHandler;
-use eZ\Bundle\EzPublishDFSBundle\eZ\IO\Handler\DFS\BinaryDataHandler;
+use eZ\Publish\Core\IO\Handler\DFS\MetadataHandler;
+use eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler;
 use eZ\Publish\Core\Base\Exceptions;
 use eZ\Publish\Core\IO\Handler as IOHandler;
 use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
+use InvalidArgumentException;
 
 class DFS implements IOHandler
 {
