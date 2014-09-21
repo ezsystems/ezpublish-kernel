@@ -50,7 +50,7 @@ class IOFactory
      *
      * @return \eZ\Publish\Core\IO\IOService
      */
-    public function getService( $prefixSetting = false )
+    public function getService( IoHandlerInterface $handler, $prefixSetting = false )
     {
         $settings = array();
 
@@ -59,7 +59,7 @@ class IOFactory
             $settings['prefix'] = $this->configResolver->getParameter( $prefixSetting );
         }
 
-        return new $this->IOServiceClass( $IOHandler, $this->mimeTypeDetector, $settings );
+        return new $this->IOServiceClass( $handler, $this->mimeTypeDetector, $settings );
     }
 
     /**
@@ -94,6 +94,6 @@ class IOFactory
      */
     public function getConfiguredHandler()
     {
-        return $this->conget( $this->configResolver->getParameter( 'handler', 'ez_io' ) );
+        return $this->container->get( $this->configResolver->getParameter( 'handler', 'ez_io' ) );
     }
 }

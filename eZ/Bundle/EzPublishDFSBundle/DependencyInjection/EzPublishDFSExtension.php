@@ -66,12 +66,15 @@ class EzPublishDFSExtension extends Extension
      * @param ContainerBuilder $container
      * @return Reference Reference to the created service
      */
-    private function createDFSHandler( $name, Reference $metaDataHandler, Reference $binaryDataHandler, ContainerBuilder $container )
+    private function createDFSHandler( $name, Reference $binaryDataHandler, Reference $metaDataHandler, ContainerBuilder $container )
     {
-        $id = sprintf( 'dfs.io_handler.%s', $name );
-        $definition = $container->setDefinition( $id, new DefinitionDecorator( 'dfs.io_handler' ) );
-        $definition->replaceArgument( 0, $metaDataHandler );
-        $definition->replaceArgument( 1, $binaryDataHandler );
+        $id = sprintf( 'ezpublish.core.io.dfs.io_handler.%s', $name );
+        $definition = $container->setDefinition( $id, new DefinitionDecorator( 'ezpublish.core.io.dfs.io_handler' ) );
+
+        // @todo needs to be configured somewhere
+        $definition->replaceArgument( 0, 'var/dfstest' );
+        $definition->replaceArgument( 1, $metaDataHandler );
+        $definition->replaceArgument( 2, $binaryDataHandler );
 
         return $id;
     }
@@ -85,11 +88,11 @@ class EzPublishDFSExtension extends Extension
      */
     protected function createDFSBinaryDataHandler( $handlerName, array $config, ContainerBuilder $container )
     {
-        $parentId = sprintf( 'dfs.io_handler.binarydata_handler.%s',$handlerName );
+        $parentId = sprintf( 'ezpublish.core.io.dfs.binarydata_handler.%s', $handlerName );
 
         if ( !$container->hasDefinition( $parentId ) )
         {
-            throw new InvalidConfigurationException( "Unknown DFS binarydata handler $handlerName" );
+            throw new InvalidConfigurationException( "Unknown DFS binarydata handler $handlerName: service @$parentId not found" );
         }
         // @todo this won't work with filesystem
         $id = sprintf( '%s.%s', $parentId, $config['adapter'] );
@@ -118,7 +121,7 @@ class EzPublishDFSExtension extends Extension
      */
     protected function createDFSMetaDataHandler( $handlerName, array $config, ContainerBuilder $container )
     {
-        $parentId = sprintf( 'dfs.io_handler.metadata_handler.%s', $handlerName );
+        $parentId = sprintf( 'ezpublish.core.io.dfs.metadata_handler.%s', $handlerName );
 
         if ( !$container->hasDefinition( $parentId ) )
         {

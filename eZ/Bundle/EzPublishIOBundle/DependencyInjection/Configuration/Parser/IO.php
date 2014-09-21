@@ -49,7 +49,7 @@ class IO extends AbstractParser
                     "Unknown IO handler {$handlerId}. Possible values: " . implode( ', ', array_keys( $handlersMap ) )
                 );
             }
-            $contextualizer->setContextualParameter( 'handler', $currentScope, $scopeSettings['handler'] );
+            $contextualizer->setContextualParameter( 'handler', $currentScope, $handlersMap[$scopeSettings['handler']] );
         }
     }
 

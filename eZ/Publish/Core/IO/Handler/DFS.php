@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\IO\Handler;
 
-use eZ\Publish\Core\IO\Handler\DFS\MetadataHandler;
-use eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler;
+use eZ\Publish\Core\IO\Handler\DFS\MetadataHandler as DFSMetadataHandler;
+use eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler as DFSBinaryDataHandler;
 use eZ\Publish\Core\Base\Exceptions;
 use eZ\Publish\Core\IO\Handler as IOHandler;
 use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
@@ -20,10 +20,10 @@ use InvalidArgumentException;
 
 class DFS implements IOHandler
 {
-    /** @var BinaryDataHandler */
+    /** @var DFSBinaryDataHandler */
     protected $binaryDataHandler;
 
-    /** @var MetadataHandler */
+    /** @var DFSMetadataHandler */
     protected $metaDataHandler;
 
     /** @var string */
@@ -31,10 +31,10 @@ class DFS implements IOHandler
 
     /**
      * @param string $storagePrefix
-     * @param MetadataHandler $metaDataHandler
-     * @param MetadataHandler $binaryDataHandler
+     * @param DFSMetadataHandler $metaDataHandler
+     * @param DFSBinaryDataHandler $binaryDataHandler
      */
-    public function __construct( $storagePrefix, MetadataHandler $metaDataHandler, BinaryDataHandler $binaryDataHandler )
+    public function __construct( $storagePrefix, DFSMetadataHandler $metaDataHandler, DFSBinaryDataHandler $binaryDataHandler )
     {
         $this->storagePrefix = $storagePrefix;
         $this->metaDataHandler = $metaDataHandler;
