@@ -37,6 +37,7 @@ class EzPublishDFSExtension extends Extension
         {
             foreach ( $dfsHandlerConfig['binarydata'] as $name => $config )
             {
+                // @todo This can probably be checked in configuration
                 if ( isset( $binaryDataHandler ) )
                 {
                     throw new InvalidConfigurationException( "Only one binarydata handler can be set. Use a dispatcher to set more" );
@@ -45,28 +46,42 @@ class EzPublishDFSExtension extends Extension
             }
             foreach ( $dfsHandlerConfig['metadata'] as $name => $config )
             {
-                // $metaDataHandler = $this->createDFMetaDataHandler( $dfsHandlerName, $name, $config, $container );
+                // @todo This can probably be checked in configuration
+                if ( isset( $metaDataHandler ) )
+                {
+                    throw new InvalidConfigurationException( "Only one metadata handler can be set. Use a dispatcher to set more" );
+                }
+                $metaDataHandler = $this->createDFSMetaDataHandler( $name, $config, $container );
             }
-            $this->createDFSHandler( $dfsHandlerName, $binaryDataHandler, $container );
+            $this->createDFSHandler( $dfsHandlerName, $binaryDataHandler, $metaDataHandler, $container );
         }
 
         // @todo add sanity checks and helpers (which handlers are defined, etc)
     }
 
     /**
-     * @param string $name
-     * @param string $metaDataHandler id of the metadata handler service
+     * @param string $name DFS handler name
+     * @param Reference $metaDataHandler reference to the metadata handler service
+     * @param Reference $metaDataHandler reference to the metadata handler service
      * @param ContainerBuilder $container
+     * @return Reference Reference to the created service
      */
-    private function createDFSHandler( $name, $metaDataHandler, ContainerBuilder $container )
+    private function createDFSHandler( $name, Reference $metaDataHandler, Reference $binaryDataHandler, ContainerBuilder $container )
     {
         $id = sprintf( 'dfs.io_handler.%s', $name );
         $definition = $container->setDefinition( $id, new DefinitionDecorator( 'dfs.io_handler' ) );
-        $definition->replaceArgument( 0, new Reference( $metaDataHandler ) );
+        $definition->replaceArgument( 0, $metaDataHandler );
+        $definition->replaceArgument( 1, $binaryDataHandler );
+
+        return $id;
     }
 
     /**
-     * @param $dfsHandlerConfig
+     * Creates a DFS Binary Data Handler
+     * @param string $handlerName binary handler name  (filesystem, flysystem...)
+     * @param array $config Handler configuration options
+     * @param ContainerBuilder $container
+     * @return Reference Reference to the binarydata handler that was created
      */
     protected function createDFSBinaryDataHandler( $handlerName, array $config, ContainerBuilder $container )
     {
@@ -76,11 +91,11 @@ class EzPublishDFSExtension extends Extension
         {
             throw new InvalidConfigurationException( "Unknown DFS binarydata handler $handlerName" );
         }
+        // @todo this won't work with filesystem
         $id = sprintf( '%s.%s', $parentId, $config['adapter'] );
-        echo "Creating service $id\n";
         $definition = $container->setDefinition( $id, new DefinitionDecorator( $parentId ) );
 
-        // Dude, please...
+        // @todo Dude, please...
         if ( $handlerName === 'flysystem' )
         {
             $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $config['adapter'] );
@@ -91,6 +106,33 @@ class EzPublishDFSExtension extends Extension
             $definition->replaceArgument( 0, $config['root'] );
         }
 
-        return $id;
+        return new Reference( $id );
+    }
+
+    /**
+     * Creates a DFS MetaData Handler
+     * @param string $handlerName binary handler name  (legacy_dfs_cluster, ...)
+     * @param array $config Handler configuration options
+     * @param ContainerBuilder $container
+     * @return Reference Reference to the metadata handler that was created
+     */
+    protected function createDFSMetaDataHandler( $handlerName, array $config, ContainerBuilder $container )
+    {
+        $parentId = sprintf( 'dfs.io_handler.metadata_handler.%s', $handlerName );
+
+        if ( !$container->hasDefinition( $parentId ) )
+        {
+            throw new InvalidConfigurationException( "Unknown DFS metadata handler $handlerName" );
+        }
+        $id = sprintf( '%s.%s', $parentId, $config['connection'] );
+        $definition = $container->setDefinition( $id, new DefinitionDecorator( $parentId ) );
+
+        // @todo Dude, please...
+        if ( $handlerName === 'legacy_dfs_cluster' )
+        {
+            $definition->replaceArgument( 0, new Reference( $config['connection'] ) );
+        }
+
+        return new Reference( $id );
     }
 }

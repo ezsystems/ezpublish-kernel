@@ -16,6 +16,8 @@ services:
     dfs.io_handler.metadata_handler.legacy_dfs_cluster:
         class: %dfs.io_handler.metadata_handler.legacy_dfs_cluster.class%
         abstract: true
+        arguments:
+            - ~
 
     dfs.io_handler.binarydata_handler.filesystem:
         class: %dfs.io_handler.binarydata_handler.filesystem.class%
