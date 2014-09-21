@@ -71,8 +71,8 @@ class EzPublishDFSExtension extends Extension
         $id = sprintf( 'ezpublish.core.io.dfs.io_handler.%s', $name );
         $definition = $container->setDefinition( $id, new DefinitionDecorator( 'ezpublish.core.io.dfs.io_handler' ) );
 
-        // @todo needs to be configured somewhere
-        $definition->replaceArgument( 0, 'var/dfstest' );
+        // @todo prefix needs to be configured somewhere
+        // $definition->replaceArgument( 0, '' );
         $definition->replaceArgument( 1, $metaDataHandler );
         $definition->replaceArgument( 2, $binaryDataHandler );
 

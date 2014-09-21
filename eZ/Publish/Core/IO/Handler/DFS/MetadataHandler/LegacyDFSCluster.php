@@ -106,7 +106,7 @@ SQL
     public function loadMetadata($path)
     {
         try {
-            $stmt = $this->db->prepare('SELECT * FROM ezdfsfile WHERE name_hash LIKE ?');
+            $stmt = $this->db->prepare('SELECT * FROM ezdfsfile WHERE name_hash LIKE ? AND expired != 1 AND mtime > 0');
             $stmt->bindValue(1, md5($path));
             $stmt->execute();
         } catch (\Exception $e) {
@@ -130,7 +130,7 @@ SQL
     public function exists( $path )
     {
         try {
-            $stmt = $this->db->prepare('SELECT name FROM ezdfsfile WHERE name_hash LIKE ?');
+            $stmt = $this->db->prepare('SELECT name FROM ezdfsfile WHERE name_hash LIKE ? and mtime > 0 and expired != 1');
             $stmt->bindValue(1, md5($path));
             $stmt->execute();
         } catch (\Exception $e) {
