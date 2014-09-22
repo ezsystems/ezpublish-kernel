@@ -24,10 +24,10 @@
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="name">
-            <xsl:number count="section" level="multiple"/>
+            <xsl:number count="section[ancestor::section] | header" level="multiple"/>
         </xsl:variable>
 
-        <a name="eztoc{translate($name, '.', '_')}" id="eztoc{translate($name, '.', '_')}"/>
+        <a name="eztoc_{translate($name, '.', '_')}" id="eztoc_{translate($name, '.', '_')}"/>
         <xsl:element name="h{$level}">
             <xsl:copy-of select="@class"/>
             <xsl:copy-of select="@align"/>
