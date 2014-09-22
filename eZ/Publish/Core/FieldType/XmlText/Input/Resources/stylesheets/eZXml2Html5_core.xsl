@@ -90,7 +90,8 @@
         <xsl:attribute name="width">
             <xsl:value-of select="@width"/>
         </xsl:attribute>
-        <xsl:attribute name="style">width: <xsl:value-of select="@width"/>;
+        <xsl:attribute name="style">
+            <xsl:value-of select="concat( 'width:', @width, ';' )"/>
         </xsl:attribute>
         <xsl:attribute name="summary">
             <xsl:value-of select="@custom:summary"/>
