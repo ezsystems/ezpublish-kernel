@@ -5,6 +5,7 @@ namespace eZ\Bundle\EzPublishDFSBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -72,9 +73,8 @@ class EzPublishDFSExtension extends Extension
         $definition = $container->setDefinition( $id, new DefinitionDecorator( 'ezpublish.core.io.dfs.io_handler' ) );
 
         // @todo prefix needs to be configured somewhere
-        // $definition->replaceArgument( 0, '' );
-        $definition->replaceArgument( 1, $metaDataHandler );
-        $definition->replaceArgument( 2, $binaryDataHandler );
+        $definition->replaceArgument( 0, $metaDataHandler );
+        $definition->replaceArgument( 1, $binaryDataHandler );
 
         return $id;
     }
@@ -96,17 +96,35 @@ class EzPublishDFSExtension extends Extension
         }
         // @todo this won't work with filesystem
         $id = sprintf( '%s.%s', $parentId, $config['adapter'] );
-        $definition = $container->setDefinition( $id, new DefinitionDecorator( $parentId ) );
+        $binaryDataHandlerDefinition = $container->setDefinition( $id, new DefinitionDecorator( $parentId ) );
 
         // @todo Dude, please...
         if ( $handlerName === 'flysystem' )
         {
             $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $config['adapter'] );
-            $definition->replaceArgument( 0, new Reference( $adapterId ) );
+            $binaryDataHandlerDefinition->replaceArgument( 0, new Reference( $adapterId ) );
         }
         else if ( $handlerName == 'filesystem' )
         {
-            $definition->replaceArgument( 0, $config['root'] );
+            $binaryDataHandlerDefinition->replaceArgument( 0, $config['root'] );
+        }
+
+        if ( isset( $config['url_decorator'] ) )
+        {
+            foreach ( $config['url_decorator'] as $urlDecoratorType => $urlDecoratorConfig )
+            {
+                foreach ( $urlDecoratorConfig as $urlDecoratorName => $urlDecoratorSubConfig )
+                {
+                    $urlDecoratorReference = $this->createUrlDecoratorService(
+                        $container,
+                        $urlDecoratorType,
+                        $urlDecoratorName,
+                        $urlDecoratorConfig
+                    );
+
+                    $binaryDataHandlerDefinition->replaceArgument( 1, $urlDecoratorReference );
+                }
+            }
         }
 
         return new Reference( $id );
@@ -138,4 +156,41 @@ class EzPublishDFSExtension extends Extension
 
         return new Reference( $id );
     }
-}
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string $type ex: prefix
+     * @param string $name ex: static_prefix
+     * @param array $config
+     *
+     * @return Reference
+     */
+    protected function createUrlDecoratorService( ContainerBuilder $container, $type, $name, $config )
+    {
+        $parentId = sprintf( 'ezpublish.core.io.dfs.url_decorator.%s', $type );
+
+        if ( !$container->hasDefinition( $parentId ) )
+        {
+            throw new InvalidConfigurationException(
+                "Unknown DFS url decorator $type: service @$parentId not found"
+            );
+        }
+
+        $id = sprintf( 'ezpublish.core.io.dfs.url_decorator.%s.', $type, $name );
+        if ( $container->hasDefinition( $id ) )
+        {
+            throw new InvalidConfigurationException(
+                "An url decorator of type $type with the name $name already exists"
+            );
+        }
+
+        $definition = $container->setDefinition( $id, new DefinitionDecorator( $parentId ) );
+        switch ( $type )
+        {
+            case 'prefix':
+                $definition->replaceArgument( 0, $config['prefix'] );
+                break;
+        }
+
+        return new Reference( $id );
+    }

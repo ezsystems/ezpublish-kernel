@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler;
 
 use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler;
+use eZ\Publish\Core\IO\Handler\DFS\UrlDecorator;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\Filesystem;
@@ -18,10 +19,15 @@ class FlySystem implements BinaryDataHandler
 {
     /** @var FilesystemInterface */
     private $filesystem;
+    /**
+     * @var UrlDecorator
+     */
+    private $urlDecorator;
 
-    public function __construct( AdapterInterface $adapter)
+    public function __construct( AdapterInterface $adapter, UrlDecorator $urlDecorator )
     {
         $this->filesystem = new FileSystem( $adapter );
+        $this->urlDecorator = $urlDecorator;
     }
 
     /**
@@ -120,4 +126,15 @@ class FlySystem implements BinaryDataHandler
         $this->filesystem->rename($fromPath, $toPath);
     }
 
+    /**
+     * Returns the public URI for $path
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function getUri( $path )
+    {
+        return $this->urlDecorator->decorate( $path );
+    }
 }

@@ -82,4 +82,11 @@ interface BinaryDataHandler
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $fromPath does not exist
      */
     public function rename( $fromPath, $toPath );
+
+    /**
+     * Returns the public URI for $path
+     * @param string $path
+     * @return string
+     */
+    public function getUri( $path );
 }

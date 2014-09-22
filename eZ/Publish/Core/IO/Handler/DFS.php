@@ -13,6 +13,7 @@ use eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler as DFSBinaryDataHandler;
 use eZ\Publish\Core\Base\Exceptions;
 use eZ\Publish\Core\IO\Handler as IOHandler;
 use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
+use eZ\Publish\Core\IO\ParameterResolver;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
@@ -30,13 +31,15 @@ class DFS implements IOHandler
     protected $storagePrefix;
 
     /**
-     * @param string $storagePrefix
      * @param DFSMetadataHandler $metaDataHandler
      * @param DFSBinaryDataHandler $binaryDataHandler
+     * @param ParameterResolver $varDirResolver
+     *
+     * @internal param string $storagePrefix
      */
-    public function __construct( $storagePrefix, DFSMetadataHandler $metaDataHandler, DFSBinaryDataHandler $binaryDataHandler )
+    public function __construct( DFSMetadataHandler $metaDataHandler, DFSBinaryDataHandler $binaryDataHandler, ParameterResolver $varDirResolver )
     {
-        $this->storagePrefix = $storagePrefix;
+        $this->storagePrefix = $varDirResolver->get();
         $this->metaDataHandler = $metaDataHandler;
         $this->binaryDataHandler = $binaryDataHandler;
     }
@@ -254,7 +257,7 @@ class DFS implements IOHandler
      */
     public function getUri( $spiBinaryFileId )
     {
-        return '/' . $this->addStoragePrefix( $spiBinaryFileId );
+        return $this->binaryDataHandler->getUri( $this->addStoragePrefix( $spiBinaryFileId ) );
     }
 
     /**
@@ -264,7 +267,9 @@ class DFS implements IOHandler
      */
     protected function addStoragePrefix( $spiBinaryFileId )
     {
-        return $this->storagePrefix . $spiBinaryFileId;
+        if ( $this->storagePrefix )
+            $spiBinaryFileId = $this->storagePrefix . '/' . $spiBinaryFileId;
+        return $spiBinaryFileId;
     }
 
     /**
@@ -277,7 +282,7 @@ class DFS implements IOHandler
      */
     protected function removeStoragePrefix( $path )
     {
-        if ( !isset( $this->storagePrefix ) )
+        if ( !$this->storagePrefix )
         {
             return $path;
         }
@@ -290,6 +295,6 @@ class DFS implements IOHandler
             );
         }
 
-        return substr( $path, strlen( $this->storagePrefix ) );
+        return substr( $path, strlen( $this->storagePrefix ) + 1 );
     }
 }
