@@ -93,7 +93,7 @@ SQL
         }
 
         if ($stmt->rowCount() != 1) {
-            throw new \Exception("@todo");
+            throw new \Exception("@todo rows affected by delete() weren't exactly 1");
         }
     }
 
@@ -110,11 +110,11 @@ SQL
             $stmt->bindValue(1, md5($path));
             $stmt->execute();
         } catch (\Exception $e) {
-            throw new NotFoundException('file', $path);
+            throw new \Exception("@todo");
         }
 
-        if ($stmt->rowCount() != 1) {
-            throw new \Exception("@todo");
+        if ($stmt->rowCount() == 0) {
+            throw new NotFoundException('file', $path);
         }
 
         return $stmt->fetch(\PDO::FETCH_ASSOC);
