@@ -39,8 +39,10 @@ class FilterConfiguration extends BaseFilterConfiguration
         $filterConfig = array(
             'cache' => 'ezpublish',
             'data_loader' => 'ezpublish',
+            'reference' => isset( $configuredVariations[$filter]['reference'] ) ? $configuredVariations[$filter]['reference'] : null,
             'filters' => $this->getVariationFilters( $filter, $configuredVariations )
         );
+
         return $filterConfig;
     }
 
@@ -49,8 +51,6 @@ class FilterConfiguration extends BaseFilterConfiguration
      *
      * Both variations configured in eZ (SiteAccess context) and LiipImagineBundle are used.
      * eZ variations always have precedence.
-     * An eZ variation can have a "reference". In that case, reference's filters are prepended to the one set of $variationName.
-     * Reference must be a valid variation name, configured in eZ or in LiipImagineBundle.
      *
      * @param string $variationName
      * @param array $configuredVariations Variations set in eZ.
@@ -70,18 +70,6 @@ class FilterConfiguration extends BaseFilterConfiguration
         if ( isset( $configuredVariations[$variationName] ) )
         {
             $filters = $configuredVariations[$variationName]['filters'];
-            // If the variation has a reference, we recursively call this method to retrieve reference's filters
-            // and add them on the top.
-            if ( isset( $configuredVariations[$variationName]['reference'] ) && $configuredVariations[$variationName]['reference'] !== 'original' )
-            {
-                array_unshift(
-                    $filters,
-                    $this->getVariationFilters(
-                        $configuredVariations[$variationName]['reference'],
-                        $configuredVariations
-                    )
-                );
-            }
         }
         // Falback to variations configured in LiipImagineBundle.
         else

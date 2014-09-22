@@ -15,8 +15,10 @@ use eZ\Publish\SPI\Variation\Values\ImageVariation;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use eZ\Publish\Core\FieldType\Value;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
+use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
 use Psr\Log\LoggerInterface;
 use InvalidArgumentException;
@@ -49,6 +51,11 @@ class AliasGenerator implements VariationHandler
     private $filterManager;
 
     /**
+     * @var FilterConfiguration
+     */
+    private $filterConfiguration;
+
+    /**
      * @var \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
      */
     private $ioResolver;
@@ -57,12 +64,14 @@ class AliasGenerator implements VariationHandler
         LoaderInterface $dataLoader,
         FilterManager $filterManager,
         ResolverInterface $ioResolver,
+        FilterConfiguration $filterConfiguration,
         LoggerInterface $logger = null
     )
     {
         $this->dataLoader = $dataLoader;
         $this->filterManager = $filterManager;
         $this->ioResolver = $ioResolver;
+        $this->filterConfiguration = $filterConfiguration;
         $this->logger = $logger;
     }
 
@@ -90,7 +99,7 @@ class AliasGenerator implements VariationHandler
                 $this->logger->debug( "Generating '$variationName' variation on $originalPath, field #$fieldId ($fieldDefIdentifier)" );
 
             $this->ioResolver->store(
-                $this->filterManager->applyFilter( $this->dataLoader->find( $originalPath ), $variationName ),
+                $this->applyFilter( $this->dataLoader->find( $originalPath ), $variationName ),
                 $originalPath,
                 $variationName
             );
@@ -110,6 +119,31 @@ class AliasGenerator implements VariationHandler
                 'imageId'      => $imageValue->imageId
             )
         );
+    }
+
+    /**
+     * Applies $variationName filters on $image.
+     *
+     * Both variations configured in eZ (SiteAccess context) and LiipImagineBundle are used.
+     * An eZ variation may have a "reference".
+     * In that case, reference's filters are applied first, recursively (a reference may also have another reference).
+     * Reference must be a valid variation name, configured in eZ or in LiipImagineBundle.
+     *
+     * @param BinaryInterface $image
+     * @param string $variationName
+     *
+     * @return \Liip\ImagineBundle\Binary\BinaryInterface
+     */
+    private function applyFilter( BinaryInterface $image, $variationName )
+    {
+        $filterConfig = $this->filterConfiguration->get( $variationName );
+        // If the variation has a reference, we recursively call this method to apply reference's filters.
+        if ( isset( $filterConfig['reference'] ) && $filterConfig['reference'] !== 'original' )
+        {
+            $image = $this->applyFilter( $image, $filterConfig['reference'] );
+        }
+
+        return $this->filterManager->applyFilter( $image, $variationName );
     }
 
     public function supportsValue( Value $value )

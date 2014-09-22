@@ -34,7 +34,8 @@ services:
             - @ezpublish.image_alias.imagine.binary_loader
             - @liip_imagine.filter.manager
             - @ezpublish.image_alias.imagine.cache_resolver
-            - @logger
+            - @liip_imagine.filter.configuration
+            - @?logger
 
     ezpublish.image_alias.imagine.filter.loader.scaledown.base:
         abstract: true

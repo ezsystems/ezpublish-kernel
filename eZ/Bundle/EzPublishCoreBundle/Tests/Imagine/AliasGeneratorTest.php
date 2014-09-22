@@ -15,6 +15,7 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use PHPUnit_Framework_TestCase;
 
 class AliasGeneratorTest extends PHPUnit_Framework_TestCase
@@ -35,6 +36,11 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
     private $ioResolver;
 
     /**
+     * @var \Liip\ImagineBundle\Imagine\Filter\FilterConfiguration
+     */
+    private $filterConfiguration;
+
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $logger;
@@ -53,11 +59,13 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->ioResolver = $this->getMock( '\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface' );
+        $this->filterConfiguration = new FilterConfiguration();
         $this->logger = $this->getMock( '\Psr\Log\LoggerInterface' );
         $this->aliasGenerator = new AliasGenerator(
             $this->dataLoader,
             $this->filterManager,
             $this->ioResolver,
+            $this->filterConfiguration,
             $this->logger
         );
     }
@@ -93,6 +101,7 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'my_variation';
+        $this->filterConfiguration->set( $variationName, array() );
         $imageId = '123-45';
         $imageValue = new ImageValue( array( 'id' => $originalPath, 'imageId' => $imageId ) );
         $field = new Field( array( 'value' => $imageValue ) );
@@ -119,6 +128,79 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->method( 'applyFilter' )
             ->with( $binary, $variationName )
             ->will( $this->returnValue( $binary ) );
+        $this->ioResolver
+            ->expects( $this->once() )
+            ->method( 'store' )
+            ->with( $binary, $originalPath, $variationName );
+        $this->ioResolver
+            ->expects( $this->once() )
+            ->method( 'resolve' )
+            ->with( $originalPath, $variationName )
+            ->will( $this->returnValue( $expectedUrl ) );
+
+        $expected = new ImageVariation(
+            array(
+                'name' => $variationName,
+                'fileName' => "image_$variationName.jpg",
+                'dirPath' => 'http://localhost/foo/bar',
+                'uri' => $expectedUrl,
+                'imageId' => $imageId
+            )
+        );
+        $this->assertEquals( $expected, $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName ) );
+    }
+
+    public function testGetVariationNotStoredHavingReferences()
+    {
+        $originalPath = 'foo/bar/image.jpg';
+        $variationName = 'my_variation';
+        $reference1 = 'reference1';
+        $reference2 = 'reference2';
+        $configVariation = array( 'reference' => $reference1 );
+        $configReference1 = array( 'reference' => $reference2 );
+        $configReference2 = array();
+        $this->filterConfiguration->set( $variationName, $configVariation );
+        $this->filterConfiguration->set( $reference1, $configReference1 );
+        $this->filterConfiguration->set( $reference2, $configReference2 );
+        $imageId = '123-45';
+        $imageValue = new ImageValue( array( 'id' => $originalPath, 'imageId' => $imageId ) );
+        $field = new Field( array( 'value' => $imageValue ) );
+        $expectedUrl = "http://localhost/foo/bar/image_$variationName.jpg";
+
+        $this->ioResolver
+            ->expects( $this->once() )
+            ->method( 'isStored' )
+            ->with( $originalPath, $variationName )
+            ->will( $this->returnValue( false ) );
+
+        $this->logger
+            ->expects( $this->once() )
+            ->method( 'debug' );
+
+        $binary = $this->getMock( '\Liip\ImagineBundle\Binary\BinaryInterface' );
+        $this->dataLoader
+            ->expects( $this->once() )
+            ->method( 'find' )
+            ->with( $originalPath )
+            ->will( $this->returnValue( $binary ) );
+
+        // Filter manager is supposed to be called 3 times to generate references, and then passed variation.
+        $this->filterManager
+            ->expects( $this->at( 0 ) )
+            ->method( 'applyFilter' )
+            ->with( $binary, $reference2 )
+            ->will( $this->returnValue( $binary ) );
+        $this->filterManager
+            ->expects( $this->at( 1 ) )
+            ->method( 'applyFilter' )
+            ->with( $binary, $reference1 )
+            ->will( $this->returnValue( $binary ) );
+        $this->filterManager
+            ->expects( $this->at( 2 ) )
+            ->method( 'applyFilter' )
+            ->with( $binary, $variationName )
+            ->will( $this->returnValue( $binary ) );
+
         $this->ioResolver
             ->expects( $this->once() )
             ->method( 'store' )
