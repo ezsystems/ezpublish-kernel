@@ -127,6 +127,18 @@ class Legacy implements IOServiceInterface
 
     public function exists( $binaryFileId )
     {
+        // If the id is an internal (absolute) path to a draft image, use the draft service to get external path & load
+        if ( $this->isDraftImagePath( $binaryFileId ) )
+        {
+            return $this->draftIOService->exists( $this->draftIOService->getExternalPath( $binaryFileId ) );
+        }
+
+        // If the id is an internal path (absolute) to a published image, replace with the internal path
+        if ( $this->isPublishedImagePath( $binaryFileId ) )
+        {
+            $binaryFileId = $this->publishedIOService->getExternalPath( $binaryFileId );
+        }
+
         return $this->publishedIOService->exists( $binaryFileId );
     }
 
