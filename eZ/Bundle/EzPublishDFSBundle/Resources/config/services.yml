@@ -41,6 +41,15 @@ services:
 
     ezpublish.core.io.dfs.url_decorator.aws_s3:
         class: %ezpublish.core.io.dfs.url_decorator.aws_s3.class%
+        arguments:
+            - ~
+
+    ezpublish.core.io.dfs.stream_file_listener:
+        class: %ezpublish.core.io.dfs.stream_file_listener.class%
+        arguments:
+            - @ezpublish.fieldtype.ezimage.io
+        tags:
+            - { name: kernel.event_subscriber }
 
 #
 #    dfs.io_handler.binarydata_handler.dispatcher.path_based_registry:
