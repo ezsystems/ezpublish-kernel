@@ -5,6 +5,7 @@ namespace eZ\Bundle\EzPublishDFSBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -72,9 +73,8 @@ class EzPublishDFSExtension extends Extension
         $definition = $container->setDefinition( $id, new DefinitionDecorator( 'ezpublish.core.io.dfs.io_handler' ) );
 
         // @todo prefix needs to be configured somewhere
-        // $definition->replaceArgument( 0, '' );
-        $definition->replaceArgument( 1, $metaDataHandler );
-        $definition->replaceArgument( 2, $binaryDataHandler );
+        $definition->replaceArgument( 0, $metaDataHandler );
+        $definition->replaceArgument( 1, $binaryDataHandler );
 
         return $id;
     }
@@ -96,17 +96,31 @@ class EzPublishDFSExtension extends Extension
         }
         // @todo this won't work with filesystem
         $id = sprintf( '%s.%s', $parentId, $config['adapter'] );
-        $definition = $container->setDefinition( $id, new DefinitionDecorator( $parentId ) );
+        $binaryDataHandlerDefinition = $container->setDefinition( $id, new DefinitionDecorator( $parentId ) );
 
         // @todo Dude, please...
         if ( $handlerName === 'flysystem' )
         {
             $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $config['adapter'] );
-            $definition->replaceArgument( 0, new Reference( $adapterId ) );
+            $binaryDataHandlerDefinition->replaceArgument( 0, new Reference( $adapterId ) );
+
+            if ( isset( $config['url_prefix'] ) )
+            {
+                $urlDecoratorReference = $this->createPrefixUrlDecoratorService(
+                    $container,
+                    $config['adapter'],
+                    $config['url_prefix']
+                );
+
+                $binaryDataHandlerDefinition->replaceArgument( 1, $urlDecoratorReference );
+            }
         }
-        else if ( $handlerName == 'filesystem' )
+        else
         {
-            $definition->replaceArgument( 0, $config['root'] );
+            if ( $handlerName == 'filesystem' )
+            {
+                $binaryDataHandlerDefinition->replaceArgument( 0, $config['root'] );
+            }
         }
 
         return new Reference( $id );
@@ -135,6 +149,23 @@ class EzPublishDFSExtension extends Extension
         {
             $definition->replaceArgument( 0, new Reference( $config['connection'] ) );
         }
+
+        return new Reference( $id );
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string $name For ex the flysystem's adapter (ex: nfs)
+     * @param array $config
+     *
+     * @return Reference
+     */
+    protected function createPrefixUrlDecoratorService( ContainerBuilder $container, $name, $prefix )
+    {
+        $id = sprintf( 'ezpublish.core.io.dfs.url_decorator.prefix.%s.', $name );
+
+        $definition = $container->setDefinition( $id, new DefinitionDecorator( 'ezpublish.core.io.dfs.url_decorator.prefix' ) );
+        $definition->replaceArgument( 0, $prefix );
 
         return new Reference( $id );
     }

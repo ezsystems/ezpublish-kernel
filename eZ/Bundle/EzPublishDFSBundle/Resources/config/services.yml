@@ -5,13 +5,18 @@ parameters:
     ezpublish.core.io.dfs.binarydata_handler.filesystem.class: eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler\Filesystem
     ezpublish.core.io.dfs.binarydata_handler.flysystem.class: eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler\FlySystem
     ezpublish.core.io.dfs.binarydata_handler.dispatcher.path_based_registry.class: eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler\Dispatcher\PathBasedRegistry
+    ezpublish.core.io.dfs.url_decorator.prefix.class: eZ\Publish\Core\IO\Handler\DFS\UrlDecorator\Prefix
+    ezpublish.core.io.dfs.url_decorator.aws_s3.class: eZ\Publish\Core\IO\Handler\DFS\UrlDecorator\AwsS3
+    ezpublish.core.io.dfs.stream_file_listener.class: eZ\Bundle\EzPublishDFSBundle\EventListener\StreamFileListener
 
 services:
     ezpublish.core.io.dfs.io_handler:
         class: %ezpublish.core.io.dfs.io_handler.class%
         abstract: true
         arguments:
-            [ '', ~, ~ ]
+            - ~
+            - ~
+            - @ezpublish.core.io.var_dir_resolver
 
     ezpublish.core.io.dfs.metadata_handler.legacy_dfs_cluster:
         class: %ezpublish.core.io.dfs.metadata_handler.legacy_dfs_cluster.class%
@@ -28,8 +33,15 @@ services:
     ezpublish.core.io.dfs.binarydata_handler.flysystem:
         class: %ezpublish.core.io.dfs.binarydata_handler.flysystem.class%
         abstract: true
-        arguments:
-            - ~
+        arguments: [~, ~]
+
+    ezpublish.core.io.dfs.url_decorator.prefix:
+        class: %ezpublish.core.io.dfs.url_decorator.prefix.class%
+        arguments: [~]
+
+    ezpublish.core.io.dfs.url_decorator.aws_s3:
+        class: %ezpublish.core.io.dfs.url_decorator.aws_s3.class%
+
 #
 #    dfs.io_handler.binarydata_handler.dispatcher.path_based_registry:
 #        class: %dfs.io_handler.binarydata_handler.dispatcher.path_basedregistry%
