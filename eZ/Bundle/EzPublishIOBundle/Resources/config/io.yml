@@ -15,7 +15,10 @@ services:
 
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
-        arguments: [@ezpublish.core.io.handler]
+        factory_service: ezpublish.core.io.factory
+        factory_method: getService
+        arguments:
+            - @ezpublish.core.io.handler
 
     ezpublish.core.io.handler:
         class: eZ\Publish\Core\IO\Handler
