@@ -13,7 +13,16 @@
     </xsl:template>
 
     <xsl:template match="header">
-        <xsl:variable name="level" select="count(ancestor-or-self::section)"/>
+        <xsl:variable name="level">
+            <xsl:choose>
+                <xsl:when test="ancestor::table">
+                    <xsl:value-of select="count(ancestor::section[ancestor::table[1]]) + 1"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="count(ancestor::section)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="name">
             <xsl:number count="section" level="multiple"/>
         </xsl:variable>
