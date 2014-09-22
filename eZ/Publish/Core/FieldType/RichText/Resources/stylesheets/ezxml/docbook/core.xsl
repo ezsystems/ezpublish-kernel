@@ -265,12 +265,19 @@
 
   <xsl:template match="header">
     <xsl:variable name="headingLevel">
-      <xsl:value-of select="count( ancestor-or-self::section )"/>
+      <xsl:choose>
+      <xsl:when test="@level">
+        <xsl:value-of select="@level"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="count( ancestor-or-self::section ) + 1"/>
+      </xsl:otherwise>
+      </xsl:choose>
     </xsl:variable>
     <xsl:element name="title" namespace="http://docbook.org/ns/docbook">
       <xsl:attribute name="ezxhtml:level">
         <xsl:choose>
-          <xsl:when test="$headingLevel = 1">
+          <xsl:when test="$headingLevel &lt; 2">
             <xsl:value-of select="2"/>
           </xsl:when>
           <xsl:when test="$headingLevel &gt; 6">
