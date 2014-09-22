@@ -474,6 +474,38 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests that forwarding custom alias will redirect to the resource destination rather than
+     * to the case-corrected alias.
+     */
+    public function testMatchRequestResourceCaseIncorrectWithForwardRedirect()
+    {
+        $pathInfo = '/heLLo_contEnt/hEllo_SEarch';
+        $urlAliasPath = '/hello_content/hello_search';
+        $destination = '/content/search';
+        $urlAlias = new URLAlias(
+            array(
+                'destination' => $destination,
+                'path' => $urlAliasPath,
+                'type' => UrlAlias::RESOURCE,
+                'forward' => true
+            )
+        );
+        $request = $this->getRequestByPathInfo( $pathInfo );
+        $this->urlAliasService
+            ->expects( $this->once() )
+            ->method( 'lookup' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( $urlAlias ) );
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+        );
+        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
+        $this->assertTrue( $request->attributes->get( 'needsRedirect' ) );
+        $this->assertSame( $destination, $request->attributes->get( 'semanticPathinfo' ) );
+    }
+
+    /**
      * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
      * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::getUrlAlias
      * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::matchRequest
