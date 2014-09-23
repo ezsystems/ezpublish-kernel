@@ -60,10 +60,7 @@ class Loading extends Extractor
     {
         if ( $hit->_type === "content" )
         {
-            return $this->contentHandler->load(
-                $hit->_id,
-                $hit->_source->version_id
-            );
+            return $this->contentHandler->loadContentInfo( $hit->_id );
         }
 
         if ( $hit->_type === "location" )
