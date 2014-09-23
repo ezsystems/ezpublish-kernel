@@ -72,7 +72,7 @@ class FilterConfiguration extends BaseFilterConfiguration
         }
 
         // Check variations configured in eZ config first.
-        if ( isset( $configuredVariations[$variationName] ) )
+        if ( isset( $configuredVariations[$variationName]['filters'] ) )
         {
             $filters = $configuredVariations[$variationName]['filters'];
         }
