@@ -52,6 +52,7 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
         $this->requestContext = new RequestContext();
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->filterConfiguration = new FilterConfiguration();
+        $this->filterConfiguration->setConfigResolver( $this->configResolver );
         $this->imageResolver = new IORepositoryResolver( $this->ioService, $this->requestContext, $this->configResolver, $this->filterConfiguration );
     }
 
@@ -200,5 +201,83 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $expectedStruct ) );
 
         $this->imageResolver->store( $binary, $path, $filter );
+    }
+
+    public function testRemoveEmptyFilters()
+    {
+        $originalPath = 'foo/bar/test.jpg';
+        $filters = array( 'filter1' => true, 'filter2' => true, 'chaud_cacao' => true );
+
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'image_variations' )
+            ->will( $this->returnValue( $filters ) );
+
+        $fileToDelete = 'foo/bar/test_chaud_cacao.jpg';
+        $this->ioService
+            ->expects( $this->exactly( count( $filters ) ) )
+            ->method( 'exists' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'foo/bar/test_filter1.jpg', false ),
+                        array( 'foo/bar/test_filter2.jpg', false ),
+                        array( $fileToDelete, true ),
+                    )
+                )
+            );
+
+        $binaryFile = new BinaryFile( array( 'id' => $fileToDelete ) );
+        $this->ioService
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFile' )
+            ->with( $fileToDelete )
+            ->will( $this->returnValue( $binaryFile ) );
+        $this->ioService
+            ->expects( $this->once() )
+            ->method( 'deleteBinaryFile' )
+            ->with( $binaryFile );
+
+        $this->imageResolver->remove( array( $originalPath ), array() );
+    }
+
+    public function testRemoveWithFilters()
+    {
+        $originalPath = 'foo/bar/test.jpg';
+        $filters = array( 'filter1', 'filter2', 'chaud_cacao' );
+
+        $this->configResolver
+            ->expects( $this->never() )
+            ->method( 'getParameter' )
+            ->with( 'image_variations' )
+            ->will( $this->returnValue( array() ) );
+
+        $fileToDelete = 'foo/bar/test_chaud_cacao.jpg';
+        $this->ioService
+            ->expects( $this->exactly( count( $filters ) ) )
+            ->method( 'exists' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'foo/bar/test_filter1.jpg', false ),
+                        array( 'foo/bar/test_filter2.jpg', false ),
+                        array( $fileToDelete, true ),
+                    )
+                )
+            );
+
+        $binaryFile = new BinaryFile( array( 'id' => $fileToDelete ) );
+        $this->ioService
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFile' )
+            ->with( $fileToDelete )
+            ->will( $this->returnValue( $binaryFile ) );
+        $this->ioService
+            ->expects( $this->once() )
+            ->method( 'deleteBinaryFile' )
+            ->with( $binaryFile );
+
+        $this->imageResolver->remove( array( $originalPath ), $filters );
     }
 }
