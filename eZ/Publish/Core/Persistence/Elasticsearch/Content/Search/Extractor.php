@@ -14,8 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor;
 
 /**
- * The Search Extractor extracts the search result from the data returned
- * from Elasticsearch index.
+ * Abstract implementation of Search Extractor, which extracts search result
+ * from the data returned by Elasticsearch index.
  */
 abstract class Extractor
 {
@@ -32,7 +32,7 @@ abstract class Extractor
     }
 
     /**
-     *
+     * Extracts search result from $data returned by Elasticsearch.
      *
      * @param mixed $data
      *
@@ -52,7 +52,10 @@ abstract class Extractor
         {
             foreach ( $data->aggregations as $name => $aggregationData )
             {
-                $result->facets[] = $this->facetBuilderVisitor->map( $name, $aggregationData );
+                $result->facets[] = $this->facetBuilderVisitor->map(
+                    $name,
+                    $aggregationData
+                );
             }
         }
 
@@ -71,7 +74,9 @@ abstract class Extractor
     }
 
     /**
+     * Extracts value object from $hit returned by Elasticsearch.
      *
+     * Needs to be implemented by concrete Extractor.
      *
      * @param mixed $hit
      *
