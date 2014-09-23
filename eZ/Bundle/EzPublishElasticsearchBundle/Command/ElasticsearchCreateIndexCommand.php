@@ -55,7 +55,7 @@ EOT
         $stmt = $query->prepare();
         $stmt->execute();
 
-        /** @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Handler $searchHandler */
+        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler $searchHandler */
         $searchHandler = $persistenceHandler->searchHandler();
         $searchHandler->setCommit( false );
         $searchHandler->purgeIndex();

@@ -34,6 +34,6 @@ class EzPublishElasticsearchExtension extends Extension
             new FileLocator( __DIR__ . '/../../../Publish/Core/settings' )
         );
         $loader->load( 'indexable_fieldtypes.yml' );
-        $loader->load( "storage_engines/legacy_solr.yml" );
+        $loader->load( "storage_engines/legacy_elasticsearch.yml" );
     }
 }
