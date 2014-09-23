@@ -98,7 +98,7 @@ class EzPublishDFSExtension extends Extension
         $id = sprintf( '%s.%s', $parentId, $config['adapter'] );
         $binaryDataHandlerDefinition = $container->setDefinition( $id, new DefinitionDecorator( $parentId ) );
 
-        // @todo Dude, please...
+        // @todo Use container configuration injection with factories
         if ( $handlerName === 'flysystem' )
         {
             $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $config['adapter'] );
@@ -114,10 +114,6 @@ class EzPublishDFSExtension extends Extension
 
                 $binaryDataHandlerDefinition->replaceArgument( 1, $urlDecoratorReference );
             }
-        }
-        else
-        {
-            $binaryDataHandlerDefinition->replaceArgument( 0, $config['root'] );
         }
 
 
@@ -142,7 +138,7 @@ class EzPublishDFSExtension extends Extension
         $id = sprintf( '%s.%s', $parentId, $config['connection'] );
         $definition = $container->setDefinition( $id, new DefinitionDecorator( $parentId ) );
 
-        // @todo Dude, please...
+        // @todo Use container configuration injection with factories
         if ( $handlerName === 'legacy_dfs_cluster' )
         {
             $definition->replaceArgument( 0, new Reference( $config['connection'] ) );

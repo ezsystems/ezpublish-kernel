@@ -52,12 +52,6 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode( 'url_prefix' )->info( 'Prefix to append to url' )->example( 'http://static.example.com' )->end()
                     ->end()
                 ->end()
-                ->arrayNode( 'filesystem' )
-                    ->canBeUnset()
-                    ->children()
-                        ->scalarNode( 'root' )->info( 'path to the root directory' )->example( '/mnt/nfs' )->end()
-                    ->end()
-                ->end()
             ->end();
 
         return $node;
