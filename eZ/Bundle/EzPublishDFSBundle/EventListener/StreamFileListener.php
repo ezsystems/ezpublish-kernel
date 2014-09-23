@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishDFSBundle\EventListener;
 
+use eZ\Bundle\EzPublishDFSBundle\BinaryStreamResponse;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -53,23 +54,15 @@ class StreamFileListener implements EventSubscriberInterface
             return;
         }
 
-        $response = new BinaryFileResponse( $this->getLocalFilePath( $path ) );
-        $response->headers->set('Content-Type', 'image/png');
+        $response = new BinaryStreamResponse(
+            $this->ioService->loadBinaryFile( ltrim( $path, '/' ) ),
+            $this->ioService
+        );
         $event->setResponse( $response );
     }
 
     private function isIOFile( $path )
     {
         return $this->ioService->exists( ltrim( $path, '/' ) );
-    }
-
-    /**
-     * @param $path
-     *
-     * @return string
-     */
-    protected function getLocalFilePath( $path )
-    {
-        return '/home/bertrand/nfs' . $path;
     }
 }
