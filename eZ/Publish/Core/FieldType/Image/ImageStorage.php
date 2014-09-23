@@ -158,7 +158,8 @@ class ImageStorage extends GatewayBasedStorage
             $field->value->externalData['mimeType'] = $binaryFile->mimeType;
             $field->value->externalData['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
             $field->value->externalData['uri'] = $binaryFile->uri;
-            $field->value->externalData['id'] = ltrim( $binaryFile->uri, '/' );
+            $field->value->externalData['id'] = $binaryFile->id;
+            $field->value->externalData['legacy_uri'] = $this->IOService->getInternalPath( $binaryFile->id );
 
             $field->value->data = array_merge(
                 $field->value->externalData,
@@ -200,7 +201,9 @@ class ImageStorage extends GatewayBasedStorage
             $field->value->externalData = null;
         }
 
-        $this->getGateway( $context )->storeImageReference( $field->value->data['uri'], $field->id );
+        // @todo Legacy specific, needs refactoring
+        $storageId = $this->IOService->getInternalPath( $field->value->data['id'] );
+        $this->getGateway( $context )->storeImageReference( $storageId, $field->id );
 
         // Data has been updated and needs to be stored!
         return true;
