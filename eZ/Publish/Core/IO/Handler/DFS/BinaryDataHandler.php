@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\IO\Handler\DFS;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\Core\IO\MetadataHandler;
+use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 
 interface BinaryDataHandler
 {
@@ -42,7 +42,7 @@ interface BinaryDataHandler
      *
      * @return array
      */
-    public function getMetadata( MetadataHandler $metadataHandler, $path );
+    public function getMetadata( IOMetadataHandler $metadataHandler, $path );
 
     /**
      * Returns the binary content from $path
