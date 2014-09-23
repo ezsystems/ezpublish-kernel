@@ -196,6 +196,7 @@ services:
             - @ezpublish_legacy.persistence_cache_purger
             - @ezpublish.urlalias_generator
             - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish_legacy.image_alias.cleaner
             - %ezpublish_legacy.configuration_mapper.options%
         calls:
             - [setContainer, [@service_container]]
