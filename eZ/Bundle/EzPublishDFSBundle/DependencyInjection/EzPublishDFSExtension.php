@@ -117,11 +117,9 @@ class EzPublishDFSExtension extends Extension
         }
         else
         {
-            if ( $handlerName == 'filesystem' )
-            {
-                $binaryDataHandlerDefinition->replaceArgument( 0, $config['root'] );
-            }
+            $binaryDataHandlerDefinition->replaceArgument( 0, $config['root'] );
         }
+
 
         return new Reference( $id );
     }
@@ -155,7 +153,8 @@ class EzPublishDFSExtension extends Extension
 
     /**
      * @param ContainerBuilder $container
-     * @param string $name For ex the flysystem's adapter (ex: nfs)
+     * @param string $type ex: prefix
+     * @param string $name ex: static_prefix
      * @param array $config
      *
      * @return Reference

@@ -63,6 +63,25 @@ class Configuration implements ConfigurationInterface
         return $node;
     }
 
+    private function getUrlDecoratorNode()
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root( 'url_decorator' );
+
+        // @todo consider simplifying
+        $node
+            ->children()
+                ->arrayNode( 'prefix' )
+                    // @todo is this really necessary, since we can only have one decorator per handler ?
+                    ->prototype( 'array' )
+                    ->children()
+                        ->scalarNode( 'prefix' )->info( 'A prefix to append to file uris')->example( 'http://static.site.com/' )->end()
+                    ->end()
+                ->end();
+
+        return $node;
+    }
+
     /**
      * @return ArrayNodeDefinition
      */

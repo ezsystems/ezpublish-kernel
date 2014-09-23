@@ -19,12 +19,13 @@ class FlySystem implements BinaryDataHandler
 {
     /** @var FilesystemInterface */
     private $filesystem;
+    
     /**
      * @var UrlDecorator
      */
     private $urlDecorator;
 
-    public function __construct( AdapterInterface $adapter, UrlDecorator $urlDecorator )
+    public function __construct( AdapterInterface $adapter, UrlDecorator $urlDecorator = null )
     {
         $this->filesystem = new FileSystem( $adapter );
         $this->urlDecorator = $urlDecorator;
@@ -135,6 +136,6 @@ class FlySystem implements BinaryDataHandler
      */
     public function getUri( $path )
     {
-        return $this->urlDecorator->decorate( $path );
+        return isset( $this->urlDecorator ) ? $this->urlDecorator->decorate( $path ) : '/' . $path;
     }
 }
