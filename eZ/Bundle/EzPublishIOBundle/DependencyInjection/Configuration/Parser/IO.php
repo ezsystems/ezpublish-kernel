@@ -28,7 +28,7 @@ class IO extends AbstractParser
     {
         $nodeBuilder
             ->scalarNode( 'handler' )
-                ->info( 'IO handler uses to manipulate binary files' )
+                ->info( 'IO handler used to manipulate binary files' )
                 ->example( 'legacy_kernel' )
             ->end();
     }
