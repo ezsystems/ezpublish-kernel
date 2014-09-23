@@ -54,12 +54,18 @@ class ImageStorage extends GatewayBasedStorage
      */
     private $deprecationWarner;
 
+    /**
+     * @var AliasCleanerInterface
+     */
+    protected $aliasCleaner;
+
     public function __construct(
         array $gateways,
         IOServiceInterface $IOService,
         PathGenerator $pathGenerator,
         MetadataHandler $imageSizeMetadataHandler,
         DeprecationWarner $deprecationWarner,
+        AliasCleanerInterface $aliasCleaner = null,
         LoggerInterface $logger = null
     )
     {
@@ -69,6 +75,7 @@ class ImageStorage extends GatewayBasedStorage
         $this->imageSizeMetadataHandler = $imageSizeMetadataHandler;
         $this->logger = $logger;
         $this->deprecationWarner = $deprecationWarner;
+        $this->aliasCleaner = $aliasCleaner;
     }
 
     /**
@@ -266,6 +273,11 @@ class ImageStorage extends GatewayBasedStorage
                 continue;
             }
 
+            if ( $this->aliasCleaner )
+            {
+                $this->aliasCleaner->removeAliases( $this->IOService->getExternalPath( $storedFiles['original'] ) );
+            }
+
             foreach ( $storedFiles as $storedFilePath )
             {
                 $gateway->removeImageReferences( $storedFilePath, $versionInfo->versionNo, $fieldId );
@@ -289,11 +301,11 @@ class ImageStorage extends GatewayBasedStorage
     }
 
     /**
-     * Extracts the field storage path from  the given $xml string
+     * Extracts the field storage paths (original image + aliases) from the given $xml string.
      *
      * @param string $xml
      *
-     * @return string|null
+     * @return array|null Array of image paths, indexed by alias name or null if empty.
      */
     protected function extractFiles( $xml )
     {
@@ -313,14 +325,14 @@ class ImageStorage extends GatewayBasedStorage
             if ( empty( $url ) )
                 return null;
 
-            $files[] = $url;
+            $files['original'] = $url;
             /** @var \DOMNode $childNode */
             foreach ( $dom->documentElement->childNodes as $childNode )
             {
                 if ( $childNode->nodeName != 'alias' )
                     continue;
 
-                $files[] = $childNode->getAttribute( 'url' );
+                $files[$childNode->getAttribute( 'name' )] = $childNode->getAttribute( 'url' );
             }
             return $files;
         }

@@ -4,6 +4,7 @@ parameters:
     ezpublish.image_alias.imagine.binary_loader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader
     ezpublish.image_alias.imagine.cache_resolver.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver
     ezpublish.image_alias.imagine.alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator
+    ezpublish.image_alias.imagine.alias_cleaner.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasCleaner
 
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.width_height.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleDownOnlyFilterLoader
     ezpublish.image_alias.imagine.filter.loader.scaledownonly.width.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleWidthDownOnlyFilterLoader
@@ -36,6 +37,10 @@ services:
             - @ezpublish.image_alias.imagine.cache_resolver
             - @liip_imagine.filter.configuration
             - @?logger
+
+    ezpublish.image_alias.imagine.alias_cleaner:
+        class: %ezpublish.image_alias.imagine.alias_cleaner.class%
+        arguments: [@ezpublish.image_alias.imagine.cache_resolver]
 
     ezpublish.image_alias.imagine.filter.loader.scaledown.base:
         abstract: true

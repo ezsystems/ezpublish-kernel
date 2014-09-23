@@ -43,6 +43,11 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     private $deprecationWarnerMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $aliasCleanerMock;
+
+    /**
      * Returns the storage identifier prefix used by the file service
      *
      * @return string
@@ -83,7 +88,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 self::$container->get( "ezpublish.fieldType.ezimage.io" ),
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
                 new IO\MetadataHandler\ImageSize(),
-                $this->getDeprecationWarnerMock()
+                $this->getDeprecationWarnerMock(),
+                $this->getAliasCleanerMock()
             )
         );
     }
@@ -95,6 +101,16 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             $this->deprecationWarnerMock = $this->getMock( 'eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface' );
         }
         return $this->deprecationWarnerMock;
+    }
+
+    public function getAliasCleanerMock()
+    {
+        if ( !isset( $this->aliasCleanerMock ) )
+        {
+            $this->aliasCleanerMock = $this->getMock( '\eZ\Publish\Core\FieldType\Image\AliasCleanerInterface' );
+        }
+
+        return $this->aliasCleanerMock;
     }
 
     /**
