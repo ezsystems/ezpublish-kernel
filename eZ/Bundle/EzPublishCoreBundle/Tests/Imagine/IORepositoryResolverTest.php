@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
@@ -39,13 +40,19 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
      */
     private $imageResolver;
 
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration
+     */
+    private $filterConfiguration;
+
     protected function setUp()
     {
         parent::setUp();
         $this->ioService = $this->getMock( 'eZ\Publish\Core\IO\IOServiceInterface' );
         $this->requestContext = new RequestContext();
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
-        $this->imageResolver = new IORepositoryResolver( $this->ioService, $this->requestContext, $this->configResolver );
+        $this->filterConfiguration = new FilterConfiguration();
+        $this->imageResolver = new IORepositoryResolver( $this->ioService, $this->requestContext, $this->configResolver, $this->filterConfiguration );
     }
 
     /**

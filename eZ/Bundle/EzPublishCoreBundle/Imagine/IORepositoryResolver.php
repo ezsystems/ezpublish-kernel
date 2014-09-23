@@ -13,6 +13,7 @@ use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
+use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\Routing\RequestContext;
 
 /**
@@ -35,11 +36,17 @@ class IORepositoryResolver implements ResolverInterface
      */
     private $configResolver;
 
-    public function __construct( IOServiceInterface $ioService, RequestContext $requestContext, ConfigResolverInterface $configResolver )
+    /**
+     * @var FilterConfiguration
+     */
+    private $filterConfiguration;
+
+    public function __construct( IOServiceInterface $ioService, RequestContext $requestContext, ConfigResolverInterface $configResolver, FilterConfiguration $filterConfiguration )
     {
         $this->ioService = $ioService;
         $this->requestContext = $requestContext;
         $this->configResolver = $configResolver;
+        $this->filterConfiguration = $filterConfiguration;
     }
 
     public function isStored( $path, $filter )
@@ -81,6 +88,10 @@ class IORepositoryResolver implements ResolverInterface
     public function remove( array $paths, array $filters )
     {
         // TODO: $paths may be empty, meaning that all generated images corresponding to $filters need to be removed.
+        if ( empty( $filters ) )
+        {
+            $filters = array_keys( $this->filterConfiguration->all() );
+        }
 
         foreach ( $paths as $path )
         {
