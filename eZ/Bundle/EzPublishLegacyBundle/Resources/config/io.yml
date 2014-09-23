@@ -23,6 +23,7 @@ services:
         factory_service: ezpublish.fieldType.ezimage.io_legacy.factory
         factory_method: buildService
         arguments: [%ezpublish.fieldType.ezimage.io_legacy.class%]
+        lazy: true
 
     # overrides the IOService used by @ezpublish.fieldType.ezimage.externalStorage
     ezpublish.fieldType.ezimage.io:
