@@ -46,6 +46,11 @@ class FilterConfiguration extends BaseFilterConfiguration
         return $filterConfig;
     }
 
+    public function all()
+    {
+        return $this->configResolver->getParameter( 'image_variations' ) + parent::all();
+    }
+
     /**
      * Returns filters to be used for $variationName.
      *
