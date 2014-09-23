@@ -900,8 +900,8 @@ class UserService implements UserServiceInterface
     {
         $locationService = $this->repository->getLocationService();
 
-        if ( !$this->repository->canUser( 'content', 'edit', $user ) )
-            throw new UnauthorizedException( 'content', 'edit' );
+        if ( !$this->repository->canUser( 'content', 'read', $user ) )
+            throw new UnauthorizedException( 'content', 'read' );
 
         $userLocations = $locationService->loadLocations(
             $user->getVersionInfo()->getContentInfo()
