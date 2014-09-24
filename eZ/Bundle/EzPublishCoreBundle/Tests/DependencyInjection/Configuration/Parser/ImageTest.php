@@ -78,101 +78,21 @@ class ImageTest extends AbstractParserTestCase
     }
 
     /**
-     * @dataProvider prePostParametersProvider
+     * @expectedException \InvalidArgumentException
      */
-    public function testPrePostParameters( array $config, array $expected )
+    public function testPrePostParameters()
     {
-        $this->load( array( 'system' => $config ) );
-        foreach ( $expected as $name => $values )
-        {
-            foreach ( $values as $sa => $expectedValue )
-            {
-                $this->assertConfigResolverParameterValue( $name, $expectedValue, $sa );
-            }
-        }
-    }
-
-    public function prePostParametersProvider()
-    {
-        return array(
+        $this->load(
             array(
-                array(
+                'system' => array(
                     'ezdemo_site' => array(
                         'imagemagick' => array(
                             'pre_parameters' => '-foo -bar',
                             'post_parameters' => '-baz'
                         )
                     )
-                ),
-                array(
-                    'imagemagick.pre_parameters' => array(
-                        'ezdemo_site' => '-foo -bar',
-                        'fre' => null
-                    ),
-                    'imagemagick.post_parameters' => array(
-                        'ezdemo_site' => '-baz',
-                        'fre' => null
-                    )
                 )
-            ),
-            array(
-                array(
-                    'ezdemo_site' => array(
-                        'imagemagick' => array(
-                            'pre_parameters' => '-foo -bar',
-                        )
-                    )
-                ),
-                array(
-                    'imagemagick.pre_parameters' => array(
-                        'ezdemo_site' => '-foo -bar',
-                        'fre' => null
-                    ),
-                    'imagemagick.post_parameters' => array(
-                        'ezdemo_site' => null,
-                        'fre' => null
-                    )
-                )
-            ),
-            array(
-                array(
-                    'ezdemo_site' => array(
-                        'imagemagick' => array(
-                            'post_parameters' => '-baz'
-                        )
-                    )
-                ),
-                array(
-                    'imagemagick.pre_parameters' => array(
-                        'ezdemo_site' => null,
-                        'fre' => null
-                    ),
-                    'imagemagick.post_parameters' => array(
-                        'ezdemo_site' => '-baz',
-                        'fre' => null
-                    )
-                )
-            ),
-            array(
-                array(
-                    'fre' => array(
-                        'imagemagick' => array(
-                            'pre_parameters' => '-fre',
-                            'post_parameters' => '-baz -fre'
-                        )
-                    )
-                ),
-                array(
-                    'imagemagick.pre_parameters' => array(
-                        'ezdemo_site' => null,
-                        'fre' => '-fre'
-                    ),
-                    'imagemagick.post_parameters' => array(
-                        'ezdemo_site' => null,
-                        'fre' => '-baz -fre'
-                    )
-                )
-            ),
+            )
         );
     }
 }

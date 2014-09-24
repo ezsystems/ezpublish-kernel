@@ -254,6 +254,10 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
 
             foreach ( $aliasSettings['filters'] as $filterName => $filter )
             {
+                if ( !isset( $this->options['imagemagick_filters'][$filterName] ) )
+                {
+                    continue;
+                }
                 $imageSettings["image.ini/$aliasName/Filters"][] = $filterName . '=' . implode( ';', $filter );
             }
         }

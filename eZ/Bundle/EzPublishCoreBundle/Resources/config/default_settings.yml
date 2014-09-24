@@ -171,6 +171,7 @@ parameters:
                 geometry/scalewidthdownonly: [770]
 
     # ImageMagick
+    # TODO: Deprecated. Move this to ezpublish_legacy.
     ezpublish.image.imagemagick.enabled: false
     ezpublish.image.imagemagick.executable_path:
     ezpublish.image.imagemagick.executable: convert
