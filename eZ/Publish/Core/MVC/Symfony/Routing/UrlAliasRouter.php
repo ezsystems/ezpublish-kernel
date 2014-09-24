@@ -96,7 +96,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         {
             $requestedPath = rawurldecode( $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() ) );
             $urlAlias = $this->getUrlAlias( $requestedPath );
-            $pathPrefix = $this->generator->getPathPrefixByRootLocationId( $this->rootLocationId );
+            $pathPrefix = $this->generator->getPathPrefixByRootLocationId( $this->generator->getRootLocationId() );
 
             $params = array(
                 '_route' => self::URL_ALIAS_ROUTE_NAME
