@@ -25,7 +25,7 @@ class ElasticsearchCreateIndexCommand extends ContainerAwareCommand
             ->addArgument( "bulk_count", InputArgument::OPTIONAL, "Number of Content objects indexed at once", 5 )
             ->setHelp(
                 <<<EOT
-The command <info>%command.name%</info> indexes current configured database in configured Solr storage.
+The command <info>%command.name%</info> indexes current configured database in configured Elasticsearch index.
 EOT
             );
     }
@@ -39,6 +39,7 @@ EOT
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getContainer()->get( 'ezpublish.connection' );
 
+        // Indexing Content
         $query = $databaseHandler
             ->createSelectQuery()
             ->select( "count(id)" )
@@ -60,6 +61,8 @@ EOT
         $searchHandler->setCommit( false );
         $searchHandler->purgeIndex();
         $searchHandler->setCommit( true );
+
+        $output->writeln( "Indexing Content..." );
 
         /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
         $progress = $this->getHelperSet()->get( 'progress' );
@@ -85,6 +88,72 @@ EOT
             if ( !empty( $contentObjects ) )
             {
                 $searchHandler->bulkIndexContent( $contentObjects );
+            }
+
+            $progress->advance( $k );
+        }
+        while ( ( $i += $bulkCount ) < $totalCount );
+
+        $progress->finish();
+
+        // Indexing Locations
+        $query = $databaseHandler->createSelectQuery();
+        $query
+            ->select( "count(node_id)" )
+            ->from( 'ezcontentobject_tree' )
+            ->where(
+                $query->expr->neq(
+                    $databaseHandler->quoteColumn( "contentobject_id" ),
+                    $query->bindValue( 0, null, PDO::PARAM_INT )
+                )
+            );
+        $stmt = $query->prepare();
+        $stmt->execute();
+        $totalCount = $stmt->fetchColumn();
+
+        $query = $databaseHandler->createSelectQuery();
+        $query
+            ->select( 'node_id' )
+            ->from( 'ezcontentobject_tree' )
+            ->where(
+                $query->expr->neq(
+                    $databaseHandler->quoteColumn( "contentobject_id" ),
+                    $query->bindValue( 0, null, PDO::PARAM_INT )
+                )
+            );
+
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler $searchHandler */
+        $searchHandler = $persistenceHandler->locationSearchHandler();
+        $searchHandler->setCommit( false );
+        $searchHandler->purgeIndex();
+        $searchHandler->setCommit( true );
+
+        $output->writeln( "Indexing Locations..." );
+
+        /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
+        $progress = $this->getHelperSet()->get( 'progress' );
+        $progress->start( $output, $totalCount );
+        $i = 0;
+        do
+        {
+            $locations = array();
+
+            for ( $k = 0; $k <= $bulkCount; $k++ )
+            {
+                if ( !$row = $stmt->fetch( PDO::FETCH_ASSOC ) )
+                {
+                    break;
+                }
+
+                $locations[] = $persistenceHandler->locationHandler()->load( $row['node_id'] );
+            }
+
+            if ( !empty( $locations ) )
+            {
+                $searchHandler->bulkIndexLocations( $locations );
             }
 
             $progress->advance( $k );
