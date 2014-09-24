@@ -197,7 +197,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      * @return string
      */
     protected function removePathPrefix( $path, $prefix ) {
-        if ( $prefix !== '/' && mb_stripos( $path, $prefix ) === 0 )
+        if ( !empty($prefix) && $prefix !== '/' && mb_stripos( $path, $prefix ) === 0 )
         {
             $path = mb_substr($path, mb_strlen($prefix));
         }
