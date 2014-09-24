@@ -2193,7 +2193,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
       <public>false</public>
       <Query>
         <Criteria>
-          <FullTextCritierion>Title</FullTextCritierion>
+          <FullTextCriterion>Title</FullTextCriterion>
         </Criteria>
         <limit>10</limit>
         <offset>0</offset>
@@ -6988,8 +6988,8 @@ View XML Schema
           <xsd:element name="ContentTypeIdCriterion" type="xsd:int" />
           <xsd:element name="ContentTypeIdentifierCriterion"
             type="xsd:string" />
-          <xsd:element name="FieldCritierion" type="fieldCriterionType" />
-          <xsd:element name="DateMetaDataCritierion" type="dateCriterionType" />
+          <xsd:element name="FieldCriterion" type="fieldCriterionType" />
+          <xsd:element name="DateMetaDataCriterion" type="dateCriterionType" />
           <xsd:element name="FullTextCriterion" type="xsd:string" />
           <xsd:element name="LocationIdCriterion" type="intList" />
           <xsd:element name="LocationRemoteIdCriterion" type="stringList" />
