@@ -72,8 +72,11 @@ class FlySystem implements BinaryDataHandler
      */
     public function getMetadata(IOMetadataHandler $metadataHandler, $path)
     {
-        // @todo
-        return array();
+        $temporaryPath = tempnam( sys_get_temp_dir(), 'getmetadata' );
+        file_put_contents( $temporaryPath, $this->getFileContents( $path ) );
+        $metadata = $metadataHandler->extract( $temporaryPath );
+        unlink( $temporaryPath );
+        return $metadata;
     }
 
     /**

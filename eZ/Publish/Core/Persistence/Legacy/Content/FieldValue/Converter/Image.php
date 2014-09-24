@@ -40,7 +40,7 @@ class Image implements Converter
         if ( isset( $value->data ) )
         {
             // Determine what needs to be stored
-            if ( isset( $value->data['mime'] ) )
+            if ( isset( $value->data['mimeType'] ) )
             {
                 // $data['mime'] is only set for real images, which have been
                 // stored
@@ -138,7 +138,7 @@ EOT;
             htmlspecialchars( $pathInfo['dirname'] ), // dirpath
             htmlspecialchars( $imageData['uri'] ), // url
             htmlspecialchars( $pathInfo['basename'] ), // @todo: Needs original file name, for whatever reason?
-            htmlspecialchars( $imageData['mime'] ), // mime_type
+            htmlspecialchars( $imageData['mimeType'] ), // mime_type
             htmlspecialchars( $imageData['width'] ), // width
             htmlspecialchars( $imageData['height'] ), // height
             htmlspecialchars( $imageData['alternativeText'] ), // alternative_text
