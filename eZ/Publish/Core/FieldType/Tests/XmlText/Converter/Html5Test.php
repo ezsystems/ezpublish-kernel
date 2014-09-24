@@ -14,6 +14,7 @@ use PHPUnit_Framework_TestCase;
 use DOMDocument;
 use DOMNodeList;
 use DOMXPath;
+use XSLTProcessor;
 
 /**
  * Tests the Html5 converter
@@ -252,5 +253,86 @@ class Html5Test extends PHPUnit_Framework_TestCase
         $html5Converter->addPreConverter( $converter2 );
 
         $this->assertSame( array( $converter1, $converter2 ), $html5Converter->getPreConverters() );
+    }
+
+    public function testTableRendering()
+    {
+        $xmlDoc = new DomDocument();
+        $xmlDoc->loadXML( '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+    <section>
+        <header>Heading 2</header>
+        <header>Heading 2</header>
+        <section>
+            <header>Heading 3</header>
+            <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+                <table border="1" width="100%" class="class1" custom:summary="summary1">
+                    <tr>
+                        <td>
+                            <section>
+                                <header>Heading 2</header>
+                                <header>Heading 2</header>
+                                <section>
+                                    <header>Heading 3</header>
+                                    <header>Heading 3</header>
+                                </section>
+                            </section>
+                            <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+                                <table border="1" width="100%" class="class2" custom:summary="summary2">
+                                    <tr>
+                                        <td>
+                                            <section>
+                                                <header>Heading 2</header>
+                                                <section>
+                                                    <header>Heading 3</header>
+                                                </section>
+                                            </section>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </paragraph>
+                        </td>
+                    </tr>
+                </table>
+            </paragraph>
+        </section>
+    </section>
+</section>' );
+
+        $xslDoc = new DOMDocument;
+        $xslDoc->load( $this->getDefaultStylesheet() );
+
+        $xsltProcessor = new XSLTProcessor();
+        $xsltProcessor->importStyleSheet( $xslDoc );
+        $xsltProcessor->registerPHPFunctions();
+
+        $result = $xsltProcessor->transformToXML( $xmlDoc );
+        $result = preg_replace( "/^ *[\r\n]*/m", "", $result );
+
+        $this->assertEquals(
+            $result,
+            '<a name="eztoc_1_1" id="eztoc_1_1"></a><h2>Heading 2</h2>
+<a name="eztoc_1_2" id="eztoc_1_2"></a><h2>Heading 2</h2>
+<a name="eztoc_1_3_1" id="eztoc_1_3_1"></a><h3>Heading 3</h3>
+<table class="class1" border="1" cellpadding="2" cellspacing="0" width="100%" style="width:100%;" summary="summary1">
+<tr>
+<td valign="top" style="vertical-align: top;">
+<a name="eztoc_1_3_1_1" id="eztoc_1_3_1_1"></a><h2>Heading 2</h2>
+<a name="eztoc_1_3_1_2" id="eztoc_1_3_1_2"></a><h2>Heading 2</h2>
+<a name="eztoc_1_3_1_3_1" id="eztoc_1_3_1_3_1"></a><h3>Heading 3</h3>
+<a name="eztoc_1_3_1_3_2" id="eztoc_1_3_1_3_2"></a><h3>Heading 3</h3>
+<table class="class2" border="1" cellpadding="2" cellspacing="0" width="100%" style="width:100%;" summary="summary2">
+<tr>
+<td valign="top" style="vertical-align: top;">
+<a name="eztoc_1_3_1_1" id="eztoc_1_3_1_1"></a><h2>Heading 2</h2>
+<a name="eztoc_1_3_1_2_1" id="eztoc_1_3_1_2_1"></a><h3>Heading 3</h3>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+'
+        );
     }
 }
