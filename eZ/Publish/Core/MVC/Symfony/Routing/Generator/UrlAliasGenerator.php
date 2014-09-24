@@ -143,6 +143,15 @@ class UrlAliasGenerator extends Generator
     }
 
     /**
+     * Returns the current root locationId
+     *
+     * @return int
+     */
+    public function getRootLocationId() {
+        return $this->rootLocationId;
+    }
+
+    /**
      * @param array $excludedUriPrefixes
      */
     public function setExcludedUriPrefixes( array $excludedUriPrefixes )
