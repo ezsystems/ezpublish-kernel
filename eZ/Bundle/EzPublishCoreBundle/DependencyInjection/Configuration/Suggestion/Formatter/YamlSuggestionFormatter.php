@@ -16,14 +16,18 @@ class YamlSuggestionFormatter implements SuggestionFormatterInterface
 {
     public function format( ConfigSuggestion $configSuggestion )
     {
-        $yamlConfig = Yaml::dump( $configSuggestion->getSuggestion(), 8 );
-        if ( php_sapi_name() !== 'cli' )
+        $message = $configSuggestion->getMessage();
+        $suggestion = $configSuggestion->getSuggestion();
+        if ( $suggestion )
         {
-            $yamlConfig = "<pre>$yamlConfig</pre>";
-        }
+            $yamlConfig = Yaml::dump( $suggestion, 8 );
+            if ( php_sapi_name() !== 'cli' )
+            {
+                $yamlConfig = "<pre>$yamlConfig</pre>";
+            }
 
-        return <<<EOT
-{$configSuggestion->getMessage()}
+            return <<<EOT
+{$message}
 
 
 Example:
@@ -31,5 +35,8 @@ Example:
 
 $yamlConfig
 EOT;
+        }
+
+        return $message;
     }
 }
