@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
@@ -33,6 +34,15 @@ class LegacyStorage extends Gateway
         'path_identification_string' => 'nodePathString',
         'data_string' => 'xml',
     );
+    /**
+     * @var IOServiceInterface
+     */
+    private $ioService;
+
+    public function __construct( IOServiceInterface $ioService )
+    {
+        $this->ioService = $ioService;
+    }
 
     /**
      * Set database handler for this gateway
@@ -112,15 +122,14 @@ class LegacyStorage extends Gateway
     /**
      * Stores a reference to the image in $path for $fieldId
      *
-     * @param string $path
+     * @param string $imageBinaryFileId
      * @param mixed $fieldId
      *
      * @return void
      */
-    public function storeImageReference( $path, $fieldId )
+    public function storeImageReference( $imageBinaryFileId, $fieldId )
     {
-        // legacy stores the path to the image without a leading /
-        $path = ltrim( $path, '/ ' );
+        $imageBinaryFileId = $this->ioService->getInternalPath( $imageBinaryFileId );
 
         $connection = $this->getConnection();
 
@@ -131,7 +140,7 @@ class LegacyStorage extends Gateway
                 $insertQuery->bindValue( $fieldId, null, \PDO::PARAM_INT )
             )->set(
                 $connection->quoteColumn( 'filepath' ),
-                $insertQuery->bindValue( $path )
+                $insertQuery->bindValue( $imageBinaryFileId )
             );
 
         $statement = $insertQuery->prepare();
