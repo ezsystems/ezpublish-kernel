@@ -129,14 +129,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                         // Specify not to prepend siteaccess while redirecting when applicable since it would be already present (see UrlAliasGenerator::doGenerate())
                         $request->attributes->set( 'prependSiteaccessOnRedirect', false );
                     }
-                    else if ( $this->needsCaseRedirect( $urlAlias, $pathPrefix . rtrim($requestedPath, '/') ) )
+                    else if ( $this->needsCaseRedirect( $urlAlias, $requestedPath, $pathPrefix ) )
                     {
-                        $semanticPathinfo = $urlAlias->path;
-                        if ( stripos( $semanticPathinfo, $pathPrefix ) === 0 )
-                        {
-                            $semanticPathinfo = substr($semanticPathinfo, strlen($pathPrefix));
-                        }
-                        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+                        $request->attributes->set( 'semanticPathinfo', $this->removePathPrefix( $urlAlias->path, $pathPrefix ) );
                         $request->attributes->set( 'needsRedirect', true );
                     }
 
@@ -153,14 +148,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                         $request->attributes->set( 'needsRedirect', true );
                     }
                     // Handle case-correction redirect
-                    else if ( $this->needsCaseRedirect( $urlAlias, $pathPrefix . rtrim($requestedPath, '/') ) )
+                    else  if ( $this->needsCaseRedirect( $urlAlias, $requestedPath, $pathPrefix ) )
                     {
-                        $semanticPathinfo = $urlAlias->path;
-                        if ( stripos( $semanticPathinfo, $pathPrefix ) === 0 )
-                        {
-                            $semanticPathinfo = substr($semanticPathinfo, strlen($pathPrefix));
-                        }
-                        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+                        $request->attributes->set( 'semanticPathinfo', $this->removePathPrefix( $urlAlias->path, $pathPrefix ) );
                         $request->attributes->set( 'needsRedirect', true );
                     }
                     else
@@ -173,14 +163,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 
                 case URLAlias::VIRTUAL:
                     // Handle case-correction redirect
-                    if ( $this->needsCaseRedirect( $urlAlias, $pathPrefix . rtrim($requestedPath, '/') ) )
+                    if ( $this->needsCaseRedirect( $urlAlias, $requestedPath, $pathPrefix ) )
                     {
-                        $semanticPathinfo = $urlAlias->path;
-                        if ( stripos( $semanticPathinfo, $pathPrefix ) === 0 )
-                        {
-                            $semanticPathinfo = substr($semanticPathinfo, strlen($pathPrefix));
-                        }
-                        $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
+                        $request->attributes->set( 'semanticPathinfo', $this->removePathPrefix( $urlAlias->path, $pathPrefix ) );
                         $request->attributes->set( 'needsRedirect', true );
                     }
                     else
@@ -202,6 +187,24 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     }
 
     /**
+     * Removes prefix from path
+     *
+     * Used to remove the prefix from the path that could be present
+     *
+     * @param $path
+     * @param $prefix
+     *
+     * @return string
+     */
+    protected function removePathPrefix( $path, $prefix ) {
+        if ( ( mb_stripos( $path, $prefix ) === 0 ) && ( $prefix != '/' ) )
+        {
+            $path = mb_substr($path, mb_strlen($prefix));
+        }
+        return $path;
+    }
+
+    /**
      * Returns true of false on comparing $urlAlias->path and $path with case sensitivity.
      *
      * Used to determine if redirect is needed because requested path is case-different
@@ -212,9 +215,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      *
      * @return boolean
      */
-    protected function needsCaseRedirect( URLAlias $loadedUrlAlias, $requestedPath )
+    protected function needsCaseRedirect( URLAlias $loadedUrlAlias, $requestedPath , $pathPrefix )
     {
-        return ( strcmp( $loadedUrlAlias->path, $requestedPath ) !== 0 );
+        return ( strcmp( $loadedUrlAlias->path, $pathPrefix . rtrim($requestedPath, '/') ) !== 0 );
     }
 
     /**
