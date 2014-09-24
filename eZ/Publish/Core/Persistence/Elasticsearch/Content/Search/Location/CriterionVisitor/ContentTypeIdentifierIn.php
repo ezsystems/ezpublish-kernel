@@ -66,9 +66,15 @@ class ContentTypeIdentifierIn extends CriterionVisitor
     {
         if ( count( $criterion->value ) > 1 )
         {
+            $idList = array();
+            foreach ( $criterion->value as $identifier )
+            {
+                $idList[] = $this->contentTypeHandler->loadByIdentifier( $identifier )->id;
+            }
+
             $filter = array(
                 "terms" => array(
-                    "content_type_id" => $this->contentTypeHandler->loadByIdentifier( $criterion->value )->id,
+                    "content_type_id" => $idList,
                 ),
             );
         }
