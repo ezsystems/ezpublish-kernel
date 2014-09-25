@@ -14,13 +14,3 @@ services:
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
         arguments: [@ezpublish.core.io.handler.legacy]
-
-
-    ezpublish.core.io.mimeTypeDetector.fileinfo:
-        class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
-
-    ezpublish.core.io.mimeTypeDetector:
-        alias: ezpublish.core.io.mimeTypeDetector.fileinfo
-
-    ezpublish.core.io.metadataHandler.imageSize:
-        class: %ezpublish.core.io.metadataHandler.imageSize.class%
