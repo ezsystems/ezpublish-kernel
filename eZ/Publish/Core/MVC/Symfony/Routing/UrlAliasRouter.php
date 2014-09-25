@@ -191,8 +191,8 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      *
      * Used to remove the prefix from the path that could be present
      *
-     * @param $path
-     * @param $prefix
+     * @param string $path
+     * @param string $prefix
      *
      * @return string
      */
@@ -213,6 +213,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLAlias $loadedUrlAlias
      * @param string $requestedPath
+     * @param string $pathPrefix
      *
      * @return boolean
      */
