@@ -3,6 +3,7 @@ parameters:
     ezpublish.core.io.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\IOFactory
     ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
     ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
+    ezpublish.core.io.handler.class: eZ\Publish\Core\IO\Handler
 
 services:
     ezpublish.core.io.factory:
@@ -23,3 +24,10 @@ services:
         class: %ezpublish.core.io.handler.filesystem.class%
         factory_service: ezpublish.core.io.factory
         factory_method: buildFilesystemHandler
+        tags:
+            - {name: ezpublish.io_handler, alias: filesystem}
+
+    ezpublish.core.io.handler:
+        class: %ezpublish.core.io.handler.class%
+        factory_service: ezpublish.core.io.factory
+        factory_method: buildConfiguredHandler

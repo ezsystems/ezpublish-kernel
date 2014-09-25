@@ -12,6 +12,7 @@ use eZ\Publish\Core\IO\Handler as IoHandlerInterface;
 use eZ\Publish\Core\IO\Handler\Filesystem;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\IO\MimeTypeDetector;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -28,6 +29,12 @@ class IOFactory implements ContainerAwareInterface
 
     /** @var ContainerInterface */
     protected $container;
+
+    /**
+     * Map of io handler alias => io handler service id
+     * @var array
+     */
+    private $ioHandlersMap;
 
     /**
      * Constructs a new IOServiceFactory
@@ -102,6 +109,29 @@ class IOFactory implements ContainerAwareInterface
                 'root_dir' => $rootDir
             )
         );
+    }
+
+    /**
+     * Returns the IO handler configured for the scope
+     * @return IOHandlerInterface
+     */
+    public function buildConfiguredHandler()
+    {
+        $handlerAlias = $this->configResolver->getParameter( 'handler', 'ez_io' );
+        if ( !isset( $this->ioHandlersMap[$handlerAlias] ) )
+        {
+            throw new InvalidConfigurationException( "No IO handler found for alias $handlerAlias" );
+        }
+
+        return $this->container->get( $this->ioHandlersMap[$handlerAlias] );
+    }
+
+    /**
+     * @param array $map Associative array of handler alias => handler service id
+     */
+    public function setHandlersMap( array $map )
+    {
+        $this->ioHandlersMap = $map;
     }
 
     /**
