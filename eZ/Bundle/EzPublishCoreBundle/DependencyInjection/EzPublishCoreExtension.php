@@ -277,8 +277,7 @@ class EzPublishCoreExtension extends Extension
 
         // Public API services
         $loader->load( 'papi.yml' );
-        // IO Services
-        $loader->load( 'io.yml' );
+
         // Built-in field types
         $loader->load( 'fieldtype_services.yml' );
 

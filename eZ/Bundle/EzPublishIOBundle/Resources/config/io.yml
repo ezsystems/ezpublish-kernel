@@ -1,0 +1,4 @@
+parameters:
+    ezpublish.core.io.handler.in_memory.class: eZ\Publish\Core\IO\Handler\InMemory
+
+services:

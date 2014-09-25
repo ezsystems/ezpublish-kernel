@@ -14,6 +14,8 @@ services:
             - [var_dir, storage_dir]
         calls:
             - [setLegacyKernelClosure, [@ezpublish_legacy.kernel]]
+        tags:
+            - {name: ezpublish.io_handler, alias: legacy_kernel}
 
     ezpublish.fieldType.ezimage.io_legacy:
         class: %ezpublish.fieldType.ezimage.io_legacy.class%
