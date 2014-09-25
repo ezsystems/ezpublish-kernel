@@ -134,7 +134,7 @@ class IORepositoryResolver implements ResolverInterface
 
     /**
      * Returns base URL, with scheme, host and port, for current request context.
-     * It no delivery URL is configured for current SiteAccess, will return base URL from current RequestContext.
+     * If no delivery URL is configured for current SiteAccess, will return base URL from current RequestContext.
      *
      * @return string
      */
