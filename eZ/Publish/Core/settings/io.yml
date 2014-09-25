@@ -1,25 +1,65 @@
 parameters:
+    ezpublish.core.io.service_factory.class: eZ\Bundle\EzPublishIOBundle\ApiLoader\ServiceFactory
+    ezpublish.core.io.handler_factory.class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
+    ezpublish.core.io.parameter_provider.class: eZ\Publish\Core\Base\Container\ApiLoader\IO\ParameterProvider\Container
+
     ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
     ezpublish.core.io.handler.filesystem.class: eZ\Publish\Core\IO\Handler\Filesystem
-    ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
     ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
-
+    ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
 services:
+    ezpublish.core.io.handler_factory:
+        class: %ezpublish.core.io.handler_factory.class%
+        arguments:
+            - @ezpublish.core.io.parameter_provider
+
+    ezpublish.core.io.service_factory:
+        class: %ezpublish.core.io.service_factory.class%
+        arguments:
+            - @ezpublish.core.io.mimeTypeDetector
+            - @ezpublish.core.io.parameter_provider
+
+    # instance of parameter provider for integration tests, that uses the container
+    ezpublish.core.io.parameter_provider:
+        class: %ezpublish.core.io.parameter_provider.class%
+        arguments:
+            - @service_container
+
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
+        factory_service: ezpublish.core.io.service_factory
+        factory_method: buildService
         arguments:
-            - @ezpublish.core.io.handler.filesystem
-            - @ezpublish.core.io.mimeTypeDetector
+            - @ezpublish.core.io.handler
+
+    # will build/return the IOHandler that is configured for the system
+    ezpublish.core.io.handler:
+        class: eZ\Publish\Core\IO\Handler
+        factory_service: ezpublish.core.io.factory
+        factory_method: getConfiguredHandler
 
     ezpublish.core.io.handler.filesystem:
         class: %ezpublish.core.io.handler.filesystem.class%
-        arguments:
-            -
-                storage_dir: %storage_dir%
-                root_dir: %io_root_dir%
+        factory_class: ezpublish.core.io.handler_factory
+        factory_method: buildFilesystem
+        tags:
+            - {name: ezpublish.io_handler, alias: filesystem}
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
 
     ezpublish.core.io.mimeTypeDetector:
         alias: ezpublish.core.io.mimeTypeDetector.fileinfo
+
+    ezpublish.core.io.metadataHandler.imageSize:
+        class: %ezpublish.core.io.metadataHandler.imageSize.class%
+#
+#    ezpublish.core.io.handler.in_memory:
+#        class: %ezpublish.core.io.handler.in_memory.class%
+#        public: false
+#        factory_service: ezpublish.core.io.handler_factory
+#        factory_method: buildHandler
+#        arguments: [%ezpublish.core.io.handler.in_memory.class%]
+#        tags:
+#          - {name: ezpublish.io_handler, alias: in_memory}
+#

@@ -4,14 +4,14 @@
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
+namespace eZ\Publish\Core\Base\Container\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use LogicException;
 
 /**
- * Registers IO handlers
+ * Registers IO handlers tagged as ezpublish.io_handler
  */
 class IOHandlerTagPass implements CompilerPassInterface
 {
@@ -20,6 +20,9 @@ class IOHandlerTagPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
+        if ( !$container->hasDefinition( 'ezpublish.core.io.handler_factory' ) )
+            return;
+
         $ioHandlersMap = array();
         foreach ( $container->findTaggedServiceIds( 'ezpublish.io_handler' ) as $id => $attributes )
         {
@@ -34,6 +37,7 @@ class IOHandlerTagPass implements CompilerPassInterface
             }
         }
 
-        $container->setParameter( 'ez_io.handlers_map', $ioHandlersMap );
+        $container->getDefinition( 'ezpublish.core.io.handler_factory' )
+            ->addMethodCall( 'setMap', $ioHandlersMap );
     }
 }

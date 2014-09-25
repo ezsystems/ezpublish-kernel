@@ -8,26 +8,22 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\ApiLoader;
 
+use eZ\Publish\Core\Base\Container\ApiLoader\IO\ParameterProvider;
 use eZ\Publish\Core\IO\Handler as IoHandlerInterface;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\SPI\IO\MimeTypeDetector;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-class IOFactory
+class HandlerFactory
 {
-    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
-    protected $configResolver;
-
-    /** @var string */
-    protected $IOServiceClass = 'eZ\\Publish\\Core\\IO\\IOService';
-
-    /** @var MimeTypeDetector */
-    protected $mimeTypeDetector;
+    /**
+     * Map of io handler alias => io handler service id
+     * @var array
+     */
+    private $ioHandlersMap;
 
     /**
-     * @var ContainerInterface
+     * @var ParameterProvider
      */
-    private $container;
+    private $parameterProvider;
 
     /**
      * Constructs a new IOServiceFactory
@@ -35,31 +31,17 @@ class IOFactory
      * @param ConfigResolverInterface $configResolver
      * @param \eZ\Publish\SPI\IO\MimeTypeDetector $mimeTypeDetector
      */
-    public function __construct( ContainerInterface $container, ConfigResolverInterface $configResolver, MimeTypeDetector $mimeTypeDetector )
+    public function __construct( ParameterProvider $parameterProvider )
     {
-        $this->configResolver = $configResolver;
-        $this->mimeTypeDetector = $mimeTypeDetector;
-        $this->container = $container;
+        $this->parameterProvider = $parameterProvider;
     }
 
     /**
-     * Returns a new IOService instance with the config string in $prefixSetting as a prefix
-     *
-     * @param IoHandlerInterface $IOHandler
-     * @param bool|string $prefixSetting
-     *
-     * @return \eZ\Publish\Core\IO\IOService
+     * @param array $map Associative array of handler alias => handler service id
      */
-    public function getService( IoHandlerInterface $handler, $prefixSetting = false )
+    public function setMap( array $map )
     {
-        $settings = array();
-
-        if ( $prefixSetting )
-        {
-            $settings['prefix'] = $this->configResolver->getParameter( $prefixSetting );
-        }
-
-        return new $this->IOServiceClass( $handler, $this->mimeTypeDetector, $settings );
+        $this->ioHandlersMap = $map;
     }
 
     /**
@@ -70,7 +52,7 @@ class IOFactory
      *
      * @return mixed
      */
-    public function getHandler( $handlerClass, $storageDirectorySetting )
+    public function buildFilesystemHandler( $handlerClass, $storageDirectorySetting )
     {
         if ( is_string( $storageDirectorySetting ) )
         {
@@ -94,6 +76,12 @@ class IOFactory
      */
     public function getConfiguredHandler()
     {
-        return $this->container->get( $this->configResolver->getParameter( 'handler', 'ez_io' ) );
+        $handlerAlias = $this->configResolver->getParameter( 'handler', 'ez_io' );
+        if ( !isset( $this->ioHandlersMap[$handlerAlias] ) )
+        {
+            throw new InvalidConfigurationException( "No IO handler found for alias $handlerAlias" );
+        }
+
+        return $this->container->get( $this->ioHandlersMap[$handlerAlias] );
     }
 }
