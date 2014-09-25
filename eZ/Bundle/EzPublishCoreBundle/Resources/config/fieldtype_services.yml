@@ -239,7 +239,7 @@ services:
         factory_service: ezpublish.core.io.factory
         factory_method: getService
         arguments:
-            - @ezpublish.core.io.handler.legacy
+            - @ezpublish.core.io.handler
             - 'image.published_images_dir'
 
     ezpublish.fieldType.ezimage.io:
