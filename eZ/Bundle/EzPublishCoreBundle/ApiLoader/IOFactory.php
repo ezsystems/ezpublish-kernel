@@ -9,10 +9,13 @@
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\IO\Handler as IoHandlerInterface;
+use eZ\Publish\Core\IO\Handler\Filesystem;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\IO\MimeTypeDetector;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class IOFactory
+class IOFactory implements ContainerAwareInterface
 {
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
@@ -22,6 +25,9 @@ class IOFactory
 
     /** @var MimeTypeDetector */
     protected $mimeTypeDetector;
+
+    /** @var ContainerInterface */
+    protected $container;
 
     /**
      * Constructs a new IOServiceFactory
@@ -79,5 +85,34 @@ class IOFactory
             $storageDirectory = implode( '/', $storageDirectoryParts );
         }
         return new $handlerClass( $storageDirectory );
+    }
+
+    public function buildFilesystemHandler()
+    {
+        $storageDir = sprintf(
+            '%s/%s/',
+            trim( $this->configResolver->getParameter( 'var_dir' ), '/' ),
+            trim( $this->configResolver->getParameter( 'storage_dir' ), '/' )
+        );
+        $rootDir = realpath( $this->container->getParameter( 'ezpublish_legacy.root_dir' ) );
+
+        return new Filesystem(
+            array(
+                'storage_dir' => $storageDir,
+                'root_dir' => $rootDir
+            )
+        );
+    }
+
+    /**
+     * Sets the Container.
+     *
+     * @param ContainerInterface|null $container A ContainerInterface instance or null
+     *
+     * @api
+     */
+    public function setContainer( ContainerInterface $container = null )
+    {
+        $this->container = $container;
     }
 }

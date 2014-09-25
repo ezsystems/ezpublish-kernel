@@ -10,7 +10,16 @@ services:
         arguments:
             - @ezpublish.config.resolver
             - @ezpublish.core.io.mimeTypeDetector
+        calls:
+            - [setContainer, [@service_container]]
 
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
-        arguments: [@ezpublish.core.io.handler.legacy]
+        arguments:
+            - @ezpublish.core.io.handler
+            - @ezpublish.core.io.mimetypedetector
+
+    ezpublish.core.io.handler.filesystem:
+        class: %ezpublish.core.io.handler.filesystem.class%
+        factory_service: ezpublish.core.io.factory
+        factory_method: buildFilesystemHandler
