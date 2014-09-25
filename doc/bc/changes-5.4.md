@@ -31,6 +31,20 @@ Changes affecting version compatibility with former or future versions.
 
 ## Deprecations
 
+* `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.
+  An exception will be thrown when compiling the container to remind to remove them
+
+  ```diff
+  ezpublish:
+      system:
+          my_siteaccess:
+  -            imagemagick:
+  -                pre_parameters:
+  -                post_parameters:
+  ```
+
+* `imagemagick` settings at the application level (`convert` path and filters definitions) have been deprecated.
+  They will be removed in v6.0.
 
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
