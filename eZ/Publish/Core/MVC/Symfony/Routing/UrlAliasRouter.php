@@ -59,6 +59,13 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     protected $generator;
 
     /**
+     * Holds current root Location id.
+     *
+     * @var int|string
+     */
+    protected $rootLocationId;
+
+    /**
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
@@ -79,6 +86,16 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     }
 
     /**
+     * Injects current root Location id.
+     *
+     * @param int|string $rootLocationId
+     */
+    public function setRootLocationId( $rootLocationId )
+    {
+        $this->rootLocationId = $rootLocationId;
+    }
+
+    /**
      * Tries to match a request with a set of routes.
      *
      * If the matcher can not find information, it must throw one of the exceptions documented
@@ -96,7 +113,14 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         {
             $requestedPath = rawurldecode( $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() ) );
             $urlAlias = $this->getUrlAlias( $requestedPath );
-            $pathPrefix = $this->generator->getPathPrefixByRootLocationId( $this->generator->getRootLocationId() );
+            if ( $this->rootLocationId === null )
+            {
+                $pathPrefix = "/";
+            }
+            else
+            {
+                $pathPrefix = $this->generator->getPathPrefixByRootLocationId( $this->rootLocationId );
+            }
 
             $params = array(
                 '_route' => self::URL_ALIAS_ROUTE_NAME
@@ -148,7 +172,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                         $request->attributes->set( 'needsRedirect', true );
                     }
                     // Handle case-correction redirect
-                    else  if ( $this->needsCaseRedirect( $urlAlias, $requestedPath, $pathPrefix ) )
+                    else if ( $this->needsCaseRedirect( $urlAlias, $requestedPath, $pathPrefix ) )
                     {
                         $request->attributes->set( 'semanticPathinfo', $this->removePathPrefix( $urlAlias->path, $pathPrefix ) );
                         $request->attributes->set( 'needsRedirect', true );
@@ -187,19 +211,20 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     }
 
     /**
-     * Removes prefix from path
+     * Removes prefix from path.
      *
-     * Used to remove the prefix from the path that could be present
+     * Checks for presence of $prefix and removes it from $path if found.
      *
-     * @param $path
-     * @param $prefix
+     * @param string $path
+     * @param string $prefix
      *
      * @return string
      */
-    protected function removePathPrefix( $path, $prefix ) {
+    protected function removePathPrefix( $path, $prefix )
+    {
         if ( $prefix !== '/' && mb_stripos( $path, $prefix ) === 0 )
         {
-            $path = mb_substr($path, mb_strlen($prefix));
+            $path = mb_substr( $path, mb_strlen( $prefix ) );
         }
         return $path;
     }
@@ -212,12 +237,18 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\URLAlias $loadedUrlAlias
      * @param string $requestedPath
+     * @param string $pathPrefix
      *
      * @return boolean
      */
     protected function needsCaseRedirect( URLAlias $loadedUrlAlias, $requestedPath , $pathPrefix )
     {
-        return ( strcmp( $loadedUrlAlias->path, $pathPrefix . rtrim($requestedPath, '/') ) !== 0 );
+        return (
+            strcmp(
+                $loadedUrlAlias->path,
+                $pathPrefix . ( $pathPrefix === "/" ? trim( $requestedPath, '/' ) : rtrim( $requestedPath, "/" ) )
+            ) !== 0
+        );
     }
 
     /**

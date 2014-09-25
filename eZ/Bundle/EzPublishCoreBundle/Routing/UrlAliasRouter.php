@@ -21,13 +21,6 @@ class UrlAliasRouter extends BaseUrlAliasRouter
      */
     protected $configResolver;
 
-    protected $rootLocationId;
-
-    public function setRootLocationId( $rootLocationId )
-    {
-        $this->rootLocationId = $rootLocationId;
-    }
-
     /**
      * @param ConfigResolverInterface $configResolver
      */
@@ -57,11 +50,17 @@ class UrlAliasRouter extends BaseUrlAliasRouter
      */
     protected function getUrlAlias( $pathinfo )
     {
-        if ( $this->rootLocationId === null || $this->generator->isUriPrefixExcluded( $pathinfo ) )
+        $pathPrefix = $this->generator->getPathPrefixByRootLocationId( $this->rootLocationId );
+
+        if (
+            $this->rootLocationId === null ||
+            $this->generator->isUriPrefixExcluded( $pathinfo ) ||
+            $pathPrefix === "/"
+        )
         {
             return parent::getUrlAlias( $pathinfo );
         }
 
-        return $this->urlAliasService->lookup( $this->generator->getPathPrefixByRootLocationId( $this->rootLocationId ) . $pathinfo );
+        return $this->urlAliasService->lookup( $pathPrefix . $pathinfo );
     }
 }
