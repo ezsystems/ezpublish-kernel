@@ -8,18 +8,22 @@ services:
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
         arguments:
-            - @ezpublish.core.io.handler.filesystem
+            - @ezpublish.core.io.handler
             - @ezpublish.core.io.mimeTypeDetector
+
+    ezpublish.core.io.handler:
+        alias: ezpublish.core.io.handler.filesystem
 
     ezpublish.core.io.handler.filesystem:
         class: %ezpublish.core.io.handler.filesystem.class%
         arguments:
-            -
-                storage_dir: %storage_dir%
-                root_dir: %io_root_dir%
+            - {storage_dir: %storage_dir%, root_dir: %io_root_dir%}
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
 
     ezpublish.core.io.mimeTypeDetector:
         alias: ezpublish.core.io.mimeTypeDetector.fileinfo
+
+    ezpublish.core.io.metadataHandler.imageSize:
+        class: %ezpublish.core.io.metadataHandler.imageSize.class%
