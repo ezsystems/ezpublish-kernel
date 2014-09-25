@@ -147,7 +147,8 @@ class UrlAliasGenerator extends Generator
      *
      * @return int
      */
-    public function getRootLocationId() {
+    public function getRootLocationId()
+    {
         return $this->rootLocationId;
     }
 
