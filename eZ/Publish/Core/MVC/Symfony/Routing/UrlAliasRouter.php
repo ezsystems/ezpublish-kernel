@@ -218,7 +218,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      */
     protected function needsCaseRedirect( URLAlias $loadedUrlAlias, $requestedPath , $pathPrefix )
     {
-        return ( strcmp( $loadedUrlAlias->path, $pathPrefix . rtrim($requestedPath, '/') ) !== 0 );
+        return ( strcmp( $loadedUrlAlias->path, $pathPrefix . rtrim( $requestedPath, '/' ) ) !== 0 );
     }
 
     /**
