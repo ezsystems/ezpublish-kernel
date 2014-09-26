@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Repository\Values\Content\Location;
@@ -1027,6 +1028,16 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'SortFolderName.php',
             ),
+        );
+    }
+
+    public function getSortedContentSearchesLegacy()
+    {
+        $fixtureDir = $this->getFixtureDir();
+
+        return array(
+            // template_look/title es ezsetting fieldtype, not indexed in Solr or Elasticsearch
+            // @todo check - ezsetting should not be searchable
             array(
                 array(
                     'filter' => new Criterion\SectionId( array( 5 ) ),
@@ -1849,6 +1860,48 @@ class SearchServiceTest extends BaseTest
             },
             $result->searchHits
         );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @todo Only for Legacy Storage Search, tests are missing for Solr and Elasticsearch
+     *
+     * @dataProvider getSortedContentSearchesLegacy
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindAndSortContentLegacy( $queryData, $fixture, $closure = null )
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        {
+            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
+        }
+
+        $query = new Query( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @todo Only for Legacy Storage Search, tests are missing for Solr and Elasticsearch
+     *
+     * @dataProvider getSortedContentSearchesLegacy
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testFindAndSortContentLocationsLegacy( $queryData, $fixture, $closure = null )
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        {
+            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
+        }
+
+        $query = new LocationQuery( $queryData );
+        $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
     /**
