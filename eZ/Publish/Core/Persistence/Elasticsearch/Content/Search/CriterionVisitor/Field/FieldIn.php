@@ -71,16 +71,15 @@ class FieldIn extends Field
                 if ( count( $criterion->value ) > 1 )
                 {
                     $term = array(
-                        "terms" => array(
+                        "match" => array(
                             "fields_doc.". $name => $criterion->value,
-                            //"execution" => "bool",
                         ),
                     );
                 }
                 else
                 {
                     $term = array(
-                        "term" => array(
+                        "match" => array(
                             "fields_doc.". $name => reset( $criterion->value ),
                         ),
                     );
@@ -109,7 +108,12 @@ class FieldIn extends Field
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
-                    "or" => $this->getCondition( $criterion ),
+                    "query" => array(
+                        "bool" => array(
+                            "should" => $this->getCondition( $criterion ),
+                            "minimum_should_match" => 1,
+                        ),
+                    ),
                 ),
             ),
         );
