@@ -47,7 +47,7 @@
                 "field_string": {
                     "path_match": "fields_doc.*_*s",
                     "match_mapping_type": "string",
-                    "mapping": { "type": "string", "index": "not_analyzed" }
+                    "mapping": { "type": "string", "analyzer": "simple" }
                 }
             },
             {
