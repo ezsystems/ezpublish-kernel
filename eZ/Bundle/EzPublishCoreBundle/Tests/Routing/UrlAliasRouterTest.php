@@ -97,7 +97,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
 
         $prefix = '/root/prefix';
         $this->urlALiasGenerator
-            ->expects( $this->once() )
+            ->expects( $this->exactly( 2 ) )
             ->method( 'getPathPrefixByRootLocationId' )
             ->with( $rootLocationId )
             ->will( $this->returnValue( $prefix ) );
@@ -128,6 +128,208 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
         $request = $this->getRequestByPathInfo( $path );
         $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
         $this->assertSame( $locationId, $request->attributes->get( 'locationId' ) );
+    }
+
+    public function testMatchRequestLocationCaseRedirectWithRootLocation()
+    {
+        $rootLocationId = 123;
+        $this->resetConfigResolver();
+        $this->configResolver
+            ->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'url_alias_router', null, null, true ),
+                    )
+                )
+            );
+        $this->router->setRootLocationId( $rootLocationId );
+
+        $prefix = '/root/prefix';
+        $this->urlALiasGenerator
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'getPathPrefixByRootLocationId' )
+            ->with( $rootLocationId )
+            ->will( $this->returnValue( $prefix ) );
+
+        $locationId = 789;
+        $path = '/foo/bar';
+        $requestedPath = "/Foo/Bar";
+        $urlAlias = new URLAlias(
+            array(
+                'destination' => $locationId,
+                'path' => $prefix . $path,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false
+            )
+        );
+        $this->urlAliasService
+            ->expects( $this->once() )
+            ->method( 'lookup' )
+            ->with( $prefix . $requestedPath )
+            ->will( $this->returnValue( $urlAlias ) );
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            'locationId' => $locationId,
+            'viewType' => ViewManager::VIEW_TYPE_FULL,
+            'layout' => true
+        );
+        $request = $this->getRequestByPathInfo( $requestedPath );
+        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
+        $this->assertSame( $locationId, $request->attributes->get( 'locationId' ) );
+        $this->assertTrue( $request->attributes->get( 'needsRedirect' ) );
+        $this->assertSame( $path, $request->attributes->get( 'semanticPathinfo' ) );
+    }
+
+    public function testMatchRequestLocationCaseRedirectWithRootRootLocation()
+    {
+        $rootLocationId = 123;
+        $this->resetConfigResolver();
+        $this->configResolver
+            ->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'url_alias_router', null, null, true ),
+                    )
+                )
+            );
+        $this->router->setRootLocationId( $rootLocationId );
+
+        $prefix = '/';
+        $this->urlALiasGenerator
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'getPathPrefixByRootLocationId' )
+            ->with( $rootLocationId )
+            ->will( $this->returnValue( $prefix ) );
+
+        $locationId = 789;
+        $path = '/foo/bar';
+        $requestedPath = "/Foo/Bar";
+        $urlAlias = new URLAlias(
+            array(
+                'destination' => $locationId,
+                'path' => $path,
+                'type' => URLAlias::LOCATION,
+                'isHistory' => false
+            )
+        );
+        $this->urlAliasService
+            ->expects( $this->once() )
+            ->method( 'lookup' )
+            ->with( $requestedPath )
+            ->will( $this->returnValue( $urlAlias ) );
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            'locationId' => $locationId,
+            'viewType' => ViewManager::VIEW_TYPE_FULL,
+            'layout' => true
+        );
+        $request = $this->getRequestByPathInfo( $requestedPath );
+        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
+        $this->assertSame( $locationId, $request->attributes->get( 'locationId' ) );
+        $this->assertTrue( $request->attributes->get( 'needsRedirect' ) );
+        $this->assertSame( $path, $request->attributes->get( 'semanticPathinfo' ) );
+    }
+
+    public function testMatchRequestResourceCaseRedirectWithRootLocation()
+    {
+        $rootLocationId = 123;
+        $this->resetConfigResolver();
+        $this->configResolver
+            ->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'url_alias_router', null, null, true ),
+                    )
+                )
+            );
+        $this->router->setRootLocationId( $rootLocationId );
+
+        $prefix = '/root/prefix';
+        $this->urlALiasGenerator
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'getPathPrefixByRootLocationId' )
+            ->with( $rootLocationId )
+            ->will( $this->returnValue( $prefix ) );
+
+        $path = '/foo/bar';
+        $requestedPath = "/Foo/Bar";
+        $urlAlias = new URLAlias(
+            array(
+                'destination' => '/content/search',
+                'path' => $prefix . $path,
+                'type' => URLAlias::RESOURCE,
+                'isHistory' => false
+            )
+        );
+        $this->urlAliasService
+            ->expects( $this->once() )
+            ->method( 'lookup' )
+            ->with( $prefix . $requestedPath )
+            ->will( $this->returnValue( $urlAlias ) );
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+        );
+        $request = $this->getRequestByPathInfo( $requestedPath );
+        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
+        $this->assertTrue( $request->attributes->get( 'needsRedirect' ) );
+        $this->assertSame( $path, $request->attributes->get( 'semanticPathinfo' ) );
+    }
+
+    public function testMatchRequestVirtualCaseRedirectWithRootLocation()
+    {
+        $rootLocationId = 123;
+        $this->resetConfigResolver();
+        $this->configResolver
+            ->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'url_alias_router', null, null, true ),
+                    )
+                )
+            );
+        $this->router->setRootLocationId( $rootLocationId );
+
+        $prefix = '/root/prefix';
+        $this->urlALiasGenerator
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'getPathPrefixByRootLocationId' )
+            ->with( $rootLocationId )
+            ->will( $this->returnValue( $prefix ) );
+
+        $path = '/foo/bar';
+        $requestedPath = "/Foo/Bar";
+        $urlAlias = new URLAlias(
+            array(
+                'path' => $prefix . $path,
+                'type' => URLAlias::VIRTUAL,
+            )
+        );
+        $this->urlAliasService
+            ->expects( $this->once() )
+            ->method( 'lookup' )
+            ->with( $prefix . $requestedPath )
+            ->will( $this->returnValue( $urlAlias ) );
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+        );
+        $request = $this->getRequestByPathInfo( $requestedPath );
+        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
+        $this->assertTrue( $request->attributes->get( 'needsRedirect' ) );
+        $this->assertSame( $path, $request->attributes->get( 'semanticPathinfo' ) );
     }
 
     public function testMatchRequestWithRootLocationAndExclusion()
