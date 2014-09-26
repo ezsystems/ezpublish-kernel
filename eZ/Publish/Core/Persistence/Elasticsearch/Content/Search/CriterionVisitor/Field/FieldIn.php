@@ -68,24 +68,19 @@ class FieldIn extends Field
         {
             foreach ( $names as $name )
             {
-                if ( count( $criterion->value ) > 1 )
+                foreach ( $criterion->value as $value )
                 {
-                    $term = array(
+                    // TODO possibly we'll need to dispatch by field type, need more tests
+                    $terms[] = array(
                         "match" => array(
-                            "fields_doc.". $name => $criterion->value,
+                            "fields_doc." . $name => array(
+                                "query" => $value,
+                                "type" => "phrase",
+                                "slop" => 0,
+                            ),
                         ),
                     );
                 }
-                else
-                {
-                    $term = array(
-                        "match" => array(
-                            "fields_doc.". $name => reset( $criterion->value ),
-                        ),
-                    );
-                }
-
-                $terms[] = $term;
             }
         }
 
