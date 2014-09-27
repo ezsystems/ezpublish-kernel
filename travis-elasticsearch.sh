@@ -35,15 +35,17 @@ run() {
 download_and_run() {
     url="http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$1.tar.gz"
     dir_name="elasticsearch-$1"
-    mappings_dir="eZ/Publish/Core/Persistence/Elasticsearch/Content/Search/Resources/mappings"
+    resources_dir="eZ/Publish/Core/Persistence/Elasticsearch/Content/Search/Resources"
 
     download $url
 
-    # Configure mappings
+    # Configure mappings and index
     mkdir $dir_name/config/mappings
     mkdir $dir_name/config/mappings/ezpublish
-    cp $mappings_dir/content.json $dir_name/config/mappings/ezpublish
-    cp $mappings_dir/location.json $dir_name/config/mappings/ezpublish
+    cp $resources_dir/mappings/content.json $dir_name/config/mappings/ezpublish
+    cp $resources_dir/mappings/location.json $dir_name/config/mappings/ezpublish
+    rm $dir_name/config/elasticsearch.yml
+    cp $resources_dir/elasticsearch.yml $dir_name/config
 
     # Run elasticsearch
     run $dir_name
