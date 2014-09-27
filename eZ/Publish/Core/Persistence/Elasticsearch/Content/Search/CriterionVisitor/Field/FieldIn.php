@@ -75,8 +75,6 @@ class FieldIn extends Field
                         "match" => array(
                             "fields_doc." . $name => array(
                                 "query" => $value,
-                                "type" => "phrase",
-                                "slop" => 0,
                             ),
                         ),
                     );
