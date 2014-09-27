@@ -64,21 +64,24 @@ class FieldIn extends Field
         }
 
         $terms = array();
-        foreach ( $fieldTypes[$criterion->target] as $names )
+        foreach ( $fieldTypes[$criterion->target] as $type => $names )
         {
+            // TODO possibly we'll need to dispatch by $type, need more tests
+            $fields = array();
+
             foreach ( $names as $name )
             {
-                foreach ( $criterion->value as $value )
-                {
-                    // TODO possibly we'll need to dispatch by field type, need more tests
-                    $terms[] = array(
-                        "match" => array(
-                            "fields_doc." . $name => array(
-                                "query" => $value,
-                            ),
-                        ),
-                    );
-                }
+                $fields[] = "fields_doc." . $name;
+            }
+
+            foreach ( $criterion->value as $value )
+            {
+                $terms[] = array(
+                    "multi_match" => array(
+                        "query" => $value,
+                        "fields" => $fields,
+                    ),
+                );
             }
         }
 
