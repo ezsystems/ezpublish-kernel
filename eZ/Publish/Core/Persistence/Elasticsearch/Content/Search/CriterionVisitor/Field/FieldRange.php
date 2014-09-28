@@ -76,7 +76,7 @@ class FieldRange extends Field
             {
                 $ranges[] = array(
                     "range" => array(
-                        "fields_doc.". $name => $range,
+                        "fields_doc." . $name => $range,
                     ),
                 );
             }
