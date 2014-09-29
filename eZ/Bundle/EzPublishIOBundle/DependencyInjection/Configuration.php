@@ -8,7 +8,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 
 class Configuration extends SiteAccessConfiguration
 {
-
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
@@ -20,7 +19,6 @@ class Configuration extends SiteAccessConfiguration
             ->info( 'IO handler uses to manipulate binary files' )
             ->example( 'legacy_kernel' )
             ->end();
-
 
         return $treeBuilder;
     }

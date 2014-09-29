@@ -6,7 +6,6 @@ parameters:
 
 services:
     ezpublish.core.io.handler.legacy:
-        public: false
         class: %ezpublish.core.io.handler.legacy.class%
         factory_service: ezpublish.core.io.factory
         factory_method: getHandler
@@ -16,7 +15,7 @@ services:
         calls:
             - [setLegacyKernelClosure, [@ezpublish_legacy.kernel]]
         tags:
-            - {name: ezpublish.io_handler, alias: legacy_kernel}
+            - { name: ezpublish.io_handler, alias: legacy_kernel }
 
     ezpublish.fieldType.ezimage.io_legacy:
         class: %ezpublish.fieldType.ezimage.io_legacy.class%
