@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -19,15 +20,13 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 class Image implements Converter
 {
     /**
-     * Factory for current class
-     *
-     * @note Class should instead be configured as service if it gains dependencies.
-     *
-     * @return Image
+     * @var IOServiceInterface
      */
-    public static function create()
+    private $ioService;
+
+    public function __construct( IOServiceInterface $ioService )
     {
-        return new self;
+        $this->ioService = $ioService;
     }
 
     /**
@@ -41,7 +40,7 @@ class Image implements Converter
         if ( isset( $value->data ) )
         {
             // Determine what needs to be stored
-            if ( isset( $value->data['mime'] ) )
+            if ( isset( $value->data['mimeType'] ) )
             {
                 // $data['mime'] is only set for real images, which have been
                 // stored
@@ -97,7 +96,8 @@ class Image implements Converter
      */
     protected function createLegacyXml( array $data )
     {
-        $pathInfo = pathinfo( ltrim( $data['uri'], '/' ) );
+        $data['uri'] = $this->ioService->getInternalPath( $data['id'] );
+        $pathInfo = pathinfo( $data['uri'] );
         return $this->fillXml( $data, $pathInfo, time() );
     }
 
@@ -136,9 +136,9 @@ EOT;
             htmlspecialchars( $pathInfo['extension'] ), // suffix="%s"
             htmlspecialchars( $pathInfo['filename'] ), // basename="%s"
             htmlspecialchars( $pathInfo['dirname'] ), // dirpath
-            htmlspecialchars( ltrim( $imageData['uri'], '/' ) ), // url
+            htmlspecialchars( $imageData['uri'] ), // url
             htmlspecialchars( $pathInfo['basename'] ), // @todo: Needs original file name, for whatever reason?
-            htmlspecialchars( $imageData['mime'] ), // mime_type
+            htmlspecialchars( $imageData['mimeType'] ), // mime_type
             htmlspecialchars( $imageData['width'] ), // width
             htmlspecialchars( $imageData['height'] ), // height
             htmlspecialchars( $imageData['alternativeText'] ), // alternative_text
@@ -200,7 +200,7 @@ EOT;
             return null;
         }
 
-        $extractedData['id'] = $url;
+        $extractedData['id'] = $this->ioService->getExternalPath( $url );
 
         if ( !$ezimageTag->hasAttribute( 'filename' ) )
         {

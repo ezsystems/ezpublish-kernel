@@ -1,7 +1,7 @@
 parameters:
     ezpublish.core.io.handler.in_memory.class: eZ\Publish\Core\IO\Handler\InMemory
     ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
-    ezpublish.core.io.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\IOFactory
+    ezpublish.core.io.factory.class: eZ\Bundle\EzPublishIOBundle\ApiLoader\IOFactory
     ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
     ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
 
@@ -9,12 +9,21 @@ services:
     ezpublish.core.io.factory:
         class: %ezpublish.core.io.factory.class%
         arguments:
+            - @service_container
             - @ezpublish.config.resolver
             - @ezpublish.core.io.mimeTypeDetector
 
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
-        arguments: [@ezpublish.core.io.handler.legacy]
+        factory_service: ezpublish.core.io.factory
+        factory_method: getService
+        arguments:
+            - @ezpublish.core.io.handler
+
+    ezpublish.core.io.handler:
+        class: eZ\Publish\Core\IO\Handler
+        factory_service: ezpublish.core.io.factory
+        factory_method: getConfiguredHandler
 
     ezpublish.core.io.handler.in_memory:
         class: %ezpublish.core.io.handler.in_memory.class%
@@ -22,6 +31,8 @@ services:
         factory_service: ezpublish.core.io.factory
         factory_method: getHandler
         arguments: [%ezpublish.core.io.handler.in_memory.class%]
+        tags:
+          - {name: ezpublish.io_handler, alias: in_memory}
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%

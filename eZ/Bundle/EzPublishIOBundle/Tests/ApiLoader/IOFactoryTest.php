@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
+namespace eZ\Bundle\EzPublishIOBundle\Tests\ApiLoader;
 
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\IOFactory;
+use eZ\Bundle\EzPublishIOBundle\ApiLoader\IOFactory;
 
 class IOFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,11 +23,17 @@ class IOFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $mimeDetector;
 
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
     protected function setUp()
     {
         parent::setUp();
         $this->configResolver = $this->getMock( 'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface' );
         $this->mimeDetector = $this->getMock( 'eZ\\Publish\\SPI\\IO\\MimeTypeDetector' );
+        $this->container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
     }
 
     public function testGetService()
@@ -38,7 +44,7 @@ class IOFactoryTest extends \PHPUnit_Framework_TestCase
             ->method( 'getParameter' )
             ->with( $prefixSetting )
             ->will( $this->returnValue( 'my_prefix' ) );
-        $factory = new IOFactory( $this->configResolver, $this->mimeDetector );
+        $factory = new IOFactory( $this->container, $this->configResolver, $this->mimeDetector );
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\IO\\IOServiceInterface',
             $factory->getService( $this->getMock( 'eZ\\Publish\\Core\\IO\\Handler' ), $prefixSetting )
@@ -53,7 +59,7 @@ class IOFactoryTest extends \PHPUnit_Framework_TestCase
             ->method( 'getParameter' )
             ->with( $directorySetting )
             ->will( $this->returnValue( 'something' ) );
-        $factory = new IOFactory( $this->configResolver, $this->mimeDetector );
+        $factory = new IOFactory( $this->container, $this->configResolver, $this->mimeDetector );
 
         $handlerClass = get_class( $this->getMock( 'eZ\\Publish\\Core\\IO\\Handler' ) );
         $this->assertInstanceOf(
@@ -78,7 +84,7 @@ class IOFactoryTest extends \PHPUnit_Framework_TestCase
             );
 
         $handlerClass = get_class( $this->getMock( 'eZ\\Publish\\Core\\IO\\Handler' ) );
-        $factory = new IOFactory( $this->configResolver, $this->mimeDetector );
+        $factory = new IOFactory( $this->container, $this->configResolver, $this->mimeDetector );
         $this->assertInstanceOf(
             'eZ\\Publish\\Core\\IO\\Handler',
             $factory->getHandler( $handlerClass, $directorySettings )
