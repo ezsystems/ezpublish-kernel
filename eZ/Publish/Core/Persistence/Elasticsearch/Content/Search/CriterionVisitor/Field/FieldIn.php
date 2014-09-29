@@ -53,7 +53,7 @@ class FieldIn extends Field
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
         $fieldTypes = $this->getFieldTypes( $criterion );
 
-        $criterion->value = (array)$criterion->value;
+        $values = (array)$criterion->value;
 
         if ( !isset( $fieldTypes[$criterion->target] ) )
         {
@@ -74,7 +74,7 @@ class FieldIn extends Field
                 $fields[] = "fields_doc." . $name;
             }
 
-            foreach ( $criterion->value as $value )
+            foreach ( $values as $value )
             {
                 $terms[] = array(
                     "multi_match" => array(
