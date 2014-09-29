@@ -162,9 +162,26 @@ class Legacy implements IOServiceInterface
         return $this->publishedIOService->createBinaryFile( $binaryFileCreateStruct );
     }
 
-    public function getUri( $id )
+    public function getUri( $binaryFileId )
     {
-        return $this->publishedIOService->getUri( $id );
+        return $this->publishedIOService->getUri( $binaryFileId );
+    }
+
+    public function getMimeType( $binaryFileId )
+    {
+        // If the id is an internal (absolute) path to a draft image, use the draft service to get external path & load
+        if ( $this->isDraftImagePath( $binaryFileId ) )
+        {
+            return $this->draftIOService->getMimeType( $this->draftIOService->getExternalPath( $binaryFileId ) );
+        }
+
+        // If the id is an internal path (absolute) to a published image, replace with the internal path
+        if ( $this->isPublishedImagePath( $binaryFileId ) )
+        {
+            $binaryFileId = $this->publishedIOService->getExternalPath( $binaryFileId );
+        }
+
+        return $this->publishedIOService->getMimeType( $binaryFileId );
     }
 
     public function getFileInputStream( BinaryFile $binaryFile )

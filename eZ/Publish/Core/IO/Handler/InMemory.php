@@ -17,6 +17,7 @@ use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use DateTime;
+use finfo;
 
 /**
  * Backend interface for handling of binary files I/O in memory
@@ -242,10 +243,20 @@ class InMemory implements IoHandlerInterface
         return $metadataHandler->extract( $this->getInternalPath( $spiBinaryFileId ) );
     }
 
+    public function getMimeType( $spiBinaryFileId )
+    {
+        if ( !isset( $this->storage[$spiBinaryFileId] ) )
+        {
+            return null;
+        }
+
+        $fileInfo = new finfo( FILEINFO_MIME_TYPE );
+        return $fileInfo->buffer( base64_decode( $this->data[$spiBinaryFileId] ) ) ?: null;
+    }
+
     public function getUri( $spiBinaryFileId )
     {
         // @todo Not implemented, would require a Front controller
         return 'todo:$path';
     }
-
 }

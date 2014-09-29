@@ -254,6 +254,11 @@ class Dispatcher implements IoHandlerInterface
         // TODO: Implement getExternalPath() method
     }
 
+    public function getMimeType( $spiBinaryFileId )
+    {
+        return $this->getHandler( $spiBinaryFileId )->getMimeType( $spiBinaryFileId );
+    }
+
     public function getUri( $spiBinaryFileId )
     {
         return $this->getHandler( $spiBinaryFileId )->getUri( $spiBinaryFileId );
