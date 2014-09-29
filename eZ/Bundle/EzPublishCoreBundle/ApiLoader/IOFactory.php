@@ -13,10 +13,10 @@ use eZ\Publish\Core\IO\Handler\Filesystem;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\IO\MimeTypeDetector;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class IOFactory implements ContainerAwareInterface
+class IOFactory extends ContainerAware
 {
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
@@ -71,7 +71,7 @@ class IOFactory implements ContainerAwareInterface
     /**
      * Returns an IOHandler instance
      *
-     * @param $handlerClass The IOHandler class to instanciate
+     * @param string $handlerClass The IOHandler class to instantiate
      * @param string|array $storageDirectorySetting Setting(s) that build-up the storage directory
      *
      * @return mixed
@@ -101,12 +101,11 @@ class IOFactory implements ContainerAwareInterface
             trim( $this->configResolver->getParameter( 'var_dir' ), '/' ),
             trim( $this->configResolver->getParameter( 'storage_dir' ), '/' )
         );
-        $rootDir = realpath( $this->container->getParameter( 'ezpublish_legacy.root_dir' ) );
 
         return new Filesystem(
             array(
                 'storage_dir' => $storageDir,
-                'root_dir' => $rootDir
+                'root_dir' => $this->container->getParameter( 'ezpublish_legacy.root_dir' )
             )
         );
     }
@@ -132,17 +131,5 @@ class IOFactory implements ContainerAwareInterface
     public function setHandlersMap( array $map )
     {
         $this->ioHandlersMap = $map;
-    }
-
-    /**
-     * Sets the Container.
-     *
-     * @param ContainerInterface|null $container A ContainerInterface instance or null
-     *
-     * @api
-     */
-    public function setContainer( ContainerInterface $container = null )
-    {
-        $this->container = $container;
     }
 }

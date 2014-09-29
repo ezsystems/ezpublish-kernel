@@ -5,6 +5,7 @@ parameters:
     ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
 
 services:
+    # service and handlers are only used for tests. Real ones are declared in EzPublishCoreBundle.
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
         arguments:
