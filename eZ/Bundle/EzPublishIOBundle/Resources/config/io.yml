@@ -1,6 +1,6 @@
 parameters:
     ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
-    ezpublish.core.io.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\IOFactory
+    ezpublish.core.io.factory.class: eZ\Bundle\EzPublishIOBundle\ApiLoader\IOFactory
     ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
     ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
     ezpublish.core.io.handler.class: eZ\Publish\Core\IO\Handler

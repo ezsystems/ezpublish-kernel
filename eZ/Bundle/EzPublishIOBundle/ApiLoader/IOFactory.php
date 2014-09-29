@@ -6,7 +6,7 @@
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
+namespace eZ\Bundle\EzPublishIOBundle\ApiLoader;
 
 use eZ\Publish\Core\IO\Handler as IoHandlerInterface;
 use eZ\Publish\Core\IO\Handler\Filesystem;
@@ -94,6 +94,10 @@ class IOFactory extends ContainerAware
         return new $handlerClass( $storageDirectory );
     }
 
+    /**
+     * Builds the filesystem IO handler based on config resolver settings
+     * @return Filesystem
+     */
     public function buildFilesystemHandler()
     {
         $storageDir = sprintf(
