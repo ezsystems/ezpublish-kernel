@@ -49,20 +49,28 @@ ezpublish:
 In addition to [filters exposed by LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/configuration.md),
 the following are available:
 
-| Filter name                  | Parameters                      | Description                                                                                  |
-|:----------------------------:|:-------------------------------:|:--------------------------------------------------------------------------------------------:|
-| geometry/scaledownonly       | [width, height]                 | Generates a thumbnail that will not exceed width/height.                                     |
-| geometry/scalewidthdownonly  | [width]                         | Generates a thumbnail that will not exceed width.                                            |
-| geometry/scaleheightdownonly | [height]                        | Generates a thumbnail that will not exceed height.                                           |
-| geometry/scalewidth          | [width]                         | Alters image width.   Proportion will be kept.                                               |
-| geometry/scaleheight         | [height]                        | Alters image height.  Proportion will be kept.                                               |
-| geometry/scale               | [width, height]                 | Alters image size, not exceeding provided width and height.  Proportion will be kept.        |
-| geometry/scaleexact          | [width, height]                 | Alters image size to fit exactly provided width and height.  Proportion will not be kept.    |
-| geometry/scalepercent        | [widthPercent, heightPercent]   | Scales width and height with provided percent values.  Proportion will not be kept.          |
-| geometry/crop                | [width, height, startX, startY] | Crops the image.  Result will have provided width/height, starting at provided startX/startY |
+| Filter name                  | Parameters                          | Description                                                                                  |
+|:----------------------------:|:-----------------------------------:|:--------------------------------------------------------------------------------------------:|
+| geometry/scaledownonly       | [width, height]                     | Generates a thumbnail that will not exceed width/height.                                     |
+| geometry/scalewidthdownonly  | [width]                             | Generates a thumbnail that will not exceed width.                                            |
+| geometry/scaleheightdownonly | [height]                            | Generates a thumbnail that will not exceed height.                                           |
+| geometry/scalewidth          | [width]                             | Alters image width.   Proportion will be kept.                                               |
+| geometry/scaleheight         | [height]                            | Alters image height.  Proportion will be kept.                                               |
+| geometry/scale               | [width, height]                     | Alters image size, not exceeding provided width and height.  Proportion will be kept.        |
+| geometry/scaleexact          | [width, height]                     | Alters image size to fit exactly provided width and height.  Proportion will not be kept.    |
+| geometry/scalepercent        | [widthPercent, heightPercent]       | Scales width and height with provided percent values.  Proportion will not be kept.          |
+| geometry/crop                | [width, height, startX, startY]     | Crops the image.  Result will have provided width/height, starting at provided startX/startY |
+| border                       | [thickBorderX, thickBorderY, color] | Adds a border around the image. Thickness is defined in px. Color is "#000" by default.      |
 
 > *Tip:* It is possible to combine filters from the list above to [the ones provided in LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md)
 and custom ones.
+
+### Discarded filters
+The following filters have been discarded due to incompatibility:
+
+* `flatten`
+* `bordercolor`
+* `border/width`
 
 ### Custom filters
 Please refer to [LiipImagineBundle documentation on custom filters](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md#load-your-custom-filters).
@@ -71,3 +79,15 @@ Please refer to [LiipImagineBundle documentation on custom filters](https://gith
 ### Drivers
 LiipImagineBundle supports GD (default), Imagick and GMagick PHP extensions and only work on image blobs (no command line tool is needed).
 See the [bundle's documentation to learn more on that topic](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/configuration.md).
+
+## Upgrade
+* Instantiate `LiipImagineBundle` in your kernel class
+* If you were using ImageMagick, please install [Imagick](http://php.net/imagick) or [Gmagick](http://php.net/gmagick) PHP extensions
+  and activate the driver in `liip_imagine`:
+
+  ```yaml
+  # ezpublish.yml or config.yml
+  liip_imagine:
+      # Driver can either "imagick" or "gmagick", depending on the PHP extension you're using.
+      driver: imagick
+  ```

@@ -15,6 +15,7 @@ parameters:
     ezpublish.image_alias.imagine.filter.loader.scale_exact.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleExactFilterLoader
     ezpublish.image_alias.imagine.filter.loader.scale_percent.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScalePercentFilterLoader
     ezpublish.image_alias.imagine.filter.loader.crop.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\CropFilterLoader
+    ezpublish.image_alias.imagine.filter.loader.border.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\BorderFilterLoader
 
 services:
     ezpublish.image_alias.imagine.binary_loader:
@@ -115,3 +116,8 @@ services:
             - [setInnerLoader, [@liip_imagine.filter.loader.crop]]
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/crop" }
+
+    ezpublish.image_alias.imagine.filter.loader.border:
+        class: %ezpublish.image_alias.imagine.filter.loader.border.class%
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "border" }
