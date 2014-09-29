@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
+namespace eZ\Bundle\EzPublishIOBundle\Tests\ApiLoader;
 
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\IOFactory;
+use eZ\Bundle\EzPublishIOBundle\ApiLoader\IOFactory;
 
 class IOFactoryTest extends \PHPUnit_Framework_TestCase
 {
