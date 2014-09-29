@@ -36,17 +36,29 @@ class ImageVariation extends ValueObjectVisitor
         $generator->startValueElement( 'uri', "/" . $data->uri );
         $generator->endValueElement( 'uri' );
 
-        $generator->startValueElement( 'contentType', $data->mimeType );
-        $generator->endValueElement( 'contentType' );
+        if ( $data->mimeType )
+        {
+            $generator->startValueElement( 'contentType', $data->mimeType );
+            $generator->endValueElement( 'contentType' );
+        }
 
-        $generator->startValueElement( 'width', $data->width );
-        $generator->endValueElement( 'width' );
+        if ( $data->width )
+        {
+            $generator->startValueElement( 'width', $data->width );
+            $generator->endValueElement( 'width' );
+        }
 
-        $generator->startValueElement( 'height', $data->height );
-        $generator->endValueElement( 'height' );
+        if ( $data->height )
+        {
+            $generator->startValueElement( 'height', $data->height );
+            $generator->endValueElement( 'height' );
+        }
 
-        $generator->startValueElement( 'fileSize', $data->fileSize );
-        $generator->endValueElement( 'fileSize' );
+        if ( $data->fileSize )
+        {
+            $generator->startValueElement( 'fileSize', $data->fileSize );
+            $generator->endValueElement( 'fileSize' );
+        }
 
         $generator->endObjectElement( 'ContentImageVariation' );
     }

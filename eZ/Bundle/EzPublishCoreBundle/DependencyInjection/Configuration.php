@@ -197,6 +197,10 @@ class Configuration extends SiteAccessConfiguration
     {
         $filtersInfo =
 <<<EOT
+DEPRECATED.
+This is only used for legacy injection.
+You may use imagick/gmagick liip_imagine bundle drivers.
+
 Hash of filters to be used for your image variations config.
 #   Key is the filter name, value is an argument passed to "convert" binary.
 #   You can use numbered placeholders (aka input variables) that will be replaced by defined parameters in your image variations config

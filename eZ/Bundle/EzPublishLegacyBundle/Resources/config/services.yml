@@ -196,6 +196,7 @@ services:
             - @ezpublish_legacy.persistence_cache_purger
             - @ezpublish.urlalias_generator
             - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish_legacy.image_alias.cleaner
             - %ezpublish_legacy.configuration_mapper.options%
         calls:
             - [setContainer, [@service_container]]
@@ -270,9 +271,6 @@ services:
     ezpublish_legacy.fieldType.ezimage.variation_service:
         class: %ezpublish_legacy.fieldType.ezimage.variation_service.class%
         arguments: [@ezpublish_legacy.kernel]
-
-    ezpublish.fieldType.ezimage.variation_service:
-        alias: ezpublish_legacy.fieldType.ezimage.variation_service
 
     ezpublish_legacy.rest_listener:
         class: %ezpublish_legacy.rest_listener.class%

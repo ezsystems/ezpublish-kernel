@@ -11,14 +11,26 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Configuration parser handling all basic configuration (aka "Image")
  */
-class Image extends AbstractParser
+class Image extends AbstractParser implements SuggestionCollectorAwareInterface
 {
+    /**
+     * @var SuggestionCollectorInterface
+     */
+    private $suggestionCollector;
+
+    public function setSuggestionCollector( SuggestionCollectorInterface $suggestionCollector )
+    {
+        $this->suggestionCollector = $suggestionCollector;
+    }
+
     /**
      * Adds semantic configuration definition.
      *
@@ -28,6 +40,7 @@ class Image extends AbstractParser
     {
         $nodeBuilder
             ->arrayNode( 'imagemagick' )
+                ->info( 'DEPRECATED.' )
                 ->children()
                     ->scalarNode( 'pre_parameters' )->info( 'Parameters that must be run BEFORE the filenames and filters' )->end()
                     ->scalarNode( 'post_parameters' )->info( 'Parameters that must be run AFTER the filenames and filters' )->end()
@@ -47,7 +60,7 @@ class Image extends AbstractParser
                             )
                         ),
                         'my_cropped_variation' => array(
-                            'reference'    => 'my_cropped_variation',
+                            'reference'    => 'my_image_variation',
                             'filters'      => array(
                                 array(
                                     'name'     => 'geometry/scalewidthdownonly',
@@ -61,7 +74,7 @@ class Image extends AbstractParser
                         )
                     )
                 )
-                ->useAttributeAsKey( 'key' )
+                ->useAttributeAsKey( 'variation_name' )
                 ->normalizeKeys( false )
                 ->prototype( 'array' )
                     ->children()
@@ -71,17 +84,28 @@ class Image extends AbstractParser
                         ->end()
                         ->arrayNode( 'filters' )
                             ->info( 'A list of filters to run, each filter must be supported by the active image converters' )
+                            ->useAttributeAsKey( 'name' )
+                            ->normalizeKeys( false )
                             ->prototype( 'array' )
-                                ->children()
-                                    ->scalarNode( 'name' )
-                                        ->info( 'The filter name, as defined in ImageMagick configuration, or a GD supported filter name' )
-                                        ->isRequired()
-                                    ->end()
-                                    ->arrayNode( 'params' )
-                                        ->info( 'Array of parameters to pass to the filter, if needed' )
-                                        ->prototype( 'scalar' )->end()
-                                    ->end()
+                                ->info( 'Array/Hash of parameters to pass to the filter' )
+                                ->useAttributeAsKey( 'options' )
+                                ->beforeNormalization()
+                                    ->ifTrue(
+                                        function ( $v )
+                                        {
+                                            // Check if passed array only contains a "params" key (BC with <=5.3).
+                                            return is_array( $v ) && count( $v ) === 1 && isset( $v['params'] );
+                                        }
+                                    )
+                                    ->then(
+                                        function ( $v )
+                                        {
+                                            // If we have the "params" key, just use the value.
+                                            return $v['params'];
+                                        }
+                                    )
                                 ->end()
+                                ->prototype( 'variable' )->end()
                             ->end()
                         ->end()
                     ->end()
@@ -96,22 +120,12 @@ class Image extends AbstractParser
 
     public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
     {
-        if ( isset( $scopeSettings['imagemagick']['pre_parameters'] ) )
+        if ( isset( $scopeSettings['imagemagick'] ) )
         {
-            $contextualizer->setContextualParameter(
-                'imagemagick.pre_parameters',
-                $currentScope,
-                $scopeSettings['imagemagick']['pre_parameters']
+            $suggestion = new ConfigSuggestion(
+                '"imagemagick" settings are deprecated. Just remove them from your configuration file.'
             );
-        }
-
-        if ( isset( $scopeSettings['imagemagick']['post_parameters'] ) )
-        {
-            $contextualizer->setContextualParameter(
-                'imagemagick.post_parameters',
-                $currentScope,
-                $scopeSettings['imagemagick']['post_parameters']
-            );
+            $this->suggestionCollector->addSuggestion( $suggestion );
         }
     }
 }

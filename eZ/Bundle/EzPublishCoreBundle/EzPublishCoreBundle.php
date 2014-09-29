@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\IdentityDefinerPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ImaginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RegisterStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\LegacyStorageEnginePass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass;
@@ -62,6 +63,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new RichTextHtml5ConverterPass );
         $container->addCompilerPass( new FragmentPass );
         $container->addCompilerPass( new StorageConnectionPass );
+        $container->addCompilerPass( new ImaginePass );
 
         // Storage passes
         $container->addCompilerPass( new ExternalStorageRegistryPass );

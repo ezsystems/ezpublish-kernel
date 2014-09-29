@@ -23,9 +23,28 @@ Changes affecting version compatibility with former or future versions.
           #    keyHashFunction: crc32
   ```
 
+* Property `id` for `eZ\Publish\Core\FieldType\Image\Value` (value object for `ezimage` FieldType) has changed.
+  It wrongly contained the full image path, including the storage directory (e.g. `var/ezdemo_site/storage/images/`.
+  To get the full path, use `uri` property.
+  Ref: [EZP-23349](https://jira.ez.no/browse/EZP-23349)
+
 
 ## Deprecations
 
+* `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.
+  An exception will be thrown when compiling the container to remind to remove them
+
+  ```diff
+  ezpublish:
+      system:
+          my_siteaccess:
+  -            imagemagick:
+  -                pre_parameters:
+  -                post_parameters:
+  ```
+
+* `imagemagick` settings at the application level (`convert` path and filters definitions) have been deprecated.
+  They will be removed in v6.0.
 
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for

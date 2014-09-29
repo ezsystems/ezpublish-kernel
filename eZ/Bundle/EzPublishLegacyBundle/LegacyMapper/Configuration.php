@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\LegacyMapper;
 
+use eZ\Publish\Core\FieldType\Image\AliasCleanerInterface;
 use eZ\Publish\Core\MVC\Legacy\LegacyEvents;
 use eZ\Publish\Core\MVC\Legacy\Event\PreBuildKernelEvent;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -64,12 +65,18 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
      */
     private $enabled = true;
 
+    /**
+     * @var AliasCleanerInterface
+     */
+    private $aliasCleaner;
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         GatewayCachePurger $gatewayCachePurger,
         PersistenceCachePurger $persistenceCachePurger,
         UrlAliasGenerator $urlAliasGenerator,
         DatabaseHandler $legacyDbHandler,
+        AliasCleanerInterface $aliasCleaner,
         array $options = array()
     )
     {
@@ -78,6 +85,7 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
         $this->persistenceCachePurger = $persistenceCachePurger;
         $this->urlAliasGenerator = $urlAliasGenerator;
         $this->legacyDbHandler = $legacyDbHandler;
+        $this->aliasCleaner = $aliasCleaner;
         $this->options = $options;
     }
 
@@ -199,18 +207,24 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
         }
 
         // Register http cache content/cache event listener
-        ezpEvent::getInstance()->attach( 'content/cache', array( $this->gatewayCachePurger, 'purge' ) );
-        ezpEvent::getInstance()->attach( 'content/cache/all', array( $this->gatewayCachePurger, 'purgeAll' ) );
+        $ezpEvent = ezpEvent::getInstance();
+        $ezpEvent->attach( 'content/cache', array( $this->gatewayCachePurger, 'purge' ) );
+        $ezpEvent->attach( 'content/cache/all', array( $this->gatewayCachePurger, 'purgeAll' ) );
 
         // Register persistence cache event listeners
-        ezpEvent::getInstance()->attach( 'content/cache', array( $this->persistenceCachePurger, 'content' ) );
-        ezpEvent::getInstance()->attach( 'content/cache/all', array( $this->persistenceCachePurger, 'all' ) );
-        ezpEvent::getInstance()->attach( 'content/class/cache/all', array( $this->persistenceCachePurger, 'contentType' ) );
-        ezpEvent::getInstance()->attach( 'content/class/cache', array( $this->persistenceCachePurger, 'contentType' ) );
-        ezpEvent::getInstance()->attach( 'content/class/group/cache', array( $this->persistenceCachePurger, 'contentTypeGroup' ) );
-        ezpEvent::getInstance()->attach( 'content/section/cache', array( $this->persistenceCachePurger, 'section' ) );
-        ezpEvent::getInstance()->attach( 'user/cache/all', array( $this->persistenceCachePurger, 'user' ) );
-        ezpEvent::getInstance()->attach( 'content/translations/cache', array( $this->persistenceCachePurger, 'languages' ) );
+        $ezpEvent->attach( 'content/cache', array( $this->persistenceCachePurger, 'content' ) );
+        $ezpEvent->attach( 'content/cache/all', array( $this->persistenceCachePurger, 'all' ) );
+        $ezpEvent->attach( 'content/class/cache/all', array( $this->persistenceCachePurger, 'contentType' ) );
+        $ezpEvent->attach( 'content/class/cache', array( $this->persistenceCachePurger, 'contentType' ) );
+        $ezpEvent->attach( 'content/class/group/cache', array( $this->persistenceCachePurger, 'contentTypeGroup' ) );
+        $ezpEvent->attach( 'content/section/cache', array( $this->persistenceCachePurger, 'section' ) );
+        $ezpEvent->attach( 'user/cache/all', array( $this->persistenceCachePurger, 'user' ) );
+        $ezpEvent->attach( 'content/translations/cache', array( $this->persistenceCachePurger, 'languages' ) );
+
+        // Register image alias removal listeners
+        $ezpEvent->attach( 'image/removeAliases', array( $this->aliasCleaner, 'removeAliases' ) );
+        $ezpEvent->attach( 'image/trashAliases', array( $this->aliasCleaner, 'removeAliases' ) );
+        $ezpEvent->attach( 'image/purgeAliases', array( $this->aliasCleaner, 'removeAliases' ) );
     }
 
     private function getImageSettings()
@@ -231,15 +245,20 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
         );
 
         // Aliases configuration
-        foreach ( $this->configResolver->getParameter( 'image_variations' ) as $aliasName => $aliasSettings )
+        $imageVariations = $this->configResolver->getParameter( 'image_variations' );
+        foreach ( $imageVariations as $aliasName => $aliasSettings )
         {
             $imageSettings['image.ini/AliasSettings/AliasList'][] = $aliasName;
             if ( isset( $aliasSettings['reference'] ) )
                 $imageSettings["image.ini/$aliasName/Reference"] = $aliasSettings['reference'];
 
-            foreach ( $aliasSettings['filters'] as $filter )
+            foreach ( $aliasSettings['filters'] as $filterName => $filter )
             {
-                $imageSettings["image.ini/$aliasName/Filters"][] = $filter['name'] . '=' . implode( ';', $filter['params'] );
+                if ( !isset( $this->options['imagemagick_filters'][$filterName] ) )
+                {
+                    continue;
+                }
+                $imageSettings["image.ini/$aliasName/Filters"][] = $filterName . '=' . implode( ';', $filter );
             }
         }
 

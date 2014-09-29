@@ -182,10 +182,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                 'imagemagick' => array(
                     'enabled' => true,
                     'path' => '/usr/bin/convert',
-                    'filters' => array(
-                        'geometry/scale' => '-geometry {1}x{2}',
-                        'geometry/scalewidth' => '-geometry {1}',
-                    ),
                 ),
                 'http_cache' => array( 'purge_type' => 'local' )
             ),

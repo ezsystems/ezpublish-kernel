@@ -87,6 +87,13 @@ EOT;
 
         $formatter = new YamlSuggestionFormatter();
         $this->assertSame( $expectedMessage, trim( $formatter->format( $suggestion ) ) );
+    }
 
+    public function testFormatNoSuggestion()
+    {
+        $message = 'This is a message';
+        $suggestion = new ConfigSuggestion( $message );
+        $formatter = new YamlSuggestionFormatter();
+        $this->assertSame( $message, $formatter->format( $suggestion ) );
     }
 }

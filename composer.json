@@ -29,7 +29,8 @@
         "pagerfanta/pagerfanta": "~1.0",
         "doctrine/dbal": "2.5.*@beta",
         "ocramius/proxy-manager": "0.5.*",
-        "doctrine/doctrine-bundle": "1.3.*@beta"
+        "doctrine/doctrine-bundle": "1.3.*@beta",
+        "liip/imagine-bundle": "~1.0"
     },
     "require-dev": {
         "ezsystems/ezpublish-legacy": "@dev",
