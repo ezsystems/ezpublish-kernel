@@ -31,3 +31,4 @@ services:
         class: %ezpublish.core.io.handler.class%
         factory_service: ezpublish.core.io.factory
         factory_method: buildConfiguredHandler
+
