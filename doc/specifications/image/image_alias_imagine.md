@@ -69,7 +69,7 @@ and custom ones.
 ### Discarded filters
 The following filters have been discarded due to incompatibility:
 
-* `flatten`
+* `flatten`. Obsolete, images are automatically flattened.
 * `bordercolor`
 * `border/width`
 
