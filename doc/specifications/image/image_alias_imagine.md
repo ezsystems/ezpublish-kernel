@@ -62,7 +62,8 @@ the following are available:
 | geometry/crop                | [width, height, startX, startY]          | Crops the image.  Result will have provided width/height, starting at provided startX/startY |
 | border                       | [thickBorderX, thickBorderY, color=#000] | Adds a border around the image. Thickness is defined in px. Color is "#000" by default.      |
 | noise                        | [radius=0]                               | Smooths the contours of an image (`imagick`/`gmagick` only). `radius` is in pixel.           |
-| resize                       | {size: [width, height]}                  | Simple resize filter (provided by LiipImagineBundle)                                         |
+| resize                       | {size: [width, height]}                  | Simple resize filter (provided by LiipImagineBundle).                                        |
+| colorspace/gray              | N/A                                      | Converts an image to grayscale.                                                              |
 
 > *Tip:* It is possible to combine filters from the list above to [the ones provided in LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md)
 and custom ones.
@@ -73,6 +74,8 @@ The following filters have been discarded due to incompatibility:
 * `flatten`. Obsolete, images are automatically flattened.
 * `bordercolor`
 * `border/width`
+* `colorspace/transparent`
+* `colorspace`
 
 ### Custom filters
 Please refer to [LiipImagineBundle documentation on custom filters](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md#load-your-custom-filters).
