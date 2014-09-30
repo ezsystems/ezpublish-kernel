@@ -32,6 +32,7 @@ class ImaginePass implements CompilerPassInterface
             $driver = substr( $imagineAlias, strripos( $imagineAlias, '.' ) + 1 );
 
             $this->processReduceNoiseFilter( $container, $driver );
+            $this->processSwirlFilter( $container, $driver );
         }
     }
 
@@ -45,6 +46,19 @@ class ImaginePass implements CompilerPassInterface
         $container->setAlias(
             'ezpublish.image_alias.imagine.filter.reduce_noise',
             new Alias( "ezpublish.image_alias.imagine.filter.reduce_noise.$driver" )
+        );
+    }
+
+    private function processSwirlFilter( ContainerBuilder $container, $driver )
+    {
+        if ( $driver !== 'imagick' && $driver !== 'gmagick' )
+        {
+            return;
+        }
+
+        $container->setAlias(
+            'ezpublish.image_alias.imagine.filter.swirl',
+            new Alias( "ezpublish.image_alias.imagine.filter.swirl.$driver" )
         );
     }
 }

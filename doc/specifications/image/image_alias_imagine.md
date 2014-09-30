@@ -49,21 +49,22 @@ ezpublish:
 In addition to [filters exposed by LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/configuration.md),
 the following are available:
 
-| Filter name                  | Parameters                               | Description                                                                                  |
-|:----------------------------:|:----------------------------------------:|:--------------------------------------------------------------------------------------------:|
-| geometry/scaledownonly       | [width, height]                          | Generates a thumbnail that will not exceed width/height.                                     |
-| geometry/scalewidthdownonly  | [width]                                  | Generates a thumbnail that will not exceed width.                                            |
-| geometry/scaleheightdownonly | [height]                                 | Generates a thumbnail that will not exceed height.                                           |
-| geometry/scalewidth          | [width]                                  | Alters image width.   Proportion will be kept.                                               |
-| geometry/scaleheight         | [height]                                 | Alters image height.  Proportion will be kept.                                               |
-| geometry/scale               | [width, height]                          | Alters image size, not exceeding provided width and height.  Proportion will be kept.        |
-| geometry/scaleexact          | [width, height]                          | Alters image size to fit exactly provided width and height.  Proportion will not be kept.    |
-| geometry/scalepercent        | [widthPercent, heightPercent]            | Scales width and height with provided percent values.  Proportion will not be kept.          |
-| geometry/crop                | [width, height, startX, startY]          | Crops the image.  Result will have provided width/height, starting at provided startX/startY |
-| border                       | [thickBorderX, thickBorderY, color=#000] | Adds a border around the image. Thickness is defined in px. Color is "#000" by default.      |
-| noise                        | [radius=0]                               | Smooths the contours of an image (`imagick`/`gmagick` only). `radius` is in pixel.           |
-| resize                       | {size: [width, height]}                  | Simple resize filter (provided by LiipImagineBundle).                                        |
-| colorspace/gray              | N/A                                      | Converts an image to grayscale.                                                              |
+| Filter name                  | Parameters                               | Description                                                                                        |
+|:----------------------------:|:----------------------------------------:|:--------------------------------------------------------------------------------------------------:|
+| geometry/scaledownonly       | [width, height]                          | Generates a thumbnail that will not exceed width/height.                                           |
+| geometry/scalewidthdownonly  | [width]                                  | Generates a thumbnail that will not exceed width.                                                  |
+| geometry/scaleheightdownonly | [height]                                 | Generates a thumbnail that will not exceed height.                                                 |
+| geometry/scalewidth          | [width]                                  | Alters image width.   Proportion will be kept.                                                     |
+| geometry/scaleheight         | [height]                                 | Alters image height.  Proportion will be kept.                                                     |
+| geometry/scale               | [width, height]                          | Alters image size, not exceeding provided width and height.  Proportion will be kept.              |
+| geometry/scaleexact          | [width, height]                          | Alters image size to fit exactly provided width and height.  Proportion will not be kept.          |
+| geometry/scalepercent        | [widthPercent, heightPercent]            | Scales width and height with provided percent values.  Proportion will not be kept.                |
+| geometry/crop                | [width, height, startX, startY]          | Crops the image.  Result will have provided width/height, starting at provided startX/startY       |
+| border                       | [thickBorderX, thickBorderY, color=#000] | Adds a border around the image. Thickness is defined in px. Color is "#000" by default.            |
+| filter/noise                 | [radius=0]                               | Smooths the contours of an image (`imagick`/`gmagick` only). `radius` is in pixel.                 |
+| filter/swirl                 | [degrees=60]                             | Swirls the pixels of the center of an image (`imagick`/`gmagick` only). `degrees` defaults to 60°. |
+| resize                       | {size: [width, height]}                  | Simple resize filter (provided by LiipImagineBundle).                                              |
+| colorspace/gray              | N/A                                      | Converts an image to grayscale.                                                                    |
 
 > *Tip:* It is possible to combine filters from the list above to [the ones provided in LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md)
 and custom ones.
