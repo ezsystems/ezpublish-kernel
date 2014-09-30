@@ -1,0 +1,34 @@
+parameters:
+    ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
+    ezpublish.core.io.factory.class: eZ\Bundle\EzPublishIOBundle\ApiLoader\IOFactory
+    ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
+    ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
+    ezpublish.core.io.handler.class: eZ\Publish\Core\IO\Handler
+
+services:
+    ezpublish.core.io.factory:
+        class: %ezpublish.core.io.factory.class%
+        arguments:
+            - @ezpublish.config.resolver
+            - @ezpublish.core.io.mimeTypeDetector
+        calls:
+            - [setContainer, [@service_container]]
+
+    ezpublish.core.io.service:
+        class: %ezpublish.core.io.service.class%
+        arguments:
+            - @ezpublish.core.io.handler
+            - @ezpublish.core.io.mimetypedetector
+
+    ezpublish.core.io.handler.filesystem:
+        class: %ezpublish.core.io.handler.filesystem.class%
+        factory_service: ezpublish.core.io.factory
+        factory_method: buildFilesystemHandler
+        tags:
+            - { name: ezpublish.io_handler, alias: filesystem }
+
+    ezpublish.core.io.handler:
+        class: %ezpublish.core.io.handler.class%
+        factory_service: ezpublish.core.io.factory
+        factory_method: buildConfiguredHandler
+

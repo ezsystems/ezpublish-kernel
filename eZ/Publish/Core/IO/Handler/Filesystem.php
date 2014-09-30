@@ -28,6 +28,7 @@ class Filesystem implements IOHandlerInterface
 {
     /**
      * The storage directory where data is stored
+     *
      * Example: var/site/storage
      * @var string
      */
