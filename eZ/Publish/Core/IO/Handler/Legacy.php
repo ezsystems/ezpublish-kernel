@@ -545,6 +545,16 @@ class Legacy implements IOHandlerInterface
 
     public function getUri( $spiBinaryFileId )
     {
-        return '/' . $this->getInternalPath( $spiBinaryFileId );
+        $storagePath = $this->getStoragePath( $spiBinaryFileId );
+        $result = $this->getLegacyKernel()->runCallback(
+            function () use ( $storagePath )
+            {
+                $clusterFile = eZClusterFileHandler::instance( $storagePath );
+                return $clusterFile->applyServerUri( $storagePath );
+            },
+            false
+        );
+
+        return $result;
     }
 }
