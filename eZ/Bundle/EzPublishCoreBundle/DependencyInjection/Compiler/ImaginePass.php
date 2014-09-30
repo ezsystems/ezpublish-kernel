@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -24,5 +25,26 @@ class ImaginePass implements CompilerPassInterface
 
         $filterConfigDef = $container->findDefinition( 'liip_imagine.filter.configuration' );
         $filterConfigDef->addMethodCall( 'setConfigResolver', array( new Reference( 'ezpublish.config.resolver' ) ) );
+
+        if ( $container->hasAlias( 'liip_imagine' ) )
+        {
+            $imagineAlias = (string)$container->getAlias( 'liip_imagine' );
+            $driver = substr( $imagineAlias, strripos( $imagineAlias, '.' ) + 1 );
+
+            $this->processReduceNoiseFilter( $container, $driver );
+        }
+    }
+
+    private function processReduceNoiseFilter( ContainerBuilder $container, $driver )
+    {
+        if ( $driver !== 'imagick' && $driver !== 'gmagick' )
+        {
+            return;
+        }
+
+        $container->setAlias(
+            'ezpublish.image_alias.imagine.filter.reduce_noise',
+            new Alias( "ezpublish.image_alias.imagine.filter.reduce_noise.$driver" )
+        );
     }
 }
