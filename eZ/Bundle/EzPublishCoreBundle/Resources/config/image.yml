@@ -151,6 +151,7 @@ services:
 
     ezpublish.image_alias.imagine.filter.loader.crop:
         class: %ezpublish.image_alias.imagine.filter.loader.crop.class%
+        public: false
         calls:
             - [setInnerLoader, [@liip_imagine.filter.loader.crop]]
         tags:
@@ -158,12 +159,14 @@ services:
 
     ezpublish.image_alias.imagine.filter.loader.border:
         class: %ezpublish.image_alias.imagine.filter.loader.border.class%
+        public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "border" }
 
     ezpublish.image_alias.imagine.filter.loader.reduce_noise:
         class: %ezpublish.image_alias.imagine.filter.loader.reduce_noise.class%
         arguments: [@ezpublish.image_alias.imagine.filter.reduce_noise]
+        public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "filter/noise" }
 
@@ -176,5 +179,6 @@ services:
 
     ezpublish.image_alias.imagine.filter.loader.grayscale:
         class: %ezpublish.image_alias.imagine.filter.loader.grayscale.class%
+        public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "colorspace/gray" }
