@@ -6,24 +6,23 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\IO\Handler\DFS;
+namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
-interface BinaryDataHandler
+interface IOBinaryDataHandler
 {
     /**
      * Creates the file $path with data from $resource
-     * @param string $path
-     * @param resource $resource
      *
-     * @throws InvalidArgumentException If file already exists
+     * @param BinaryFileCreateStruct $binaryFileCreateStruct
      *
      * @return void
      */
-    public function createFromStream( $path, $resource );
+    public function createFromStream( BinaryFileCreateStruct $binaryFileCreateStruct );
 
     /**
      * Deletes the file $path

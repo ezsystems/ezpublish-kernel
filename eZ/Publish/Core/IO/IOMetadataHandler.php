@@ -6,19 +6,24 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\IO\Handler\DFS;
+namespace eZ\Publish\Core\IO;
 
-interface MetadataHandler
+use eZ\Publish\SPI\IO\BinaryFile;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+
+interface IOMetadataHandler
 {
     /**
-     * Inserts a new reference to file $path
+     * Stores the file from $binaryFileCreateStruct
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If a file $path already exists
+     * @param BinaryFileCreateStruct $binaryFileCreateStruct
      *
-     * @param string $path
-     * @param integer $mtime
+     * @return BinaryFile
+     *
+     * @throws @todo
+     *
      */
-    public function insert( $path, $mtime );
+    public function insert( BinaryFileCreateStruct $binaryFileCreateStruct );
 
     /**
      * Deletes file $path
@@ -34,7 +39,7 @@ interface MetadataHandler
      *
      * @param string $path
      *
-     * @return array A hash with metadata for $path. Keys: mtime, size.
+     * @return BinaryFile
      */
     public function loadMetadata( $path );
 

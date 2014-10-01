@@ -1,299 +1,388 @@
 <?php
 /**
- * File containing the DFS class.
+ * File containing the eZ\Publish\Core\Repository\IOService class.
  *
- * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\IO\Handler;
 
-use eZ\Publish\Core\IO\Handler\DFS\MetadataHandler as DFSMetadataHandler;
-use eZ\Publish\Core\IO\Handler\DFS\BinaryDataHandler as DFSBinaryDataHandler;
-use eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\Core\IO\Handler as IOHandler;
-use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
-use eZ\Publish\Core\IO\ParameterResolver;
-use eZ\Publish\SPI\IO\BinaryFile;
-use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
-use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
-use InvalidArgumentException;
+namespace eZ\Publish\Core\IO;
 
-class DFS implements IOHandler
+use eZ\Publish\Core\IO\Handler;
+use eZ\Publish\Core\IO\Values\BinaryFile;
+use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\MimeTypeDetector;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\IO\MetadataHandler;
+
+/**
+ * The io service for managing binary files
+ *
+ * @package eZ\Publish\Core\Repository
+ */
+class IOService implements IOServiceInterface
 {
-    /** @var DFSBinaryDataHandler */
-    protected $binaryDataHandler;
+    /** @var IOBinaryDataHandler */
+    protected $binarydataHandler;
 
-    /** @var DFSMetadataHandler */
-    protected $metaDataHandler;
+    /** @var IOMetadataHandler */
+    protected $metadataHandler;
 
-    /** @var string */
-    protected $storagePrefix;
+    /** @var MimeTypeDetector */
+    protected $mimeTypeDetector;
 
     /**
-     * @param DFSMetadataHandler $metaDataHandler
-     * @param DFSBinaryDataHandler $binaryDataHandler
+     * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @internal param string $storagePrefix
+     * @param IOMetadataHandler $metadataHandler
+     * @param IOBinarydataHandler $binarydataHandler
+     * @param array $settings
+     *
+     * @internal param Handler $handler
      */
-    public function __construct( DFSMetadataHandler $metaDataHandler, DFSBinaryDataHandler $binaryDataHandler, $storagePrefix )
+    public function __construct(
+        IOMetadataHandler $metadataHandler,
+        IOBinarydataHandler $binarydataHandler,
+        array $settings = array() )
     {
-        $this->storagePrefix = $storagePrefix;
-        $this->metaDataHandler = $metaDataHandler;
-        $this->binaryDataHandler = $binaryDataHandler;
+        $this->metadataHandler = $metadataHandler;
+        $this->binarydataHandler = $binarydataHandler;
+
+        // Union makes sure default settings are ignored if provided in argument
+        $this->settings = $settings + array();
     }
 
     /**
-     * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
+     * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
      *
-     * @throws InvalidArgumentException If the target path already exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When given an invalid uploaded file
      *
-     * @param BinaryFileCreateStruct $createStruct
+     * @param array $uploadedFile The $_POST hash of an uploaded file
      *
-     * @return BinaryFile The newly created BinaryFile object
+     * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
      */
-    public function create( BinaryFileCreateStruct $createStruct )
+    public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
     {
-        $path = $this->addStoragePrefix( $createStruct->id );
-        $this->metaDataHandler->insert( $path, $createStruct->size );
-        $this->binaryDataHandler->createFromStream( $path, $createStruct->getInputStream() );
-        return $this->load( $createStruct->id );
+        if ( !is_string( $uploadedFile['tmp_name'] ) || empty( $uploadedFile['tmp_name'] ) )
+            throw new InvalidArgumentException( "uploadedFile", "uploadedFile['tmp_name'] does not exist or has invalid value" );
+
+        if ( !is_uploaded_file( $uploadedFile['tmp_name'] ) || !is_readable( $uploadedFile['tmp_name'] ) )
+            throw new InvalidArgumentException( "uploadedFile", "file was not uploaded or is unreadable" );
+
+        $fileHandle = fopen( $uploadedFile['tmp_name'], 'rb' );
+        if ( $fileHandle === false )
+            throw new InvalidArgumentException( "uploadedFile", "failed to get file resource" );
+
+        $binaryCreateStruct = new BinaryFileCreateStruct();
+        $binaryCreateStruct->size = $uploadedFile['size'];
+        $binaryCreateStruct->inputStream = $fileHandle;
+        $binaryCreateStruct->mimeType = $uploadedFile['type'];
+
+        return $binaryCreateStruct;
     }
 
     /**
-     * Deletes the existing BinaryFile with path $path
+     * Creates a BinaryFileCreateStruct object from $localFile
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When $localFile doesn't exist/can't be read
      *
-     * @param string $spiBinaryFileId
+     * @param string $localFile Path to local file
+     *
+     * @return \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct
      */
-    public function delete( $spiBinaryFileId )
+    public function newBinaryCreateStructFromLocalFile( $localFile )
     {
-        $path = $this->addStoragePrefix( $spiBinaryFileId );
-        $this->metaDataHandler->delete( $path );
-        $this->binaryDataHandler->delete( $path );
+        if ( empty( $localFile ) || !is_string( $localFile ) )
+            throw new InvalidArgumentException( "localFile", "localFile has an invalid value" );
+
+        if ( !is_file( $localFile ) || !is_readable( $localFile ) )
+            throw new InvalidArgumentException( "localFile", "file does not exist or is unreadable: {$localFile}" );
+
+        $fileHandle = fopen( $localFile, 'rb' );
+        if ( $fileHandle === false )
+            throw new InvalidArgumentException( "localFile", "failed to get file resource" );
+
+        $binaryCreateStruct = new BinaryFileCreateStruct(
+            array(
+                'size' => filesize( $localFile ),
+                'inputStream' => $fileHandle,
+                'mimeType' => $this->mimeTypeDetector->getFromPath( $localFile )
+            )
+        );
+
+        return $binaryCreateStruct;
     }
 
     /**
-     * Updates the file identified by $path with data from $updateFile
+     * Creates a binary file in the repository
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the source path doesn't exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
+     * @param \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct $binaryFileCreateStruct
      *
-     * @param string $spiBinaryFileId
-     * @param BinaryFileUpdateStruct $updateFileStruct
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      *
-     * @return BinaryFile The updated BinaryFile
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile The created BinaryFile object
      */
-    public function update( $spiBinaryFileId, BinaryFileUpdateStruct $updateFileStruct )
+    public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
-        if ( !$this->exists( $spiBinaryFileId ) )
+        if ( empty( $binaryFileCreateStruct->id ) || !is_string( $binaryFileCreateStruct->id ) )
+            throw new InvalidArgumentValue( "id", $binaryFileCreateStruct->id, "BinaryFileCreateStruct" );
+
+        if ( !is_int( $binaryFileCreateStruct->size ) || $binaryFileCreateStruct->size < 0 )
+            throw new InvalidArgumentValue( "size", $binaryFileCreateStruct->size, "BinaryFileCreateStruct" );
+
+        if ( !is_resource( $binaryFileCreateStruct->inputStream ) )
+            throw new InvalidArgumentValue( "inputStream", "property is not a file resource", "BinaryFileCreateStruct" );
+
+        if ( !isset( $binaryFileCreateStruct->mimeType ) )
         {
-            throw new Exceptions\NotFoundException( 'BinaryFile', $spiBinaryFileId );
+            $buffer = fread( $binaryFileCreateStruct->inputStream, $binaryFileCreateStruct->size );
+            $binaryFileCreateStruct->mimeType = $this->mimeTypeDetector->getFromBuffer( $buffer );
+            unset( $buffer );
         }
 
-        $sourceStoragePath = $this->addStoragePrefix( $spiBinaryFileId );
+        $spiBinaryCreateStruct = $this->buildSPIBinaryFileCreateStructObject( $binaryFileCreateStruct );
 
-        if ( !isset( $updateFileStruct->id ) || $updateFileStruct->id == $spiBinaryFileId )
+        try
         {
-            $destinationStoragePath = $this->addStoragePrefix( $spiBinaryFileId );
+            $this->binarydataHandler->createFromStream( $spiBinaryCreateStruct );
         }
-        else
+        catch ( \Exception $e )
         {
-            $destinationStoragePath = $this->addStoragePrefix( $updateFileStruct->id );
-
-            if ( $this->metaDataHandler->exists( $destinationStoragePath ) )
-            {
-                throw new Exceptions\InvalidArgumentException(
-                    "\$updateFileStruct->id",
-                    "File '{$updateFileStruct->id}' already exists"
-                );
-            }
+            throw new \Exception( "@todo" );
         }
 
-        if ( $destinationStoragePath != $sourceStoragePath )
-        {
-            $this->metaDataHandler->rename( $sourceStoragePath, $destinationStoragePath );
-            $this->binaryDataHandler->rename( $sourceStoragePath, $destinationStoragePath );
-        }
+        $spiBinaryFile = $this->metadataHandler->insert( $spiBinaryCreateStruct );
 
-        if ( $updateFileStruct->getInputStream() !== null )
-        {
-            $this->binaryDataHandler->updateFileContents(
-                $destinationStoragePath,
-                $updateFileStruct->getInputStream()
-            );
-        }
-
-        return $this->load( $updateFileStruct->id );
+        return $this->buildDomainBinaryFileObject( $spiBinaryFile );
     }
 
     /**
-     * Checks if the BinaryFile with path $path exists
+     * Deletes $binaryFile
      *
-     * @param string $spiBinaryFileId
+     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
-     * @return boolean
+     * @throws InvalidArgumentValue
      */
-    public function exists( $spiBinaryFileId )
+    public function deleteBinaryFile( BinaryFile $binaryFile )
     {
-        return $this->metaDataHandler->exists(
-            $this->addStoragePrefix( $spiBinaryFileId )
+        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
+            throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
+
+        $spiUri = $this->getPrefixedUri( $binaryFile->id );
+        try
+        {
+            $this->metadataHandler->delete( $spiUri );
+        }
+        catch ( \Exception $e )
+        {
+            $this->binarydataHandler->delete( $spiUri );
+            throw new \Exception( "@todo" );
+        }
+        $this->binarydataHandler->delete( $spiUri );
+    }
+
+    /**
+     * Loads the binary file with $binaryFileId
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $binaryFileId exists
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $binaryFileId is invalid
+     * @param string $binaryFileId
+     * @return BinaryFile|bool the file, or false if it doesn't exist
+     */
+    public function loadBinaryFile( $binaryFileId )
+    {
+        if ( empty( $binaryFileId ) || !is_string( $binaryFileId ) )
+            throw new InvalidArgumentValue( "binaryFileId", $binaryFileId );
+
+        // @todo An absolute path can in no case be loaded, but throwing an exception is a bit too much at this stage
+        if ( $binaryFileId[0] === '/' )
+            return false;
+
+        return $this->buildDomainBinaryFileObject(
+            $this->metadataHandler->loadMetadata( $this->getPrefixedUri( $binaryFileId ) )
         );
     }
 
     /**
-     * Loads the BinaryFile identified by $path
+     * Returns a read (mode: rb) file resource to $binaryFile
      *
-     * @throws NotFoundException If no file identified by $path exists
+     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
-     * @param string $spiBinaryFileId
-     *
-     * @return BinaryFile
-     */
-    public function load( $spiBinaryFileId )
-    {
-        $metadata = $this->metaDataHandler->loadMetadata(
-            $this->addStoragePrefix( $spiBinaryFileId )
-        );
-
-        $spiBinaryFile = new BinaryFile;
-        $spiBinaryFile->id = $spiBinaryFileId;
-        $spiBinaryFile->mtime = new \DateTime( "@{$metadata['mtime']}" );
-        $spiBinaryFile->size = $metadata['size'];
-        $spiBinaryFile->uri = $this->getUri( $spiBinaryFileId );
-
-        return $spiBinaryFile;
-    }
-
-    /**
-     * Returns a read only, binary file resource to the BinaryFile identified by $path
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
-     *
-     * @param string $spiBinaryFileId
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      *
      * @return resource
      */
-    public function getFileResource( $spiBinaryFileId )
+    public function getFileInputStream( BinaryFile $binaryFile )
     {
-        if ( !$this->exists( $spiBinaryFileId ) )
-        {
-            throw new Exceptions\NotFoundException( 'BinaryFile', $spiBinaryFileId );
-        }
-        return $this->binaryDataHandler->getFileResource( $this->addStoragePrefix( $spiBinaryFileId ) );
-    }
+        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
+            throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
 
-    /**
-     * Returns the contents of the BinaryFile identified by $path
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
-     *
-     * @param string $spiBinaryFileId
-     *
-     * @return string
-     */
-    public function getFileContents( $spiBinaryFileId )
-    {
-        return $this->binaryDataHandler->getFileContents(
-            $this->addStoragePrefix( $spiBinaryFileId )
+        return $this->binarydataHandler->getFileResource(
+            $this->getPrefixedUri( $binaryFile->id )
         );
     }
 
     /**
-     * Returns the internal, handler level path from the api level $binaryFileId
+     * Returns the content of the binary file
      *
-     * @param string $spiBinaryFileId
+     * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+
      * @return string
      */
-    public function getInternalPath( $externalPath )
+    public function getFileContents( BinaryFile $binaryFile )
     {
-        return $this->addStoragePrefix( $externalPath );
+        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
+            throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
+
+        return $this->binarydataHandler->getFileContents(
+            $this->getPrefixedUri( $binaryFile->id )
+        );
     }
 
     /**
-     * Removes the internal storage path from $path
-     *
-     * @param string $apiBinaryFileId
-     *
+     * Returns the internal, handler level path to $externalPath
+     * @param string $externalId
      * @return string
      */
-    public function getExternalPath( $path )
+    public function getInternalPath( $externalId )
     {
-        return $this->removeStoragePrefix( $path );
+        // @todo fix if still required
+        /*$path = $this->metadataHandler->getInternalPath(
+            $this->getPrefixedUri( $externalId )
+        );*/
+        return $externalId;
     }
 
     /**
-     * Executes $metadataHandler on $path, and returns the metadata array
-     *
+     * Returns the external path to $internalId
+     * @param string $internalId
+     * @return string
+     */
+    public function getExternalPath( $internalId )
+    {
+        // @todo fix if still required
+        return $internalId;
+        // return $this->removeUriPrefix( $this->ioHandler->getExternalPath( $internalId ) );
+    }
+
+    /**
+     * Returns the public HTTP uri for $id
+     * @param string $id
+     * @return string
+     */
+    public function getUri( $id )
+    {
+        // @todo UrlDecorator ?
+        return $this->binarydataHandler->getUri( $id );
+    }
+
+    /**
      * @param MetadataHandler $metadataHandler
-     * @param string $spiBinaryFileId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $spiBinaryFileId isn't
+     * @param BinaryFile      $binaryFile
      *
      * @return array
-     *
-     * @todo Consider having specific metadatahandler interfaces: FileMetadataHandler, PathMetadataHandler...
      */
-    public function getMetadata( IOMetadataHandler $metadataHandler, $spiBinaryFileId )
+    public function getMetadata( MetadataHandler $metadataHandler, BinaryFile $binaryFile )
     {
-        return $this->binaryDataHandler->getMetadata(
+        // @todo Check if still required
+        return array();
+        /*$this->ioHandler->getMetadata(
             $metadataHandler,
-            $this->addStoragePrefix( $spiBinaryFileId )
-        );
+            $this->getPrefixedUri( $binaryFile->id )
+        );*/
+    }
+
+    public function exists( $binaryFileId )
+    {
+        return $this->metadataHandler->exists( $this->getPrefixedUri( $binaryFileId ) );
     }
 
     /**
-     * Returns the file's public HTTP URI, as exposed from the outside
-     * @deprecated should not be required. Seek & destroy.
+     * Generates SPI BinaryFileCreateStruct object from provided API BinaryFileCreateStruct object
      *
-     * @param string $spiBinaryFileId
+     * @param \eZ\Publish\Core\IO\Values\BinaryFileCreateStruct $binaryFileCreateStruct
      *
-     * @return string
-     *
-     * @todo Make it depend on the BinaryDataHandler (right ?)
+     * @return \eZ\Publish\SPI\IO\BinaryFileCreateStruct
      */
-    public function getUri( $spiBinaryFileId )
+    protected function buildSPIBinaryFileCreateStructObject( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
-        return $this->binaryDataHandler->getUri( $this->addStoragePrefix( $spiBinaryFileId ) );
+        $spiBinaryCreateStruct = new SPIBinaryFileCreateStruct();
+
+        $spiBinaryCreateStruct->id = $this->getPrefixedUri( $binaryFileCreateStruct->id );
+        $spiBinaryCreateStruct->size = $binaryFileCreateStruct->size;
+        $spiBinaryCreateStruct->setInputStream( $binaryFileCreateStruct->inputStream );
+        $spiBinaryCreateStruct->mimeType = $binaryFileCreateStruct->mimeType;
+
+        return $spiBinaryCreateStruct;
     }
 
     /**
-     * Prefixes $spiBinaryFileId with the storage prefix, if any
-     * @param string $spiBinaryFileId
-     * @return string
-     */
-    protected function addStoragePrefix( $spiBinaryFileId )
-    {
-        if ( $this->storagePrefix )
-            $spiBinaryFileId = $this->storagePrefix . '/' . $spiBinaryFileId;
-        return $spiBinaryFileId;
-    }
-
-    /**
-     * Removes the storage prefix from $path
+     * Generates API BinaryFile object from provided SPI BinaryFile object
      *
-     * @param $path
+     * @param \eZ\Publish\SPI\IO\BinaryFile $spiBinaryFile
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @return string
+     * @return \eZ\Publish\Core\IO\Values\BinaryFile
      */
-    protected function removeStoragePrefix( $path )
+    protected function buildDomainBinaryFileObject( SPIBinaryFile $spiBinaryFile )
     {
-        if ( !$this->storagePrefix )
+        if ( isset( $spiBinaryFile->mimeType ) )
         {
-            return $path;
+            $mimeType = $spiBinaryFile->mimeType;
         }
-
-        if ( strpos( $path, $this->storagePrefix ) !== 0 )
+        else
         {
-            throw new Exceptions\InvalidArgumentException(
-                '$uri',
-                "Prefix {$this->storagePrefix} not found in {$path}"
+            // @todo adapt to André's patch
+            $mimeType = $this->mimeTypeDetector->getFromBuffer(
+                $this->binarydataHandler->getFileContents( $spiBinaryFile->id )
             );
         }
 
-        return substr( $path, strlen( $this->storagePrefix ) + 1 );
+        return new BinaryFile(
+            array(
+                'size' => (int)$spiBinaryFile->size,
+                'mtime' => $spiBinaryFile->mtime,
+                'id' => $this->removeUriPrefix( $spiBinaryFile->id ),
+                'mimeType' => $mimeType,
+                'uri' => $spiBinaryFile->uri
+            )
+        );
+    }
+
+    /**
+     * Returns $uri prefixed with what is configured in the service
+     * @param string $binaryFileId
+     * @return string
+     */
+    protected function getPrefixedUri( $binaryFileId )
+    {
+        $prefix = '';
+        if ( isset( $this->settings['prefix'] ) )
+            $prefix = $this->settings['prefix'] . '/';
+        return $prefix . $binaryFileId;
+    }
+
+    /**
+     * @param mixed $spiBinaryFileId
+     * @return string
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
+    protected function removeUriPrefix( $spiBinaryFileId )
+    {
+        if ( !isset( $this->settings['prefix'] ) )
+        {
+            return $spiBinaryFileId;
+        }
+
+        if ( strpos( $spiBinaryFileId, $this->settings['prefix'] . '/' ) !== 0 )
+        {
+            throw new InvalidArgumentException( '$id', "Prefix {$this->settings['prefix']} not found in {$spiBinaryFileId}" );
+        }
+
+        return substr( $spiBinaryFileId, strlen( $this->settings['prefix'] ) + 1 );
     }
 }
