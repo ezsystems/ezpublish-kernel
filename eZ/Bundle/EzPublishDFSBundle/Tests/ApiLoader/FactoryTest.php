@@ -49,7 +49,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( 'var_dir', null, null, '/path/to/legacy/var/test' ),
+                        array( 'var_dir', null, null, '/path/to/legacy/var/test/' ),
                         array( 'storage_dir', null, null, 'storage' )
                     )
                 )
@@ -66,6 +66,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $refStoragePrefixProperty = $refObject->getProperty( 'storagePrefix' );
         $refStoragePrefixProperty->setAccessible( true );
 
-        self::assertEquals( 'var/foo/storage', $refStoragePrefixProperty->getValue( $handler ) );
+        self::assertEquals( '/path/to/legacy/var/test/storage', $refStoragePrefixProperty->getValue( $handler ) );
     }
 }

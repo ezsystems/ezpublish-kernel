@@ -28,7 +28,7 @@ class DFSFactory
     {
         $storagePrefix = sprintf(
             '%s/%s',
-            trim( $this->configResolver->getParameter( 'var_dir' ), '/' ),
+            rtrim( $this->configResolver->getParameter( 'var_dir' ), '/' ),
             trim( $this->configResolver->getParameter( 'storage_dir' ), '/' )
         );
 
