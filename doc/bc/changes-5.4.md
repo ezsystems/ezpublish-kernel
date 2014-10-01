@@ -56,6 +56,9 @@ Changes affecting version compatibility with former or future versions.
                           - { name: resize, params: {size: [1080, 1024]} }
   ```
 
+* Language filtering has been changed to respect always available flag, this affects:
+  - Criterion\LanguageCode second argument `$matchAlwaysAvailable` changed to true by default
+
 
 ## Deprecations
 
