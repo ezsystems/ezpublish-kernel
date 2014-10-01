@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\IO\IOBinarydataHandler;
 
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\Handler\DFS\UrlDecorator;
 use eZ\Publish\Core\IO\IOBinarydataHandler;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
@@ -109,6 +110,8 @@ class Flysystem implements IOBinaryDataHandler
      * @param string $spiBinaryFileId
      *
      * @return resource A read-only binary resource to $spiBinaryFileId
+     *
+     * @throws BinaryFileNotFoundException
      */
     public function getResource( $spiBinaryFileId )
     {
