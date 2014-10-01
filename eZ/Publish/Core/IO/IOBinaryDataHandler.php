@@ -69,25 +69,6 @@ interface IOBinaryDataHandler
     public function getResource( $path );
 
     /**
-     * Updates the content from $path with data from the read binary resource $resource
-     *
-     * @param string $path
-     * @param resource $resource
-     */
-    public function updateFileContents( $path, $resource  );
-
-    /**
-     * Renames file $fromPath to $toPath
-     *
-     * @param $fromPath
-     * @param $toPath
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $toPath already exists
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $fromPath does not exist
-     */
-    public function rename( $fromPath, $toPath );
-
-    /**
      * Returns the public URI for $path
      * @param string $path
      * @return string

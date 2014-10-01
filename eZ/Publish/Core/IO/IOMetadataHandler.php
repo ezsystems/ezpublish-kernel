@@ -51,15 +51,4 @@ interface IOMetadataHandler
      * @return bool
      */
     public function exists( $path );
-
-    /**
-     * Renames file $fromPath to $toPath
-     *
-     * @param $fromPath
-     * @param $toPath
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $toPath already exists
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $fromPath does not exist
-     */
-    public function rename( $fromPath, $toPath );
 }
