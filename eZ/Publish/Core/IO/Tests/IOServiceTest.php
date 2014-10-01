@@ -44,7 +44,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
         $this->metadataHandlerMock = $this->getMock( 'eZ\Publish\Core\IO\IOMetadataHandler' );
         $this->mimeTypeDetectorMock = $this->getMock( 'eZ\\Publish\\SPI\\IO\\MimeTypeDetector' );
 
-        $this->IOService = new \eZ\Publish\Core\IO\IOService(
+        $this->IOService = new IOService(
             $this->metadataHandlerMock,
             $this->binarydataHandlerMock,
             $this->mimeTypeDetectorMock,

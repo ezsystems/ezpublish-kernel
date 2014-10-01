@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\Core\IO;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\Handler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
@@ -165,37 +168,42 @@ class IOService implements IOServiceInterface
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
-     * @throws InvalidArgumentValue
+     * @throws InvalidArgumentValue If the binary file is invalid
+     * @throws BinaryFileNotFoundException If the binary file isn't found
      */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
-        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
-            throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
-
+        $this->checkBinaryFileId( $binaryFile );
         $spiUri = $this->getPrefixedUri( $binaryFile->id );
+
         try
         {
             $this->metadataHandler->delete( $spiUri );
         }
-        catch ( \Exception $e )
+        catch ( BinaryFileNotFoundException $e )
         {
             $this->binarydataHandler->delete( $spiUri );
-            throw new \Exception( "@todo" );
+            throw $e;
         }
+
         $this->binarydataHandler->delete( $spiUri );
     }
 
     /**
      * Loads the binary file with $binaryFileId
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $binaryFileId exists
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $binaryFileId is invalid
+     *
      * @param string $binaryFileId
+     *
      * @return BinaryFile|bool the file, or false if it doesn't exist
+     *
+     * @throws BinaryFileNotFoundException If no file identified by $binaryFileId exists
+     * @throws InvalidBinaryFileIdException
+     *
+     * @todo Figure out if it returns false or throws an exception when the file isn't found
      */
     public function loadBinaryFile( $binaryFileId )
     {
-        if ( empty( $binaryFileId ) || !is_string( $binaryFileId ) )
-            throw new InvalidArgumentValue( "binaryFileId", $binaryFileId );
+        $this->checkBinaryFileId( $binaryFileId );
 
         // @todo An absolute path can in no case be loaded, but throwing an exception is a bit too much at this stage
         if ( $binaryFileId[0] === '/' )
@@ -211,14 +219,13 @@ class IOService implements IOServiceInterface
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     * @throws InvalidBinaryFileIdException
      *
      * @return resource
      */
     public function getFileInputStream( BinaryFile $binaryFile )
     {
-        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
-            throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
+        $this->checkBinaryFileId( $binaryFile );
 
         return $this->binarydataHandler->getResource(
             $this->getPrefixedUri( $binaryFile->id )
@@ -230,14 +237,13 @@ class IOService implements IOServiceInterface
      *
      * @param \eZ\Publish\Core\IO\Values\BinaryFile $binaryFile
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     * @throws InvalidBinaryFileIdException
 
      * @return string
      */
     public function getFileContents( BinaryFile $binaryFile )
     {
-        if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
-            throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
+        $this->checkBinaryFileId( $binaryFile );
 
         return $this->binarydataHandler->getContents(
             $this->getPrefixedUri( $binaryFile->id )
@@ -384,5 +390,18 @@ class IOService implements IOServiceInterface
         }
 
         return substr( $spiBinaryFileId, strlen( $this->settings['prefix'] ) + 1 );
+    }
+
+    /**
+     * @param string $binaryFileId
+     *
+     * @throws InvalidBinaryFileIdException If the id is invalid
+     */
+    protected function checkBinaryFileId( $binaryFileId )
+    {
+        if ( empty( $binaryFileId ) || !is_string( $binaryFileId ) )
+        {
+            throw new InvalidBinaryFileIdException( $binaryFileId );
+        }
     }
 }
