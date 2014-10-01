@@ -10,14 +10,15 @@
 namespace eZ\Publish\Core\IO\Tests\Handler;
 
 use eZ\Publish\Core\IO\Handler\Dispatcher;
-use eZ\Publish\Core\IO\Handler\InMemory as InMemory;
-use eZ\Publish\Core\IO\Tests\Handler\Base as BaseHandlerTest;
+use eZ\Publish\Core\IO\Handler\Filesystem as FilesystemHandler;
+use eZ\Publish\Core\IO\MimeTypeDetector\FileInfo as FileInfoMimeTypeDetector;
+use eZ\Publish\Core\IO\Tests\Handler\FilesystemTest;
 use eZ\Publish\SPI\IO\BinaryFile;
 
 /**
  * Handler test
  */
-class DispatcherTest extends BaseHandlerTest
+class DispatcherTest extends FilesystemTest
 {
     /**
      * @var \eZ\Publish\SPI\IO\Handler
@@ -29,25 +30,28 @@ class DispatcherTest extends BaseHandlerTest
      */
     protected $alternativeBackend;
 
-    public function setUp()
-    {
-        self::markTestSkipped();
-    }
-
     /**
      * @return \eZ\Publish\Core\IO\Handler
      */
-    protected function getIOHandler()
+    protected function getIOHandler( $path = null )
     {
-        $this->defaultBackend = new InMemory();
-        $this->alternativeBackend = new InMemory();
+        $path = $path ?: self::$storageDir;
+        if ( !file_exists( $path . '/default' ) )
+            @mkdir( $path . '/default' );
+
+        if ( !file_exists( $path . '/alternative' ) )
+            @mkdir( $path . '/alternative' );
+
+        $this->defaultBackend = new FilesystemHandler( new FileInfoMimeTypeDetector(), $path . '/default' );
+        $this->alternativeBackend = new FilesystemHandler( new FileInfoMimeTypeDetector(), $path . '/alternative'  );
         return new Dispatcher(
             $this->defaultBackend,
             array(
                 array(
                     'handler' => $this->alternativeBackend,
-                    // match conditions:
-                    'prefix' => 'var/test/',
+                    // match conditions, simulating alternative handler for draft images, for more effective matching
+                    // it should have some form of 'at' condition to match (===) on a specific path element
+                    'prefix' => $path . '/',
                     'suffix' => '.gif,.jpg',
                     'contains' => 'image-versioned'
                 )
@@ -81,7 +85,7 @@ class DispatcherTest extends BaseHandlerTest
                 array(
                     'handler' => 555,
                     // match conditions:
-                    'prefix' => 'var/test/',
+                    'prefix' => self::$storageDir . '/',
                     'suffix' => '.gif,.jpg',
                     'contains' => 'image-versioned'
                 )
@@ -112,7 +116,7 @@ class DispatcherTest extends BaseHandlerTest
      */
     public function testDispatcherDefaultBackendCreate()
     {
-        $repositoryPath = 'var/test/storage/images/ezplogo.gif';
+        $repositoryPath = self::$storageDir . '/storage/images/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $binaryFile = $this->IOHandler->create( $struct );
         $binaryFile2 = $this->defaultBackend->load( $repositoryPath );
@@ -122,12 +126,13 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in default handler
+     *
      * @covers \eZ\Publish\Core\IO\Handler\Dispatcher::getHandler
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDispatcherDefaultBackendCreateNotFound()
     {
-        $repositoryPath = 'var/test/storage/images/ezplogo.gif';
+        $repositoryPath = self::$storageDir . '/storage/images/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $binaryFile = $this->IOHandler->create( $struct );
         $this->alternativeBackend->load( $repositoryPath );
@@ -139,7 +144,7 @@ class DispatcherTest extends BaseHandlerTest
      */
     public function testDispatcherAlternativeBackendCreate()
     {
-        $repositoryPath = 'var/test/storage/image-versioned/ezplogo.gif';
+        $repositoryPath = self::$storageDir . '/storage/image-versioned/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $binaryFile = $this->IOHandler->create( $struct );
         $binaryFile2 = $this->alternativeBackend->load( $repositoryPath );
@@ -154,14 +159,9 @@ class DispatcherTest extends BaseHandlerTest
      */
     public function testDispatcherAlternativeBackendCreateNotFound()
     {
-        $repositoryPath = 'var/test/storage/image-versioned/ezplogo.gif';
+        $repositoryPath = self::$storageDir . '/storage/image-versioned/ezplogo.gif';
         $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
         $binaryFile = $this->IOHandler->create( $struct );
         $this->defaultBackend->load( $repositoryPath );
-    }
-
-    public function testGetMetadata( BinaryFile $binaryFile )
-    {
-        self::markTestIncomplete( "Not implemented" );
     }
 }

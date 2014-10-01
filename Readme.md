@@ -76,7 +76,7 @@ Meaning you can make your own implementation if you want, but we don't guarantee
 Currently SPI consists of:
 * [eZ/Publish/SPI](eZ/Publish/SPI/)  *Service provider interfaces*
 * [eZ/Publish/Core/Persistence/Legacy](eZ/Publish/Core/Persistence/Legacy/)  *Legacy Storage-Engine (Persistence-handler)*
-* [eZ/Publish/Core/IO](eZ/Publish/Core/IO/)  *IO (file) Handlers; Legacy, Dispatcher and InMemory (for unit testing)*
+* [eZ/Publish/Core/IO](eZ/Publish/Core/IO/)  *IO (file) Handlers; Legacy, Dispatcher and FileSystem (for integration tests)*
 
 ## How to run tests
 

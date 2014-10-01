@@ -21,7 +21,7 @@ use RecursiveIteratorIterator;
  */
 class FilesystemTest extends BaseHandlerTest
 {
-    private static $storageDir = 'var/filesystem';
+    protected static $storageDir = 'var/filesystem';
 
     public static function setupBeforeClass()
     {

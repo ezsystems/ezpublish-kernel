@@ -246,7 +246,7 @@ class Dispatcher implements IoHandlerInterface
 
     public function getMetadata( MetadataHandler $metadataHandler, $spiBinaryFileId )
     {
-        // TODO: Implement getMetadata() method.
+        return $this->getHandler( $spiBinaryFileId )->getMetadata( $metadataHandler, $spiBinaryFileId );
     }
 
     public function getExternalPath( $path )
