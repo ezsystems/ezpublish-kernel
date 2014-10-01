@@ -41,16 +41,16 @@ class IOService implements IOServiceInterface
      * @param IOMetadataHandler $metadataHandler
      * @param IOBinarydataHandler $binarydataHandler
      * @param array $settings
-     *
-     * @internal param Handler $handler
      */
     public function __construct(
         IOMetadataHandler $metadataHandler,
         IOBinarydataHandler $binarydataHandler,
+        MimeTypeDetector $mimeTypeDetector,
         array $settings = array() )
     {
         $this->metadataHandler = $metadataHandler;
         $this->binarydataHandler = $binarydataHandler;
+        $this->mimeTypeDetector = $mimeTypeDetector;
 
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array();
@@ -148,7 +148,7 @@ class IOService implements IOServiceInterface
 
         try
         {
-            $this->binarydataHandler->createFromStream( $spiBinaryCreateStruct );
+            $this->binarydataHandler->create( $spiBinaryCreateStruct );
         }
         catch ( \Exception $e )
         {
@@ -337,9 +337,9 @@ class IOService implements IOServiceInterface
         else
         {
             // @todo adapt to André's patch
-            $mimeType = $this->mimeTypeDetector->getFromBuffer(
+            /*$mimeType = $this->mimeTypeDetector->getFromBuffer(
                 $this->binarydataHandler->getContents( $spiBinaryFile->id )
-            );
+            );*/
         }
 
         return new BinaryFile(

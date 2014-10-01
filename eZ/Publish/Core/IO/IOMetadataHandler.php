@@ -11,6 +11,9 @@ namespace eZ\Publish\Core\IO;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
+/**
+ * Provides reading & writing of files meta data (size, modification time...)
+ */
 interface IOMetadataHandler
 {
     /**

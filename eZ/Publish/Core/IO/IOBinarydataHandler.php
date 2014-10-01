@@ -14,11 +14,9 @@ use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
 /**
- * Handles IO binary data.
- *
  * Provides reading & writing of files binary data.
  */
-interface IOBinaryDataHandler
+interface IOBinarydataHandler
 {
     /**
      * Creates a new file with data from $binaryFileCreateStruct
@@ -27,7 +25,7 @@ interface IOBinaryDataHandler
      *
      * @return void
      */
-    public function createFromStream( BinaryFileCreateStruct $binaryFileCreateStruct );
+    public function create( BinaryFileCreateStruct $binaryFileCreateStruct );
 
     /**
      * Deletes the file $path
