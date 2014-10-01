@@ -155,7 +155,7 @@ class IOService implements IOServiceInterface
             throw new \Exception( "@todo" );
         }
 
-        $spiBinaryFile = $this->metadataHandler->insert( $spiBinaryCreateStruct );
+        $spiBinaryFile = $this->metadataHandler->create( $spiBinaryCreateStruct );
 
         return $this->buildDomainBinaryFileObject( $spiBinaryFile );
     }
@@ -202,7 +202,7 @@ class IOService implements IOServiceInterface
             return false;
 
         return $this->buildDomainBinaryFileObject(
-            $this->metadataHandler->loadMetadata( $this->getPrefixedUri( $binaryFileId ) )
+            $this->metadataHandler->load( $this->getPrefixedUri( $binaryFileId ) )
         );
     }
 
@@ -220,7 +220,7 @@ class IOService implements IOServiceInterface
         if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
             throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
 
-        return $this->binarydataHandler->getFileResource(
+        return $this->binarydataHandler->getResource(
             $this->getPrefixedUri( $binaryFile->id )
         );
     }
@@ -239,7 +239,7 @@ class IOService implements IOServiceInterface
         if ( empty( $binaryFile->id ) || !is_string( $binaryFile->id ) )
             throw new InvalidArgumentValue( "binaryFileId", $binaryFile->id, "BinaryFile" );
 
-        return $this->binarydataHandler->getFileContents(
+        return $this->binarydataHandler->getContents(
             $this->getPrefixedUri( $binaryFile->id )
         );
     }
@@ -338,7 +338,7 @@ class IOService implements IOServiceInterface
         {
             // @todo adapt to André's patch
             $mimeType = $this->mimeTypeDetector->getFromBuffer(
-                $this->binarydataHandler->getFileContents( $spiBinaryFile->id )
+                $this->binarydataHandler->getContents( $spiBinaryFile->id )
             );
         }
 

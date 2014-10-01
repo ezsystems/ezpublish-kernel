@@ -13,10 +13,15 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
+/**
+ * Handles IO binary data.
+ *
+ * Provides reading & writing of files binary data.
+ */
 interface IOBinaryDataHandler
 {
     /**
-     * Creates the file $path with data from $resource
+     * Creates a new file with data from $binaryFileCreateStruct
      *
      * @param BinaryFileCreateStruct $binaryFileCreateStruct
      *
@@ -52,7 +57,7 @@ interface IOBinaryDataHandler
      *
      * @return string
      */
-    public function getFileContents( $path );
+    public function getContents( $path );
 
     /**
      * Returns a read-only, binary file resource to $path
@@ -61,7 +66,7 @@ interface IOBinaryDataHandler
      *
      * @return resource A read-only binary resource to $path
      */
-    public function getFileResource( $path );
+    public function getResource( $path );
 
     /**
      * Updates the content from $path with data from the read binary resource $resource

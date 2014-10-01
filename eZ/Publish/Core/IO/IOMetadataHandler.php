@@ -23,7 +23,7 @@ interface IOMetadataHandler
      * @throws @todo
      *
      */
-    public function insert( BinaryFileCreateStruct $binaryFileCreateStruct );
+    public function create( BinaryFileCreateStruct $binaryFileCreateStruct );
 
     /**
      * Deletes file $path
@@ -41,7 +41,7 @@ interface IOMetadataHandler
      *
      * @return BinaryFile
      */
-    public function loadMetadata( $path );
+    public function load( $path );
 
     /**
      * Checks if a file $path exists
