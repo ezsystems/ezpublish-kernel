@@ -163,7 +163,7 @@ class Legacy implements IOHandlerInterface
 
         if ( $storagePrefix === 'images' )
         {
-            return 'images';
+            return 'image';
         }
 
         if ( $storagePrefix === 'original' )
