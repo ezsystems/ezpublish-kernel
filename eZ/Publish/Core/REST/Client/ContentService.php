@@ -273,11 +273,12 @@ class ContentService implements APIContentService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
+    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = false )
     {
         return $this->loadContent(
             $contentInfo->id,
@@ -293,10 +294,11 @@ class ContentService implements APIContentService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null )
+    public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = false )
     {
         $contentInfo = $versionInfo->getContentInfo();
 
@@ -313,13 +315,14 @@ class ContentService implements APIContentService, Sessionable
      *
      * @param int $contentId
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      * @todo Handle $versionNo = null
      * @todo Handle language filters
      */
-    public function loadContent( $contentId, array $languages = null, $versionNo = null )
+    public function loadContent( $contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = false )
     {
         // $contentId should already be a URL!
         $contentIdValues = $this->requestParser->parse( 'object', $contentId );
@@ -368,11 +371,12 @@ class ContentService implements APIContentService, Sessionable
      *
      * @param string $remoteId
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
+    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = false )
     {
         $contentInfo = $this->loadContentInfoByRemoteId( $remoteId );
 

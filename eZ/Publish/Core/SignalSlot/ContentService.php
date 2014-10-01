@@ -148,13 +148,14 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
+    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = false )
     {
-        return $this->service->loadContentByContentInfo( $contentInfo, $languages, $versionNo );
+        return $this->service->loadContentByContentInfo( $contentInfo, $languages, $versionNo, $useAlwaysAvailable );
     }
 
     /**
@@ -164,12 +165,13 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null )
+    public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = false )
     {
-        return $this->service->loadContentByVersionInfo( $versionInfo, $languages );
+        return $this->service->loadContentByVersionInfo( $versionInfo, $languages, $useAlwaysAvailable );
     }
 
     /**
@@ -182,13 +184,14 @@ class ContentService implements ContentServiceInterface
      *
      * @param int $contentId
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContent( $contentId, array $languages = null, $versionNo = null )
+    public function loadContent( $contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = false )
     {
-        return $this->service->loadContent( $contentId, $languages, $versionNo );
+        return $this->service->loadContent( $contentId, $languages, $versionNo, $useAlwaysAvailable );
     }
 
     /**
@@ -201,13 +204,14 @@ class ContentService implements ContentServiceInterface
      *
      * @param string $remoteId
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
+    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = false )
     {
-        return $this->service->loadContentByRemoteId( $remoteId, $languages, $versionNo );
+        return $this->service->loadContentByRemoteId( $remoteId, $languages, $versionNo, $useAlwaysAvailable );
     }
 
     /**

@@ -72,7 +72,7 @@ class PreviewController
     {
         try
         {
-            $content = $this->contentService->loadContent( $contentId, array( $language ), $versionNo );
+            $content = $this->contentService->loadContent( $contentId, array( $language ), $versionNo, true );
             $location = $this->previewHelper->getPreviewLocation( $contentId );
         }
         catch ( UnauthorizedException $e )
