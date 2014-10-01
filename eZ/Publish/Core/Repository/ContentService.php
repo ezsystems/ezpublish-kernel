@@ -276,11 +276,11 @@ class ContentService implements ContentServiceInterface
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = false )
+    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = true )
     {
         // Change $useAlwaysAvailable to false to avoid contentInfo lookup if we know alwaysAvailable is disabled
         if ( $useAlwaysAvailable && !$contentInfo->alwaysAvailable )
@@ -303,11 +303,11 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByVersionInfo( APIVersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = false )
+    public function loadContentByVersionInfo( APIVersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = true )
     {
         // Change $useAlwaysAvailable to false to avoid contentInfo lookup if we know alwaysAvailable is disabled
         if ( $useAlwaysAvailable && !$versionInfo->getContentInfo()->alwaysAvailable )
@@ -334,11 +334,11 @@ class ContentService implements ContentServiceInterface
      * @param int $contentId
      * @param array|null $languages A language filter for fields. If not given all languages are returned
      * @param int|null $versionNo the version number. If not given the current version is returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContent( $contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = false )
+    public function loadContent( $contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true )
     {
         $content = $this->internalLoadContent( $contentId, $languages, $versionNo, false, $useAlwaysAvailable );
 
@@ -366,11 +366,11 @@ class ContentService implements ContentServiceInterface
      * @param array|null $languages A language filter for fields. If not given all languages are returned
      * @param int|null $versionNo the version number. If not given the current version is returned
      * @param bool $isRemoteId
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function internalLoadContent( $id, array $languages = null, $versionNo = null, $isRemoteId = false, $useAlwaysAvailable = false )
+    public function internalLoadContent( $id, array $languages = null, $versionNo = null, $isRemoteId = false, $useAlwaysAvailable = true )
     {
         try
         {
@@ -437,11 +437,11 @@ class ContentService implements ContentServiceInterface
      * @param string $remoteId
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default as of 5.4) and if alwaysAvailable is true
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = false )
+    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true )
     {
         $content = $this->internalLoadContent( $remoteId, $languages, $versionNo, true, $useAlwaysAvailable );
 

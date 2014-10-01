@@ -272,9 +272,7 @@ class Manager implements ViewManagerInterface
                     $parameters + array(
                         'content' => $this->repository->getContentService()->loadContentByContentInfo(
                             $location->getContentInfo(),
-                            $this->configResolver->getParameter( 'languages' ),
-                            null,
-                            true
+                            $this->configResolver->getParameter( 'languages' )
                         )
                     )
                 );

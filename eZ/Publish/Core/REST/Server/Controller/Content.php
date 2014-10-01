@@ -86,7 +86,7 @@ class Content extends RestController
                 $languages = explode( ',', $this->request->query->get( 'languages' ) );
             }
 
-            $contentVersion = $this->repository->getContentService()->loadContent( $contentId, $languages, null, true );
+            $contentVersion = $this->repository->getContentService()->loadContent( $contentId, $languages );
             $relations = $this->repository->getContentService()->loadRelations( $contentVersion->getVersionInfo() );
         }
 

@@ -58,6 +58,14 @@ Changes affecting version compatibility with former or future versions.
 
 * Language filtering has been changed to respect always available flag, this affects:
   - Criterion\LanguageCode second argument `$matchAlwaysAvailable` changed to true by default
+  - ContentService methods with `$useAlwaysAvailable` has been changed to be true by default, affects:
+    - loadContentByContentInfo
+    - loadContentByVersionInfo
+    - loadContent
+    - loadContentByRemoteId
+
+  If you have code that expects exception(load) or no content (search) if not a specific language
+  exists, you should then review your code and consider setting these properties to false.
 
 
 ## Deprecations
