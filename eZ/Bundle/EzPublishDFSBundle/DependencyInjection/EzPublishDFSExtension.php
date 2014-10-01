@@ -75,7 +75,7 @@ class EzPublishDFSExtension extends Extension
         // @todo prefix needs to be configured somewhere
         $definition->replaceArgument( 0, $metaDataHandler );
         $definition->replaceArgument( 1, $binaryDataHandler );
-        $definition->addTag( 'ezpublish.io_handler', array( 'alias', $name ) );
+        $definition->addTag( 'ezpublish.io_handler', array( 'alias' => $name ) );
 
         return $id;
     }
