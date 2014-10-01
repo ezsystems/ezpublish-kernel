@@ -92,14 +92,15 @@ class AliasGenerator implements VariationHandler
         }
 
         $originalPath = $imageValue->id;
+        $originalBinary = $this->dataLoader->find( $originalPath );
         // Create the image alias only if it does not already exist.
-        if ( !$this->ioResolver->isStored( $originalPath, $variationName ) )
+        if ( $variationName !== IORepositoryResolver::VARIATION_ORIGINAL && !$this->ioResolver->isStored( $originalPath, $variationName ) )
         {
             if ( $this->logger )
                 $this->logger->debug( "Generating '$variationName' variation on $originalPath, field #$fieldId ($fieldDefIdentifier)" );
 
             $this->ioResolver->store(
-                $this->applyFilter( $this->dataLoader->find( $originalPath ), $variationName ),
+                $this->applyFilter( $originalBinary, $variationName ),
                 $originalPath,
                 $variationName
             );
@@ -138,7 +139,7 @@ class AliasGenerator implements VariationHandler
     {
         $filterConfig = $this->filterConfiguration->get( $variationName );
         // If the variation has a reference, we recursively call this method to apply reference's filters.
-        if ( isset( $filterConfig['reference'] ) && $filterConfig['reference'] !== 'original' )
+        if ( isset( $filterConfig['reference'] ) && $filterConfig['reference'] !== IORepositoryResolver::VARIATION_ORIGINAL )
         {
             $image = $this->applyFilter( $image, $filterConfig['reference'] );
         }

@@ -150,6 +150,58 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( $expected, $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName ) );
     }
 
+    public function testGetVariationOriginal()
+    {
+        $originalPath = 'foo/bar/image.jpg';
+        $variationName = 'original';
+        $imageId = '123-45';
+        $imageValue = new ImageValue( array( 'id' => $originalPath, 'imageId' => $imageId ) );
+        $field = new Field( array( 'value' => $imageValue ) );
+        $expectedUrl = "http://localhost/foo/bar/image.jpg";
+
+        $this->ioResolver
+            ->expects( $this->never() )
+            ->method( 'isStored' )
+            ->with( $originalPath, $variationName )
+            ->will( $this->returnValue( false ) );
+
+        $this->logger
+            ->expects( $this->once() )
+            ->method( 'debug' );
+
+        $binary = $this->getMock( '\Liip\ImagineBundle\Binary\BinaryInterface' );
+        $this->dataLoader
+            ->expects( $this->once() )
+            ->method( 'find' )
+            ->with( $originalPath )
+            ->will( $this->returnValue( $binary ) );
+        $this->filterManager
+            ->expects( $this->never() )
+            ->method( 'applyFilter' )
+            ->with( $binary, $variationName )
+            ->will( $this->returnValue( $binary ) );
+        $this->ioResolver
+            ->expects( $this->never() )
+            ->method( 'store' )
+            ->with( $binary, $originalPath, $variationName );
+        $this->ioResolver
+            ->expects( $this->once() )
+            ->method( 'resolve' )
+            ->with( $originalPath, $variationName )
+            ->will( $this->returnValue( $expectedUrl ) );
+
+        $expected = new ImageVariation(
+            array(
+                'name' => $variationName,
+                'fileName' => "image.jpg",
+                'dirPath' => 'http://localhost/foo/bar',
+                'uri' => $expectedUrl,
+                'imageId' => $imageId
+            )
+        );
+        $this->assertEquals( $expected, $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName ) );
+    }
+
     public function testGetVariationNotStoredHavingReferences()
     {
         $originalPath = 'foo/bar/image.jpg';
@@ -243,7 +295,7 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->method( 'debug' );
 
         $this->dataLoader
-            ->expects( $this->never() )
+            ->expects( $this->once() )
             ->method( 'find' );
         $this->filterManager
             ->expects( $this->never() )

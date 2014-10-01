@@ -130,6 +130,11 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 'Tardis/bigger/in-the-inside/RiverSong.jpg',
+                IORepositoryResolver::VARIATION_ORIGINAL, null,
+                'http://localhost/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong.jpg'
+            ),
+            array(
+                'Tardis/bigger/in-the-inside/RiverSong.jpg',
                 'thumbnail', null,
                 'http://localhost/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg'
             ),
@@ -152,6 +157,11 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
                 'CultOfScaro/Dalek-fisherman.png',
                 'so_ridiculous', 'https://doctor.who:1234',
                 'https://doctor.who:1234/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png'
+            ),
+            array(
+                'CultOfScaro/Dalek-fisherman.png',
+                IORepositoryResolver::VARIATION_ORIGINAL, 'https://doctor.who:1234',
+                'https://doctor.who:1234/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman.png'
             ),
         );
     }
