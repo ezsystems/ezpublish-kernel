@@ -27,6 +27,34 @@ Changes affecting version compatibility with former or future versions.
   It wrongly contained the full image path, including the storage directory (e.g. `var/ezdemo_site/storage/images/`.
   To get the full path, use `uri` property.
   Ref: [EZP-23349](https://jira.ez.no/browse/EZP-23349)
+  
+* `border` image filter configuration has changed. It now takes a 3rd parameter for color (`#000` by default).
+  This parameter accepts RGB hexa values. 1st is still border thickness for horizontal, 2nd thickness for vertical.
+  
+  ```yaml
+  ezpublish:
+      system:
+          my_siteaccess:
+              image_variations:
+                  my_border_variation:
+                      reference: null
+                      filters:
+                          # Adding a white border, 10px thick.
+                          - { name: border, params: [10, 10, "#fff"] }
+  ```
+  
+* `resize` image filter configuration has changed. It now follows the configuration provided in LiipImagineBundle:
+
+  ```yaml
+  ezpublish:
+      system:
+          my_siteaccess:
+              image_variations:
+                  my_border_variation:
+                      reference: null
+                      filters:
+                          - { name: resize, params: {size: [1080, 1024]} }
+  ```
 
 
 ## Deprecations
@@ -49,3 +77,13 @@ Changes affecting version compatibility with former or future versions.
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).
+
+
+## Removed features
+
+* Following image filters are not supported any more and have been removed:
+  * `flatten`. Obsolete, images are automatically flattened.
+  * `bordercolor`. Not applicable any more.
+  * `border/width`. Not applicable any more.
+  * `colorspace/transparent`
+  * `colorspace`
