@@ -27,11 +27,17 @@ class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
      */
     private $viewManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $container;
+
     protected function setUp()
     {
         parent::setUp();
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface' );
         $this->viewManager = $this->getMock( 'eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewManager' );
+        $this->container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
     }
 
     public function testGetSubscribedEvents()
@@ -49,6 +55,7 @@ class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
     {
         $siteAccess = new SiteAccess( 'test' );
         $event = new ScopeChangeEvent( $siteAccess );
+        $resettableServices = array( 'foo', 'bar.baz' );
         $this->configResolver
             ->expects( $this->once() )
             ->method( 'setDefaultScope' )
@@ -57,8 +64,17 @@ class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'setSiteAccess' )
             ->with( $siteAccess );
+        $this->container
+            ->expects( $this->at( 0 ) )
+            ->method( 'set' )
+            ->with( 'foo', null );
+        $this->container
+            ->expects( $this->at( 1 ) )
+            ->method( 'set' )
+            ->with( 'bar.baz', null );
 
-        $listener = new ConfigScopeListener( $this->configResolver, $this->viewManager );
+        $listener = new ConfigScopeListener( $this->configResolver, $this->viewManager, $resettableServices );
+        $listener->setContainer( $this->container );
         $listener->onConfigScopeChange( $event );
         $this->assertSame( $siteAccess, $event->getSiteAccess() );
     }
