@@ -39,16 +39,6 @@ interface IOBinaryDataHandler
     public function delete( $path );
 
     /**
-     * Retrieves metadata from $path using $metadataHandler
-     *
-     * @param MetadataHandler $metadataHandler
-     * @param string $path
-     *
-     * @return array
-     */
-    public function getMetadata( IOMetadataHandler $metadataHandler, $path );
-
-    /**
      * Returns the binary content from $path
      *
      * @param $path
