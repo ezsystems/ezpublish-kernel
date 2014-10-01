@@ -8,8 +8,7 @@
  */
 namespace eZ\Publish\Core\IO;
 
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
@@ -30,36 +29,38 @@ interface IOBinarydataHandler
     /**
      * Deletes the file $path
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
-     * @throws NotFoundException If $path isn't found
+     * @throws BinaryFileNotFoundException If the file is not found
      */
-    public function delete( $path );
+    public function delete( $spiBinaryFileId );
 
     /**
      * Returns the binary content from $path
      *
-     * @param $path
+     * @param $spiBinaryFileId
      *
-     * @throws NotFoundException If $path is not found
+     * @throws BinaryFileNotFoundException If $path is not found
      *
      * @return string
      */
-    public function getContents( $path );
+    public function getContents( $spiBinaryFileId );
 
     /**
      * Returns a read-only, binary file resource to $path
      *
-     * @param string $path
+     * @param string $spiBinaryFileId
      *
      * @return resource A read-only binary resource to $path
      */
-    public function getResource( $path );
+    public function getResource( $spiBinaryFileId );
 
     /**
      * Returns the public URI for $path
-     * @param string $path
+     *
+     * @param string $spiBinaryFileId
+     *
      * @return string
      */
-    public function getUri( $path );
+    public function getUri( $spiBinaryFileId );
 }

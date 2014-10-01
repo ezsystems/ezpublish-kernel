@@ -19,14 +19,14 @@ interface IOMetadataHandler
     /**
      * Stores the file from $binaryFileCreateStruct
      *
-     * @param BinaryFileCreateStruct $binaryFileCreateStruct
+     * @param BinaryFileCreateStruct $spiBinaryFileCreateStruct
      *
      * @return BinaryFile
      *
      * @throws @todo
      *
      */
-    public function create( BinaryFileCreateStruct $binaryFileCreateStruct );
+    public function create( BinaryFileCreateStruct $spiBinaryFileCreateStruct );
 
     /**
      * Deletes file $path
@@ -35,7 +35,7 @@ interface IOMetadataHandler
      *
      * @param string $path
      */
-    public function delete( $path );
+    public function delete( $spiBinaryFileId );
 
     /**
      * Loads and returns metadata for $path
@@ -44,7 +44,7 @@ interface IOMetadataHandler
      *
      * @return BinaryFile
      */
-    public function load( $path );
+    public function load( $spiBinaryFileId );
 
     /**
      * Checks if a file $path exists
@@ -53,5 +53,5 @@ interface IOMetadataHandler
      *
      * @return bool
      */
-    public function exists( $path );
+    public function exists( $spiBinaryFileId );
 }
