@@ -30,7 +30,7 @@ class IOHandlerTagPass implements CompilerPassInterface
             {
                 if ( !isset( $attribute['alias'] ) )
                     throw new LogicException(
-                        'ezpublish.io_handler service tag needs an "alias" attribute to identify the handler.'
+                        'ezpublish.io_handler service tag needs an "alias" attribute to identify the handler. None given for ' . $id
                     );
 
                 $ioHandlersMap[$attribute['alias']] = $id;
