@@ -5,6 +5,7 @@ parameters:
     ezpublish.content_preview_helper.class: eZ\Publish\Core\Helper\ContentPreviewHelper
     ezpublish.config_scope_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ConfigScopeListener
     ezpublish.config_resolver.resettable_services: []
+    ezpublish.config_resolver.dynamic_settings_services: []
 
 services:
     # Helpers
@@ -28,7 +29,11 @@ services:
 
     ezpublish.config_scope_listener:
         class: %ezpublish.config_scope_listener.class%
-        arguments: [@ezpublish.config.resolver.core, @ezpublish.view_manager, %ezpublish.config_resolver.resettable_services%]
+        arguments:
+            - @ezpublish.config.resolver.core
+            - @ezpublish.view_manager
+            - %ezpublish.config_resolver.resettable_services%
+            - %ezpublish.config_resolver.dynamic_settings_services%
         calls:
             - [setContainer, [@service_container]]
         tags:

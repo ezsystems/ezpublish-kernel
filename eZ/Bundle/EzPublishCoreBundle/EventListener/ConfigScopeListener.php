@@ -15,6 +15,7 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ConfigScopeListener extends ContainerAware implements EventSubscriberInterface
@@ -30,15 +31,30 @@ class ConfigScopeListener extends ContainerAware implements EventSubscriberInter
     private $viewManager;
 
     /**
+     * Array of serviceIds to reset in the container.
+     *
      * @var array
      */
     private $resettableServices;
 
-    public function __construct( VersatileScopeInterface $configResolver, ViewManagerInterface $viewManager, array $resettableServices )
+    /**
+     * Array of "fake" services handling dynamic settings injection.
+     *
+     * @var array
+     */
+    private $dynamicSettingsServices;
+
+    public function __construct(
+        VersatileScopeInterface $configResolver,
+        ViewManagerInterface $viewManager,
+        array $resettableServices,
+        array $fakeServices
+    )
     {
         $this->configResolver = $configResolver;
         $this->viewManager = $viewManager;
         $this->resettableServices = $resettableServices;
+        $this->dynamicSettingsServices = $fakeServices;
     }
 
     public static function getSubscribedEvents()
@@ -62,6 +78,14 @@ class ConfigScopeListener extends ContainerAware implements EventSubscriberInter
         foreach ( $this->resettableServices as $serviceId )
         {
             $this->container->set( $serviceId, null );
+        }
+
+        // Force dynamic settings services to synchronize.
+        // This will trigger services depending on dynamic settings to update if they use setter injection.
+        foreach ( $this->dynamicSettingsServices as $fakeServiceId )
+        {
+            $this->container->set( $fakeServiceId, null );
+            $this->container->set( $fakeServiceId, $this->container->get( $fakeServiceId ) );
         }
     }
 }

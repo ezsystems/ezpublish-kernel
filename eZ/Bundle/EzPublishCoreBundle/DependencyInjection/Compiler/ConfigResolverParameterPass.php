@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParserInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -39,9 +40,12 @@ class ConfigResolverParameterPass implements CompilerPassInterface
     public function process( ContainerBuilder $container )
     {
         $dynamicSettingsServices = array();
-        // #1 Loop against all arguments of all service definitions to replace dynamic settings by the fake service.
-        foreach ( $container->getDefinitions() as $id => $definition )
+        $resettableServices = array();
+        $fakeServices = array();
+        // Pass #1 Loop against all arguments of all service definitions to replace dynamic settings by the fake service.
+        foreach ( $container->getDefinitions() as $serviceId => $definition )
         {
+            // Constructor injection
             $replaceArguments = array();
             foreach ( $definition->getArguments() as $i => $arg )
             {
@@ -50,39 +54,44 @@ class ConfigResolverParameterPass implements CompilerPassInterface
                     continue;
                 }
 
-                $parsedParams = $this->dynamicSettingParser->parseDynamicSetting( $arg );
-                $configResolverArgs = array(
-                    $parsedParams['param'],
-                    $parsedParams['namespace'],
-                    $parsedParams['scope']
-                );
-                $paramConverter = new Definition( 'stdClass', $configResolverArgs );
-                $paramConverter
-                    ->setFactoryService( 'ezpublish.config.resolver' )
-                    ->setFactoryMethod( 'getParameter' );
+                $fakeServiceId = $this->injectFakeService( $container, $this->getConfigResolverArgs( $arg ) );
+                $replaceArguments[$i] = new Reference( $fakeServiceId, ContainerInterface::NULL_ON_INVALID_REFERENCE );
+                $fakeServices[] = $fakeServiceId;
+            }
 
-                $serviceId = 'ezpublish.config_resolver.fake.' . implode( '_', $configResolverArgs );
-                if ( !$container->hasDefinition( $serviceId ) )
+            if ( !empty( $replaceArguments ) )
+            {
+                $dynamicSettingsServices[$serviceId] = true;
+                foreach ( $replaceArguments as $i => $arg )
                 {
-                    $container->setDefinition( $serviceId, $paramConverter );
+                    $definition->replaceArgument( $i, $arg );
                 }
-                $replaceArguments[$i] = new Reference( $serviceId );
             }
 
-            if ( empty( $replaceArguments ) )
+            // Setter injection
+            $methodCalls = $definition->getMethodCalls();
+            foreach ( $methodCalls as $i => &$call )
             {
-                continue;
+                list( $method, $callArgs ) = $call;
+                foreach ( $callArgs as &$callArg )
+                {
+                    if ( !$this->dynamicSettingParser->isDynamicSetting( $callArg ) )
+                    {
+                        continue;
+                    }
+
+                    $fakeServiceId = $this->injectFakeService( $container, $this->getConfigResolverArgs( $callArg ) );
+                    $callArg = new Reference( $fakeServiceId, ContainerInterface::NULL_ON_INVALID_REFERENCE );
+                    $fakeServices[] = $fakeServiceId;
+                }
+
+                $call = array( $method, $callArgs );
             }
 
-            $dynamicSettingsServices[$id] = true;
-            foreach ( $replaceArguments as $i => $arg )
-            {
-                $definition->replaceArgument( $i, $arg );
-            }
+            $definition->setMethodCalls( $methodCalls );
         }
 
-        // #2 Loop again, to get all services depending on dynamic settings services.
-        $dependentServices = array();
+        // Pass #2 Loop again, to get all services depending on dynamic settings services.
         foreach ( $container->getDefinitions() as $id => $definition )
         {
             $isDependent = false;
@@ -104,16 +113,57 @@ class ConfigResolverParameterPass implements CompilerPassInterface
 
             if ( $isDependent )
             {
-                $dependentServices[] = $id;
+                $resettableServices[] = $id;
             }
         }
 
         $resettableServices = array_unique(
             array_merge(
                 array_keys( $dynamicSettingsServices ),
-                $dependentServices
+                $resettableServices
             )
         );
         $container->setParameter( 'ezpublish.config_resolver.resettable_services', $resettableServices );
+        $container->setParameter( 'ezpublish.config_resolver.dynamic_settings_services', array_unique( $fakeServices ) );
+    }
+
+    /**
+     * @param string $dynamicSetting
+     *
+     * @return array
+     */
+    private function getConfigResolverArgs( $dynamicSetting )
+    {
+        $parsedParams = $this->dynamicSettingParser->parseDynamicSetting( $dynamicSetting );
+        $configResolverArgs = array(
+            $parsedParams['param'],
+            $parsedParams['namespace'],
+            $parsedParams['scope']
+        );
+
+        return $configResolverArgs;
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param $configResolverArgs
+     *
+     * @return string
+     */
+    private function injectFakeService( ContainerBuilder $container, $configResolverArgs )
+    {
+        $paramConverter = new Definition( 'stdClass', $configResolverArgs );
+        $paramConverter
+            ->setFactoryService( 'ezpublish.config.resolver' )
+            ->setFactoryMethod( 'getParameter' )
+            ->setSynchronized( true );
+
+        $serviceId = 'ezpublish.config_resolver.fake.' . implode( '_', $configResolverArgs );
+        if ( !$container->hasDefinition( $serviceId ) )
+        {
+            $container->setDefinition( $serviceId, $paramConverter );
+        }
+
+        return $serviceId;
     }
 }

@@ -10,9 +10,8 @@ Goal of this feature is to allow developers to inject these dynamic settings exp
 ## Usage
 Static container parameters follows the `%<parameter_name>%` syntax in Symfony.
 
-Dynamic parameters have the following: `$<parameter_name>[, <namespace>[, <scope>]]$`
-
-Default namespace being `ezsettings`, and default scope being current siteaccess.
+Dynamic parameters have the following: `$<parameter_name>[, <namespace>[, <scope>]]$`, default namespace being `ezsettings`, 
+and default scope being current siteaccess.
 
 For more information, see [ConfigResolver documentation](https://confluence.ez.no/display/EZP/Configuration#Configuration-DynamicconfigurationwiththeConfigResolver).
 
@@ -55,7 +54,40 @@ class MyServiceClass
 }
 ```
 
-**After**
+**After, with setter injection (preferred)**
+```yaml
+parameters:
+    acme_test.my_service.class: Acme\TestBundle\MyServiceClass
+
+services:
+    acme_test.my_service:
+        class: %acme_test.my_service.class%
+        calls:
+            - [setLanguages, ["$languages$"]]
+```
+
+```php
+namespace Acme\TestBundle;
+
+class MyServiceClass
+{
+    /**
+     * Prioritized languages
+     *
+     * @var array
+     */
+    private $languages;
+
+    public function setLanguages( array $languages = null )
+    {
+        $this->languages = $languages;
+    }
+}
+```
+
+> **Important**: Ensure you always add `null` as a default value, especially if the argument is type-hinted.
+
+**After, with constructor injection**
 ```yaml
 parameters:
     acme_test.my_service.class: Acme\TestBundle\MyServiceClass
@@ -85,6 +117,12 @@ class MyServiceClass
 }
 ```
 
+> **Tip**: Setter injection for dynamic settings should always be preferred, as it makes it possible to update your services
+> that depend on them when ConfigResolver is updating its scope (e.g. when previewing content in a given SiteAccess).
+> Constructor injection will make your service be reset in that case.
+>
+> **However, only one dynamic setting should be injected by setter**.
+
 ### Injecting 3rd party parameters
 
 ```yaml
@@ -102,7 +140,8 @@ services:
         class: %acme_test.my_service.class%
         # The following argument will automatically resolve to the right value, depending on the current SiteAccess.
         # We specify "acme" as the namespace we want to use for parameter resolving.
-        arguments: ["$some_parameter;acme$"]
+        calls:
+            - [setSomeParameter, ["$some_parameter;acme$"]]
 ```
 
 ```php
@@ -112,7 +151,7 @@ class MyServiceClass
 {
     private $myParameter;
 
-    public function __construct( $myParameter )
+    public function setSomeParameter( $myParameter = null )
     {
         // Will be "foo" for ezdemo_site, "bar" for ezdemo_site_admin, or null if another SiteAccess.
         $this->myParameter = $myParameter;
