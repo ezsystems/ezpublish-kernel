@@ -43,6 +43,8 @@ class LegacyDFSCluster implements MetadataHandler
      */
     public function create( BinaryFileCreateStruct $binaryFileCreateStruct )
     {
+        $path = $this->addPrefix( $binaryFileCreateStruct->id );
+
         try {
             /**
              * @todo what might go wrong here ? Can another process be trying to insert the same image ?
@@ -57,8 +59,8 @@ ON DUPLICATE KEY UPDATE
   mtime=VALUES(mtime), expired=VALUES(expired)
 SQL
             );
-            $stmt->bindValue( 'name', $binaryFileCreateStruct->id );
-            $stmt->bindValue( 'name_hash', md5( $binaryFileCreateStruct->id ) );
+            $stmt->bindValue( 'name', $path );
+            $stmt->bindValue( 'name_hash', md5( $path ) );
             $stmt->bindValue( 'name_trunk', $this->getNameTrunk( $binaryFileCreateStruct ) );
             $stmt->bindValue( 'mtime', $binaryFileCreateStruct->mtime );
             $stmt->bindValue( 'size', $binaryFileCreateStruct->size );
@@ -86,14 +88,16 @@ SQL
      */
     public function delete( $spiBinaryFileId )
     {
+        $path = $this->addPrefix( $spiBinaryFileId );
+
         // @todo delete or expire ? legacy_mode option ?
         $stmt = $this->db->prepare( 'DELETE FROM ezdfsfile WHERE name_hash LIKE :name_hash' );
-        $stmt->bindValue( 'name_hash', md5( $spiBinaryFileId ) );
+        $stmt->bindValue( 'name_hash', md5( $path ) );
         $stmt->execute();
 
         if ( $stmt->rowCount() != 1 )
         {
-            throw new BinaryFileNotFoundException( $spiBinaryFileId );
+            throw new BinaryFileNotFoundException( $path );
         }
     }
 
@@ -109,13 +113,15 @@ SQL
      */
     public function load( $spiBinaryFileId )
     {
+        $path = $this->addPrefix( $spiBinaryFileId );
+
         $stmt = $this->db->prepare( 'SELECT * FROM ezdfsfile WHERE name_hash LIKE ? AND expired != 1 AND mtime > 0' );
-        $stmt->bindValue( 1, md5( $spiBinaryFileId ) );
+        $stmt->bindValue( 1, md5( $path ) );
         $stmt->execute();
 
         if ( $stmt->rowCount() == 0 )
         {
-            throw new BinaryFileNotFoundException( $spiBinaryFileId );
+            throw new BinaryFileNotFoundException( $path );
         }
 
         return $stmt->fetch( \PDO::FETCH_ASSOC );
@@ -132,8 +138,10 @@ SQL
      */
     public function exists( $spiBinaryFileId )
     {
+        $path = $this->addPrefix( $spiBinaryFileId );
+
         $stmt = $this->db->prepare( 'SELECT name FROM ezdfsfile WHERE name_hash LIKE ? and mtime > 0 and expired != 1' );
-        $stmt->bindValue( 1, md5( $spiBinaryFileId ) );
+        $stmt->bindValue( 1, md5( $path ) );
         $stmt->execute();
 
         return ( $stmt->rowCount() == 1 );
@@ -148,5 +156,33 @@ SQL
     {
         // @todo fixme
         return $binaryFileCreateStruct->id;
+    }
+
+    protected function addPrefix( $id )
+    {
+        if ( !isset( $this->prefix ) )
+        {
+            return $id;
+        }
+
+        return sprintf( '%s/%s', $this->prefix, $id );
+    }
+
+    /**
+     * @throws InvalidBinaryFileIdException
+     */
+    protected function removePrefix( $prefixedId )
+    {
+        if ( !isset( $this->prefix ) )
+        {
+            return $prefixedId;
+        }
+
+        if ( strpos( $prefixedId, $this->prefix . '/' ) !== 0 )
+        {
+            throw new InvalidBinaryFileIdException( $prefixedId );
+        }
+
+        return substr( $prefixedId, strlen( $this->prefix ) + 1 );
     }
 }
