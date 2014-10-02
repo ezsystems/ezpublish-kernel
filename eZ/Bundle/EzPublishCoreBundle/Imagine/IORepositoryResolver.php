@@ -21,6 +21,8 @@ use Symfony\Component\Routing\RequestContext;
  */
 class IORepositoryResolver implements ResolverInterface
 {
+    const VARIATION_ORIGINAL = 'original';
+
     /**
      * @var \eZ\Publish\Core\IO\IOServiceInterface
      */
@@ -57,7 +59,11 @@ class IORepositoryResolver implements ResolverInterface
     public function resolve( $path, $filter )
     {
         $path = $this->ioService->loadBinaryFile( $path )->uri;
-        return sprintf( '%s%s', $this->getBaseUrl(), $this->getFilePath( $path, $filter ) );
+        return sprintf(
+            '%s%s',
+            $this->getBaseUrl(),
+            $filter !== static::VARIATION_ORIGINAL ? $this->getFilePath( $path, $filter ) : $path
+        );
     }
 
     /**

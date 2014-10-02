@@ -50,7 +50,10 @@ class BinaryFile extends ValueObject
 
     /**
      * The file's mime type
+     *
      * Example: text/xml
+     *
+     * @deprecated Since 5.3.3, use IOService::getMimeType() if you want to be 6.0 compatible as opposed to < 5.3.3
      * @var string
      */
     public $mimeType;

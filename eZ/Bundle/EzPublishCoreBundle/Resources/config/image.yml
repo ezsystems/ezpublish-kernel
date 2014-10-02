@@ -15,8 +15,48 @@ parameters:
     ezpublish.image_alias.imagine.filter.loader.scale_exact.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleExactFilterLoader
     ezpublish.image_alias.imagine.filter.loader.scale_percent.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScalePercentFilterLoader
     ezpublish.image_alias.imagine.filter.loader.crop.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\CropFilterLoader
+    ezpublish.image_alias.imagine.filter.loader.border.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\BorderFilterLoader
+    ezpublish.image_alias.imagine.filter.loader.reduce_noise.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ReduceNoiseFilterLoader
+    ezpublish.image_alias.imagine.filter.loader.grayscale.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\GrayscaleFilterLoader
+    ezpublish.image_alias.imagine.filter.loader.swirl.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\SwirlFilterLoader
+
+    ezpublish.image_alias.imagine.filter.unsupported.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\UnsupportedFilter
+    ezpublish.image_alias.imagine.filter.reduce_noise.imagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\ReduceNoiseFilter
+    ezpublish.image_alias.imagine.filter.reduce_noise.gmagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Gmagick\ReduceNoiseFilter
+    ezpublish.image_alias.imagine.filter.swirl.imagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\SwirlFilter
+    ezpublish.image_alias.imagine.filter.swirl.gmagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Gmagick\SwirlFilter
 
 services:
+    # Filters
+    ezpublish.image_alias.imagine.filter.unsupported:
+        class: %ezpublish.image_alias.imagine.filter.unsupported.class%
+        public: false
+
+    ezpublish.image_alias.imagine.filter.reduce_noise.imagick:
+        class: %ezpublish.image_alias.imagine.filter.reduce_noise.imagick.class%
+        public: false
+
+    ezpublish.image_alias.imagine.filter.reduce_noise.gmagick:
+        class: %ezpublish.image_alias.imagine.filter.reduce_noise.gmagick.class%
+        public: false
+
+    # Aliasing by default to unsupported filter as it's not supported by GD.
+    # Alias is changed by Imagine compiler pass to use current driver.
+    ezpublish.image_alias.imagine.filter.reduce_noise:
+        alias: ezpublish.image_alias.imagine.filter.unsupported
+
+    ezpublish.image_alias.imagine.filter.swirl.imagick:
+        class: %ezpublish.image_alias.imagine.filter.swirl.imagick.class%
+        public: false
+
+    ezpublish.image_alias.imagine.filter.swirl.gmagick:
+        class: %ezpublish.image_alias.imagine.filter.swirl.gmagick.class%
+        public: false
+
+    ezpublish.image_alias.imagine.filter.swirl:
+        alias: ezpublish.image_alias.imagine.filter.unsupported
+
+    # Filter loaders
     ezpublish.image_alias.imagine.binary_loader:
         class: %ezpublish.image_alias.imagine.binary_loader.class%
         arguments: [@ezpublish.fieldType.ezimage.io, @liip_imagine.extension_guesser]
@@ -111,7 +151,34 @@ services:
 
     ezpublish.image_alias.imagine.filter.loader.crop:
         class: %ezpublish.image_alias.imagine.filter.loader.crop.class%
+        public: false
         calls:
             - [setInnerLoader, [@liip_imagine.filter.loader.crop]]
         tags:
             - { name: liip_imagine.filter.loader, loader: "geometry/crop" }
+
+    ezpublish.image_alias.imagine.filter.loader.border:
+        class: %ezpublish.image_alias.imagine.filter.loader.border.class%
+        public: false
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "border" }
+
+    ezpublish.image_alias.imagine.filter.loader.reduce_noise:
+        class: %ezpublish.image_alias.imagine.filter.loader.reduce_noise.class%
+        arguments: [@ezpublish.image_alias.imagine.filter.reduce_noise]
+        public: false
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "filter/noise" }
+
+    ezpublish.image_alias.imagine.filter.loader.swirl:
+        class: %ezpublish.image_alias.imagine.filter.loader.swirl.class%
+        arguments: [@ezpublish.image_alias.imagine.filter.swirl]
+        public: false
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "filter/swirl" }
+
+    ezpublish.image_alias.imagine.filter.loader.grayscale:
+        class: %ezpublish.image_alias.imagine.filter.loader.grayscale.class%
+        public: false
+        tags:
+            - { name: liip_imagine.filter.loader, loader: "colorspace/gray" }

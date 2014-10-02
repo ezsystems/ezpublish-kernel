@@ -277,14 +277,26 @@ class IOService implements IOServiceInterface
     }
 
     /**
-     * Returns the public HTTP uri for $id
-     * @param string $id
+     * Returns the public HTTP uri for $binaryFileId
+     * @param string $binaryFileId
      * @return string
      */
-    public function getUri( $id )
+    public function getUri( $binaryFileId )
     {
-        // @todo UrlDecorator ?
-        return $this->binarydataHandler->getUri( $id );
+        return $this->ioHandler->getUri( $binaryFileId );
+    }
+
+    /**
+     * Gets the mime-type of the BinaryFile
+     *
+     * Example: text/xml
+     *
+     * @param string $binaryFileId
+     * @return string|null
+     */
+    public function getMimeType( $binaryFileId )
+    {
+        return $this->ioHandler->getMimeType( $this->getPrefixedUri( $binaryFileId ) );
     }
 
     /**
@@ -343,10 +355,7 @@ class IOService implements IOServiceInterface
         }
         else
         {
-            // @todo adapt to André's patch
-            /*$mimeType = $this->mimeTypeDetector->getFromBuffer(
-                $this->binarydataHandler->getContents( $spiBinaryFile->id )
-            );*/
+            $mimeType = $this->ioHandler->getMimeType( $spiBinaryFile->id );
         }
 
         return new BinaryFile(
