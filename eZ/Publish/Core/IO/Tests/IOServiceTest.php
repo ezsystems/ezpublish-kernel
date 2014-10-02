@@ -232,8 +232,8 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $expectedContents ) );
 
         self::assertEquals(
-            $this->getIOService()->getFileContents( $binaryFile ),
-            $expectedContents
+            $expectedContents,
+            $this->getIOService()->getFileContents( $binaryFile )
         );
     }
 

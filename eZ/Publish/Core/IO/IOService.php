@@ -173,7 +173,7 @@ class IOService implements IOServiceInterface
      */
     public function deleteBinaryFile( BinaryFile $binaryFile )
     {
-        $this->checkBinaryFileId( $binaryFile );
+        $this->checkBinaryFileId( $binaryFile->id );
         $spiUri = $this->getPrefixedUri( $binaryFile->id );
 
         try
@@ -225,7 +225,7 @@ class IOService implements IOServiceInterface
      */
     public function getFileInputStream( BinaryFile $binaryFile )
     {
-        $this->checkBinaryFileId( $binaryFile );
+        $this->checkBinaryFileId( $binaryFile->id );
 
         return $this->binarydataHandler->getResource(
             $this->getPrefixedUri( $binaryFile->id )
@@ -243,7 +243,7 @@ class IOService implements IOServiceInterface
      */
     public function getFileContents( BinaryFile $binaryFile )
     {
-        $this->checkBinaryFileId( $binaryFile );
+        $this->checkBinaryFileId( $binaryFile->id );
 
         return $this->binarydataHandler->getContents(
             $this->getPrefixedUri( $binaryFile->id )
