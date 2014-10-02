@@ -81,18 +81,28 @@ class Filesystem implements IOHandlerInterface
 
         if ( isset( $options['root_dir'] ) && $options['root_dir'] !== '' )
         {
-            $this->rootDirectory = $options['root_dir'];
             $storageDirectory = $options['root_dir'] . '/' . $options['storage_dir'];
+            $this->rootDirectory = $options['root_dir'];
+
         }
         else
         {
             $storageDirectory = $options['storage_dir'];
         }
 
-        if ( !file_exists( $storageDirectory ) || !is_dir( $storageDirectory ) )
+        if ( !file_exists( $storageDirectory ) )
+        {
+            if ( !@mkdir( $storageDirectory, 0775, true ) )
+            {
+                throw new RuntimeException( "Could not create storage directory $storageDirectory" );
+            }
+        }
+
+        if ( !is_dir( $storageDirectory ) )
         {
             throw new RuntimeException( "Storage directory $storageDirectory doesn't exist" );
         }
+
         if ( !is_writeable( $storageDirectory ) )
         {
             throw new RuntimeException( "Storage directory $storageDirectory can not be written to" );

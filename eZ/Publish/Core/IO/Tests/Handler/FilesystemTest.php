@@ -23,6 +23,8 @@ class FilesystemTest extends BaseHandlerTest
 {
     protected static $storageDir = 'var/filesystem';
 
+    protected static $rootDir = null;
+
     public static function setupBeforeClass()
     {
         if ( !file_exists( self::$storageDir ) )
@@ -33,56 +35,68 @@ class FilesystemTest extends BaseHandlerTest
 
     public function setUp()
     {
-        self::cleanUpStorageDir();
+        self::cleanupDir();
         parent::setUp();
     }
 
     public function tearDown()
     {
-        self::cleanUpStorageDir();
+        self::cleanupDir();
         parent::tearDown();
     }
 
     /**
      * @return \eZ\Publish\SPI\IO\Handler
      */
-    protected function getIOHandler( $path = null )
+    protected function getIOHandler( $storageDir = null, $rootDir = null )
     {
-        return new FilesystemHandler( new FileInfoMimeTypeDetector(), $path ?: self::$storageDir );
+        $storageDir = $storageDir ?: self::$storageDir;
+        $rootDir = $rootDir ?: self::$rootDir;
+
+        $options = array( 'storage_dir' => $storageDir );
+        if ( $rootDir !== null )
+        {
+            $options['root_dir'] = $rootDir;
+        }
+
+        return new FilesystemHandler( new FileInfoMimeTypeDetector(), $options );
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testConstructDirectoryNotFound()
+    public function testConstructDirectoryRootDirDoesNotExist()
     {
-        $this->getIOHandler( 'some/path' );
+        $rootDir = 'var/otherdir';
+        $this->getIOHandler( $rootDir );
+        $this->assertTrue( file_exists( $rootDir ) && is_dir( $rootDir ), "Failed asserting that $rootDir was created" );
+
+        self::cleanupDir( $rootDir, true );
     }
 
-    public function testConstructDirectoryNotWritable()
+    public function testConstructStorageDirectoryNotWritable()
     {
-        $dir = self::$storageDir . DIRECTORY_SEPARATOR . 'dir';
-        mkdir( $dir );
-        chmod( $dir, 0000 );
+        $storageDir = self::$storageDir . DIRECTORY_SEPARATOR . 'dir';
+        mkdir( $storageDir );
+        chmod( $storageDir, 0000 );
         try
         {
-            $this->getIOHandler( $dir );
+            $this->getIOHandler( $storageDir );
         }
         catch ( \RuntimeException $e )
         {
             $gotException = true;
         }
-        chmod( $dir, 0775 );
-        rmdir( $dir );
+        chmod( $storageDir, 0775 );
+        rmdir( $storageDir );
 
         self::assertTrue( isset( $gotException ), "No exception was thrown" );
     }
 
-    private function cleanupStorageDir()
+    private function cleanupDir( $dir = null, $removeDirectory = false )
     {
+        $dir = $dir ?: self::$storageDir;
+
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator(
-                self::$storageDir,
+                $dir,
                 FileSystemIterator::KEY_AS_PATHNAME | FileSystemIterator::SKIP_DOTS | FilesystemIterator::CURRENT_AS_FILEINFO
             ),
             RecursiveIteratorIterator::CHILD_FIRST
@@ -98,6 +112,11 @@ class FilesystemTest extends BaseHandlerTest
             {
                 unlink( $path );
             }
+        }
+
+        if ( $removeDirectory )
+        {
+            rmdir( $dir );
         }
     }
 }
