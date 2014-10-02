@@ -116,17 +116,16 @@ class Legacy implements IOHandlerInterface
 
         $storagePath = $this->getStoragePath( $createStruct->id );
         $scope = $this->getScope( $storagePath );
-        $dataType = $this->getDatatype( $createStruct->mimeType );
 
         $clusterHandler = $this->getClusterHandler();
         $this->getLegacyKernel()->runCallback(
-            function () use ( $createStruct, $storagePath, $dataType, $scope, $clusterHandler )
+            function () use ( $createStruct, $storagePath, $scope, $clusterHandler )
             {
                 $clusterHandler->fileStoreContents(
                     $storagePath,
                     fread( $createStruct->getInputStream(), $createStruct->size ),
                     $scope,
-                    $dataType
+                    $createStruct->mimeType
                 );
             },
             false,
@@ -134,11 +133,6 @@ class Legacy implements IOHandlerInterface
         );
 
         return $this->load( $createStruct->id );
-    }
-
-    protected function getDatatype( $mimeType )
-    {
-        return substr( $mimeType, 0, strpos( $mimeType, '/' ) );
     }
 
     /**
@@ -481,36 +475,6 @@ class Legacy implements IOHandlerInterface
     }
 
     /**
-     * Returns a mimeType from a local file, using fileinfo
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If file does not exist
-     * @todo If legacy path is made available then this function can use that to skip executing legacy kernel
-     * @param string $path
-     * @return string
-     */
-    protected function getMimeTypeFromLocalFile( $path )
-    {
-        $returnValue = $this->getLegacyKernel()->runCallback(
-            function () use ( $path )
-            {
-                if ( !is_file( $path ) )
-                    return null;
-
-                $fileInfo = new finfo( FILEINFO_MIME_TYPE );
-                return $fileInfo->file( $path );
-            },
-            false,
-            false
-        );
-
-        if ( $returnValue === null )
-        {
-            throw new NotFoundException( 'BinaryFile', $path );
-        }
-
-        return $returnValue;
-    }
-
-    /**
      * Transforms an SPI id in a storage path using the $storageDirectory
      * @param string $spiBinaryFileId
      * @return string
@@ -541,6 +505,32 @@ class Legacy implements IOHandlerInterface
         }
 
         return substr( $path, strlen( $this->storageDirectory ) + 1 );
+    }
+
+    /**
+     * Gets the mime-type of the BinaryFile
+     *
+     * Example: text/xml
+     *
+     * @param string $spiBinaryFileId
+     * @return string|null
+     */
+    public function getMimeType( $spiBinaryFileId )
+    {
+        $storagePath = $this->getStoragePath( $spiBinaryFileId );
+        $mimeType = $this->getLegacyKernel()->runCallback(
+            function () use ( $storagePath )
+            {
+                $clusterFile = eZClusterFileHandler::instance( $storagePath );
+                return !empty( $clusterFile->metaData['datatype'] ) ?
+                    $clusterFile->metaData['datatype'] :
+                    $clusterFile->dataType();
+            },
+            false,
+            false
+        );
+
+        return $mimeType;
     }
 
     public function getUri( $spiBinaryFileId )

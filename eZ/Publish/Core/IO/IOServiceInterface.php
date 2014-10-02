@@ -98,13 +98,23 @@ interface IOServiceInterface
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct );
 
     /**
-     * Returns the public HTTP uri for $id
+     * Returns the public HTTP uri for $binaryFileId
      *
-     * @param string $id
+     * @param string $binaryFileId
      *
      * @return string
      */
-    public function getUri( $id );
+    public function getUri( $binaryFileId );
+
+    /**
+     * Gets the mime-type of the BinaryFile
+     *
+     * Example: text/xml
+     *
+     * @param string $binaryFileId
+     * @return string|null
+     */
+    public function getMimeType( $binaryFileId );
 
     /**
      * Returns a read (mode: rb) file resource to the binary file identified by $path

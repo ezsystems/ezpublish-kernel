@@ -300,6 +300,23 @@ abstract class Base extends PHPUnit_Framework_TestCase
         self::assertEquals( $metadata, $expectedMetadata );
     }
 
+    /**
+     * @depends testCreate
+     * @param BinaryFile $binaryFile
+     */
+    public function testGetMimeType( BinaryFile $binaryFile )
+    {
+        $repositoryPath = 'images/testGetFileContents.gif';
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->IOHandler->create( $struct );
+
+        $mimeType = $this->IOHandler->getMimeType(
+            $binaryFile->id
+        );
+
+        self::assertEquals( $struct->mimeType, $mimeType );
+    }
+
         /**
      * Creates a BinaryFile object from $localFile
      *

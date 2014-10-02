@@ -49,8 +49,10 @@ class BinaryFile
 
     /**
      * The file's mime type
-     * If not provided, will be auto-detected by the IOService
+     *
      * Example: text/xml
+     *
+     * @deprecated Since 5.3.3, use IO\Handler::getMimeType()
      * @var string
      */
     public $mimeType;
