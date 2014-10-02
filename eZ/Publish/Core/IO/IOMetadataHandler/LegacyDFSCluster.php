@@ -8,25 +8,34 @@
  */
 namespace eZ\Publish\Core\IO\IOMetadataHandler;
 
+use eZ\Publish\Core\IO\IOMetadataHandler;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
-use eZ\Publish\Core\IO\Handler\DFS\MetadataHandler;
-use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
+use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 
 /**
  * @todo Describe
  * @todo Rename to LegacyStorage ?
  */
-class LegacyDFSCluster implements MetadataHandler
+class LegacyDFSCluster implements IOMetadataHandler
 {
     /** @var Connection */
     private $db;
 
-    public function __construct( Connection $connection )
+    /** @var string */
+    private $prefix;
+
+    public function __construct( Connection $connection, array $options = array() )
     {
         $this->db = $connection;
+        if ( isset( $options['prefix'] ) )
+        {
+            $this->prefix = trim( $options['prefix'], '/' );
+        }
     }
 
     /**
@@ -41,7 +50,7 @@ class LegacyDFSCluster implements MetadataHandler
      *
      * @todo fix exception handling
      */
-    public function create( BinaryFileCreateStruct $binaryFileCreateStruct )
+    public function create( SPIBinaryFileCreateStruct $binaryFileCreateStruct )
     {
         $path = $this->addPrefix( $binaryFileCreateStruct->id );
 
@@ -64,7 +73,7 @@ SQL
             $stmt->bindValue( 'name_trunk', $this->getNameTrunk( $binaryFileCreateStruct ) );
             $stmt->bindValue( 'mtime', $binaryFileCreateStruct->mtime );
             $stmt->bindValue( 'size', $binaryFileCreateStruct->size );
-            $stmt->bindValue( 'scope', '@todo' );
+            $stmt->bindValue( 'scope', $this->getScope( $binaryFileCreateStruct ) );
             $stmt->bindValue( 'datatype', $binaryFileCreateStruct->mimeType );
             $stmt->execute();
         }
@@ -77,6 +86,14 @@ SQL
         {
             throw new \Exception("@TODO: unexpected rowCount " . $stmt->rowCount());
         }
+
+        $spiBinaryFile = new SPIBinaryFile();
+        $spiBinaryFile->id = $binaryFileCreateStruct->id;
+        $spiBinaryFile->mimeType = $binaryFileCreateStruct->mimeType;
+        $spiBinaryFile->mtime = $binaryFileCreateStruct->mtime;
+        $spiBinaryFile->size = $binaryFileCreateStruct->size;
+
+        return $spiBinaryFile;
     }
 
     /**
@@ -106,7 +123,7 @@ SQL
      *
      * @param string $spiBinaryFileId
      *
-     * @return array A hash with metadata for $spiBinaryFileId. Keys: mtime, size.
+     * @return SPIBinaryFile
      *
      * @throws BinaryFileNotFoundException if no row is found for $spiBinaryFileId
      * @throws DBALException Any unhandled DBAL exception
@@ -124,7 +141,14 @@ SQL
             throw new BinaryFileNotFoundException( $path );
         }
 
-        return $stmt->fetch( \PDO::FETCH_ASSOC );
+        $row = $stmt->fetch( \PDO::FETCH_ASSOC );
+
+        $spiBinaryFile = new SPIBinaryFile();
+        $spiBinaryFile->id = $spiBinaryFileId;
+        $spiBinaryFile->size = $row['size'];
+        $spiBinaryFile->mtime = $row['mtime'];
+        $spiBinaryFile->mimeType = $row['datatype'];
+        return $spiBinaryFile;
     }
 
     /**
@@ -148,14 +172,29 @@ SQL
     }
 
     /**
-     * @param BinaryFileCreateStruct $binaryFileCreateStruct
+     * @param SPIBinaryFileCreateStruct $binaryFileCreateStruct
      *
      * @return mixed
      */
-    protected function getNameTrunk( BinaryFileCreateStruct $binaryFileCreateStruct )
+    protected function getNameTrunk( SPIBinaryFileCreateStruct $binaryFileCreateStruct )
     {
-        // @todo fixme
-        return $binaryFileCreateStruct->id;
+        return $this->addPrefix( $binaryFileCreateStruct->id );
+    }
+
+    protected function getScope( SPIBinaryFileCreateStruct $binaryFileCreateStruct )
+    {
+        list( $filePrefix ) = explode( '/', $binaryFileCreateStruct->id );
+
+        switch ( $filePrefix )
+        {
+            case 'images':
+                return 'image';
+
+            case 'original':
+                return 'binaryfile';
+        }
+
+        return 'UNKNOWN_SCOPE';
     }
 
     protected function addPrefix( $id )
