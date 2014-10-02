@@ -11,7 +11,7 @@ Goal of this feature is to allow developers to inject these dynamic settings exp
 ### Syntax
 Static container parameters follows the `%<parameter_name>%` syntax in Symfony.
 
-Dynamic parameters have the following: `$<parameter_name>[, <namespace>[, <scope>]]$`, default namespace being `ezsettings`, 
+Dynamic parameters have the following: `$<parameter_name>[; <namespace>[; <scope>]]$`, default namespace being `ezsettings`, 
 and default scope being current siteaccess.
 
 For more information, see [ConfigResolver documentation](https://confluence.ez.no/display/EZP/Configuration#Configuration-DynamicconfigurationwiththeConfigResolver).
