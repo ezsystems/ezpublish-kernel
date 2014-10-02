@@ -323,6 +323,7 @@ class IOService implements IOServiceInterface
         $spiBinaryCreateStruct->size = $binaryFileCreateStruct->size;
         $spiBinaryCreateStruct->setInputStream( $binaryFileCreateStruct->inputStream );
         $spiBinaryCreateStruct->mimeType = $binaryFileCreateStruct->mimeType;
+        $spiBinaryCreateStruct->mtime = time();
 
         return $spiBinaryCreateStruct;
     }
