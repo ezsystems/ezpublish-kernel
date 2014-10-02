@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AsseticPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
@@ -69,6 +70,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new ImaginePass );
         $container->addCompilerPass( new IOHandlerTagPass() );
         $container->addCompilerPass( new ConfigResolverParameterPass( new DynamicSettingParser() ) );
+        $container->addCompilerPass( new AsseticPass() );
 
         // Storage passes
         $container->addCompilerPass( new ExternalStorageRegistryPass );
