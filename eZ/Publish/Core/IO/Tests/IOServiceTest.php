@@ -245,6 +245,26 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testCreateBinaryFile
+     * @covers IOService \eZ\Publish\Core\IO\IOService::getMimeType()
+     */
+    public function testGetMimeType( BinaryFile $binaryFile )
+    {
+        $this->getIOHandlerMock()
+            ->expects( $this->once() )
+            ->method( 'getMimeType' )
+            ->with( $this->equalTo( $this->getPrefixedUri( $binaryFile->id ) ) )
+            ->will( $this->returnValue( $binaryFile->mimeType ) );
+
+        self::assertEquals(
+            $binaryFile->mimeType,
+            $this->getIOService()->getMimeType(
+                $binaryFile->id
+            )
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\IO\IOService::deleteBinaryFile
      * @depends testCreateBinaryFile
      */

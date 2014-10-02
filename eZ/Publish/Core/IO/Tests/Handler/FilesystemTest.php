@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\IO\Tests\Handler;
 
 use eZ\Publish\Core\IO\Handler\Filesystem as FilesystemHandler;
+use eZ\Publish\Core\IO\MimeTypeDetector\FileInfo as FileInfoMimeTypeDetector;
 use eZ\Publish\Core\IO\Tests\Handler\Base as BaseHandlerTest;
 use FileSystemIterator;
 use RecursiveDirectoryIterator;
@@ -20,7 +21,7 @@ use RecursiveIteratorIterator;
  */
 class FilesystemTest extends BaseHandlerTest
 {
-    private static $storageDir = 'var/filesystem';
+    protected static $storageDir = 'var/filesystem';
 
     public static function setupBeforeClass()
     {
@@ -47,7 +48,7 @@ class FilesystemTest extends BaseHandlerTest
      */
     protected function getIOHandler( $path = null )
     {
-        return new FilesystemHandler( $path ?: self::$storageDir );
+        return new FilesystemHandler( new FileInfoMimeTypeDetector(), $path ?: self::$storageDir );
     }
 
     /**

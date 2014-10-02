@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\IO\Handler;
 
 use eZ\Publish\Core\IO\Handler as IOHandlerInterface;
+use eZ\Publish\SPI\IO\MimeTypeDetector;
 use eZ\Publish\SPI\IO\BinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFileUpdateStruct;
@@ -26,6 +27,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class Filesystem implements IOHandlerInterface
 {
+
+    /**
+     * @var MimeTypeDetector
+     */
+    protected $mimeTypeDetector;
+
     /**
      * The storage directory where data is stored
      * Example: var/site/storage
@@ -46,11 +53,16 @@ class Filesystem implements IOHandlerInterface
     private $prefix;
 
     /**
+     * @param MimeTypeDetector $mimeTypeDetector
      * @param array|string $options Possible keys: storage_dir, root_dir.
      *        Supports string instead of array for BC, in which case it is considered as storage_dir.
+     * @throws InvalidArgumentException On invalid settings
+     * @throws RuntimeException On invalid / not-writable directory
      */
-    public function __construct( $options = array() )
+    public function __construct( MimeTypeDetector $mimeTypeDetector, $options = array() )
     {
+        $this->mimeTypeDetector = $mimeTypeDetector;
+
         // BC with < 5.3
         if ( is_string( $options ) )
         {
@@ -340,6 +352,19 @@ class Filesystem implements IOHandlerInterface
     public function getMetadata( MetadataHandler $metadataHandler, $spiBinaryFileId )
     {
         return $metadataHandler->extract( $this->getStoragePath( $spiBinaryFileId ) );
+    }
+
+    /**
+     * Gets the mime-type of the BinaryFile
+     *
+     * Example: text/xml
+     *
+     * @param string $spiBinaryFileId
+     * @return string|null
+     */
+    public function getMimeType( $spiBinaryFileId )
+    {
+        return $this->mimeTypeDetector->getFromPath( $this->getStoragePath( $spiBinaryFileId ) ) ?: null;
     }
 
     /**

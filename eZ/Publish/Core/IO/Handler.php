@@ -114,6 +114,16 @@ interface Handler
     public function getMetadata( MetadataHandler $metadataHandler, $spiBinaryFileId );
 
     /**
+     * Gets the mime-type of the BinaryFile
+     *
+     * Example: text/xml
+     *
+     * @param string $spiBinaryFileId
+     * @return string|null
+     */
+    public function getMimeType( $spiBinaryFileId );
+
+    /**
      * Returns the file's public HTTP URI, as exposed from the outside
      * @deprecated should not be required. Seek & destroy.
      * @param string $spiBinaryFileId
