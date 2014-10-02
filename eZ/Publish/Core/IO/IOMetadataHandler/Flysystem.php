@@ -71,4 +71,9 @@ class Flysystem implements IOMetadataHandler
     {
         return $this->filesystem->has( $spiBinaryFileId );
     }
+
+    public function getMimeType( $spiBinaryFileId )
+    {
+        return $this->filesystem->getMimetype( $spiBinaryFileId );
+    }
 }

@@ -131,4 +131,15 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
 
         self::assertFalse( $this->handler->exists( 'prefix/my/file.png' ) );
     }
+
+    public function testGetMetadata()
+    {
+        $this->filesystem
+            ->expects( $this->once() )
+            ->method( 'getMimeType' )
+            ->with( 'file.txt' )
+            ->will( $this->returnValue( 'text/plain' ) );
+
+        self::assertEquals( 'text/plain', $this->handler->getMimeType( 'file.txt') );
+    }
 }

@@ -283,7 +283,7 @@ class IOService implements IOServiceInterface
      */
     public function getUri( $binaryFileId )
     {
-        return $this->ioHandler->getUri( $binaryFileId );
+        return $this->binarydataHandler->getUri( $binaryFileId );
     }
 
     /**
@@ -296,7 +296,7 @@ class IOService implements IOServiceInterface
      */
     public function getMimeType( $binaryFileId )
     {
-        return $this->ioHandler->getMimeType( $this->getPrefixedUri( $binaryFileId ) );
+        return $this->metadataHandler->getMimeType( $this->getPrefixedUri( $binaryFileId ) );
     }
 
     /**
@@ -307,12 +307,10 @@ class IOService implements IOServiceInterface
      */
     public function getMetadata( MetadataHandler $metadataHandler, BinaryFile $binaryFile )
     {
-        // @todo Check if still required
-        return array();
-        /*$this->ioHandler->getMetadata(
+        return $this->ioHandler->getMetadata(
             $metadataHandler,
             $this->getPrefixedUri( $binaryFile->id )
-        );*/
+        );
     }
 
     public function exists( $binaryFileId )

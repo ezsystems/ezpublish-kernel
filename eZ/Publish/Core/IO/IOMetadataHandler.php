@@ -54,4 +54,13 @@ interface IOMetadataHandler
      * @return bool
      */
     public function exists( $spiBinaryFileId );
+
+    /**
+     * Returns the file's mimetype. Example: text/plain
+     *
+     * @param $spiBinaryFileId
+     *
+     * @return string
+     */
+    public function getMimeType( $spiBinaryFileId );
 }

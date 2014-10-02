@@ -224,4 +224,9 @@ SQL
 
         return substr( $prefixedId, strlen( $this->prefix ) + 1 );
     }
+
+    public function getMimeType( $spiBinaryFileId )
+    {
+
+    }
 }

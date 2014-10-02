@@ -280,7 +280,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMimeType( BinaryFile $binaryFile )
     {
-        $this->getIOHandlerMock()
+        $this->metadataHandlerMock
             ->expects( $this->once() )
             ->method( 'getMimeType' )
             ->with( $this->equalTo( $this->getPrefixedUri( $binaryFile->id ) ) )
