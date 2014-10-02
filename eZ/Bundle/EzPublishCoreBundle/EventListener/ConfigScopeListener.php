@@ -35,26 +35,26 @@ class ConfigScopeListener extends ContainerAware implements EventSubscriberInter
      *
      * @var array
      */
-    private $resettableServices;
+    private $resettableServiceIds;
 
     /**
      * Array of "fake" services handling dynamic settings injection.
      *
      * @var array
      */
-    private $dynamicSettingsServices;
+    private $dynamicSettingsServiceIds;
 
     public function __construct(
         VersatileScopeInterface $configResolver,
         ViewManagerInterface $viewManager,
-        array $resettableServices,
-        array $fakeServices
+        array $resettableServiceIds,
+        array $dynamicSettingsServiceIds
     )
     {
         $this->configResolver = $configResolver;
         $this->viewManager = $viewManager;
-        $this->resettableServices = $resettableServices;
-        $this->dynamicSettingsServices = $fakeServices;
+        $this->resettableServiceIds = $resettableServiceIds;
+        $this->dynamicSettingsServiceIds = $dynamicSettingsServiceIds;
     }
 
     public static function getSubscribedEvents()
@@ -75,14 +75,14 @@ class ConfigScopeListener extends ContainerAware implements EventSubscriberInter
         }
 
         // Ensure to reset services that need to be.
-        foreach ( $this->resettableServices as $serviceId )
+        foreach ( $this->resettableServiceIds as $serviceId )
         {
             $this->container->set( $serviceId, null );
         }
 
         // Force dynamic settings services to synchronize.
         // This will trigger services depending on dynamic settings to update if they use setter injection.
-        foreach ( $this->dynamicSettingsServices as $fakeServiceId )
+        foreach ( $this->dynamicSettingsServiceIds as $fakeServiceId )
         {
             $this->container->set( $fakeServiceId, null );
             $this->container->set( $fakeServiceId, $this->container->get( $fakeServiceId ) );
