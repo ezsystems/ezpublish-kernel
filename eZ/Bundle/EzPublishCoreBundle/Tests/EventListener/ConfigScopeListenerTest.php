@@ -56,6 +56,7 @@ class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
         $siteAccess = new SiteAccess( 'test' );
         $event = new ScopeChangeEvent( $siteAccess );
         $resettableServices = array( 'foo', 'bar.baz' );
+        $dynamicSettingsServiceIds = array( 'something', 'something_else' );
         $this->configResolver
             ->expects( $this->once() )
             ->method( 'setDefaultScope' )
@@ -73,7 +74,37 @@ class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
             ->method( 'set' )
             ->with( 'bar.baz', null );
 
-        $listener = new ConfigScopeListener( $this->configResolver, $this->viewManager, $resettableServices );
+        $fakeService1 = new \stdClass;
+        $this->container
+            ->expects( $this->at( 2 ) )
+            ->method( 'set' )
+            ->with( 'something', null );
+        $this->container
+            ->expects( $this->at( 3 ) )
+            ->method( 'get' )
+            ->with( 'something' )
+            ->will( $this->returnValue( $fakeService1 ) );
+        $this->container
+            ->expects( $this->at( 4 ) )
+            ->method( 'set' )
+            ->with( 'something', $fakeService1 );
+
+        $fakeService2 = new \stdClass;
+        $this->container
+            ->expects( $this->at( 5 ) )
+            ->method( 'set' )
+            ->with( 'something_else', null );
+        $this->container
+            ->expects( $this->at( 6 ) )
+            ->method( 'get' )
+            ->with( 'something_else' )
+            ->will( $this->returnValue( $fakeService2 ) );
+        $this->container
+            ->expects( $this->at( 7 ) )
+            ->method( 'set' )
+            ->with( 'something_else', $fakeService2 );
+
+        $listener = new ConfigScopeListener( $this->configResolver, $this->viewManager, $resettableServices, $dynamicSettingsServiceIds );
         $listener->setContainer( $this->container );
         $listener->onConfigScopeChange( $event );
         $this->assertSame( $siteAccess, $event->getSiteAccess() );
