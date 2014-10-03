@@ -275,16 +275,24 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null )
+    public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = true )
     {
+        // Change $useAlwaysAvailable to false to avoid contentInfo lookup if we know alwaysAvailable is disabled
+        if ( $useAlwaysAvailable && !$contentInfo->alwaysAvailable )
+        {
+            $useAlwaysAvailable = false;
+        }
+
         return $this->loadContent(
             $contentInfo->id,
             $languages,
-            $versionNo
+            $versionNo,
+            $useAlwaysAvailable
         );
     }
 
@@ -295,15 +303,23 @@ class ContentService implements ContentServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByVersionInfo( APIVersionInfo $versionInfo, array $languages = null )
+    public function loadContentByVersionInfo( APIVersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = true )
     {
+        // Change $useAlwaysAvailable to false to avoid contentInfo lookup if we know alwaysAvailable is disabled
+        if ( $useAlwaysAvailable && !$versionInfo->getContentInfo()->alwaysAvailable )
+        {
+            $useAlwaysAvailable = false;
+        }
+
         return $this->loadContent(
             $versionInfo->getContentInfo()->id,
             $languages,
-            $versionInfo->versionNo
+            $versionInfo->versionNo,
+            $useAlwaysAvailable
         );
     }
 
@@ -317,13 +333,14 @@ class ContentService implements ContentServiceInterface
      *
      * @param int $contentId
      * @param array|null $languages A language filter for fields. If not given all languages are returned
-     * @param int|null $versionNo the version number. If not given the current version is returned.
+     * @param int|null $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContent( $contentId, array $languages = null, $versionNo = null )
+    public function loadContent( $contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true )
     {
-        $content = $this->internalLoadContent( $contentId, $languages, $versionNo );
+        $content = $this->internalLoadContent( $contentId, $languages, $versionNo, false, $useAlwaysAvailable );
 
         if ( !$this->repository->canUser( 'content', 'read', $content ) )
             throw new UnauthorizedException( 'content', 'read' );
@@ -345,32 +362,46 @@ class ContentService implements ContentServiceInterface
      * @access private This is only available to services that needs access to Content w/o permissions checks
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
      *
-     * @param mixed $contentId
+     * @param mixed $id
      * @param array|null $languages A language filter for fields. If not given all languages are returned
-     * @param int|null $versionNo the version number. If not given the current version is returned.
+     * @param int|null $versionNo the version number. If not given the current version is returned
      * @param bool $isRemoteId
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function internalLoadContent( $id, array $languages = null, $versionNo = null, $isRemoteId = false )
+    public function internalLoadContent( $id, array $languages = null, $versionNo = null, $isRemoteId = false, $useAlwaysAvailable = true )
     {
         try
         {
+            // Get Content ID if lookup by remote ID
             if ( $isRemoteId )
             {
                 $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId( $id );
                 $id = $spiContentInfo->id;
-
-                if ( $versionNo === null )
-                {
-                    $versionNo = $spiContentInfo->currentVersionNo;
-                }
             }
-            else if ( $versionNo === null )
+
+            // Get current version if $versionNo is not defined
+            if ( $versionNo === null )
             {
-                $versionNo = $this->persistenceHandler->contentHandler()->loadContentInfo(
-                    $id
-                )->currentVersionNo;
+                if ( !isset( $spiContentInfo ) )
+                    $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $id );
+
+                $versionNo = $spiContentInfo->currentVersionNo;
+            }
+
+            // Set main language on $languages filter if not empty and $useAlwaysAvailable being true
+            if ( !empty( $languages ) && $useAlwaysAvailable )
+            {
+                if ( !isset( $spiContentInfo ) )
+                    $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $id );
+
+                if ( $spiContentInfo->alwaysAvailable )
+                {
+                    $languages[] = $spiContentInfo->mainLanguageCode;
+                    $languages = array_unique( $languages );
+                }
+
             }
 
             $spiContent = $this->persistenceHandler->contentHandler()->load(
@@ -405,13 +436,14 @@ class ContentService implements ContentServiceInterface
      *
      * @param string $remoteId
      * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned.
+     * @param int $versionNo the version number. If not given the current version is returned
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null )
+    public function loadContentByRemoteId( $remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true )
     {
-        $content = $this->internalLoadContent( $remoteId, $languages, $versionNo, true );
+        $content = $this->internalLoadContent( $remoteId, $languages, $versionNo, true, $useAlwaysAvailable );
 
         if ( !$this->repository->canUser( 'content', 'read', $content ) )
             throw new UnauthorizedException( 'content', 'read' );

@@ -525,8 +525,8 @@ abstract class ContentBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $contentService = $this->repository->getContentService();
 
-        // Throws an exception because content does not exists in "eng-GB" language
-        $content = $contentService->loadContent( 4, array( "fre-FR" ) );
+        // Throws an exception because content does not exists in "fre-FR" language
+        $content = $contentService->loadContent( 4, array( "fre-FR" ), null, false );
         /* END: Use Case */
     }
 

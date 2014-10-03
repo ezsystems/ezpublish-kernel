@@ -117,25 +117,25 @@ class ContentServiceTest extends ServiceTest
             ),
             array(
                 'loadContentByContentInfo',
-                array( $contentInfo, array( $language ), $versionNo ),
+                array( $contentInfo, array( $language ), $versionNo, true ),
                 $content,
                 0
             ),
             array(
                 'loadContentByVersionInfo',
-                array( $versionInfo, array( $language ) ),
+                array( $versionInfo, array( $language ), true ),
                 $content,
                 0
             ),
             array(
                 'loadContent',
-                array( $contentId, array( $language ), $versionNo ),
+                array( $contentId, array( $language ), $versionNo, true ),
                 $content,
                 0
             ),
             array(
                 'loadContentByRemoteId',
-                array( $remoteId, array( $language ), $versionNo ),
+                array( $remoteId, array( $language ), $versionNo, true ),
                 $content,
                 0
             ),

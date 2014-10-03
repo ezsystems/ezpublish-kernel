@@ -497,7 +497,7 @@ class ContentTest extends BaseServiceMockTest
     /**
      * @dataProvider internalLoadContentProvider
      */
-    public function testInternalLoadContent( $id, $languages, $versionNo, $isRemoteId )
+    public function testInternalLoadContent( $id, $languages, $versionNo, $isRemoteId, $useAlwaysAvailable )
     {
         $contentService = $this->getPartlyMockedContentService();
         /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
@@ -526,6 +526,15 @@ class ContentTest extends BaseServiceMockTest
                 ->with( $id )
                 ->will( $this->returnValue( $spiContentInfo ) );
         }
+        else if ( !empty( $languages ) && $useAlwaysAvailable )
+        {
+            $spiContentInfo = new SPIContentInfo( array( 'alwaysAvailable' => false ) );
+            $contentHandler
+                ->expects( $this->once() )
+                ->method( 'loadContentInfo' )
+                ->with( $id )
+                ->will( $this->returnValue( $spiContentInfo ) );
+        }
 
         $spiContent = new SPIContent();
         $contentHandler
@@ -542,28 +551,28 @@ class ContentTest extends BaseServiceMockTest
 
         $this->assertSame(
             $content,
-            $contentService->internalLoadContent( $id, $languages, $versionNo, $isRemoteId )
+            $contentService->internalLoadContent( $id, $languages, $versionNo, $isRemoteId, $useAlwaysAvailable )
         );
     }
 
     public function internalLoadContentProvider()
     {
         return array(
-            array( 123, null, null, false ),
-            array( 123, null, 456, false ),
-            array( 456, null, 123, false ),
-            array( 456, null, 2, false ),
-            array( 456, array( 'eng-GB' ), 2, false ),
-            array( 456, array( 'eng-GB', 'fre-FR' ), null, false ),
-            array( 456, array( 'eng-GB', 'fre-FR', 'nor-NO' ), 2, false ),
+            array( 123, null, null, false, false ),
+            array( 123, null, 456, false, false ),
+            array( 456, null, 123, false, true ),
+            array( 456, null, 2, false, false ),
+            array( 456, array( 'eng-GB' ), 2, false, true ),
+            array( 456, array( 'eng-GB', 'fre-FR' ), null, false, false ),
+            array( 456, array( 'eng-GB', 'fre-FR', 'nor-NO' ), 2, false, false ),
             // With remoteId
-            array( 123, null, null, true ),
-            array( 'someRemoteId', null, 456, true ),
-            array( 456, null, 123, true ),
-            array( 'someRemoteId', null, 2, true ),
-            array( 'someRemoteId', array( 'eng-GB' ), 2, true ),
-            array( 456, array( 'eng-GB', 'fre-FR' ), null, true ),
-            array( 'someRemoteId', array( 'eng-GB', 'fre-FR', 'nor-NO' ), 2, true ),
+            array( 123, null, null, true, false ),
+            array( 'someRemoteId', null, 456, true, false ),
+            array( 456, null, 123, true, false ),
+            array( 'someRemoteId', null, 2, true, false ),
+            array( 'someRemoteId', array( 'eng-GB' ), 2, true, false ),
+            array( 456, array( 'eng-GB', 'fre-FR' ), null, true, false ),
+            array( 'someRemoteId', array( 'eng-GB', 'fre-FR', 'nor-NO' ), 2, true, false ),
         );
     }
 
@@ -608,7 +617,8 @@ class ContentTest extends BaseServiceMockTest
         )->with(
             $this->equalTo( 42 ),
             $this->equalTo( array( "cro-HR" ) ),
-            $this->equalTo( 7 )
+            $this->equalTo( 7 ),
+            $this->equalTo( false )
         )->will(
             $this->returnValue( "result" )
         );
@@ -639,7 +649,8 @@ class ContentTest extends BaseServiceMockTest
         )->with(
             $this->equalTo( 42 ),
             $this->equalTo( array( "cro-HR" ) ),
-            $this->equalTo( 7 )
+            $this->equalTo( 7 ),
+            $this->equalTo( false )
         )->will(
             $this->returnValue( "result" )
         );

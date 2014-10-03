@@ -10,7 +10,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 50,
                         'title' => 'Files',
                     ),
-                    'score' => 0.18718657,
+                    'score' => 0.49504447000000001,
                     'index' => NULL,
                     'highlight' => NULL,
                 )
@@ -21,7 +21,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 51,
                         'title' => 'Multimedia',
                     ),
-                    'score' => 0.18718657,
+                    'score' => 0.49504447000000001,
                     'index' => NULL,
                     'highlight' => NULL,
                 )
@@ -54,7 +54,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 56,
                         'title' => 'Design',
                     ),
-                    'score' => 0.18718657,
+                    'score' => 0.49504447000000001,
                     'index' => NULL,
                     'highlight' => NULL,
                 )
@@ -65,7 +65,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 57,
                         'title' => 'Home',
                     ),
-                    'score' => 1.3054208,
+                    'score' => 1.8913484,
                     'index' => NULL,
                     'highlight' => NULL,
                 )
@@ -76,7 +76,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 58,
                         'title' => 'Contact Us',
                     ),
-                    'score' => 1.3054208,
+                    'score' => 0.81501900000000005,
                     'index' => NULL,
                     'highlight' => NULL,
                 )
@@ -87,7 +87,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                         'id' => 59,
                         'title' => 'Partners',
                     ),
-                    'score' => 0.18718657,
+                    'score' => 0.49504447000000001,
                     'index' => NULL,
                     'highlight' => NULL,
                 )
@@ -96,7 +96,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
         'spellSuggestion' => NULL,
         'time' => 1,
         'timedOut' => NULL,
-        'maxScore' => 1.3054208,
+        'maxScore' => 1.8913484,
         'totalCount' => 18,
     )
 );

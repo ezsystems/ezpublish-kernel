@@ -35,12 +35,12 @@ class LanguageCode extends Criterion implements CriterionInterface
      *
      * @param string|string[] $value One or more language codes that must be matched
      * @param boolean $matchAlwaysAvailable Denotes if always-available Content is to be matched regardless
-     *                                      of language codes
+     *                                      of language codes, this is the default behaviour
      *
      * @throws \InvalidArgumentException if non string value is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $value, $matchAlwaysAvailable = false )
+    public function __construct( $value, $matchAlwaysAvailable = true )
     {
         if ( !is_bool( $matchAlwaysAvailable ) )
         {
