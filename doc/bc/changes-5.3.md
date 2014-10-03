@@ -92,6 +92,10 @@ Changes affecting version compatibility with former or future versions.
   deprecated for content search use since their behaviour is unpredictable by design when
   content has several locations. Instead use same functionality on new Location Search API.
 
+* 5.3.3: Added $useAlwaysAvailable argument for all ContentService methods with languages filtering
+  Default value will be changed from false to true in 5.4 as part of story ( https://jira.ez.no/browse/EZP-22191 ):
+  "As a User I expect API's with language filters to respect Always available flag"
+
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).

@@ -100,19 +100,7 @@ class IOFactory extends ContainerAware
      */
     public function buildFilesystemHandler()
     {
-// @todo am I still required ?
-//        $storageDir = sprintf(
-//            '%s/%s/',
-//            trim( $this->configResolver->getParameter( 'var_dir' ), '/' ),
-//            trim( $this->configResolver->getParameter( 'storage_dir' ), '/' )
-//        );
-//
-//        return new Filesystem(
-//            array(
-//                'storage_dir' => $storageDir,
-//                'root_dir' => $this->container->getParameter( 'ezpublish_legacy.root_dir' )
-//            )
-//        );
+        // @todo should be removed
     }
 
     /**

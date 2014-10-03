@@ -2169,7 +2169,8 @@ class ContentServiceTest extends BaseContentServiceTest
             $publishedContent->getVersionInfo(),
             array(
                 'eng-GB'
-            )
+            ),
+            false
         );
         /* END: Use Case */
 
@@ -2260,7 +2261,9 @@ class ContentServiceTest extends BaseContentServiceTest
             $publishedContent->contentInfo,
             array(
                 'eng-US'
-            )
+            ),
+            null,
+            false
         );
         /* END: Use Case */
 
@@ -2367,7 +2370,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $draft = $this->createMultipleLanguageDraftVersion1();
 
         // This draft contains those fields localized with "eng-GB"
-        $draftLocalized = $contentService->loadContent( $draft->id, array( 'eng-GB' ) );
+        $draftLocalized = $contentService->loadContent( $draft->id, array( 'eng-GB' ), null, false );
         /* END: Use Case */
 
         $this->assertLocaleFieldsEquals( $draftLocalized->getFields(), 'eng-GB' );
@@ -2448,7 +2451,9 @@ class ContentServiceTest extends BaseContentServiceTest
         // This draft contains those fields localized with "eng-GB"
         $draftLocalized = $contentService->loadContentByRemoteId(
             $draft->contentInfo->remoteId,
-            array( 'eng-GB' )
+            array( 'eng-GB' ),
+            null,
+            false
         );
         /* END: Use Case */
 

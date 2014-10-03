@@ -399,7 +399,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'criterion' => new Criterion\LanguageCode( "eng-GB" ),
+                    'criterion' => new Criterion\LanguageCode( "eng-GB", false ),
                     'sortClauses' => array( new SortClause\ContentId() )
                 ),
                 $fixtureDir . 'LanguageCode.php',
@@ -414,7 +414,7 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
-                    'criterion' => new Criterion\LanguageCode( "eng-GB", true ),
+                    'criterion' => new Criterion\LanguageCode( "eng-GB" ),
                     'offset' => 10,
                     'sortClauses' => array( new SortClause\ContentId() )
                 ),
