@@ -351,21 +351,11 @@ class IOService implements IOServiceInterface
      */
     protected function buildDomainBinaryFileObject( SPIBinaryFile $spiBinaryFile )
     {
-        if ( isset( $spiBinaryFile->mimeType ) )
-        {
-            $mimeType = $spiBinaryFile->mimeType;
-        }
-        else
-        {
-            $mimeType = $this->metadataHandler->getMimeType( $spiBinaryFile->id );
-        }
-
         return new BinaryFile(
             array(
                 'size' => (int)$spiBinaryFile->size,
                 'mtime' => $spiBinaryFile->mtime,
                 'id' => $this->removeUriPrefix( $spiBinaryFile->id ),
-                'mimeType' => $mimeType,
                 'uri' => $spiBinaryFile->uri
             )
         );
