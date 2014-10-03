@@ -10,8 +10,8 @@ namespace eZ\Publish\Core\IO\IOBinarydataHandler;
 
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
-use eZ\Publish\Core\IO\Handler\DFS\UrlDecorator;
 use eZ\Publish\Core\IO\IOBinarydataHandler;
+use eZ\Publish\Core\IO\UrlDecorator;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException as FlysystemNotFoundException;

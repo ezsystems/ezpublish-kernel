@@ -25,15 +25,20 @@ services:
     ezpublish.core.io.binarydata_handler.flysystem:
         class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
         arguments:
-            - @ezpublish.core.io.flysystem.default_adapter
+            - @ezpublish.core.io.flysystem.default_filesystem
+            - @ezpublish.core.io.flysystem.storage_dir_url_decorator
 
     ezpublish.core.io.flysystem.default_filesystem:
         class: League\Flysystem\Filesystem
         arguments:
             - @ezpublish.core.io.flysystem.default_adapter
 
-
     ezpublish.core.io.flysystem.default_adapter:
         class: League\Flysystem\Adapter\Local
+        arguments:
+            - %storage_dir%
+
+    ezpublish.core.io.flysystem.storage_dir_url_decorator:
+        class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
         arguments:
             - %storage_dir%

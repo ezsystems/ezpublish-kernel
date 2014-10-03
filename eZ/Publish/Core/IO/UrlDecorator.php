@@ -6,8 +6,7 @@
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  * @version //autogentag//
  */
-namespace eZ\Publish\Core\IO\Handler\DFS;
-
+namespace eZ\Publish\Core\IO;
 
 interface UrlDecorator
 {
