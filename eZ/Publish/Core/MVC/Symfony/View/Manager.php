@@ -10,7 +10,10 @@
 namespace eZ\Publish\Core\MVC\Symfony\View;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Base\Exceptions\NotFound\TranslationNotFoundException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Content as ContentViewProvider;
 use eZ\Publish\Core\MVC\Symfony\View\Provider\Location as LocationViewProvider;
@@ -231,6 +234,7 @@ class Manager implements ViewManagerInterface
      */
     public function renderContent( Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
     {
+        $this->ensureContentCanBeDisplayedInCurrentLanguages( $content );
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         foreach ( $this->getAllContentViewProviders() as $viewProvider )
         {
@@ -267,19 +271,34 @@ class Manager implements ViewManagerInterface
             if ( $view instanceof ContentViewInterface )
             {
                 $parameters['location'] = $location;
+                $content = $this->repository->getContentService()->loadContentByContentInfo( $location->getContentInfo() );
+                $this->ensureContentCanBeDisplayedInCurrentLanguages( $content );
+
                 return $this->renderContentView(
                     $view,
                     $parameters + array(
-                        'content' => $this->repository->getContentService()->loadContentByContentInfo(
-                            $location->getContentInfo(),
-                            $this->configResolver->getParameter( 'languages' )
-                        )
+                        'content' => $content
                     )
                 );
             }
         }
 
         throw new RuntimeException( "Unable to find a view for location #$location->id" );
+    }
+
+    /**
+     * @param Content $content
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFound\TranslationNotFoundException
+     */
+    private function ensureContentCanBeDisplayedInCurrentLanguages( Content $content )
+    {
+        $versionInfo = $content->getVersionInfo();
+        $languages = $this->configResolver->getParameter( 'languages' );
+        $commonLanguages = array_intersect( $languages, $versionInfo->languageCodes );
+        if ( !$versionInfo->getContentInfo()->alwaysAvailable && empty( $commonLanguages ) )
+        {
+            throw new TranslationNotFoundException( $content->id, $languages );
+        }
     }
 
     /**
