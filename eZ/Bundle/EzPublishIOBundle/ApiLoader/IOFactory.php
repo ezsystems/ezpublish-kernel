@@ -6,13 +6,17 @@
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
-namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
+namespace eZ\Bundle\EzPublishIOBundle\ApiLoader;
 
 use eZ\Publish\Core\IO\Handler as IoHandlerInterface;
+use eZ\Publish\Core\IO\Handler\Filesystem;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\IO\MimeTypeDetector;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class IOFactory
+class IOFactory extends ContainerAware
 {
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
@@ -22,6 +26,15 @@ class IOFactory
 
     /** @var MimeTypeDetector */
     protected $mimeTypeDetector;
+
+    /** @var ContainerInterface */
+    protected $container;
+
+    /**
+     * Map of io handler alias => io handler service id
+     * @var array
+     */
+    private $ioHandlersMap;
 
     /**
      * Constructs a new IOServiceFactory
@@ -58,7 +71,7 @@ class IOFactory
     /**
      * Returns an IOHandler instance
      *
-     * @param $handlerClass The IOHandler class to instanciate
+     * @param string $handlerClass The IOHandler class to instantiate
      * @param string|array $storageDirectorySetting Setting(s) that build-up the storage directory
      *
      * @return mixed
@@ -79,5 +92,48 @@ class IOFactory
             $storageDirectory = implode( '/', $storageDirectoryParts );
         }
         return new $handlerClass( $storageDirectory );
+    }
+
+    /**
+     * Builds the filesystem IO handler based on config resolver settings
+     * @return Filesystem
+     */
+    public function buildFilesystemHandler()
+    {
+        $storageDir = sprintf(
+            '%s/%s/',
+            trim( $this->configResolver->getParameter( 'var_dir' ), '/' ),
+            trim( $this->configResolver->getParameter( 'storage_dir' ), '/' )
+        );
+
+        return new Filesystem(
+            array(
+                'storage_dir' => $storageDir,
+                'root_dir' => $this->container->getParameter( 'ezpublish_legacy.root_dir' )
+            )
+        );
+    }
+
+    /**
+     * Returns the IO handler configured for the scope
+     * @return IOHandlerInterface
+     */
+    public function buildConfiguredHandler()
+    {
+        $handlerAlias = $this->configResolver->getParameter( 'handler', 'ez_io' );
+        if ( !isset( $this->ioHandlersMap[$handlerAlias] ) )
+        {
+            throw new InvalidConfigurationException( "No IO handler found for alias $handlerAlias" );
+        }
+
+        return $this->container->get( $this->ioHandlersMap[$handlerAlias] );
+    }
+
+    /**
+     * @param array $map Associative array of handler alias => handler service id
+     */
+    public function setHandlersMap( array $map )
+    {
+        $this->ioHandlersMap = $map;
     }
 }

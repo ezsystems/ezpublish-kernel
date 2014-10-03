@@ -27,6 +27,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\XmlTextConverterP
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
+use eZ\Publish\Core\Base\Container\Compiler\IOHandlerTagPass;
 use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\CriteriaConverterPass;
@@ -64,6 +65,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new FragmentPass );
         $container->addCompilerPass( new StorageConnectionPass );
         $container->addCompilerPass( new ImaginePass );
+        $container->addCompilerPass( new IOHandlerTagPass() );
 
         // Storage passes
         $container->addCompilerPass( new ExternalStorageRegistryPass );

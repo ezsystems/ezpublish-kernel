@@ -6,7 +6,6 @@ parameters:
 
 services:
     ezpublish.core.io.handler.legacy:
-        public: false
         class: %ezpublish.core.io.handler.legacy.class%
         factory_service: ezpublish.core.io.factory
         factory_method: getHandler
@@ -15,6 +14,8 @@ services:
             - [var_dir, storage_dir]
         calls:
             - [setLegacyKernelClosure, [@ezpublish_legacy.kernel]]
+        tags:
+            - { name: ezpublish.io_handler, alias: legacy_kernel }
 
     ezpublish.fieldType.ezimage.io_legacy:
         class: %ezpublish.fieldType.ezimage.io_legacy.class%
@@ -31,7 +32,7 @@ services:
         factory_service: ezpublish.core.io.factory
         factory_method: getService
         arguments:
-            - @ezpublish.core.io.handler.legacy
+            - @ezpublish.core.io.handler
             - 'image.versioned_images_dir'
 
     ezpublish.fieldType.ezimage.io_legacy.factory:
