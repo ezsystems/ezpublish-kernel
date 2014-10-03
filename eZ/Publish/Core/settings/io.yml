@@ -15,9 +15,7 @@ services:
         class: %ezpublish.core.io.handler.filesystem.class%
         arguments:
             - @ezpublish.core.io.mimeTypeDetector
-            -
-                storage_dir: %storage_dir%
-                root_dir: %io_root_dir%
+            - { storage_dir: %storage_dir%, root_dir: %io_root_dir% }
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
