@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Image\IO;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
@@ -150,6 +151,28 @@ class Legacy implements IOServiceInterface
         }
 
         return $this->publishedIOService->loadBinaryFile( $binaryFileId );
+    }
+
+    /**
+     * Since both services should use the same uri, we can use any of them to *GET* the URI
+     */
+    public function loadBinaryFileByUri( $binaryFileUri )
+    {
+        try
+        {
+            return $this->publishedIOService->loadBinaryFileByUri( $binaryFileUri );
+        }
+        catch ( NotFoundException $publishedException )
+        {
+            try
+            {
+                return $this->draftIOService->loadBinaryFileByUri( $binaryFileUri );
+            }
+            catch ( NotFoundException $e )
+            {
+                throw $publishedException;
+            }
+        }
     }
 
     public function getFileContents( BinaryFile $binaryFile )

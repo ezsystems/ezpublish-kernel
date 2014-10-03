@@ -75,6 +75,18 @@ interface IOServiceInterface
     public function loadBinaryFile( $binaryFileId );
 
     /**
+     * Loads the binary file with uri $uri
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If the id is invalid
+     *
+     * @param string $binaryFileUri
+     *
+     * @return BinaryFile the file, or false if it doesn't exist
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $binaryFileId exists
+     */
+    public function loadBinaryFileByUri( $binaryFileUri );
+
+    /**
      * Returns the content of the binary file
      *
      * @param BinaryFile $binaryFile

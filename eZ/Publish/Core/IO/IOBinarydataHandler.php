@@ -63,4 +63,11 @@ interface IOBinarydataHandler
      * @return string
      */
     public function getUri( $spiBinaryFileId );
+
+    /**
+     * Returns the id in $binaryFileUri
+     * @param string $binaryFileUri
+     * @return string
+     */
+    public function getIdFromUri( $binaryFileUri );
 }

@@ -11,8 +11,18 @@ namespace eZ\Publish\Core\IO;
 interface UrlDecorator
 {
     /**
+     * Modifies the id into an uri
+     *
      * @param string $url
      * @return string
      */
-    public function decorate( $url );
+    public function decorate( $id );
+
+    /**
+     * Unmodifies an uri into an id
+     * @param $url
+     *
+     * @return mixed
+     */
+    public function undecorate( $url );
 }

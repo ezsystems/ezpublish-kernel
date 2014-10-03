@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\IO\UrlDecorator;
 
+use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\UrlDecorator;
 
 /**
@@ -29,13 +30,28 @@ class AbsolutePrefix implements UrlDecorator
         $this->prefix = '/' . trim( $prefix, '/' ) . '/';
     }
 
-    public function decorate( $url )
+    public function decorate( $id )
+    {
+        if ( empty( $this->prefix ) )
+        {
+            return $id;
+        }
+
+        return $this->prefix . ltrim( $id, '/' );
+    }
+
+    public function undecorate( $url )
     {
         if ( empty( $this->prefix ) )
         {
             return $url;
         }
 
-        return $this->prefix . ltrim( $url, '/' );
+        if ( strpos( $url, $this->prefix ) !== 0 )
+        {
+            throw new InvalidBinaryFileIdException( $url );
+        }
+
+        return substr( $url, strlen( $this->prefix ) );
     }
 }

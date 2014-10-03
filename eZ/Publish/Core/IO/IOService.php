@@ -159,6 +159,10 @@ class IOService implements IOServiceInterface
         }
 
         $spiBinaryFile = $this->metadataHandler->create( $spiBinaryCreateStruct );
+        if ( !isset( $spiBinaryFile->uri ) )
+        {
+            $spiBinaryFile->uri = $this->binarydataHandler->getUri( $spiBinaryFile->id );
+        }
 
         return $this->buildDomainBinaryFileObject( $spiBinaryFile );
     }
@@ -216,6 +220,15 @@ class IOService implements IOServiceInterface
         }
 
         return $this->buildDomainBinaryFileObject( $spiBinaryFile );
+    }
+
+    public function loadBinaryFileByUri( $binaryFileUri )
+    {
+        return $this->loadBinaryFile(
+            $this->removeUriPrefix(
+                $this->binarydataHandler->getIdFromUri( $binaryFileUri )
+            )
+        );
     }
 
     /**

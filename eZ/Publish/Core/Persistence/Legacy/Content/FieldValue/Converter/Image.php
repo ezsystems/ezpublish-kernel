@@ -18,16 +18,12 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class Image implements Converter
 {
-    /**
-     * Factory for current class
-     *
-     * @note Class should instead be configured as service if it gains dependencies.
-     *
-     * @return Image
-     */
-    public static function create()
+    /** @var IOServiceInterface */
+    private $imageIoService;
+
+    public function __construct( IOServiceInterface $imageIoService )
     {
-        return new self;
+        $this->imageIoService = $imageIoService;
     }
 
     /**
@@ -200,7 +196,7 @@ EOT;
             return null;
         }
 
-        $extractedData['id'] = $url;
+        $extractedData['id'] = $this->imageIoService->loadBinaryFileByUri( '/' . $url )->id;
 
         if ( !$ezimageTag->hasAttribute( 'filename' ) )
         {

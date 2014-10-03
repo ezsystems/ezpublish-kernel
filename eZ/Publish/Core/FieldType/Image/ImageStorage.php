@@ -187,8 +187,7 @@ class ImageStorage extends GatewayBasedStorage
 
             try
             {
-                $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
-                $metadata = $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile );
+                $this->IOService->loadBinaryFile( $field->value->data['id'] );
             }
             catch ( NotFoundException $e )
             {
@@ -275,7 +274,9 @@ class ImageStorage extends GatewayBasedStorage
 
             if ( $this->aliasCleaner )
             {
-                $this->aliasCleaner->removeAliases( $this->IOService->getExternalPath( $storedFiles['original'] ) );
+                $this->aliasCleaner->removeAliases(
+                    $this->IOService->loadBinaryFileByUri( '/' . $storedFiles['original'] )
+                );
             }
 
             foreach ( $storedFiles as $storedFilePath )
@@ -285,7 +286,7 @@ class ImageStorage extends GatewayBasedStorage
                 {
                     try
                     {
-                        $binaryFile = $this->IOService->loadBinaryFile( $storedFilePath );
+                        $binaryFile = $this->IOService->loadBinaryFileByUri( '/' . $storedFilePath );
                         $this->IOService->deleteBinaryFile( $binaryFile );
                     }
                     catch ( NotFoundException $e )
@@ -302,6 +303,8 @@ class ImageStorage extends GatewayBasedStorage
 
     /**
      * Extracts the field storage paths (original image + aliases) from the given $xml string.
+     *
+     * @todo This belongs in the gateway, as the XML is an internal legacy format
      *
      * @param string $xml
      *

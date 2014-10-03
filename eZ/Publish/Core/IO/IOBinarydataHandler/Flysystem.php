@@ -125,7 +125,7 @@ class Flysystem implements IOBinaryDataHandler
     }
 
     /**
-     * Returns the public URI for $spiBinaryFileId
+     * Returns the public URI for $spiBinaryFileId using the uriDecorator. If none, prefixes with a /
      *
      * @param string $spiBinaryFileId
      *
@@ -137,5 +137,14 @@ class Flysystem implements IOBinaryDataHandler
             return $this->urlDecorator->decorate( $spiBinaryFileId );
         else
             return '/'. $spiBinaryFileId;
+    }
+
+    public function getIdFromUri( $binaryFileUri )
+    {
+        if ( isset( $this->urlDecorator ) )
+            return $this->urlDecorator->undecorate( $binaryFileUri );
+        else
+            return ltrim( $binaryFileUri, '/' );
+
     }
 }
