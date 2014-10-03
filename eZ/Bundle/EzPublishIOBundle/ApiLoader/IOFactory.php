@@ -101,7 +101,7 @@ class IOFactory extends ContainerAware
     public function buildFilesystemHandler()
     {
         $storageDir = sprintf(
-            '%s/%s/',
+            '%s/%s',
             trim( $this->configResolver->getParameter( 'var_dir' ), '/' ),
             trim( $this->configResolver->getParameter( 'storage_dir' ), '/' )
         );
