@@ -101,12 +101,13 @@ class IOFactory extends ContainerAware
     public function buildFilesystemHandler()
     {
         $storageDir = sprintf(
-            '%s/%s/',
+            '%s/%s',
             trim( $this->configResolver->getParameter( 'var_dir' ), '/' ),
             trim( $this->configResolver->getParameter( 'storage_dir' ), '/' )
         );
 
         return new Filesystem(
+            $this->mimeTypeDetector,
             array(
                 'storage_dir' => $storageDir,
                 'root_dir' => $this->container->getParameter( 'ezpublish_legacy.root_dir' )
