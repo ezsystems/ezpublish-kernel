@@ -209,9 +209,13 @@ class IOService implements IOServiceInterface
         if ( $binaryFileId[0] === '/' )
             return false;
 
-        return $this->buildDomainBinaryFileObject(
-            $this->metadataHandler->load( $this->getPrefixedUri( $binaryFileId ) )
-        );
+        $spiBinaryFile = $this->metadataHandler->load( $this->getPrefixedUri( $binaryFileId ) );
+        if ( !isset( $spiBinaryFile->uri ) )
+        {
+            $spiBinaryFile->uri = $this->binarydataHandler->getUri( $spiBinaryFile->id );
+        }
+
+        return $this->buildDomainBinaryFileObject( $spiBinaryFile );
     }
 
     /**
@@ -353,7 +357,7 @@ class IOService implements IOServiceInterface
         }
         else
         {
-            $mimeType = $this->ioHandler->getMimeType( $spiBinaryFile->id );
+            $mimeType = $this->metadataHandler->getMimeType( $spiBinaryFile->id );
         }
 
         return new BinaryFile(

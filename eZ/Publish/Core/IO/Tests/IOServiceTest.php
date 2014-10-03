@@ -187,6 +187,38 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \eZ\Publish\Core\IO\IOService::loadBinaryFile
+     */
+    public function testLoadBinaryFileNoMetadataUri()
+    {
+        $id = "my/path.png";
+        $spiId = $this->getPrefixedUri( $id );
+        $spiBinaryFile = new SPIBinaryFile;
+        $spiBinaryFile->id = $spiId;
+        $spiBinaryFile->size = 12345;
+
+        $this->metadataHandlerMock
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->with( $spiId )
+            ->will( $this->returnValue( $spiBinaryFile ) );
+
+        $this->binarydataHandlerMock
+            ->expects( $this->once() )
+            ->method( 'getUri' )
+            ->with( $spiId )
+            ->will( $this->returnValue( "/$spiId" ) );
+
+        $binaryFile = $this->getIOService()->loadBinaryFile( $id );
+
+        $expectedBinaryFile = new BinaryFile( array( 'id' => $id, 'size' => 12345, 'uri' => "/$spiId" ) );
+
+        self::assertEquals( $expectedBinaryFile, $binaryFile );
+
+        return $binaryFile;
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\IO\IOService::loadBinaryFile
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadBinaryFileNotFound()
