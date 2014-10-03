@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
+use eZ\Publish\API\Repository\Exceptions\SourceImageNotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
@@ -17,6 +18,7 @@ use eZ\Publish\Core\FieldType\Value;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -92,7 +94,16 @@ class AliasGenerator implements VariationHandler
         }
 
         $originalPath = $imageValue->id;
-        $originalBinary = $this->dataLoader->find( $originalPath );
+
+        try
+        {
+            $originalBinary = $this->dataLoader->find( $originalPath );
+        }
+        catch ( NotLoadableException $e )
+        {
+            throw new SourceImageNotFoundException( $originalPath, 0, $e );
+        }
+
         // Create the image alias only if it does not already exist.
         if ( $variationName !== IORepositoryResolver::VARIATION_ORIGINAL && !$this->ioResolver->isStored( $originalPath, $variationName ) )
         {

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
+use eZ\Publish\API\Repository\Exceptions\SourceImageNotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -464,6 +465,15 @@ class ContentExtension extends Twig_Extension
             if ( isset( $this->logger ) )
             {
                 $this->logger->error( "Couldn't get variation '{$variationName}' for image with id {$field->value->id}" );
+            }
+        }
+        catch ( SourceImageNotFoundException $e )
+        {
+            if ( isset( $this->logger ) )
+            {
+                $this->logger->error(
+                    "Couldn't create variation '{$variationName}' for image with id {$field->value->id} because source image can't be found"
+                );
             }
         }
     }
