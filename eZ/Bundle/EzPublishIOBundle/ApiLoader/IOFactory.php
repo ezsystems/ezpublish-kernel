@@ -107,6 +107,7 @@ class IOFactory extends ContainerAware
         );
 
         return new Filesystem(
+            $this->mimeTypeDetector,
             array(
                 'storage_dir' => $storageDir,
                 'root_dir' => $this->container->getParameter( 'ezpublish_legacy.root_dir' )
