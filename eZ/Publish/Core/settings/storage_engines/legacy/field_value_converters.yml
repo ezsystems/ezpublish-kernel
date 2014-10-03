@@ -122,8 +122,10 @@ services:
 
     ezpublish.fieldType.ezimage.converter:
         class: %ezpublish.fieldType.ezimage.converter.class%
+        arguments:
+            - @ezpublish.fieldType.ezimage.io
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezimage, lazy: true, callback: '::create'}
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezimage}
 
     ezpublish.fieldType.ezisbn.converter:
         class: %ezpublish.fieldType.ezisbn.converter.class%

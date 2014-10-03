@@ -115,12 +115,6 @@ class ImageStorage extends GatewayBasedStorage
      */
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
-        /*$storedValue = isset( $field->value->externalData )
-            // New image
-            ? $field->value->externalData
-            // Copied / updated image
-            : $field->value->data;*/
-
         $contentMetaData = array(
             'fieldId' => $field->id,
             'versionNo' => $versionInfo->versionNo,
@@ -161,15 +155,19 @@ class ImageStorage extends GatewayBasedStorage
                 $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $localFilePath );
                 $binaryFileCreateStruct->id = $targetPath;
                 $binaryFile = $this->IOService->createBinaryFile( $binaryFileCreateStruct );
+
+                $imageSize = getimagesize( $localFilePath );
+                $field->value->externalData['width'] = $imageSize[0];
+                $field->value->externalData['height'] = $imageSize[1];
             }
-            $field->value->externalData['mimeType'] = $binaryFile->mimeType;
             $field->value->externalData['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
             $field->value->externalData['uri'] = $binaryFile->uri;
-            $field->value->externalData['id'] = ltrim( $binaryFile->uri, '/' );
+            $field->value->externalData['id'] = $binaryFile->id;
+            $field->value->externalData['mime'] = $this->IOService->getMimeType( $binaryFile->id );
 
             $field->value->data = array_merge(
                 $field->value->externalData,
-                $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile ),
+                // $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile ),
                 $contentMetaData
             );
 
@@ -200,7 +198,6 @@ class ImageStorage extends GatewayBasedStorage
 
             $field->value->data = array_merge(
                 $field->value->data,
-                $metadata,
                 $contentMetaData
             );
             $field->value->externalData = null;
@@ -234,6 +231,7 @@ class ImageStorage extends GatewayBasedStorage
 
             try
             {
+                // @todo use exists ?
                 $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
             }
             catch ( NotFoundException $e )

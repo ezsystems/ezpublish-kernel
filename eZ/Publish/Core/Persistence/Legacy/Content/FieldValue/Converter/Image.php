@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -37,15 +38,14 @@ class Image implements Converter
         if ( isset( $value->data ) )
         {
             // Determine what needs to be stored
-            if ( isset( $value->data['mime'] ) )
+            if ( isset( $value->data['width'] ) && isset( $value->data['fieldId'] ) )
             {
-                // $data['mime'] is only set for real images, which have been
-                // stored
+                // width + field id set means that something really needs to be stored
                 $storageFieldValue->dataText = $this->createLegacyXml( $value->data );
             }
             else if ( isset( $value->data['fieldId'] ) )
             {
-                // $fieldId is only set if data is to be stored at all
+                // $fieldId without width mleans an empty field
                 $storageFieldValue->dataText = $this->createEmptyLegacyXml( $value->data );
             }
             // otherwise the image is unprocessed and the DB field stays empty
@@ -203,6 +203,9 @@ EOT;
             throw new \RuntimeException( 'Missing attribute "filename" in <ezimage/> tag.' );
         }
         $extractedData['fileName'] = $ezimageTag->getAttribute( 'filename' );
+        $extractedData['width'] = $ezimageTag->getAttribute( 'width' );
+        $extractedData['height'] = $ezimageTag->getAttribute( 'height' );
+        $extractedData['mime'] = $ezimageTag->getAttribute( 'mime_type' );
 
         if ( !$ezimageTag->hasAttribute( 'alternative_text' ) )
         {
