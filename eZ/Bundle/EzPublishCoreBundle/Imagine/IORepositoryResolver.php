@@ -10,7 +10,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\Core\IO\IOServiceInterface;
-use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
@@ -34,20 +33,14 @@ class IORepositoryResolver implements ResolverInterface
     private $requestContext;
 
     /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
-    private $configResolver;
-
-    /**
      * @var FilterConfiguration
      */
     private $filterConfiguration;
 
-    public function __construct( IOServiceInterface $ioService, RequestContext $requestContext, ConfigResolverInterface $configResolver, FilterConfiguration $filterConfiguration )
+    public function __construct( IOServiceInterface $ioService, RequestContext $requestContext, FilterConfiguration $filterConfiguration )
     {
         $this->ioService = $ioService;
         $this->requestContext = $requestContext;
-        $this->configResolver = $configResolver;
         $this->filterConfiguration = $filterConfiguration;
     }
 
@@ -59,10 +52,11 @@ class IORepositoryResolver implements ResolverInterface
     public function resolve( $path, $filter )
     {
         $path = $this->ioService->loadBinaryFile( $path )->uri;
+        $path = $filter !== static::VARIATION_ORIGINAL ? $this->getFilePath( $path, $filter ) : $path;
         return sprintf(
             '%s%s',
-            $this->getBaseUrl(),
-            $filter !== static::VARIATION_ORIGINAL ? $this->getFilePath( $path, $filter ) : $path
+            $path[0] === '/' ? $this->getBaseUrl() : '',
+            $path
         );
     }
 
@@ -146,12 +140,6 @@ class IORepositoryResolver implements ResolverInterface
      */
     protected function getBaseUrl()
     {
-        // Return configured delivery URL if any.
-        if ( $deliveryUrl = $this->configResolver->getParameter( 'image.delivery_url' ) )
-        {
-            return $deliveryUrl;
-        }
-
         $port = '';
         if ( $this->requestContext->getScheme() === 'https' && $this->requestContext->getHttpsPort() != 443 )
         {
