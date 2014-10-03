@@ -1,6 +1,5 @@
 parameters:
     ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
-    ezpublish.core.io.handler.filesystem.class: eZ\Publish\Core\IO\Handler\Filesystem
     ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
     ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
 
@@ -8,17 +7,33 @@ services:
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
         arguments:
-            - @ezpublish.core.io.handler.filesystem
+            - @ezpublish.core.io.metadata_handler.flysystem
+            - @ezpublish.core.io.binarydata_handler.flysystem
             - @ezpublish.core.io.mimeTypeDetector
-
-    ezpublish.core.io.handler.filesystem:
-        class: %ezpublish.core.io.handler.filesystem.class%
-        arguments:
-            - @ezpublish.core.io.mimeTypeDetector
-            - { storage_dir: %storage_dir%, root_dir: %io_root_dir% }
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
 
     ezpublish.core.io.mimeTypeDetector:
         alias: ezpublish.core.io.mimeTypeDetector.fileinfo
+
+    ezpublish.core.io.metadata_handler.flysystem:
+        class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
+        arguments:
+            - @ezpublish.core.io.flysystem.default_filesystem
+
+    ezpublish.core.io.binarydata_handler.flysystem:
+        class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
+        arguments:
+            - @ezpublish.core.io.flysystem.default_adapter
+
+    ezpublish.core.io.flysystem.default_filesystem:
+        class: League\Flysystem\Filesystem
+        arguments:
+            - @ezpublish.core.io.flysystem.default_adapter
+
+
+    ezpublish.core.io.flysystem.default_adapter:
+        class: League\Flysystem\Adapter\Local
+        arguments:
+            - %storage_dir%

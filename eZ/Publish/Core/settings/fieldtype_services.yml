@@ -30,14 +30,16 @@ services:
     ezpublish.fieldType.ezimage.io_service.filesystem.published:
         class: %ezpublish.core.io.service.class%
         arguments:
-            - @ezpublish.core.io.handler.filesystem
+            - @ezpublish.core.io.metadata_andler.flysystem
+            - @ezpublish.core.io.binarydata_handler.flysystem
             - @ezpublish.core.io.mimeTypeDetector
             - { prefix: %image_storage_prefix% }
 
     ezpublish.fieldType.ezimage.io_service.filesystem.draft:
         class: %ezpublish.core.io.service.class%
         arguments:
-            - @ezpublish.core.io.handler.filesystem
+            - @ezpublish.core.io.metadata_handler.flysystem
+            - @ezpublish.core.io.binarydata_handler.flysystem
             - @ezpublish.core.io.mimeTypeDetector
             - { prefix: %image_draft_storage_prefix% }
 
