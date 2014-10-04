@@ -30,6 +30,13 @@ class Legacy extends SetupFactory
     protected static $dsn;
 
     /**
+     * Root dir for IO operations
+     *
+     * @var string
+     */
+    protected static $ioRootDir;
+
+    /**
      * Database type (sqlite, mysql, ...)
      *
      * @var string
@@ -69,8 +76,31 @@ class Legacy extends SetupFactory
             self::$dsn = "sqlite://:memory:";
 
         self::$db = preg_replace( '(^([a-z]+).*)', '\\1', self::$dsn );
+
+        self::$ioRootDir = $this->createTemporaryDirectory();
     }
 
+    /**
+     * Creates a temporary directory and returns it
+     * @return string
+     * @throw \RuntimeException If the root directory can't be created
+     */
+    private function createTemporaryDirectory()
+    {
+        $tmpFile = tempnam(
+            sys_get_temp_dir(),
+            'ez_legacy_tests_' . time()
+        );
+
+        // Convert file into directory
+        unlink( $tmpFile );
+        if ( !@mkdir( $tmpDir = $tmpFile ) )
+        {
+            throw new \RuntimeException( "Eror temporary directory $tmpDir" );
+        };
+
+        return $tmpDir;
+    }
     /**
      * Returns a configured repository for testing.
      *
@@ -329,6 +359,11 @@ class Legacy extends SetupFactory
             $containerBuilder->setParameter(
                 "legacy_dsn",
                 self::$dsn
+            );
+
+            $containerBuilder->setParameter(
+                "io_root_dir",
+                self::$ioRootDir . '/' . $containerBuilder->getParameter( 'storage_dir' )
             );
 
             self::$serviceContainer = new ServiceContainer(

@@ -30,6 +30,13 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     protected static $installDir;
 
     /**
+     * Root directory for IO files
+     *
+     * @var string
+     */
+    protected static $ioRootDir;
+
+    /**
      * Storage directory used by the IOHandler
      * @var string
      */
@@ -88,6 +95,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         {
             self::$installDir = $this->getConfigValue( 'ezpublish.kernel.root_dir' );
             self::$storageDir = $this->getConfigValue( static::$storageDirConfigKey );
+            self::$ioRootDir = $this->getConfigValue( 'io_root_dir' );
 
             self::setUpIgnoredPath( $this->getConfigValue( 'ignored_storage_files' ) );
         }
@@ -186,5 +194,12 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     protected static function isIgnoredPath( $path )
     {
         return isset( self::$ignoredPathList[realpath( $path )] );
+    }
+
+    protected function uriExistsOnIO( $uri )
+    {
+        $spiId = str_replace( self::$storageDir, '', ltrim( $uri, '/' ) );
+        $path = self::$ioRootDir . '/' . $spiId;
+        return file_exists( $path );
     }
 }

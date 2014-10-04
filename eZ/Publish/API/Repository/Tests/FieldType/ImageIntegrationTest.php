@@ -186,8 +186,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            $exists = file_exists( $path = $this->getInstallDir() . $field->value->uri ),
-            "Asserting that $path exists."
+            $this->uriExistsOnIO( $field->value->uri ),
+            "Asserting that {$field->value->uri} exists."
         );
 
         self::$loadedImagePath = $field->value->id;
@@ -268,8 +268,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $this->assertTrue(
-            file_exists( $path = $this->getInstallDir() . $field->value->uri ),
-            "Asserting that file $path exists"
+            $this->uriExistsOnIO( $field->value->uri ),
+            "Asserting that file {$field->value->uri} exists"
         );
     }
 
@@ -520,11 +520,11 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $content = $contentService->createContent( $contentCreateStruct, array( $locationCreateStruct ) );
         $content = $contentService->publishVersion( $content->getVersionInfo() );
 
-        $originalFile = $content->fields['image']['eng-GB']->uri;
+        $originalFileUri = $content->fields['image']['eng-GB']->uri;
 
         $this->assertTrue(
-            $exists = file_exists( $path = $this->getInstallDir() . '/' .  $originalFile ),
-            "Asserting image file $path exists."
+            $this->uriExistsOnIO( $originalFileUri ),
+            "Asserting image file $originalFileUri exists."
         );
 
         // Create a new draft and update it
@@ -537,16 +537,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         // remove the newly published content version, verify that the original file exists
         $contentService->deleteVersion( $updatedDraft->versionInfo, 2 );
         $this->assertTrue(
-            $exists = file_exists( $path = $this->getInstallDir() . '/' .  $originalFile ),
-            "Asserting original image file $path exists."
+            $this->uriExistsOnIO( $originalFileUri ),
+            "Asserting original image file $originalFileUri exists."
         );
 
         // delete content
         $contentService->deleteContent( $content->contentInfo );
         $this->assertFalse(
-            $exists = file_exists( $path = $this->getInstallDir() . '/' .  $originalFile ),
-            "Asserting image file $path exists."
+            $this->uriExistsOnIO( $originalFileUri ),
+            "Asserting image file $originalFileUri has been removed."
         );
     }
-
 }

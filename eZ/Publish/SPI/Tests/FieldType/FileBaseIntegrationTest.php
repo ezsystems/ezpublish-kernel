@@ -131,7 +131,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         );
         $containerBuilder->setParameter(
             "io_root_dir",
-            self::$tmpDir
+            self::$tmpDir . '/var/ezdemo_site/storage'
         );
 
         $containerBuilder->compile();
