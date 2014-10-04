@@ -20,43 +20,31 @@ services:
     ezpublish.fieldType.ezimage.io_service.filesystem:
         class: %ezpublish.fieldType.ezimage.io_legacy.class%
         arguments:
-            - @ezpublish.fieldType.ezimage.io_service.filesystem.published
-            - @ezpublish.fieldType.ezimage.io_service.filesystem.draft
+            - @ezpublish.fieldType.ezimage.io_service.published
+            - @ezpublish.fieldType.ezimage.io_service.draft
             -
                 var_dir: %storage_dir%
                 draft_images_dir: %image_draft_storage_prefix%
                 published_images_dir: %image_storage_prefix%
 
-    ezpublish.fieldType.ezimage.io_service.filesystem.published:
-        class: %ezpublish.core.io.service.class%
-        arguments:
-            - @ezpublish.core.io.metadata_handler.flysystem
-            - @ezpublish.core.io.binarydata_handler.flysystem
-            - @ezpublish.core.io.mimeTypeDetector
-            - { prefix: %image_storage_prefix% }
+    ezpublish.fieldType.ezimage.io_service.published:
+        parent: ezpublish.core.io.service
+        calls:
+            - [ setPrefix, [ %image_storage_prefix% ] ]
 
-    ezpublish.fieldType.ezimage.io_service.filesystem.draft:
-        class: %ezpublish.core.io.service.class%
-        arguments:
-            - @ezpublish.core.io.metadata_handler.flysystem
-            - @ezpublish.core.io.binarydata_handler.flysystem
-            - @ezpublish.core.io.mimeTypeDetector
-            - { prefix: %image_draft_storage_prefix% }
+    ezpublish.fieldType.ezimage.io_service.draft:
+        parent: ezpublish.core.io.service
+        calls:
+            - [ setPrefix, [ %image_draft_storage_prefix% ] ]
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
 
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.io_service:
-        alias: ezpublish.fieldType.ezbinaryfile.io_service.filesystem
-
-    ezpublish.fieldType.ezbinaryfile.io_service.filesystem:
-        class: %ezpublish.core.io.service.class%
-        arguments:
-            - @ezpublish.core.io.metadata_handler.flysystem
-            - @ezpublish.core.io.binarydata_handler.flysystem
-            - @ezpublish.core.io.mimeTypeDetector
-            - { prefix: %binaryfile_storage_prefix% }
+        parent: ezpublish.core.io.service
+        calls:
+            - [ setPrefix, [ %binaryfile_storage_prefix% ] ]
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
