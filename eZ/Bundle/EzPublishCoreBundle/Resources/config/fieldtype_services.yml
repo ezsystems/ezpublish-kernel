@@ -230,32 +230,40 @@ services:
                 http://ez.no/namespaces/ezpublish5/xhtml5: @ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5
 
     # Image
+    ezpublish.fieldType.ezimage.io_service:
+        class: %ezpublish.fieldType.ezimage.io_legacy.class%
+        arguments:
+            - @ezpublish.fieldType.ezimage.io_service.published
+            - @ezpublish.fieldType.ezimage.io_service.draft
+        # @todo Change to a dynamic setter
+            -
+                var_dir: $var_dir$
+                storage_dir: $storage_dir$
+                draft_images_dir: $image.versioned_images_dir$
+                published_images_dir: $image.published_images_dir$
+
     # Image alias generator
     ezpublish.fieldType.ezimage.variation_service:
         alias: ezpublish.image_alias.imagine.alias_generator
 
-    ezpublish.fieldType.ezimage.io_service:
-        class: %ezpublish.core.io.service.class%
-        factory_service: ezpublish.core.io.factory
-        factory_method: getService
-        arguments:
-            - @ezpublish.core.io.handler
-            - 'image.published_images_dir'
+    ezpublish.fieldType.ezimage.io_service.published:
+        parent: ezpublish.core.io.service
+        calls:
+            - [ setPrefix, [ $image.published_images_dir ] ]
 
-    ezpublish.fieldType.ezimage.io:
-        alias: ezpublish.fieldType.ezimage.io_service
+    ezpublish.fieldType.ezimage.io_service.draft:
+        parent: ezpublish.core.io.service
+        calls:
+            - [ setPrefix, [ $image.versioned_images_dir$ ] ]
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
 
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.io_service:
-        class: %ezpublish.core.io.service.class%
-        factory_service: ezpublish.core.io.factory
-        factory_method: getService
-        arguments:
-            - @ezpublish.core.io.handler
-            - 'binary_dir'
+        parent: ezpublish.core.io.service
+        calls:
+            - [ setPrefix, [ $binary_dir ] ]
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%

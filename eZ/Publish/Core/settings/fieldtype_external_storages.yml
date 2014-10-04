@@ -25,7 +25,7 @@ services:
         class: %ezpublish.fieldType.ezimage.externalStorage.class%
         arguments:
             - []
-            - @ezpublish.fieldType.ezimage.io
+            - @ezpublish.fieldType.ezimage.io_service
             - @ezpublish.fieldType.ezimage.pathGenerator
             - @ezpublish.fieldType.metadataHandler.imagesize
             - @ezpublish.utils.deprecation_warner

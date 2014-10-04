@@ -13,11 +13,12 @@ parameters:
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
 
 services:
-    # Image
+    # Deprecated since 5.4. Use ezpublish.fieldType.ezimage.io_service.
     ezpublish.fieldType.ezimage.io:
-        alias: ezpublish.fieldType.ezimage.io_service.filesystem
+        alias: ezpublish.fieldType.ezimage.io_service
 
-    ezpublish.fieldType.ezimage.io_service.filesystem:
+    # Custom IOService with a proxy that handles the legacy prefix (images-versioned)
+    ezpublish.fieldType.ezimage.io_service:
         class: %ezpublish.fieldType.ezimage.io_legacy.class%
         arguments:
             - @ezpublish.fieldType.ezimage.io_service.published
@@ -32,6 +33,7 @@ services:
         calls:
             - [ setPrefix, [ %image_storage_prefix% ] ]
 
+    # Used to manipulate images with a legacy 'images-versioned' path
     ezpublish.fieldType.ezimage.io_service.draft:
         parent: ezpublish.core.io.service
         calls:

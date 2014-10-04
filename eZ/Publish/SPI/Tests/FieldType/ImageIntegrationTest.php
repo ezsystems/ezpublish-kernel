@@ -77,7 +77,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $fieldType = new FieldType\Image\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
 
-        $ioService = self::$container->get( "ezpublish.fieldType.ezimage.io" );
+        $ioService = self::$container->get( "ezpublish.fieldType.ezimage.io_service" );
         return $this->getHandler(
             'ezimage',
             $fieldType,
