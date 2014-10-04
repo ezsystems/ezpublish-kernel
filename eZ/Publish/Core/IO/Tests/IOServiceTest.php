@@ -154,7 +154,6 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
         $binaryFile = $this->IOService->createBinaryFile( $createStruct );
         self::assertInstanceOf( 'eZ\Publish\Core\IO\Values\BinaryFile', $binaryFile );
         self::assertEquals( $createStruct->id, $binaryFile->id );
-        self::assertEquals( $createStruct->mimeType, $binaryFile->mimeType );
         self::assertEquals( $createStruct->size, $binaryFile->size );
 
         return $binaryFile;
