@@ -36,7 +36,7 @@ services:
     ezpublish.core.io.flysystem.default_adapter:
         class: League\Flysystem\Adapter\Local
         arguments:
-            - %storage_dir%
+            - %io_root_dir%/%storage_dir%
 
     ezpublish.core.io.flysystem.storage_dir_url_decorator:
         class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix

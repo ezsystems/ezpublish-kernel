@@ -77,15 +77,16 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $fieldType = new FieldType\Image\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
 
+        $ioService = self::$container->get( "ezpublish.fieldType.ezimage.io" );
         return $this->getHandler(
             'ezimage',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Image(),
+            new Legacy\Content\FieldValue\Converter\Image( $ioService ),
             new FieldType\Image\ImageStorage(
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage(),
                 ),
-                self::$container->get( "ezpublish.fieldType.ezimage.io" ),
+                $ioService,
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
                 new IO\MetadataHandler\ImageSize(),
                 $this->getDeprecationWarnerMock(),
