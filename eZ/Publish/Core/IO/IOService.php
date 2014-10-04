@@ -59,6 +59,11 @@ class IOService implements IOServiceInterface
         $this->settings = $settings + array();
     }
 
+    public function setPrefix( $prefix )
+    {
+        $this->settings['prefix'] = $prefix;
+    }
+
     /**
      * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
      *

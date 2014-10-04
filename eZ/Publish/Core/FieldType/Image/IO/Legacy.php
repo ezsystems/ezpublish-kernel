@@ -93,6 +93,15 @@ class Legacy implements IOServiceInterface
     }
 
     /**
+     * Sets the IOService prefix
+     */
+    public function setPrefix( $prefix )
+    {
+        $this->publishedIOService->setPrefix( $prefix );
+        $this->draftIOService->setPrefix( $prefix );
+    }
+
+    /**
      * Computes the paths to published & draft images path using $options
      *
      * @param array $options

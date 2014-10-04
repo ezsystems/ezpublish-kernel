@@ -16,6 +16,12 @@ use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 interface IOServiceInterface
 {
     /**
+     * The the internal prefix added by the IO Service
+     * @param string $prefix
+     */
+    public function setPrefix( $prefix );
+
+    /**
      * Returns the external path to $internalPath
      *
      * @param string $internalId
