@@ -26,6 +26,8 @@ interface IOServiceInterface
      *
      * @param string $internalId
      *
+     * @deprecated Since 5.4. Use loadBinaryFileByUri.
+     *
      * @return string
      */
     public function getExternalPath( $internalId );
@@ -62,6 +64,8 @@ interface IOServiceInterface
      * Returns the internal, handler level path to $externalPath
      *
      * @param string $externalId
+     *
+     * @deprecated Since 5.4. Use the uri property.
      *
      * @return string
      */
