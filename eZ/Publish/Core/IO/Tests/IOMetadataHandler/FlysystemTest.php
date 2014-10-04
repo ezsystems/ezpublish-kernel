@@ -33,13 +33,11 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
         // good example of bad responsibilities... since create also loads, we test the same thing twice
         $spiCreateStruct = new SPIBinaryFileCreateStruct();
         $spiCreateStruct->id = 'prefix/my/file.png';
-        $spiCreateStruct->mimeType = 'image/png';
         $spiCreateStruct->size = 123;
         $spiCreateStruct->mtime = 1307155200;
 
         $expectedSpiBinaryFile = new SPIBinaryFile();
         $expectedSpiBinaryFile->id = 'prefix/my/file.png';
-        $expectedSpiBinaryFile->mimeType = 'image/png';
         $expectedSpiBinaryFile->size = 123;
         $expectedSpiBinaryFile->mtime = 1307155200;
 
@@ -51,8 +49,7 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
                 $this->returnValue(
                     array(
                         'timestamp' => 1307155200,
-                        'size' => 123,
-                        'mimetype' => 'image/png'
+                        'size' => 123
                     )
                 )
             );
@@ -72,7 +69,6 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
     {
         $expectedSpiBinaryFile = new SPIBinaryFile();
         $expectedSpiBinaryFile->id = 'prefix/my/file.png';
-        $expectedSpiBinaryFile->mimeType = 'image/png';
         $expectedSpiBinaryFile->size = 123;
         $expectedSpiBinaryFile->mtime = 1307155200;
 
@@ -85,7 +81,6 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
                     array(
                         'timestamp' => 1307155200,
                         'size' => 123,
-                        'mimetype' => 'image/png'
                     )
                 )
             );
