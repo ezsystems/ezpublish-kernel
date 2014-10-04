@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
-use eZ\Publish\Core\IO\MetadataHandler as IOMetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
 /**
