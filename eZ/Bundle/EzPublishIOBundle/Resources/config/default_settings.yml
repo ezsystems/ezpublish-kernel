@@ -1,2 +1,2 @@
 parameters:
-    ez_io.default.handler: filesystem
+    ez_io.default.io_root_dir: /home/bertrand/ezpublish5/ezpublish_legacy/var/ezdemo_site/storage
