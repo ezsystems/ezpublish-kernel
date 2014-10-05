@@ -13,11 +13,21 @@ services:
             - "$io.metadata_handler$"
 
     ezpublish.core.io.binarydata_handler:
-        class: eZ\Publish\Core\IO\IOMetadataHandler
-        factory_service: ezpublish.core.io.metadata_handler.factory
+        class: eZ\Publish\Core\IO\IOBinarydataHandler
+        factory_service: ezpublish.core.io.binarydata_handler.factory
         factory_method: getConfiguredHandler
         arguments:
             - "$io.binarydata_handler$"
+
+    ezpublish.core.io.metadata_handler.factory:
+        class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    ezpublish.core.io.binarydata_handler.factory:
+        class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
+        calls:
+            - [ setContainer, [ @service_container ] ]
 
     # Inject the siteaccess config into a few io services
     ezpublish.core.io.flysystem.default_adapter:
