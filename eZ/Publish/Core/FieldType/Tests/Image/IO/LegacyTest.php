@@ -216,6 +216,45 @@ class LegacyTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testLoadBinaryFileByUriWithPublishedFile()
+    {
+        $binaryFileUri = 'var/test/images/an/image.png';
+        $binaryFile = new BinaryFile( array( 'id' => 'an/image.png' ) );
+        $this->publishedIoServiceMock
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFileByUri' )
+            ->with( $binaryFileUri )
+            ->will( $this->returnValue( $binaryFile ) );
+
+        self::assertSame(
+            $binaryFile,
+            $this->service->loadBinaryFileByUri( $binaryFileUri )
+        );
+    }
+
+    public function testLoadBinaryFileByUriWithDraftFile()
+    {
+        $binaryFileUri = 'var/test/images-versioned/an/image.png';
+        $binaryFile = new BinaryFile( array( 'id' => 'an/image.png' ) );
+
+        $this->publishedIoServiceMock
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFileByUri' )
+            ->with( $binaryFileUri )
+            ->will( $this->throwException( new \RuntimeException ) );
+
+        $this->draftIoServiceMock
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFileByUri' )
+            ->with( $binaryFileUri )
+            ->will( $this->returnValue( $binaryFile ) );
+
+        self::assertSame(
+            $binaryFile,
+            $this->service->loadBinaryFileByUri( $binaryFileUri )
+        );
+    }
+
     public function testGetFileContents()
     {
         $binaryFile = new BinaryFile();

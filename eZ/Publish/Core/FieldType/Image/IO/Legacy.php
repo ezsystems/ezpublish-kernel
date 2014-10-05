@@ -13,6 +13,7 @@ use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+use RuntimeException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -171,15 +172,16 @@ class Legacy implements IOServiceInterface
         {
             return $this->publishedIOService->loadBinaryFileByUri( $binaryFileUri );
         }
-        catch ( NotFoundException $publishedException )
+        // Runtime means that the prefix didn't match, NotFound can pass through
+        catch ( RuntimeException $prefixException )
         {
             try
             {
                 return $this->draftIOService->loadBinaryFileByUri( $binaryFileUri );
             }
-            catch ( NotFoundException $e )
+            catch ( RuntimeException $e )
             {
-                throw $publishedException;
+                throw $prefixException;
             }
         }
     }
