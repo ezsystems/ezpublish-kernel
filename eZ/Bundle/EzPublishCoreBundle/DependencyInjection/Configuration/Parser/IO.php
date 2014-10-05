@@ -14,64 +14,37 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class Languages extends AbstractParser
+class IO extends AbstractParser
 {
     private $siteAccessesByLanguages = array();
 
-    /**
-     * Adds semantic configuration definition.
-     *
-     * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $nodeBuilder Node just under ezpublish.system.<siteaccess>
-     *
-     * @return void
-     */
     public function addSemanticConfig( NodeBuilder $nodeBuilder )
     {
         $nodeBuilder
-            ->arrayNode( 'languages' )
-                ->cannotBeEmpty()
-                ->info( 'Available languages, in order of precedence' )
-                ->example( array( 'fre-FR', 'eng-GB' ) )
-                ->prototype( 'scalar' )->end()
-            ->end()
-            ->arrayNode( 'translation_siteaccesses' )
-                ->info( 'List of "translation siteaccesses" which can be used by language switcher.' )
-                ->example( array( 'french_siteaccess', 'english_siteaccess' ) )
-                ->prototype( 'scalar' )->end()
+            ->arrayNode( 'io' )
+                ->info( 'Binary storage options' )
+                ->children()
+                    ->scalarNode( 'metadata_handler' )
+                        ->info( 'handler uses to manipulate IO files metadata' )
+                        ->example( 'default' )
+                    ->end()
+                    ->scalarNode( 'binarydata_handler' )
+                        ->info( 'handler uses to manipulate IO files binarydata' )
+                        ->example( 'default' )
+                    ->end()
+                ->end()
             ->end();
-    }
-
-    public function preMap( array $config, ContextualizerInterface $contextualizer )
-    {
-        $contextualizer->mapConfigArray( 'languages', $config, ContextualizerInterface::UNIQUE );
-        $contextualizer->mapConfigArray( 'translation_siteaccesses', $config, ContextualizerInterface::UNIQUE );
-
-        $container = $contextualizer->getContainer();
-        if ( $container->hasParameter( 'ezpublish.siteaccesses_by_language' ) )
-        {
-            $this->siteAccessesByLanguages = $container->getParameter( 'ezpublish.siteaccesses_by_language' );
-        }
     }
 
     public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
     {
-        $container = $contextualizer->getContainer();
-        if ( $container->hasParameter( "ezsettings.$currentScope.languages" ) )
+        if ( isset( $scopeSettings['metadata_handler'] ) )
         {
-            $languages = $container->getParameter( "ezsettings.$currentScope.languages" );
-            $mainLanguage = array_shift( $languages );
-            if ( $mainLanguage )
-            {
-                $this->siteAccessesByLanguages[$mainLanguage][] = $currentScope;
-            }
+            $contextualizer->setContextualParameter( 'io.metadata_handler', $currentScope, $scopeSettings['metadata_handler'] );
         }
-    }
-
-    public function postMap( array $config, ContextualizerInterface $contextualizer )
-    {
-        $contextualizer->getContainer()->setParameter(
-            'ezpublish.siteaccesses_by_language',
-            $this->siteAccessesByLanguages
-        );
+        if ( isset( $scopeSettings['binarydata_handler'] ) )
+        {
+            $contextualizer->setContextualParameter( 'io.binarydata_handler', $currentScope, $scopeSettings['binarydata_handler'] );
+        }
     }
 }
