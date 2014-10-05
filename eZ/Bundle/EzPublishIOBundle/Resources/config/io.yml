@@ -4,21 +4,37 @@ parameters:
     ezpublish.core.io.flysystem.storage_dir_url_decorator.class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
 
 services:
+    # Builds the binarydata and metadata handler based on the siteaccess config
+    ezpublish.core.io.metadata_handler:
+        class: eZ\Publish\Core\IO\IOMetadataHandler
+        factory_service: ezpublish.core.io.metadata_handler.factory
+        factory_method: getConfiguredHandler
+        arguments:
+            - "$io.metadata_handler$"
+
+    ezpublish.core.io.binarydata_handler:
+        class: eZ\Publish\Core\IO\IOMetadataHandler
+        factory_service: ezpublish.core.io.metadata_handler.factory
+        factory_method: getConfiguredHandler
+        arguments:
+            - "$io.binarydata_handler$"
+
+    # Inject the siteaccess config into a few io services
     ezpublish.core.io.flysystem.default_adapter:
         class: %ezpublish.core.io.flysystem.default_adapter.class%
         arguments:
-            - $io_root_dir$
+            - "$io_root_dir;ez_io$"
 
-    ezpublish.core.io.flysystem.storage_dir_url_decorator:
+    ezpublish.core.io.flysystem.default_url_decorator:
         class: %ezpublish.core.io.flysystem.storage_dir_url_decorator.class%
         calls:
-            - [ setPrefix, [ $io_prefix$ ] ]
+            - [ setPrefix, [ "$io_root_dir;ez_io$" ] ]
 
     ezpublish.core.io.stream_file_listener:
         class: %ezpublish.core.io.stream_file_listener.class%
         arguments:
             - @ezpublish.fieldtype.ezimage.io_service
         calls:
-            - [ setIoPrefix, [ $io_root_dir$ ] ]
+            - [ setIoPrefix, [ "$io_root_dir;ez_io$" ] ]
         tags:
             - { name: kernel.event_subscriber }

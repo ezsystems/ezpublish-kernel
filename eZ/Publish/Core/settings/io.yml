@@ -7,9 +7,15 @@ services:
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
         arguments:
-            - @ezpublish.core.io.metadata_handler.flysystem
-            - @ezpublish.core.io.binarydata_handler.flysystem
+            - @ezpublish.core.io.metadata_handler
+            - @ezpublish.core.io.binarydata_handler
             - @ezpublish.core.io.mimeTypeDetector
+
+    ezpublish.core.io.metadata_handler:
+        alias: ezpublish.core.io.metadata_handler.flysystem.default
+
+    ezpublish.core.io.binarydata_handler:
+        alias: ezpublish.core.io.binarydata_handler.flysystem.default
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
@@ -18,15 +24,23 @@ services:
         alias: ezpublish.core.io.mimeTypeDetector.fileinfo
 
     ezpublish.core.io.metadata_handler.flysystem:
+        abstract: true
+        class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
+
+    ezpublish.core.io.metadata_handler.flysystem.default:
         class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
         arguments:
             - @ezpublish.core.io.flysystem.default_filesystem
 
     ezpublish.core.io.binarydata_handler.flysystem:
+        abstract: true
+        class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
+
+    ezpublish.core.io.binarydata_handler.flysystem.default:
         class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
         arguments:
             - @ezpublish.core.io.flysystem.default_filesystem
-            - @ezpublish.core.io.flysystem.storage_dir_url_decorator
+            - @ezpublish.core.io.flysystem.default_url_decorator
 
     ezpublish.core.io.flysystem.default_filesystem:
         class: League\Flysystem\Filesystem
@@ -38,7 +52,16 @@ services:
         arguments:
             - %io_root_dir%
 
-    ezpublish.core.io.flysystem.storage_dir_url_decorator:
+    ezpublish.core.io.flysystem.default_url_decorator:
         class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
         arguments:
             - %storage_dir%
+
+#    ezpublish.core.io.metadata_handler.legacy_dfs_cluster:
+#        abstract: true
+#        class: eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster
+#        arguments:
+#            - @doctrine.dbal.connection
+#        tags:
+#            - { name: ezpublish.io.metadata_handler, alias: legacy_dfs_cluster }
+#
