@@ -18,7 +18,7 @@ services:
         class: %ezpublish.core.io.stream_file_listener.class%
         arguments:
             - @ezpublish.fieldtype.ezimage.io
-        calls
+        calls:
             - [ setIoPrefix, [ $io_root_dir$ ] ]
         tags:
             - { name: kernel.event_subscriber }
