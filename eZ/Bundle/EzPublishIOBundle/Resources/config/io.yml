@@ -17,7 +17,7 @@ services:
     ezpublish.core.io.stream_file_listener:
         class: %ezpublish.core.io.stream_file_listener.class%
         arguments:
-            - @ezpublish.fieldtype.ezimage.io
+            - @ezpublish.fieldtype.ezimage.io_service
         calls:
             - [ setIoPrefix, [ $io_root_dir$ ] ]
         tags:
