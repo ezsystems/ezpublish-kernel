@@ -17,7 +17,7 @@ class Configuration extends SiteAccessConfiguration
         $systemNode
             ->scalarNode( 'handler' )
             ->info( 'IO handler uses to manipulate binary files' )
-            ->example( 'legacy_kernel' )
+            ->example( 'legacy_vardir' )
             ->end();
 
         return $treeBuilder;

@@ -1,43 +1,24 @@
 parameters:
-    ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
-    ezpublish.core.io.factory.class: eZ\Bundle\EzPublishIOBundle\ApiLoader\IOFactory
-    ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
-    ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
-    ezpublish.core.io.handler.class: eZ\Publish\Core\IO\Handler
+    ezpublish.core.io.stream_file_listener.class: eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener
+    ezpublish.core.io.flysystem.default_adapter.class: League\Flysystem\Adapter\Local
+    ezpublish.core.io.flysystem.storage_dir_url_decorator.class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
 
 services:
-    ezpublish.core.io.factory:
-        class: %ezpublish.core.io.factory.class%
-        arguments:
-            - @ezpublish.config.resolver
-            - @ezpublish.core.io.mimeTypeDetector
-        calls:
-            - [setContainer, [@service_container]]
-
-    ezpublish.core.io.service:
-        class: %ezpublish.core.io.service.class%
-        arguments:
-            - @ezpublish.core.io.handler
-            - @ezpublish.core.io.mimetypedetector
-
-    ezpublish.core.io.handler.filesystem:
-        class: %ezpublish.core.io.handler.filesystem.class%
-        factory_service: ezpublish.core.io.factory
-        factory_method: buildFilesystemHandler
-        tags:
-            - { name: ezpublish.io_handler, alias: filesystem }
-
-    ezpublish.core.io.handler:
-        class: %ezpublish.core.io.handler.class%
-        factory_service: ezpublish.core.io.factory
-        factory_method: buildConfiguredHandler
-
     ezpublish.core.io.flysystem.default_adapter:
-        class: League\Flysystem\Adapter\Local
+        class: %ezpublish.core.io.flysystem.default_adapter.class%
         arguments:
             - $io_root_dir$
 
     ezpublish.core.io.flysystem.storage_dir_url_decorator:
-        class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
+        class: %ezpublish.core.io.flysystem.storage_dir_url_decorator.class%
+        calls:
+            - [ setPrefix, [ $io_prefix$ ] ]
+
+    ezpublish.core.io.stream_file_listener:
+        class: %ezpublish.core.io.stream_file_listener.class%
         arguments:
-            - $io_prefix$
+            - @ezpublish.fieldtype.ezimage.io
+        calls
+            - [ setIoPrefix, [ $io_root_dir$ ] ]
+        tags:
+            - { name: kernel.event_subscriber }

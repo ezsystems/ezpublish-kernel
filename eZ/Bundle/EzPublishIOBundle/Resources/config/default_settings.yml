@@ -1,3 +1,2 @@
 parameters:
-    ez_io.handlers_map: {}
     ez_io.default.handler: filesystem

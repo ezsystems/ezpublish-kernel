@@ -17,17 +17,22 @@ use eZ\Publish\Core\IO\UrlDecorator;
 class AbsolutePrefix implements UrlDecorator
 {
     /**
-     * @var
+     * The URI absolute prefix.
+     * @var string
      */
     private $prefix;
 
     /**
-     * @param string $prefix uri prefix, without leading or trailing slashes
+     * @param string $prefix uri prefix. Will be nested within '/' on both ends.
      */
-    public function __construct( $prefix )
+    public function __construct( $prefix = null )
     {
-        // @todo cleanup at compilation time, and assume string okay
         $this->prefix = '/' . trim( $prefix, '/' ) . '/';
+    }
+
+    public function setPrefix( $prefix )
+    {
+        $this->prefix = $prefix;
     }
 
     public function decorate( $id )
