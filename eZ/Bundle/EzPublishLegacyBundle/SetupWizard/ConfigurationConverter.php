@@ -141,9 +141,6 @@ class ConfigurationConverter
             $settings['ezpublish']['system'][$siteaccess]['image_variations'] = $imgSettings;
         }
 
-        // Explicitly set Http cache purge type to "local"
-        $settings['ezpublish']['http_cache']['purge_type'] = 'local';
-
         foreach ( $siteList as $siteaccess )
         {
             if (
