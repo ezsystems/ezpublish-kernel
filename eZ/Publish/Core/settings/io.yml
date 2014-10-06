@@ -29,7 +29,7 @@ services:
         arguments:
             - ~
         tags:
-            - { name: ezpublish.io.metadata_handler_type, alias: flysystem }
+            - { name: ezpublish.io.metadata_handler, alias: flysystem }
 
     ezpublish.core.io.metadata_handler.flysystem.default:
         class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
@@ -42,7 +42,7 @@ services:
         arguments:
             - ~
         tags:
-            - { name: ezpublish.io.binarydata_handler_type, alias: flysystem }
+            - { name: ezpublish.io.binarydata_handler, alias: flysystem }
 
     ezpublish.core.io.binarydata_handler.flysystem.default:
         class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
@@ -71,4 +71,4 @@ services:
         arguments:
             - ~
         tags:
-            - { name: ezpublish.io.metadata_handler_type, alias: legacy_dfs_cluster }
+            - { name: ezpublish.io.metadata_handler, alias: legacy_dfs_cluster }

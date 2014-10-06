@@ -18,31 +18,40 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class IOHandlerTagPassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->setDefinition( 'ezpublish.core.io.factory', new Definition() );
-    }
-
     protected function registerCompilerPass( ContainerBuilder $container )
     {
         $container->addCompilerPass( new IOHandlerTagPass() );
     }
 
-    public function testLocaleListener()
+    public function testMetadataHandler()
     {
-        $ioHandlerIdentifier = 'io_handler_identifier';
-        $ioHandlerServiceId = 'io_handler';
+        $ioHandlerServiceId = 'some_handler';
+        $ioHandlerAlias = 'some_alias_handler';
         $def = new Definition();
-        $def->addTag( 'ezpublish.io_handler', array( 'alias' => $ioHandlerIdentifier ) );
+        $def->addTag( 'ezpublish.io.metadata_handler', array( 'alias' => $ioHandlerAlias ) );
         $this->setDefinition( $ioHandlerServiceId, $def );
 
         $this->compile();
 
-        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.core.io.factory',
-            'setHandlersMap',
-            array( array( $ioHandlerIdentifier => $ioHandlerServiceId ) )
+        $this->assertContainerBuilderHasParameter(
+            'ez_io.metadata_handlers_map',
+            array( $ioHandlerAlias => $ioHandlerServiceId )
+        );
+    }
+
+    public function testBinarydataHandler()
+    {
+        $ioHandlerServiceId = 'some_handler';
+        $ioHandlerAlias = 'some_alias_handler';
+        $def = new Definition();
+        $def->addTag( 'ezpublish.io.binarydata_handler', array( 'alias' => $ioHandlerAlias ) );
+        $this->setDefinition( $ioHandlerServiceId, $def );
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasParameter(
+            'ez_io.binarydata_handlers_map',
+            array( $ioHandlerAlias => $ioHandlerServiceId )
         );
     }
 }

@@ -21,12 +21,12 @@ class IOHandlerTagPass implements CompilerPassInterface
     public function process( ContainerBuilder $container )
     {
         $container->setParameter(
-            'ez_io.metadata_handlers_type_map',
-            $this->findHandlers( $container, 'ezpublish.io.metadata_handler_type' )
+            'ez_io.metadata_handlers_map',
+            $this->findHandlers( $container, 'ezpublish.io.metadata_handler' )
         );
         $container->setParameter(
-            'ez_io.binarydata_handlers_type_map',
-            $this->findHandlers( $container, 'ezpublish.io.binarydata_handler_type' )
+            'ez_io.binarydata_handlers_map',
+            $this->findHandlers( $container, 'ezpublish.io.binarydata_handler' )
         );
     }
 
@@ -37,7 +37,7 @@ class IOHandlerTagPass implements CompilerPassInterface
     protected function findHandlers( ContainerBuilder $container, $tag )
     {
         $map = array();
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.io.metadata_handler_type' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( $tag ) as $id => $attributes )
         {
             foreach ( $attributes as $attribute )
             {

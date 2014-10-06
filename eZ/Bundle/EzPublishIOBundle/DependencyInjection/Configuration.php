@@ -16,7 +16,6 @@ class Configuration extends SiteAccessConfiguration
                 ->append( $this->getBinaryDataNode() )
             ->end();
 
-
         return $treeBuilder;
     }
 
