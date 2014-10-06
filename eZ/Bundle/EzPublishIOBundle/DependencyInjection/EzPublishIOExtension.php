@@ -8,8 +8,10 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\Validator\Tests\Fixtures\Reference;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -18,6 +20,23 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class EzPublishIOExtension extends Extension
 {
+    /**
+     * Array of metadatahandler name => service id
+     * @var array
+     */
+    private $binarydataHandlers;
+
+    /**
+     * Array of binarydatahandler name => service id
+     * @var array
+     */
+    private $metadataHandlers;
+
+    public function getAlias()
+    {
+        return 'ez_io';
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -33,22 +52,49 @@ class EzPublishIOExtension extends Extension
         $loader->load( 'io.yml' );
         $loader->load( 'default_settings.yml' );
 
-        // Map settings
-        $processor = new ConfigurationProcessor( $container, 'ez_io' );
-        $processor->mapConfig(
-            $config,
-            function ( $scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
+        if ( isset( $config['binarydata_handlers'] ) )
+        {
+            foreach ( $config['binarydata_handlers'] as $handlerType => $handlers )
             {
-                if ( isset( $scopeSettings['handler'] ) )
+                foreach ( $handlers as $handlerName => $handlerConfig )
                 {
-                    $contextualizer->setContextualParameter( 'handler', $currentScope, $scopeSettings['handler'] );
+                    $this->registerBinarydataHandler( $handlerType, $handlerName, $handlerConfig, $container );
                 }
             }
-        );
+        }
+
+        if ( isset( $config['metadata_handlers'] ) )
+        {
+            foreach ( $config['metadata_handlers'] as $handlerType => $handlers )
+            {
+                foreach ( $handlers as $handlerName => $handlerConfig )
+                {
+                    $this->registerMetadataHandler( $handlerType, $handlerName, $handlerConfig, $container );
+                }
+            }
+        }
+
+        $container->setParameter( 'ez_io.metadata_handlers', $this->metadataHandlers );
+        $container->setParameter( 'ez_io.binarydata_handlers', $this->binarydataHandlers );
     }
 
-    public function getAlias()
+    protected function registerBinaryDataHandler( $type, $name, array $config )
     {
-        return 'ez_io';
+        if ( isset( $this->binarydataHandlers[$type] ) )
+        {
+            throw new InvalidConfigurationException( "A binarydata handler named $type already exists" );
+        }
+
+        $this->binarydataHandlers[$type][$name] = $config;
+    }
+
+    protected function registerMetaDataHandler( $type, $name, array $config )
+    {
+        if ( isset( $this->metadataHandlers[$type] ) )
+        {
+            throw new InvalidConfigurationException( "A metadata handler named $type already exists" );
+        }
+
+        $this->metadataHandlers[$type][$name] = $config;
     }
 }

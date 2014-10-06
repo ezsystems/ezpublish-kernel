@@ -26,6 +26,10 @@ services:
     ezpublish.core.io.metadata_handler.flysystem:
         abstract: true
         class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
+        arguments:
+            - ~
+        tags:
+            - { name: ezpublish.io.metadata_handler_type, alias: flysystem }
 
     ezpublish.core.io.metadata_handler.flysystem.default:
         class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
@@ -35,6 +39,10 @@ services:
     ezpublish.core.io.binarydata_handler.flysystem:
         abstract: true
         class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
+        arguments:
+            - ~
+        tags:
+            - { name: ezpublish.io.binarydata_handler_type, alias: flysystem }
 
     ezpublish.core.io.binarydata_handler.flysystem.default:
         class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
@@ -57,11 +65,10 @@ services:
         arguments:
             - %storage_dir%
 
-#    ezpublish.core.io.metadata_handler.legacy_dfs_cluster:
-#        abstract: true
-#        class: eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster
-#        arguments:
-#            - @doctrine.dbal.connection
-#        tags:
-#            - { name: ezpublish.io.metadata_handler, alias: legacy_dfs_cluster }
-#
+    ezpublish.core.io.metadata_handler.legacy_dfs_cluster:
+        abstract: true
+        class: eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster
+        arguments:
+            - ~
+        tags:
+            - { name: ezpublish.io.metadata_handler_type, alias: legacy_dfs_cluster }

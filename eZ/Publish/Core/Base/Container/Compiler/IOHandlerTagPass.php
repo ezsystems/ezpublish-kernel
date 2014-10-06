@@ -20,24 +20,37 @@ class IOHandlerTagPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.core.io.factory' ) )
-            return;
+        $container->setParameter(
+            'ez_io.metadata_handlers_type_map',
+            $this->findHandlers( $container, 'ezpublish.io.metadata_handler_type' )
+        );
+        $container->setParameter(
+            'ez_io.binarydata_handlers_type_map',
+            $this->findHandlers( $container, 'ezpublish.io.binarydata_handler_type' )
+        );
+    }
 
-        $ioHandlersMap = array();
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.io_handler' ) as $id => $attributes )
+    /**
+     * @param ContainerBuilder $container
+     * @param                  $metadataHandlersTypeMap
+     */
+    protected function findHandlers( ContainerBuilder $container, $tag )
+    {
+        $map = array();
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.io.metadata_handler_type' ) as $id => $attributes )
         {
             foreach ( $attributes as $attribute )
             {
                 if ( !isset( $attribute['alias'] ) )
+                {
                     throw new LogicException(
-                        'ezpublish.io_handler service tag needs an "alias" attribute to identify the handler.'
+                        "$tag service tag needs an 'alias' attribute to identify the handler. None given for $id"
                     );
+                }
 
-                $ioHandlersMap[$attribute['alias']] = $id;
+                $map[$attribute['alias']] = $id;
             }
         }
-
-        $container->getDefinition( 'ezpublish.core.io.factory' )
-            ->addMethodCall( 'setHandlersMap', array( $ioHandlersMap ) );
+        return $map;
     }
 }
