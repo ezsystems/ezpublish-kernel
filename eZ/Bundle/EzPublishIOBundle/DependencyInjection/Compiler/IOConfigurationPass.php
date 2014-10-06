@@ -27,7 +27,7 @@ class IOConfigurationPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasParameter( 'ez_io.metadata_handlers' ) && !$container->hasParameter( 'ez_io.binarydata_handlers' ))
+        if ( !$container->hasParameter( 'ez_io.metadata_handlers' ) && !$container->hasParameter( 'ez_io.binarydata_handlers' ) )
         {
             return;
         }
@@ -36,7 +36,7 @@ class IOConfigurationPass implements CompilerPassInterface
             $container,
             $container->getDefinition( 'ezpublish.core.io.metadata_handler.factory' ),
             $container->getParameter( 'ez_io.metadata_handlers' ),
-            $container->getParameter( 'ez_io.metadata_handlers_type_map' ),
+            $container->getParameter( 'ez_io.metadata_handlers_map' ),
             'ezpublish.core.io.metadata_handler.flysystem.default'
         );
 
@@ -44,7 +44,7 @@ class IOConfigurationPass implements CompilerPassInterface
             $container,
             $container->getDefinition( 'ezpublish.core.io.binarydata_handler.factory' ),
             $container->getParameter( 'ez_io.binarydata_handlers' ),
-            $container->getParameter( 'ez_io.binarydata_handlers_type_map' ),
+            $container->getParameter( 'ez_io.binarydata_handlers_map' ),
             'ezpublish.core.io.binarydata_handler.flysystem.default'
         );
 
@@ -53,18 +53,22 @@ class IOConfigurationPass implements CompilerPassInterface
 
     /**
      * @param ContainerBuilder $container
-     * @param                  $handlers
-     * @param                  $HandlerTypesMap
+     * @param Definition $factory The factory service that should receive the list of handlers
+     * @param array $handlers Handlers configuration declared via semantic config
+     * @param array $handlerTypesMap Map of alias => handler service id
+     * @param string $defaultHandler default handler id
+     *
+     * @internal param $HandlerTypesMap
      */
-    protected function processHandlers( ContainerBuilder $container, Definition $factory, $handlers, $handlerTypesMap, $defaultHandler )
+    protected function processHandlers( ContainerBuilder $container, Definition $factory, array $handlers, array $handlerTypesMap, $defaultHandler )
     {
-        $handlersMap = array();
+        $handlersMap = array( 'default' => $defaultHandler );
 
         foreach ( $handlers as $type => $typeArray )
         {
             if ( !isset( $handlerTypesMap[$type] ) )
             {
-                throw new InvalidConfigurationException( "Unknown metadata handler type $type" );
+                throw new InvalidConfigurationException( "Unknown handler type $type" );
             }
 
             $parentHandlerId = $handlerTypesMap[$type];
@@ -78,6 +82,10 @@ class IOConfigurationPass implements CompilerPassInterface
                 if ( $type == 'flysystem' )
                 {
                     $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $config['adapter'] );
+                    if ( !$container->hasDefinition( $adapterId ) )
+                    {
+                        throw new InvalidConfigurationException( "Unknown flysystem adapter {$config['adapter']}" );
+                    }
                     $definition->replaceArgument( 0, new Reference( $adapterId ) );
                 }
                 else if ( $type == 'legacy_dfs_cluster' )
@@ -89,11 +97,6 @@ class IOConfigurationPass implements CompilerPassInterface
             }
         }
 
-        // @todo What about the default handlers ? :-)
-        if ( !isset( $handlersMap['default'] ) )
-        {
-            $handlersMap['default'] = $defaultHandler;
-        }
         $factory->addMethodCall( 'setHandlersMap', array( $handlersMap ) );
     }
 }
