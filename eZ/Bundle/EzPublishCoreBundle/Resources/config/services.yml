@@ -4,6 +4,7 @@ parameters:
     ezpublish.config.resolver.dynamic.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
     ezpublish.config.resolver.chain.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
     ezpublish.config.default_scope: ezsettings
+    ezpublish.config.dynamic_setting.parser.class: eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser
     ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
@@ -39,6 +40,9 @@ services:
 
     ezpublish.config.resolver:
         alias: ezpublish.config.resolver.chain
+
+    ezpublish.config.dynamic_setting.parser:
+        class: %ezpublish.config.dynamic_setting.parser.class%
 
     ezpublish.controller.base:
         class: %ezpublish.controller.base.class%
