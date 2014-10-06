@@ -9,6 +9,7 @@ parameters:
     ezpublish.http_cache.purge_client.http_client.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\Curl
     ezpublish.http_cache.purge_client.http_client.timeout: 1          # Timeout, in seconds. Setting a low value will emulate an asynchronous request
     ezpublish.http_cache.purge_client.browser.class: Buzz\Browser
+    ezpublish.http_cache.purge_client.fos.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\FOSPurgeClient
 
 services:
     # Parameter %ezpublish.cache_pool.class% and cache decorator service are defined
@@ -48,6 +49,9 @@ services:
     ezpublish.http_cache.purge_client.single_request:
         class: %ezpublish.http_cache.purge_client.single_request.class%
         parent: ezpublish.http_cache.purge_client.multi_request
+    ezpublish.http_cache.purge_client.fos:
+        class: %ezpublish.http_cache.purge_client.fos.class%
+        arguments: [@fos_http_cache.cache_manager]
 
     ezpublish.http_cache.purge_client:
         alias: ezpublish.http_cache.purge_client.local

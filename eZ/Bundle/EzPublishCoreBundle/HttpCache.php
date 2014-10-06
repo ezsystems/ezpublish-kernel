@@ -52,7 +52,7 @@ abstract class HttpCache extends BaseHttpCache
      */
     protected function invalidate( Request $request, $catch = false )
     {
-        if ( $request->getMethod() !== 'PURGE' )
+        if ( $request->getMethod() !== 'PURGE' && $request->getMethod() !== 'BAN' )
         {
             return parent::invalidate( $request, $catch );
         }

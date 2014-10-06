@@ -14,14 +14,17 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Formatter\YamlSuggestionFormatter;
+use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Loader\FileLoader;
 use Symfony\Component\Config\FileLocator;
 use InvalidArgumentException;
+use Symfony\Component\Yaml\Yaml;
 
-class EzPublishCoreExtension extends Extension
+class EzPublishCoreExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector
@@ -444,5 +447,14 @@ class EzPublishCoreExtension extends Extension
     private function handleImage( array $config, ContainerBuilder $container, FileLoader $loader )
     {
         $loader->load( 'image.yml' );
+    }
+
+    public function prepend( ContainerBuilder $container )
+    {
+        // Default settings for FOSHttpCacheBundle
+        $configFile = __DIR__ . '/../Resources/config/fos_http_cache.yml';
+        $config = Yaml::parse( file_get_contents( $configFile ) );
+        $container->prependExtensionConfig( 'fos_http_cache', $config );
+        $container->addResource( new FileResource( $configFile ) );
     }
 }
