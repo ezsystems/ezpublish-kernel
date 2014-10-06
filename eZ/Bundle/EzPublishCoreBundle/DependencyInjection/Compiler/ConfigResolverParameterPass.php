@@ -54,6 +54,11 @@ class ConfigResolverParameterPass implements CompilerPassInterface
                     continue;
                 }
 
+                // Decorators use index_X for their key
+                if ( strpos( $i, 'index' ) === 0 )
+                {
+                    $i = (int)substr( $i, strlen( 'index_' ) );
+                }
                 $fakeServiceId = $this->injectFakeService( $container, $this->getConfigResolverArgs( $arg ) );
                 $replaceArguments[$i] = new Reference( $fakeServiceId, ContainerInterface::NULL_ON_INVALID_REFERENCE );
                 $fakeServices[] = $fakeServiceId;
