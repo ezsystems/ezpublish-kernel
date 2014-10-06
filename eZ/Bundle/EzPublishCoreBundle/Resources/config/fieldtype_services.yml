@@ -52,6 +52,7 @@ parameters:
 
     # Image
     ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
+    ezpublish.fieldType.ezimage.io_service.options_provider.class: eZ\Publish\Core\FieldType\Image\IO\OptionsProvider
 
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
@@ -235,12 +236,15 @@ services:
         arguments:
             - @ezpublish.fieldType.ezimage.io_service.published
             - @ezpublish.fieldType.ezimage.io_service.draft
-        # @todo Change to a dynamic setter
-            -
-                var_dir: $var_dir$
-                storage_dir: $storage_dir$
-                draft_images_dir: $image.versioned_images_dir$
-                published_images_dir: $image.published_images_dir$
+            - @ezpublish.fieldType.ezimage.io_service.options_provider
+
+    ezpublish.fieldType.ezimage.io_service.options_provider:
+        class: %ezpublish.fieldType.ezimage.io_service.options_provider.class%
+        calls:
+            - [ setVarDir, [ $var_dir$ ] ]
+            - [ setStorageDir, [ $storage_dir$ ] ]
+            - [ setDraftImagesDir, [ $image.versioned_images_dir$ ] ]
+            - [ setPublishedImagesDir, [ $image.published_images_dir$ ] ]
 
     # Image alias generator
     ezpublish.fieldType.ezimage.variation_service:
@@ -249,7 +253,7 @@ services:
     ezpublish.fieldType.ezimage.io_service.published:
         parent: ezpublish.core.io.service
         calls:
-            - [ setPrefix, [ $image.published_images_dir ] ]
+            - [ setPrefix, [ $image.published_images_dir$ ] ]
 
     ezpublish.fieldType.ezimage.io_service.draft:
         parent: ezpublish.core.io.service

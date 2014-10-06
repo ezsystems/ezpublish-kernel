@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Tests\Image\IO;
 
 use eZ\Publish\Core\FieldType\Image\IO\Legacy as LegacyIOService;
+use eZ\Publish\Core\FieldType\Image\IO\OptionsProvider;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use PHPUnit_Framework_TestCase;
@@ -36,15 +37,18 @@ class LegacyTest extends PHPUnit_Framework_TestCase
     {
         $this->publishedIoServiceMock = $this->getMock( 'eZ\Publish\Core\IO\IOServiceInterface' );
         $this->draftIoServiceMock = $this->getMock( 'eZ\Publish\Core\IO\IOServiceInterface' );
-        $this->service = new LegacyIOService(
-            $this->publishedIoServiceMock,
-            $this->draftIoServiceMock,
+        $optionsProvider = new OptionsProvider(
             array(
                 'var_dir' => 'var/test',
                 'storage_dir' => 'storage',
                 'draft_images_dir' => 'images-versioned',
                 'published_images_dir' => 'images'
             )
+        );
+        $this->service = new LegacyIOService(
+            $this->publishedIoServiceMock,
+            $this->draftIoServiceMock,
+            $optionsProvider
         );
     }
 

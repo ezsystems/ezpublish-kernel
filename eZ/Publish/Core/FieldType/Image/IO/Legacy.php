@@ -14,7 +14,6 @@ use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use RuntimeException;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Legacy Image IOService
@@ -59,6 +58,11 @@ class Legacy implements IOServiceInterface
     private $draftPrefix;
 
     /**
+     * @var OptionsProvider
+     */
+    private $optionsProvider;
+
+    /**
      * @param IOServiceInterface $publishedIOService
      * @param IOServiceInterface $draftIOService
      * @param array $options Path options. Known keys: var_dir, storage_dir, draft_images_dir, published_images_dir.
@@ -69,28 +73,12 @@ class Legacy implements IOServiceInterface
      * @throws \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
      *         If a required option is missing.
      */
-    public function __construct( IOServiceInterface $publishedIOService, IOServiceInterface $draftIOService, array $options = array() )
+    public function __construct( IOServiceInterface $publishedIOService, IOServiceInterface $draftIOService, OptionsProvider $optionsProvider )
     {
         $this->publishedIOService = $publishedIOService;
         $this->draftIOService = $draftIOService;
-
-        $resolver = new OptionsResolver();
-        $this->configureOptions( $resolver );
-        $this->setPrefixes( $resolver->resolve( $options ) );
-    }
-
-    private function configureOptions( OptionsResolver $resolver )
-    {
-        $resolver->setRequired( array( 'var_dir', 'draft_images_dir', 'published_images_dir' ) );
-        $resolver->setOptional( array( 'storage_dir' ) );
-        $resolver->setAllowedTypes(
-            array(
-                'var_dir' => 'string',
-                'storage_dir' => 'string',
-                'draft_images_dir' => 'string',
-                'published_images_dir' => 'string'
-            )
-        );
+        $this->optionsProvider = $optionsProvider;
+        $this->setPrefixes();
     }
 
     /**
@@ -103,22 +91,20 @@ class Legacy implements IOServiceInterface
     }
 
     /**
-     * Computes the paths to published & draft images path using $options
-     *
-     * @param array $options
+     * Computes the paths to published & draft images path using the options from the provider
      */
-    private function setPrefixes( array $options )
+    private function setPrefixes()
     {
-        $pathArray = array( $options['var_dir'] );
+        $pathArray = array( $this->optionsProvider->getVarDir() );
 
         // The storage dir itself might be null
-        if ( isset( $options['storage_dir'] ) )
+        if ( $storageDir = $this->optionsProvider->getStorageDir() )
         {
-            $pathArray[] = $options['storage_dir'];
+            $pathArray[] = $storageDir;
         }
 
-        $this->draftPrefix = implode( '/', array_merge( $pathArray, array( $options['draft_images_dir'] ) ) );
-        $this->publishedPrefix = implode( '/', array_merge( $pathArray, array( $options['published_images_dir'] ) ) );
+        $this->draftPrefix = implode( '/', array_merge( $pathArray, array( $this->optionsProvider->getDraftImagesDir() ) ) );
+        $this->publishedPrefix = implode( '/', array_merge( $pathArray, array( $this->optionsProvider->getPublishedImagesDir() ) ) );
     }
 
     public function getExternalPath( $internalId )
