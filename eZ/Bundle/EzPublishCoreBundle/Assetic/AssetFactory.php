@@ -39,8 +39,6 @@ class AssetFactory extends BaseAssetFactory
     /**
      * Adds dynamic settings notation support: $<paramName>[;<namespace>[;<scope>]]$
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
-     *
      * {@inheritdoc}
      */
     protected function parseInput( $input, array $options = array() )
@@ -54,9 +52,14 @@ class AssetFactory extends BaseAssetFactory
                 $parsedSettings['scope']
             );
 
-            if ( !is_string( $input ) )
+            if ( is_array( $input ) )
             {
-                throw new InvalidArgumentType( 'input', 'string', $input );
+                $collection = $this->createAssetCollection( array(), $options );
+                foreach ( $input as $file )
+                {
+                    $collection->add( parent::parseInput( $file, $options ) );
+                }
+                return $collection;
             }
         }
 
