@@ -1,6 +1,4 @@
 parameters:
-    ez_io.default.io_root_dir: /home/bertrand/ezpublish5/ezpublish_legacy/var/ezdemo_site/storage
-
     # Available IO handlers types
     ez_io.binarydata_handlers_map: {}
     ez_io.metadata_handlers_map: {}

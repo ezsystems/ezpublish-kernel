@@ -14,10 +14,11 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
+/**
+ * @todo test
+ */
 class IO extends AbstractParser
 {
-    private $siteAccessesByLanguages = array();
-
     public function addSemanticConfig( NodeBuilder $nodeBuilder )
     {
         $nodeBuilder
@@ -45,6 +46,27 @@ class IO extends AbstractParser
         if ( isset( $scopeSettings['binarydata_handler'] ) )
         {
             $contextualizer->setContextualParameter( 'io.binarydata_handler', $currentScope, $scopeSettings['binarydata_handler'] );
+        }
+    }
+
+    /**
+     * Post process configuration to add io_root_dir and io_prefix.
+     */
+    public function postMap( array $config, ContextualizerInterface $contextualizer )
+    {
+        $container = $contextualizer->getContainer();
+        $configResolver = $container->get( 'ezpublish.config.resolver.core' );
+        $configResolver->setContainer( $container );
+
+        foreach ( array_merge( array( 'default' ), $config['siteaccess']['list'] ) as $sa )
+        {
+            $varDir = $configResolver->getParameter( 'var_dir', null, $sa );
+            $storageDir = $configResolver->getParameter( 'storage_dir', null, $sa );
+
+            $ioPrefix = "$varDir/$storageDir";
+            $ioRootDir = "%ezpublish_legacy.root_dir%/$ioPrefix";
+            $container->setParameter( "ezsettings.$sa.io_root_dir", $ioRootDir );
+            $container->setParameter( "ezsettings.$sa.io_prefix", $ioPrefix );
         }
     }
 }

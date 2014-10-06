@@ -33,18 +33,18 @@ services:
     ezpublish.core.io.flysystem.default_adapter:
         class: %ezpublish.core.io.flysystem.default_adapter.class%
         arguments:
-            - "$io_root_dir;ez_io$"
+            - "$io_root_dir$"
 
     ezpublish.core.io.flysystem.default_url_decorator:
         class: %ezpublish.core.io.flysystem.storage_dir_url_decorator.class%
         calls:
-            - [ setPrefix, [ "$io_root_dir;ez_io$" ] ]
+            - [ setPrefix, [ "$io_prefix$" ] ]
 
     ezpublish.core.io.stream_file_listener:
         class: %ezpublish.core.io.stream_file_listener.class%
         arguments:
             - @ezpublish.fieldtype.ezimage.io_service
         calls:
-            - [ setIoPrefix, [ "$io_root_dir;ez_io$" ] ]
+            - [ setIoPrefix, [ "$io_prefix$" ] ]
         tags:
             - { name: kernel.event_subscriber }
