@@ -24,13 +24,13 @@ class EzPublishIOExtension extends Extension
      * Array of metadatahandler name => service id
      * @var array
      */
-    private $binarydataHandlers;
+    private $binarydataHandlers = array();
 
     /**
      * Array of binarydatahandler name => service id
      * @var array
      */
-    private $metadataHandlers;
+    private $metadataHandlers = array();
 
     public function getAlias()
     {
