@@ -39,13 +39,19 @@ class IO extends AbstractParser
 
     public function mapConfig( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
     {
-        if ( isset( $scopeSettings['metadata_handler'] ) )
+        if ( !isset( $scopeSettings['io'] ) )
         {
-            $contextualizer->setContextualParameter( 'io.metadata_handler', $currentScope, $scopeSettings['metadata_handler'] );
+            return;
         }
-        if ( isset( $scopeSettings['binarydata_handler'] ) )
+
+        $settings = $scopeSettings['io'];
+        if ( isset( $settings['metadata_handler'] ) )
         {
-            $contextualizer->setContextualParameter( 'io.binarydata_handler', $currentScope, $scopeSettings['binarydata_handler'] );
+            $contextualizer->setContextualParameter( 'io.metadata_handler', $currentScope, $settings['metadata_handler'] );
+        }
+        if ( isset( $settings['binarydata_handler'] ) )
+        {
+            $contextualizer->setContextualParameter( 'io.binarydata_handler', $currentScope, $settings['binarydata_handler'] );
         }
     }
 
