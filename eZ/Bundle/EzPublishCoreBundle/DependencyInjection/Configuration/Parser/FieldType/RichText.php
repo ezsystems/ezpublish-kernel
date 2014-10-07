@@ -280,7 +280,8 @@ class RichText extends AbstractFieldTypeParser
                 unset( $scopeSettings['fieldtypes']['ezrichtext']['edit_custom_tags'] );
             }
 
-            if ( isset( $scopeSettings['fieldtypes']['ezrichtext']['input_custom_tags'] ) ) {
+            if ( isset( $scopeSettings['fieldtypes']['ezrichtext']['input_custom_tags'] ) )
+            {
                 $scopeSettings['fieldtypes.ezrichtext.input_custom_xsl'] = $scopeSettings['fieldtypes']['ezrichtext']['input_custom_tags'];
                 unset( $scopeSettings['fieldtypes']['ezrichtext']['input_custom_tags'] );
             }

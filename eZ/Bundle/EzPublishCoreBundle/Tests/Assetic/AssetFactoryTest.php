@@ -84,7 +84,6 @@ class AssetFactoryTest extends BaseTest
         $this->assertCount( count( $fooValues ), $parseInputResult->all() );
     }
 
-
     public function testParseInputString()
     {
         $assetFactory = $this->getAssetFactory();
