@@ -27,11 +27,17 @@ class AbsolutePrefix implements UrlDecorator
      */
     public function __construct( $prefix = null )
     {
-        $this->prefix = '/' . trim( $prefix, '/' ) . '/';
+        if ( $prefix !== null )
+        {
+            $this->setPrefix( $prefix );
+        }
     }
 
     public function setPrefix( $prefix )
     {
+        if ( $prefix != '' )
+            $prefix = '/' . trim( $prefix, '/' ) . '/';
+
         $this->prefix = $prefix;
     }
 
