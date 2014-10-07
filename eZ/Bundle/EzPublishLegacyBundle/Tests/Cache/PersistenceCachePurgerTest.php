@@ -233,6 +233,7 @@ class PersistenceCachePurgerTest extends PHPUnit_Framework_TestCase
                     array(
                         array( 'content', $contentId, null ),
                         array( 'content', 'info', $contentId, null ),
+                        array( 'content', 'info', 'remoteId', null ),
                         array( 'urlAlias', null ),
                         array( 'location', null ),
                     )
