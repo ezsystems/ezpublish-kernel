@@ -56,7 +56,7 @@ class IOTest extends AbstractParserTestCase
     {
         $config = array(
             'system' => array(
-                'ezdemo_site'=> array(
+                'ezdemo_site' => array(
                     'var_dir' => 'var/ezdemo_site'
                 )
             )
