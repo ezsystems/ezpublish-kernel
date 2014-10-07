@@ -9,6 +9,7 @@ namespace eZ\Bundle\EzPublishIOBundle\EventListener;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\Core\IO\IOServiceInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -22,13 +23,13 @@ class StreamFileListener implements EventSubscriberInterface
     /** @var IOServiceInterface */
     private $ioService;
 
-    /** @var */
-    private $ioPrefix;
+    /** @var ConfigResolverInterface */
+    private $configResolver;
 
-    public function __construct( IOServiceInterface $ioService, $ioUriPrefix )
+    public function __construct( IOServiceInterface $ioService, ConfigResolverInterface $configResolver )
     {
         $this->ioService = $ioService;
-        $this->ioPrefix = $ioUriPrefix;
+        $this->configResolver = $configResolver;
     }
 
     public function setIoPrefix( $ioPrefix )
@@ -76,6 +77,6 @@ class StreamFileListener implements EventSubscriberInterface
      */
     private function isIoUri( $uri )
     {
-        return ( strpos( $uri, $this->ioPrefix ) === 0 );
+        return ( strpos( $uri, $this->configResolver->getParameter( 'io_prefix' ) ) === 0 );
     }
 }

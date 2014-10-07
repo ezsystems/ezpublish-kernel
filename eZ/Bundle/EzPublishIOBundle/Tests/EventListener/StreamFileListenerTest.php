@@ -24,24 +24,29 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
     /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $ioServiceMock;
 
-    private static $ioUriPrefix = '/var/test/storage';
+    private $ioUriPrefix = '/var/test/storage';
+
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $configResolverMock;
 
     public function setUp(  )
     {
         $this->ioServiceMock = $this->getMock( 'eZ\Publish\Core\IO\IOServiceInterface' );
-        $this->eventListener = new StreamFileListener( $this->ioServiceMock, self::$ioUriPrefix );
+
+        $this->configResolverMock = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $this->configResolverMock
+            ->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->with( 'io_prefix' )
+            ->will( $this->returnValue( $this->ioUriPrefix ) );
+
+        $this->eventListener = new StreamFileListener( $this->ioServiceMock, $this->configResolverMock );
     }
 
     public function testDoesNotRespondToNonIoUri()
     {
-        $request = new Request();
-        $request->attributes->set( 'semanticPathinfo', '/Not-an-image' );
-
-        $event = new GetResponseEvent(
-            $this->getMock( 'Symfony\Component\HttpKernel\HttpKernelInterface' ),
-            $request,
-            HttpKernelInterface::MASTER_REQUEST
-        );
+        $request = $this->createRequest( '/Not-an-image' );
+        $event = $this->createEvent( $request );
 
         $this->eventListener->onKernelRequest( $event );
 
@@ -50,15 +55,10 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
 
     public function testRespondsToIoUri()
     {
-        $request = new Request();
         $uri = '/var/test/storage/images/image.png';
-        $request->attributes->set( 'semanticPathinfo', $uri );
+        $request = $this->createRequest( $uri );
 
-        $event = new GetResponseEvent(
-            $this->getMock( 'Symfony\Component\HttpKernel\HttpKernelInterface' ),
-            $request,
-            HttpKernelInterface::MASTER_REQUEST
-        );
+        $event = $this->createEvent( $request );
 
         $binaryFile = new BinaryFile( array( 'mtime' => new DateTime ) );
 
@@ -74,5 +74,30 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
             new BinaryStreamResponse( $binaryFile, $this->ioServiceMock ),
             $event->getResponse()
         );
+    }
+
+    /**
+     * @return Request
+     */
+    protected function createRequest( $semanticPath )
+    {
+        $request = new Request();
+        $request->attributes->set( 'semanticPathinfo', $semanticPath );
+        return $request;
+    }
+
+    /**
+     * @param $request
+     *
+     * @return GetResponseEvent
+     */
+    protected function createEvent( $request )
+    {
+        $event = new GetResponseEvent(
+            $this->getMock( 'Symfony\Component\HttpKernel\HttpKernelInterface' ),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST
+        );
+        return $event;
     }
 }
