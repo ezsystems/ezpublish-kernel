@@ -87,14 +87,7 @@ SQL
             throw new \RuntimeException( "Unexpected rowCount " . $stmt->rowCount() );
         }
 
-        $spiBinaryFile = new SPIBinaryFile();
-        $spiBinaryFile->id = $binaryFileCreateStruct->id;
-        $spiBinaryFile->mimeType = $binaryFileCreateStruct->mimeType;
-        $spiBinaryFile->mtime = $binaryFileCreateStruct->mtime;
-        $spiBinaryFile->size = $binaryFileCreateStruct->size;
-        $spiBinaryFile->mimeType = $binaryFileCreateStruct->mimeType;
-
-        return $spiBinaryFile;
+        return $this->mapSPIBinaryFileCreateStructToSPIBinaryFile( $binaryFileCreateStruct );
     }
 
     /**
@@ -143,14 +136,12 @@ SQL
             throw new BinaryFileNotFoundException( $path );
         }
 
-        $row = $stmt->fetch( \PDO::FETCH_ASSOC );
+        $row = array_merge(
+            array( 'id' => $spiBinaryFileId ),
+            $stmt->fetch( \PDO::FETCH_ASSOC )
+        );
 
-        $spiBinaryFile = new SPIBinaryFile();
-        $spiBinaryFile->id = $spiBinaryFileId;
-        $spiBinaryFile->size = $row['size'];
-        $spiBinaryFile->mtime = $row['mtime'];
-        $spiBinaryFile->mimeType = $row['datatype'];
-        return $spiBinaryFile;
+        return $this->mapArrayToSPIBinaryFile( $row );
     }
 
     /**
@@ -229,6 +220,42 @@ SQL
 
     public function getMimeType( $spiBinaryFileId )
     {
+        $return $this->load( $spiBinaryFileId )->id;
+    }
 
+    /**
+     * @param $spiBinaryFile
+     *
+     * @return SPIBinaryFile
+     */
+    protected function mapArrayToSPIBinaryFile( array $properties )
+    {
+        if ( !isset( $properties->mimeType ) )
+        {
+            $properties['mimeType'] = $this->getMimeType( $properties['id'] );
+        }
+
+        $spiBinaryFile = new SPIBinaryFile();
+        $spiBinaryFile->id = $properties['id'];
+        $spiBinaryFile->size = $properties['size'];
+        $spiBinaryFile->mtime = $properties['mtime'];
+        $spiBinaryFile->mimeType = $properties['datatype'];
+        return $spiBinaryFile;
+    }
+
+    /**
+     * @param SPIBinaryFileCreateStruct $binaryFileCreateStruct
+     *
+     * @return SPIBinaryFile
+     */
+    protected function mapSPIBinaryFileCreateStructToSPIBinaryFile( SPIBinaryFileCreateStruct $binaryFileCreateStruct )
+    {
+        $spiBinaryFile = new SPIBinaryFile();
+        $spiBinaryFile->id = $binaryFileCreateStruct->id;
+        $spiBinaryFile->mimeType = $binaryFileCreateStruct->mimeType;
+        $spiBinaryFile->mtime = $binaryFileCreateStruct->mtime;
+        $spiBinaryFile->size = $binaryFileCreateStruct->size;
+        $spiBinaryFile->mimeType = $binaryFileCreateStruct->mimeType;
+        return $spiBinaryFile;
     }
 }
