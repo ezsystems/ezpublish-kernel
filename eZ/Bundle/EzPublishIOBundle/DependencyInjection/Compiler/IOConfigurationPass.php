@@ -88,10 +88,6 @@ class IOConfigurationPass implements CompilerPassInterface
                     }
                     $definition->replaceArgument( 0, new Reference( $adapterId ) );
                 }
-                else if ( $type == 'legacy_dfs_cluster' )
-                {
-                    $definition->replaceArgument( 0, new Reference( $config['connection'] ) );
-                }
 
                 $handlersMap[$name] = $id;
             }

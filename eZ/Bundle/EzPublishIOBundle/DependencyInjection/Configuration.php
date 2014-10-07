@@ -63,14 +63,6 @@ class Configuration extends SiteAccessConfiguration
                         ->end()
                     ->end()
                 ->end()
-                ->arrayNode( 'legacy_dfs_cluster' )
-                    ->canBeUnset()
-                    ->prototype( 'array' )
-                        ->children()
-                            ->scalarNode( 'connection' )->info( 'doctrine connection' )->example( 'default' )->end()
-                        ->end()
-                    ->end()
-                ->end()
             ->end();
 
         return $node;
