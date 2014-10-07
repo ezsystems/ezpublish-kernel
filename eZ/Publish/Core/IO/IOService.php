@@ -207,14 +207,12 @@ class IOService implements IOServiceInterface
      *
      * @throws BinaryFileNotFoundException If no file identified by $binaryFileId exists
      * @throws InvalidBinaryFileIdException
-     *
-     * @todo Figure out if it returns false or throws an exception when the file isn't found
      */
     public function loadBinaryFile( $binaryFileId )
     {
         $this->checkBinaryFileId( $binaryFileId );
 
-        // @todo An absolute path can in no case be loaded, but throwing an exception is a bit too much at this stage
+        // @todo An absolute path can in no case be loaded, but throwing an exception is too much (why ?)
         if ( $binaryFileId[0] === '/' )
             return false;
 

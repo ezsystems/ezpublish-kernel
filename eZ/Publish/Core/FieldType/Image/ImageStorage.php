@@ -231,7 +231,7 @@ class ImageStorage extends GatewayBasedStorage
 
             try
             {
-                // @todo use exists ?
+                // @todo Test if file exists first ? What do we do then ?
                 $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
             }
             catch ( NotFoundException $e )

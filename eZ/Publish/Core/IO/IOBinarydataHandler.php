@@ -22,6 +22,8 @@ interface IOBinarydataHandler
      * @param BinaryFileCreateStruct $binaryFileCreateStruct
      *
      * @return void
+     *
+     * @throws \RuntimeException if an error occured creating the file
      */
     public function create( BinaryFileCreateStruct $binaryFileCreateStruct );
 

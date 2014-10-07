@@ -16,6 +16,7 @@ use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
+use RuntimeException;
 
 /**
  * @todo Describe
@@ -46,9 +47,7 @@ class LegacyDFSCluster implements IOMetadataHandler
      * @param string  $spiBinaryFileId
      * @param integer $mtime
      *
-     * @throws DBALException Any unhandled DBAL exception
-     *
-     * @todo fix exception handling
+     * @throws RuntimeException if an error occurs creating the record
      */
     public function create( SPIBinaryFileCreateStruct $binaryFileCreateStruct )
     {
@@ -79,12 +78,13 @@ SQL
         }
         catch ( DBALException $e )
         {
-            throw $e;
+            throw new RuntimeException( "A DBAL error occured while writing $path", 0, $e );
         }
 
         if ( $stmt->rowCount() == 0 )
         {
-            throw new \Exception("@TODO: unexpected rowCount " . $stmt->rowCount());
+            // @todo BadStateException
+            throw new \RuntimeException( "Unexpected rowCount " . $stmt->rowCount() );
         }
 
         $spiBinaryFile = new SPIBinaryFile();
@@ -108,13 +108,14 @@ SQL
     {
         $path = $this->addPrefix( $spiBinaryFileId );
 
-        // @todo delete or expire ? legacy_mode option ?
+        // Unlike the legacy cluster, the file is directly deleted. It was inherited from the DB cluster anyway
         $stmt = $this->db->prepare( 'DELETE FROM ezdfsfile WHERE name_hash LIKE :name_hash' );
         $stmt->bindValue( 'name_hash', md5( $path ) );
         $stmt->execute();
 
         if ( $stmt->rowCount() != 1 )
         {
+            // Is this really necessary ?
             throw new BinaryFileNotFoundException( $path );
         }
     }
