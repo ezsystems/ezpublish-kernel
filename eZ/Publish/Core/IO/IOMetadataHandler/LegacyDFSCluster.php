@@ -92,6 +92,7 @@ SQL
         $spiBinaryFile->mimeType = $binaryFileCreateStruct->mimeType;
         $spiBinaryFile->mtime = $binaryFileCreateStruct->mtime;
         $spiBinaryFile->size = $binaryFileCreateStruct->size;
+        $spiBinaryFile->mimeType = $binaryFileCreateStruct->mimeType;
 
         return $spiBinaryFile;
     }
