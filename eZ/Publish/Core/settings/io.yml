@@ -6,6 +6,7 @@ parameters:
 services:
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
+        lazy: true
         arguments:
             - @ezpublish.core.io.metadata_handler
             - @ezpublish.core.io.binarydata_handler
