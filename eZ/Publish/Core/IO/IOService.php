@@ -275,13 +275,9 @@ class IOService implements IOServiceInterface
      * @param string $externalId
      * @return string
      */
-    public function getInternalPath( $externalId )
+    public function getInternalPath( $spiBinaryFileId )
     {
-        // @todo fix if still required
-        /*$path = $this->metadataHandler->getInternalPath(
-            $this->getPrefixedUri( $externalId )
-        );*/
-        return $externalId;
+        return $this->loadBinaryFile( $spiBinaryFileId )->uri;
     }
 
     /**
@@ -291,9 +287,7 @@ class IOService implements IOServiceInterface
      */
     public function getExternalPath( $internalId )
     {
-        // @todo fix if still required
-        return $internalId;
-        // return $this->removeUriPrefix( $this->ioHandler->getExternalPath( $internalId ) );
+        return $this->loadBinaryFileByUri( $internalId )->id;
     }
 
     /**
@@ -317,20 +311,6 @@ class IOService implements IOServiceInterface
     public function getMimeType( $binaryFileId )
     {
         return $this->metadataHandler->getMimeType( $this->getPrefixedUri( $binaryFileId ) );
-    }
-
-    /**
-     * @param MetadataHandler $metadataHandler
-     * @param BinaryFile      $binaryFile
-     *
-     * @return array
-     */
-    public function getMetadata( MetadataHandler $metadataHandler, BinaryFile $binaryFile )
-    {
-        return $this->ioHandler->getMetadata(
-            $metadataHandler,
-            $this->getPrefixedUri( $binaryFile->id )
-        );
     }
 
     public function exists( $binaryFileId )

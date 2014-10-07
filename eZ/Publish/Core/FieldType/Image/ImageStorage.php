@@ -167,7 +167,6 @@ class ImageStorage extends GatewayBasedStorage
 
             $field->value->data = array_merge(
                 $field->value->externalData,
-                // $this->IOService->getMetadata( $this->imageSizeMetadataHandler, $binaryFile ),
                 $contentMetaData
             );
 

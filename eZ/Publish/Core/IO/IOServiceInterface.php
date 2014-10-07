@@ -33,14 +33,6 @@ interface IOServiceInterface
     public function getExternalPath( $internalId );
 
     /**
-     * @param MetadataHandler $metadataHandler
-     * @param BinaryFile $binaryFile
-     *
-     * @return array
-     */
-    public function getMetadata( MetadataHandler $metadataHandler, BinaryFile $binaryFile );
-
-    /**
      * Creates a BinaryFileCreateStruct object from $localFile
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException When given a non existing / unreadable file

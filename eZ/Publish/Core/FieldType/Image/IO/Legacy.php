@@ -112,11 +112,6 @@ class Legacy implements IOServiceInterface
         return $this->publishedIOService->getExternalPath( $internalId );
     }
 
-    public function getMetadata( MetadataHandler $metadataHandler, BinaryFile $binaryFile )
-    {
-        return $this->publishedIOService->getMetadata( $metadataHandler, $binaryFile );
-    }
-
     public function newBinaryCreateStructFromLocalFile( $localFile )
     {
         return $this->publishedIOService->newBinaryCreateStructFromLocalFile( $localFile );

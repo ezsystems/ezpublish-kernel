@@ -66,27 +66,6 @@ class LegacyTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetMetadata()
-    {
-        $metadataHandler = $this->getMock( 'eZ\Publish\Core\IO\MetadataHandler' );
-        $binaryFile = new BinaryFile();
-
-        $this->publishedIoServiceMock
-            ->expects( $this->once() )
-            ->method( 'getMetadata' )
-            ->with( $metadataHandler, $binaryFile )
-            ->will( $this->returnValue( array() ) );
-
-        $this->draftIoServiceMock
-            ->expects( $this->never() )
-            ->method( 'getMetadata' );
-
-        self::assertEquals(
-            array(),
-            $this->service->getMetadata( $metadataHandler, $binaryFile )
-        );
-    }
-
     public function testNewBinaryCreateStructFromLocalFile()
     {
         $path = '/tmp/file.png';

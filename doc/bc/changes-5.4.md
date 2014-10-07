@@ -67,7 +67,6 @@ Changes affecting version compatibility with former or future versions.
   If you have code that expects exception(load) or no content (search) if not a specific language
   exists, you should then review your code and consider setting these properties to false.
 
-
 ## Deprecations
 
 * `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.
@@ -85,6 +84,15 @@ Changes affecting version compatibility with former or future versions.
 * `imagemagick` settings at the application level (`convert` path and filters definitions) have been deprecated.
   They will be removed in v6.0.
 
+* `mimeType` property from BinaryFile is deprecated. The value might not be present for some IO handlers.
+  Use `getMimeType` from the IOService instead.
+
+* `IOService::getExternalPath()` and `IOService::getInternalPath()` have been removed.
+  `getInternalPath()`, that returned the handler level path, can be obtained using the uri property.
+
+  and by getting the URI from the returned value object.
+  `getExternalPath()`, that returns the id seen from the IOService, can be replaced by `IOService::loadBinaryFileByUri()`.
+
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).
@@ -98,3 +106,7 @@ updated list of known issues (missing features, breaks and errata).
   * `border/width`. Not applicable any more.
   * `colorspace/transparent`
   * `colorspace`
+
+* `IOService::getMetadata()` has been removed
+  ImageSize metadata is now handled at fieldtype level, in the Legacy
+  conversion, and upon upload on the local file.
