@@ -53,7 +53,7 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->filterConfiguration = new FilterConfiguration();
         $this->filterConfiguration->setConfigResolver( $this->configResolver );
-        $this->imageResolver = new IORepositoryResolver( $this->ioService, $this->requestContext, $this->configResolver, $this->filterConfiguration );
+        $this->imageResolver = new IORepositoryResolver( $this->ioService, $this->requestContext, $this->filterConfiguration );
     }
 
     /**
@@ -163,30 +163,6 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
                 IORepositoryResolver::VARIATION_ORIGINAL, 'https://doctor.who:1234',
                 'https://doctor.who:1234/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman.png'
             ),
-        );
-    }
-
-    public function testResolveCustomDeliveryUrl()
-    {
-        $deliveryUrl = 'http://doctor.who:8080';
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'image.delivery_url' )
-            ->will( $this->returnValue( $deliveryUrl ) );
-
-        $path = 'Tardis/bigger/in-the-inside/RiverSong.jpg';
-        $filter = 'thumbnail';
-        $storageDir = '/var/doctorwho/storage/images';
-        $this->ioService
-            ->expects( $this->once() )
-            ->method( 'loadBinaryFile' )
-            ->with( $path )
-            ->will( $this->returnValue( new BinaryFile( array( 'uri' => "$storageDir/$path" ) ) ) );
-
-        $this->assertSame(
-            "$deliveryUrl$storageDir/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg",
-            $this->imageResolver->resolve( $path, $filter )
         );
     }
 

@@ -40,7 +40,8 @@
         "mikey179/vfsStream": "1.1.0",
         "phpunit/phpunit": "~4.1.3",
         "matthiasnoback/symfony-dependency-injection-test": "0.*",
-        "mockery/mockery": "dev-master"
+        "mockery/mockery": "dev-master",
+        "symfony/assetic-bundle": "~2.3"
     },
     "replace": {
         "ezsystems/ezpublish": "*",
