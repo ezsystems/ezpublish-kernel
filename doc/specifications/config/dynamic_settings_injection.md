@@ -21,6 +21,14 @@ This feature also introduces a *DynamicSettingParser* service that can be used f
 This service has `ezpublish.config.dynamic_setting.parser` for ID and implements
 `eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParserInterface`.
 
+## Limitations
+A few limitations still remain:
+
+* It is not possible to concatenate a dynamic setting, either with other dynamic settings or with container parameters.
+  Workaround is to use separate arguments/setters.
+* It is not possible to define an array of options having dynamic settings. They will not be parsed. Workaround is to use
+  separate arguments/setters.
+
 ## Example
 ### Injecting an eZ parameter
 Defining a simple service needing `languages` parameter (i.e. prioritized languages).
