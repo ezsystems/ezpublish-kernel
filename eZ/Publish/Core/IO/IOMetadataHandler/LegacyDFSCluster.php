@@ -19,8 +19,9 @@ use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use RuntimeException;
 
 /**
- * @todo Describe
- * @todo Rename to LegacyStorage ?
+ * Manages IO metadata in a mysql table, ezdfsfile.
+ *
+ * It supports locking, and will prevent simultaneous writes to the same file.
  */
 class LegacyDFSCluster implements IOMetadataHandler
 {

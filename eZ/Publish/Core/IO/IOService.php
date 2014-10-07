@@ -275,9 +275,9 @@ class IOService implements IOServiceInterface
      * @param string $externalId
      * @return string
      */
-    public function getInternalPath( $spiBinaryFileId )
+    public function getInternalPath( $binaryFileId )
     {
-        return $this->loadBinaryFile( $spiBinaryFileId )->uri;
+        return $this->binarydataHandler->getUri( $this->getPrefixedUri( $binaryFileId ) );
     }
 
     /**
