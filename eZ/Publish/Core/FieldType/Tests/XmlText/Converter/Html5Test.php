@@ -335,4 +335,19 @@ class Html5Test extends PHPUnit_Framework_TestCase
 '
         );
     }
+
+    public function testEmbedRendering()
+    {
+        $dom = new DomDocument();
+        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><embed view="embed" size="small" align="left" object_id="42"/>First paragraph</paragraph><paragraph>Second paragraph</paragraph></section>' );
+
+        $html5 = new Html5( $this->getDefaultStylesheet(), array() );
+        $result = $html5->convert( $dom );
+
+        $this->assertEquals(
+            trim( $result ),
+            '<div class="object-left"></div><p>First paragraph</p><p>Second paragraph</p>'
+        );
+    }
 }
