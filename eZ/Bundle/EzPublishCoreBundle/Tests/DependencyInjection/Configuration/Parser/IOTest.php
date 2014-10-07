@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\Parser;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Common;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\IO;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use Symfony\Component\Yaml\Yaml;
@@ -24,7 +25,7 @@ class IOTest extends AbstractParserTestCase
 
     protected function getContainerExtensions()
     {
-        return array( new EzPublishCoreExtension( array( new IO() ) ) );
+        return array( new EzPublishCoreExtension( array( new Common(), new IO() ) ) );
     }
 
     protected function getMinimalConfiguration()
@@ -32,7 +33,7 @@ class IOTest extends AbstractParserTestCase
         return $this->minimalConfig = Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_minimal.yml' ) );
     }
 
-    public function testDefaultHandlersConfig()
+    public function testHandlersConfig()
     {
         $config = array(
             'system' => array(
@@ -49,5 +50,29 @@ class IOTest extends AbstractParserTestCase
 
         $this->assertConfigResolverParameterValue( 'io.metadata_handler', 'cluster', 'ezdemo_site' );
         $this->assertConfigResolverParameterValue( 'io.binarydata_handler', 'cluster', 'ezdemo_site' );
+    }
+
+    public function testExtraVariables()
+    {
+        $config = array(
+            'system' => array(
+                'ezdemo_site'=> array(
+                    'var_dir' => 'var/ezdemo_site'
+                )
+            )
+        );
+
+        $this->load( $config );
+
+        $this->assertConfigResolverParameterValue(
+            'io_root_dir',
+            '%ezpublish_legacy.root_dir%/var/ezdemo_site/storage',
+            'ezdemo_site'
+        );
+        $this->assertConfigResolverParameterValue(
+            'io_prefix',
+            'var/ezdemo_site/storage',
+            'ezdemo_site'
+        );
     }
 }
