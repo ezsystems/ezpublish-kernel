@@ -28,6 +28,9 @@ A few limitations still remain:
   Workaround is to use separate arguments/setters.
 * It is not possible to define an array of options having dynamic settings. They will not be parsed. Workaround is to use
   separate arguments/setters.
+* Injecting dynamic settings in request listeners is **not recommended**, as it won't be resolved with the correct scope 
+  (request listeners are **instantiated before SiteAccess match**). Workaround is to inject the ConfigResolver instead, and
+  resolving the your setting in your `onKernelRequest` method (or equivalent).
 
 ## Example
 ### Injecting an eZ parameter
