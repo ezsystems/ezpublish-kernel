@@ -65,3 +65,11 @@ services:
         class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
         arguments:
             - %storage_dir%
+
+    ezpublish.core.io.metadata_handler.legacy_dfs_cluster:
+        abstract: true
+        class: eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster
+        arguments:
+            - ~
+        tags:
+            - { name: ezpublish.io.metadata_handler, alias: legacy_dfs_cluster }
