@@ -110,6 +110,29 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         );
     }
 
+    public function testLegacyDFSClusterMetadataHandler()
+    {
+        $this->container->setParameter(
+            'ez_io.metadata_handlers',
+            array( 'legacy_dfs_cluster' => array( 'my_handler' => array( 'connection' => 'doctrine.dbal.cluster_connection' ) ) )
+        );
+
+        $this->container->setDefinition( 'doctrine.dbal.cluster_connection', new Definition() );
+
+        $this->compile();
+
+        $this->assertContainerBuilderHasServiceDefinitionWithParent(
+            'ezpublish.core.io.metadata_handler.legacy_dfs_cluster.my_handler',
+            'ezpublish.core.io.metadata_handler.legacy_dfs_cluster'
+        );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            'ezpublish.core.io.metadata_handler.legacy_dfs_cluster.my_handler',
+            0,
+            'doctrine.dbal.cluster_connection'
+        );
+    }
+
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      * @expectedExceptionMessage Unknown handler

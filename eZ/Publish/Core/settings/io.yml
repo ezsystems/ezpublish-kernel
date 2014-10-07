@@ -75,3 +75,10 @@ services:
         arguments:
             - @ezpublish.core.io.default_url_decorator
             - @ezpublish.core.io.image_fieldtype.legacy_url_decorator
+
+    ezpublish.core.io.metadata_handler.legacy_dfs_cluster:
+        abstract: true
+        class: eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster
+        arguments:
+            - ~
+            - @ezpublish.core.io.image_fieldtype.legacy_url_decorator
