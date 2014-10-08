@@ -13,6 +13,7 @@ use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\IOBinarydataHandler;
 use eZ\Publish\Core\IO\UrlDecorator;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException as FlysystemNotFoundException;
 use League\Flysystem\FilesystemInterface;
@@ -29,7 +30,6 @@ class Flysystem implements IOBinaryDataHandler
 
     public function __construct( FilesystemInterface $filesystem, UrlDecorator $urlDecorator = null )
     {
-        // $filesystem = new FileSystem( $adapter, null, [ 'visibility' => AdapterInterface::VISIBILITY_PUBLIC ] );
         $this->filesystem = $filesystem;
         $this->urlDecorator = $urlDecorator;
     }
@@ -50,7 +50,10 @@ class Flysystem implements IOBinaryDataHandler
             $this->filesystem->writeStream(
                 $binaryFileCreateStruct->id,
                 $binaryFileCreateStruct->getInputStream(),
-                [ 'mimetype' => $binaryFileCreateStruct->mimeType ]
+                array(
+                    'mimetype' => $binaryFileCreateStruct->mimeType,
+                    'visibility' => AdapterInterface::VISIBILITY_PUBLIC
+                )
             );
         }
         catch ( FileExistsException $e )
@@ -58,7 +61,10 @@ class Flysystem implements IOBinaryDataHandler
             $this->filesystem->updateStream(
                 $binaryFileCreateStruct->id,
                 $binaryFileCreateStruct->getInputStream(),
-                [ 'mimetype' => $binaryFileCreateStruct->mimeType ]
+                array(
+                    'mimetype' => $binaryFileCreateStruct->mimeType,
+                    'visibility' => AdapterInterface::VISIBILITY_PUBLIC
+                )
             );
         }
     }
