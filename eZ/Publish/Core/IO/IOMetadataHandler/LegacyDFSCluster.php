@@ -223,7 +223,18 @@ SQL
 
     public function getMimeType( $spiBinaryFileId )
     {
-        $return $this->load( $spiBinaryFileId )->id;
+        $stmt = $this->db->prepare( 'SELECT * FROM ezdfsfile WHERE name_hash LIKE ? AND expired != 1 AND mtime > 0' );
+        $stmt->bindValue( 1, md5( $this->addPrefix( $spiBinaryFileId ) ) );
+        $stmt->execute();
+
+        if ( $stmt->rowCount() == 0 )
+        {
+            throw new BinaryFileNotFoundException( $spiBinaryFileId );
+        }
+
+        $row = $stmt->fetch( \PDO::FETCH_ASSOC );
+
+        return $row['datatype'];
     }
 
     /**
