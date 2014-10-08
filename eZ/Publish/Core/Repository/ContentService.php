@@ -401,7 +401,6 @@ class ContentService implements ContentServiceInterface
                     $languages[] = $spiContentInfo->mainLanguageCode;
                     $languages = array_unique( $languages );
                 }
-
             }
 
             $spiContent = $this->persistenceHandler->contentHandler()->load(

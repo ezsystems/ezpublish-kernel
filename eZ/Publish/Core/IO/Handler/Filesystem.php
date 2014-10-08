@@ -83,7 +83,6 @@ class Filesystem implements IOHandlerInterface
         {
             $storageDirectory = $options['root_dir'] . '/' . $options['storage_dir'];
             $this->rootDirectory = $options['root_dir'];
-
         }
         else
         {
