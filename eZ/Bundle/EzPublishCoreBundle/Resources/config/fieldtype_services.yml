@@ -253,12 +253,12 @@ services:
     ezpublish.fieldType.ezimage.io_service.published:
         parent: ezpublish.core.io.service
         calls:
-            - [ setPrefix, [ $image.published_images_dir$ ] ]
+            - [ setPrefix, [ "$image.published_images_dir$" ] ]
 
     ezpublish.fieldType.ezimage.io_service.draft:
         parent: ezpublish.core.io.service
         calls:
-            - [ setPrefix, [ $image.versioned_images_dir$ ] ]
+            - [ setPrefix, [ "$image.versioned_images_dir$" ] ]
 
     ezpublish.fieldType.ezimage.pathGenerator:
         class: %ezpublish.fieldType.ezimage.pathGenerator.class%
@@ -267,7 +267,7 @@ services:
     ezpublish.fieldType.ezbinaryfile.io_service:
         parent: ezpublish.core.io.service
         calls:
-            - [ setPrefix, [ $binary_dir ] ]
+            - [ setPrefix, [ "$binary_dir$" ] ]
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
