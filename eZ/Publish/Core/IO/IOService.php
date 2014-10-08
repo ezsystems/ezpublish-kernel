@@ -55,9 +55,7 @@ class IOService implements IOServiceInterface
         $this->metadataHandler = $metadataHandler;
         $this->binarydataHandler = $binarydataHandler;
         $this->mimeTypeDetector = $mimeTypeDetector;
-
-        // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array();
+        $this->settings = $settings;
     }
 
     public function setPrefix( $prefix )
