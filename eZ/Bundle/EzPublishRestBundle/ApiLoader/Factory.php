@@ -4,7 +4,6 @@ namespace eZ\Bundle\EzPublishRestBundle\ApiLoader;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
-use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -44,14 +43,11 @@ class Factory
         $this->request = $request;
     }
 
-    public function getBinaryFileFieldTypeProcessor( IOService $binaryFileIOService )
+    public function getBinaryFileFieldTypeProcessor()
     {
-        $urlPrefix = isset( $this->request ) ? $this->request->getUriForPath( '/' ) : '';
+        $hostPrefix = isset( $this->request ) ? rtrim( $this->request->getUriForPath( '/' ), '/' ) : '';
 
-        return new FieldTypeProcessor\BinaryProcessor(
-            sys_get_temp_dir(),
-            $urlPrefix . $binaryFileIOService->getInternalPath( '{path}' )
-        );
+        return new FieldTypeProcessor\BinaryProcessor( sys_get_temp_dir(), $hostPrefix );
     }
 
     /**

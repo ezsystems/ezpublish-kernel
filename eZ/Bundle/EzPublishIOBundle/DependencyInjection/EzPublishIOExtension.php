@@ -58,7 +58,7 @@ class EzPublishIOExtension extends Extension
             {
                 foreach ( $handlers as $handlerName => $handlerConfig )
                 {
-                    $this->registerBinarydataHandler( $handlerType, $handlerName, $handlerConfig, $container );
+                    $this->registerBinarydataHandler( $handlerType, $handlerName, $handlerConfig );
                 }
             }
         }
@@ -69,7 +69,7 @@ class EzPublishIOExtension extends Extension
             {
                 foreach ( $handlers as $handlerName => $handlerConfig )
                 {
-                    $this->registerMetadataHandler( $handlerType, $handlerName, $handlerConfig, $container );
+                    $this->registerMetadataHandler( $handlerType, $handlerName, $handlerConfig );
                 }
             }
         }
@@ -78,7 +78,7 @@ class EzPublishIOExtension extends Extension
         $container->setParameter( 'ez_io.binarydata_handlers', $this->binarydataHandlers );
     }
 
-    protected function registerBinaryDataHandler( $type, $name, array $config )
+    private function registerBinaryDataHandler( $type, $name, array $config )
     {
         if ( isset( $this->binarydataHandlers[$type] ) )
         {
@@ -88,7 +88,7 @@ class EzPublishIOExtension extends Extension
         $this->binarydataHandlers[$type][$name] = $config;
     }
 
-    protected function registerMetaDataHandler( $type, $name, array $config )
+    private function registerMetaDataHandler( $type, $name, array $config )
     {
         if ( isset( $this->metadataHandlers[$type] ) )
         {

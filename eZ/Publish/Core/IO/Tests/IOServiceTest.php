@@ -368,40 +368,6 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
         $this->getIOService()->deleteBinaryFile( $binaryFile );
     }
 
-    /**
-     * @depends testLoadBinaryFile
-     */
-    public function testGetExternalPath()
-    {
-//        $id = "my/path.png";
-//        $spiId = $this->getPrefixedUri( $id );
-//        echo "spiId: $spiId\n";
-//        $uri = $spiId;
-//
-//        $spiBinaryFile = new SPIBinaryFile;
-//        $spiBinaryFile->id = $spiId;
-//        $spiBinaryFile->size = 12345;
-//        $spiBinaryFile->mimeType = 'application/any';
-//        $spiBinaryFile->uri = $spiId;
-//
-//        $this->metadataHandlerMock
-//            ->expects( $this->once() )
-//            ->method( 'loadBinaryFileByUri' )
-//            ->with( $uri )
-//            ->will( $this->returnValue( $spiBinaryFile ) );
-//
-//        $this->binarydataHandlerMock
-//            ->expects( $this->once() )
-//            ->method( 'getIdFromUri' )
-//            ->with( $spiId )
-//            ->will( $this->returnValue( $spiId ) );
-//
-//        self::assertEquals(
-//            $uri,
-//            $this->getIOService()->getExternalPath( $uri )
-//        );
-    }
-
     public function getPrefixedUri( $uri )
     {
         return self::PREFIX . '/' . $uri;

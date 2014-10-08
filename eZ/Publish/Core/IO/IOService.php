@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\IO;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
-use eZ\Publish\Core\IO\Handler;
+use eZ\Publish\Core\IO\Exception\IOException;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
@@ -21,6 +21,7 @@ use eZ\Publish\SPI\IO\MimeTypeDetector;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\IO\MetadataHandler;
+use Exception;
 
 /**
  * The io service for managing binary files
@@ -49,14 +50,13 @@ class IOService implements IOServiceInterface
         IOMetadataHandler $metadataHandler,
         IOBinarydataHandler $binarydataHandler,
         MimeTypeDetector $mimeTypeDetector,
-        array $settings = array() )
+        array $settings = array()
+    )
     {
         $this->metadataHandler = $metadataHandler;
         $this->binarydataHandler = $binarydataHandler;
         $this->mimeTypeDetector = $mimeTypeDetector;
-
-        // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array();
+        $this->settings = $settings;
     }
 
     public function setPrefix( $prefix )
@@ -158,9 +158,9 @@ class IOService implements IOServiceInterface
         {
             $this->binarydataHandler->create( $spiBinaryCreateStruct );
         }
-        catch ( \Exception $e )
+        catch ( Exception $e )
         {
-            throw new \Exception( "@todo" );
+            throw new IOException( "An error occured creating binarydata", $e );
         }
 
         $spiBinaryFile = $this->metadataHandler->create( $spiBinaryCreateStruct );

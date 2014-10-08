@@ -7,10 +7,16 @@
  */
 namespace eZ\Publish\Core\IO\Exception;
 
-class BinarydataException
-{
-    public function __construct( $internalId )
-    {
+use Exception;
+use RuntimeException;
 
+/**
+ * General IO exception
+ */
+class IOException extends RuntimeException
+{
+    public function __construct( $message, Exception $e = null )
+    {
+        parent::__construct( $message, 0, $e );
     }
 }
