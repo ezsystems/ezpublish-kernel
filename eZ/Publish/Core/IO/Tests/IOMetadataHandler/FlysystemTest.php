@@ -135,6 +135,6 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
             ->with( 'file.txt' )
             ->will( $this->returnValue( 'text/plain' ) );
 
-        self::assertEquals( 'text/plain', $this->handler->getMimeType( 'file.txt') );
+        self::assertEquals( 'text/plain', $this->handler->getMimeType( 'file.txt' ) );
     }
 }

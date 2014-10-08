@@ -8,8 +8,11 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle;
 
+use DateTime;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
+use LogicException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,6 +30,7 @@ class BinaryStreamResponse extends Response
     protected $ioService;
 
     protected $offset;
+
     protected $maxlen;
 
     /**
@@ -45,11 +49,12 @@ class BinaryStreamResponse extends Response
     {
         $this->ioService = $ioService;
 
-        parent::__construct(null, $status, $headers);
+        parent::__construct( null, $status, $headers );
 
-        $this->setFile($binaryFile, $contentDisposition, $autoLastModified);
+        $this->setFile( $binaryFile, $contentDisposition, $autoLastModified );
 
-        if ($public) {
+        if ( $public )
+        {
             $this->setPublic();
         }
     }
@@ -63,19 +68,19 @@ class BinaryStreamResponse extends Response
      * @param bool                $autoLastModified
      *
      * @return BinaryFileResponse
-     *
-     * @throws FileException
      */
     public function setFile($file, $contentDisposition = null, $autoLastModified = true)
     {
         $this->file = $file;
 
-        if ($autoLastModified) {
+        if ( $autoLastModified )
+        {
             $this->setAutoLastModified();
         }
 
-        if ($contentDisposition) {
-            $this->setContentDisposition($contentDisposition);
+        if ( $contentDisposition )
+        {
+            $this->setContentDisposition( $contentDisposition );
         }
 
         return $this;
@@ -96,7 +101,7 @@ class BinaryStreamResponse extends Response
      */
     public function setAutoLastModified()
     {
-        $this->setLastModified( \DateTime::createFromFormat( 'U', $this->file->mtime->getTimestamp() ) );
+        $this->setLastModified( DateTime::createFromFormat( 'U', $this->file->mtime->getTimestamp() ) );
 
         return $this;
     }
@@ -104,20 +109,21 @@ class BinaryStreamResponse extends Response
     /**
      * Sets the Content-Disposition header with the given filename.
      *
-     * @param string $disposition      ResponseHeaderBag::DISPOSITION_INLINE or ResponseHeaderBag::DISPOSITION_ATTACHMENT
-     * @param string $filename         Optionally use this filename instead of the real name of the file
+     * @param string $disposition ResponseHeaderBag::DISPOSITION_INLINE or ResponseHeaderBag::DISPOSITION_ATTACHMENT
+     * @param string $filename Optionally use this filename instead of the real name of the file
      * @param string $filenameFallback A fallback filename, containing only ASCII characters. Defaults to an automatically encoded filename
      *
-     * @return BinaryFileResponse
+     * @return BinaryStreamResponse
      */
-    public function setContentDisposition($disposition, $filename = '', $filenameFallback = '')
+    public function setContentDisposition( $disposition, $filename = '', $filenameFallback = '' )
     {
-        if ($filename === '') {
+        if ( $filename === '' )
+        {
             $filename = $this->file->id;
         }
 
-        $dispositionHeader = $this->headers->makeDisposition($disposition, $filename, $filenameFallback);
-        $this->headers->set('Content-Disposition', $dispositionHeader);
+        $dispositionHeader = $this->headers->makeDisposition( $disposition, $filename, $filenameFallback );
+        $this->headers->set( 'Content-Disposition', $dispositionHeader );
 
         return $this;
     }
@@ -125,52 +131,63 @@ class BinaryStreamResponse extends Response
     /**
      * {@inheritdoc}
      */
-    public function prepare(Request $request)
+    public function prepare( Request $request )
     {
-        $this->headers->set('Content-Length', $this->file->size);
-        $this->headers->set('Accept-Ranges', 'bytes');
-        $this->headers->set('Content-Transfer-Encoding', 'binary');
+        $this->headers->set( 'Content-Length', $this->file->size );
+        $this->headers->set( 'Accept-Ranges', 'bytes' );
+        $this->headers->set( 'Content-Transfer-Encoding', 'binary' );
 
-        if (!$this->headers->has('Content-Type')) {
-            $this->headers->set('Content-Type', $this->file->mimeType ?: 'application/octet-stream');
+        if ( !$this->headers->has( 'Content-Type' ) )
+        {
+            $this->headers->set( 'Content-Type', $this->file->mimeType ?: 'application/octet-stream' );
         }
 
-        if ('HTTP/1.0' != $request->server->get('SERVER_PROTOCOL')) {
-            $this->setProtocolVersion('1.1');
+        if ( 'HTTP/1.0' != $request->server->get( 'SERVER_PROTOCOL' ) )
+        {
+            $this->setProtocolVersion( '1.1' );
         }
 
-        $this->ensureIEOverSSLCompatibility($request);
+        $this->ensureIEOverSSLCompatibility( $request );
 
         $this->offset = 0;
         $this->maxlen = -1;
 
-        if ($request->headers->has('Range')) {
+        if ( $request->headers->has( 'Range' ) )
+        {
             // Process the range headers.
-            if (!$request->headers->has('If-Range') || $this->getEtag() == $request->headers->get('If-Range')) {
-                $range = $request->headers->get('Range');
+            if ( !$request->headers->has( 'If-Range' ) || $this->getEtag() == $request->headers->get( 'If-Range' ) )
+            {
+                $range = $request->headers->get( 'Range' );
                 $fileSize = $this->file->size;
 
-                list($start, $end) = explode('-', substr($range, 6), 2) + array(0);
+                list( $start, $end ) = explode( '-', substr( $range, 6 ), 2 ) + array( 0 );
 
-                $end = ('' === $end) ? $fileSize - 1 : (int) $end;
+                $end = ( '' === $end ) ? $fileSize - 1 : (int)$end;
 
-                if ('' === $start) {
+                if ( '' === $start )
+                {
                     $start = $fileSize - $end;
                     $end = $fileSize - 1;
-                } else {
-                    $start = (int) $start;
+                }
+                else
+                {
+                    $start = (int)$start;
                 }
 
-                if ($start <= $end) {
-                    if ($start < 0 || $end > $fileSize - 1) {
-                        $this->setStatusCode(416);
-                    } elseif ($start !== 0 || $end !== $fileSize - 1) {
+                if ( $start <= $end )
+                {
+                    if ( $start < 0 || $end > $fileSize - 1 )
+                    {
+                        $this->setStatusCode( 416 );
+                    }
+                    else if ( $start !== 0 || $end !== $fileSize - 1 )
+                    {
                         $this->maxlen = $end < $fileSize ? $end - $start + 1 : -1;
                         $this->offset = $start;
 
-                        $this->setStatusCode(206);
-                        $this->headers->set('Content-Range', sprintf('bytes %s-%s/%s', $start, $end, $fileSize));
-                        $this->headers->set('Content-Length', $end - $start + 1);
+                        $this->setStatusCode( 206 );
+                        $this->headers->set( 'Content-Range', sprintf( 'bytes %s-%s/%s', $start, $end, $fileSize ) );
+                        $this->headers->set( 'Content-Length', $end - $start + 1 );
                     }
                 }
             }
@@ -184,32 +201,35 @@ class BinaryStreamResponse extends Response
      */
     public function sendContent()
     {
-        if (!$this->isSuccessful()) {
+        if ( !$this->isSuccessful() )
+        {
             parent::sendContent();
 
             return;
         }
 
-        if (0 === $this->maxlen) {
+        if ( 0 === $this->maxlen )
+        {
             return;
         }
 
-        $out = fopen('php://output', 'wb');
+        $out = fopen( 'php://output', 'wb' );
         $in = $this->ioService->getFileInputStream( $this->file );
-        stream_copy_to_stream($in, $out, $this->maxlen, $this->offset);
+        stream_copy_to_stream( $in, $out, $this->maxlen, $this->offset );
 
-        fclose($out);
+        fclose( $out );
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws \LogicException when the content is not null
+     * @throws LogicException when the content is not null
      */
     public function setContent($content)
     {
-        if (null !== $content) {
-            throw new \LogicException('The content cannot be set on a BinaryFileResponse instance.');
+        if ( null !== $content )
+        {
+            throw new LogicException( 'The content cannot be set on a BinaryStreamResponse instance.' );
         }
     }
 

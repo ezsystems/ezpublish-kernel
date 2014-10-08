@@ -139,7 +139,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
                     function ( $subject ) use ( $id )
                     {
                         if ( !$subject instanceof \eZ\Publish\SPI\IO\BinaryFileCreateStruct )
-                            return  false;
+                            return false;
                         return $subject->id == $id;
                     }
                 )
