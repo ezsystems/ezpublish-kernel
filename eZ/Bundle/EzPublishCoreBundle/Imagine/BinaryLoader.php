@@ -43,7 +43,7 @@ class BinaryLoader implements LoaderInterface
         try
         {
             $binaryFile = $this->ioService->loadBinaryFile( $path );
-            $mimeType = $binaryFile->mimeType ?: $this->ioService->getMimeType( $path );
+            $mimeType = $this->ioService->getMimeType( $path );
         }
         catch ( NotFoundException $e )
         {

@@ -1,5 +1,4 @@
 parameters:
-    ezpublish.core.io.stream_file_listener.class: eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener
     ezpublish.core.io.flysystem.default_adapter.class: League\Flysystem\Adapter\Local
     ezpublish.core.io.flysystem.storage_dir_url_decorator.class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
 
@@ -39,11 +38,3 @@ services:
         class: %ezpublish.core.io.flysystem.storage_dir_url_decorator.class%
         calls:
             - [ setPrefix, [ "$io_prefix$" ] ]
-
-    ezpublish.core.io.stream_file_listener:
-        class: %ezpublish.core.io.stream_file_listener.class%
-        arguments:
-            - @ezpublish.fieldtype.ezimage.io_service
-            - @ezpublish.config.resolver
-        tags:
-            - { name: kernel.event_subscriber }

@@ -32,8 +32,7 @@ class ImageVariation extends ValueObjectVisitor
         );
         $generator->endAttribute( 'href' );
 
-        // @todo installation subfolder
-        $generator->startValueElement( 'uri', "/" . $data->uri );
+        $generator->startValueElement( 'uri', $data->uri );
         $generator->endValueElement( 'uri' );
 
         if ( $data->mimeType )
