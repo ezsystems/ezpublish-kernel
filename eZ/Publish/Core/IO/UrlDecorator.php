@@ -8,21 +8,24 @@
  */
 namespace eZ\Publish\Core\IO;
 
+/**
+ * Modifies, both way, and URI.
+ */
 interface UrlDecorator
 {
     /**
-     * Modifies the id into an uri
+     * Decorates $uri.
      *
-     * @param string $url
-     * @return string
+     * @param string $uri
+     * @return string Decorated string
      */
-    public function decorate( $id );
+    public function decorate( $uri );
 
     /**
-     * Unmodifies an uri into an id
-     * @param $url
+     * Un-decorates decorated $uri
+     * @param $uri
      *
-     * @return mixed
+     * @return string Un-decorated string
      */
-    public function undecorate( $url );
+    public function undecorate( $uri );
 }
