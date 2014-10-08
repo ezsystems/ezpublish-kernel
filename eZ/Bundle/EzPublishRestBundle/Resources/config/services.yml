@@ -301,7 +301,7 @@ services:
         factory_service: ezpublish_rest.factory
         factory_method: getBinaryFileFieldTypeProcessor
         arguments:
-            - @ezpublish.fieldtype.ezbinaryfile.io_service
+            - @ezpublish.core.io.flysystem.default_url_decorator
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezbinaryfile }
 
