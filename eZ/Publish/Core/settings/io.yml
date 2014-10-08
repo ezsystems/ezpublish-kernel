@@ -42,6 +42,7 @@ services:
         class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
         arguments:
             - ~
+            - @ezpublish.core.io.flysystem.default_url_decorator
         tags:
             - { name: ezpublish.io.binarydata_handler, alias: flysystem }
 
@@ -51,8 +52,12 @@ services:
             - @ezpublish.core.io.flysystem.default_filesystem
             - @ezpublish.core.io.flysystem.default_url_decorator
 
-    ezpublish.core.io.flysystem.default_filesystem:
+    ezpublish.core.io.flysystem.base_filesystem:
         class: League\Flysystem\Filesystem
+        abstract: true
+
+    ezpublish.core.io.flysystem.default_filesystem:
+        parent: ezpublish.core.io.flysystem.base_filesystem
         arguments:
             - @ezpublish.core.io.flysystem.default_adapter
 

@@ -78,24 +78,49 @@ class IOConfigurationPass implements CompilerPassInterface
 
             foreach ( $typeArray as $name => $config )
             {
-                $id = sprintf( '%s.%s', $parentHandlerId, $name );
+                $handlerId = sprintf( '%s.%s', $parentHandlerId, $name );
 
-                $definition = $container->setDefinition( $id, new DefinitionDecorator( $parentHandlerId ) );
+                $definition = $container->setDefinition( $handlerId, new DefinitionDecorator( $parentHandlerId ) );
 
                 if ( $type === 'flysystem' )
                 {
-                    $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $config['adapter'] );
-                    if ( !$container->hasDefinition( $adapterId ) )
-                    {
-                        throw new InvalidConfigurationException( "Unknown flysystem adapter {$config['adapter']}" );
-                    }
-                    $definition->replaceArgument( 0, new Reference( $adapterId ) );
+                    $filesystemId = $this->createFlysystemFilesystem( $container, $name, $config['adapter'] );
+
+                    $definition = $container->setDefinition( $handlerId, new DefinitionDecorator( $parentHandlerId ) );
+                    $definition->replaceArgument( 0, new Reference( $filesystemId ) );
                 }
 
-                $handlersMap[$name] = $id;
+                $handlersMap[$name] = $handlerId;
             }
         }
 
         $factory->addMethodCall( 'setHandlersMap', array( $handlersMap ) );
+    }
+
+    /**
+     * Creates a flysystem filesystem $name service
+     *
+     * @param ContainerBuilder $container
+     * @param string $name filesystem name (nfs, local...)
+     * @param string $adapter adapter name
+     *
+     * @return string
+     */
+    private function createFlysystemFilesystem( ContainerBuilder $container, $name, $adapter )
+    {
+        $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $adapter );
+        if ( !$container->hasDefinition( $adapterId ) )
+        {
+            throw new InvalidConfigurationException( "Unknown flysystem adapter $adapter" );
+        }
+
+        $filesystemId = sprintf( 'ezpublish.core.io.flysystem.%s_filesystem', $name );
+        $definition = $container->setDefinition(
+            $filesystemId,
+            new DefinitionDecorator( 'ezpublish.core.io.flysystem.base_filesystem' )
+        );
+        $definition->setArguments( array( new Reference( $adapterId ) ) );
+
+        return $filesystemId;
     }
 }
