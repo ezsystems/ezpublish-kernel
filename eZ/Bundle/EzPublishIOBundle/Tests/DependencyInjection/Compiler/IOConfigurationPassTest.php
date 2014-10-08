@@ -85,6 +85,23 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
             'ezpublish.core.io.binarydata_handler.flysystem.my_handler',
             'ezpublish.core.io.binarydata_handler.flysystem'
         );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            'ezpublish.core.io.binarydata_handler.flysystem.my_handler',
+            0,
+            'ezpublish.core.io.flysystem.my_handler_filesystem'
+        );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithParent(
+            'ezpublish.core.io.flysystem.my_handler_filesystem',
+            'ezpublish.core.io.flysystem.base_filesystem'
+        );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            'ezpublish.core.io.flysystem.my_handler_filesystem',
+            0,
+            'oneup_flysystem.my_adapter_adapter'
+        );
     }
 
     public function testFlysystemMetadataHandler()
@@ -105,6 +122,17 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ezpublish.core.io.metadata_handler.flysystem.my_handler',
+            0,
+            'ezpublish.core.io.flysystem.my_handler_filesystem'
+        );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithParent(
+            'ezpublish.core.io.flysystem.my_handler_filesystem',
+            'ezpublish.core.io.flysystem.base_filesystem'
+        );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            'ezpublish.core.io.flysystem.my_handler_filesystem',
             0,
             'oneup_flysystem.my_adapter_adapter'
         );

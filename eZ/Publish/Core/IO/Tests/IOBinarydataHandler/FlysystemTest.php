@@ -43,7 +43,7 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo( $spiBinaryFileCreateStruct->id ),
                 $this->equalTo( $stream ),
-                $this->equalTo( ['mimetype' => 'image/png'] )
+                $this->equalTo( array( 'mimetype' => 'image/png', 'visibility' => 'public' ) )
             );
 
         $this->handler->create( $spiBinaryFileCreateStruct );
@@ -65,7 +65,7 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo( $spiBinaryFileCreateStruct->id ),
                 $this->equalTo( $stream ),
-                $this->equalTo( ['mimetype' => 'image/png'] )
+                $this->equalTo( array( 'mimetype' => 'image/png', 'visibility' => 'public' ) )
             )
             ->will( $this->throwException( new FileExistsException( 'prefix/my/file.png' ) ) );
 
@@ -75,7 +75,7 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo( $spiBinaryFileCreateStruct->id ),
                 $this->equalTo( $stream ),
-                $this->equalTo( ['mimetype' => 'image/png'] )
+                $this->equalTo( array( 'mimetype' => 'image/png', 'visibility' => 'public' ) )
             );
 
         $this->handler->create( $spiBinaryFileCreateStruct );
