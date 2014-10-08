@@ -16,7 +16,9 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This compiler pass will tweak the locale_listener service.
+ * This compiler pass will create the metadata and binarydata IO handlers depending on container configuration.
+ *
+ * @todo Refactor into two passes, since they're very very close.
  */
 class IOConfigurationPass implements CompilerPassInterface
 {
@@ -27,23 +29,24 @@ class IOConfigurationPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasParameter( 'ez_io.metadata_handlers' ) && !$container->hasParameter( 'ez_io.binarydata_handlers' ) )
-        {
-            return;
-        }
-
+        $ioMetadataHandlers = $container->hasParameter( 'ez_io.metadata_handlers' ) ?
+            $container->getParameter( 'ez_io.metadata_handlers' ) :
+            array();
         $this->processHandlers(
             $container,
             $container->getDefinition( 'ezpublish.core.io.metadata_handler.factory' ),
-            $container->getParameter( 'ez_io.metadata_handlers' ),
+            $ioMetadataHandlers,
             $container->getParameter( 'ez_io.metadata_handlers_map' ),
             'ezpublish.core.io.metadata_handler.flysystem.default'
         );
 
+        $ioBinarydataHandlers = $container->hasParameter( 'ez_io.binarydata_handlers' ) ?
+            $container->getParameter( 'ez_io.binarydata_handlers' ) :
+            array();
         $this->processHandlers(
             $container,
             $container->getDefinition( 'ezpublish.core.io.binarydata_handler.factory' ),
-            $container->getParameter( 'ez_io.binarydata_handlers' ),
+            $ioBinarydataHandlers,
             $container->getParameter( 'ez_io.binarydata_handlers_map' ),
             'ezpublish.core.io.binarydata_handler.flysystem.default'
         );
@@ -79,7 +82,7 @@ class IOConfigurationPass implements CompilerPassInterface
 
                 $definition = $container->setDefinition( $id, new DefinitionDecorator( $parentHandlerId ) );
 
-                if ( $type == 'flysystem' )
+                if ( $type === 'flysystem' )
                 {
                     $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $config['adapter'] );
                     if ( !$container->hasDefinition( $adapterId ) )

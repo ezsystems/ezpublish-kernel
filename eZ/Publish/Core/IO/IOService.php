@@ -49,7 +49,8 @@ class IOService implements IOServiceInterface
         IOMetadataHandler $metadataHandler,
         IOBinarydataHandler $binarydataHandler,
         MimeTypeDetector $mimeTypeDetector,
-        array $settings = array() )
+        array $settings = array()
+    )
     {
         $this->metadataHandler = $metadataHandler;
         $this->binarydataHandler = $binarydataHandler;
