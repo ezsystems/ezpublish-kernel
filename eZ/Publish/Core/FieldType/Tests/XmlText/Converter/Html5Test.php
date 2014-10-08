@@ -221,25 +221,29 @@ class Html5Test extends PHPUnit_Framework_TestCase
     public function testConvertReturnsNotValidXml()
     {
         $dom = new DomDocument();
-        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">This is only a literal with &lt;strong&gt;strong&lt;/strong&gt; text</literal></paragraph></section>' );
+        $dom->loadXML(
+            '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">This is only a literal with &lt;strong&gt;strong&lt;/strong&gt; text</literal></paragraph></section>'
+        );
         $html5 = new Html5( $this->getDefaultStylesheet(), array() );
         $result = $html5->convert( $dom );
 
         $this->assertEquals(
-             $result,
-             'This is only a literal with <strong>strong</strong> text
+            $result,
+            'This is only a literal with <strong>strong</strong> text
 '
         );
 
-        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">This is text followed by an iframe &lt;iframe src="http://www.ez.no" /&gt;</literal></paragraph></section>' );
+        $dom->loadXML(
+            '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">This is text followed by an iframe &lt;iframe src="http://www.ez.no" /&gt;</literal></paragraph></section>'
+        );
         $html5 = new Html5( $this->getDefaultStylesheet(), array() );
         $result = $html5->convert( $dom );
 
         $this->assertEquals(
-             $result,
-             'This is text followed by an iframe <iframe src="http://www.ez.no" />
+            $result,
+            'This is text followed by an iframe <iframe src="http://www.ez.no" />
 '
         );
     }
@@ -258,7 +262,8 @@ class Html5Test extends PHPUnit_Framework_TestCase
     public function testTableRendering()
     {
         $xmlDoc = new DomDocument();
-        $xmlDoc->loadXML( '<?xml version="1.0" encoding="utf-8"?>
+        $xmlDoc->loadXML(
+            '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
     <section>
         <header>Heading 2</header>
@@ -297,7 +302,8 @@ class Html5Test extends PHPUnit_Framework_TestCase
             </paragraph>
         </section>
     </section>
-</section>' );
+</section>'
+        );
 
         $xslDoc = new DOMDocument;
         $xslDoc->load( $this->getDefaultStylesheet() );
