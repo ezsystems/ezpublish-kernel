@@ -1,29 +1,34 @@
 <?php
 /**
- * File containing the SetupWizardContext class for the LegacyBundle.
+ * File containing the SetupWizard Context class for the LegacyBundle.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context;
+namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context\SetupWizard;
 
-use PHPUnit_Framework_Assert as Assertion;
+use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
+use eZ\Bundle\EzPublishLegacyBundle\Features\Context\Legacy;
 use Behat\Behat\Context\BehatContext;
 use Behat\Behat\Context\Step;
 use Behat\Gherkin\Node\TableNode;
+use PHPUnit_Framework_Assert as Assertion;
 
-class SetupWizardContext extends LegacyContext
+class Context extends Legacy
 {
     /**
      * @var array This var should have the association between title in setup and package
      */
     protected $packages = array();
 
-    public function __construct( $parameters )
+    /**
+     * Initialize parameters
+     */
+    public function __construct()
     {
-        parent::__construct( $parameters );
+        parent::__construct();
 
         $this->pageIdentifierMap += array(
             "setup wizard" => "/ezsetup",
@@ -41,25 +46,23 @@ class SetupWizardContext extends LegacyContext
      *
      * @AfterSuite
      */
-    static public function clearInstallation()
+    static function clearInstallation()
     {
         // @todo: implementation
     }
 
     /**
-     * @Given /^I am (?:at|on) (?:|the )"(?P<stepTitle>[^"]*)" step/
-     * @Then /^I see "(?P<stepTitle>[^"]*)" step$/
+     * @Given I am at/on (the) ":stepTitle step
+     * @Then  I see :stepTitle step
      */
     public function iAmOnStep( $stepTitle )
     {
-        return array(
-            new Step\Then( 'I see "Setup Wizard" page' ),
-            new Step\Then( 'I see "' . $stepTitle . '" title' ),
-        );
+        $this->iShouldBeOnPage( 'Setup Wizard' );
+        $this->iSeeTitle( $stepTitle );
     }
 
     /**
-     * @When /^I select "(?P<packageName>[^"]*)" package version "(?P<version>[^"]*)"$/
+     * @When I select :packageName package version :version
      */
     public function iSelectPackage( $packageName, $version )
     {
@@ -67,21 +70,19 @@ class SetupWizardContext extends LegacyContext
         Assertion::assertNotNull( $package, "Package '$packageName' not defined" );
 
         // first select the package
-        $field = $this->getSession()->getPage()->findField( $package );
-        Assertion::assertNotNull( $field, "Couldn't find '$package' field" );
-        $this->browserFillField( $field );
+        $fields = $this->getXpath()->findFields( $package );
+        Assertion::assertNotEmpty( $fields, "Couldn't find '$package' field" );
+        $fields[0]->check();
 
         // now verify version
         // IMPORTANT: only verify the values shown on the page, does not actually
         //      verify if the package is in a given version
         $versionLabel = "$packageName (ver. $version)";
-        return array(
-            new Step\Then( 'I see "' . $versionLabel . '" title' )
-        );
+        $this->iSeeTitle( $versionLabel );
     }
 
     /**
-     * @Then /^I see "(?P<packageName>[^"]*)" package version "(?P<version>[^"]*)" imported$/
+     * @Then I see :packageName package version :version imported
      */
     public function iSeeImported( $packageName, $version )
     {
@@ -104,11 +105,11 @@ class SetupWizardContext extends LegacyContext
     }
 
     /**
-     * @Then /^I see following packages for version "(?P<version>[^"]*)" imported(?:|\:)$/
+     * @Then I see following packages for version :version imported:
      */
     public function iSeeFollowingPackagesForVersionImported( $version, TableNode $packagesTable )
     {
-        $packages = $this->getSubContext( 'Common' )->convertTableToArrayOfData( $packagesTable );
+        $packages = GherkinHelper::convertTableToArrayOfData( $packagesTable );
 
         foreach ( $packages as $packageName )
         {
@@ -133,5 +134,52 @@ class SetupWizardContext extends LegacyContext
 
             Assertion::assertNotNull( $importElement, "Couldn't find 'Imported' for '$versionLabel' package" );
         }
+    }
+
+    /**
+     * Simple override for the following sentences:
+     * - Given I filled form with:
+     * - When I fill form with:
+     */
+    public function iFillFormWith( TableNode $table )
+    {
+        foreach ( GherkinHelper::convertTableToArrayOfData( $table ) as $field => $value )
+        {
+            // fill the form
+            $el = $this->findFieldElement( $field );
+            $el->setValue( $value );
+        }
+    }
+
+    /**
+    * Find field element
+    * This is a complement to the normal search, because in some cases the
+    * label has no "for" attribute, so the normal search won't find it. So this
+    * will try to find an input right after a label with $field
+    *
+    * @param string $field Can be id, name, label, value
+    *
+    * @return \Behat\Mink\Element\NodeElement
+    */
+    protected function findFieldElement( $field )
+    {
+        $page = $this->getSession()->getPage();
+        // attempt to find field through id, name, or label
+        $fieldElement = $page->findField( $field );
+        if ( empty( $fieldElement ) )
+        {
+            // if field wasn't found, and there is an label for that, we will
+            // attempt to find the next input after the label
+            $fieldElement = $page->find(
+                "xpath",
+                "//*[self::" .
+                implode( " or self::", $this->getTagsFor( 'input' ) )
+                . "][preceding::label[contains( text(), "
+                . $this->getXpath()->literal( $field )
+                . " )]]"
+            );
+        }
+        Assertion::assertNotNull( $fieldElement, "Couldn't find '$field' field" );
+        return $fieldElement;
     }
 }

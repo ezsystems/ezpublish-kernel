@@ -9,8 +9,11 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Features\Context;
 
-use EzSystems\BehatBundle\Context\BrowserContext;
+use EzSystems\BehatBundle\Context\Browser\Context;
 
-class LegacyContext extends BrowserContext
+/**
+ * Legacy base context class
+ */
+class Legacy extends Context
 {
 }
