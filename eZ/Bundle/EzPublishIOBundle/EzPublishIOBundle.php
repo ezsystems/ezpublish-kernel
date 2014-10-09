@@ -37,6 +37,7 @@ class EzPublishIOBundle extends Bundle
         {
             $this->extension = new EzPublishIOExtension();
             $this->extension->addMetadataHandlerFactory( 'flysystem', new ConfigurationFactory\MetadataHandler\Flysystem() );
+            $this->extension->addMetadataHandlerFactory( 'legacy_dfs_cluster', new ConfigurationFactory\MetadataHandler\LegacyDFSCluster() );
             $this->extension->addBinarydataHandlerFactory( 'flysystem', new ConfigurationFactory\BinarydataHandler\Flysystem() );
         }
 
