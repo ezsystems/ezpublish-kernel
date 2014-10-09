@@ -2,68 +2,68 @@
 
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Configuration as SiteAccessConfiguration;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Configuration extends SiteAccessConfiguration
+class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root( 'ez_io' )
-            ->children()
-                ->append( $this->getMetaDataNode() )
-                ->append( $this->getBinaryDataNode() )
-            ->end();
+        $rootNode = $treeBuilder->root( 'ez_io' );
+
+        $this->addMetadataHandlersSection( $rootNode );
+        $this->addBinarydataHandlersSection( $rootNode );
+
+        $rootNode->children()->end();
 
         return $treeBuilder;
     }
 
-    /**
-     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
-     */
-    private function getBinaryDataNode()
+    private function addMetadataHandlersSection( NodeDefinition $node )
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root( 'binarydata_handlers' );
-
-        $node
+        $metadataHandlersNodeBuilder = $node
             ->children()
-                ->arrayNode( 'flysystem' )
-                    ->canBeUnset()
+                ->arrayNode( 'metadata_handlers' )
+                    ->info( 'Handlers for files metadata, that read & write files metadata (size, modification time...)' )
+                    ->useAttributeAsKey( 'name' )
                     ->prototype( 'array' )
-                        ->children()
-                            ->scalarNode( 'adapter' )->isRequired()->info( 'flysystem adapter' )->example( 'nfs' )->end()
-                            ->scalarNode( 'url_prefix' )->info( 'Prefix to append to url' )->example( 'http://static.example.com' )->end()
-                        ->end()
-                    ->end()
+                    ->performNoDeepMerging()
+                    ->children();
+
+        $this->addFlysystemHandlerConfiguration( $metadataHandlersNodeBuilder );
+    }
+
+    private function addBinarydataHandlersSection( NodeDefinition $node )
+    {
+        $metadataHandlersNodeBuilder = $node
+            ->children()
+                ->arrayNode( 'binarydata_handlers' )
+                    ->info( 'Handlers for files binary, that read & write binary content' )
+                    ->useAttributeAsKey( 'name' )
+                    ->prototype( 'array' )
+                    ->performNoDeepMerging()
+                    ->children();
+
+        $this->addFlysystemHandlerConfiguration( $metadataHandlersNodeBuilder );
+    }
+
+    private function addFlysystemHandlerConfiguration( NodeBuilder $node )
+    {
+        $node
+            ->arrayNode( 'flysystem' )
+            ->info( 'Handler based on league/flysystem, an abstract filesystem library.' )
+            ->canBeUnset()
+            ->children()
+                ->scalarNode( 'adapter' )
+                    ->info( "Flysystem adapter. Should be configured using oneup flysystem bundle.")
+                    ->isRequired()
+                    ->example( 'nfs' )
                 ->end()
             ->end()
         ->end();
-
-        return $node;
-    }
-
-    /**
-     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
-     */
-    private function getMetaDataNode()
-    {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root( 'metadata_handlers' );
-
-        $node
-            ->children()
-                ->arrayNode( 'flysystem' )
-                    ->canBeUnset()
-                    ->prototype( 'array' )
-                        ->children()
-                            ->scalarNode( 'adapter' )->isRequired()->info( 'flysystem adapter' )->example( 'nfs' )->end()
-                            ->scalarNode( 'url_prefix' )->info( 'Prefix to append to url' )->example( 'http://static.example.com' )->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end();
 
         return $node;
     }

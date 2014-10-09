@@ -54,23 +54,19 @@ class EzPublishIOExtension extends Extension
 
         if ( isset( $config['binarydata_handlers'] ) )
         {
-            foreach ( $config['binarydata_handlers'] as $handlerType => $handlers )
+            foreach ( $config['binarydata_handlers'] as $handlerName => $handlerConfig )
             {
-                foreach ( $handlers as $handlerName => $handlerConfig )
-                {
-                    $this->registerBinarydataHandler( $handlerType, $handlerName, $handlerConfig );
-                }
+                list( $handlerType, $handlerConfig ) = each( $handlerConfig );
+                $this->registerBinarydataHandler( $handlerType, $handlerName, $handlerConfig );
             }
         }
 
         if ( isset( $config['metadata_handlers'] ) )
         {
-            foreach ( $config['metadata_handlers'] as $handlerType => $handlers )
+            foreach ( $config['metadata_handlers'] as $handlerName => $handlerConfig )
             {
-                foreach ( $handlers as $handlerName => $handlerConfig )
-                {
-                    $this->registerMetadataHandler( $handlerType, $handlerName, $handlerConfig );
-                }
+                list( $handlerType, $handlerConfig ) = each( $handlerConfig );
+                $this->registerMetadataHandler( $handlerType, $handlerName, $handlerConfig );
             }
         }
 
