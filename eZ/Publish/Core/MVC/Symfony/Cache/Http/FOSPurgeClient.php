@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
-use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use FOS\HttpCacheBundle\CacheManager;
 
 class FOSPurgeClient implements PurgeClientInterface
@@ -37,17 +36,7 @@ class FOSPurgeClient implements PurgeClientInterface
             $locationIds = array( $locationIds );
         }
 
-        if ( $this->cacheManager->supports( CacheManager::INVALIDATE ) )
-        {
-            $this->cacheManager->invalidate( array( 'X-Location-Id' => '(' . implode( '|', $locationIds ) . ')' ) );
-        }
-        else
-        {
-            foreach ( $locationIds as $locationId )
-            {
-                $this->cacheManager->invalidateRoute( UrlAliasRouter::URL_ALIAS_ROUTE_NAME, array( 'locationId' => $locationId ) );
-            }
-        }
+        $this->cacheManager->invalidate( array( 'X-Location-Id' => '(' . implode( '|', $locationIds ) . ')' ) );
     }
 
     public function purgeAll()
