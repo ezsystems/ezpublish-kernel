@@ -242,13 +242,44 @@ EOT;
 
     private function addHttpCacheSection( ArrayNodeDefinition $rootNode )
     {
+        $purgeTypeInfo = <<<EOT
+Http cache purge type.
+
+Cache purge for content/locations is triggered when needed (e.g. on publish) and will result in one or several Http PURGE requests.
+Can be "local" or "http":
+- If "local" is used, an Http PURGE request will be emulated when needed (e.g. when using Symfony internal reverse proxy).
+- If "http" is used, only one Http BAN request will be sent, with X-Location-Id header containing locationIds to ban.
+  X-Location-Id consists in a Regexp containing locationIds to ban.
+  Examples:
+   - (123|456|789) => Purge locations #123, #456, #789.
+   - .* => Purge all locations.
+EOT;
+
         $rootNode
             ->children()
                 ->arrayNode( 'http_cache' )
-                    ->info( 'DEPRECATED' )
+                    ->info( $purgeTypeInfo )
                     ->children()
-                        ->scalarNode( 'purge_type' )->end()
-                        ->scalarNode( 'timeout' )->end()
+                        ->enumNode( 'purge_type' )
+                            ->values( array( 'local', 'http' ) )
+                            ->defaultValue( 'local' )
+                            ->beforeNormalization()
+                                ->ifTrue(
+                                    function ( $v )
+                                    {
+                                        $http = array( 'multiple_http' => true, 'single_http' => true );
+                                        return isset( $http[$v] );
+                                    }
+                                )
+                                ->then(
+                                    function ()
+                                    {
+                                        return 'http';
+                                    }
+                                )
+                            ->end()
+                        ->end()
+                        ->scalarNode( 'timeout' )->info( 'DEPRECATED' )->end()
                     ->end()
                 ->end()
             ->end();

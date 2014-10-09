@@ -13,7 +13,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Formatter\YamlSuggestionFormatter;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -327,41 +326,28 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     private function handleCache( array $config, ContainerBuilder $container, FileLoader $loader )
     {
         $loader->load( 'cache.yml' );
-        if ( isset( $config['http_cache'] ) )
-        {
-            $message =
-<<<EOT
-Config "ezpublish.http_cache" has been deprecated.
-You can safely remove it.
-EOT;
 
-            $this->suggestionCollector->addSuggestion( new ConfigSuggestion( $message ) );
+        if ( isset( $config['http_cache']['purge_type'] ) )
+        {
+            switch ( $config['http_cache']['purge_type'] )
+            {
+                case 'local':
+                    $purgeService = 'ezpublish.http_cache.purge_client.local';
+                    break;
+                case 'http':
+                    $purgeService = 'ezpublish.http_cache.purge_client.fos';
+                    break;
+                default:
+                    if ( !$container->has( $config['http_cache']['purge_type'] ) )
+                    {
+                        throw new \InvalidArgumentException( "Invalid ezpublish.http_cache.purge_type. Can be 'single', 'multiple' or a valid service identifier implementing PurgeClientInterface." );
+                    }
+
+                    $purgeService = $config['http_cache']['purge_type'];
+            }
+
+            $container->setAlias( 'ezpublish.http_cache.purge_client', $purgeService );
         }
-//
-//        if ( isset( $config['http_cache']['purge_type'] ) )
-//        {
-//            switch ( $config['http_cache']['purge_type'] )
-//            {
-//                case 'local':
-//                    $purgeService = 'ezpublish.http_cache.purge_client.local';
-//                    break;
-//                case 'single_http':
-//                    $purgeService = 'ezpublish.http_cache.purge_client.single_request';
-//                    break;
-//                case 'multiple_http':
-//                    $purgeService = 'ezpublish.http_cache.purge_client.multi_request';
-//                    break;
-//                default:
-//                    if ( !$container->has( $config['http_cache']['purge_type'] ) )
-//                    {
-//                        throw new \InvalidArgumentException( "Invalid ezpublish.http_cache.purge_type. Can be 'single', 'multiple' or a valid service identifier implementing PurgeClientInterface." );
-//                    }
-//
-//                    $purgeService = $config['http_cache']['purge_type'];
-//            }
-//
-//            $container->setAlias( 'ezpublish.http_cache.purge_client', $purgeService );
-//        }
 //
 //        if ( isset( $config['http_cache']['timeout'] ) )
 //        {
