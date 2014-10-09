@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition as ServiceDefinition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -20,7 +21,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * Binarydata & metadata are identical, except for the parent service.
  */
-abstract class Flysystem implements ConfigurationFactory
+abstract class Flysystem extends ContainerAware implements ConfigurationFactory
 {
     public function addConfiguration( NodeDefinition $node )
     {
@@ -41,9 +42,9 @@ abstract class Flysystem implements ConfigurationFactory
             ->end();
     }
 
-    public function configureHandler( ContainerBuilder $container, ServiceDefinition $definition, array $config )
+    public function configureHandler( ServiceDefinition $definition, array $config )
     {
-        $filesystemId = $this->createFlysystemFilesystem( $container, $config['name'], $config['adapter'] );
+        $filesystemId = $this->createFilesystem( $this->container, $config['name'], $config['adapter'] );
         $definition->replaceArgument( 0, new Reference( $filesystemId ) );
     }
 
@@ -56,7 +57,7 @@ abstract class Flysystem implements ConfigurationFactory
      *
      * @return string
      */
-    private function createFlysystemFilesystem( ContainerBuilder $container, $name, $adapter )
+    private function createFilesystem( ContainerBuilder $container, $name, $adapter )
     {
         $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $adapter );
         if ( !$container->hasDefinition( $adapterId ) )
