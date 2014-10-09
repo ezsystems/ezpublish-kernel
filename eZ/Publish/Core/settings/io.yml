@@ -29,8 +29,6 @@ services:
         class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
         arguments:
             - ~
-        tags:
-            - { name: ezpublish.io.metadata_handler, alias: flysystem }
 
     ezpublish.core.io.metadata_handler.flysystem.default:
         class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
@@ -43,8 +41,6 @@ services:
         arguments:
             - ~
             - @ezpublish.core.io.flysystem.default_url_decorator
-        tags:
-            - { name: ezpublish.io.binarydata_handler, alias: flysystem }
 
     ezpublish.core.io.binarydata_handler.flysystem.default:
         class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem

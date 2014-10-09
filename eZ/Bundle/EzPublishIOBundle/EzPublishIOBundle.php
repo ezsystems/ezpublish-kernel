@@ -16,7 +16,6 @@ class EzPublishIOBundle extends Bundle
 
     public function build( ContainerBuilder $container )
     {
-        $container->addCompilerPass( new IOHandlerTagPass() );
         $container->addCompilerPass(
             new Compiler\IOConfigurationPass(
                 $this->extension->getMetadataHandlerFactories(),
