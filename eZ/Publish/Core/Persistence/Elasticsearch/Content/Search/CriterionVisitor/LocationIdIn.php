@@ -73,7 +73,6 @@ class LocationIdIn extends CriterionVisitor
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
-
         return array(
             "nested" => array(
                 "path" => "locations_doc",
