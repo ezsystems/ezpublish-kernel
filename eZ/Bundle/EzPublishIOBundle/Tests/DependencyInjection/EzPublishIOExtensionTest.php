@@ -8,15 +8,20 @@
 namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection;
 
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\EzPublishIOExtension;
+use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 
 class EzPublishIOExtensionTest extends AbstractExtensionTestCase
 {
     protected function getContainerExtensions()
     {
-        return array(
-            new EzPublishIOExtension()
-        );
+        $flysystemFactory = new ConfigurationFactory\Flysystem();
+
+        $extension = new EzPublishIOExtension();
+        $extension->addMetadataHandlerFactory( 'flysystem', $flysystemFactory );
+        $extension->addBinarydataHandlerFactory( 'flysystem', $flysystemFactory );
+
+        return array( $extension );
     }
 
     public function testParametersWithoutConfiguration()
@@ -31,7 +36,7 @@ class EzPublishIOExtensionTest extends AbstractExtensionTestCase
     {
         $config = array(
             'metadata_handlers' => array(
-                'test' => array( 'flysystem' => array( 'adapter' => 'test' ) )
+                'my_metadata_handler' => array( 'flysystem' => array( 'adapter' => 'my_adapter' ) )
             )
         );
         $this->load( $config );
@@ -39,7 +44,7 @@ class EzPublishIOExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter( 'ez_io.binarydata_handlers', array() );
         $this->assertContainerBuilderHasParameter(
             'ez_io.metadata_handlers',
-            array( 'flysystem' => array( 'test' => array( 'adapter' => 'test' ) ) )
+            array( 'my_metadata_handler' => array( 'type' => 'flysystem', 'adapter' => 'my_adapter' ) )
         );
     }
 
@@ -47,7 +52,7 @@ class EzPublishIOExtensionTest extends AbstractExtensionTestCase
     {
         $config = array(
             'binarydata_handlers' => array(
-                'test' => array( 'flysystem' => array( 'adapter' => 'test' ) )
+                'my_binarydata_handler' => array( 'flysystem' => array( 'adapter' => 'my_adapter' ) )
             )
         );
         $this->load( $config );
@@ -55,7 +60,7 @@ class EzPublishIOExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter( 'ez_io.metadata_handlers', array() );
         $this->assertContainerBuilderHasParameter(
             'ez_io.binarydata_handlers',
-            array( 'flysystem' => array( 'test' => array( 'adapter' => 'test' ) ) )
+            array( 'my_binarydata_handler' => array( 'type' => 'flysystem', 'adapter' => 'my_adapter' ) )
         );
     }
 }

@@ -9,62 +9,70 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
+    /**
+     * @var ConfigurationFactory[]
+     */
+    private $metadataHandlerFactories = array();
+
+    /**
+     * @var ConfigurationFactory[]
+     */
+    private $binarydataHandlerFactories = array();
+
+    public function setMetadataHandlerFactories( array $factories )
+    {
+        $this->metadataHandlerFactories = $factories;
+    }
+
+    public function setBinarydataHandlerFactories( array $factories )
+    {
+        $this->binarydataHandlerFactories = $factories;
+    }
+
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root( 'ez_io' );
 
-        $this->addMetadataHandlersSection( $rootNode );
-        $this->addBinarydataHandlersSection( $rootNode );
+        $this->addHandlersSection(
+            $rootNode,
+            'metadata_handlers',
+            'Handlers for files metadata, that read & write files metadata (size, modification time...)',
+            $this->metadataHandlerFactories
+        );
+        $this->addHandlersSection(
+            $rootNode,
+            'binarydata_handlers',
+            'Handlers for files binary data. Reads & write files binary content',
+            $this->binarydataHandlerFactories
+        );
 
         $rootNode->children()->end();
 
         return $treeBuilder;
     }
 
-    private function addMetadataHandlersSection( NodeDefinition $node )
+    /**
+     * @param NodeDefinition $node
+     * @param                $name
+     * @param string $info block info line
+     * @param ConfigurationFactory[] $factories
+     */
+    private function addHandlersSection( NodeDefinition $node, $name, $info, array &$factories )
     {
-        $metadataHandlersNodeBuilder = $node
+        $handlersNodeBuilder = $node
             ->children()
-                ->arrayNode( 'metadata_handlers' )
-                    ->info( 'Handlers for files metadata, that read & write files metadata (size, modification time...)' )
+                ->arrayNode( $name )
+                    ->info( $info )
                     ->useAttributeAsKey( 'name' )
                     ->prototype( 'array' )
                     ->performNoDeepMerging()
                     ->children();
 
-        $this->addFlysystemHandlerConfiguration( $metadataHandlersNodeBuilder );
-    }
-
-    private function addBinarydataHandlersSection( NodeDefinition $node )
-    {
-        $metadataHandlersNodeBuilder = $node
-            ->children()
-                ->arrayNode( 'binarydata_handlers' )
-                    ->info( 'Handlers for files binary, that read & write binary content' )
-                    ->useAttributeAsKey( 'name' )
-                    ->prototype( 'array' )
-                    ->performNoDeepMerging()
-                    ->children();
-
-        $this->addFlysystemHandlerConfiguration( $metadataHandlersNodeBuilder );
-    }
-
-    private function addFlysystemHandlerConfiguration( NodeBuilder $node )
-    {
-        $node
-            ->arrayNode( 'flysystem' )
-            ->info( 'Handler based on league/flysystem, an abstract filesystem library.' )
-            ->canBeUnset()
-            ->children()
-                ->scalarNode( 'adapter' )
-                    ->info( "Flysystem adapter. Should be configured using oneup flysystem bundle.")
-                    ->isRequired()
-                    ->example( 'nfs' )
-                ->end()
-            ->end()
-        ->end();
-
-        return $node;
+        foreach ( $factories as $name => $factory )
+        {
+            $factoryNode = $handlersNodeBuilder->arrayNode( $name )->canBeUnset();
+            $factory->addConfiguration( $factoryNode );
+        }
     }
 }

@@ -8,6 +8,7 @@
 
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
 
+use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,6 +23,20 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class IOConfigurationPass implements CompilerPassInterface
 {
+    /** @var ConfigurationFactory[] */
+    private $metadataHandlerFactories;
+
+    /** @var ConfigurationFactory[] */
+    private $binarydataHandlerFactories;
+
+    public function __construct(
+        array $metadataHandlerFactories = array(),
+        array $binarydataHandlerFactories = array()
+    )
+    {
+        $this->metadataHandlerFactories = $metadataHandlerFactories;
+        $this->binarydataHandlerFactories = $binarydataHandlerFactories;
+    }
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
@@ -63,7 +78,13 @@ class IOConfigurationPass implements CompilerPassInterface
      *
      * @internal param $HandlerTypesMap
      */
-    protected function processHandlers( ContainerBuilder $container, Definition $factory, array $handlers, array $handlerTypesMap, $defaultHandler )
+    protected function processHandlers(
+        ContainerBuilder $container,
+        Definition $factory,
+        array $handlers,
+        array $handlerTypesMap,
+        $defaultHandler
+    )
     {
         $handlersMap = array( 'default' => $defaultHandler );
 
@@ -85,8 +106,6 @@ class IOConfigurationPass implements CompilerPassInterface
                 if ( $type === 'flysystem' )
                 {
                     $filesystemId = $this->createFlysystemFilesystem( $container, $name, $config['adapter'] );
-
-                    $definition = $container->setDefinition( $handlerId, new DefinitionDecorator( $parentHandlerId ) );
                     $definition->replaceArgument( 0, new Reference( $filesystemId ) );
                 }
 
