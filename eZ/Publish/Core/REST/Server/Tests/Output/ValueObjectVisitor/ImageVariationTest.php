@@ -35,7 +35,7 @@ class ImageVariationTest extends ValueObjectVisitorBaseTest
                 'height' => 400,
                 'name' => 'test',
                 'imageId' => '123-456789',
-                'uri' => 'path/to/image/123/456789/variation.png',
+                'uri' => '/path/to/image/123/456789/variation.png',
                 'mimeType' => 'image/png',
                 'fileSize' => 12345,
                 'fileName' => 'Test-Image.png'
