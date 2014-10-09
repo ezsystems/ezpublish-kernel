@@ -1,4 +1,4 @@
 proxy_client:
     default: varnish
     varnish:
-        servers: [127.0.0.1]
+        servers: [$http_cache.purge_servers$]

@@ -4,6 +4,8 @@ parameters:
     ezpublish.http_cache.purge_client.local.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient
     ezpublish.http_cache.store.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore
     ezpublish.http_cache.store.root: %kernel.cache_dir%/http_cache
+    ezpublish.http_cache.cache_manager.class: FOS\HttpCacheBundle\CacheManager
+    ezpublish.http_cache.proxy_client.varnish.factory.class: eZ\Bundle\EzPublishCoreBundle\Cache\Http\VarnishProxyClientFactory
     ezpublish.http_cache.purge_client.fos.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\FOSPurgeClient
 
 services:
@@ -37,9 +39,19 @@ services:
         class: %ezpublish.http_cache.store.class%
         arguments: [%ezpublish.http_cache.store.root%]
 
+    # Duplicate fos_http_cache.cache_manager not to interfere with it.
+    # Service will be modified at compile time, to enforce injection of Varnish proxy client.
+    ezpublish.http_cache.cache_manager:
+        parent: fos_http_cache.cache_manager
+        class: %ezpublish.http_cache.cache_manager.class%
+
+    ezpublish.http_cache.proxy_client.varnish.factory:
+        class: %ezpublish.http_cache.proxy_client.varnish.factory.class%
+        arguments: [@ezpublish.config.resolver, @ezpublish.config.dynamic_setting.parser, %fos_http_cache.proxy_client.varnish.class%]
+
     ezpublish.http_cache.purge_client.fos:
         class: %ezpublish.http_cache.purge_client.fos.class%
-        arguments: [@fos_http_cache.cache_manager]
+        arguments: [@ezpublish.http_cache.cache_manager]
 
     ezpublish.http_cache.purge_client:
         alias: ezpublish.http_cache.purge_client.local
