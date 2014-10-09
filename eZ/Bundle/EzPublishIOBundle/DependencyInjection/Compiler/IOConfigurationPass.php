@@ -36,7 +36,7 @@ class IOConfigurationPass implements CompilerPassInterface
             $container,
             $container->getDefinition( 'ezpublish.core.io.metadata_handler.factory' ),
             $ioMetadataHandlers,
-            $container->getParameter( 'ez_io.metadata_handlers_map' ),
+            $container->getParameter( 'ez_io.available_metadata_handler_types' ),
             'ezpublish.core.io.metadata_handler.flysystem.default'
         );
 
@@ -47,7 +47,7 @@ class IOConfigurationPass implements CompilerPassInterface
             $container,
             $container->getDefinition( 'ezpublish.core.io.binarydata_handler.factory' ),
             $ioBinarydataHandlers,
-            $container->getParameter( 'ez_io.binarydata_handlers_map' ),
+            $container->getParameter( 'ez_io.available_binarydata_handler_types' ),
             'ezpublish.core.io.binarydata_handler.flysystem.default'
         );
 

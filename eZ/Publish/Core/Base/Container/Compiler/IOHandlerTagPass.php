@@ -16,23 +16,26 @@ use LogicException;
 class IOHandlerTagPass implements CompilerPassInterface
 {
     /**
-     * @throws \LogicException
+     * @throws \LogicException If a service tag is incorrect
      */
     public function process( ContainerBuilder $container )
     {
         $container->setParameter(
-            'ez_io.metadata_handlers_map',
+            'ez_io.available_metadata_handler_types',
             $this->findHandlers( $container, 'ezpublish.io.metadata_handler' )
         );
         $container->setParameter(
-            'ez_io.binarydata_handlers_map',
+            'ez_io.available_binarydata_handler_types',
             $this->findHandlers( $container, 'ezpublish.io.binarydata_handler' )
         );
     }
 
     /**
      * @param ContainerBuilder $container
-     * @param                  $metadataHandlersTypeMap
+     * @param string $tag
+     * @return array Array of service alias => service id
+     *
+     * @throws \LogicException If a service tag is incorrect
      */
     protected function findHandlers( ContainerBuilder $container, $tag )
     {

@@ -23,8 +23,6 @@ class EzPublishIOExtensionTest extends AbstractExtensionTestCase
     {
         $this->load();
 
-        $this->assertContainerBuilderHasParameter( 'ez_io.binarydata_handlers_map', array() );
-        $this->assertContainerBuilderHasParameter( 'ez_io.metadata_handlers_map', array() );
         $this->assertContainerBuilderHasParameter( 'ez_io.metadata_handlers', array() );
         $this->assertContainerBuilderHasParameter( 'ez_io.binarydata_handlers', array() );
     }
@@ -38,8 +36,6 @@ class EzPublishIOExtensionTest extends AbstractExtensionTestCase
         );
         $this->load( $config );
 
-        $this->assertContainerBuilderHasParameter( 'ez_io.binarydata_handlers_map', array() );
-        $this->assertContainerBuilderHasParameter( 'ez_io.metadata_handlers_map', array() );
         $this->assertContainerBuilderHasParameter( 'ez_io.binarydata_handlers', array() );
         $this->assertContainerBuilderHasParameter(
             'ez_io.metadata_handlers',
@@ -56,8 +52,6 @@ class EzPublishIOExtensionTest extends AbstractExtensionTestCase
         );
         $this->load( $config );
 
-        $this->assertContainerBuilderHasParameter( 'ez_io.binarydata_handlers_map', array() );
-        $this->assertContainerBuilderHasParameter( 'ez_io.metadata_handlers_map', array() );
         $this->assertContainerBuilderHasParameter( 'ez_io.metadata_handlers', array() );
         $this->assertContainerBuilderHasParameter(
             'ez_io.binarydata_handlers',

@@ -23,7 +23,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         $this->container->setParameter( 'ez_io.binarydata_handlers', array() );
 
         $this->container->setParameter(
-            'ez_io.metadata_handlers_map',
+            'ez_io.available_metadata_handler_types',
             array(
                 'flysystem' => 'ezpublish.core.io.metadata_handler.flysystem',
                 'legacy_dfs_cluster' => 'ezpublish.core.io.metadata_handler.legacy_dfs_cluster'
@@ -31,7 +31,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         );
 
         $this->container->setParameter(
-            'ez_io.binarydata_handlers_map',
+            'ez_io.available_binarydata_handler_types',
             array(
                 'flysystem' => 'ezpublish.core.io.binarydata_handler.flysystem'
             )

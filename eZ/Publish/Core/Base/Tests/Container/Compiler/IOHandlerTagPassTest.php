@@ -34,7 +34,7 @@ class IOHandlerTagPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasParameter(
-            'ez_io.metadata_handlers_map',
+            'ez_io.available_metadata_handler_types',
             array( $ioHandlerAlias => $ioHandlerServiceId )
         );
     }
@@ -50,7 +50,7 @@ class IOHandlerTagPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasParameter(
-            'ez_io.binarydata_handlers_map',
+            'ez_io.available_binarydata_handler_types',
             array( $ioHandlerAlias => $ioHandlerServiceId )
         );
     }
