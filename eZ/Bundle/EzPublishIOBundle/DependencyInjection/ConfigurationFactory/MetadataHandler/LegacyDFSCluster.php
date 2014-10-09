@@ -20,7 +20,7 @@ class LegacyDFSCluster implements ConfigurationFactory
         return 'ezpublish.core.io.metadata_handler.legacy_dfs_cluster';
     }
 
-    public function configureHandler( ContainerBuilder $container, ServiceDefinition $definition, array $config )
+    public function configureHandler( ServiceDefinition $definition, array $config )
     {
         $definition->replaceArgument( 0, new Reference( $config['connection'] ) );
     }
