@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -89,23 +90,40 @@ class IOConfigurationPass implements CompilerPassInterface
 
         foreach ( $configuredHandlers as $name => $config )
         {
-            $type = $config['type'];
-
-            if ( !isset( $factories[$type] ) )
-            {
-                throw new InvalidConfigurationException( "Unknown handler type $type" );
-            }
-            $configurationFactory = $factories[$type];
+            $configurationFactory = $this->getFactory( $factories, $config["type"], $container );
 
             $parentHandlerId = $configurationFactory->getParentServiceId();
             $handlerId = sprintf( '%s.%s', $parentHandlerId, $name );
             $definition = $container->setDefinition( $handlerId, new DefinitionDecorator( $parentHandlerId ) );
 
-            $configurationFactory->configureHandler( $container, $definition, $config );
+            $configurationFactory->configureHandler( $definition, $config );
 
             $handlers[$name] = $handlerId;
         }
 
         $factory->addMethodCall( 'setHandlersMap', array( $handlers ) );
+    }
+
+    /**
+     * Returns from $factories the factory for handler $type
+     *
+     * @param ContainerBuilder $container
+     * @param ConfigurationFactory[] $factories
+     * @param string $type
+     *
+     * @return ConfigurationFactory
+     *
+     */
+    protected function getFactory( array $factories, $type, ContainerBuilder $container )
+    {
+        if ( !isset( $factories[$type] ) )
+        {
+            throw new InvalidConfigurationException( "Unknown handler type $type" );
+        }
+        if ( $factories[$type] instanceof ContainerAware )
+        {
+            $factories[$type]->setContainer( $container );
+        }
+        return $factories[$type];
     }
 }
