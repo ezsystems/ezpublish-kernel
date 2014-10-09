@@ -21,16 +21,73 @@ use Symfony\Component\Validator\Tests\Fixtures\Reference;
 class EzPublishIOExtension extends Extension
 {
     /**
-     * Array of metadatahandler name => service id
-     * @var array
+     * @var ConfigurationFactory[]
      */
-    private $binarydataHandlers = array();
+    private $metadataHandlerFactories = array();
 
     /**
-     * Array of binarydatahandler name => service id
+     * @var ConfigurationFactory[]
+     */
+    private $binarydataHandlerFactories = array();
+
+    /**
+     * Array of handlers:
+     *
+     * array(
+     *     'metadata' => array(
+     *         'my_metadata_handler' = > array(
+     *             'type' => 'flysystem'
+     *             'adapter' => 'my_adapter'
+     *         )
+     *     ),
+     *     'binarydata' => array(
+     *         'my_metadata_handler' = > array(
+     *             'type' => 'flysystem'
+     *             'adapter' => 'my_adapter'
+     *         )
+     *     )
+     * )
      * @var array
      */
-    private $metadataHandlers = array();
+    private $handlers = array();
+
+    /**
+     * Registers a metadata handler configuration $factory for handler with $alias
+     *
+     * @param string $alias
+     * @param ConfigurationFactory $factory
+     */
+    public function addMetadataHandlerFactory( $alias, ConfigurationFactory $factory )
+    {
+        $this->metadataHandlerFactories[$alias] = $factory;
+    }
+
+    /**
+     * Registers a binarydata handler configuration $factory for handler with $alias
+     *
+     * @param string $alias
+     * @param ConfigurationFactory $factory
+     */
+    public function addBinarydataHandlerFactory( $alias, ConfigurationFactory $factory )
+    {
+        $this->binarydataHandlerFactories[$alias] = $factory;
+    }
+
+    /**
+     * @return ConfigurationFactory[]
+     */
+    public function getMetadataHandlerFactories()
+    {
+        return $this->metadataHandlerFactories;
+    }
+
+    /**
+     * @return ConfigurationFactory[]
+     */
+    public function getBinarydataHandlerFactories()
+    {
+        return $this->binarydataHandlerFactories;
+    }
 
     public function getAlias()
     {
@@ -46,51 +103,46 @@ class EzPublishIOExtension extends Extension
 
         $configuration = $this->getConfiguration( $configs, $container );
 
-        // Note: this is where the transformation occurs
         $config = $this->processConfiguration( $configuration, $configs );
 
         $loader->load( 'io.yml' );
         $loader->load( 'default_settings.yml' );
 
-        if ( isset( $config['binarydata_handlers'] ) )
+        $this->processHandlers( $container, $config, 'metadata_handlers' );
+        $this->processHandlers( $container, $config, 'binarydata_handlers' );
+    }
+
+    /**
+     * Processes the config key $key, and registers the result in ez_io.$key.
+     * @param ContainerBuilder $container
+     * @param string $key Configuration key, either binarydata or metadata
+     */
+    private function processHandlers( ContainerBuilder $container, $config, $key )
+    {
+        $handlers = array();
+        if ( isset( $config[$key] ) )
         {
-            foreach ( $config['binarydata_handlers'] as $handlerName => $handlerConfig )
+            foreach ( $config[$key] as $name => $config )
             {
-                list( $handlerType, $handlerConfig ) = each( $handlerConfig );
-                $this->registerBinarydataHandler( $handlerType, $handlerName, $handlerConfig );
+                list( $type, $config ) = each( $config );
+                if ( isset( $handlers[$name] ) )
+                {
+                    throw new InvalidConfigurationException( "A $key named $name already exists" );
+                }
+                $config['type'] = $type;
+                $config['name'] = $name;
+                $handlers[$name] = $config;
             }
         }
-
-        if ( isset( $config['metadata_handlers'] ) )
-        {
-            foreach ( $config['metadata_handlers'] as $handlerName => $handlerConfig )
-            {
-                list( $handlerType, $handlerConfig ) = each( $handlerConfig );
-                $this->registerMetadataHandler( $handlerType, $handlerName, $handlerConfig );
-            }
-        }
-
-        $container->setParameter( 'ez_io.metadata_handlers', $this->metadataHandlers );
-        $container->setParameter( 'ez_io.binarydata_handlers', $this->binarydataHandlers );
+        $container->setParameter( "ez_io.{$key}", $handlers );
     }
 
-    private function registerBinaryDataHandler( $type, $name, array $config )
+    public function getConfiguration( array $config, ContainerBuilder $container )
     {
-        if ( isset( $this->binarydataHandlers[$type] ) )
-        {
-            throw new InvalidConfigurationException( "A binarydata handler named $type already exists" );
-        }
-
-        $this->binarydataHandlers[$type][$name] = $config;
+        $configuration = new Configuration();
+        $configuration->setMetadataHandlerFactories( $this->getMetadataHandlerFactories() );
+        $configuration->setBinarydataHandlerFactories( $this->getBinarydataHandlerFactories() );
+        return $configuration;
     }
 
-    private function registerMetaDataHandler( $type, $name, array $config )
-    {
-        if ( isset( $this->metadataHandlers[$type] ) )
-        {
-            throw new InvalidConfigurationException( "A metadata handler named $type already exists" );
-        }
-
-        $this->metadataHandlers[$type][$name] = $config;
-    }
 }

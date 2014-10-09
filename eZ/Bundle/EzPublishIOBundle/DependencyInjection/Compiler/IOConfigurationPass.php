@@ -8,12 +8,12 @@
 
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
 
+use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This compiler pass will create the metadata and binarydata IO handlers depending on container configuration.
@@ -22,6 +22,20 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class IOConfigurationPass implements CompilerPassInterface
 {
+    /** @var ConfigurationFactory[] */
+    private $metadataHandlerFactories;
+
+    /** @var ConfigurationFactory[] */
+    private $binarydataHandlerFactories;
+
+    public function __construct(
+        array $metadataHandlerFactories = array(),
+        array $binarydataHandlerFactories = array()
+    )
+    {
+        $this->metadataHandlerFactories = $metadataHandlerFactories;
+        $this->binarydataHandlerFactories = $binarydataHandlerFactories;
+    }
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
@@ -36,7 +50,7 @@ class IOConfigurationPass implements CompilerPassInterface
             $container,
             $container->getDefinition( 'ezpublish.core.io.metadata_handler.factory' ),
             $ioMetadataHandlers,
-            $container->getParameter( 'ez_io.available_metadata_handler_types' ),
+            $this->metadataHandlerFactories,
             'ezpublish.core.io.metadata_handler.flysystem.default'
         );
 
@@ -47,7 +61,7 @@ class IOConfigurationPass implements CompilerPassInterface
             $container,
             $container->getDefinition( 'ezpublish.core.io.binarydata_handler.factory' ),
             $ioBinarydataHandlers,
-            $container->getParameter( 'ez_io.available_binarydata_handler_types' ),
+            $this->binarydataHandlerFactories,
             'ezpublish.core.io.binarydata_handler.flysystem.default'
         );
 
@@ -57,70 +71,41 @@ class IOConfigurationPass implements CompilerPassInterface
     /**
      * @param ContainerBuilder $container
      * @param Definition $factory The factory service that should receive the list of handlers
-     * @param array $handlers Handlers configuration declared via semantic config
-     * @param array $handlerTypesMap Map of alias => handler service id
+     * @param array $configuredHandlers Handlers configuration declared via semantic config
+     * @param ConfigurationFactory[] $factories Map of alias => handler service id
      * @param string $defaultHandler default handler id
      *
      * @internal param $HandlerTypesMap
      */
-    protected function processHandlers( ContainerBuilder $container, Definition $factory, array $handlers, array $handlerTypesMap, $defaultHandler )
+    protected function processHandlers(
+        ContainerBuilder $container,
+        Definition $factory,
+        array $configuredHandlers,
+        array $factories,
+        $defaultHandler
+    )
     {
-        $handlersMap = array( 'default' => $defaultHandler );
+        $handlers = array( 'default' => $defaultHandler );
 
-        foreach ( $handlers as $type => $typeArray )
+        foreach ( $configuredHandlers as $name => $config )
         {
-            if ( !isset( $handlerTypesMap[$type] ) )
+            $type = $config['type'];
+
+            if ( !isset( $factories[$type] ) )
             {
                 throw new InvalidConfigurationException( "Unknown handler type $type" );
             }
+            $configurationFactory = $factories[$type];
 
-            $parentHandlerId = $handlerTypesMap[$type];
+            $parentHandlerId = $configurationFactory->getParentServiceId();
+            $handlerId = sprintf( '%s.%s', $parentHandlerId, $name );
+            $definition = $container->setDefinition( $handlerId, new DefinitionDecorator( $parentHandlerId ) );
 
-            foreach ( $typeArray as $name => $config )
-            {
-                $handlerId = sprintf( '%s.%s', $parentHandlerId, $name );
+            $configurationFactory->configureHandler( $container, $definition, $config );
 
-                $definition = $container->setDefinition( $handlerId, new DefinitionDecorator( $parentHandlerId ) );
-
-                if ( $type === 'flysystem' )
-                {
-                    $filesystemId = $this->createFlysystemFilesystem( $container, $name, $config['adapter'] );
-
-                    $definition = $container->setDefinition( $handlerId, new DefinitionDecorator( $parentHandlerId ) );
-                    $definition->replaceArgument( 0, new Reference( $filesystemId ) );
-                }
-
-                $handlersMap[$name] = $handlerId;
-            }
+            $handlers[$name] = $handlerId;
         }
 
-        $factory->addMethodCall( 'setHandlersMap', array( $handlersMap ) );
-    }
-
-    /**
-     * Creates a flysystem filesystem $name service
-     *
-     * @param ContainerBuilder $container
-     * @param string $name filesystem name (nfs, local...)
-     * @param string $adapter adapter name
-     *
-     * @return string
-     */
-    private function createFlysystemFilesystem( ContainerBuilder $container, $name, $adapter )
-    {
-        $adapterId = sprintf( 'oneup_flysystem.%s_adapter', $adapter );
-        if ( !$container->hasDefinition( $adapterId ) )
-        {
-            throw new InvalidConfigurationException( "Unknown flysystem adapter $adapter" );
-        }
-
-        $filesystemId = sprintf( 'ezpublish.core.io.flysystem.%s_filesystem', $name );
-        $definition = $container->setDefinition(
-            $filesystemId,
-            new DefinitionDecorator( 'ezpublish.core.io.flysystem.base_filesystem' )
-        );
-        $definition->setArguments( array( new Reference( $adapterId ) ) );
-
-        return $filesystemId;
+        $factory->addMethodCall( 'setHandlersMap', array( $handlers ) );
     }
 }
