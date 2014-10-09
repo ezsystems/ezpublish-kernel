@@ -30,7 +30,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5Conv
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
-use eZ\Publish\Core\Base\Container\Compiler\IOHandlerTagPass;
 use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\CriteriaConverterPass;
@@ -68,7 +67,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new FragmentPass );
         $container->addCompilerPass( new StorageConnectionPass );
         $container->addCompilerPass( new ImaginePass );
-        $container->addCompilerPass( new IOHandlerTagPass() );
         $container->addCompilerPass( new ConfigResolverParameterPass( new DynamicSettingParser() ) );
         $container->addCompilerPass( new AsseticPass() );
 

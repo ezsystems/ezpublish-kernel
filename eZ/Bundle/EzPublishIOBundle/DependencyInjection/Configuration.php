@@ -2,77 +2,77 @@
 
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Configuration as SiteAccessConfiguration;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Configuration extends SiteAccessConfiguration
+class Configuration implements ConfigurationInterface
 {
+    /**
+     * @var ConfigurationFactory[]
+     */
+    private $metadataHandlerFactories = array();
+
+    /**
+     * @var ConfigurationFactory[]
+     */
+    private $binarydataHandlerFactories = array();
+
+    public function setMetadataHandlerFactories( array $factories )
+    {
+        $this->metadataHandlerFactories = $factories;
+    }
+
+    public function setBinarydataHandlerFactories( array $factories )
+    {
+        $this->binarydataHandlerFactories = $factories;
+    }
+
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root( 'ez_io' )
-            ->children()
-                ->append( $this->getMetaDataNode() )
-                ->append( $this->getBinaryDataNode() )
-            ->end();
+        $rootNode = $treeBuilder->root( 'ez_io' );
+
+        $this->addHandlersSection(
+            $rootNode,
+            'metadata_handlers',
+            'Handlers for files metadata, that read & write files metadata (size, modification time...)',
+            $this->metadataHandlerFactories
+        );
+        $this->addHandlersSection(
+            $rootNode,
+            'binarydata_handlers',
+            'Handlers for files binary data. Reads & write files binary content',
+            $this->binarydataHandlerFactories
+        );
+
+        $rootNode->children()->end();
 
         return $treeBuilder;
     }
 
     /**
-     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     * @param NodeDefinition $node
+     * @param                $name
+     * @param string $info block info line
+     * @param ConfigurationFactory[] $factories
      */
-    private function getBinaryDataNode()
+    private function addHandlersSection( NodeDefinition $node, $name, $info, array &$factories )
     {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root( 'binarydata_handlers' );
-
-        $node
+        $handlersNodeBuilder = $node
             ->children()
-                ->arrayNode( 'flysystem' )
-                    ->canBeUnset()
+                ->arrayNode( $name )
+                    ->info( $info )
+                    ->useAttributeAsKey( 'name' )
                     ->prototype( 'array' )
-                        ->children()
-                            ->scalarNode( 'adapter' )->isRequired()->info( 'flysystem adapter' )->example( 'nfs' )->end()
-                            ->scalarNode( 'url_prefix' )->info( 'Prefix to append to url' )->example( 'http://static.example.com' )->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ->end();
+                    ->performNoDeepMerging()
+                    ->children();
 
-        return $node;
-    }
-
-    /**
-     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
-     */
-    private function getMetaDataNode()
-    {
-        $treeBuilder = new TreeBuilder();
-        $node = $treeBuilder->root( 'metadata_handlers' );
-
-        $node
-            ->children()
-                ->arrayNode( 'flysystem' )
-                    ->canBeUnset()
-                    ->prototype( 'array' )
-                        ->children()
-                            ->scalarNode( 'adapter' )->isRequired()->info( 'flysystem adapter' )->example( 'nfs' )->end()
-                            ->scalarNode( 'url_prefix' )->info( 'Prefix to append to url' )->example( 'http://static.example.com' )->end()
-                        ->end()
-                    ->end()
-                ->end()
-                ->arrayNode( 'legacy_dfs_cluster' )
-                    ->canBeUnset()
-                    ->prototype( 'array' )
-                        ->children()
-                            ->scalarNode( 'connection' )->info( 'doctrine connection' )->example( 'default' )->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end();
-
-        return $node;
+        foreach ( $factories as $name => $factory )
+        {
+            $factoryNode = $handlersNodeBuilder->arrayNode( $name )->canBeUnset();
+            $factory->addConfiguration( $factoryNode );
+        }
     }
 }

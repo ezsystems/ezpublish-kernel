@@ -1,8 +1,4 @@
 parameters:
-    # Available IO handlers types
-    ez_io.binarydata_handlers_map: {}
-    ez_io.metadata_handlers_map: {}
-
     # User configured IO handlers
     ez_io.metadata_handlers: {}
     ez_io.binarydata_handlers: {}

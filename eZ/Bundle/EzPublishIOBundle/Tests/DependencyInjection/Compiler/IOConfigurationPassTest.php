@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the IOHandlerTagPass class.
+ * File containing the IOConfigurationPass class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\Compiler;
 
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\IOConfigurationPass;
+use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -22,23 +23,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         $this->container->setParameter( 'ez_io.metadata_handlers', array() );
         $this->container->setParameter( 'ez_io.binarydata_handlers', array() );
 
-        $this->container->setParameter(
-            'ez_io.metadata_handlers_map',
-            array(
-                'flysystem' => 'ezpublish.core.io.metadata_handler.flysystem',
-                'legacy_dfs_cluster' => 'ezpublish.core.io.metadata_handler.legacy_dfs_cluster'
-            )
-        );
-
-        $this->container->setParameter(
-            'ez_io.binarydata_handlers_map',
-            array(
-                'flysystem' => 'ezpublish.core.io.binarydata_handler.flysystem'
-            )
-        );
-
         $this->container->setDefinition( 'ezpublish.core.io.metadata_handler.flysystem', new Definition() );
-        $this->container->setDefinition( 'ezpublish.core.io.metadata_handler.legacy_dfs_cluster', new Definition() );
         $this->container->setDefinition( 'ezpublish.core.io.binarydata_handler.flysystem', new Definition() );
 
         $this->container->setDefinition( 'ezpublish.core.io.binarydata_handler.factory', new Definition() );
@@ -47,7 +32,12 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
 
     protected function registerCompilerPass( ContainerBuilder $container )
     {
-        $container->addCompilerPass( new IOConfigurationPass() );
+        $container->addCompilerPass(
+            new IOConfigurationPass(
+                array( 'flysystem' => new ConfigurationFactory\MetadataHandler\Flysystem() ),
+                array( 'flysystem' => new ConfigurationFactory\BinarydataHandler\Flysystem() )
+            )
+        );
     }
 
     /**
@@ -74,7 +64,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.binarydata_handlers',
-            array( 'flysystem' => array( 'my_handler' => array( 'adapter' => 'my_adapter' ) ) )
+            array( 'my_handler' => array( 'name' => 'my_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter' ) )
         );
 
         $this->container->setDefinition( 'oneup_flysystem.my_adapter_adapter', new Definition() );
@@ -108,7 +98,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.metadata_handlers',
-            array( 'flysystem' => array( 'my_handler' => array( 'adapter' => 'my_adapter' ) ) )
+            array( 'my_handler' => array( 'name' => 'my_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter' ) )
         );
 
         $this->container->setDefinition( 'oneup_flysystem.my_adapter_adapter', new Definition() );
@@ -169,7 +159,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.metadata_handlers',
-            array( 'unknown' => array() )
+            array( 'my_handler' => array( 'type' => 'unknown' ) )
         );
 
         $this->compile();
@@ -183,7 +173,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.binarydata_handlers',
-            array( 'unknown' => array() )
+            array( 'my_handler' => array( 'type' => 'unknown' ) )
         );
 
         $this->compile();
