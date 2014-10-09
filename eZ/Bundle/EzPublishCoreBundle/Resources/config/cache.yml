@@ -42,4 +42,4 @@ services:
         arguments: [@fos_http_cache.cache_manager]
 
     ezpublish.http_cache.purge_client:
-        alias: ezpublish.http_cache.purge_client.fos
+        alias: ezpublish.http_cache.purge_client.local
