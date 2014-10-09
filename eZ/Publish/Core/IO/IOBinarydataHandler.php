@@ -1,10 +1,9 @@
 <?php
 /**
- * File containing the BinaryDataHandler interface
+ * This file is part of the eZ Publish Kernel package
  *
- * @copyright Copyright (C) 2013 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
- * @version //autogentag//
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
 namespace eZ\Publish\Core\IO;
 
