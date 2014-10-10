@@ -33,18 +33,11 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getFilesystem
-     */
     public function testGetFilesystem()
     {
         $this->assertInstanceOf( 'Symfony\\Component\\Filesystem\\Filesystem', $this->store->getFilesystem() );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::setFilesystem
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getFilesystem
-     */
     public function testSetFilesystem()
     {
         $fs = new Filesystem();
@@ -52,10 +45,6 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $fs, $this->store->getFilesystem() );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getPath
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheLockName
-     */
     public function testGetPath()
     {
         $prefix = LocationAwareStore::LOCATION_CACHE_DIR . '/123/';
@@ -63,10 +52,6 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( strpos( $path, __DIR__ . "/$prefix" ) === 0 );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getPath
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheLockName
-     */
     public function testGetStalePath()
     {
         // Generate the lock file to force using the stale cache dir
@@ -81,10 +66,6 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
         @unlink( $lockFile );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getPath
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheLockName
-     */
     public function testGetPathDeadProcess()
     {
         if ( !function_exists( 'posix_kill' ) )
@@ -108,12 +89,6 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
         return $this->getMock( 'Symfony\\Component\\Filesystem\\Filesystem' );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::purgeByRequest
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::purgeLocation
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheLockName
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheDir
-     */
     public function testPurgeByRequestSingleLocation()
     {
         $fs = $this->getFilesystemMock();
@@ -141,17 +116,11 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
             ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName( $locationId ), $locationCacheDir ) );
 
         $request = Request::create( '/', 'PURGE' );
-        $request->headers->set( 'X-Location-Id', $locationId );
+        $request->headers->set( 'X-Location-Id', "$locationId" );
         $this->store->purgeByRequest( $request );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::purgeByRequest
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::purgeLocation
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheLockName
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheDir
-     */
-    public function testPurgeByRequestMultipleLocations()
+    public function testPurgeByRequestMultipleLocationsBC()
     {
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem( $fs );
@@ -186,12 +155,41 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
         $this->store->purgeByRequest( $request );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::purgeAllContent
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::purgeLocation
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheLockName
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheDir
-     */
+    public function testPurgeByRequestMultipleLocations()
+    {
+        $fs = $this->getFilesystemMock();
+        $this->store->setFilesystem( $fs );
+        $locationIds = array( 123, 456, 789 );
+        $i = 0;
+        foreach ( $locationIds as $locationId )
+        {
+            $locationCacheDir = $this->store->getLocationCacheDir( $locationId );
+            $staleCacheDir = str_replace( LocationAwareStore::LOCATION_CACHE_DIR, LocationAwareStore::LOCATION_STALE_CACHE_DIR, $locationCacheDir );
+
+            $fs
+                ->expects( $this->at( $i++ ) )
+                ->method( 'exists' )
+                ->with( $locationCacheDir )
+                ->will( $this->returnValue( true ) );
+            $fs
+                ->expects( $this->at( $i++ ) )
+                ->method( 'mkdir' )
+                ->with( $staleCacheDir );
+            $fs
+                ->expects( $this->at( $i++ ) )
+                ->method( 'mirror' )
+                ->with( $locationCacheDir, $staleCacheDir );
+            $fs
+                ->expects( $this->at( $i++ ) )
+                ->method( 'remove' )
+                ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName( $locationId ), $locationCacheDir ) );
+        }
+
+        $request = Request::create( '/', 'BAN' );
+        $request->headers->set( 'X-Location-Id', '(' . implode( '|', $locationIds ) . ')' );
+        $this->store->purgeByRequest( $request );
+    }
+
     public function testPurgeAllContent()
     {
         $fs = $this->getFilesystemMock();
@@ -220,13 +218,37 @@ class LocationAwareStoreTest extends PHPUnit_Framework_TestCase
         $this->store->purgeAllContent();
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::purgeByRequest
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::purgeLocation
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheLockName
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore::getLocationCacheDir
-     */
     public function testPurgeAllContentByRequest()
+    {
+        $fs = $this->getFilesystemMock();
+        $this->store->setFilesystem( $fs );
+        $locationCacheDir = $this->store->getLocationCacheDir();
+        $staleCacheDir = str_replace( LocationAwareStore::LOCATION_CACHE_DIR, LocationAwareStore::LOCATION_STALE_CACHE_DIR, $locationCacheDir );
+
+        $fs
+            ->expects( $this->any() )
+            ->method( 'exists' )
+            ->with( $locationCacheDir )
+            ->will( $this->returnValue( true ) );
+        $fs
+            ->expects( $this->once() )
+            ->method( 'mkdir' )
+            ->with( $staleCacheDir );
+        $fs
+            ->expects( $this->once() )
+            ->method( 'mirror' )
+            ->with( $locationCacheDir, $staleCacheDir );
+        $fs
+            ->expects( $this->once() )
+            ->method( 'remove' )
+            ->with( array( $staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir ) );
+
+        $request = Request::create( '/', 'BAN' );
+        $request->headers->set( 'X-Location-Id', '.*' );
+        $this->store->purgeByRequest( $request );
+    }
+
+    public function testPurgeAllContentByRequestBC()
     {
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem( $fs );
