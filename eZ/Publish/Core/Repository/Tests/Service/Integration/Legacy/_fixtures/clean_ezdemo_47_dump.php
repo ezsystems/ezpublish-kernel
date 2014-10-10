@@ -6211,7 +6211,7 @@ array (
   'language_code' => 'eng-US',
   'language_id' => '3',
   'sort_key_int' => '0',
-  'sort_key_string' => '',
+  'sort_key_string' => 'media',
   'version' => '1',
  ),
  20 =>

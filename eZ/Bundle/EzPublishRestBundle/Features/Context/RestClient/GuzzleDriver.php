@@ -9,10 +9,26 @@
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
+use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\DriverInterface;
+use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\DriverHelper;
 use Guzzle\Http\Client;
+use Guzzle\Http\Message\Header;
+use Guzzle\Http\Exception\BadResponseException;
 
-class GuzzleDriver extends RestClient
+class GuzzleDriver implements DriverInterface
 {
+    use DriverHelper;
+
+    /**
+     * @var boolean
+     */
+    protected $sent = false;
+
+    /**
+     * @var \Guzzle\Http\Client
+     */
+    protected $client;
+
     /**
      * @var \Guzzle\Http\Message\Request
      */
@@ -23,7 +39,203 @@ class GuzzleDriver extends RestClient
      */
     protected $response;
 
-    public function getResponseBody()
+    /**
+     * @var string
+     */
+    protected $host;
+
+    /**
+     * @var string
+     */
+    protected $resource;
+
+    /**
+     * @var string
+     */
+    protected $method;
+
+    /**
+     * @var array Associative array with 'header' => 'value'
+     */
+    protected $headers;
+
+    /**
+     * @var string
+     */
+    protected $body;
+
+    /**
+     * Instanciate a client
+     */
+    public function __construct()
+    {
+        $this->client = new Client();
+    }
+
+    /**
+     * Get reponse
+     *
+     * @return \Guzzle\Http\Message\Response
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    protected function getResponse()
+    {
+        if ( $this->sent )
+        {
+            return $this->response;
+        }
+
+        throw new \RuntimeException( "Attempt to get response data when request hasn't been sent yet" );
+    }
+
+    /**
+     * Send the request
+     */
+    public function send()
+    {
+        // make a request object
+        $this->request = $this->client->createRequest(
+            $this->method,
+            $this->host . $this->resource
+        );
+
+        // set headers
+        foreach ( $this->headers as $header => $value )
+        {
+            $this->request->setHeader( $header, $value );
+        }
+
+        // set body
+        if ( !empty( $this->body ) )
+        {
+            $this->request->setBody( $this->body );
+        }
+
+        try
+        {
+            // finally send the request
+            $this->response = $this->client->send( $this->request );
+        }
+        // if the response is an 40x or a 50x then it will throw an exception
+        // we catch and get the response stored on the request object
+        catch ( BadResponseException $e )
+        {
+            $this->response = $this->request->getResponse();
+        }
+
+        $this->sent = true;
+    }
+
+    /**
+     * Set request host
+     *
+     * @param string $host
+     *
+     * @return void
+     */
+    public function setHost( $host )
+    {
+        if ( substr( $host, -1 ) === '/' )
+        {
+            $host = substr( $host, 0, strlen( $host ) - 1 );
+        }
+
+        $this->host = $host;
+    }
+
+    /**
+     * Set request resource url
+     *
+     * @param string $resource
+     *
+     * @return void
+     */
+    public function setResource( $resource )
+    {
+        $this->resource = $resource;
+    }
+
+    /**
+     * Set request method
+     *
+     * @param string $method Can be GET, POST, PATCH, ...
+     *
+     * @return void
+     */
+    public function setMethod( $method )
+    {
+        $this->method = $method;
+    }
+
+    /**
+     * Get response status code
+     *
+     * @return string
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    public function getStatusCode()
+    {
+        return $this->getResponse()->getStatusCode();
+    }
+
+    /**
+     * Get response status message
+     *
+     * @return string
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    public function getStatusMessage()
+    {
+        return $this->getResponse()->getReasonPhrase();
+    }
+
+    /**
+     * Set request header
+     *
+     * @param string $header Header to be set
+     *
+     * @return void
+     */
+    public function setHeader( $header, $value )
+    {
+        if ( is_array( $value ) )
+        {
+            $value = implode( ';', $value );
+        }
+
+        $this->headers[$header] = $value;
+    }
+
+    /**
+     * Get all response headers
+     *
+     * @return array Associative array with $header => $value (value can be an array if it hasn't a single value)
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    public function getHeaders()
+    {
+        $headers = array();
+        foreach ( $this->response->getHeaders()->getAll() as $header => $headerObject )
+        {
+            $allHeaderValues = $headerObject->toArray();
+            $headers[strtolower( $header )] = implode( ";", $allHeaderValues );
+        }
+
+        return $headers;
+    }
+
+    /**
+     * Get response body
+     *
+     * @return string
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    public function getBody()
     {
         $bodyObject = $this->response->getBody();
 
@@ -38,64 +250,15 @@ class GuzzleDriver extends RestClient
         return $bodyObject->read( $length );
     }
 
-    public function getResponseHeaders()
+    /**
+     * Set request body
+     *
+     * @param string $body
+     *
+     * @return void
+     */
+    public function setBody( $body )
     {
-        $headers = array();
-        foreach ( $this->response->getHeaders()->getAll() as $header => $headerObject )
-        {
-            $allHeaderValues = $headerObject->toArray();
-            // only getting the first of the array, most of the cases this will
-            // work as expected
-            $headers[$header] = $allHeaderValues[0];
-        }
-
-        return $headers;
-    }
-
-    public function getResponseStatusCode()
-    {
-        return $this->response->getStatusCode();
-    }
-
-    public function getResponseStatusMessage()
-    {
-        return $this->response->getReasonPhrase();
-    }
-
-    public function sendRequest()
-    {
-        $client = new Client();
-
-        // make a request object
-        $request = $client->createRequest(
-            $this->requestType,
-            $this->host . $this->resource
-        );
-
-        // set headers
-        foreach ( $this->headers as $header => $value )
-        {
-            $request->setHeader( $header, $value );
-        }
-
-        // set body
-        if ( !empty( $this->body ) )
-        {
-            $request->setBody( $this->body );
-        }
-
-        $this->request = $request;
-
-        try
-        {
-            // finally send the request
-            $this->response = $request->send();
-        }
-        // if the response is an 40x or a 50x then it will throw an exception
-        // we catch and get the response stored on the request object
-        catch ( \Exception $e )
-        {
-            $this->response = $this->request->getResponse();
-        }
+        $this->body = $body;
     }
 }

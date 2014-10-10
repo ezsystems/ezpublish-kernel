@@ -9,76 +9,227 @@
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
+use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\DriverInterface;
+use eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient\DriverHelper;
 use Buzz\Message\Request;
 use Buzz\Message\Response;
 use Buzz\Client\Curl;
 
-class BuzzDriver extends RestClient
+class BuzzDriver implements DriverInterface
 {
+    use DriverHelper;
+
+    /**
+     * @var boolean
+     */
+    private $sent = false;
+
     /**
      * @var \Buzz\Message\Request
      */
-    protected $request;
+    private $request;
 
     /**
      * @var \Buzz\Message\Response
      */
-    protected $response;
+    private $response;
 
-    public function getResponseHeaders()
+    /**
+     * Initialize the request and response
+     */
+    public function __construct()
+    {
+        $this->request = new Request();
+        $this->response = new Response();
+    }
+
+    /**
+     * Get reponse
+     *
+     * @return \Buzz\Message\Response
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    protected function getResponse()
+    {
+        if ( $this->sent )
+        {
+            return $this->response;
+        }
+
+        throw new \RuntimeException( "Attempt to get response data when request hasn't been sent yet" );
+    }
+
+    /**
+     * Get request
+     *
+     * @return \Buzz\Message\Response
+     */
+    protected function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Send the request
+     */
+    public function send()
+    {
+        // prepare client
+        $curl = new Curl();
+        $curl->send(
+            $this->request,
+            $this->response
+        );
+
+        $this->sent = true;
+    }
+
+    /**
+     * Set request host
+     *
+     * @param string $host
+     *
+     * @return void
+     */
+    public function setHost( $host )
+    {
+        if ( substr( $host, -1 ) === '/' )
+        {
+            $host = substr( $host, 0, strlen( $host ) - 1 );
+        }
+
+        $this->getRequest()->setHost( $host );
+    }
+
+    /**
+     * Set request resource url
+     *
+     * @param string $resource
+     *
+     * @return void
+     */
+    public function setResource( $resource )
+    {
+        $this->getRequest()->setResource( $resource );
+    }
+
+    /**
+     * Set request method
+     *
+     * @param string $method Can be GET, POST, PATCH, ...
+     *
+     * @return void
+     */
+    public function setMethod( $method )
+    {
+        $this->getRequest()->setMethod( $method );
+    }
+
+    /**
+     * Get response status code
+     *
+     * @return string
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    public function getStatusCode()
+    {
+        return $this->getResponse()->getStatusCode();
+    }
+
+    /**
+     * Get response status message
+     *
+     * @return string
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    public function getStatusMessage()
+    {
+        return $this->getResponse()->getReasonPhrase();
+    }
+
+    /**
+     * Set request header
+     *
+     * @param string $header Header to be set
+     *
+     * @return void
+     */
+    public function setHeader( $header, $value )
+    {
+        if ( is_array( $value ) )
+        {
+            $value = implode( ';', $value );
+        }
+
+        $this->getRequest()->addHeader( "$header: $value" );
+    }
+
+    /**
+     * Get all response headers
+     *
+     * @return array Associative array with $header => $value (value can be an array if it hasn't a single value)
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    public function getHeaders()
     {
         return $this->unFormatHeaders( $this->response->getHeaders() );
     }
 
-    public function getResponseBody()
+    /**
+     * Get response body
+     *
+     * @return string
+     *
+     * @throws \RuntimeException If request hasn't been send already
+     */
+    public function getBody()
     {
-        return $this->response->getContent();
+        return $this->getResponse()->getContent();
     }
 
-    public function getResponseStatusCode()
+    /**
+     * Set request body
+     *
+     * @param string $body
+     *
+     * @return void
+     */
+    public function setBody( $body )
     {
-        return $this->response->getStatusCode();
+        $this->getRequest()->setContent( $body );
     }
 
-    public function getResponseStatusMessage()
+    /**
+     * Converts the buzz headers attributes into single lines
+     *
+     * @param array $headers All headers
+     *
+     * @return array
+     */
+    protected function unFormatHeaders( array $headers )
     {
-        return $this->response->getReasonPhrase();
-    }
+        $headersInAssociativeArray = array();
+        foreach ( $headers as $header )
+        {
+            $colonPosition = strpos( $header, ':' );
 
-    public function sendRequest()
-    {
-        // new Request
-        $request = new Request(
-            $this->requestType,
-            $this->resource,
-            $this->host
-        );
+            // if no ':' is found than add all header to array
+            if ( $colonPosition === false )
+            {
+                $headersInAssociativeArray[] = $header;
+            }
+            else
+            {
+                $key = strtolower( trim( substr( $header, 0, $colonPosition ) ) );
+                $value = trim( substr( $header, $colonPosition + 1, strlen( $header ) ) );
+                $headersInAssociativeArray[$key] = $value;
+            }
+        }
 
-        // add headers
-        $request->addHeaders( $this->headers );
-
-        // add body
-        $request->setContent( $this->body );
-
-        // prepare client
-        $response = new Response();
-        $curl = new Curl();
-        $curl->send(
-            $request,
-            $response
-        );
-
-        $this->request = $request;
-        $this->response = $response;
-    }
-
-    public function getCompleteResponse()
-    {
-        return $this->response;
-    }
-
-    public function getCompleteRequest()
-    {
-        return $this->request;
+        return $headersInAssociativeArray;
     }
 }

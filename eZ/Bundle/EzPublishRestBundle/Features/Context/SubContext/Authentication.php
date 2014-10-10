@@ -9,44 +9,28 @@
 
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
-use EzSystems\BehatBundle\Sentence\Authentication as AuthenticationSentences;
-use Behat\Behat\Exception\PendingException;
+use Behat\Behat\Tester\Exception\PendingException;
 
-class Authentication extends Base implements AuthenticationSentences
+trait Authentication
 {
     /**
-     * Given I am logged in as an|a "<role>"
-     * Given I have "<role>" permissions
+     * @Given I have :role permissions
      */
-    public function iAmLoggedInAsAn( $role )
+    public function usePermissionsOfRole( $role )
     {
-        switch( strtolower( $role ) )
-        {
-            case 'administrator':
-                $user = 'admin';
-                $password = 'publish';
-                break;
+        $credentials = $this->getCredentialsFor( $role );
 
-            default:
-                throw new PendingException( "Login with '$role' role not implemented yet" );
-        }
-
-        $this->restDriver->setAuthentication( $user, $password );
+        $this->restDriver->setAuthentication(
+            $credentials['login'],
+            $credentials['password']
+        );
     }
 
     /**
-     * Given I am logged in as "<user>" with password "<password>"
+     * @Given I don't have permissions
+     * @Given I do not have permissions
      */
-    public function iAmLoggedInAsWithPassword( $user, $password )
-    {
-        $this->restDriver->setAuthentication( $user, $password );
-    }
-
-    /**
-     * Given I am not logged in
-     * Given I do not|don't have permissions
-     */
-    public function iAmNotLoggedIn()
+    public function useAnonymousRole()
     {
         $this->restDriver->setAuthentication( '', '' );
     }

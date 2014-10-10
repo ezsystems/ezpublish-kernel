@@ -12,74 +12,54 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 use EzSystems\BehatBundle\Sentence\Exception as ExceptionSentences;
 use Behat\Behat\Context\Step;
 
-class Exception extends Base implements ExceptionSentences
+trait Exception
 {
     /**
-     * Then I see an invalid field exception|error
+     * @Then response has (an) unauthorized exception/error
+     * @Then response has (a) not authorized exception/error
      */
-    public function iSeeAnInvalidFieldError()
+    public function iSeeNotAuthorizedException()
     {
-        return array(
-            new Step\Then( 'I see 403 status code' ),
-            new Step\Then( 'I see "Forbidden" status message' ),
-            new Step\Then( 'I see "content-type" header with an "ErrorMessage"' ),
-            new Step\Then( 'I see response body with "eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException" object' ),
-            new Step\Then( 'I see response error 403 status code' ),
-            new Step\Then( 'I see response error description with "' . self::REGEX_INVALID_FIELD_MESSAGE . '"' ),
-        );
+        $this->assertStatusCode( 401 );
+        $this->assertStatusMessage( 'Unauthorized' );
     }
 
     /**
-     * Then I see a forbidden exception|error
+     * @Then response has (an) invalid field exception/error
      */
-    public function iSeeAForbiddenError()
+    public function assertInvalidFieldException()
     {
-        return array(
-            new Step\Then( 'I see 403 status code' ),
-            new Step\Then( 'I see "Forbidden" status message' ),
-            new Step\Then( 'I see "content-type" header with an "ErrorMessage"' ),
-            new Step\Then( 'I see response error 403 status code' ),
-        );
+        $this->assertStatusCode( 403 );
+        $this->assertStatusMessage( 'Forbidden' );
+        $this->assertHeaderHasObject( 'content-type', 'ErrorMessage' );
+        $this->assertResponseObject( 'eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException' );
+        $this->assertResponseErrorStatusCode( 403 );
+        $this->assertResponseErrorDescription( "/^Argument '([^']+)' is invalid:(.+)\$/" );
     }
 
     /**
-     * Then I see a forbidden exception|error with "<message>" message
+     * @Then response has a forbidden exception/error with message :message
      */
-    public function iSeeAForbiddenErrorWithMessage( $message )
+    public function assertForbiddenExceptionWithMessage( $message )
     {
-        return array(
-            new Step\Then( 'I see 403 status code' ),
-            new Step\Then( 'I see "Forbidden" status message' ),
-            new Step\Then( 'I see "content-type" header with an "ErrorMessage"' ),
-            new Step\Then( 'I see response error 403 status code' ),
-            new Step\Then( 'I see response error description with "/' . $message . '/"' ),
-        );
+        $this->assertStatusCode( 403 );
+        $this->assertStatusMessage( 'Forbidden' );
+        $this->assertHeaderHasObject( 'content-type', 'ErrorMessage' );
+        $this->assertResponseObject( 'eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException' );
+        $this->assertResponseErrorStatusCode( 403 );
+        $this->assertResponseErrorDescription( "/^$message\$/" );
     }
 
     /**
-     * Then I see a |not authorized exception|error
-     * Then I see an unauthorized exception|error
+     * @Then response has (a) not found exception/error
      */
-    public function iSeeNotAuthorizedError()
+    public function assertNotFoundException()
     {
-        return array(
-            new Step\Then( 'I see 401 status code' ),
-            new Step\Then( 'I see "Unauthorized" status message' ),
-        );
-    }
-
-    /**
-     * Then I see a not found exception|error
-     */
-    public function iSeeNotFoundError()
-    {
-        return array(
-            new Step\Then( 'I see 404 status code' ),
-            new Step\Then( 'I see "Not Found" status message' ),
-            new Step\Then( 'I see "content-type" header with an "ErrorMessage"' ),
-            new Step\Then( 'I see response body with "eZ\\Publish\\Core\\REST\\Common\\Exceptions\\NotFoundException" object' ),
-            new Step\Then( 'I see response error 404 status code' ),
-            new Step\Then( 'I see response error description with "' . self::REGEX_NOT_FOUND_MESSAGE . '"' ),
-        );
+        $this->assertStatusCode( 404 );
+        $this->assertStatusMessage( 'Not Found' );
+        $this->assertHeaderHasObject( 'content-type', 'ErrorMessage' );
+        $this->assertResponseObject( 'eZ\\Publish\\Core\\REST\\Common\\Exceptions\\NotFoundException' );
+        $this->assertResponseErrorStatusCode( 404 );
+        $this->assertResponseErrorDescription( "/^Could not find '([^']+)' with identifier '([^']+)'\$/" );
     }
 }
