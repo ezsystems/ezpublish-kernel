@@ -121,5 +121,8 @@ abstract class ConfigurationFactoryTest extends AbstractContainerBuilderTestCase
     /**
      * Lets you test extra changes that may have been done to the container during configuration.
      */
-    abstract public function validateConfiguredContainer();
+    public function validateConfiguredContainer()
+    {
+
+    }
 }
