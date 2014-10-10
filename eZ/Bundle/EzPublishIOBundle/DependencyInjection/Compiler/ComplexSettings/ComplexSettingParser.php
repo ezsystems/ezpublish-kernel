@@ -7,6 +7,8 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\ComplexSettings;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
+
 /**
  * Parses a string that contains dynamic settings ($foo;eng;bar$).
  *
@@ -14,6 +16,16 @@ namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\ComplexSettin
  */
 class ComplexSettingParser
 {
+    /**
+     * @var DynamicSettingParser
+     */
+    private $dynamicSettingParser;
+
+    public function __construct( DynamicSettingParser $dynamicSettingParser )
+    {
+        $this->dynamicSettingParser = $dynamicSettingParser;
+    }
+
     /**
      * Tests if $string contains dynamic settings
      *
@@ -45,18 +57,6 @@ class ComplexSettingParser
         );
 
         return $matches[0];
-    }
-
-    /**
-     * Tests if $string is a dynamic setting, meaning that it only contains the setting and nothing else
-     *
-     * @param string $string
-     *
-     * @return bool
-     */
-    public function isDynamicSetting( $string )
-    {
-        return (bool)preg_match( '#^\$[a-zA-Z0-9_.-]+(?:(?:;[a-zA-Z0-9_]+)(?:;[a-zA-Z0-9_.-]+)?)?\$$#i', $string );
     }
 
     /**
