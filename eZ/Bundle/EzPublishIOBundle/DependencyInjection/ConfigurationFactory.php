@@ -1,14 +1,13 @@
 <?php
 /**
- * This file is part of the eZ Publish Legacy package
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
- * @license For full copyright and license information view LICENSE file distributd with this source code.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\Definition as ServiceDefinition;
 
 /**
@@ -32,9 +31,9 @@ interface ConfigurationFactory
      *     ->scalarNode( 'an_argument' )->info( 'This is an argument' )
      *   ->end();
      * ```
-     * @param NodeDefinition $node The handler's configuration node.
+     * @param ArrayNodeDefinition $node The handler's configuration node.
      */
-    public function addConfiguration( NodeDefinition $node );
+    public function addConfiguration( ArrayNodeDefinition $node );
 
     /**
      * Returns the ID of the base, abstract service used to create the handlers.

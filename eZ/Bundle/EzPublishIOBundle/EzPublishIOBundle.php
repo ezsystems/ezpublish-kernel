@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * This file is part of the eZ Publish Kernel package
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace eZ\Bundle\EzPublishIOBundle;
 
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
@@ -16,10 +21,11 @@ class EzPublishIOBundle extends Bundle
 
     public function build( ContainerBuilder $container )
     {
+        $extension = $this->getContainerExtension();
         $container->addCompilerPass(
             new Compiler\IOConfigurationPass(
-                $this->extension->getMetadataHandlerFactories(),
-                $this->extension->getBinarydataHandlerFactories()
+                $extension->getMetadataHandlerFactories(),
+                $extension->getBinarydataHandlerFactories()
             )
         );
         parent::build( $container );

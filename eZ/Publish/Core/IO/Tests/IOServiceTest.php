@@ -1,12 +1,10 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Repository\Tests\Service\Integration\IOBase class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\IO\Tests;
 
 use eZ\Publish\Core\IO\Handler as IOHandlerInterface;

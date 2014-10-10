@@ -1,17 +1,16 @@
 <?php
 /**
- * File containing the IOConfigurationPass class.
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
 
-use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
+use ArrayObject;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -23,15 +22,15 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
  */
 class IOConfigurationPass implements CompilerPassInterface
 {
-    /** @var ConfigurationFactory[] */
+    /** @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|ArrayObject */
     private $metadataHandlerFactories;
 
-    /** @var ConfigurationFactory[] */
+    /** @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|ArrayObject */
     private $binarydataHandlerFactories;
 
     public function __construct(
-        array $metadataHandlerFactories = array(),
-        array $binarydataHandlerFactories = array()
+        ArrayObject $metadataHandlerFactories = null,
+        ArrayObject $binarydataHandlerFactories = null
     )
     {
         $this->metadataHandlerFactories = $metadataHandlerFactories;
@@ -73,7 +72,7 @@ class IOConfigurationPass implements CompilerPassInterface
      * @param ContainerBuilder $container
      * @param Definition $factory The factory service that should receive the list of handlers
      * @param array $configuredHandlers Handlers configuration declared via semantic config
-     * @param ConfigurationFactory[] $factories Map of alias => handler service id
+     * @param \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|ArrayObject $factories Map of alias => handler service id
      * @param string $defaultHandler default handler id
      *
      * @internal param $HandlerTypesMap
@@ -82,7 +81,7 @@ class IOConfigurationPass implements CompilerPassInterface
         ContainerBuilder $container,
         Definition $factory,
         array $configuredHandlers,
-        array $factories,
+        ArrayObject $factories,
         $defaultHandler
     )
     {
@@ -108,19 +107,19 @@ class IOConfigurationPass implements CompilerPassInterface
      * Returns from $factories the factory for handler $type
      *
      * @param ContainerBuilder $container
-     * @param ConfigurationFactory[] $factories
+     * @param \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|ArrayObject|ContainerAware[] $factories
      * @param string $type
      *
-     * @return ConfigurationFactory
+     * @return \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory
      *
      */
-    protected function getFactory( array $factories, $type, ContainerBuilder $container )
+    protected function getFactory( ArrayObject $factories, $type, ContainerBuilder $container )
     {
         if ( !isset( $factories[$type] ) )
         {
             throw new InvalidConfigurationException( "Unknown handler type $type" );
         }
-        if ( $factories[$type] instanceof ContainerAware )
+        if ( $factories[$type] instanceof ContainerAwareInterface )
         {
             $factories[$type]->setContainer( $container );
         }

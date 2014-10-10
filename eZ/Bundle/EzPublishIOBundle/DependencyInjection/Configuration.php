@@ -1,7 +1,13 @@
 <?php
-
+/**
+ * This file is part of the eZ Publish Kernel package
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection;
 
+use ArrayObject;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -10,21 +16,21 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
-     * @var ConfigurationFactory[]
+     * @var ConfigurationFactory[]|ArrayObject
      */
     private $metadataHandlerFactories = array();
 
     /**
-     * @var ConfigurationFactory[]
+     * @var ConfigurationFactory[]|ArrayObject
      */
     private $binarydataHandlerFactories = array();
 
-    public function setMetadataHandlerFactories( array $factories )
+    public function setMetadataHandlerFactories( ArrayObject $factories )
     {
         $this->metadataHandlerFactories = $factories;
     }
 
-    public function setBinarydataHandlerFactories( array $factories )
+    public function setBinarydataHandlerFactories( ArrayObject $factories )
     {
         $this->binarydataHandlerFactories = $factories;
     }
@@ -56,9 +62,9 @@ class Configuration implements ConfigurationInterface
      * @param NodeDefinition $node
      * @param                $name
      * @param string $info block info line
-     * @param ConfigurationFactory[] $factories
+     * @param ConfigurationFactory[]|ArrayObject $factories
      */
-    private function addHandlersSection( NodeDefinition $node, $name, $info, array &$factories )
+    private function addHandlersSection( NodeDefinition $node, $name, $info, ArrayObject &$factories )
     {
         $handlersNodeBuilder = $node
             ->children()
