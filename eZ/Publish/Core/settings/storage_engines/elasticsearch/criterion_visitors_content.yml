@@ -12,6 +12,8 @@ parameters:
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_modified_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\ModifiedRange
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\PublishedRange
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DateMetadata\PublishedRange
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.depth_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DepthIn
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.depth_range.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\DepthRange
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.language_code_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LanguageCodeIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LocationIdIn
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.location_remote_id_in.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\LocationRemoteIdIn
@@ -95,6 +97,16 @@ services:
 
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range:
         class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.date_published_range.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.depth_in:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.depth_in.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.depth_range:
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.depth_range.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 
