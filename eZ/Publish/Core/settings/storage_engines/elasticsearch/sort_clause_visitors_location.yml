@@ -4,6 +4,8 @@ parameters:
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.content_name.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\ContentName
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_modified.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\DateModified
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_published.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\DatePublished
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.section_identifier.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\SectionIdentifier
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.section_name.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\SectionName
 
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.depth.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\Location\Depth
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.id.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\SortClauseVisitor\Location\Id
@@ -35,6 +37,16 @@ services:
 
     ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_published:
         class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.date_published.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.section_identifier:
+        class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.section_identifier.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.section_name:
+        class: %ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.section_name.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor}
 

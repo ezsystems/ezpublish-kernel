@@ -9,6 +9,8 @@ parameters:
     ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.location_path_string.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\LocationPathString
     ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.location_priority.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\LocationPriority
     ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.map_location_distance.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\MapLocationDistance
+    ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.section_identifier.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\SectionIdentifier
+    ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.section_name.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\SectionName
 
 services:
     # Note: services tagged with 'ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor'
@@ -66,5 +68,15 @@ services:
             - @ezpublish.spi.persistence.legacy.content_type.handler
             - @ezpublish.persistence.solr.search.field_registry
             - @ezpublish.persistence.solr.search.content.field_name_generator
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.section_identifier:
+        class: %ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.section_identifier.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.section_name:
+        class: %ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor.section_name.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor}
