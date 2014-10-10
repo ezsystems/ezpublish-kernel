@@ -29,9 +29,6 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         $this->container->setParameter( 'ez_io.metadata_handlers', array() );
         $this->container->setParameter( 'ez_io.binarydata_handlers', array() );
 
-        $this->container->setDefinition( 'ezpublish.core.io.metadata_handler.flysystem', new Definition() );
-        $this->container->setDefinition( 'ezpublish.core.io.binarydata_handler.flysystem', new Definition() );
-
         $this->container->setDefinition( 'ezpublish.core.io.binarydata_handler.factory', new Definition() );
         $this->container->setDefinition( 'ezpublish.core.io.metadata_handler.factory', new Definition() );
     }
