@@ -5,9 +5,9 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
-namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\Compiler\ComplexSettings;
+namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\ComplexSettings;
 
-use eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\ComplexSettings\ArgumentValueFactory;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ArgumentValueFactory;
 use PHPUnit_Framework_TestCase;
 
 class ArgumentValueFactoryTest extends PHPUnit_Framework_TestCase

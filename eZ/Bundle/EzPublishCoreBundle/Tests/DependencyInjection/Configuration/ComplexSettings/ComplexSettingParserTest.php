@@ -5,10 +5,10 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
  */
-namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\Compiler\ComplexSettings;
+namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\ComplexSettings;
 
 use PHPUnit_Framework_TestCase;
-use eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\ComplexSettings\ComplexSettingParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 
 class ComplexSettingParserTest extends PHPUnit_Framework_TestCase
 {
@@ -17,15 +17,7 @@ class ComplexSettingParserTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->parser = new ComplexSettingParser();;
-    }
-
-    /**
-     * @dataProvider provideSettings
-     */
-    public function testIsComplexSetting( $setting, $expected )
-    {
-        self::assertEquals( $expected[0], $this->parser->isDynamicSetting( $setting ), "string" );
+        $this->parser = new ComplexSettingParser();
     }
 
     /**
