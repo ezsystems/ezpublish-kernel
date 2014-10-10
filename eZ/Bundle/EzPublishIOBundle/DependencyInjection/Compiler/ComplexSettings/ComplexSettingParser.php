@@ -23,11 +23,28 @@ class ComplexSettingParser
      */
     public function containsDynamicSettings( $string )
     {
-        $dollarsCount = substr_count( $string, '$' );
-        if ( $dollarsCount < 2 )
-        {
-            return false;
-        }
+        return count( $this->matchDynamicSettings( $string ) ) > 0;
+    }
+
+    /**
+     * Matches all dynamic settings in $string
+     *
+     * Example: '/tmp/$var_dir/$storage_dir' => ['$var_dir$', '$storage_dir']
+     *
+     * @param string $string
+     *
+     * @return array
+     */
+    protected function matchDynamicSettings( $string )
+    {
+        preg_match_all(
+            '/\$[a-zA-Z0-9_.-]+(?:(?:;[a-zA-Z0-9_]+)(?:;[a-zA-Z0-9_.-]+)?)?\$/',
+            $string,
+            $matches,
+            PREG_PATTERN_ORDER
+        );
+
+        return $matches[0];
     }
 
     /**
@@ -39,20 +56,18 @@ class ComplexSettingParser
      */
     public function isDynamicSetting( $string )
     {
-        return ( preg_match( "^\$[a-z0-9_\.]+(?:;[a-z0-9_\.]+){0,2}\$$", $string ) );
+        return (bool)preg_match( '#^\$[a-zA-Z0-9_.-]+(?:(?:;[a-zA-Z0-9_]+)(?:;[a-zA-Z0-9_.-]+)?)?\$$#i', $string );
     }
 
     /**
-     * Parses a complex setting into a ComplexSetting object
+     * Parses dynamic settings
      *
      * @param string $string
      *
-     * @return ComplexSetting
+     * @return array key: original string, value: dynamic settings
      */
-    public function getDynamicSetting( $string )
+    public function parseComplexSetting( $string )
     {
-        $elements = preg_split( "^\$[a-z0-9_\.]+(?:;[a-z0-9_\.]+){0,2}\$$", $string );
-
-        return new ComplexSetting( $string, $elements );
+        return $this->matchDynamicSettings( $string );
     }
 }
