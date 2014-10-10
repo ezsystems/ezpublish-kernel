@@ -55,6 +55,7 @@ class VarnishProxyClientFactory
             if ( !$this->dynamicSettingParser->isDynamicSetting( $server ) )
             {
                 $allServers[] = $server;
+                continue;
             }
 
             $settings = $this->dynamicSettingParser->parseDynamicSetting( $server );
