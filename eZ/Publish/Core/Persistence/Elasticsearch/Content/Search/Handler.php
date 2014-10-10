@@ -176,17 +176,18 @@ class Handler implements SearchHandlerInterface
         if ( $versionId === null )
         {
             $query = array(
-                "filter" => array(
-                    "and" => array(
-                        array(
-                            "ids" => array(
-                                "type" => "content",
-                                "values" => $contentId,
-                            )
-                        ),
-                        array(
-                            "term" => array(
-                                "version_id" => $versionId,
+                "query" => array(
+                    "filtered" => array(
+                        "filter" => array(
+                            "and" => array(
+                                array(
+                                    "ids" => array(
+                                        "type" => "content",
+                                        "values" => array(
+                                            $contentId,
+                                        ),
+                                    )
+                                ),
                             ),
                         ),
                     ),
@@ -212,7 +213,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation( $locationId )
     {
-        // 1. Update all Content in the subtree with additional Location(s) outside of it
+        // 1. Update (reindex) all Content in the subtree with additional Location(s) outside of it
         $query = array(
             "filter" => array(
                 "nested" => array(
@@ -253,6 +254,11 @@ class Handler implements SearchHandlerInterface
         // 2. Delete all Content in the subtree with no other Location(s) outside of it
         $query["filter"]["nested"]["filter"]["and"][1] = array(
             "not" => $query["filter"]["nested"]["filter"]["and"][1],
+        );
+        $query = array(
+            "query" => array(
+                "filtered" => $query,
+            ),
         );
 
         $this->gateway->deleteByQuery( $query, "content" );

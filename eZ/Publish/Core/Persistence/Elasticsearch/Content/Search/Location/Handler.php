@@ -116,9 +116,13 @@ class Handler implements SearchHandlerInterface
     public function deleteContent( $contentId )
     {
         $query = array(
-            "filter" => array(
-                "term" => array(
-                    "content_id" => $contentId,
+            "query" => array(
+                "filtered" => array(
+                    "filter" => array(
+                        "term" => array(
+                            "content_id" => $contentId,
+                        ),
+                    ),
                 ),
             ),
         );
