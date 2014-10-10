@@ -33,6 +33,10 @@ class IO extends AbstractParser
                         ->info( 'Handler uses to manipulate IO files binarydata' )
                         ->example( 'default' )
                     ->end()
+                    ->scalarNode( 'url_prefix' )
+                        ->info( 'Prefix added to binary files uris. A host can also be added' )
+                        ->example( '$var_dir$/$storage_dir$, http://static.example.com/' )
+                    ->end()
                 ->end()
             ->end();
     }
@@ -52,6 +56,10 @@ class IO extends AbstractParser
         if ( isset( $settings['binarydata_handler'] ) )
         {
             $contextualizer->setContextualParameter( 'io.binarydata_handler', $currentScope, $settings['binarydata_handler'] );
+        }
+        if ( isset( $settings['url_prefix'] ) )
+        {
+            $contextualizer->setContextualParameter( 'io.url_prefix', $currentScope, $settings['url_prefix'] );
         }
     }
 
