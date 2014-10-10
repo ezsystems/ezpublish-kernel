@@ -14,18 +14,8 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
  *
  * Example: "$var_dir$/$storage_dir$"
  */
-class ComplexSettingParser
+class ComplexSettingParser extends DynamicSettingParser
 {
-    /**
-     * @var DynamicSettingParser
-     */
-    private $dynamicSettingParser;
-
-    public function __construct( DynamicSettingParser $dynamicSettingParser )
-    {
-        $this->dynamicSettingParser = $dynamicSettingParser;
-    }
-
     /**
      * Tests if $string contains dynamic settings
      *
