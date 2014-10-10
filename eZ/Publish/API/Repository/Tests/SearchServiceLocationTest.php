@@ -1575,56 +1575,6 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
-     * Test for the findLocations() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
-     */
-    public function testContentWithMultipleLocations()
-    {
-        $repository = $this->getRepository();
-        $contentService = $repository->getContentService();
-        $contentTypeService = $repository->getContentTypeService();
-        $locationService = $repository->getLocationService();
-
-        $forumType = $contentTypeService->loadContentTypeByIdentifier( "forum" );
-
-        $createStruct = $contentService->newContentCreateStruct( $forumType, "eng-GB" );
-        $createStruct->alwaysAvailable = false;
-        $createStruct->setField( "name", "An awesome duplicate forum" );
-
-        $draft = $contentService->createContent( $createStruct );
-        $content = $contentService->publishVersion( $draft->getVersionInfo() );
-
-        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct( 2 );
-        $location1 = $locationService->createLocation( $content->contentInfo, $locationCreateStruct );
-        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct( 5 );
-        $location2 = $locationService->createLocation( $content->contentInfo, $locationCreateStruct );
-
-        $query = new LocationQuery(
-            array(
-                'filter' => new Criterion\ContentId( $content->id ),
-                'sortClauses' => array(
-                    new SortClause\Location\Id( LocationQuery::SORT_ASC )
-                )
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
-
-        $this->assertEquals( 2, $result->totalCount );
-        $this->assertEquals(
-            $location1->id,
-            $result->searchHits[0]->valueObject->id
-        );
-        $this->assertEquals(
-            $location2->id,
-            $result->searchHits[1]->valueObject->id
-        );
-    }
-
-    /**
      * Assert that query result matches the given fixture.
      *
      * @param LocationQuery $query
