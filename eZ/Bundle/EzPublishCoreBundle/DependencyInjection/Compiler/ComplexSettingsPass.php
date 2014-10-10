@@ -7,7 +7,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
-use eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\ComplexSettings\ComplexSettingParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -27,30 +27,35 @@ class ComplexSettingsPass implements CompilerPassInterface
     {
         foreach ( $container->getDefinitions() as $serviceId => $definition )
         {
-            foreach( $definition->getArguments() as $argumentIndex => $argumentValue )
+            $arguments = $definition->getArguments();
+            foreach ( $arguments as $argumentIndex => $argumentValue )
             {
+                if ( !is_string( $argumentValue ) )
+                {
+                    continue;
+                }
+
                 if ( !$this->parser->containsDynamicSettings( $argumentValue ) )
                 {
                     continue;
                 }
 
-                if ( !$this->parser->isDynamicSetting( $argumentValue ) )
+                if ( $this->parser->isDynamicSetting( $argumentValue ) )
                 {
                     continue;
                 }
 
+                $factoryServiceId = sprintf( '%s.%s_%d', $serviceId, '__complex_setting_factory', $argumentIndex );
                 $container->setDefinition(
-                    sprintf( '%s.%s_%d', $serviceId, '__complex_setting_factory', $argumentIndex ),
-                    $this->createFactoryDefinition( $argumentValue )
-                    new Definition(
-                        'eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\ComplexSettings\ArgumentValueFactory',
-                        array(
-                            new Reference( 'ezpublish.config.resolver' ),
-                            $argumentValue,
-                            $this->parser->parseComplexSetting( $argumentValue )
-                        )
+                    $factoryServiceId,
+                    $this->createFactoryDefinition(
+                        $argumentValue,
+                        $this->parser->parseComplexSetting( $argumentValue )
                     )
                 );
+
+                $arguments[$argumentIndex] = new Reference( $factoryServiceId );
+                $definition->setArguments( $arguments );
             }
         }
     }
@@ -81,5 +86,31 @@ class ComplexSettingsPass implements CompilerPassInterface
     private function isDynamicSetting( $string )
     {
         return ( preg_match( "^\$[a-z0-9_\.]+(?:;[a-z0-9_\.]+){0,2}\$$", $string ) );
+    }
+
+    /**
+     * @param $argumentValue
+     * @param $dynamicSettings
+     *
+     * @return Definition
+     */
+    private function createFactoryDefinition( $argumentValue, $dynamicSettings )
+    {
+        $definition = new Definition(
+            'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ArgumentValueFactory',
+            array( $argumentValue )
+        );
+
+        foreach ( $dynamicSettings as $dynamicSetting )
+        {
+            $definition->addMethodCall(
+                'setDynamicSetting',
+                // yes, array, so that the dynamic parser doesn't pick it up. A bit dangerous...
+                // @todo might be safer with a numeric index and an sprintf string...
+                array( array( $dynamicSetting ), $dynamicSetting )
+            );
+        }
+
+        return $definition;
     }
 }

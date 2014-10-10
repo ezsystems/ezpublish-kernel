@@ -10,6 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AsseticPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
@@ -28,6 +29,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\XmlTextConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
@@ -67,6 +69,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new FragmentPass );
         $container->addCompilerPass( new StorageConnectionPass );
         $container->addCompilerPass( new ImaginePass );
+        $container->addCompilerPass( new ComplexSettingsPass( new ComplexSettingParser() ) );
         $container->addCompilerPass( new ConfigResolverParameterPass( new DynamicSettingParser() ) );
         $container->addCompilerPass( new AsseticPass() );
 
