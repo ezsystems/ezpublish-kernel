@@ -7,6 +7,7 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection;
 
+use ArrayObject;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
@@ -26,35 +27,20 @@ use Symfony\Component\Validator\Tests\Fixtures\Reference;
 class EzPublishIOExtension extends Extension
 {
     /**
-     * @var ConfigurationFactory[]
+     * @var ConfigurationFactory[]|ArrayObject
      */
-    private $metadataHandlerFactories = array();
+    private $metadataHandlerFactories;
 
     /**
-     * @var ConfigurationFactory[]
+     * @var ConfigurationFactory[]|ArrayObject
      */
-    private $binarydataHandlerFactories = array();
+    private $binarydataHandlerFactories;
 
-    /**
-     * Array of handlers:
-     *
-     * array(
-     *     'metadata' => array(
-     *         'my_metadata_handler' = > array(
-     *             'type' => 'flysystem'
-     *             'adapter' => 'my_adapter'
-     *         )
-     *     ),
-     *     'binarydata' => array(
-     *         'my_metadata_handler' = > array(
-     *             'type' => 'flysystem'
-     *             'adapter' => 'my_adapter'
-     *         )
-     *     )
-     * )
-     * @var array
-     */
-    private $handlers = array();
+    public function __construct()
+    {
+        $this->metadataHandlerFactories = new ArrayObject();
+        $this->binarydataHandlerFactories = new ArrayObject();
+    }
 
     /**
      * Registers a metadata handler configuration $factory for handler with $alias
@@ -79,7 +65,7 @@ class EzPublishIOExtension extends Extension
     }
 
     /**
-     * @return ConfigurationFactory[]
+     * @return ConfigurationFactory[]|ArrayObject
      */
     public function getMetadataHandlerFactories()
     {
@@ -87,7 +73,7 @@ class EzPublishIOExtension extends Extension
     }
 
     /**
-     * @return ConfigurationFactory[]
+     * @return ConfigurationFactory[]|ArrayObject
      */
     public function getBinarydataHandlerFactories()
     {

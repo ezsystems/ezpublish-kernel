@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\Compiler;
 
+use ArrayObject;
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\IOConfigurationPass;
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
@@ -16,6 +17,12 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class IOConfigurationPassTest extends AbstractCompilerPassTestCase
 {
+    /** @var ConfigurationFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $metadataConfigurationFactoryMock;
+
+    /** @var ConfigurationFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $binarydataConfigurationFactoryMock;
+
     public function setUp()
     {
         parent::setUp();
@@ -31,10 +38,17 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
 
     protected function registerCompilerPass( ContainerBuilder $container )
     {
+        $this->metadataConfigurationFactoryMock = $this->getMock( '\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory' );
+        $this->binarydataConfigurationFactoryMock = $this->getMock( '\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory' );
+
         $container->addCompilerPass(
             new IOConfigurationPass(
-                array( 'flysystem' => new ConfigurationFactory\MetadataHandler\Flysystem() ),
-                array( 'flysystem' => new ConfigurationFactory\BinarydataHandler\Flysystem() )
+                new ArrayObject(
+                    array( 'test_handler' => $this->metadataConfigurationFactoryMock )
+                ),
+                new ArrayObject(
+                    array( 'test_handler' => $this->binarydataConfigurationFactoryMock )
+                )
             )
         );
     }
@@ -59,71 +73,43 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    public function testFlysystemBinaryHandler()
+    public function testBinarydataHandler()
     {
         $this->container->setParameter(
             'ez_io.binarydata_handlers',
-            array( 'my_handler' => array( 'name' => 'my_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter' ) )
+            array( 'my_handler' => array( 'name' => 'my_handler', 'type' => 'test_handler' ) )
         );
 
-        $this->container->setDefinition( 'oneup_flysystem.my_adapter_adapter', new Definition() );
+        $this->binarydataConfigurationFactoryMock
+            ->expects( $this->once() )
+            ->method( 'getParentServiceId' )
+            ->will( $this->returnValue( 'test.io.binarydata_handler.test_handler' ) );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithParent(
-            'ezpublish.core.io.binarydata_handler.flysystem.my_handler',
-            'ezpublish.core.io.binarydata_handler.flysystem'
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.core.io.binarydata_handler.flysystem.my_handler',
-            0,
-            'ezpublish.core.io.flysystem.my_handler_filesystem'
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithParent(
-            'ezpublish.core.io.flysystem.my_handler_filesystem',
-            'ezpublish.core.io.flysystem.base_filesystem'
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.core.io.flysystem.my_handler_filesystem',
-            0,
-            'oneup_flysystem.my_adapter_adapter'
+            'test.io.binarydata_handler.test_handler.my_handler',
+            'test.io.binarydata_handler.test_handler'
         );
     }
 
-    public function testFlysystemMetadataHandler()
+    public function testMetadataHandler()
     {
         $this->container->setParameter(
             'ez_io.metadata_handlers',
-            array( 'my_handler' => array( 'name' => 'my_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter' ) )
+            array( 'my_handler' => array( 'name' => 'my_handler', 'type' => 'test_handler' ) )
         );
 
-        $this->container->setDefinition( 'oneup_flysystem.my_adapter_adapter', new Definition() );
+        $this->metadataConfigurationFactoryMock
+            ->expects( $this->once() )
+            ->method( 'getParentServiceId' )
+            ->will( $this->returnValue( 'test.io.metadata_handler.test_handler' ) );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithParent(
-            'ezpublish.core.io.metadata_handler.flysystem.my_handler',
-            'ezpublish.core.io.metadata_handler.flysystem'
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.core.io.metadata_handler.flysystem.my_handler',
-            0,
-            'ezpublish.core.io.flysystem.my_handler_filesystem'
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithParent(
-            'ezpublish.core.io.flysystem.my_handler_filesystem',
-            'ezpublish.core.io.flysystem.base_filesystem'
-        );
-
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'ezpublish.core.io.flysystem.my_handler_filesystem',
-            0,
-            'oneup_flysystem.my_adapter_adapter'
+            'test.io.metadata_handler.test_handler.my_handler',
+            'test.io.metadata_handler.test_handler'
         );
     }
 
@@ -135,7 +121,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.metadata_handlers',
-            array( 'my_handler' => array( 'type' => 'unknown' ) )
+            array( 'test' => array( 'type' => 'unknown' ) )
         );
 
         $this->compile();
@@ -149,7 +135,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.binarydata_handlers',
-            array( 'my_handler' => array( 'type' => 'unknown' ) )
+            array( 'test' => array( 'type' => 'unknown' ) )
         );
 
         $this->compile();
