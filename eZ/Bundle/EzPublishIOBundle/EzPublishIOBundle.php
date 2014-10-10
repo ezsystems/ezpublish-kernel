@@ -21,10 +21,11 @@ class EzPublishIOBundle extends Bundle
 
     public function build( ContainerBuilder $container )
     {
+        $extension = $this->getContainerExtension();
         $container->addCompilerPass(
             new Compiler\IOConfigurationPass(
-                $this->extension->getMetadataHandlerFactories(),
-                $this->extension->getBinarydataHandlerFactories()
+                $extension->getMetadataHandlerFactories(),
+                $extension->getBinarydataHandlerFactories()
             )
         );
         parent::build( $container );
