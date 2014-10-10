@@ -67,7 +67,7 @@ matrix:
     - php: hhvm
       env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
     - php: hhvm
-      env: ELASTICSEARCH_VERSION="1.3.1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="2.3.*"
+      env: ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="2.3.*"
 
 # test only master (+ Pull requests)
 branches:
