@@ -8,8 +8,7 @@
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory\MetadataHandler;
 
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\Definition as ServiceDefinition;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -25,7 +24,7 @@ class LegacyDFSCluster implements ConfigurationFactory
         $definition->replaceArgument( 0, new Reference( $config['connection'] ) );
     }
 
-    public function addConfiguration( NodeDefinition $node )
+    public function addConfiguration( ArrayNodeDefinition $node )
     {
         $node
             ->info(
