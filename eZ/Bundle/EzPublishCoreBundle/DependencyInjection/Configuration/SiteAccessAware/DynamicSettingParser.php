@@ -16,10 +16,17 @@ class DynamicSettingParser implements DynamicSettingParserInterface
     public function isDynamicSetting( $setting )
     {
         // Checks if $setting begins and ends with appropriate delimiter.
-        return
+        $result =
             is_string( $setting )
             && strpos( $setting, static::BOUNDARY_DELIMITER ) === 0
             && substr( $setting, -1 ) === static::BOUNDARY_DELIMITER;
+
+        if ( $result === false )
+        {
+            return false;
+        }
+
+        return (bool)preg_match( '/^\$[a-zA-Z0-9_.-]+(?:(?:;[a-zA-Z0-9_.]+)(?:;[a-zA-Z0-9_.-]+)?)?\$$/', $setting );
     }
 
     public function parseDynamicSetting( $setting )

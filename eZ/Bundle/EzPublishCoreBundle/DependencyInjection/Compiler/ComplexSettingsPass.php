@@ -7,31 +7,50 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
 
+use eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\ComplexSettings\ComplexSettingParser;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
 
-class DynamicSettingsPass implements CompilerPassInterface
+class ComplexSettingsPass implements CompilerPassInterface
 {
+    /** @var ComplexSettingParser */
+    private $parser;
+
+    public function __construct( ComplexSettingParser $parser )
+    {
+        $this->parser = $parser;
+    }
+
     public function process( ContainerBuilder $container )
     {
-        foreach ( $container->getDefinitions() as $definition )
+        foreach ( $container->getDefinitions() as $serviceId => $definition )
         {
             foreach( $definition->getArguments() as $argumentIndex => $argumentValue )
             {
-                if ( !$this->containsDynamicSettings( $argumentValue ) )
+                if ( !$this->parser->containsDynamicSettings( $argumentValue ) )
                 {
-                    return;
+                    continue;
                 }
 
-                if ( !$this->isDynamicSetting( $argumentValue ) )
+                if ( !$this->parser->isDynamicSetting( $argumentValue ) )
                 {
-                    return;
+                    continue;
                 }
 
-                foreach( $this->parser->getDynamicSettings( $argumentValue ) as $dynamicSetting )
-                {
-
-                }
+                $container->setDefinition(
+                    sprintf( '%s.%s_%d', $serviceId, '__complex_setting_factory', $argumentIndex ),
+                    $this->createFactoryDefinition( $argumentValue )
+                    new Definition(
+                        'eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler\ComplexSettings\ArgumentValueFactory',
+                        array(
+                            new Reference( 'ezpublish.config.resolver' ),
+                            $argumentValue,
+                            $this->parser->parseComplexSetting( $argumentValue )
+                        )
+                    )
+                );
             }
         }
     }
