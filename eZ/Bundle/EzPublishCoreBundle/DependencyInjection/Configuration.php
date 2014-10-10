@@ -246,22 +246,22 @@ EOT;
 Http cache purge type.
 
 Cache purge for content/locations is triggered when needed (e.g. on publish) and will result in one or several Http PURGE requests.
-Can be "local" or "http":
+Can be "local" or "http" or a valid service ID:
 - If "local" is used, an Http PURGE request will be emulated when needed (e.g. when using Symfony internal reverse proxy).
 - If "http" is used, only one Http BAN request will be sent, with X-Location-Id header containing locationIds to ban.
   X-Location-Id consists in a Regexp containing locationIds to ban.
   Examples:
    - (123|456|789) => Purge locations #123, #456, #789.
    - .* => Purge all locations.
+- If a serviceId is provided, it must be defined in the ServiceContainer and must implement eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface.
 EOT;
 
         $rootNode
             ->children()
                 ->arrayNode( 'http_cache' )
-                    ->info( $purgeTypeInfo )
                     ->children()
-                        ->enumNode( 'purge_type' )
-                            ->values( array( 'local', 'http' ) )
+                        ->scalarNode( 'purge_type' )
+                            ->info( $purgeTypeInfo )
                             ->defaultValue( 'local' )
                             ->beforeNormalization()
                                 ->ifTrue(

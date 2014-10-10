@@ -348,11 +348,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
             $container->setAlias( 'ezpublish.http_cache.purge_client', $purgeService );
         }
-//
-//        if ( isset( $config['http_cache']['timeout'] ) )
-//        {
-//            $container->setParameter( 'ezpublish.http_cache.purge_client.http_client.timeout', (int)$config['http_cache']['timeout'] );
-//        }
     }
 
     /**

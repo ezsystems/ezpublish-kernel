@@ -133,7 +133,7 @@ class CommonTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue( 'storage_dir', 'storage', 'ezdemo_site' );
         $this->assertConfigResolverParameterValue( 'binary_dir', 'original', 'ezdemo_site' );
         $this->assertConfigResolverParameterValue( 'session_name', '%ezpublish.session_name.default%', 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'http_cache.purge_servers', array( 'http://localhost/' ), 'ezdemo_site' );
+        $this->assertConfigResolverParameterValue( 'http_cache.purge_servers', array(), 'ezdemo_site' );
         $this->assertConfigResolverParameterValue( 'anonymous_user_id', 10, 'ezdemo_site' );
         $this->assertConfigResolverParameterValue( 'index_page', null, 'ezdemo_site' );
     }
