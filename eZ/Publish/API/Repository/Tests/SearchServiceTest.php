@@ -789,7 +789,8 @@ class SearchServiceTest extends BaseTest
         $testContent = $this->createMultipleCountriesContent();
 
         $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof \eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr )
+        // @todo index full contries data
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
         {
             $country = "BE";
         }
