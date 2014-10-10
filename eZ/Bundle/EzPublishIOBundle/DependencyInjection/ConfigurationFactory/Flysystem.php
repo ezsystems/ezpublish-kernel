@@ -8,7 +8,7 @@
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 abstract class Flysystem extends ContainerAware implements ConfigurationFactory
 {
-    public function addConfiguration( NodeDefinition $node )
+    public function addConfiguration( ArrayNodeDefinition $node )
     {
         $node
             ->info(

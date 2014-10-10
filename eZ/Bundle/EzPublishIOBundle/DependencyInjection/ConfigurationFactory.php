@@ -7,8 +7,7 @@
  */
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\Definition as ServiceDefinition;
 
 /**
@@ -32,9 +31,9 @@ interface ConfigurationFactory
      *     ->scalarNode( 'an_argument' )->info( 'This is an argument' )
      *   ->end();
      * ```
-     * @param NodeDefinition $node The handler's configuration node.
+     * @param ArrayNodeDefinition $node The handler's configuration node.
      */
-    public function addConfiguration( NodeDefinition $node );
+    public function addConfiguration( ArrayNodeDefinition $node );
 
     /**
      * Returns the ID of the base, abstract service used to create the handlers.
