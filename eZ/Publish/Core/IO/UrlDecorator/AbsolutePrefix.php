@@ -38,7 +38,11 @@ class AbsolutePrefix implements UrlDecorator
         if ( $prefix != '' )
         {
             $urlParts = parse_url( $prefix );
-            if ( !isset( $urlParts['scheme'] ) )
+            if ( isset( $urlParts['scheme'] ) )
+            {
+                $prefix = rtrim( $prefix, '/' ) . '/';
+            }
+            else
             {
                 $prefix = '/' . trim( $prefix, '/' ) . '/';
             }

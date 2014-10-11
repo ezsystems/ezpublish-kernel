@@ -98,8 +98,9 @@ class Image implements Converter
      */
     protected function createLegacyXml( array $data )
     {
-        $data['uri'] = $this->urlRedecorator->redecorateFromSource( $data['uri'] );
-        $pathInfo = pathinfo( ltrim( $data['uri'], '/' ) );
+        // @todo Trim the initial / in the legacy decorator
+        $data['uri'] = ltrim( $this->urlRedecorator->redecorateFromSource( $data['uri'] ), '/' );
+        $pathInfo = pathinfo( $data['uri'] );
         return $this->fillXml( $data, $pathInfo, time() );
     }
 
@@ -202,7 +203,8 @@ EOT;
             return null;
         }
 
-        $extractedData['id'] = $this->imageIoService->loadBinaryFileByUri( '/' . $url )->id;
+        $url = $this->urlRedecorator->redecorateFromTarget( '/' . $url );
+        $extractedData['id'] = $this->imageIoService->loadBinaryFileByUri( $url )->id;
 
         if ( !$ezimageTag->hasAttribute( 'filename' ) )
         {
