@@ -11,7 +11,7 @@
     <php>
         <env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch" />
         <env name="backendVersion" value="5" />
-        <env name="fixtureDir" value="Solr" />
+        <env name="fixtureDir" value="Elasticsearch" />
         <env name="elasticsearchServer" value="http://localhost:9200/" />
     </php>
     <testsuites>
