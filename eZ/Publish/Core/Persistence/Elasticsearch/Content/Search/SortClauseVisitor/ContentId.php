@@ -40,8 +40,8 @@ class ContentId extends SortClauseVisitor
     {
         return array(
             "id" => array(
-                "order" => $this->getDirection( $sortClause )
-            )
+                "order" => $this->getDirection( $sortClause ),
+            ),
         );
     }
 }
