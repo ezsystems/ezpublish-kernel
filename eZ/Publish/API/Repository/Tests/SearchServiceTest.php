@@ -3339,6 +3339,10 @@ class SearchServiceTest extends BaseTest
                 {
                     $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
                 }
+
+                $position = strrpos( $fixture, "/" );
+                $fixture = substr_replace( $fixture, "/Location", $position, 0 );
+
                 $result = $searchService->findLocations( $query );
             }
             else if ( $query instanceof Query )
@@ -3374,13 +3378,16 @@ class SearchServiceTest extends BaseTest
             }
         }
 
+        $fixture = include $fixture;
+
         if ( $closure !== null )
         {
+            $closure( $fixture );
             $closure( $result );
         }
 
         $this->assertEquals(
-            include $fixture,
+            $fixture,
             $result,
             "Search results do not match.",
             .1 // Be quite generous regarding delay -- most important for scores
