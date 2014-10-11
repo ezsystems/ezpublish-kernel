@@ -3340,8 +3340,11 @@ class SearchServiceTest extends BaseTest
                     $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
                 }
 
-                $position = strrpos( $fixture, "/" );
-                $fixture = substr_replace( $fixture, "/Location", $position, 0 );
+                if ( $setupFactory instanceof LegacyElasticsearch )
+                {
+                    $position = strrpos( $fixture, "/" );
+                    $fixture = substr_replace( $fixture, "/Location", $position, 0 );
+                }
 
                 $result = $searchService->findLocations( $query );
             }
