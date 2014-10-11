@@ -1,0 +1,12 @@
+services:
+    # used by legacy alone to decorate its own url
+    ezpublish_legacy.fieldtype.ezimage.legacy_url_decorator:
+        class: %ezpublish.core.io.url_decorator.absolute_prefix.class%
+        arguments:
+            - "$var_dir$/$storage_dir$"
+
+    ezpublish_legacy.fieldtype.ezimage.legacy_url_redecorator:
+        class: eZ\Publish\Core\IO\UrlRedecorator
+        arguments:
+            - @ezpublish.core.io.default_url_decorator
+            - @ezpublish_legacy.fieldtype.ezimage.legacy_url_decorator

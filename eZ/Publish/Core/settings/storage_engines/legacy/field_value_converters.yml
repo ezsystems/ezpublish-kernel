@@ -124,6 +124,7 @@ services:
         class: %ezpublish.fieldType.ezimage.converter.class%
         arguments:
             - @ezpublish.fieldType.ezimage.io_service
+            - @?ezpublish_legacy.fieldtype.ezimage.legacy_url_redecorator
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezimage}
 
