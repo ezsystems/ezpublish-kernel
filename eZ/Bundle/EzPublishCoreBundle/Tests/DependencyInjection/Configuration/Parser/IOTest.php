@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\Parser;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Common;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\IO;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
@@ -18,14 +19,20 @@ class IOTest extends AbstractParserTestCase
 {
     private $minimalConfig;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $suggestionCollector;
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
     protected function getContainerExtensions()
     {
-        return array( new EzPublishCoreExtension( array( new Common(), new IO() ) ) );
+        return array(
+            new EzPublishCoreExtension(
+                array(
+//                    new Common(),
+                    new IO( new ComplexSettingParser() ) )
+            )
+        );
     }
 
     protected function getMinimalConfiguration()
@@ -54,24 +61,42 @@ class IOTest extends AbstractParserTestCase
 
     public function testExtraVariables()
     {
+        $this->setParameter( 'ezsettings.ezdemo_site.var_dir', 'var/ezdemo_site' );
+        $this->setParameter( 'ezsettings.other_site_group.var_dir', 'var/other_site' );
+
+        $this->load();
+
+        $this->assertConfigResolverParameterValue(
+            'io_root_dir', '%ezpublish_legacy.root_dir%/var/ezdemo_site/storage', 'ezdemo_site'
+        );
+        $this->assertConfigResolverParameterValue(
+            'io_prefix', 'var/ezdemo_site/storage', 'ezdemo_site'
+        );
+
+        $this->assertConfigResolverParameterValue(
+            'io_root_dir', '%ezpublish_legacy.root_dir%/var/other_site/storage', 'ezdemo_site'
+        );
+        $this->assertConfigResolverParameterValue(
+            'io_prefix', 'var/ezdemo_site/storage', 'ezdemo_site'
+        );
+    }
+
+    public function testComplexUrlPrefix()
+    {
         $config = array(
             'system' => array(
                 'ezdemo_site' => array(
-                    'var_dir' => 'var/ezdemo_site'
+                    'io' => array(
+                        'url_prefix' => 'http://example.com/$var_dir$'
+                    )
                 )
             )
         );
-
         $this->load( $config );
 
         $this->assertConfigResolverParameterValue(
-            'io_root_dir',
-            '%ezpublish_legacy.root_dir%/var/ezdemo_site/storage',
-            'ezdemo_site'
-        );
-        $this->assertConfigResolverParameterValue(
-            'io_prefix',
-            'var/ezdemo_site/storage',
+            'io.url_prefix',
+            'http://example.com/var/ezdemo_site',
             'ezdemo_site'
         );
     }

@@ -104,7 +104,7 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\Image,
                     new ConfigParser\Page,
                     new ConfigParser\Languages,
-                    new ConfigParser\IO
+                    new ConfigParser\IO( new ComplexSettingParser() )
                 )
             );
         }
