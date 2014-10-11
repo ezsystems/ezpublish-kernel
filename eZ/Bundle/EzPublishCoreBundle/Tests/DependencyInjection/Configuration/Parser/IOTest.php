@@ -27,11 +27,7 @@ class IOTest extends AbstractParserTestCase
     protected function getContainerExtensions()
     {
         return array(
-            new EzPublishCoreExtension(
-                array(
-//                    new Common(),
-                    new IO( new ComplexSettingParser() ) )
-            )
+            new EzPublishCoreExtension( array( new IO( new ComplexSettingParser() ) ) )
         );
     }
 
