@@ -84,28 +84,87 @@ class IO extends AbstractParser
         $configResolver = $container->get( 'ezpublish.config.resolver.core' );
         $configResolver->setContainer( $container );
 
+        // complex parameters dependencies
+        foreach ( array_merge( $config['siteaccess']['list'], array_keys( $config['siteaccess']['groups'] ) ) as $scope )
+        {
+            $this->addComplexParametersDependencies( 'io.url_prefix', $scope, $container );
+        }
+
         // we should only write for default, and for sa/sa groups/global IF they have a declared value
         $scopes = array_merge(
             array( 'default' ),
             $config['siteaccess']['list'],
             array_keys( $config['siteaccess']['groups'] )
         );
-        foreach ( $scopes as $sa )
+        foreach ( $scopes as $scope )
         {
-            $this->setIoPrefix( $container, $sa );
+            $this->setIoPrefix( $container, $scope );
 
             // post process io.url_prefix for complex settings
-            $postProcessedValue = $this->postProcessComplexSetting( 'io.url_prefix', $sa, $configResolver );
+            $postProcessedValue = $this->postProcessComplexSetting( 'io.url_prefix', $scope, $container );
             if ( is_string( $postProcessedValue ) )
             {
-                $contextualizer->setContextualParameter( 'io.url_prefix', $sa, $postProcessedValue );
+                $contextualizer->setContextualParameter( 'io.url_prefix', $scope, $postProcessedValue );
                 // $container->setParameter( "ezsettings.$sa.io.url_prefix", $postProcessedValue );
             }
         }
     }
 
-    private function postProcessComplexSetting( $setting, $sa, ConfigResolver $configResolver )
+    /**
+     * Applies dependencies of complex $parameter in $scope.
+     *
+     *
+     */
+    private function addComplexParametersDependencies( $parameter, $scope, ContainerBuilder $container )
     {
+//        if ( $scope === 'default' )
+//        {
+//            return;
+//        }
+//
+        // The complex setting exists in this scope, we don't need to do anything
+        if ( $container->hasParameter( "ezsettings.$scope.$parameter" ) )
+        {
+            return;
+        }
+        $parameterValue = $container->getParameter( "ezsettings.default.$parameter" );
+
+        // not complex in this scope
+        if ( !$this->complexSettingParser->containsDynamicSettings( $parameterValue ) )
+        {
+            return;
+        }
+
+        // if one of the complex parameters dependencies is set in the current scope,
+        // we set the complex parameter in the current scope as well.
+        foreach ( $this->complexSettingParser->parseComplexSetting( $parameterValue ) as $dynamicParameter )
+        {
+            $dynamicParameterParts = $this->complexSettingParser->parseDynamicSetting( $dynamicParameter );
+            if ( $dynamicParameterParts['scope'] === $scope )
+            {
+                continue;
+            }
+            $dynamicParameterId = sprintf(
+                '%s.%s.%s',
+                $dynamicParameterParts['namespace'] ?: 'ezsettings',
+                $scope,
+                $dynamicParameterParts['param']
+            );
+            if ( $container->hasParameter( $dynamicParameterId ) )
+            {
+                $container->setParameter( "ezsettings.$scope.$parameter", $parameterValue );
+                break;
+            }
+        }
+
+    }
+
+    private function postProcessComplexSetting( $setting, $sa, ContainerBuilder $container )
+    {
+        $configResolver = $container->get( 'ezpublish.config.resolver.core' );
+
+        // the config resolver doesn't have this parameter, but what about its dependencies ?
+        // or should this be handled somewhere else ?
         if ( !$configResolver->hasParameter( $setting, null, $sa ) )
         {
             return false;

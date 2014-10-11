@@ -62,7 +62,6 @@ class IOTest extends AbstractParserTestCase
     public function testExtraVariables()
     {
         $this->setParameter( 'ezsettings.ezdemo_site.var_dir', 'var/ezdemo_site' );
-        $this->setParameter( 'ezsettings.other_site_group.var_dir', 'var/other_site' );
 
         $this->load();
 
@@ -72,32 +71,27 @@ class IOTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue(
             'io_prefix', 'var/ezdemo_site/storage', 'ezdemo_site'
         );
-
-        $this->assertConfigResolverParameterValue(
-            'io_root_dir', '%ezpublish_legacy.root_dir%/var/other_site/storage', 'ezdemo_site'
-        );
-        $this->assertConfigResolverParameterValue(
-            'io_prefix', 'var/ezdemo_site/storage', 'ezdemo_site'
-        );
     }
 
-    public function testComplexUrlPrefix()
+    /**
+     * Tests that a complex default io.url_prefix will be set in a context where one of its dependencies is set
+     */
+    public function testComplexUrlPrefixWithCustomizedVarDir()
     {
-        $config = array(
-            'system' => array(
-                'ezdemo_site' => array(
-                    'io' => array(
-                        'url_prefix' => 'http://example.com/$var_dir$'
-                    )
-                )
-            )
-        );
-        $this->load( $config );
+        $this->container->setParameter( "ezsettings.default.io.url_prefix", '$var_dir$/$storage_dir$' );
+        $this->container->setParameter( "ezsettings.default.var_dir", "var" );
+        $this->container->setParameter( "ezsettings.default.storage_dir", "storage" );
+        $this->container->setParameter( "ezsettings.ezdemo_site.var_dir", "var/ezdemo_site" );
 
-        $this->assertConfigResolverParameterValue(
-            'io.url_prefix',
-            'http://example.com/var/ezdemo_site',
-            'ezdemo_site'
+        $this->load();
+
+        // Should have been defined & converted in ezdemo_site
+        $this->assertContainerBuilderHasParameter(
+            "ezsettings.ezdemo_site.io.url_prefix", "var/ezdemo_site/storage"
+        );
+        // Should have been converted in default
+        $this->assertContainerBuilderHasParameter(
+            "ezsettings.default.io.url_prefix", "var/storage"
         );
     }
 }
