@@ -20,29 +20,29 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolv
  * When the services using those factories are built, every dynamic setting in the string
  * is resolved, and the setting is replaced with its value in the string, and returned.
  */
-class ArgumentValueFactory
+class ComplexSettingValueFactory
 {
-    private $argumentString = '';
-
-    private $dynamicSettings = array();
-
-    public function __construct( $argumentString )
+    /**
+     * Can receive as many tuples of array( argumentName ), argumentValue as necessary
+     *
+     * @param $argumentString
+     * @param string $dynamicSettingName..
+     * @param string $dynamicSettingValue..
+     *
+     * @return string
+     */
+    public static function getArgumentValue( $argumentString )
     {
-        $this->argumentString = $argumentString;
-    }
+        $arguments = array_slice( func_get_args(), 1 );
 
-    public function setDynamicSetting( array $argumentString, $dynamicValue )
-    {
-        $this->dynamicSettings[$argumentString[0]] = $dynamicValue;
-    }
-
-    public function getArgumentValue()
-    {
-        $value = $this->argumentString;
-        foreach ( $this->dynamicSettings as $dynamicSettingString => $dynamicSettingValue )
+        $value = $argumentString;
+        while ( $dynamicSettingName = array_shift( $arguments ) )
         {
-            $value = str_replace( $dynamicSettingString, $dynamicSettingValue, $value );
+            $dynamicSettingName = $dynamicSettingName[0];
+            $dynamicSettingValue = array_shift( $arguments );
+            $value = str_replace( $dynamicSettingName, $dynamicSettingValue, $value );
         }
+
         return $value;
     }
 }

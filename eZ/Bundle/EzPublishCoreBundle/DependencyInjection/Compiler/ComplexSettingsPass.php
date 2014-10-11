@@ -97,18 +97,19 @@ class ComplexSettingsPass implements CompilerPassInterface
     private function createFactoryDefinition( $argumentValue, $dynamicSettings )
     {
         $definition = new Definition(
-            'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ArgumentValueFactory',
+            'stdClass',
             array( $argumentValue )
         );
 
+        $definition->setFactoryClass( 'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory' );
+        $definition->setFactoryMethod( 'getArgumentValue' );
         foreach ( $dynamicSettings as $dynamicSetting )
         {
-            $definition->addMethodCall(
-                'setDynamicSetting',
-                // yes, array, so that the dynamic parser doesn't pick it up. A bit dangerous...
-                // @todo might be safer with a numeric index and an sprintf string...
-                array( array( $dynamicSetting ), $dynamicSetting )
-            );
+            // the setting won't be transformed in an array
+            $definition->addArgument( array( $dynamicSetting ) );
+
+            // this one will be transformed
+            $definition->addArgument( $dynamicSetting );
         }
 
         return $definition;

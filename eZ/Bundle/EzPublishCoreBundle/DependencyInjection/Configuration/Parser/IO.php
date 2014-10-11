@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ArgumentValueFactory;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
@@ -180,19 +180,35 @@ class IO extends AbstractParser
         if ( $this->complexSettingParser->isDynamicSetting( $settingValue ) )
         {
             $parts = $this->complexSettingParser->parseDynamicSetting( $settingValue );
+            if ( !isset( $parts['namespace'] ) )
+            {
+                $parts['namespace'] = 'ezsettings';
+            }
+            if ( !isset( $parts['scope'] ) )
+            {
+                $parts['scope'] = $sa;
+            }
             return $configResolver->getParameter( $parts['param'], null, $sa );
         }
 
-        $factory = new ArgumentValueFactory( $settingValue );
+        $value = $settingValue;
         foreach ( $this->complexSettingParser->parseComplexSetting( $settingValue ) as $dynamicSetting )
         {
             $parts = $this->complexSettingParser->parseDynamicSetting( $dynamicSetting );
-            $factory->setDynamicSetting(
-                array( $dynamicSetting ),
-                $configResolver->getParameter( $parts['param'], null, $sa )
-            );
+            if ( !isset( $parts['namespace'] ) )
+            {
+                $parts['namespace'] = 'ezsettings';
+            }
+            if ( !isset( $parts['scope'] ) )
+            {
+                $parts['scope'] = $sa;
+            }
+
+            $dynamicSettingValue = $configResolver->getParameter( $parts['param'], $parts['namespace'], $parts['scope'] );
+
+            $value = str_replace( $dynamicSetting, $dynamicSettingValue, $value );
         }
-        return $factory->getArgumentValue();
+        return $value;
     }
 
     /**
