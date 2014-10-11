@@ -84,7 +84,12 @@ EOT
             }
         }
 
-        $output->writeln( "Installing wrappers for eZ Publish legacy front controllers (rest & cluster)" );
+        if ( $input->getOption( 'relative' ) )
+        {
+            $legacyRootDir = $filesystem->makePathRelative( realpath( $legacyRootDir ), realpath( $targetArg ) );
+        }
+
+        $output->writeln( "Installing wrappers for eZ Publish legacy front controllers (rest & cluster) with path $legacyRootDir" );
         foreach ( array( 'index_rest.php', 'index_cluster.php' ) as $frontController )
         {
             $newFrontController = "$targetArg/$frontController";
