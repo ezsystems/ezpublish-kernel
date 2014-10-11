@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Finder\Finder;
 
 class LegacyBundleInstallCommand extends ContainerAwareCommand
@@ -113,17 +114,25 @@ EOT
             $filesystem->remove( $targetPath );
         }
 
+        if ( !$options['copy'] )
+        {
+            try
+            {
+                $filesystem->symlink(
+                    $options['relative'] ? $relativeExtensionPath : $extensionPath,
+                    $targetPath
+                );
+            }
+            catch ( IOException $e )
+            {
+                $options['copy'] = true;
+            }
+        }
+
         if ( $options['copy'] )
         {
             $filesystem->mkdir( $targetPath, 0777 );
             $filesystem->mirror( $extensionPath, $targetPath, Finder::create()->in( $extensionPath ) );
-        }
-        else
-        {
-            $filesystem->symlink(
-                $options['relative'] ? $relativeExtensionPath : $extensionPath,
-                $targetPath
-            );
         }
 
         return $targetPath;
