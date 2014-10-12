@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -146,17 +147,25 @@ class TranslationHelper
     }
 
     /**
-     * Returns Field definition name in the appropriate language for a given content.
+     * Returns Field definition name in the appropriate language for a given content
+     *
      * By default, this method will return the field definition name in current language if translation is present. If not, main language will be used.
      * If $forcedLanguage is provided, will return the field definition name in this language, if translation is present.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param string $fieldTypeIdentifier Field definition identifier.
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param string $fieldDefIdentifier Field Definition identifier
+     * @param string $property Specifies if 'name' or 'description' should be used
      * @param string $forcedLanguage Locale we want the field definition name translated in in (e.g. "fre-FR"). Null by default (takes current locale)
      *
-     * @return string
+     * @throws InvalidArgumentException
+     * @return string|null
      */
-    public function getTranslatedFieldDefinitionName( ContentType $contentType, $fieldTypeIdentifier, $forcedLanguage = null )
+    public function getTranslatedFieldDefinitionProperty(
+        ContentType $contentType,
+        $fieldDefIdentifier,
+        $property = 'name',
+        $forcedLanguage = null
+    )
     {
         if ( $forcedLanguage !== null )
         {
@@ -167,17 +176,30 @@ class TranslationHelper
             $languages = $this->configResolver->getParameter( 'languages' );
         }
 
-        // Loop over prioritized languages to get the appropriate translated field definition name .
-        foreach ( $languages as $lang )
+        // Always add main language as last entry, forcing to use the main language if all others fail.
+        $languages[] = $contentType->mainLanguageCode;
+
+        $fieldDefinition = $contentType->getFieldDefinition( $fieldDefIdentifier );
+        if ( !$fieldDefinition instanceof FieldDefinition )
         {
-            $fieldDefinition = $contentType->getFieldDefinition( $fieldTypeIdentifier );
-            if ( $fieldDefinition instanceof FieldDefinition && $fieldDefinition->getName( $lang ) )
-            {
-                return $fieldDefinition->getName( $lang );
-            }
+            return null;
         }
 
-        return null;
+        $method = 'get' . $property;
+        if ( !method_exists( $fieldDefinition, $method ) )
+        {
+            throw new InvalidArgumentException( '$property', "Method 'get{$property}' not found on FieldDefinition" );
+        }
+
+        // Loop over prioritized languages to get the appropriate translated field definition name
+        // Should ideally have used array_unique, but in that case the loop should ideally never reach last item
+        foreach ( $languages as $lang )
+        {
+            if ( $name = $fieldDefinition->$method( $lang ) )
+            {
+                return $name;
+            }
+        }
     }
 
     /**

@@ -39,6 +39,18 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
 
   `bool = ez_is_field_empty( Content $content, string|Field $fieldDefIdentifier[, string $forcedLanguage] )`
 
+* ez_field_name
+
+  _Since 5.4_
+
+  `string|null = ez_field_name( Content|ContentInfo $content, string $fieldDefIdentifier[, string $forcedLanguage] )`
+
+* ez_field_description
+
+  _Since 5.4_
+
+  `string|null = ez_field_description( Content|ContentInfo $content, string $fieldDefIdentifier[, string $forcedLanguage] )`
+
 
 ## Rendering helpers
 

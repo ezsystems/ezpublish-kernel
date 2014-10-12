@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistryInterface;
@@ -31,7 +32,6 @@ use Twig_Environment;
 use Twig_SimpleFunction;
 use Twig_SimpleFilter;
 use Twig_Template;
-use InvalidArgumentException;
 use LogicException;
 
 /**
@@ -233,6 +233,10 @@ class ContentExtension extends Twig_Extension
                 'ez_field_name',
                 array( $this, 'getTranslatedFieldDefinitionName' )
             ),
+            new Twig_SimpleFunction(
+                'ez_field_description',
+                array( $this, 'getTranslatedFieldDefinitionDescription' )
+            ),
         );
     }
 
@@ -358,7 +362,8 @@ class ContentExtension extends Twig_Extension
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $fieldIdentifier Identifier for the field we want to render
      * @param array $params An array of parameters to pass to the field view
-     * @throws \InvalidArgumentException If $fieldIdentifier is invalid in $content
+     *
+     * @throws InvalidArgumentException
      * @return string The HTML markup
      */
     public function renderField( Content $content, $fieldIdentifier, array $params = array() )
@@ -368,7 +373,8 @@ class ContentExtension extends Twig_Extension
         if ( !$field instanceof Field )
         {
             throw new InvalidArgumentException(
-                "Invalid field identifier '$fieldIdentifier' for content #{$content->contentInfo->id}"
+                '$fieldIdentifier',
+                "Invalid for content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
             );
         }
 
@@ -653,23 +659,55 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $content Must be a valid Content object.
-     * @param string $fieldIdentifier Identifier of the field to translate
+     * Gets name of a FieldDefinition name by loading ContentType based on Content/ContentInfo object
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $content Must be Content or ContentInfo object
+     * @param string $fieldDefIdentifier Identifier for the field we want to get the name from
      * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content object.
      *
-     * @return string
+     * @return string|null
      */
-    public function getTranslatedFieldDefinitionName( ValueObject $content, $fieldIdentifier, $forcedLanguage = null )
+    public function getTranslatedFieldDefinitionName( ValueObject $content, $fieldDefIdentifier, $forcedLanguage = null )
     {
-        if ( $content instanceof ValueObject )
+        if ( $contentType = $this->getContentType( $content ) )
         {
-            $contentType = $this->repository->getContentTypeService()->loadContentType( $content->contentInfo->contentTypeId );
-            $fieldDefinitionName = $this->translationHelper->getTranslatedFieldDefinitionName( $contentType, $fieldIdentifier, $forcedLanguage );
-            return $fieldDefinitionName;
+            return $this->translationHelper->getTranslatedFieldDefinitionProperty(
+                $contentType,
+                $fieldDefIdentifier,
+                'name',
+                $forcedLanguage
+            );
         }
-        throw new InvalidArgumentType( '$content', 'eZ\Publish\API\Repository\Values\Content\Content', $content );
+
+        throw new InvalidArgumentType( '$content', 'Content|ContentInfo', $content );
+    }
+
+    /**
+     * Gets name of a FieldDefinition description by loading ContentType based on Content/ContentInfo object
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $content Must be Content or ContentInfo object
+     * @param string $fieldDefIdentifier Identifier for the field we want to get the name from
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content object.
+     *
+     * @return string|null
+     */
+    public function getTranslatedFieldDefinitionDescription( ValueObject $content, $fieldDefIdentifier, $forcedLanguage = null )
+    {
+        if ( $contentType = $this->getContentType( $content ) )
+        {
+            return $this->translationHelper->getTranslatedFieldDefinitionProperty(
+                $contentType,
+                $fieldDefIdentifier,
+                'description',
+                $forcedLanguage
+            );
+        }
+
+        throw new InvalidArgumentType( '$content', 'Content|ContentInfo', $content );
     }
 
     /**
@@ -692,5 +730,25 @@ class ContentExtension extends Twig_Extension
         }
 
         return $this->fieldHelper->isFieldEmpty( $content, $fieldDefIdentifier, $forcedLanguage );
+    }
+
+    /**
+     * Get ContentType by Content/ContentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content|\eZ\Publish\API\Repository\Values\Content\ContentInfo $content
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType|null
+     */
+    private function getContentType( ValueObject $content )
+    {
+        if ( $content instanceof Content )
+        {
+            return $this->repository->getContentTypeService()->loadContentType(
+                $content->getVersionInfo()->getContentInfo()->contentTypeId
+            );
+        }
+        else if ( $content instanceof ContentInfo )
+        {
+            return $this->repository->getContentTypeService()->loadContentType( $content->contentTypeId );
+        }
     }
 }
