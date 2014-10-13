@@ -48,10 +48,34 @@ class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
 
         $this->compile();
 
-        self::assertContainerBuilderHasServiceDefinitionWithMethodCall(
+        self::assertContainerBuilderHasServiceDefinitionWithArgument(
             'service1.__complex_setting_factory_0',
-            'setDynamicSetting',
-            array( array( '$var_dir$' ), '$var_dir$' )
+            0,
+            '/mnt/nfs/$var_dir$/$storage_dir$'
+        );
+
+        self::assertContainerBuilderHasServiceDefinitionWithArgument(
+            'service1.__complex_setting_factory_0',
+            1,
+            array( '$var_dir$' )
+        );
+
+        self::assertContainerBuilderHasServiceDefinitionWithArgument(
+            'service1.__complex_setting_factory_0',
+            2,
+            '$var_dir$'
+        );
+
+        self::assertContainerBuilderHasServiceDefinitionWithArgument(
+            'service1.__complex_setting_factory_0',
+            3,
+            array( '$storage_dir$' )
+        );
+
+        self::assertContainerBuilderHasServiceDefinitionWithArgument(
+            'service1.__complex_setting_factory_0',
+            4,
+            '$storage_dir$'
         );
 
         self::assertContainerBuilderHasServiceDefinitionWithArgument(

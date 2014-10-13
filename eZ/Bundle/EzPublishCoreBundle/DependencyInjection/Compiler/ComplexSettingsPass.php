@@ -61,36 +61,14 @@ class ComplexSettingsPass implements CompilerPassInterface
     }
 
     /**
-     * Tests if $string contains dynamic settings with extra strings.
-     * @param string $string
-     * @return bool
-     */
-    private function containsDynamicSettings( $string )
-    {
-        $dollarsCount = substr_count( $string, '$' );
-        if ( $dollarsCount < 2 )
-        {
-            return false;
-        }
-
-        // The string IS a dynamic variable, not our job
-        if ( $this->isDynamicSetting( $string ) )
-        {
-            return false;
-        }
-
-        // Now let's see if it really contains dynamic variables
-
-    }
-
-    private function isDynamicSetting( $string )
-    {
-        return ( preg_match( "^\$[a-z0-9_\.]+(?:;[a-z0-9_\.]+){0,2}\$$", $string ) );
-    }
-
-    /**
-     * @param $argumentValue
-     * @param $dynamicSettings
+     * Creates a complex setting factory.
+     *
+     * The factory has a variable number of argumentsdynamic settings are added as tupples:
+     * first the argument in an array, so that it is not transformed by the config resolver pass, then the argument
+     * as a string, so that it does get transformed.
+     *
+     * @param string $argumentValue The original argument ($var$/$another_var$)
+     * @param array $dynamicSettings Array of dynamic settings in $argumentValue
      *
      * @return Definition
      */
@@ -101,7 +79,9 @@ class ComplexSettingsPass implements CompilerPassInterface
             array( $argumentValue )
         );
 
-        $definition->setFactoryClass( 'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory' );
+        $definition->setFactoryClass(
+            'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory'
+        );
         $definition->setFactoryMethod( 'getArgumentValue' );
         foreach ( $dynamicSettings as $dynamicSetting )
         {
