@@ -35,7 +35,7 @@ class FieldMap
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator
      */
     protected $nameGenerator;
 
@@ -72,7 +72,7 @@ class FieldMap
      * <code>
      *  array(
      *      "field-identifier" => array(
-     *          "solr_field_name",
+     *          "elasticsearch_field_name",
      *          …
      *      ),
      *      …

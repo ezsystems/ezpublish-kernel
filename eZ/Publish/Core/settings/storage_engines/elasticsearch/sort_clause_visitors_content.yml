@@ -58,7 +58,7 @@ services:
         arguments:
             - @ezpublish.spi.persistence.legacy.content_type.handler
             - @ezpublish.persistence.solr.search.field_registry
-            - @ezpublish.persistence.solr.search.content.field_name_generator
+            - @ezpublish.persistence.elasticsearch.search.content.field_name_generator
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor}
 
@@ -67,7 +67,7 @@ services:
         arguments:
             - @ezpublish.spi.persistence.legacy.content_type.handler
             - @ezpublish.persistence.solr.search.field_registry
-            - @ezpublish.persistence.solr.search.content.field_name_generator
+            - @ezpublish.persistence.elasticsearch.search.content.field_name_generator
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.sort_clause_visitor}
 

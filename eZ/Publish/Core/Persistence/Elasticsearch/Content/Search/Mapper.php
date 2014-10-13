@@ -30,7 +30,7 @@ class Mapper
     /**
      * Field name generator
      *
-     * @var FieldNameGenerator
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 

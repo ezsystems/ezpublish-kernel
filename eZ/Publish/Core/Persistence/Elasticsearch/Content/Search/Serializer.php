@@ -27,7 +27,7 @@ class Serializer
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator
      */
     protected $nameGenerator;
 

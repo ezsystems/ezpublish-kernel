@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVis
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
 use RuntimeException;
@@ -38,7 +38,7 @@ class MapLocationDistance extends SortClauseVisitor
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
@@ -52,7 +52,7 @@ class MapLocationDistance extends SortClauseVisitor
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator $fieldNameGenerator
      */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,

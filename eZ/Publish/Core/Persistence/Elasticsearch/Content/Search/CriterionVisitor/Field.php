@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
@@ -21,14 +21,14 @@ abstract class Field extends CriterionVisitor
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap
      */
     protected $fieldMap;
 
     /**
      * Create from FieldMap
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap $fieldMap
      */
     public function __construct( FieldMap $fieldMap )
     {
