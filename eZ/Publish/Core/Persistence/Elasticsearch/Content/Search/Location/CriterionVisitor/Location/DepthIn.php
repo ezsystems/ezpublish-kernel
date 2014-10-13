@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the range DepthIn Depth criterion visitor class
+ * File containing the DepthIn Depth criterion visitor class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -50,8 +50,8 @@ class DepthIn extends CriterionVisitor
     {
         return array(
             "terms" => array(
-                "depth_i" => $criterion->value
-            )
+                "depth_i" => $criterion->value,
+            ),
         );
     }
 }
