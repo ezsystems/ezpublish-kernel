@@ -68,6 +68,10 @@ Changes affecting version compatibility with former or future versions.
 * REST v2 POST /user/sessions
   For story EZP-22163 to allow for login with existing sessions+csrf token this endpoint has been slightly changed to 1. not return location header, but continue to return session info directly 2. Return 200 instead of 201 in this case if session and login matches (409 if not). See doc/specifications/rest/REST-API-V2.rst for latest info.
 
+* Renamed fieldtypes IO Services:
+  ezpublish.fieldType.ezbinaryfile.IOService => ezpublish.fieldType.ezbinaryfile.io_service
+  ezpublish.fieldType.ezimage.IOService => ezpublish.fieldType.ezimage.io (ezpublish.fieldType.ezimage.io_service also existed, but wasn't the expected one)
+
 ## Deprecations
 
 * Method `eZ\Publish\API\Repository\RoleService::removePolicy` is deprecated in
