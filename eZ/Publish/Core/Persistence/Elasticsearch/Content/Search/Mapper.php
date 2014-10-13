@@ -347,11 +347,6 @@ class Mapper
                 new FieldType\IdentifierField()
             ),
             new Field(
-                'content_id',
-                $location->contentId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
                 'parent_id',
                 $location->parentId,
                 new FieldType\IdentifierField()
