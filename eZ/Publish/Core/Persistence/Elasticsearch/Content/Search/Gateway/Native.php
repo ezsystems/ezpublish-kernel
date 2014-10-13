@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Content Search Native Gateway class
+ * File containing the Elasticsearch Native Gateway class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -21,8 +21,8 @@ use ArrayObject;
 use RuntimeException;
 
 /**
- * The Content Search Gateway provides the implementation for one database to
- * retrieve the desired content objects.
+ * The Native Gateway provides the implementation to retrieve the desired
+ * documents from Elasticsearch index storage.
  */
 class Native extends Gateway
 {
@@ -61,6 +61,14 @@ class Native extends Gateway
 
     protected $indexName;
 
+    /**
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\HttpClient $client
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer $serializer
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $criterionVisitorDispatcher
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor $sortClauseVisitor
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor $facetBuilderVisitor
+     * @param string $indexName
+     */
     public function __construct(
         HttpClient $client,
         Serializer $serializer,
@@ -80,6 +88,8 @@ class Native extends Gateway
     }
 
     /**
+     * Indexes a given $document.
+     *
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
      */
     public function index( Document $document )
@@ -106,6 +116,8 @@ class Native extends Gateway
     }
 
     /**
+     * Performs bulk index of a given array of documents.
+     *
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document[] $documents
      */
     public function bulkIndex( array $documents )
@@ -143,6 +155,14 @@ class Native extends Gateway
         $this->flush();
     }
 
+    /**
+     * Finds and returns documents of a given $type for a given $query object.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
+     * @param string $type
+     *
+     * @return mixed
+     */
     public function find( Query $query, $type )
     {
         $aggregationList = array_map(
@@ -206,6 +226,14 @@ class Native extends Gateway
         return $data;
     }
 
+    /**
+     * Finds and returns documents of a given $type for a given $query string.
+     *
+     * @param mixed $query
+     * @param string $type
+     *
+     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message
+     */
     public function findRaw( $query, $type )
     {
         $response = $this->client->request(
@@ -222,6 +250,11 @@ class Native extends Gateway
         return $response;
     }
 
+    /**
+     * Deletes all documents of a given $type from the index.
+     *
+     * @param string $type
+     */
     public function purgeIndex( $type )
     {
         $result = $this->client->request( "DELETE", "/{$this->indexName}/{$type}/_query?q=id:*" );
@@ -236,9 +269,10 @@ class Native extends Gateway
     }
 
     /**
+     * Deletes a single document of the given $type by given document $id.
      *
-     * @param $id
-     * @param $type
+     * @param int|string $id
+     * @param string $type
      */
     public function delete( $id, $type )
     {
@@ -246,6 +280,12 @@ class Native extends Gateway
         $this->flush();
     }
 
+    /**
+     * Deletes a document(s) of the given $type by given $query string.
+     *
+     * @param mixed $query
+     * @param string $type
+     */
     public function deleteByQuery( $query, $type )
     {
         $result = $this->client->request(
@@ -261,6 +301,9 @@ class Native extends Gateway
         $this->flush();
     }
 
+    /**
+     * Flushes data from memory to the index storage.
+     */
     public function flush()
     {
         $this->client->request( "POST", "/_flush?full=false&force=false" );
