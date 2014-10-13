@@ -31,6 +31,7 @@ services:
             - ~
 
     ezpublish.core.io.metadata_handler.flysystem.default:
+        parent: ezpublish.core.io.metadata_handler.flysystem
         class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
         arguments:
             - @ezpublish.core.io.flysystem.default_filesystem
@@ -43,6 +44,7 @@ services:
             - @ezpublish.core.io.flysystem.default_url_decorator
 
     ezpublish.core.io.binarydata_handler.flysystem.default:
+        parent: ezpublish.core.io.binarydata_handler.flysystem
         class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
         arguments:
             - @ezpublish.core.io.flysystem.default_filesystem
