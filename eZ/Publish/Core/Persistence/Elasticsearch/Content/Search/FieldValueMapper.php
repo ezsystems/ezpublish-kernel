@@ -34,4 +34,3 @@ abstract class FieldValueMapper
      */
     abstract public function map( Field $field );
 }
-

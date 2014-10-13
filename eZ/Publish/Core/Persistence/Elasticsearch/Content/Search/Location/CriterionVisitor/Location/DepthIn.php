@@ -55,4 +55,3 @@ class DepthIn extends CriterionVisitor
         );
     }
 }
-

@@ -42,4 +42,3 @@ class DocumentMapper extends FieldValueMapper
         return $field->value;
     }
 }
-

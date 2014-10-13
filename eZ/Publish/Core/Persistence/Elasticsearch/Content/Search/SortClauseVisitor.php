@@ -46,4 +46,3 @@ abstract class SortClauseVisitor
         return ( $sortClause->direction === "descending" ? "desc" : "asc" );
     }
 }
-

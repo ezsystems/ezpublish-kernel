@@ -48,4 +48,3 @@ class MultipleStringMapper extends StringMapper
         return $values;
     }
 }
-

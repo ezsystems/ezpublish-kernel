@@ -88,4 +88,3 @@ class UserMetadataIn extends CriterionVisitor
         return $filter;
     }
 }
-

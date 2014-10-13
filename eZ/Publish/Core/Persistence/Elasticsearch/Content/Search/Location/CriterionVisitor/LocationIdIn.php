@@ -66,4 +66,3 @@ class LocationIdIn extends CriterionVisitor
         return $filter;
     }
 }
-

@@ -66,4 +66,3 @@ class RemoteIdIn extends CriterionVisitor
         return $filter;
     }
 }
-

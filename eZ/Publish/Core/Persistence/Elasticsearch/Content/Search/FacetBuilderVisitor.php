@@ -72,4 +72,3 @@ abstract class FacetBuilderVisitor
         return $values;
     }
 }
-

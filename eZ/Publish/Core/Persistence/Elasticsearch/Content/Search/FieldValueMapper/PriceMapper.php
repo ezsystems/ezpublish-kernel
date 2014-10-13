@@ -42,4 +42,3 @@ class PriceMapper extends FieldValueMapper
         return (double)$field->value;
     }
 }
-

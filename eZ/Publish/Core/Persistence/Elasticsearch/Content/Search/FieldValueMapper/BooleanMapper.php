@@ -42,4 +42,3 @@ class BooleanMapper extends FieldValueMapper
         return (boolean)$field->value;
     }
 }
-

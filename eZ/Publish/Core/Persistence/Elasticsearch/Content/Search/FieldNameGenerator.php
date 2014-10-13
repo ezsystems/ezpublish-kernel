@@ -92,4 +92,3 @@ class FieldNameGenerator
         return $name . '_' . $typeName;
     }
 }
-

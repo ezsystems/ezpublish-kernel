@@ -86,4 +86,3 @@ class Aggregate extends FieldValueMapper
         );
     }
 }
-

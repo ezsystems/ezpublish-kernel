@@ -55,4 +55,3 @@ class PriorityIn extends CriterionVisitor
         );
     }
 }
-

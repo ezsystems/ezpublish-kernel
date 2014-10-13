@@ -55,4 +55,3 @@ class IdentifierMapper extends FieldValueMapper
         return preg_replace( '([^A-Za-z0-9/]+)', '', $value );
     }
 }
-

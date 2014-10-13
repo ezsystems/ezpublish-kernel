@@ -49,4 +49,3 @@ class MultipleIdentifierMapper extends IdentifierMapper
         return $values;
     }
 }
-

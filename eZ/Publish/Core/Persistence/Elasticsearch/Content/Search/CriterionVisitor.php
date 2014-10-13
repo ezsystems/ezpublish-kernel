@@ -120,4 +120,3 @@ abstract class CriterionVisitor
         return $range;
     }
 }
-

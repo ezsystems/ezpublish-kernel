@@ -42,4 +42,3 @@ class IntegerMapper extends FieldValueMapper
         return (int)$field->value;
     }
 }
-

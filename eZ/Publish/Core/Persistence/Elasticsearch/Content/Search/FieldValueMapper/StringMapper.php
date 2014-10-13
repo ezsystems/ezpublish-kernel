@@ -58,4 +58,3 @@ class StringMapper extends FieldValueMapper
         return preg_replace( '([\x00-\x09\x0B\x0C\x1E\x1F]+)', '', $value instanceof DOMDocument ? $value->saveXML() : $value );
     }
 }
-
