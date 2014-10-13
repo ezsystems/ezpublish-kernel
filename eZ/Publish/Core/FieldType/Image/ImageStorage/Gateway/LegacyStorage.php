@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
+use eZ\Publish\Core\IO\UrlRedecorator;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 
@@ -33,6 +34,16 @@ class LegacyStorage extends Gateway
         'path_identification_string' => 'nodePathString',
         'data_string' => 'xml',
     );
+
+    /**
+     * @var UrlRedecorator
+     */
+    private $redecorator;
+
+    public function __construct( UrlRedecorator $redecorator )
+    {
+        $this->redecorator = $redecorator;
+    }
 
     /**
      * Set database handler for this gateway
@@ -112,15 +123,15 @@ class LegacyStorage extends Gateway
     /**
      * Stores a reference to the image in $path for $fieldId
      *
-     * @param string $path
+     * @param string $uri File IO uri (not legacy)
      * @param mixed $fieldId
      *
      * @return void
      */
-    public function storeImageReference( $path, $fieldId )
+    public function storeImageReference( $uri, $fieldId )
     {
         // legacy stores the path to the image without a leading /
-        $path = ltrim( $path, '/ ' );
+        $path = $this->redecorator->redecorateFromSource( $uri );
 
         $connection = $this->getConnection();
 
@@ -184,14 +195,16 @@ class LegacyStorage extends Gateway
     /**
      * Removes all references from $fieldId to a path that starts with $path
      *
-     * @param string $path
+     * @param string $uri File IO uri (not legacy)
      * @param int $versionNo
      * @param mixed $fieldId
      *
      * @return void
      */
-    public function removeImageReferences( $path, $versionNo, $fieldId )
+    public function removeImageReferences( $uri, $versionNo, $fieldId )
     {
+        $path = $this->redecorator->redecorateFromSource( $uri );
+
         if ( !$this->canRemoveImageReference( $path, $versionNo, $fieldId ) )
             return;
 
@@ -220,12 +233,14 @@ class LegacyStorage extends Gateway
     /**
      * Returns the number of recorded references to the given $path
      *
-     * @param string $path
+     * @param string $uri File IO uri (not legacy)
      *
      * @return int
      */
-    public function countImageReferences( $path )
+    public function countImageReferences( $uri )
     {
+        $path = $this->redecorator->redecorateFromSource( $uri );
+
         $connection = $this->getConnection();
 
         $selectQuery = $connection->createSelectQuery();
@@ -251,7 +266,7 @@ class LegacyStorage extends Gateway
     /**
      * Checks if image $path can be removed when deleting $versionNo and $fieldId
      *
-     * @param string $path
+     * @param string $path legacy image path (var/storage/images...)
      * @param int $versionNo
      * @param mixed $fieldId
      *
@@ -294,6 +309,41 @@ class LegacyStorage extends Gateway
         $statement = $selectQuery->prepare();
         $statement->execute();
         return (int)$statement->fetchColumn() === 0;
+    }
+
+    public function extractFilesFromXml( $xml )
+    {
+        if ( empty( $xml ) )
+        {
+            // Empty image value
+            return null;
+        }
+
+        $files = array();
+
+        $dom = new \DOMDocument();
+        $dom->loadXml( $xml );
+        if ( $dom->documentElement->hasAttribute( 'dirpath' ) )
+        {
+            $url = $dom->documentElement->getAttribute( 'url' );
+            if ( empty( $url ) )
+                return null;
+
+            $files['original'] = $this->redecorator->redecorateFromTarget( $url );
+            /** @var \DOMNode $childNode */
+            foreach ( $dom->documentElement->childNodes as $childNode )
+            {
+                if ( $childNode->nodeName != 'alias' )
+                    continue;
+
+                $files[$childNode->getAttribute( 'name' )] = $this->redecorator->redecorateFromTarget(
+                    $childNode->getAttribute( 'url' )
+                );
+            }
+            return $files;
+        }
+
+        return null;
     }
 }
 

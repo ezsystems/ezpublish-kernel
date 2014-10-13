@@ -60,6 +60,8 @@ services:
 
     ezpublish.fieldType.ezimage.storage_gateway:
         class: %ezpublish.fieldType.ezimage.storage_gateway.class%
+        arguments:
+            - @ezpublish.core.io.image_fieldtype.legacy_url_redecorator
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler.gateway, alias: ezimage, identifier: LegacyStorage}
 

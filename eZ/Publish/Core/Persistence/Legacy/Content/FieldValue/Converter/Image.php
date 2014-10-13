@@ -99,7 +99,7 @@ class Image implements Converter
     protected function createLegacyXml( array $data )
     {
         // @todo Trim the initial / in the legacy decorator
-        $data['uri'] = $this->urlRedecorator->redecorateFromSource( $data['uri'] ) ;
+        $data['uri'] = $this->urlRedecorator->redecorateFromSource( $data['uri'] );
         $pathInfo = pathinfo( $data['uri'] );
         return $this->fillXml( $data, $pathInfo, time() );
     }
@@ -197,13 +197,13 @@ EOT;
             throw new \RuntimeException( 'Missing attribute "url" in <ezimage/> tag.' );
         }
 
-        if ( ( $url = $ezimageTag->getAttribute( 'url' ) ) === '' )
+        if ( ( $legacyUrl = $ezimageTag->getAttribute( 'url' ) ) === '' )
         {
             // Detected XML considered "empty" by the legacy storage
             return null;
         }
 
-        $url = $this->urlRedecorator->redecorateFromTarget( $url );
+        $url = $this->urlRedecorator->redecorateFromTarget( $legacyUrl );
         $extractedData['id'] = $this->imageIoService->loadBinaryFileByUri( $url )->id;
 
         if ( !$ezimageTag->hasAttribute( 'filename' ) )

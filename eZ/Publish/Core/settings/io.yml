@@ -77,4 +77,4 @@ services:
         class: %ezpublish.core.io.image_fieldtype.legacy_url_redecorator.class%
         arguments:
             - @ezpublish.core.io.default_url_decorator
-            - @ezpublish.core.fieldtype.ezimage.legacy_url_decorator
+            - @ezpublish.core.io.image_fieldtype.legacy_url_decorator
