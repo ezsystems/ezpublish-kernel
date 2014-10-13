@@ -8,11 +8,12 @@
  */
 namespace eZ\Publish\Core\FieldType\Image\IO;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use RuntimeException;
 
 /**
  * Legacy Image IOService
@@ -57,6 +58,11 @@ class Legacy implements IOServiceInterface
     private $draftPrefix;
 
     /**
+     * @var OptionsProvider
+     */
+    private $optionsProvider;
+
+    /**
      * @param IOServiceInterface $publishedIOService
      * @param IOServiceInterface $draftIOService
      * @param array $options Path options. Known keys: var_dir, storage_dir, draft_images_dir, published_images_dir.
@@ -67,57 +73,43 @@ class Legacy implements IOServiceInterface
      * @throws \Symfony\Component\OptionsResolver\Exception\MissingOptionsException
      *         If a required option is missing.
      */
-    public function __construct( IOServiceInterface $publishedIOService, IOServiceInterface $draftIOService, array $options = array() )
+    public function __construct( IOServiceInterface $publishedIOService, IOServiceInterface $draftIOService, OptionsProvider $optionsProvider )
     {
         $this->publishedIOService = $publishedIOService;
         $this->draftIOService = $draftIOService;
-
-        $resolver = new OptionsResolver();
-        $this->configureOptions( $resolver );
-        $this->setPrefixes( $resolver->resolve( $options ) );
-    }
-
-    private function configureOptions( OptionsResolver $resolver )
-    {
-        $resolver->setRequired( array( 'var_dir', 'draft_images_dir', 'published_images_dir' ) );
-        $resolver->setOptional( array( 'storage_dir' ) );
-        $resolver->setAllowedTypes(
-            array(
-                'var_dir' => 'string',
-                'storage_dir' => 'string',
-                'draft_images_dir' => 'string',
-                'published_images_dir' => 'string'
-            )
-        );
+        $this->optionsProvider = $optionsProvider;
+        $this->setPrefixes();
     }
 
     /**
-     * Computes the paths to published & draft images path using $options
-     *
-     * @param array $options
+     * Sets the IOService prefix
      */
-    private function setPrefixes( array $options )
+    public function setPrefix( $prefix )
     {
-        $pathArray = array( $options['var_dir'] );
+        $this->publishedIOService->setPrefix( $prefix );
+        $this->draftIOService->setPrefix( $prefix );
+    }
+
+    /**
+     * Computes the paths to published & draft images path using the options from the provider
+     */
+    private function setPrefixes()
+    {
+        $pathArray = array( $this->optionsProvider->getVarDir() );
 
         // The storage dir itself might be null
-        if ( isset( $options['storage_dir'] ) )
+        if ( $storageDir = $this->optionsProvider->getStorageDir() )
         {
-            $pathArray[] = $options['storage_dir'];
+            $pathArray[] = $storageDir;
         }
 
-        $this->draftPrefix = implode( '/', array_merge( $pathArray, array( $options['draft_images_dir'] ) ) );
-        $this->publishedPrefix = implode( '/', array_merge( $pathArray, array( $options['published_images_dir'] ) ) );
+        $this->draftPrefix = implode( '/', array_merge( $pathArray, array( $this->optionsProvider->getDraftImagesDir() ) ) );
+        $this->publishedPrefix = implode( '/', array_merge( $pathArray, array( $this->optionsProvider->getPublishedImagesDir() ) ) );
     }
 
     public function getExternalPath( $internalId )
     {
         return $this->publishedIOService->getExternalPath( $internalId );
-    }
-
-    public function getMetadata( MetadataHandler $metadataHandler, BinaryFile $binaryFile )
-    {
-        return $this->publishedIOService->getMetadata( $metadataHandler, $binaryFile );
     }
 
     public function newBinaryCreateStructFromLocalFile( $localFile )
@@ -150,6 +142,29 @@ class Legacy implements IOServiceInterface
         }
 
         return $this->publishedIOService->loadBinaryFile( $binaryFileId );
+    }
+
+    /**
+     * Since both services should use the same uri, we can use any of them to *GET* the URI
+     */
+    public function loadBinaryFileByUri( $binaryFileUri )
+    {
+        try
+        {
+            return $this->publishedIOService->loadBinaryFileByUri( $binaryFileUri );
+        }
+        // Runtime means that the prefix didn't match, NotFound can pass through
+        catch ( RuntimeException $prefixException )
+        {
+            try
+            {
+                return $this->draftIOService->loadBinaryFileByUri( $binaryFileUri );
+            }
+            catch ( RuntimeException $e )
+            {
+                throw $prefixException;
+            }
+        }
     }
 
     public function getFileContents( BinaryFile $binaryFile )

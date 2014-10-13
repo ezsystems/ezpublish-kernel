@@ -20,19 +20,20 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
      */
     public function testPostProcessValueHash()
     {
-        $path = 'application/815b3aa9.pdf';
+        $uri = '/var/ezdemo_site/storage/original/application/815b3aa9.pdf';
         $processor = $this->getProcessor();
 
         $inputHash = array(
-            'path' => $path,
+            'uri' => '/var/ezdemo_site/storage/original/application/815b3aa9.pdf',
         );
 
         $outputHash = $processor->postProcessValueHash( $inputHash );
 
+        $expectedUri = 'http://static.example.com' . $uri;
         $this->assertEquals(
             array(
-                'path' => $path,
-                'url' => str_replace( '{path}', $path, self::TEMPLATE_URL )
+                'url' => $expectedUri,
+                'uri' => $expectedUri
             ),
             $outputHash
         );
@@ -47,7 +48,7 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
     {
         return new BinaryProcessor(
             $this->getTempDir(),
-            self::TEMPLATE_URL
+            'http://static.example.com'
         );
     }
 }

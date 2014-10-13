@@ -45,8 +45,8 @@ class EzPublishLegacyExtension extends Extension
         // View
         $loader->load( 'view.yml' );
 
-        // IO Services
-        $loader->load( 'io.yml' );
+        // Fieldtype Services
+        $loader->load( 'fieldtype_services.yml' );
 
         // SignalSlot settings
         $loader->load( 'slot.yml' );

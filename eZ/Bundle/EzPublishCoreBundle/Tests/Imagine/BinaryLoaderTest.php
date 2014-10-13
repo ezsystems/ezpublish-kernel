@@ -60,7 +60,7 @@ class BinaryLoaderTest extends PHPUnit_Framework_TestCase
         $path = 'something.jpg';
         $mimeType = 'foo/mime-type';
         $content = 'some content';
-        $binaryFile = new BinaryFile( array( 'id' => $path, 'mimeType' => $mimeType ) );
+        $binaryFile = new BinaryFile( array( 'id' => $path ) );
         $this->ioService
             ->expects( $this->once() )
             ->method( 'loadBinaryFile' )
@@ -79,6 +79,12 @@ class BinaryLoaderTest extends PHPUnit_Framework_TestCase
             ->method( 'getFileContents' )
             ->with( $binaryFile )
             ->will( $this->returnValue( $content ) );
+
+        $this->ioService
+            ->expects( $this->once() )
+            ->method( 'getMimeType' )
+            ->with( $binaryFile->id )
+            ->will( $this->returnValue( $mimeType ) );
 
         $expected = new Binary( $content, $mimeType, $format );
         $this->assertEquals( $expected, $this->binaryLoader->find( $path ) );

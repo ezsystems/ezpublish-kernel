@@ -12,23 +12,22 @@ namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 class BinaryProcessor extends BinaryInputProcessor
 {
     /**
-     * Template for binary URLs
+     * Host prefix for uris, without a leading /
      *
-     * The template may contain a "{path}" variable, which is replaced by the
-     * MD5 file name part of the binary path.
+     * @todo Refactor such transformation with a service that receives the request and has the host
      *
      * @var string
      */
-    protected $urlTemplate;
+    protected $hostPrefix;
 
     /**
      * @param string $temporaryDirectory
-     * @param string $urlTemplate
+     * @param string $hostPrefix
      */
-    public function __construct( $temporaryDirectory, $urlTemplate )
+    public function __construct( $temporaryDirectory, $hostPrefix )
     {
         parent::__construct( $temporaryDirectory );
-        $this->urlTemplate = $urlTemplate;
+        $this->hostPrefix = $hostPrefix;
     }
 
     /**
@@ -41,25 +40,27 @@ class BinaryProcessor extends BinaryInputProcessor
             return $outgoingValueHash;
         }
 
-        $outgoingValueHash['url'] = $this->generateUrl(
-            $outgoingValueHash['path']
-        );
+        // url is kept for BC, but uri is the right one
+        $outgoingValueHash['uri'] = $outgoingValueHash['url'] = $this->generateUrl( $outgoingValueHash['uri'] );
+
         return $outgoingValueHash;
     }
 
     /**
      * Generates a URL for $path
      *
-     * @param string $path
+     * @param string $path absolute url
      *
      * @return string
      */
     protected function generateUrl( $path )
     {
-        return str_replace(
-            '{path}',
-            $path,
-            $this->urlTemplate
-        );
+        $url = $path;
+        if ( $this->hostPrefix )
+        {
+            // url should start with a /
+            $url = $this->hostPrefix . $url;
+        }
+        return $url;
     }
 }

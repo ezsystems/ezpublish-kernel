@@ -1,24 +1,59 @@
 parameters:
     ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
-    ezpublish.core.io.handler.filesystem.class: eZ\Publish\Core\IO\Handler\Filesystem
     ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
     ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
+    ezpublish.core.io.binarydata_handler.flysystem.class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
+    ezpublish.core.io.metadata_handler.flysystem.class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
 
 services:
     ezpublish.core.io.service:
         class: %ezpublish.core.io.service.class%
+        lazy: true
         arguments:
-            - @ezpublish.core.io.handler.filesystem
+            - @ezpublish.core.io.metadata_handler
+            - @ezpublish.core.io.binarydata_handler
             - @ezpublish.core.io.mimeTypeDetector
-
-    ezpublish.core.io.handler.filesystem:
-        class: %ezpublish.core.io.handler.filesystem.class%
-        arguments:
-            - @ezpublish.core.io.mimeTypeDetector
-            - { storage_dir: %storage_dir%, root_dir: %io_root_dir% }
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%
 
     ezpublish.core.io.mimeTypeDetector:
         alias: ezpublish.core.io.mimeTypeDetector.fileinfo
+
+    # metadata handlers
+    ezpublish.core.io.metadata_handler:
+        alias: ezpublish.core.io.metadata_handler.flysystem
+
+    ezpublish.core.io.metadata_handler.flysystem:
+        class: %ezpublish.core.io.metadata_handler.flysystem.class%
+        arguments:
+            - @ezpublish.core.io.flysystem.default_filesystem
+
+    # binarydata handlers
+    ezpublish.core.io.binarydata_handler:
+        alias: ezpublish.core.io.binarydata_handler.flysystem
+
+    ezpublish.core.io.binarydata_handler.flysystem:
+        class: %ezpublish.core.io.binarydata_handler.flysystem.class%
+        arguments:
+            - @ezpublish.core.io.flysystem.default_filesystem
+            - @ezpublish.core.io.flysystem.default_url_decorator
+
+    ezpublish.core.io.flysystem.base_filesystem:
+        class: League\Flysystem\Filesystem
+        abstract: true
+
+    ezpublish.core.io.flysystem.default_filesystem:
+        parent: ezpublish.core.io.flysystem.base_filesystem
+        arguments:
+            - @ezpublish.core.io.flysystem.default_adapter
+
+    ezpublish.core.io.flysystem.default_adapter:
+        class: League\Flysystem\Adapter\Local
+        arguments:
+            - %io_root_dir%
+
+    ezpublish.core.io.flysystem.default_url_decorator:
+        class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
+        arguments:
+            - %storage_dir%

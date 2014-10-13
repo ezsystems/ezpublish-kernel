@@ -1,10 +1,9 @@
 <?php
 /**
- * File containing the ${NAME} class.
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\IO;
 use eZ\Publish\Core\IO\Values\BinaryFile;
@@ -16,21 +15,21 @@ use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 interface IOServiceInterface
 {
     /**
+     * The the internal prefix added by the IO Service
+     * @param string $prefix
+     */
+    public function setPrefix( $prefix );
+
+    /**
      * Returns the external path to $internalPath
      *
      * @param string $internalId
      *
+     * @deprecated Since 5.4. Use loadBinaryFileByUri.
+     *
      * @return string
      */
     public function getExternalPath( $internalId );
-
-    /**
-     * @param MetadataHandler $metadataHandler
-     * @param BinaryFile $binaryFile
-     *
-     * @return array
-     */
-    public function getMetadata( MetadataHandler $metadataHandler, BinaryFile $binaryFile );
 
     /**
      * Creates a BinaryFileCreateStruct object from $localFile
@@ -57,6 +56,8 @@ interface IOServiceInterface
      *
      * @param string $externalId
      *
+     * @deprecated Since 5.4. Use the uri property.
+     *
      * @return string
      */
     public function getInternalPath( $externalId );
@@ -73,6 +74,18 @@ interface IOServiceInterface
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $binaryFileId is invalid
      */
     public function loadBinaryFile( $binaryFileId );
+
+    /**
+     * Loads the binary file with uri $uri
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If the id is invalid
+     *
+     * @param string $binaryFileUri
+     *
+     * @return BinaryFile the file, or false if it doesn't exist
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If no file identified by $binaryFileId exists
+     */
+    public function loadBinaryFileByUri( $binaryFileUri );
 
     /**
      * Returns the content of the binary file

@@ -3,51 +3,62 @@
  * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
- * @license For full copyright and license information view LICENSE file distributd with this source code.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
-use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\Parser\AbstractParserTestCase;
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\EzPublishIOExtension;
-use Symfony\Component\DependencyInjection\Definition;
+use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 
-class EzPublishIOExtensionTest extends AbstractParserTestCase
+class EzPublishIOExtensionTest extends AbstractExtensionTestCase
 {
     protected function getContainerExtensions()
     {
-        return array(
-            // required to get the config resolver
-            new EzPublishCoreExtension(),
-            new EzPublishIOExtension()
+        $extension = new EzPublishIOExtension();
+        $extension->addMetadataHandlerFactory( 'flysystem', new ConfigurationFactory\MetadataHandler\Flysystem() );
+        $extension->addBinarydataHandlerFactory( 'flysystem', new ConfigurationFactory\BinarydataHandler\Flysystem() );
+
+        return array( $extension );
+    }
+
+    public function testParametersWithoutConfiguration()
+    {
+        $this->load();
+
+        $this->assertContainerBuilderHasParameter( 'ez_io.metadata_handlers', array() );
+        $this->assertContainerBuilderHasParameter( 'ez_io.binarydata_handlers', array() );
+    }
+
+    public function testParametersWithMetadataHandler()
+    {
+        $config = array(
+            'metadata_handlers' => array(
+                'my_metadata_handler' => array( 'flysystem' => array( 'adapter' => 'my_adapter' ) )
+            )
+        );
+        $this->load( $config );
+
+        $this->assertContainerBuilderHasParameter( 'ez_io.binarydata_handlers', array() );
+        $this->assertContainerBuilderHasParameter(
+            'ez_io.metadata_handlers',
+            array( 'my_metadata_handler' => array( 'name' => 'my_metadata_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter' ) )
         );
     }
 
-    public function testDefaultHandler()
+    public function testParametersWithBinarydataHandler()
     {
-        $this->load();
-        $this->assertConfigResolverParameterValue( 'handler', 'filesystem', 'default' );
-    }
+        $config = array(
+            'binarydata_handlers' => array(
+                'my_binarydata_handler' => array( 'flysystem' => array( 'adapter' => 'my_adapter' ) )
+            )
+        );
+        $this->load( $config );
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
-     */
-    protected $configResolver;
-
-    protected function load( array $configurationValues = array() )
-    {
-        parent::load( $configurationValues );
-        $this->configResolver = $this->container->get( 'ezpublish.config.resolver.core' );
-    }
-
-    /**
-     * Overrides the abstract parent's implementation to use the right namespace
-     *
-     * {@inheritdoc}
-     */
-    protected function assertConfigResolverParameterValue( $parameterName, $expectedValue, $scope, $assertSame = true )
-    {
-        $assertMethod = $assertSame ? 'assertSame' : 'assertEquals';
-        $this->$assertMethod( $expectedValue, $this->configResolver->getParameter( $parameterName, 'ez_io', $scope ) );
+        $this->assertContainerBuilderHasParameter( 'ez_io.metadata_handlers', array() );
+        $this->assertContainerBuilderHasParameter(
+            'ez_io.binarydata_handlers',
+            array( 'my_binarydata_handler' => array( 'name' => 'my_binarydata_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter' ) )
+        );
     }
 }

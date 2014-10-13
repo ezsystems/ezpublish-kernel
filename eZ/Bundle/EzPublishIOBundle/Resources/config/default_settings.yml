@@ -1,3 +1,4 @@
 parameters:
-    ez_io.handlers_map: {}
-    ez_io.default.handler: filesystem
+    # User configured IO handlers
+    ez_io.metadata_handlers: {}
+    ez_io.binarydata_handlers: {}

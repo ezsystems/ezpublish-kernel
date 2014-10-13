@@ -3,11 +3,11 @@ parameters:
     anonymous_user_id: 10
     kernel.debug: false
     languages: []
-    io_root_dir: ""
     image_storage_prefix: images
     image_draft_storage_prefix: images-versioned
     binaryfile_storage_prefix: original
     storage_dir: var/ezdemo_site/storage
+    io_root_dir: %storage_dir%
 
 services:
     ezpublish.api.persistence_handler:

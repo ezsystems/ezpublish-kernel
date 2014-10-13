@@ -43,13 +43,13 @@ class BinaryLoader implements LoaderInterface
         try
         {
             $binaryFile = $this->ioService->loadBinaryFile( $path );
+            $mimeType = $this->ioService->getMimeType( $path );
         }
         catch ( NotFoundException $e )
         {
             throw new NotLoadableException( "Source image not found in $path", 0, $e );
         }
 
-        $mimeType = $binaryFile->mimeType;
         return new Binary(
             $this->ioService->getFileContents( $binaryFile ),
             $mimeType,

@@ -64,6 +64,11 @@ class LegacySolr extends Legacy
                 self::$dsn
             );
 
+            $containerBuilder->setParameter(
+                "io_root_dir",
+                self::$ioRootDir . '/' . $containerBuilder->getParameter( 'storage_dir' )
+            );
+
             self::$serviceContainer = new ServiceContainer(
                 $containerBuilder,
                 $installDir,

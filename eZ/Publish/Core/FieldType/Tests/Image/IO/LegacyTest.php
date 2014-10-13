@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Tests\Image\IO;
 
 use eZ\Publish\Core\FieldType\Image\IO\Legacy as LegacyIOService;
+use eZ\Publish\Core\FieldType\Image\IO\OptionsProvider;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use PHPUnit_Framework_TestCase;
@@ -36,15 +37,18 @@ class LegacyTest extends PHPUnit_Framework_TestCase
     {
         $this->publishedIoServiceMock = $this->getMock( 'eZ\Publish\Core\IO\IOServiceInterface' );
         $this->draftIoServiceMock = $this->getMock( 'eZ\Publish\Core\IO\IOServiceInterface' );
-        $this->service = new LegacyIOService(
-            $this->publishedIoServiceMock,
-            $this->draftIoServiceMock,
+        $optionsProvider = new OptionsProvider(
             array(
                 'var_dir' => 'var/test',
                 'storage_dir' => 'storage',
                 'draft_images_dir' => 'images-versioned',
                 'published_images_dir' => 'images'
             )
+        );
+        $this->service = new LegacyIOService(
+            $this->publishedIoServiceMock,
+            $this->draftIoServiceMock,
+            $optionsProvider
         );
     }
 
@@ -59,27 +63,6 @@ class LegacyTest extends PHPUnit_Framework_TestCase
         self::assertEquals(
             'path/file.png',
             $this->service->getExternalPath( 'var/test/storage/images/path/file.png' )
-        );
-    }
-
-    public function testGetMetadata()
-    {
-        $metadataHandler = $this->getMock( 'eZ\Publish\Core\IO\MetadataHandler' );
-        $binaryFile = new BinaryFile();
-
-        $this->publishedIoServiceMock
-            ->expects( $this->once() )
-            ->method( 'getMetadata' )
-            ->with( $metadataHandler, $binaryFile )
-            ->will( $this->returnValue( array() ) );
-
-        $this->draftIoServiceMock
-            ->expects( $this->never() )
-            ->method( 'getMetadata' );
-
-        self::assertEquals(
-            array(),
-            $this->service->getMetadata( $metadataHandler, $binaryFile )
         );
     }
 
@@ -213,6 +196,45 @@ class LegacyTest extends PHPUnit_Framework_TestCase
         self::assertSame(
             $binaryFile,
             $this->service->loadBinaryFile( $internalId )
+        );
+    }
+
+    public function testLoadBinaryFileByUriWithPublishedFile()
+    {
+        $binaryFileUri = 'var/test/images/an/image.png';
+        $binaryFile = new BinaryFile( array( 'id' => 'an/image.png' ) );
+        $this->publishedIoServiceMock
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFileByUri' )
+            ->with( $binaryFileUri )
+            ->will( $this->returnValue( $binaryFile ) );
+
+        self::assertSame(
+            $binaryFile,
+            $this->service->loadBinaryFileByUri( $binaryFileUri )
+        );
+    }
+
+    public function testLoadBinaryFileByUriWithDraftFile()
+    {
+        $binaryFileUri = 'var/test/images-versioned/an/image.png';
+        $binaryFile = new BinaryFile( array( 'id' => 'an/image.png' ) );
+
+        $this->publishedIoServiceMock
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFileByUri' )
+            ->with( $binaryFileUri )
+            ->will( $this->throwException( new \RuntimeException ) );
+
+        $this->draftIoServiceMock
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFileByUri' )
+            ->with( $binaryFileUri )
+            ->will( $this->returnValue( $binaryFile ) );
+
+        self::assertSame(
+            $binaryFile,
+            $this->service->loadBinaryFileByUri( $binaryFileUri )
         );
     }
 

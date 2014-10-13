@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Tests\IdManager;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler as CachingContentTypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as CachingLanguageHandler;
 use Exception;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -28,6 +29,13 @@ class Legacy extends SetupFactory
      * @var string
      */
     protected static $dsn;
+
+    /**
+     * Root dir for IO operations
+     *
+     * @var string
+     */
+    protected static $ioRootDir;
 
     /**
      * Database type (sqlite, mysql, ...)
@@ -69,8 +77,31 @@ class Legacy extends SetupFactory
             self::$dsn = "sqlite://:memory:";
 
         self::$db = preg_replace( '(^([a-z]+).*)', '\\1', self::$dsn );
+
+        self::$ioRootDir = $this->createTemporaryDirectory();
     }
 
+    /**
+     * Creates a temporary directory and returns it
+     * @return string
+     * @throw \RuntimeException If the root directory can't be created
+     */
+    private function createTemporaryDirectory()
+    {
+        $tmpFile = tempnam(
+            sys_get_temp_dir(),
+            'ez_legacy_tests_' . time()
+        );
+
+        // Convert file into directory
+        unlink( $tmpFile );
+        if ( !@mkdir( $tmpDir = $tmpFile ) )
+        {
+            throw new \RuntimeException( "Eror temporary directory $tmpDir" );
+        };
+
+        return $tmpDir;
+    }
     /**
      * Returns a configured repository for testing.
      *
@@ -129,6 +160,7 @@ class Legacy extends SetupFactory
     {
         $data = $this->getInitialData();
         $handler = $this->getDatabaseHandler();
+        $this->copyVarDir( $this->getInitialVarDir() );
 
         // @todo FIXME: Needs to be in fixture
         $data['ezcontentobject_trash'] = array();
@@ -191,6 +223,19 @@ class Legacy extends SetupFactory
         }
 
         $this->applyStatements( $this->getPostInsertStatements() );
+    }
+
+    protected function getInitialVarDir()
+    {
+        return __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/var';
+    }
+
+    protected function copyVarDir( $sourceDir )
+    {
+        $fs = new Filesystem();
+        $varDir = self::$ioRootDir . '/var';
+        $fs->mkdir( $varDir );
+        $fs->mirror( $sourceDir, $varDir );
     }
 
     /**
@@ -329,6 +374,11 @@ class Legacy extends SetupFactory
             $containerBuilder->setParameter(
                 "legacy_dsn",
                 self::$dsn
+            );
+
+            $containerBuilder->setParameter(
+                "io_root_dir",
+                self::$ioRootDir . '/' . $containerBuilder->getParameter( 'storage_dir' )
             );
 
             self::$serviceContainer = new ServiceContainer(

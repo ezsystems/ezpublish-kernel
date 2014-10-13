@@ -1,33 +1,68 @@
 parameters:
-    ezpublish.core.io.service.class: eZ\Publish\Core\IO\IOService
-    ezpublish.core.io.factory.class: eZ\Bundle\EzPublishIOBundle\ApiLoader\IOFactory
-    ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
-    ezpublish.core.io.metadataHandler.imageSize.class: eZ\Publish\Core\IO\MetadataHandler\ImageSize
-    ezpublish.core.io.handler.class: eZ\Publish\Core\IO\Handler
+    ezpublish.core.io.flysystem.default_adapter.class: League\Flysystem\Adapter\Local
+    ezpublish.core.io.flysystem.storage_dir_url_decorator.class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
 
 services:
-    ezpublish.core.io.factory:
-        class: %ezpublish.core.io.factory.class%
+    # Builds the binarydata and metadata handler based on the siteaccess config
+    ezpublish.core.io.metadata_handler:
+        class: eZ\Publish\Core\IO\IOMetadataHandler
+        factory_service: ezpublish.core.io.metadata_handler.factory
+        factory_method: getConfiguredHandler
         arguments:
-            - @ezpublish.config.resolver
-            - @ezpublish.core.io.mimeTypeDetector
+            - "$io.metadata_handler$"
+
+    ezpublish.core.io.binarydata_handler:
+        class: eZ\Publish\Core\IO\IOBinarydataHandler
+        factory_service: ezpublish.core.io.binarydata_handler.factory
+        factory_method: getConfiguredHandler
+        arguments:
+            - "$io.binarydata_handler$"
+
+    ezpublish.core.io.metadata_handler.factory:
+        class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
         calls:
-            - [setContainer, [@service_container]]
+            - [ setContainer, [ @service_container ] ]
 
-    ezpublish.core.io.service:
-        class: %ezpublish.core.io.service.class%
+    ezpublish.core.io.binarydata_handler.factory:
+        class: eZ\Bundle\EzPublishIOBundle\ApiLoader\HandlerFactory
+        calls:
+            - [ setContainer, [ @service_container ] ]
+
+    # Inject the siteaccess config into a few io services
+    ezpublish.core.io.flysystem.default_adapter:
+        class: %ezpublish.core.io.flysystem.default_adapter.class%
         arguments:
-            - @ezpublish.core.io.handler
-            - @ezpublish.core.io.mimetypedetector
+            - "$io_root_dir$"
 
-    ezpublish.core.io.handler.filesystem:
-        class: %ezpublish.core.io.handler.filesystem.class%
-        factory_service: ezpublish.core.io.factory
-        factory_method: buildFilesystemHandler
-        tags:
-            - { name: ezpublish.io_handler, alias: filesystem }
+    ezpublish.core.io.flysystem.default_url_decorator:
+        class: %ezpublish.core.io.flysystem.storage_dir_url_decorator.class%
+        calls:
+            - [ setPrefix, [ "$io_prefix$" ] ]
 
-    ezpublish.core.io.handler:
-        class: %ezpublish.core.io.handler.class%
-        factory_service: ezpublish.core.io.factory
-        factory_method: buildConfiguredHandler
+    # Base service for flysystem metadata handler
+    ezpublish.core.io.metadata_handler.flysystem:
+        abstract: true
+        class: %ezpublish.core.io.binarydata_handler.flysystem.class%
+        arguments:
+            - ~
+
+    # Default flysystem metadata handler
+    ezpublish.core.io.metadata_handler.flysystem.default:
+        class: %ezpublish.core.io.metadata_handler.flysystem.class%
+        arguments:
+            - @ezpublish.core.io.flysystem.default_filesystem
+
+    # Base service for flysystem binarydata handler
+    ezpublish.core.io.binarydata_handler.flysystem:
+        abstract: true
+        class: %ezpublish.core.io.binarydata_handler.flysystem.class%
+        arguments:
+            - ~
+            - @ezpublish.core.io.flysystem.default_url_decorator
+
+    # Default flysystem binarydata handler
+    ezpublish.core.io.binarydata_handler.flysystem.default:
+        class: %ezpublish.core.io.binarydata_handler.flysystem.class%
+        arguments:
+            - @ezpublish.core.io.flysystem.default_filesystem
+            - @ezpublish.core.io.flysystem.default_url_decorator
