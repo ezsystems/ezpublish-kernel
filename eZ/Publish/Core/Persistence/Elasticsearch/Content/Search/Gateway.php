@@ -44,7 +44,7 @@ abstract class Gateway
     /**
      * Finds and returns documents of a given $type for a given $query string.
      *
-     * @param mixed $query
+     * @param string $query
      * @param string $type
      *
      * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message
@@ -69,7 +69,7 @@ abstract class Gateway
     /**
      * Deletes a document(s) of the given $type by given $query string.
      *
-     * @param mixed $query
+     * @param string $query
      * @param string $type
      */
     abstract public function deleteByQuery( $query, $type );

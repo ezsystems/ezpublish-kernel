@@ -115,7 +115,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteContent( $contentId )
     {
-        $query = array(
+        $ast = array(
             "query" => array(
                 "filtered" => array(
                     "filter" => array(
@@ -127,7 +127,7 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $this->gateway->deleteByQuery( $query, "location" );
+        $this->gateway->deleteByQuery( json_encode( $ast ), "location" );
     }
 
     /**

@@ -218,7 +218,7 @@ class Native extends Gateway
             $ast["size"] = 1000;
         }
 
-        $response = $this->findRaw( $ast, $type );
+        $response = $this->findRaw( json_encode( $ast ), $type );
 
         // TODO: error handling
         $data = json_decode( $response->body );
@@ -229,7 +229,7 @@ class Native extends Gateway
     /**
      * Finds and returns documents of a given $type for a given $query string.
      *
-     * @param mixed $query
+     * @param string $query
      * @param string $type
      *
      * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message
@@ -243,7 +243,7 @@ class Native extends Gateway
                 array(
                     "Content-Type" => "application/json",
                 ),
-                $json = json_encode( $query, JSON_PRETTY_PRINT )
+                $query
             )
         );
 
@@ -283,7 +283,7 @@ class Native extends Gateway
     /**
      * Deletes a document(s) of the given $type by given $query string.
      *
-     * @param mixed $query
+     * @param string $query
      * @param string $type
      */
     public function deleteByQuery( $query, $type )
@@ -295,7 +295,7 @@ class Native extends Gateway
                 array(
                     "Content-Type" => "application/json",
                 ),
-                $json = json_encode( $query )
+                $query
             )
         );
         $this->flush();

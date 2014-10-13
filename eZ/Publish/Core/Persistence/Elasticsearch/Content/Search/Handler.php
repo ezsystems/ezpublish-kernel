@@ -175,7 +175,7 @@ class Handler implements SearchHandlerInterface
     {
         if ( $versionId === null )
         {
-            $query = array(
+            $ast = array(
                 "query" => array(
                     "filtered" => array(
                         "filter" => array(
@@ -194,7 +194,7 @@ class Handler implements SearchHandlerInterface
                 ),
             );
 
-            $this->gateway->deleteByQuery( $query, "content" );
+            $this->gateway->deleteByQuery( json_encode( $ast ), "content" );
         }
         else
         {
@@ -214,7 +214,7 @@ class Handler implements SearchHandlerInterface
     public function deleteLocation( $locationId )
     {
         // 1. Update (reindex) all Content in the subtree with additional Location(s) outside of it
-        $query = array(
+        $ast = array(
             "filter" => array(
                 "nested" => array(
                     "path" => "locations_doc",
@@ -240,7 +240,7 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $response = $this->gateway->findRaw( $query, "content" );
+        $response = $this->gateway->findRaw( json_encode( $ast ), "content" );
         $result = json_decode( $response->body );
 
         $documents = array();
@@ -252,16 +252,16 @@ class Handler implements SearchHandlerInterface
         $this->gateway->bulkIndex( $documents );
 
         // 2. Delete all Content in the subtree with no other Location(s) outside of it
-        $query["filter"]["nested"]["filter"]["and"][1] = array(
-            "not" => $query["filter"]["nested"]["filter"]["and"][1],
+        $ast["filter"]["nested"]["filter"]["and"][1] = array(
+            "not" => $ast["filter"]["nested"]["filter"]["and"][1],
         );
-        $query = array(
+        $ast = array(
             "query" => array(
-                "filtered" => $query,
+                "filtered" => $ast,
             ),
         );
 
-        $this->gateway->deleteByQuery( $query, "content" );
+        $this->gateway->deleteByQuery( json_encode( $ast ), "content" );
     }
 
     /**
