@@ -272,6 +272,11 @@ class Mapper
                 $languageCode,
                 new FieldType\StringField()
             );
+            $fields[] = new Field(
+                'meta_is_main_translation',
+                $content->versionInfo->contentInfo->mainLanguageCode === $languageCode,
+                new FieldType\BooleanField()
+            );
 
             foreach ( $fieldMap[$languageCode] as $field )
             {

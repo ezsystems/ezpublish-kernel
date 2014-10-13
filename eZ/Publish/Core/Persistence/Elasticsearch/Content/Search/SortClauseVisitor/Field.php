@@ -162,19 +162,26 @@ class Field extends SortClauseVisitor
 
         $sort = array(
             "fields_doc.{$fieldName}" => array(
-                "mode" => "max",
                 "order" => $this->getDirection( $sortClause ),
             ),
         );
 
-        if ( $target->languageCode !== null )
+        if ( $target->languageCode === null )
         {
-            $sort["fields_doc.{$fieldName}"]["nested_filter"] = array(
-                "term" => array(
-                    "fields_doc.meta_language_code_s" => $target->languageCode,
-                ),
+            $nestedFilterTerm = array(
+                "fields_doc.meta_is_main_translation_b" => true,
             );
         }
+        else
+        {
+            $nestedFilterTerm = array(
+                "fields_doc.meta_language_code_s" => $target->languageCode,
+            );
+        }
+
+        $sort["fields_doc.{$fieldName}"]["nested_filter"] = array(
+            "term" => $nestedFilterTerm,
+        );
 
         return $sort;
     }

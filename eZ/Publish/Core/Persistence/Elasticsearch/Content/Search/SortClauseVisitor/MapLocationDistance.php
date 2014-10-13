@@ -168,7 +168,6 @@ class MapLocationDistance extends SortClauseVisitor
         $sortClause = array(
             "_geo_distance" => array(
                 "nested_path" => "fields_doc",
-                "mode" => "max",
                 "order" => $this->getDirection( $sortClause ),
                 "fields_doc.{$fieldName}" => array(
                     "lat" => $target->latitude,
@@ -178,15 +177,22 @@ class MapLocationDistance extends SortClauseVisitor
             ),
         );
 
-        // TODO should maybe somehow filter even when language filter is not used (non-translatable field)
-        if ( $target->languageCode !== null )
+        if ( $target->languageCode === null )
         {
-            $sortClause["_geo_distance"]["nested_filter"] = array(
-                "term" => array(
-                    "fields_doc.meta_language_code_s" => $target->languageCode,
-                ),
+            $nestedFilterTerm = array(
+                "fields_doc.meta_is_main_translation_b" => true,
             );
         }
+        else
+        {
+            $nestedFilterTerm = array(
+                "fields_doc.meta_language_code_s" => $target->languageCode,
+            );
+        }
+
+        $sort["fields_doc.{$fieldName}"]["nested_filter"] = array(
+            "term" => $nestedFilterTerm,
+        );
 
         return $sortClause;
     }
