@@ -171,8 +171,7 @@ class Field extends SortClauseVisitor
         {
             $sort["fields_doc.{$fieldName}"]["nested_filter"] = array(
                 "term" => array(
-                    // TODO: fix normalization
-                    "fields_doc.meta_language_code_id" => str_replace( "-", "", $target->languageCode ),
+                    "fields_doc.meta_language_code_s" => $target->languageCode,
                 ),
             );
         }

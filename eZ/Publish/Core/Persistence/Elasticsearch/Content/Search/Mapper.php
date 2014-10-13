@@ -270,7 +270,7 @@ class Mapper
             $fields[] = new Field(
                 'meta_language_code',
                 $languageCode,
-                new FieldType\IdentifierField()
+                new FieldType\StringField()
             );
 
             foreach ( $fieldMap[$languageCode] as $field )
