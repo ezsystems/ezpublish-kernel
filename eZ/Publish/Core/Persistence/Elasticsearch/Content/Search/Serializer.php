@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
 use eZ\Publish\SPI\Persistence\Content\Search\FieldType\DocumentField;
 
 /**
- *
+ * Serializer serializes a Document to a string that can be passed
+ * over Elasticsearch REST API.
  */
 class Serializer
 {
@@ -31,6 +31,10 @@ class Serializer
      */
     protected $nameGenerator;
 
+    /**
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper $fieldValueMapper
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator $nameGenerator
+     */
     public function __construct(
         FieldValueMapper $fieldValueMapper,
         FieldNameGenerator $nameGenerator
@@ -41,7 +45,9 @@ class Serializer
     }
 
     /**
-     * @param Document $document
+     * Returns document _source that can be used for (bulk) indexing.
+     *
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
      *
      * @return string
      */
@@ -50,6 +56,19 @@ class Serializer
         return json_encode( $this->getDocumentHash( $document ) );
     }
 
+    /**
+     * Returns bulk metadata for creating a new document or replacing an existing document.
+     *
+     * Note: _index parameter is omitted because it is configurable
+     * on a gateway and passed as a part of the REST resource
+     * in {@link \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway::bulkIndex()}.
+     *
+     * @see \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway::bulkIndex()
+     *
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
+     *
+     * @return string
+     */
     public function getIndexMetadata( Document $document )
     {
         $metadataHash = array(
@@ -63,7 +82,11 @@ class Serializer
     }
 
     /**
+     * Converts given $document to a hash format that can be JSON encoded
+     * to get a document _source.
      *
+     * Implemented in a separate method because of a recursion needed to
+     * handle nested documents.
      *
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
      *
