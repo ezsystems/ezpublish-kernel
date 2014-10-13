@@ -14,25 +14,12 @@ use eZ\Publish\Core\IO\UrlDecorator;
 /**
  * Prefixes the URI with a string, and makes it absolute
  */
-class AbsolutePrefix implements UrlDecorator
+class AbsolutePrefix extends Prefix implements UrlDecorator
 {
     /**
-     * The URI absolute prefix.
-     * @var string
+     * Makes the prefix absolute
+     * @param $prefix
      */
-    private $prefix;
-
-    /**
-     * @param string $prefix uri prefix. Will be nested within '/' on both ends.
-     */
-    public function __construct( $prefix = null )
-    {
-        if ( $prefix !== null )
-        {
-            $this->setPrefix( $prefix );
-        }
-    }
-
     public function setPrefix( $prefix )
     {
         if ( $prefix != '' )
@@ -49,30 +36,5 @@ class AbsolutePrefix implements UrlDecorator
         }
 
         $this->prefix = $prefix;
-    }
-
-    public function decorate( $id )
-    {
-        if ( empty( $this->prefix ) )
-        {
-            return $id;
-        }
-
-        return $this->prefix . ltrim( $id, '/' );
-    }
-
-    public function undecorate( $url )
-    {
-        if ( empty( $this->prefix ) )
-        {
-            return $url;
-        }
-
-        if ( strpos( $url, $this->prefix ) !== 0 )
-        {
-            throw new InvalidBinaryFileIdException( $url );
-        }
-
-        return substr( $url, strlen( $this->prefix ) );
     }
 }
