@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Aggregate criterion visitor class
+ * File containing the CriterionVisitorDispatcher class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -15,22 +15,23 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use RuntimeException;
 
 /**
- * Dispatches Criterion objects to a visitor depending on the query context
+ * Dispatches Criterion objects to a visitor depending on the query context.
  */
 class CriterionVisitorDispatcher
 {
     /**
-     * @todo
+     * Query visiting context.
      */
     const CONTEXT_QUERY = "query";
 
     /**
-     * @todo
+     * Filter visiting context.
      */
     const CONTEXT_FILTER = "filter";
 
     /**
-     * @todo
+     * Map of CONTEXT_* constants to a method handling the visiting for a context.
+     *
      * @var array
      */
     protected $contextMethodMap = array(
