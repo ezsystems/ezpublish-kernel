@@ -32,11 +32,11 @@ class Native extends Gateway
     protected $client;
 
     /**
-     * Field value mapper
+     * Document serializer
      *
      * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer
      */
-    protected $mapper;
+    protected $serializer;
 
     /**
      * Query criterion visitor dispatcher
