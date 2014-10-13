@@ -19,7 +19,7 @@ use RuntimeException;
 abstract class CriterionVisitor
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      *

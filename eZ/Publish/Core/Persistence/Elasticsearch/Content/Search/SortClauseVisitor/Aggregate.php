@@ -51,7 +51,7 @@ class Aggregate extends SortClauseVisitor
     }
 
     /**
-     * CHeck if visitor is applicable to current sortClause
+     * Check if visitor is applicable to current sortClause
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *

@@ -51,7 +51,7 @@ class Aggregate extends FacetBuilderVisitor
     }
 
     /**
-     * CHeck if visitor is applicable to current facet result
+     * Check if visitor is applicable to current facet result
      *
      * @param string $name
      *
