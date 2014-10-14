@@ -14,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
-use RuntimeException;
 
 /**
  * Base class for Field sort clauses
