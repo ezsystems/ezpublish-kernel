@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
- * Visits the sort clause into a Elasticsearch query
+ * Visits the sort clause into a hash representation of Elasticsearch sort
  */
 abstract class SortClauseVisitor
 {
@@ -30,7 +30,7 @@ abstract class SortClauseVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return string
+     * @return mixed Hash representation of Elasticsearch sort
      */
     abstract public function visit( SortClause $sortClause );
 

@@ -34,7 +34,7 @@ class ContentId extends SortClauseVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return string
+     * @return mixed
      */
     public function visit( SortClause $sortClause )
     {

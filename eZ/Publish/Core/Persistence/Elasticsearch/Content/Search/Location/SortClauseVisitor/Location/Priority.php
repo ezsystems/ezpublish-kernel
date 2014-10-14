@@ -34,14 +34,14 @@ class Priority extends SortClauseVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
-     * @return string
+     * @return mixed
      */
     public function visit( SortClause $sortClause )
     {
         return array(
             "priority_i" => array(
-                "order" => $this->getDirection( $sortClause )
-            )
+                "order" => $this->getDirection( $sortClause ),
+            ),
         );
     }
 }
