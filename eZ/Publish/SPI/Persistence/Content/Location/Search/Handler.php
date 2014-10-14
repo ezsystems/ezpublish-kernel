@@ -27,16 +27,22 @@ interface Handler
     public function findLocations( LocationQuery $query );
 
     /**
+     * Indexes a Location in the index storage
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      */
     public function indexLocation( Location $location );
 
     /**
+     * Deletes a Location from the index storage
+     *
      * @param int|string $locationId
      */
     public function deleteLocation( $locationId );
 
     /**
+     * Deletes a Content from the index storage
+     *
      * @param $contentId
      */
     public function deleteContent( $contentId );

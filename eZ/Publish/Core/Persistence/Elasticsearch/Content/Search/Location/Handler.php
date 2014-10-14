@@ -21,7 +21,7 @@ use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
 
 /**
- *
+ * The Location Search Handler interface defines search operations on Location elements in the storage engine.
  */
 class Handler implements SearchHandlerInterface
 {
@@ -33,7 +33,7 @@ class Handler implements SearchHandlerInterface
     protected $gateway;
 
     /**
-     * Field name generator
+     * Document mapper
      *
      * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper
      */
@@ -82,6 +82,8 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * Indexes a Location in the index storage
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      */
     public function indexLocation( Location $location )
@@ -91,6 +93,15 @@ class Handler implements SearchHandlerInterface
         $this->gateway->index( $document );
     }
 
+    /**
+     * Indexes several Locations
+     *
+     * @todo: This function and setCommit() is needed for Persistence\Solr for test speed but not part
+     *       of interface for the reason described in Solr\Content\Search\Gateway\Native::bulkIndexContent
+     *       Short: Bulk handling should be properly designed before added to the interface.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location[] $locations
+     */
     public function bulkIndexLocations( array $locations )
     {
         $documents = array();
@@ -103,6 +114,8 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * Deletes a Location from the index storage
+     *
      * @param int|string $locationId
      */
     public function deleteLocation( $locationId )
@@ -111,6 +124,8 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * Deletes a Content from the index storage
+     *
      * @param $contentId
      */
     public function deleteContent( $contentId )

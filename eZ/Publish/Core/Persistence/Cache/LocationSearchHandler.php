@@ -30,6 +30,8 @@ class LocationSearchHandler extends AbstractHandler implements LocationSearchHan
     }
 
     /**
+     * Indexes a Location in the index storage
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      */
     public function indexLocation( Location $location )
@@ -39,6 +41,8 @@ class LocationSearchHandler extends AbstractHandler implements LocationSearchHan
     }
 
     /**
+     * Deletes a Location from the index storage
+     *
      * @param int|string $locationId
      */
     public function deleteLocation( $locationId )
@@ -48,6 +52,8 @@ class LocationSearchHandler extends AbstractHandler implements LocationSearchHan
     }
 
     /**
+     * Deletes a Content from the index storage
+     *
      * @param int|string $contentId
      */
     public function deleteContent( $contentId )

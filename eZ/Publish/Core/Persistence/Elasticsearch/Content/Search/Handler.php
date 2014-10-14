@@ -203,7 +203,7 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
-     *
+     * Deletes a location from the index
      *
      * @todo When we support Location-less Content, we will have to reindex instead of removing
      * @todo Should we not already support the above?
