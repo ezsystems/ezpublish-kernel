@@ -40,7 +40,6 @@ class LocationPathString extends SortClauseVisitor
     {
         return array(
             "locations_doc.path_string_id" => array(
-                "mode" => "max",
                 "order" => $this->getDirection( $sortClause ),
                 "nested_filter" => array(
                     "term" => array(

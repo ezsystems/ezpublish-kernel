@@ -40,7 +40,6 @@ class LocationDepth extends SortClauseVisitor
     {
         return array(
             "locations_doc.depth_i" => array(
-                "mode" => "max",
                 "order" => $this->getDirection( $sortClause ),
                 "nested_filter" => array(
                     "term" => array(

@@ -40,7 +40,6 @@ class LocationPriority extends SortClauseVisitor
     {
         return array(
             "locations_doc.priority_i" => array(
-                "mode" => "max",
                 "order" => $this->getDirection( $sortClause ),
                 "nested_filter" => array(
                     "term" => array(
