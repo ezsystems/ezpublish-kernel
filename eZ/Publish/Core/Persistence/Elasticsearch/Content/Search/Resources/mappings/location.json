@@ -1,5 +1,6 @@
 {
     "location": {
+        "dynamic": false,
         "properties": {
             "id": { "type": "integer", "index": "not_analyzed" },
             "priority_i": { "type": "integer", "index": "not_analyzed" },

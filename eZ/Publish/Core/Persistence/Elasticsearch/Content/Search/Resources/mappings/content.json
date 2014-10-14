@@ -1,5 +1,6 @@
 {
     "content": {
+        "dynamic": false,
         "properties": {
             "id": { "type": "integer", "index": "not_analyzed" },
             "type_id": { "type": "string", "index": "not_analyzed" },
@@ -20,6 +21,7 @@
             "object_state_mid": { "type": "string", "index": "not_analyzed" },
             "locations_doc": {
                 "type": "nested",
+                "dynamic": false,
                 "properties": {
                     "id": { "type": "integer", "index": "not_analyzed" },
                     "priority_i": { "type": "integer", "index": "not_analyzed" },
@@ -37,6 +39,7 @@
             },
             "fields_doc": {
                 "type": "nested",
+                "dynamic": true,
                 "properties": {
                     "meta_language_code_s": { "type": "string", "index": "not_analyzed" },
                     "meta_is_main_translation_b": { "type": "boolean", "index": "not_analyzed" },
