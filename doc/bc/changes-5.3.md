@@ -100,6 +100,10 @@ Changes affecting version compatibility with former or future versions.
   Default value will be changed from false to true in 5.4 as part of story ( https://jira.ez.no/browse/EZP-22191 ):
   "As a User I expect API's with language filters to respect Always available flag"
 
+* As of eZ Publish 5.3.3/2014.09 UserGroup->subGroupCount is deprecated
+  API\Repository\Values\User\UserGroup->subGroupCount will be removed in future version,
+  this value can be obtained on demand using search service or other API methods.
+
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).

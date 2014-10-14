@@ -27,6 +27,7 @@ abstract class UserGroup extends Content
 
     /**
      * The number of sub groups
+     * @deprecated As of eZ Publish 5.3.3, count can be obtained on demand using location service.
      * @var int
      */
     protected $subGroupCount;
