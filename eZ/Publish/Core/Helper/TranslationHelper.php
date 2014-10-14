@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -63,20 +64,7 @@ class TranslationHelper
      */
     public function getTranslatedContentName( Content $content, $forcedLanguage = null )
     {
-        if ( $forcedLanguage !== null )
-        {
-            $languages = array( $forcedLanguage );
-        }
-        else
-        {
-            $languages = $this->configResolver->getParameter( 'languages' );
-        }
-
-        // Always add null to ensure we will pass it to VersionInfo::getName() if no valid translated name is found.
-        // So we have at least content name in main language.
-        $languages[] = null;
-
-        foreach ( $languages as $lang )
+        foreach ( $this->getLanguages( $forcedLanguage ) as $lang )
         {
             $translatedName = $content->getVersionInfo()->getName( $lang );
             if ( $translatedName !== null )
@@ -123,20 +111,8 @@ class TranslationHelper
      */
     public function getTranslatedField( Content $content, $fieldDefIdentifier, $forcedLanguage = null )
     {
-        if ( $forcedLanguage !== null )
-        {
-            $languages = array( $forcedLanguage );
-        }
-        else
-        {
-            $languages = $this->configResolver->getParameter( 'languages' );
-        }
-        // Always add null as last entry so that we can use it pass it as languageCode $content->getField(),
-        // forcing to use the main language if all others fail.
-        $languages[] = null;
-
         // Loop over prioritized languages to get the appropriate translated field.
-        foreach ( $languages as $lang )
+        foreach ( $this->getLanguages( $forcedLanguage ) as $lang )
         {
             $field = $content->getField( $fieldDefIdentifier, $lang );
             if ( $field instanceof Field )
@@ -167,37 +143,105 @@ class TranslationHelper
         $forcedLanguage = null
     )
     {
-        if ( $forcedLanguage !== null )
-        {
-            $languages = array( $forcedLanguage );
-        }
-        else
-        {
-            $languages = $this->configResolver->getParameter( 'languages' );
-        }
-
-        // Always add main language as last entry, forcing to use the main language if all others fail.
-        $languages[] = $contentType->mainLanguageCode;
-
         $fieldDefinition = $contentType->getFieldDefinition( $fieldDefIdentifier );
         if ( !$fieldDefinition instanceof FieldDefinition )
         {
-            return null;
+            throw new InvalidArgumentException(
+                '$fieldDefIdentifier',
+                "Field '{$fieldDefIdentifier}' not found on {$contentType->identifier}"
+            );
         }
 
         $method = 'get' . $property;
         if ( !method_exists( $fieldDefinition, $method ) )
         {
-            throw new InvalidArgumentException( '$property', "Method 'get{$property}' not found on FieldDefinition" );
+            throw new InvalidArgumentException( '$property', "Method get'{$property}'() not found on FieldDefinition" );
         }
 
         // Loop over prioritized languages to get the appropriate translated field definition name
         // Should ideally have used array_unique, but in that case the loop should ideally never reach last item
-        foreach ( $languages as $lang )
+        foreach ( $this->getLanguages( $forcedLanguage, $contentType->mainLanguageCode ) as $lang )
         {
             if ( $name = $fieldDefinition->$method( $lang ) )
             {
                 return $name;
+            }
+        }
+    }
+
+    /**
+     * Gets translated property generic helper
+     *
+     * For generic use, expects property in singular form. For instance if 'name' is provided it will first look for
+     * property called 'names' and look for correct translation there, otherwise fallback to getName() method if set.
+     *
+     * Languages will consist of either forced language or current languages list, in addition helper will check if for
+     * mainLanguage property and append that to languages if alwaysAvailable property is true or non-existing.
+     *
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object Must be Content, VersionInfo or ContentInfo object
+     * @param string $property Property name, example 'names', 'descriptions'
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @throws InvalidArgumentException
+     * @return string|null
+     */
+    public function getTranslatedByProperty( ValueObject $object, $property, $forcedLanguage = null )
+    {
+        if ( !isset( $object->$property ) )
+        {
+            throw new InvalidArgumentException( '$property', "Property '{$property}' not found on " . get_class( $object ) );
+        }
+
+        // Always force main language as fallback, if defined and if either alwaysAvailable is true or not defined
+        // if language is already is set on array we still do this as ideally the loop will never
+        if ( isset( $object->mainLanguageCode ) && ( !isset( $object->alwaysAvailable ) || $object->alwaysAvailable ) )
+        {
+            $languages = $this->getLanguages( $forcedLanguage, $object->mainLanguageCode );
+        }
+        else
+        {
+            $languages = $this->getLanguages( $forcedLanguage );
+        }
+
+        foreach ( $languages as $lang )
+        {
+            if ( isset( $object->$property[$lang] ) )
+            {
+                return $object->$property[$lang];
+            }
+        }
+    }
+
+    /**
+     * Gets translated method generic helper
+     *
+     * For generic use, expects property in singular form. For instance if 'name' is provided it will first look for
+     * property called 'names' and look for correct translation there, otherwise fallback to getName() method if set.
+     *
+     * Languages will consist of either forced language or current languages list, in addition helper will append null
+     * to list of languages so method may fallback to main/initial language if supported by domain.
+     *
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object Must be Content, VersionInfo or ContentInfo object
+     * @param string $method Method name, example 'getName', 'description'
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @throws InvalidArgumentException
+     * @return string|null
+     */
+    public function getTranslatedByMethod( ValueObject $object, $method, $forcedLanguage = null )
+    {
+        if ( !method_exists( $object, $method ) )
+        {
+            throw new InvalidArgumentException( '$method', "Method '{$method}' not found on " . get_class( $object ) );
+        }
+
+        foreach ( $this->getLanguages( $forcedLanguage ) as $lang )
+        {
+            if ( $value = $object->$method( $lang ) )
+            {
+                return $value;
             }
         }
     }
@@ -254,5 +298,27 @@ class TranslationHelper
 
         sort( $availableLanguages );
         return array_unique( $availableLanguages );
+    }
+
+    /**
+     * @param string|null $forcedLanguage
+     * @param string|null $fallbackLanguage
+     * @return array|mixed
+     */
+    private function getLanguages( $forcedLanguage = null, $fallbackLanguage = null )
+    {
+        if ( $forcedLanguage !== null )
+        {
+            $languages = array( $forcedLanguage );
+        }
+        else
+        {
+            $languages = $this->configResolver->getParameter( 'languages' );
+        }
+
+        // Always add $fallbackLanguage, even if null, as last entry so that we can fallback to
+        // main/initial language if domain supports it.
+        $languages[] = $fallbackLanguage;
+        return $languages;
     }
 }
