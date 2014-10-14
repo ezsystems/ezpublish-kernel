@@ -116,6 +116,11 @@ abstract class FieldBase extends SortClauseVisitor
     }
 
     /**
+     * Returns the term condition for nested filter, used to target specific nested field document.
+     *
+     * If given $languageCode is not null the condition targets the field document in the
+     * given translation, otherwise document for translation in main language code is returned.
+     *
      * @param null|string $languageCode
      *
      * @return mixed
