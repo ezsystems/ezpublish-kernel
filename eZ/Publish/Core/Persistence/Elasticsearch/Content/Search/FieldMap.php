@@ -65,7 +65,7 @@ class FieldMap
     }
 
     /**
-     * Get field type information
+     * Get field type information for criterion
      *
      * Returns an array in the form:
      *
@@ -119,5 +119,64 @@ class FieldMap
         }
 
         return $this->fieldTypes;
+    }
+
+    /**
+     * Get field type information for sort clause
+     *
+     * TODO: handle custom field
+     * TODO: caching (see above)
+     *
+     * @param string $contentTypeIdentifier
+     * @param string $fieldDefinitionIdentifier
+     * @param string $languageCode
+     *
+     * @return array
+     */
+    public function getSortFieldTypes( $contentTypeIdentifier, $fieldDefinitionIdentifier, $languageCode )
+    {
+        $types = array();
+
+        foreach ( $this->contentTypeHandler->loadAllGroups() as $group )
+        {
+            foreach ( $this->contentTypeHandler->loadContentTypes( $group->id ) as $contentType )
+            {
+                if ( $contentType->identifier !== $contentTypeIdentifier )
+                {
+                    continue;
+                }
+
+                foreach ( $contentType->fieldDefinitions as $fieldDefinition )
+                {
+                    if ( $fieldDefinition->identifier !== $fieldDefinitionIdentifier )
+                    {
+                        continue;
+                    }
+
+                    // TODO: find a better way to handle non-translatable fields?
+                    if ( $languageCode === null || $fieldDefinition->isTranslatable )
+                    {
+                        $fieldType = $this->fieldRegistry->getType( $fieldDefinition->fieldType );
+
+                        foreach ( $fieldType->getIndexDefinition() as $name => $type )
+                        {
+                            $types[$type->type] =
+                                $this->nameGenerator->getTypedName(
+                                    $this->nameGenerator->getName(
+                                        $name,
+                                        $fieldDefinition->identifier,
+                                        $contentType->identifier
+                                    ),
+                                    $type
+                                );
+                        }
+                    }
+
+                    break 3;
+                }
+            }
+        }
+
+        return $types;
     }
 }
