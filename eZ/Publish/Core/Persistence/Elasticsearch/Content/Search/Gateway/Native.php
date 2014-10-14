@@ -75,7 +75,6 @@ class Native extends Gateway
         CriterionVisitorDispatcher $criterionVisitorDispatcher,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
-        // todo move up
         $indexName = "ezpublish"
     )
     {
