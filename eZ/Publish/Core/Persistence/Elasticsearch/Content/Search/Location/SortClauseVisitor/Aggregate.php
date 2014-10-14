@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
- * Visits the sortClause tree into an Elasticsearch query
+ * Aggregate sort clause visitor
  */
 class Aggregate extends SortClauseVisitor
 {

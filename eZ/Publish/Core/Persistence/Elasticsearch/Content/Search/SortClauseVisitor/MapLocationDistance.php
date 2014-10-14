@@ -17,7 +17,7 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
 use RuntimeException;
 
 /**
- * Visits the sortClause tree into a Elasticsearch query
+ * Visits the MapLocationDistance sort clause
  */
 class MapLocationDistance extends SortClauseVisitor
 {
