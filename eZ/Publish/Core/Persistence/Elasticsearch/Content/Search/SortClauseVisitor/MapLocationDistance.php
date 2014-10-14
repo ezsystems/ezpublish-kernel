@@ -157,9 +157,8 @@ class MapLocationDistance extends SortClauseVisitor
             $target->languageCode
         );
 
-        if ( empty( $types ) )
+        if ( empty( $types ) || !isset( $types["ez_geolocation"] ) )
         {
-            // TODO should this really crash? maybe a dedicated exception is needed
             throw new RuntimeException( "No sortable fields found" );
         }
 
