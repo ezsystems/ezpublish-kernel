@@ -341,4 +341,42 @@ class Html5Test extends PHPUnit_Framework_TestCase
 '
         );
     }
+
+    public function dataProviderEmbedRendering()
+    {
+        return array(
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><embed view="embed" size="small" object_id="42"/></paragraph></section>',
+                '<div></div>'
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph class="test"><embed view="embed" size="small" align="left" object_id="42"/>First paragraph</paragraph><paragraph>Second paragraph</paragraph></section>',
+                '<div class="object-left"></div><p class="test">First paragraph</p><p>Second paragraph</p>'
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph class="test"><embed view="embed" size="small" align="left" object_id="42"/>First<anchor name="middle"/>paragraph</paragraph><paragraph>Second paragraph</paragraph></section>',
+                '<div class="object-left"></div><p class="test">First<a id="middle"></a>paragraph</p><p>Second paragraph</p>'
+            )
+        );
+    }
+
+    /**
+     * @dataProvider dataProviderEmbedRendering
+     */
+    public function testEmbedRendering( $xml, $expected )
+    {
+        $dom = new DomDocument();
+        $dom->loadXML( $xml );
+
+        $html5 = new Html5( $this->getDefaultStylesheet(), array() );
+        $result = $html5->convert( $dom );
+
+        $this->assertEquals(
+            $expected,
+            trim( $result )
+        );
+    }
 }
