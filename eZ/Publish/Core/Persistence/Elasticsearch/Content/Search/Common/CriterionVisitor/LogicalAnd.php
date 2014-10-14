@@ -36,7 +36,7 @@ class LogicalAnd extends CriterionVisitor
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
-     * @return string
+     * @return mixed
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
@@ -58,7 +58,7 @@ class LogicalAnd extends CriterionVisitor
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
-     * @return string
+     * @return mixed
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
     {

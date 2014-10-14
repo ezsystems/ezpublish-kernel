@@ -42,7 +42,7 @@ class ContentTypeIdIn extends CriterionVisitor
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
-     * @return string
+     * @return mixed
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
@@ -50,16 +50,16 @@ class ContentTypeIdIn extends CriterionVisitor
         {
             $filter = array(
                 "terms" => array(
-                    "type_id" => $criterion->value
-                )
+                    "type_id" => $criterion->value,
+                ),
             );
         }
         else
         {
             $filter = array(
                 "term" => array(
-                    "type_id" => $criterion->value[0]
-                )
+                    "type_id" => $criterion->value[0],
+                ),
             );
         }
 

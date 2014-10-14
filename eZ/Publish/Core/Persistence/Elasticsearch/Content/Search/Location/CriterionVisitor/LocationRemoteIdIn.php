@@ -42,7 +42,7 @@ class LocationRemoteIdIn extends CriterionVisitor
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
-     * @return string
+     * @return mixed
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
     {
@@ -50,16 +50,16 @@ class LocationRemoteIdIn extends CriterionVisitor
         {
             $filter = array(
                 "terms" => array(
-                    "remote_id_id" => $criterion->value
-                )
+                    "remote_id_id" => $criterion->value,
+                ),
             );
         }
         else
         {
             $filter = array(
                 "term" => array(
-                    "remote_id_id" => $criterion->value[0]
-                )
+                    "remote_id_id" => $criterion->value[0],
+                ),
             );
         }
 

@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use RuntimeException;
 
 /**
- * Visits the criterion tree into a Elasticsearch query AST
+ * Visits the criterion tree into a hash representation of Elasticsearch query/filter AST.
  */
 abstract class CriterionVisitor
 {
@@ -33,7 +33,7 @@ abstract class CriterionVisitor
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
-     * @return string
+     * @return mixed Hash representation of Elasticsearch filter abstract syntax tree
      */
     abstract public function visitFilter( Criterion $criterion, CriterionVisitorDispatcher $dispatcher = null );
 
@@ -45,7 +45,7 @@ abstract class CriterionVisitor
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
      *
-     * @return string
+     * @return mixed Hash representation of Elasticsearch query abstract syntax tree
      */
     public function visitQuery( Criterion $criterion, CriterionVisitorDispatcher $dispatcher = null )
     {
