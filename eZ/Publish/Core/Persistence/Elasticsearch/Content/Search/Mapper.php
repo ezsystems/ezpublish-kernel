@@ -23,7 +23,8 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 
 /**
- *
+ * Mapper maps Content and Location objects to a Document object, representing a
+ * document in Elasticsearch index storage.
  */
 class Mapper
 {
@@ -76,6 +77,15 @@ class Mapper
      */
     protected $fieldRegistry;
 
+    /**
+     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
+     */
     public function __construct(
         FieldRegistry $fieldRegistry,
         FieldNameGenerator $fieldNameGenerator,
@@ -96,9 +106,7 @@ class Mapper
     }
 
     /**
-     * Map content to document.
-     *
-     * A document is an array of fields
+     * Maps given Content by given $contentId to a Document.
      *
      * @param int|string $contentId
      *
@@ -114,9 +122,7 @@ class Mapper
     }
 
     /**
-     * Map content to document.
-     *
-     * A document is an array of fields
+     * Maps given Content to a Document.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
@@ -246,7 +252,8 @@ class Mapper
     }
 
     /**
-     *
+     * Returns an array of documents containing fields for the given $content.
+     * Each document contains fields for a single language.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
@@ -314,9 +321,10 @@ class Mapper
     }
 
     /**
-     * Map content to document.
+     * Maps given $location of a $content to a Document.
      *
-     * A document is an array of fields
+     * Returned Location Document is to be used as nested Document of a Content, not searchable
+     * directly but only through Content Search.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      * @param \eZ\Publish\SPI\Persistence\Content $content
@@ -390,6 +398,15 @@ class Mapper
         );
     }
 
+    /**
+     * Maps given Location to a Document.
+     *
+     * Returned Document represents a "parent" Location document searchable with Location Search.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     *
+     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     */
     public function mapContentLocation( Location $location )
     {
         $contentInfo = $this->contentHandler->loadContentInfo( $location->contentId );
@@ -498,6 +515,13 @@ class Mapper
         return $document;
     }
 
+    /**
+     * Returns an array of object state ids of a Content with given $contentId.
+     *
+     * @param int|string $contentId
+     *
+     * @return array
+     */
     protected function getObjectStateIds( $contentId )
     {
         $objectStateIds = array();
