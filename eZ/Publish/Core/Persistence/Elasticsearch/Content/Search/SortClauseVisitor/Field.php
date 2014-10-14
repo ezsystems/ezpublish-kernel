@@ -62,8 +62,6 @@ class Field extends SortClauseVisitor
      * Get field type information
      *
      * TODO: extract/abstract FieldMap (and handle custom field?? TBD for sort)
-     * TODO: as data is nested/namespaced there is no real need for type info in field name
-     * TODO: ^^^ type identifier is not indexed so it MUST NOT be used as far as that is the case anyway
      *
      * @param string $contentTypeIdentifier
      * @param string $fieldDefinitionIdentifier
