@@ -98,13 +98,13 @@ class Aggregate extends FacetBuilderVisitor
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map facet builder to a proper Elasticsearch representation
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder $facetBuilder
      *
-     * @return string
+     * @return mixed
      */
     public function visit( FacetBuilder $facetBuilder )
     {

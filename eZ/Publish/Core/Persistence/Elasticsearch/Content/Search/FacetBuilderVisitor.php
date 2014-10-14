@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 
 /**
- * Visits the facet builder tree into a Elasticsearch query
+ * Visits the facet builder tree into a hash representation of Elasticsearch aggregations
  */
 abstract class FacetBuilderVisitor
 {
@@ -45,11 +45,11 @@ abstract class FacetBuilderVisitor
     abstract public function canVisit( FacetBuilder $facetBuilder );
 
     /**
-     * Map field value to a proper Elasticsearch representation
+     * Map facet builder to a proper Elasticsearch representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder $facetBuilder
      *
-     * @return string
+     * @return mixed Hash representation of Elasticsearch aggregations
      */
     abstract public function visit( FacetBuilder $facetBuilder );
 
