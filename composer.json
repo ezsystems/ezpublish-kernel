@@ -20,7 +20,7 @@
         "zetacomponents/mail": "~1.8",
         "zetacomponents/php-generator": "~1.1",
         "symfony/symfony": "~2.3",
-        "symfony-cmf/routing": "1.1.*",
+        "symfony-cmf/routing": "~1.1",
         "qafoo/rmf": "1.0.*",
         "kriswallsmith/buzz": ">=0.9",
         "tedivm/stash-bundle": "0.4.*",
