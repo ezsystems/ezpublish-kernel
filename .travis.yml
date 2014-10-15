@@ -81,7 +81,7 @@ before_script:
   - echo "$TEST_TIMEZONE"
 
 # execute phpunit as the script command
-script: "phpunit -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 -c $TEST_CONFIG"
+script: "phpunit -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 -d hhvm.libxml.ext_entity_whitelist=file -c $TEST_CONFIG"
 
 # disable mail notifications
 notification:
