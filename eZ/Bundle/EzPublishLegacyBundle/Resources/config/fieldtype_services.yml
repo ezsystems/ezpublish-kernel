@@ -1,5 +1,4 @@
 parameters:
-    ezpublish.fieldType.ezimage.io_legacy.class: eZ\Publish\Core\FieldType\Image\IO\Legacy
     ezpublish.fieldType.ezimage.io_legacy.factory.class: eZ\Bundle\EzPublishLegacyBundle\FieldType\Image\IO\IOServiceFactory
     ezpublish_legacy.image_alias.cleaner.class: eZ\Publish\Core\MVC\Legacy\Image\AliasCleaner
 
