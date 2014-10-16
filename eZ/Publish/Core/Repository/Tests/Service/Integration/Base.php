@@ -48,16 +48,12 @@ abstract class Base extends PHPUnit_Framework_TestCase
     {
         return new User(
             array(
-                'content' => new Content(
+                'versionInfo' => new VersionInfo(
                     array(
-                        'versionInfo' => new VersionInfo(
-                            array(
-                                'contentInfo' => new ContentInfo( array( 'id' => $id ) )
-                            )
-                        ),
-                        'internalFields' => array()
+                        'contentInfo' => new ContentInfo( array( 'id' => $id ) )
                     )
-                )
+                ),
+                'internalFields' => array()
             )
         );
     }

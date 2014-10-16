@@ -15,13 +15,11 @@ use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruc
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
-use eZ\Publish\Core\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
 use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\SPI\Persistence\User\Handler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
@@ -138,7 +136,7 @@ class UserService implements UserServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainUserGroupObject( $publishedContent );
+        return $publishedContent;
     }
 
     /**
@@ -153,9 +151,7 @@ class UserService implements UserServiceInterface
      */
     public function loadUserGroup( $id )
     {
-        $content = $this->repository->getContentService()->loadContent( $id );
-
-        return $this->buildDomainUserGroupObject( $content );
+        return $this->repository->getContentService()->loadContent( $id );
     }
 
     /**
@@ -178,57 +174,31 @@ class UserService implements UserServiceInterface
         if ( $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null )
             return array();
 
-        $mainGroupLocation = $locationService->loadLocation(
+        $mainLocation = $locationService->loadLocation(
             $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId
         );
 
-        $searchResult = $this->searchSubGroups(
-            $mainGroupLocation->id,
-            $mainGroupLocation->sortField,
-            $mainGroupLocation->sortOrder
+        $searchQuery = new Query();
+        $searchQuery->filter = new CriterionLogicalAnd(
+            array(
+                new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
+                new CriterionParentLocationId( $mainLocation->id )
+            )
         );
+
+        $searchQuery->sortClauses[] = $this->getSortClauseBySortField( $mainLocation->sortField, $mainLocation->sortOrder );
+
+        $searchResult = $this->repository->getSearchService()->findContent( $searchQuery, array(), false );
         if ( $searchResult->totalCount == 0 )
             return array();
 
         $subUserGroups = array();
         foreach ( $searchResult->searchHits as $searchHit )
         {
-            $subUserGroups[] = $this->buildDomainUserGroupObject( $searchHit->valueObject );
+            $subUserGroups[] = $searchHit->valueObject;
         }
 
         return $subUserGroups;
-    }
-
-    /**
-     * Returns (searches) subgroups of a user group described by its main location
-     *
-     * @param mixed $locationId
-     * @param int|null $sortField
-     * @param int $sortOrder
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
-     */
-    protected function searchSubGroups( $locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = -1 )
-    {
-        $searchQuery = new Query();
-
-        $searchQuery->offset = $offset >= 0 ? (int)$offset : 0;
-        $searchQuery->limit = $limit >= 0 ? (int)$limit  : null;
-
-        $searchQuery->filter = new CriterionLogicalAnd(
-            array(
-                new CriterionContentTypeId( $this->settings['userGroupClassID'] ),
-                new CriterionParentLocationId( $locationId )
-            )
-        );
-
-        $searchQuery->sortClauses = array();
-        if ( $sortField !== null )
-            $searchQuery->sortClauses[] = $this->getSortClauseBySortField( $sortField, $sortOrder );
-
-        return $this->repository->getSearchService()->findContent( $searchQuery, array(), false );
     }
 
     /**
@@ -359,7 +329,7 @@ class UserService implements UserServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainUserGroupObject( $publishedContent );
+        return $publishedContent;
     }
 
     /**
@@ -482,7 +452,7 @@ class UserService implements UserServiceInterface
         {
             $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
             // Create user before publishing, so that external data can be returned
-            $spiUser = $this->userHandler->create(
+            $this->userHandler->create(
                 new SPIUser(
                     array(
                         'id' => $contentDraft->id,
@@ -500,7 +470,8 @@ class UserService implements UserServiceInterface
                     )
                 )
             );
-            $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
+
+            $publishedUser = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
             $this->repository->commit();
         }
@@ -510,7 +481,7 @@ class UserService implements UserServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainUserObject( $spiUser, $publishedContent );
+        return $publishedUser;
     }
 
     /**
@@ -524,34 +495,7 @@ class UserService implements UserServiceInterface
      */
     public function loadUser( $userId )
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
-        $content = $this->repository->getContentService()->internalLoadContent( $userId );
-        // Get spiUser value from Field Value
-        foreach ( $content->getFields() as $field )
-        {
-            if ( !$field->value instanceof UserValue )
-                continue;
-
-            /** @var \eZ\Publish\Core\FieldType\User\Value $value */
-            $value = $field->value;
-            $spiUser = new SPIUser();
-            $spiUser->id = $value->contentId;
-            $spiUser->login = $value->login;
-            $spiUser->email = $value->email;
-            $spiUser->hashAlgorithm = $value->passwordHashType;
-            $spiUser->passwordHash = $value->passwordHash;
-            $spiUser->isEnabled = $value->enabled;
-            $spiUser->maxLogin = $value->maxLogin;
-            break;
-        }
-
-        // If for some reason not found, load it
-        if ( !isset( $spiUser ) )
-        {
-            $spiUser = $this->userHandler->load( $userId );
-        }
-
-        return $this->buildDomainUserObject( $spiUser, $content );
+        return $this->repository->getContentService()->internalLoadContent( $userId );
     }
 
     /**
@@ -601,7 +545,7 @@ class UserService implements UserServiceInterface
         if ( $spiUser->passwordHash !== $passwordHash )
             throw new NotFoundException( "user", $login );
 
-        return $this->buildDomainUserObject( $spiUser );
+        return $this->repository->getContentService()->internalLoadContent( $spiUser->id );
     }
 
     /**
@@ -619,7 +563,7 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue( "login", $login );
 
         $spiUser = $this->userHandler->loadByLogin( $login );
-        return $this->buildDomainUserObject( $spiUser );
+        return $this->repository->getContentService()->internalLoadContent( $spiUser->id );
     }
 
     /**
@@ -640,7 +584,7 @@ class UserService implements UserServiceInterface
         $users = array();
         foreach ( $this->userHandler->loadByEmail( $email ) as $spiUser )
         {
-            $users[] = $this->buildDomainUserObject( $spiUser );
+            $users[] = $this->repository->getContentService()->internalLoadContent( $spiUser->id );
         }
         return $users;
     }
@@ -932,7 +876,7 @@ class UserService implements UserServiceInterface
         $userGroups = array();
         foreach ( $searchResult->searchHits as $resultItem )
         {
-            $userGroups[] = $this->buildDomainUserGroupObject( $resultItem->valueObject );
+            $userGroups[] = $resultItem->valueObject;
         }
 
         return $userGroups;
@@ -981,9 +925,7 @@ class UserService implements UserServiceInterface
         $users = array();
         foreach ( $searchResult->searchHits as $resultItem )
         {
-            $spiUser = $this->userHandler->load( $resultItem->valueObject->id );
-
-            $users[] = $this->buildDomainUserObject( $spiUser, $resultItem->valueObject );
+            $users[] = $resultItem->valueObject;
         }
 
         return $users;
@@ -1066,63 +1008,6 @@ class UserService implements UserServiceInterface
     public function newUserGroupUpdateStruct()
     {
         return new UserGroupUpdateStruct();
-    }
-
-    /**
-     * Builds the domain UserGroup object from provided Content object
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
-     */
-    protected function buildDomainUserGroupObject( APIContent $content )
-    {
-        $locationService = $this->repository->getLocationService();
-
-        $subGroupCount = 0;
-        if ( $content->getVersionInfo()->getContentInfo()->mainLocationId !== null )
-        {
-            $mainLocation = $locationService->loadLocation(
-                $content->getVersionInfo()->getContentInfo()->mainLocationId
-            );
-            $parentLocation = $locationService->loadLocation( $mainLocation->parentLocationId );
-            $subGroups = $this->searchSubGroups( $mainLocation->id, null, Location::SORT_ORDER_ASC, 0, 0 );
-            $subGroupCount = $subGroups->totalCount;
-        }
-
-        return new UserGroup(
-            array(
-                'content' => $content,
-                'parentId' => isset( $parentLocation ) ? $parentLocation->contentId : null,
-                'subGroupCount' => $subGroupCount
-            )
-        );
-    }
-
-    /**
-     * Builds the domain user object from provided persistence user object
-     *
-     * @param \eZ\Publish\SPI\Persistence\User $spiUser
-     * @param \eZ\Publish\API\Repository\Values\Content\Content|null $content
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    protected function buildDomainUserObject( SPIUser $spiUser, APIContent $content = null )
-    {
-        if ( $content === null )
-            $content = $this->repository->getContentService()->internalLoadContent( $spiUser->id );
-
-        return new User(
-            array(
-                'content' => $content,
-                'login' => $spiUser->login,
-                'email' => $spiUser->email,
-                'passwordHash' => $spiUser->passwordHash,
-                'hashAlgorithm' => (int)$spiUser->hashAlgorithm,
-                'enabled' => $spiUser->isEnabled,
-                'maxLogin' => (int)$spiUser->maxLogin,
-            )
-        );
     }
 
     /**

@@ -274,14 +274,10 @@ abstract class UserBase extends BaseServiceTest
 
         $parentGroup = new UserGroup(
             array(
-                'content' => new Content(
-                    array(
-                        "versionInfo" => new VersionInfo(
-                            array( "contentInfo" => new ContentInfo( array( "id" => APIBaseTest::DB_INT_MAX ) ) )
-                        ),
-                        "internalFields" => array()
-                    )
-                )
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => APIBaseTest::DB_INT_MAX ) ) )
+                ),
+                "internalFields" => array()
             )
         );
         $userService->loadSubUserGroups( $parentGroup );
@@ -319,14 +315,10 @@ abstract class UserBase extends BaseServiceTest
 
         $userGroup = new UserGroup(
             array(
-                'content' => new Content(
-                    array(
-                        "versionInfo" => new VersionInfo(
-                            array( "contentInfo" => new ContentInfo( array( "id" => APIBaseTest::DB_INT_MAX ) ) )
-                        ),
-                        "internalFields" => array()
-                    )
-                )
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => APIBaseTest::DB_INT_MAX ) ) )
+                ),
+                "internalFields" => array()
             )
         );
         $userService->deleteUserGroup( $userGroup );
@@ -365,26 +357,18 @@ abstract class UserBase extends BaseServiceTest
 
         $userGroupToMove = new UserGroup(
             array(
-                'content' => new Content(
-                    array(
-                        "versionInfo" => new VersionInfo(
-                            array( "contentInfo" => new ContentInfo( array( "id" => APIBaseTest::DB_INT_MAX ) ) )
-                        ),
-                        "internalFields" => array()
-                    )
-                )
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => APIBaseTest::DB_INT_MAX ) ) )
+                ),
+                "internalFields" => array()
             )
         );
         $parentUserGroup = new UserGroup(
             array(
-                'content' => new Content(
-                    array(
-                        "versionInfo" => new VersionInfo(
-                            array( "contentInfo" => new ContentInfo( array( "id" => APIBaseTest::DB_INT_MAX ) ) )
-                        ),
-                        "internalFields" => array()
-                    )
-                )
+                "versionInfo" => new VersionInfo(
+                    array( "contentInfo" => new ContentInfo( array( "id" => APIBaseTest::DB_INT_MAX ) ) )
+                ),
+                "internalFields" => array()
             )
         );
         $userService->moveUserGroup( $userGroupToMove, $parentUserGroup );
@@ -468,16 +452,12 @@ abstract class UserBase extends BaseServiceTest
 
         $parentGroup = new UserGroup(
             array(
-                'content' => new Content(
+                "versionInfo" => new VersionInfo(
                     array(
-                        "versionInfo" => new VersionInfo(
-                            array(
-                                "contentInfo" => new ContentInfo( array( 'id' => APIBaseTest::DB_INT_MAX ) )
-                            )
-                        ),
-                        "internalFields" => array()
+                        "contentInfo" => new ContentInfo( array( 'id' => APIBaseTest::DB_INT_MAX ) )
                     )
-                )
+                ),
+                "internalFields" => array()
             )
         );
         $userService->createUser( $userCreateStruct, array( $parentGroup ) );

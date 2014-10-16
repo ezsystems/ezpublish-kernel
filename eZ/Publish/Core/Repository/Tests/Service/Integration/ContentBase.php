@@ -2088,7 +2088,7 @@ abstract class ContentBase extends BaseServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
+            "eZ\\Publish\\API\\Repository\\Values\\Content\\Content",
             $copiedContent
         );
 
@@ -2125,7 +2125,7 @@ abstract class ContentBase extends BaseServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            "eZ\\Publish\\Core\\Repository\\Values\\Content\\Content",
+            "eZ\\Publish\\API\\Repository\\Values\\Content\\Content",
             $copiedContent
         );
 

@@ -159,12 +159,11 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
     {
         return new User(
             array(
-                'content' => $this->getContent(
-                    $this->getVersionInfo(
-                        $this->getContentInfo( $userId, $userRemoteId ),
-                        $userVersionNo
-                    )
-                )
+                'versionInfo' => $this->getVersionInfo(
+                    $this->getContentInfo( $userId, $userRemoteId ),
+                    $userVersionNo
+                ),
+                'internalFields' => array()
             )
         );
     }
@@ -181,11 +180,9 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
     {
         return new UserGroup(
             array(
-                'content' => $this->getContent(
-                    $this->getVersionInfo(
-                        $this->getContentInfo( $groupId, $groupRemoteId ),
-                        $groupVersioNo
-                    )
+                'versionInfo' => $this->getVersionInfo(
+                    $this->getContentInfo( $groupId, $groupRemoteId ),
+                    $groupVersioNo
                 )
             )
         );

@@ -761,39 +761,32 @@ class RoleService implements RoleServiceInterface
         if ( $this->repository->hasAccess( 'role', 'read' ) !== true )
             throw new UnauthorizedException( 'role', 'read' );
 
-        $userService = $this->repository->getUserService();
+        $contentService = $this->repository->getContentService();
         $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByRoleId( $role->id );
         $roleAssignments = array();
 
         foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
-            // First check if the Role is assigned to a User
-            // If no User is found, see if it belongs to a UserGroup
-            try
+            $object = $contentService->loadContent( $spiRoleAssignment->contentId );
+            // Pick correct type
+            if ( $object instanceof User )
             {
-                $user = $userService->loadUser( $spiRoleAssignment->contentId );
                 $roleAssignments[] = $this->roleDomainMapper->buildDomainUserRoleAssignmentObject(
                     $spiRoleAssignment,
-                    $user,
+                    $object,
                     $role
                 );
             }
-            catch ( APINotFoundException $e )
+            else if ( $object instanceof UserGroup )
             {
-                try
-                {
-                    $userGroup = $userService->loadUserGroup( $spiRoleAssignment->contentId );
-                    $roleAssignments[] = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
-                        $spiRoleAssignment,
-                        $userGroup,
-                        $role
-                    );
-                }
-                catch ( APINotFoundException $e )
-                {
-                    // Do nothing
-                }
+
+                $roleAssignments[] = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
+                    $spiRoleAssignment,
+                    $object,
+                    $role
+                );
             }
+            // Else do nothing, should throw something like BadState here
         }
 
         return $roleAssignments;

@@ -72,6 +72,13 @@ class DomainMapper
     protected $fieldTypeService;
 
     /**
+     * List of DomainTypeMappers with key corresponding to content type identifier
+     *
+     * @var \eZ\Publish\Core\Repository\DomainType\DomainTypeMapper[]
+     */
+    protected $customDomainMappers;
+
+    /**
      * Setups service with reference to repository.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
@@ -79,13 +86,15 @@ class DomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
      * @param \eZ\Publish\Core\Repository\Helper\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\Core\Repository\DomainType\DomainTypeMapper[] $customDomainMappers
      */
     public function __construct(
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
         TypeHandler $contentTypeHandler,
         LanguageHandler $contentLanguageHandler,
-        FieldTypeService $fieldTypeService
+        FieldTypeService $fieldTypeService,
+        array $customDomainMappers
     )
     {
         $this->contentHandler = $contentHandler;
@@ -93,6 +102,7 @@ class DomainMapper
         $this->contentTypeHandler = $contentTypeHandler;
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeService = $fieldTypeService;
+        $this->customDomainMappers = $customDomainMappers;
     }
 
     /**
@@ -112,12 +122,20 @@ class DomainMapper
             );
         }
 
-        return new Content(
-            array(
-                "internalFields" => $this->buildDomainFields( $spiContent->fields, $contentType ),
-                "versionInfo" => $this->buildVersionInfoDomainObject( $spiContent->versionInfo )
-            )
+        $properties = array(
+            "internalFields" => $this->buildDomainFields( $spiContent->fields, $contentType ),
+            "versionInfo" => $this->buildVersionInfoDomainObject( $spiContent->versionInfo )
         );
+
+        if ( isset( $this->customDomainMappers[ $contentType->identifier ] ) )
+        {
+            return $this->customDomainMappers[ $contentType->identifier ]->buildContentObject(
+                $spiContent,
+                $properties
+            );
+        }
+
+        return new Content( $properties );
     }
 
     /**
