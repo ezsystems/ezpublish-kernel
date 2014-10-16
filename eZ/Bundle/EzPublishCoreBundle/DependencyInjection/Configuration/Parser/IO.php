@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Languages class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -18,9 +18,6 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/**
- * @todo test
- */
 class IO extends AbstractParser
 {
     /** @var ComplexSettingParser */
@@ -105,7 +102,6 @@ class IO extends AbstractParser
             if ( is_string( $postProcessedValue ) )
             {
                 $contextualizer->setContextualParameter( 'io.url_prefix', $scope, $postProcessedValue );
-                // $container->setParameter( "ezsettings.$sa.io.url_prefix", $postProcessedValue );
             }
         }
     }
@@ -117,11 +113,6 @@ class IO extends AbstractParser
      */
     private function addComplexParametersDependencies( $parameter, $scope, ContainerBuilder $container )
     {
-//        if ( $scope === 'default' )
-//        {
-//            return;
-//        }
-//
         // The complex setting exists in this scope, we don't need to do anything
         if ( $container->hasParameter( "ezsettings.$scope.$parameter" ) )
         {
@@ -156,7 +147,6 @@ class IO extends AbstractParser
                 break;
             }
         }
-
     }
 
     private function postProcessComplexSetting( $setting, $sa, ContainerBuilder $container )
