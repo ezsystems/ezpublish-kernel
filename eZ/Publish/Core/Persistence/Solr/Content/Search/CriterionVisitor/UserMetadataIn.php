@@ -53,6 +53,9 @@ class UserMetadataIn extends CriterionVisitor
                 $solrField = 'owner_id';
                 break;
             case Criterion\UserMetadata::GROUP:
+                $solrField = 'owner_user_group_mid';
+                break;
+
             default:
                 throw new NotImplementedException(
                     "No visitor available for: " . get_class( $criterion ) . ' with operator ' . $criterion->operator

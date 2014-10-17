@@ -265,6 +265,15 @@ class Handler implements SearchHandlerInterface
         }
         $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
 
+        // UserGroups and Users are Content, but permissions cascade is achieved through
+        // Locations hierarchy. We index all ancestor Location Content ids of all
+        // Locations of an owner.
+        $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds(
+            $content->versionInfo->contentInfo->ownerId
+        );
+        // Add owner user id as it can also be considered as user group.
+        $ancestorLocationsContentIds[] = $content->versionInfo->contentInfo->ownerId ;
+
         $document = array(
             new Field(
                 'id',
@@ -300,6 +309,11 @@ class Handler implements SearchHandlerInterface
                 'owner',
                 $content->versionInfo->contentInfo->ownerId,
                 new FieldType\IdentifierField()
+            ),
+            new Field(
+                'owner_user_group',
+                $ancestorLocationsContentIds,
+                new FieldType\MultipleIdentifierField()
             ),
             new Field(
                 'section',
@@ -507,6 +521,43 @@ class Handler implements SearchHandlerInterface
         );
 
         return $document;
+    }
+
+    /**
+     * Returns Content ids of all ancestor Locations of all Locations
+     * of a Content with given $contentId.
+     *
+     * Used to determine user groups of a user with $contentId.
+     *
+     * @param int|string $contentId
+     *
+     * @return array
+     */
+    protected function getAncestorLocationsContentIds( $contentId )
+    {
+        $locations = $this->locationHandler->loadLocationsByContent( $contentId );
+        $ancestorLocationContentIds = array();
+        $ancestorLocationIds = array();
+
+        foreach ( $locations as $location )
+        {
+            $locationIds = explode( "/", trim( $location->pathString, "/" ) );
+            // Remove Location of Content with $contentId
+            array_pop( $locationIds );
+            // Remove Root Location id (id==1 in legacy DB)
+            array_shift( $locationIds );
+
+            $ancestorLocationIds = array_merge( $ancestorLocationIds, $locationIds );
+        }
+
+        foreach ( array_unique( $ancestorLocationIds ) as $locationId )
+        {
+            $location = $this->locationHandler->load( $locationId );
+
+            $ancestorLocationContentIds[$location->contentId] = true;
+        }
+
+        return array_keys( $ancestorLocationContentIds );
     }
 
     /**
