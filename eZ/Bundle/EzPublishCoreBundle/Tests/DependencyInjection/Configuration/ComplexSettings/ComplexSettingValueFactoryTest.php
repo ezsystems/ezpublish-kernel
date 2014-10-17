@@ -14,13 +14,15 @@ class ArgumentValueFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testGetArgumentValue()
     {
-        $factory = new ComplexSettingValueFactory( '/mnt/nfs/$var_dir$/$storage_dir$' );
-        $factory->setDynamicSetting( array( '$var_dir$' ), 'var/ezdemo_site' );
-        $factory->setDynamicSetting( array( '$storage_dir$' ), 'storage' );
-
         self::assertEquals(
             '/mnt/nfs/var/ezdemo_site/storage',
-            $factory->getArgumentValue()
+            ComplexSettingValueFactory::getArgumentValue(
+                '/mnt/nfs/$var_dir$/$storage_dir$',
+                array( '$var_dir$' ),
+                'var/ezdemo_site',
+                array( '$storage_dir$' ),
+                'storage'
+            )
         );
     }
 }
