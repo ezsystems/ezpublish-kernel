@@ -19,7 +19,9 @@ class DynamicSettingParser implements DynamicSettingParserInterface
         return
             is_string( $setting )
             && strpos( $setting, static::BOUNDARY_DELIMITER ) === 0
-            && substr( $setting, -1 ) === static::BOUNDARY_DELIMITER;
+            && substr( $setting, -1 ) === static::BOUNDARY_DELIMITER
+            && substr_count( $setting, static::BOUNDARY_DELIMITER ) == 2
+            && substr_count( $setting, static::INNER_DELIMITER ) <= 2;
     }
 
     public function parseDynamicSetting( $setting )

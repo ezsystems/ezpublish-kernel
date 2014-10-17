@@ -172,7 +172,7 @@ class ImageStorage extends GatewayBasedStorage
 
             $field->value->externalData = null;
         }
-        // existing image
+        // existing image from another version
         else
         {
             if ( $field->value->data === null )
@@ -263,7 +263,7 @@ class ImageStorage extends GatewayBasedStorage
 
         foreach ( $fieldXmls as $fieldId => $xml )
         {
-            $storedFiles = $this->extractFiles( $xml );
+            $storedFiles = $gateway->extractFilesFromXml( $xml );
             if ( $storedFiles === null )
             {
                 continue;
@@ -272,7 +272,7 @@ class ImageStorage extends GatewayBasedStorage
             if ( $this->aliasCleaner )
             {
                 $this->aliasCleaner->removeAliases(
-                    $this->IOService->loadBinaryFileByUri( '/' . $storedFiles['original'] )
+                    $this->IOService->loadBinaryFileByUri( $storedFiles['original'] )
                 );
             }
 
@@ -283,7 +283,7 @@ class ImageStorage extends GatewayBasedStorage
                 {
                     try
                     {
-                        $binaryFile = $this->IOService->loadBinaryFileByUri( '/' . $storedFilePath );
+                        $binaryFile = $this->IOService->loadBinaryFileByUri( $storedFilePath );
                         $this->IOService->deleteBinaryFile( $binaryFile );
                     }
                     catch ( NotFoundException $e )
@@ -309,35 +309,6 @@ class ImageStorage extends GatewayBasedStorage
      */
     protected function extractFiles( $xml )
     {
-        if ( empty( $xml ) )
-        {
-            // Empty image value
-            return null;
-        }
-
-        $files = array();
-
-        $dom = new \DOMDocument();
-        $dom->loadXml( $xml );
-        if ( $dom->documentElement->hasAttribute( 'dirpath' ) )
-        {
-            $url = $dom->documentElement->getAttribute( 'url' );
-            if ( empty( $url ) )
-                return null;
-
-            $files['original'] = $url;
-            /** @var \DOMNode $childNode */
-            foreach ( $dom->documentElement->childNodes as $childNode )
-            {
-                if ( $childNode->nodeName != 'alias' )
-                    continue;
-
-                $files[$childNode->getAttribute( 'name' )] = $childNode->getAttribute( 'url' );
-            }
-            return $files;
-        }
-
-        return null;
     }
 
     /**

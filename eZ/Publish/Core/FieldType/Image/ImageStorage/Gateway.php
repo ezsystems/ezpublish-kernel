@@ -26,12 +26,12 @@ abstract class Gateway extends StorageGateway
     /**
      * Stores a reference to the image in $path for $fieldId
      *
-     * @param string $path
+     * @param string $uri File IO uri
      * @param mixed $fieldId
      *
      * @return void
      */
-    abstract public function storeImageReference( $path, $fieldId );
+    abstract public function storeImageReference( $uri, $fieldId );
 
     /**
      * Returns a the XML content stored for the given $fieldIds
@@ -46,21 +46,26 @@ abstract class Gateway extends StorageGateway
     /**
      * Removes all references from $fieldId to a path that starts with $path
      *
-     * @param string $path
+     * @param string $uri File IO uri (not legacy uri)
      * @param int $versionNo
      * @param mixed $fieldId
      *
      * @return void
      */
-    abstract public function removeImageReferences( $path, $versionNo, $fieldId );
+    abstract public function removeImageReferences( $uri, $versionNo, $fieldId );
 
     /**
      * Returns the number of recorded references to the given $path
      *
-     * @param string $path
+     * @param string $uri File IO uri (not legacy uri)
      *
      * @return int
      */
-    abstract public function countImageReferences( $path );
+    abstract public function countImageReferences( $uri );
+
+    /**
+     * Returns the public uris for the images stored in $xml
+     */
+    abstract public function extractFilesFromXml( $xml );
 }
 

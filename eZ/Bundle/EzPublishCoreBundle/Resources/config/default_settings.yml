@@ -29,8 +29,12 @@ parameters:
     ezsettings.default.storage_dir: "storage"           # Where to place new files for storage, it's relative to var directory
     ezsettings.default.binary_dir: "original"
     ezsettings.default.anonymous_user_id: 10            # The ID of the user to be used for everyone who is not logged in
+
+    # IO
     ezsettings.default.io.metadata_handler: "default"
     ezsettings.default.io.binarydata_handler: "default"
+    ezsettings.default.io.url_prefix: "$var_dir$/$storage_dir$"
+
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)
     ezsettings.default.content.ttl_cache: true          # Whether to use TTL Cache for content (i.e. Max-Age response header)
