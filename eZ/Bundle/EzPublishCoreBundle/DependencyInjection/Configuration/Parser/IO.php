@@ -85,6 +85,7 @@ class IO extends AbstractParser
         foreach ( array_merge( $config['siteaccess']['list'], array_keys( $config['siteaccess']['groups'] ) ) as $scope )
         {
             $this->addComplexParametersDependencies( 'io.url_prefix', $scope, $container );
+            $this->addComplexParametersDependencies( 'io.legacy_url_prefix', $scope, $container );
         }
 
         // we should only write for default, and for sa/sa groups/global IF they have a declared value
@@ -102,6 +103,13 @@ class IO extends AbstractParser
             if ( is_string( $postProcessedValue ) )
             {
                 $contextualizer->setContextualParameter( 'io.url_prefix', $scope, $postProcessedValue );
+            }
+
+            // post process io.legacy_url_prefix for complex settings
+            $postProcessedValue = $this->postProcessComplexSetting( 'io.legacy_url_prefix', $scope, $container );
+            if ( is_string( $postProcessedValue ) )
+            {
+                $contextualizer->setContextualParameter( 'io.legacy_url_prefix', $scope, $postProcessedValue );
             }
         }
     }

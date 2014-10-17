@@ -69,4 +69,4 @@ services:
     ezpublish.core.io.image_fieldtype.legacy_url_decorator:
         class: %ezpublish.core.io.url_decorator.prefix.class%
         arguments:
-            - "$var_dir$/$storage_dir$"
+            - "$io.legacy_url_prefix$"
