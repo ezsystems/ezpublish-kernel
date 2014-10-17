@@ -13,33 +13,11 @@ use PHPUnit_Framework_TestCase;
 /**
  * Test case for IO Service
  */
-class AbsolutePrefixTest extends PHPUnit_Framework_TestCase
+class AbsolutePrefixTest extends PrefixTest
 {
-
-    /**
-     * @dataProvider provideData
-     */
-    public function testDecorate( $url, $prefix, $decoratedUrl )
+    protected function buildDecorator( $prefix )
     {
-        $decorator = new AbsolutePrefix( $prefix );
-
-        self::assertEquals(
-            $decoratedUrl,
-            $decorator->decorate( $url )
-        );
-    }
-
-    /**
-     * @dataProvider provideData
-     */
-    public function testUndecorate( $url, $prefix, $decoratedUrl )
-    {
-        $decorator = new AbsolutePrefix( $prefix );
-
-        self::assertEquals(
-            $url,
-            $decorator->undecorate( $decoratedUrl )
-        );
+        return new AbsolutePrefix( $prefix );
     }
 
     public function provideData()
@@ -52,7 +30,17 @@ class AbsolutePrefixTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'images/file.png',
+                'var/storage/',
+                '/var/storage/images/file.png'
+            ),
+            array(
+                'images/file.png',
                 'http://static.example.com',
+                'http://static.example.com/images/file.png'
+            ),
+            array(
+                'images/file.png',
+                'http://static.example.com/',
                 'http://static.example.com/images/file.png'
             )
         );
