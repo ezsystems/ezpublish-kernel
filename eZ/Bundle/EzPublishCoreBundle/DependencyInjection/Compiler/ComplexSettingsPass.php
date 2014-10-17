@@ -7,7 +7,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParserInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -15,10 +15,10 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ComplexSettingsPass implements CompilerPassInterface
 {
-    /** @var ComplexSettingParser */
+    /** @var ComplexSettingParserInterface */
     private $parser;
 
-    public function __construct( ComplexSettingParser $parser )
+    public function __construct( ComplexSettingParserInterface $parser )
     {
         $this->parser = $parser;
     }

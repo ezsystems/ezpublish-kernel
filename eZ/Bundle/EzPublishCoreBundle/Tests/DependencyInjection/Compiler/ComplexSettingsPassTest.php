@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
 {
-    /** @var ComplexSettingParser|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParserInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $parserMock;
 
     public function setUp()

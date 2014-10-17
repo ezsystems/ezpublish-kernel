@@ -10,8 +10,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\AbstractParser;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParserInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
@@ -20,10 +20,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class IO extends AbstractParser
 {
-    /** @var ComplexSettingParser */
+    /** @var ComplexSettingParserInterface */
     private $complexSettingParser;
 
-    public function __construct( ComplexSettingParser $complexSettingParser )
+    public function __construct( ComplexSettingParserInterface $complexSettingParser )
     {
         $this->complexSettingParser = $complexSettingParser;
     }

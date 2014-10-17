@@ -16,7 +16,7 @@ class DynamicSettingParser implements DynamicSettingParserInterface
     public function isDynamicSetting( $setting )
     {
         // Checks if $setting begins and ends with appropriate delimiter.
-        $result =
+        return
             is_string( $setting )
             && strpos( $setting, static::BOUNDARY_DELIMITER ) === 0
             && substr( $setting, -1 ) === static::BOUNDARY_DELIMITER;

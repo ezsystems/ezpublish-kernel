@@ -9,20 +9,41 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Comple
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
 
-/**
- * Parses a string that contains dynamic settings ($foo;eng;bar$).
- *
- * Example: "$var_dir$/$storage_dir$"
- */
-class ComplexSettingParser extends DynamicSettingParser
+class ComplexSettingParser extends DynamicSettingParser implements ComplexSettingParserInterface
 {
     /**
-     * Tests if $string contains dynamic settings
-     *
-     * @param string $string
-     *
-     * @return bool
+     * Regular expression that matches a dynamic variable
+     * @var string
      */
+    private $dynamicSettingRegex;
+
+    public function __construct()
+    {
+        $boundaryDelimiter = preg_quote( static::BOUNDARY_DELIMITER, '/' );
+        $this->dynamicSettingRegex = sprintf(
+            '%s[a-zA-Z0-9_.-]+(?:(?:%s[a-zA-Z0-9_]+)(?:%s[a-zA-Z0-9_.-]+)?)?%s',
+            $boundaryDelimiter,
+            static::INNER_DELIMITER,
+            static::INNER_DELIMITER,
+            $boundaryDelimiter
+        );
+    }
+
+    /**
+     * In addition to the parent's test, verifies the variables with a regexp
+     *
+     * {@inheritdoc}
+     */
+    public function isDynamicSetting( $setting )
+    {
+        if ( parent::isDynamicSetting( $setting ) === false )
+        {
+            return false;
+        }
+
+        return (bool)preg_match( '/^' . $this->dynamicSettingRegex . '$/', $setting );
+    }
+
     public function containsDynamicSettings( $string )
     {
         return count( $this->matchDynamicSettings( $string ) ) > 0;
@@ -39,23 +60,10 @@ class ComplexSettingParser extends DynamicSettingParser
      */
     protected function matchDynamicSettings( $string )
     {
-        preg_match_all(
-            '/\$[a-zA-Z0-9_.-]+(?:(?:;[a-zA-Z0-9_]+)(?:;[a-zA-Z0-9_.-]+)?)?\$/',
-            $string,
-            $matches,
-            PREG_PATTERN_ORDER
-        );
-
+        preg_match_all( '/' . $this->dynamicSettingRegex . '/', $string, $matches, PREG_PATTERN_ORDER );
         return $matches[0];
     }
 
-    /**
-     * Parses dynamic settings
-     *
-     * @param string $string
-     *
-     * @return array key: original string, value: dynamic settings
-     */
     public function parseComplexSetting( $string )
     {
         return $this->matchDynamicSettings( $string );
