@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\IO;
 /**
  * Converts urls between two decorators
  */
-class UrlRedecorator
+class UrlRedecorator implements UrlRedecoratorInterface
 {
     /** @var UrlDecorator */
     private $sourceDecorator;
