@@ -7,6 +7,7 @@
  */
 namespace eZ\Publish\Core\IO\IOMetadataHandler;
 
+use DateTime;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\IOMetadataHandler;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
@@ -56,7 +57,7 @@ class Flysystem implements IOMetadataHandler
 
         $spiBinaryFile = new SPIBinaryFile();
         $spiBinaryFile->id = $spiBinaryFileId;
-        $spiBinaryFile->mtime = $info['timestamp'];
+        $spiBinaryFile->mtime = new DateTime( '@' . $info['timestamp'] );
         $spiBinaryFile->size = $info['size'];
 
         return $spiBinaryFile;

@@ -11,6 +11,7 @@ use eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use PHPUnit_Framework_TestCase;
+use DateTime;
 
 class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
 {
@@ -120,7 +121,7 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
         $expectedSpiBinaryFile = new SPIBinaryFile();
         $expectedSpiBinaryFile->id = 'prefix/my/file.png';
         $expectedSpiBinaryFile->size = 123;
-        $expectedSpiBinaryFile->mtime = 1307155200;
+        $expectedSpiBinaryFile->mtime = new DateTime( '@1307155200' );
         $expectedSpiBinaryFile->mimeType = 'image/png';
 
         self::assertEquals(

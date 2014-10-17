@@ -7,6 +7,7 @@
  */
 namespace eZ\Publish\Core\IO\IOMetadataHandler;
 
+use DateTime;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\IO\IOMetadataHandler;
 use Doctrine\DBAL\Connection;
@@ -256,7 +257,7 @@ SQL
         $spiBinaryFile = new SPIBinaryFile();
         $spiBinaryFile->id = $properties['id'];
         $spiBinaryFile->size = $properties['size'];
-        $spiBinaryFile->mtime = $properties['mtime'];
+        $spiBinaryFile->mtime = new DateTime( '@' . $properties['mtime'] );
         $spiBinaryFile->mimeType = $properties['datatype'];
         return $spiBinaryFile;
     }
