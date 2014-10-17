@@ -60,7 +60,8 @@ class UserMetadataIn extends CriterionVisitor
                 break;
 
             case Criterion\UserMetadata::GROUP:
-                // TODO: index data and implement
+                $fieldName = "owner_user_group_mid";
+                break;
 
             default:
                 throw new NotImplementedException(
