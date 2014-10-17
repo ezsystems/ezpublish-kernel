@@ -38,6 +38,7 @@ class DynamicSettingParserTest extends PHPUnit_Framework_TestCase
             array( '$foo;babar.elephant$', true ),
             array( '$foo;babar;elephant$', true ),
             array( '$foo;bar;baz_biz$', true ),
+            array( '$foo$/$bar$', false )
         );
     }
 
