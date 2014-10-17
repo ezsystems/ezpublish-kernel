@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Legacy\Image;
 
 use eZ\Publish\Core\FieldType\Image\AliasCleanerInterface;
 use eZ\Publish\Core\IO\IOServiceInterface;
+use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 
 class AliasCleaner implements AliasCleanerInterface
 {
@@ -24,14 +25,28 @@ class AliasCleaner implements AliasCleanerInterface
      */
     private $ioService;
 
-    public function __construct( AliasCleanerInterface $innerAliasCleaner, IOServiceInterface $ioService )
+    /**
+     * @var UrlRedecoratorInterface
+     */
+    private $urlRedecorator;
+
+    public function __construct(
+        AliasCleanerInterface $innerAliasCleaner,
+        IOServiceInterface $ioService,
+        UrlRedecoratorInterface $urlRedecorator
+    )
     {
         $this->innerAliasCleaner = $innerAliasCleaner;
         $this->ioService = $ioService;
+        $this->urlRedecorator = $urlRedecorator;
     }
 
     public function removeAliases( $originalPath )
     {
-        $this->innerAliasCleaner->removeAliases( $this->ioService->getExternalPath( $originalPath ) );
+        $this->innerAliasCleaner->removeAliases(
+            $this->ioService->loadBinaryFileByUri(
+                $this->urlRedecorator->redecorateFromTarget( $originalPath )
+            )
+        );
     }
 }
