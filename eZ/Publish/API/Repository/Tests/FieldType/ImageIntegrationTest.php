@@ -436,7 +436,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         {
             if ( $field->fieldDefIdentifier === 'data' )
             {
-                $paths[$field->languageCode] = $field->value->id;
+                $paths[$field->languageCode] = $field->value->uri;
             }
         }
 
@@ -451,6 +451,14 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $contentService->deleteContent( $updatedDraft->contentInfo );
+
+        foreach ( $paths as $uri )
+        {
+            self::assertFalse(
+                $this->uriExistsOnIO( $uri ),
+                "$uri has not been removed"
+            );
+        }
     }
 
     public function providerForTestIsEmptyValue()
