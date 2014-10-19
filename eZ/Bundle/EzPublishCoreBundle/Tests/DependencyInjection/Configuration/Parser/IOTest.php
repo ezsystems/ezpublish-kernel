@@ -19,11 +19,6 @@ class IOTest extends AbstractParserTestCase
 {
     private $minimalConfig;
 
-    public function setUp()
-    {
-        parent::setUp();
-    }
-
     protected function getContainerExtensions()
     {
         return array(
