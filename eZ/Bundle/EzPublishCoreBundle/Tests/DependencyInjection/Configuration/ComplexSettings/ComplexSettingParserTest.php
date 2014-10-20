@@ -25,7 +25,7 @@ class ComplexSettingParserTest extends PHPUnit_Framework_TestCase
      */
     public function testContainsDynamicSettings( $setting, $expected )
     {
-        self::assertEquals( $expected[1], $this->parser->containsDynamicSettings( $setting ), "string" );
+        self::assertEquals( $expected[0], $this->parser->containsDynamicSettings( $setting ), "string" );
     }
 
     /**
@@ -33,7 +33,7 @@ class ComplexSettingParserTest extends PHPUnit_Framework_TestCase
      */
     public function testParseComplexSetting( $setting, $expected )
     {
-        self::assertEquals( $expected[2], $this->parser->parseComplexSetting( $setting ), "string" );
+        self::assertEquals( $expected[1], $this->parser->parseComplexSetting( $setting ), "string" );
     }
 
     public function provideSettings()
@@ -42,40 +42,40 @@ class ComplexSettingParserTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '%container_var%',
-                array( false, false, array() )
+                array( false, array() )
             ),
             array(
                 '$somestring',
-                array( false, false, array() )
+                array( false, array() )
             ),
             array(
                 '$setting$',
-                array( true, true, array( '$setting$' ) )
+                array( true, array( '$setting$' ) )
             ),
             array(
 
                 '$setting;scope$',
-                array( true, true, array( '$setting;scope$' ) )
+                array( true, array( '$setting;scope$' ) )
             ),
             array(
                 '$setting;namespace;scope$',
-                array( true, true, array( '$setting;namespace;scope$' ) )
+                array( true, array( '$setting;namespace;scope$' ) )
             ),
             array(
                 'a_string_before$setting;namespace;scope$',
-                array( false, true, array( '$setting;namespace;scope$' ) )
+                array( true, array( '$setting;namespace;scope$' ) )
             ),
             array(
                 '$setting;namespace;scope$a_string_after',
-                array( false, true, array( '$setting;namespace;scope$' ) )
+                array( true, array( '$setting;namespace;scope$' ) )
             ),
             array(
                 'a_string_before$setting;namespace;scope$a_string_after',
-                array( false, true, array( '$setting;namespace;scope$' ) )
+                array( true, array( '$setting;namespace;scope$' ) )
             ),
             array(
                 '$setting;one$somethingelse$setting;two$',
-                array( false, true, array( '$setting;one$', '$setting;two$' ) )
+                array( true, array( '$setting;one$', '$setting;two$' ) )
             ),
         );
     }

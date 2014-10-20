@@ -299,19 +299,6 @@ class ImageStorage extends GatewayBasedStorage
     }
 
     /**
-     * Extracts the field storage paths (original image + aliases) from the given $xml string.
-     *
-     * @todo This belongs in the gateway, as the XML is an internal legacy format
-     *
-     * @param string $xml
-     *
-     * @return array|null Array of image paths, indexed by alias name or null if empty.
-     */
-    protected function extractFiles( $xml )
-    {
-    }
-
-    /**
      * Checks if field type has external data to deal with
      *
      * @return boolean

@@ -98,7 +98,6 @@ class Image implements Converter
      */
     protected function createLegacyXml( array $data )
     {
-        // @todo Trim the initial / in the legacy decorator
         $data['uri'] = $this->urlRedecorator->redecorateFromSource( $data['uri'] );
         $pathInfo = pathinfo( $data['uri'] );
         return $this->fillXml( $data, $pathInfo, time() );

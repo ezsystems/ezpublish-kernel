@@ -59,14 +59,4 @@ class Prefix implements UrlDecorator
 
         return trim( substr( $url, strlen( $this->prefix ) ), '/' );
     }
-
-    /**
-     * Prefixes $string with a / if there isn't one.
-     * @param string $string
-     * @return string
-     */
-    protected function prefixWithSlash( $string )
-    {
-        return '/' . trim( $string, '/' );
-    }
 }
