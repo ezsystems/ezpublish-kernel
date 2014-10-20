@@ -5315,7 +5315,7 @@ class ContentTest extends BaseServiceMockTest
 
         $contentInfo->expects( $this->any() )
             ->method( "__get" )
-            ->with( "id" )
+            ->with( "sectionId" )
             ->will( $this->returnValue( 42 ) );
 
         $repository->expects( $this->once() )

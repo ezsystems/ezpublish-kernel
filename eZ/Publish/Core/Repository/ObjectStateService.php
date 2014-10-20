@@ -495,7 +495,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function setContentState( ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState )
     {
         if ( $this->repository->canUser( 'state', 'assign', $contentInfo, $objectState ) !== true )
-            throw new UnauthorizedException( 'state', 'assign' );
+            throw new UnauthorizedException( 'state', 'assign', array( 'contentId' => $contentInfo->id ) );
 
         $loadedObjectState = $this->loadObjectState( $objectState->id );
 
