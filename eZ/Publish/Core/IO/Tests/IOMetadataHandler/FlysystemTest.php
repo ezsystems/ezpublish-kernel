@@ -5,14 +5,14 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\IO\Tests\IOBMetadataHandler;
+namespace eZ\Publish\Core\IO\Tests\IOMetadataHandler;
 
-use eZ\Publish\Core\IO\Exception\IOStateException;
 use eZ\Publish\Core\IO\IOMetadataHandler\Flysystem;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use League\Flysystem\FileNotFoundException;
 use PHPUnit_Framework_TestCase;
+use DateTime;
 
 class FlysystemTest extends PHPUnit_Framework_TestCase
 {
@@ -34,12 +34,12 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
         $spiCreateStruct = new SPIBinaryFileCreateStruct();
         $spiCreateStruct->id = 'prefix/my/file.png';
         $spiCreateStruct->size = 123;
-        $spiCreateStruct->mtime = 1307155200;
+        $spiCreateStruct->mtime = new DateTime( '@1307155200' );
 
         $expectedSpiBinaryFile = new SPIBinaryFile();
         $expectedSpiBinaryFile->id = 'prefix/my/file.png';
         $expectedSpiBinaryFile->size = 123;
-        $expectedSpiBinaryFile->mtime = 1307155200;
+        $expectedSpiBinaryFile->mtime = new DateTime( '@1307155200' );
 
         $this->filesystem
             ->expects( $this->once() )
@@ -70,7 +70,7 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
         $expectedSpiBinaryFile = new SPIBinaryFile();
         $expectedSpiBinaryFile->id = 'prefix/my/file.png';
         $expectedSpiBinaryFile->size = 123;
-        $expectedSpiBinaryFile->mtime = 1307155200;
+        $expectedSpiBinaryFile->mtime = new DateTime( '@1307155200' );
 
         $this->filesystem
             ->expects( $this->once() )

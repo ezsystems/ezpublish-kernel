@@ -1,4 +1,5 @@
 parameters:
+    ezpublish.core.io.stream_file_listener.class: eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener
     ezpublish.core.io.flysystem.default_adapter.class: League\Flysystem\Adapter\Local
 
 services:
@@ -70,3 +71,13 @@ services:
         class: %ezpublish.core.io.url_decorator.prefix.class%
         arguments:
             - "$io.legacy_url_prefix$"
+
+    ezpublish.core.io.stream_file_listener:
+        class: %ezpublish.core.io.stream_file_listener.class%
+        arguments:
+            - @ezpublish.fieldtype.ezimage.io_service
+            - @ezpublish.config.resolver
+        calls:
+            - [setIoPrefix, ["$io.url_prefix"]]
+        tags:
+            - { name: kernel.event_subscriber }
