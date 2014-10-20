@@ -86,6 +86,7 @@ class IO extends AbstractParser
         {
             $this->addComplexParametersDependencies( 'io.url_prefix', $scope, $container );
             $this->addComplexParametersDependencies( 'io.legacy_url_prefix', $scope, $container );
+            $this->addComplexParametersDependencies( 'io.root_dir', $scope, $container );
         }
 
         // we should only write for default, and for sa/sa groups/global IF they have a declared value
@@ -96,8 +97,6 @@ class IO extends AbstractParser
         );
         foreach ( $scopes as $scope )
         {
-            $this->setIoPrefix( $container, $scope );
-
             // post process io.url_prefix for complex settings
             $postProcessedValue = $this->postProcessComplexSetting( 'io.url_prefix', $scope, $container );
             if ( is_string( $postProcessedValue ) )
@@ -110,6 +109,13 @@ class IO extends AbstractParser
             if ( is_string( $postProcessedValue ) )
             {
                 $contextualizer->setContextualParameter( 'io.legacy_url_prefix', $scope, $postProcessedValue );
+            }
+
+            // post process io.root_dir for complex settings
+            $postProcessedValue = $this->postProcessComplexSetting( 'io.root_dir', $scope, $container );
+            if ( is_string( $postProcessedValue ) )
+            {
+                $contextualizer->setContextualParameter( 'io.root_dir', $scope, $postProcessedValue );
             }
         }
     }
@@ -161,8 +167,6 @@ class IO extends AbstractParser
     {
         $configResolver = $container->get( 'ezpublish.config.resolver.core' );
 
-        // the config resolver doesn't have this parameter, but what about its dependencies ?
-        // or should this be handled somewhere else ?
         if ( !$configResolver->hasParameter( $setting, null, $sa ) )
         {
             return false;
@@ -207,39 +211,5 @@ class IO extends AbstractParser
             $value = str_replace( $dynamicSetting, $dynamicSettingValue, $value );
         }
         return $value;
-    }
-
-    /**
-     * @param $configResolver
-     * @param $sa
-     * @param $container
-     *
-     * @return bool|string
-     */
-    protected function setIoPrefix( ContainerBuilder $container, $sa )
-    {
-        $configResolver = $container->get( 'ezpublish.config.resolver.core' );
-
-        $hasVarDir = $container->hasParameter( "ezsettings.$sa.var_dir" );
-        $hasStorageDir = $container->hasParameter( "ezsettings.$sa.storage_dir" );
-
-        if ( !$hasVarDir && !$hasStorageDir )
-        {
-            return false;
-        }
-
-        $varDir = $hasVarDir ?
-            $container->getParameter( "ezsettings.$sa.var_dir" ) :
-            $configResolver->getParameter( 'var_dir', null, $sa );
-
-        $storageDir = $hasStorageDir ?
-            $container->getParameter( "ezsettings.$sa.storage_dir" ) :
-            $configResolver->getParameter( 'storage_dir', null, $sa );
-
-        $ioPrefix = "$varDir/$storageDir";
-        $ioRootDir = "%ezpublish_legacy.root_dir%/$ioPrefix";
-
-        $container->setParameter( "ezsettings.$sa.io_root_dir", $ioRootDir );
-        $container->setParameter( "ezsettings.$sa.io_prefix", $ioPrefix );
     }
 }

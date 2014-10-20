@@ -36,7 +36,6 @@ services:
     ezpublish.core.io.binarydata_handler:
         alias: ezpublish.core.io.binarydata_handler.flysystem
 
-
     ezpublish.core.io.binarydata_handler.flysystem:
         class: %ezpublish.core.io.binarydata_handler.flysystem.class%
         arguments:

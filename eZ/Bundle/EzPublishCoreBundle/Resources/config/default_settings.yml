@@ -35,6 +35,7 @@ parameters:
     ezsettings.default.io.binarydata_handler: "default"
     ezsettings.default.io.url_prefix: "$var_dir$/$storage_dir$"
     ezsettings.default.io.legacy_url_prefix: "$var_dir$/$storage_dir$"
+    ezsettings.default.io.root_dir: "%ezpublish_legacy.root_dir%/$var_dir$/$storage_dir$"
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)

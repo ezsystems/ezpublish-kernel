@@ -31,7 +31,7 @@ services:
     ezpublish.core.io.flysystem.default_adapter:
         class: %ezpublish.core.io.flysystem.default_adapter.class%
         arguments:
-            - "$io_root_dir$"
+            - "$io.root_dir$"
 
     ezpublish.core.io.prefix_url_decorator:
         class: %ezpublish.core.io.url_decorator.absolute_prefix.class%
