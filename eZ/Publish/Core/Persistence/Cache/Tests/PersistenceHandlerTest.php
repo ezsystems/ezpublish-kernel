@@ -110,9 +110,10 @@ class PersistenceHandlerTest extends HandlerTest
      */
     public function testObjectStateHandler()
     {
-        $this->loggerMock->expects( $this->once() )->method( 'logUnCachedHandler' );
-        $this->persistenceHandlerMock->expects( $this->once() )->method( 'objectStateHandler' );
-        $this->persistenceCacheHandler->objectStateHandler();
+        $this->loggerMock->expects( $this->never() )->method( $this->anything() );
+        $handler = $this->persistenceCacheHandler->objectStateHandler();
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\ObjectStateHandler', $handler );
     }
 
     /**
