@@ -4,8 +4,6 @@ parameters:
     ezpublish.core.io.mimeTypeDetector.fileinfo.class: eZ\Publish\Core\IO\MimeTypeDetector\FileInfo
     ezpublish.core.io.binarydata_handler.flysystem.class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
     ezpublish.core.io.metadata_handler.flysystem.class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
-    ezpublish.core.io.binarydata_handler.flysystem.class: eZ\Publish\Core\IO\IOBinarydataHandler\Flysystem
-    ezpublish.core.io.metadata_handler.flysystem.class: eZ\Publish\Core\IO\IOMetadataHandler\Flysystem
     ezpublish.core.io.url_decorator.prefix.class: eZ\Publish\Core\IO\UrlDecorator\Prefix
     ezpublish.core.io.url_decorator.absolute_prefix.class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
     ezpublish.core.io.image_fieldtype.legacy_url_redecorator.class: eZ\Publish\Core\IO\UrlRedecorator
