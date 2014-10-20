@@ -7,17 +7,17 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner;
+namespace eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
-use eZ\Publish\SPI\User\Identity;
-use eZ\Publish\SPI\User\IdentityAware;
+use FOS\HttpCache\UserContext\ContextProviderInterface;
+use FOS\HttpCache\UserContext\UserContext;
 
 /**
  * Identity definer based on current user role ids and role limitations.
  */
-class Role implements IdentityAware
+class RoleContextProvider implements ContextProviderInterface
 {
     /**
      * @var \eZ\Publish\Core\Repository\Repository
@@ -29,11 +29,12 @@ class Role implements IdentityAware
         $this->repository = $repository;
     }
 
-    public function setIdentity( Identity $identity )
+    public function updateUserContext( UserContext $context )
     {
         $user = $this->repository->getCurrentUser();
+        /** @var \eZ\Publish\API\Repository\Values\User\RoleAssignment[] $roleAssignments */
         $roleAssignments = $this->repository->sudo(
-            function ( $repository ) use ( $user )
+            function ( Repository $repository ) use ( $user )
             {
                 return $repository->getRoleService()->getRoleAssignmentsForUser( $user, true );
             }
@@ -44,27 +45,22 @@ class Role implements IdentityAware
         /** @var UserRoleAssignment $roleAssignment */
         foreach ( $roleAssignments as $roleAssignment )
         {
-            $roleIds[] = $roleAssignment->role->id;
+            $roleId = $roleAssignment->getRole()->id;
+            $roleIds[] = $roleId;
+            $limitation = $roleAssignment->getRoleLimitation();
             // If a limitation is present, store the limitation values by roleId
-            if ( $roleAssignment->limitation !== null )
+            if ( $limitation !== null )
             {
-                $limitationValuesKey = "{$roleAssignment->role->id}-" . $roleAssignment->limitation->getIdentifier();
+                $limitationValuesKey = sprintf( '%s-%s', $roleId, $limitation->getIdentifier() );
                 $limitationValues[$limitationValuesKey] = array();
-                foreach ( $roleAssignment->limitation->limitationValues as $value )
+                foreach ( $limitation->limitationValues as $value )
                 {
                     $limitationValues[$limitationValuesKey][] = $value;
                 }
             }
         }
 
-        $identity->setInformation( 'roleIdList', implode( '|', $roleIds ) );
-
-        // Flatten each limitation values to a string and then store it as Identity information
-        $limitationValuesFlattened = array();
-        foreach ( $limitationValues as $roleId => $limitationArray )
-        {
-            $limitationValuesFlattened[] = "$roleId:" . implode( '|', $limitationArray );
-        }
-        $identity->setInformation( 'roleLimitationList', implode( ',', $limitationValuesFlattened ) );
+        $context->addParameter( 'roledIdList', $roleIds );
+        $context->addParameter( 'roleLimitationList', $limitationValues );
     }
 }

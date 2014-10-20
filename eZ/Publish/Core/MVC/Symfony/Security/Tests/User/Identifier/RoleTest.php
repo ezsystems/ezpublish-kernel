@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User\Identifier;
 
 use eZ\Publish\Core\MVC\Symfony\Security\User\Identity;
-use eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\Role as RoleDefiner;
+use eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider\RoleContextProvider as RoleDefiner;
 
 class RoleTest extends \PHPUnit_Framework_TestCase
 {
