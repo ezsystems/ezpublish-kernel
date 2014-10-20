@@ -356,7 +356,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                     'fileSize' => null,
                     'id' => null,
                     'imageId' => null,
-                    'uri' => null
+                    'uri' => null,
+                    'width' => null,
+                    'height' => null
                 ),
             ),
             array(
@@ -367,7 +369,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                         'alternativeText' => 'My icy flower at night',
                         'fileSize' => 23,
                         'imageId' => '1-2',
-                        'uri' => "/$path"
+                        'uri' => "/$path",
+                        'width' => 123,
+                        'height' => 456
                     )
                 ),
                 array(
@@ -378,7 +382,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                     'fileSize' => 23,
                     'inputUri' => null,
                     'imageId' => '1-2',
-                    'uri' => "/$path"
+                    'uri' => "/$path",
+                    'width' => 123,
+                    'height' => 456
                 ),
             ),
         );
@@ -430,7 +436,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         {
             if ( $field->fieldDefIdentifier === 'data' )
             {
-                $paths[$field->languageCode] = $field->value->id;
+                $paths[$field->languageCode] = $field->value->uri;
             }
         }
 
@@ -445,6 +451,14 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         );
 
         $contentService->deleteContent( $updatedDraft->contentInfo );
+
+        foreach ( $paths as $uri )
+        {
+            self::assertFalse(
+                $this->uriExistsOnIO( $uri ),
+                "$uri has not been removed"
+            );
+        }
     }
 
     public function providerForTestIsEmptyValue()

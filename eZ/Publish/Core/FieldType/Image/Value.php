@@ -74,6 +74,18 @@ class Value extends BaseValue
     public $inputUri;
 
     /**
+     * Original image width
+     * @var int
+    */
+    public $width;
+
+    /**
+     * Original image height
+     * @var int
+     */
+    public $height;
+
+    /**
      * Construct a new Value object.
      *
      * @param array $imageData

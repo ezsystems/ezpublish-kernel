@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\IO\IOServiceInterface;
+use eZ\Publish\Core\IO\UrlRedecorator;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
@@ -22,9 +23,13 @@ class Image implements Converter
     /** @var IOServiceInterface */
     private $imageIoService;
 
-    public function __construct( IOServiceInterface $imageIoService )
+    /** @var UrlRedecorator */
+    private $urlRedecorator;
+
+    public function __construct( IOServiceInterface $imageIoService, UrlRedecorator $urlRedecorator )
     {
         $this->imageIoService = $imageIoService;
+        $this->urlRedecorator = $urlRedecorator;
     }
 
     /**
@@ -93,7 +98,8 @@ class Image implements Converter
      */
     protected function createLegacyXml( array $data )
     {
-        $pathInfo = pathinfo( ltrim( $data['uri'], '/' ) );
+        $data['uri'] = $this->urlRedecorator->redecorateFromSource( $data['uri'] );
+        $pathInfo = pathinfo( $data['uri'] );
         return $this->fillXml( $data, $pathInfo, time() );
     }
 
@@ -132,7 +138,7 @@ EOT;
             htmlspecialchars( $pathInfo['extension'] ), // suffix="%s"
             htmlspecialchars( $pathInfo['filename'] ), // basename="%s"
             htmlspecialchars( $pathInfo['dirname'] ), // dirpath
-            htmlspecialchars( ltrim( $imageData['uri'], '/' ) ), // url
+            htmlspecialchars( $imageData['uri'] ), // url
             htmlspecialchars( $pathInfo['basename'] ), // @todo: Needs original file name, for whatever reason?
             htmlspecialchars( $imageData['mime'] ), // mime_type
             htmlspecialchars( $imageData['width'] ), // width
@@ -190,13 +196,14 @@ EOT;
             throw new \RuntimeException( 'Missing attribute "url" in <ezimage/> tag.' );
         }
 
-        if ( ( $url = $ezimageTag->getAttribute( 'url' ) ) === '' )
+        if ( ( $legacyUrl = $ezimageTag->getAttribute( 'url' ) ) === '' )
         {
             // Detected XML considered "empty" by the legacy storage
             return null;
         }
 
-        $extractedData['id'] = $this->imageIoService->loadBinaryFileByUri( '/' . $url )->id;
+        $url = $this->urlRedecorator->redecorateFromTarget( $legacyUrl );
+        $extractedData['id'] = $this->imageIoService->loadBinaryFileByUri( $url )->id;
 
         if ( !$ezimageTag->hasAttribute( 'filename' ) )
         {

@@ -1,6 +1,5 @@
 parameters:
     ezpublish.core.io.flysystem.default_adapter.class: League\Flysystem\Adapter\Local
-    ezpublish.core.io.flysystem.storage_dir_url_decorator.class: eZ\Publish\Core\IO\UrlDecorator\AbsolutePrefix
 
 services:
     # Builds the binarydata and metadata handler based on the siteaccess config
@@ -32,12 +31,12 @@ services:
     ezpublish.core.io.flysystem.default_adapter:
         class: %ezpublish.core.io.flysystem.default_adapter.class%
         arguments:
-            - "$io_root_dir$"
+            - "$io.root_dir$"
 
-    ezpublish.core.io.flysystem.default_url_decorator:
-        class: %ezpublish.core.io.flysystem.storage_dir_url_decorator.class%
+    ezpublish.core.io.prefix_url_decorator:
+        class: %ezpublish.core.io.url_decorator.absolute_prefix.class%
         calls:
-            - [ setPrefix, [ "$io_prefix$" ] ]
+            - [ setPrefix, [ "$io.url_prefix$" ] ]
 
     # Base service for flysystem metadata handler
     ezpublish.core.io.metadata_handler.flysystem:
@@ -58,11 +57,16 @@ services:
         class: %ezpublish.core.io.binarydata_handler.flysystem.class%
         arguments:
             - ~
-            - @ezpublish.core.io.flysystem.default_url_decorator
+            - @ezpublish.core.io.default_url_decorator
 
     # Default flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem.default:
         class: %ezpublish.core.io.binarydata_handler.flysystem.class%
         arguments:
             - @ezpublish.core.io.flysystem.default_filesystem
-            - @ezpublish.core.io.flysystem.default_url_decorator
+            - @ezpublish.core.io.default_url_decorator
+
+    ezpublish.core.io.image_fieldtype.legacy_url_decorator:
+        class: %ezpublish.core.io.url_decorator.prefix.class%
+        arguments:
+            - "$io.legacy_url_prefix$"

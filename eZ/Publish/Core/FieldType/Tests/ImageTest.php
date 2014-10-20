@@ -310,6 +310,8 @@ class ImageTest extends FieldTypeTest
                         'alternativeText' => 'This is so Sindelfingen!',
                         'imageId' => '123-12345',
                         'uri' => 'http://' . $this->getImageInputPath(),
+                        'width' => 123,
+                        'height' => 456
                     )
                 ),
                 array(
@@ -321,6 +323,8 @@ class ImageTest extends FieldTypeTest
                     'imageId' => '123-12345',
                     'uri' => 'http://' . $this->getImageInputPath(),
                     'inputUri' => null,
+                    'width' => 123,
+                    'height' => 456
                 ),
             ),
             // BC with 5.0 (EZP-20948). Path can be used as input instead of $inputUri.
@@ -344,6 +348,8 @@ class ImageTest extends FieldTypeTest
                     'imageId' => '123-12345',
                     'uri' => 'http://' . $this->getImageInputPath(),
                     'inputUri' => $this->getImageInputPath(),
+                    'width' => null,
+                    'height' => null
                 ),
             )
         );

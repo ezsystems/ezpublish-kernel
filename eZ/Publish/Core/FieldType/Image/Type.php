@@ -315,7 +315,9 @@ class Type extends FieldType
             'fileSize' => $value->fileSize,
             'imageId' => $value->imageId,
             'uri' => $value->uri,
-            'inputUri' => $value->inputUri
+            'inputUri' => $value->inputUri,
+            'width' => $value->width,
+            'height' => $value->height
         );
     }
 
@@ -373,6 +375,12 @@ class Type extends FieldType
                     : null ),
                 'imageId' => ( isset( $fieldValue->data['imageId'] )
                     ? $fieldValue->data['imageId']
+                    : null ),
+                'width' => ( isset( $fieldValue->data['width'] )
+                    ? $fieldValue->data['width']
+                    : null ),
+                'height' => ( isset( $fieldValue->data['height'] )
+                    ? $fieldValue->data['height']
                     : null ),
             )
         );

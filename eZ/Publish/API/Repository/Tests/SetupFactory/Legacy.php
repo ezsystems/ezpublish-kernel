@@ -78,7 +78,10 @@ class Legacy extends SetupFactory
 
         self::$db = preg_replace( '(^([a-z]+).*)', '\\1', self::$dsn );
 
-        self::$ioRootDir = $this->createTemporaryDirectory();
+        if ( !isset( self::$ioRootDir ) )
+        {
+            self::$ioRootDir = $this->createTemporaryDirectory();
+        }
     }
 
     /**
@@ -92,15 +95,19 @@ class Legacy extends SetupFactory
             sys_get_temp_dir(),
             'ez_legacy_tests_' . time()
         );
-
-        // Convert file into directory
         unlink( $tmpFile );
-        if ( !@mkdir( $tmpDir = $tmpFile ) )
-        {
-            throw new \RuntimeException( "Eror temporary directory $tmpDir" );
-        };
 
-        return $tmpDir;
+        $fs = new Filesystem();
+        $fs->mkdir( $tmpFile );
+
+        $varDir = $tmpFile . '/var';
+        if ( $fs->exists( $varDir ) )
+        {
+            $fs->remove( $varDir );
+        }
+        $fs->mkdir( $varDir );
+
+        return $tmpFile;
     }
     /**
      * Returns a configured repository for testing.
@@ -160,7 +167,7 @@ class Legacy extends SetupFactory
     {
         $data = $this->getInitialData();
         $handler = $this->getDatabaseHandler();
-        $this->copyVarDir( $this->getInitialVarDir() );
+        $this->cleanupVarDir( $this->getInitialVarDir() );
 
         // @todo FIXME: Needs to be in fixture
         $data['ezcontentobject_trash'] = array();
@@ -230,10 +237,18 @@ class Legacy extends SetupFactory
         return __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/var';
     }
 
-    protected function copyVarDir( $sourceDir )
+    protected function cleanupVarDir( $sourceDir )
     {
+        if ( $this->getServiceContainer()->getInnerContainer()->has( 'ezpublish.core.io.flysystem.default_filesystem' ) )
+        {
+            $this->getServiceContainer()->getInnerContainer()->get( 'ezpublish.core.io.flysystem.default_filesystem' )->flushCache();
+        }
         $fs = new Filesystem();
         $varDir = self::$ioRootDir . '/var';
+        if ( $fs->exists( $varDir ) )
+        {
+            $fs->remove( $varDir );
+        }
         $fs->mkdir( $varDir );
         $fs->mirror( $sourceDir, $varDir );
     }

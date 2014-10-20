@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\Parser;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Common;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\IO;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
@@ -18,14 +19,19 @@ class IOTest extends AbstractParserTestCase
 {
     private $minimalConfig;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $suggestionCollector;
+    public function setUp()
+    {
+        parent::setUp();
+        $this->container->setParameter( "ezsettings.default.var_dir", "var" );
+        $this->container->setParameter( "ezsettings.default.storage_dir", "storage" );
+        $this->container->setParameter( "ezsettings.ezdemo_site.var_dir", "var/ezdemo_site" );
+    }
 
     protected function getContainerExtensions()
     {
-        return array( new EzPublishCoreExtension( array( new Common(), new IO() ) ) );
+        return array(
+            new EzPublishCoreExtension( array( new IO( new ComplexSettingParser() ) ) )
+        );
     }
 
     protected function getMinimalConfiguration()
@@ -52,27 +58,62 @@ class IOTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue( 'io.binarydata_handler', 'cluster', 'ezdemo_site' );
     }
 
-    public function testExtraVariables()
+    /**
+     * Tests that a complex default io.url_prefix will be set in a context where one of its dependencies is set
+     */
+    public function testComplexIoUrlPrefix()
     {
-        $config = array(
-            'system' => array(
-                'ezdemo_site' => array(
-                    'var_dir' => 'var/ezdemo_site'
-                )
-            )
-        );
+        $this->load();
 
-        $this->load( $config );
-
-        $this->assertConfigResolverParameterValue(
-            'io_root_dir',
-            '%ezpublish_legacy.root_dir%/var/ezdemo_site/storage',
-            'ezdemo_site'
+        // Should have been defined & converted in ezdemo_site
+        $this->assertContainerBuilderHasParameter(
+            "ezsettings.ezdemo_site.io.url_prefix", "var/ezdemo_site/storage"
         );
-        $this->assertConfigResolverParameterValue(
-            'io_prefix',
-            'var/ezdemo_site/storage',
-            'ezdemo_site'
+        // Should have been converted in default
+        $this->assertContainerBuilderHasParameter(
+            "ezsettings.default.io.url_prefix", "var/storage"
+        );
+    }
+
+    /**
+     * Tests that a complex default io.url_prefix will be set in a context where one of its dependencies is set
+     */
+    public function testComplexIoLegacyUrlPrefix()
+    {
+        $this->container->setParameter( "ezsettings.default.var_dir", "var" );
+        $this->container->setParameter( "ezsettings.default.storage_dir", "storage" );
+        $this->container->setParameter( "ezsettings.ezdemo_site.var_dir", "var/ezdemo_site" );
+
+        $this->load();
+
+        // Should have been defined & converted in ezdemo_site
+        $this->assertContainerBuilderHasParameter(
+            "ezsettings.ezdemo_site.io.legacy_url_prefix", "var/ezdemo_site/storage"
+        );
+        // Should have been converted in default
+        $this->assertContainerBuilderHasParameter(
+            "ezsettings.default.io.legacy_url_prefix", "var/storage"
+        );
+    }
+
+    /**
+     * Tests that a complex default io.url_prefix will be set in a context where one of its dependencies is set
+     */
+    public function testComplexIoRootDir()
+    {
+        $this->container->setParameter( "ezsettings.default.var_dir", "var" );
+        $this->container->setParameter( "ezsettings.default.storage_dir", "storage" );
+        $this->container->setParameter( "ezsettings.ezdemo_site.var_dir", "var/ezdemo_site" );
+
+        $this->load();
+
+        // Should have been defined & converted in ezdemo_site
+        $this->assertContainerBuilderHasParameter(
+            "ezsettings.ezdemo_site.io.root_dir", "%ezpublish_legacy.root_dir%/var/ezdemo_site/storage"
+        );
+        // Should have been converted in default
+        $this->assertContainerBuilderHasParameter(
+            "ezsettings.default.io.root_dir", "%ezpublish_legacy.root_dir%/var/storage"
         );
     }
 }

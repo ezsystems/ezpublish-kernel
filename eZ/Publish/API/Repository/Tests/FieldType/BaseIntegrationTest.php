@@ -683,16 +683,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
-     * Tests creeating a new version keeps the existing value
-     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
-     * @depends testLoadFieldType
-     */
-    public function testUpdateFieldNoNewContent()
-    {
-        return $this->updateContent( null, false );
-    }
-
-    /**
      * Updates the standard published content object with $fieldData
      *
      * @param mixed $fieldData
@@ -738,6 +728,23 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     }
 
     /**
+     * @depends testUpdateTypeFieldStillAvailable
+     */
+    public function testUpdatedDataCorrect( Field $field )
+    {
+        $this->assertUpdatedFieldDataLoadedCorrect( $field );
+    }
+
+    /**
+     * Tests creeating a new version keeps the existing value
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateFieldNoNewContent()
+    {
+        return $this->updateContent( null, false );
+    }
+
+    /**
      * @depends testUpdateFieldNoNewContent
      */
     public function testUpdateNoNewContentTypeFieldStillAvailable( $content )
@@ -751,14 +758,6 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         }
 
         $this->fail( "Custom field not found." );
-    }
-
-    /**
-     * @depends testUpdateTypeFieldStillAvailable
-     */
-    public function testUpdatedDataCorrect( Field $field )
-    {
-        $this->assertUpdatedFieldDataLoadedCorrect( $field );
     }
 
     /**
