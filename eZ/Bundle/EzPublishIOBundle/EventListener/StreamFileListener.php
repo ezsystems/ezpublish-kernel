@@ -26,10 +26,9 @@ class StreamFileListener implements EventSubscriberInterface
     /** @var ConfigResolverInterface */
     private $configResolver;
 
-    public function __construct( IOServiceInterface $ioService, ConfigResolverInterface $configResolver )
+    public function __construct( IOServiceInterface $ioService )
     {
         $this->ioService = $ioService;
-        $this->configResolver = $configResolver;
     }
 
     public function setIoPrefix( $ioPrefix )
@@ -78,6 +77,6 @@ class StreamFileListener implements EventSubscriberInterface
     private function isIoUri( $uri )
     {
         $uri = ltrim( $uri, '/' );
-        return ( strpos( $uri, $this->configResolver->getParameter( 'io_prefix' ) ) === 0 );
+        return ( strpos( $uri, $this->ioPrefix ) === 0 );
     }
 }
