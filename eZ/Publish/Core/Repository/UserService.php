@@ -576,6 +576,7 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentValue if credentials are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
     public function loadUserByCredentials( $login, $password )
@@ -583,7 +584,7 @@ class UserService implements UserServiceInterface
         if ( !is_string( $login ) || empty( $login ) )
             throw new InvalidArgumentValue( "login", $login );
 
-        if ( !is_string( $password ) || empty( $password ) )
+        if ( !is_string( $password ) )
             throw new InvalidArgumentValue( "password", $password );
 
         // Randomize login time to protect against timing attacks
