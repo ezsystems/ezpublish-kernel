@@ -63,9 +63,9 @@ class ComplexSettingsPass implements CompilerPassInterface
     /**
      * Creates a complex setting factory.
      *
-     * The factory has a variable number of argumentsdynamic settings are added as tupples:
-     * first the argument in an array, so that it is not transformed by the config resolver pass, then the argument
-     * as a string, so that it does get transformed.
+     * The factory has a variable number of arguments.
+     * Dynamic settings are added as tupples: first the argument without the leading and trailing $, so that it is not
+     * transformed by the config resolver pass, then the argument as a string, so that it does get transformed.
      *
      * @param string $argumentValue The original argument ($var$/$another_var$)
      * @param array $dynamicSettings Array of dynamic settings in $argumentValue
@@ -85,10 +85,10 @@ class ComplexSettingsPass implements CompilerPassInterface
         $definition->setFactoryMethod( 'getArgumentValue' );
         foreach ( $dynamicSettings as $dynamicSetting )
         {
-            // the setting won't be transformed in an array
-            $definition->addArgument( array( $dynamicSetting ) );
+            // Trim the '$'  so that the dynamic setting doesn't get transformed
+            $definition->addArgument( trim( $dynamicSetting, '$' ) );
 
-            // this one will be transformed
+            // This one will be transformed
             $definition->addArgument( $dynamicSetting );
         }
 

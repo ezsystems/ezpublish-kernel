@@ -34,13 +34,6 @@ class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
             )
         );
 
-        $this->setDefinition(
-            'service_with_array',
-            new Definition(
-                'stdClass', array( array( 'foo' ) )
-            )
-        );
-
         $this->compile();
 
         self::assertContainerBuilderHasServiceDefinitionWithArgument(
@@ -52,7 +45,7 @@ class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
         self::assertContainerBuilderHasServiceDefinitionWithArgument(
             'service1.__complex_setting_factory_0',
             1,
-            array( '$var_dir$' )
+            'var_dir'
         );
 
         self::assertContainerBuilderHasServiceDefinitionWithArgument(
@@ -64,7 +57,7 @@ class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
         self::assertContainerBuilderHasServiceDefinitionWithArgument(
             'service1.__complex_setting_factory_0',
             3,
-            array( '$storage_dir$' )
+            'storage_dir'
         );
 
         self::assertContainerBuilderHasServiceDefinitionWithArgument(

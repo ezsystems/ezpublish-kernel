@@ -10,7 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory;
 use PHPUnit_Framework_TestCase;
 
-class ArgumentValueFactoryTest extends PHPUnit_Framework_TestCase
+class ComplexSettingValueFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testGetArgumentValue()
     {
@@ -18,9 +18,9 @@ class ArgumentValueFactoryTest extends PHPUnit_Framework_TestCase
             '/mnt/nfs/var/ezdemo_site/storage',
             ComplexSettingValueFactory::getArgumentValue(
                 '/mnt/nfs/$var_dir$/$storage_dir$',
-                array( '$var_dir$' ),
+                'var_dir',
                 'var/ezdemo_site',
-                array( '$storage_dir$' ),
+                'storage_dir',
                 'storage'
             )
         );

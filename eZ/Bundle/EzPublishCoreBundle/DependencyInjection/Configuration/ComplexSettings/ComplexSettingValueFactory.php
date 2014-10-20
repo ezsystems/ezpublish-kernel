@@ -15,10 +15,25 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolv
  * Meant to be added, as a service, in place of a complex argument, containing one or more dynamic setting
  * within another string.
  *
- * During the ComplexSettingPass, an instance of this factory will be created, and will be added one addDynamicSetting
- * call per setting in the string. The settings in these calls will be replaced by the ConfigResolverCompilerPass.
+ * During the ComplexSettingPass, complex settings will be replaced by a factory based on this class.
+ *
+ * Each setting is added twice:
+ * - once with the $ trimmed, so that we know what is being replaced
+ * - once with the $ untrimmed, so that the ConfigResolverPass transforms those into their value.
+ *
  * When the services using those factories are built, every dynamic setting in the string
  * is resolved, and the setting is replaced with its value in the string, and returned.
+ *
+ * Example:
+ * ```php
+ * $argumentValue = ComplexSettingValueFactory::getArgumentValue(
+ *     '$var_dir$/$storage_dir$',
+ *     'var_dir',
+ *     '$var_dir$'
+ *     'storage_dir',
+ *     '$storage_dir$'
+ * );
+ * ```
  */
 class ComplexSettingValueFactory
 {
@@ -38,9 +53,8 @@ class ComplexSettingValueFactory
         $value = $argumentString;
         while ( $dynamicSettingName = array_shift( $arguments ) )
         {
-            $dynamicSettingName = $dynamicSettingName[0];
             $dynamicSettingValue = array_shift( $arguments );
-            $value = str_replace( $dynamicSettingName, $dynamicSettingValue, $value );
+            $value = str_replace( "\$$dynamicSettingName\$", $dynamicSettingValue, $value );
         }
 
         return $value;
