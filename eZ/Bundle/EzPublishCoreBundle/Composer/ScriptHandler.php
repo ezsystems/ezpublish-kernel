@@ -24,6 +24,20 @@ class ScriptHandler extends DistributionBundleScriptHandler
         $options = self::getOptions( $event );
         $appDir = $options['symfony-app-dir'];
         $webDir = $options['symfony-web-dir'];
+        $env = isset( $options['ezpublish-asset-dump-env'] ) ? $options['ezpublish-asset-dump-env'] : "";
+
+        if ( !$env )
+        {
+            $env = $event->getIO()->ask(
+                "<question>Which environment would you like to dump production assets for?</question> (Default: 'prod', type 'none' to skip) ",
+                'prod'
+            );
+        }
+
+        if ( $env === 'none' )
+        {
+            return;
+        }
 
         if ( !is_dir( $appDir ) )
         {
@@ -37,7 +51,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
             return;
         }
 
-        static::executeCommand( $event, $appDir, 'assetic:dump --env=prod ' . escapeshellarg( $webDir ) );
+        static::executeCommand( $event, $appDir, 'assetic:dump --env=' . escapeshellarg( $env ) . ' ' . escapeshellarg( $webDir ) );
     }
 
     /**
