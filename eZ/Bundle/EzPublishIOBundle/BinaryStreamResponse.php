@@ -1,10 +1,11 @@
 <?php
 /**
- * This file is part of the eZ Publish Legacy package
+ * This file is part of the eZ Publish Legacy package.
+ *
+ * Many parts are copied from the Symfony2 kernel, and are copyrighted to their respective owners.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributd with this source code.
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishIOBundle;
 
@@ -45,7 +46,7 @@ class BinaryStreamResponse extends Response
      * @param bool                $autoEtag           Whether the ETag header should be automatically set
      * @param bool                $autoLastModified   Whether the Last-Modified header should be automatically set
      */
-    public function __construct(BinaryFile $binaryFile, IOServiceInterface $ioService, $status = 200, $headers = array(), $public = true, $contentDisposition = null, $autoLastModified = true)
+    public function __construct( BinaryFile $binaryFile, IOServiceInterface $ioService, $status = 200, $headers = array(), $public = true, $contentDisposition = null, $autoLastModified = true )
     {
         $this->ioService = $ioService;
 
@@ -63,13 +64,13 @@ class BinaryStreamResponse extends Response
      * Sets the file to stream.
      *
      * @param \SplFileInfo|string $file The file to stream
-     * @param string              $contentDisposition
-     * @param bool                $autoEtag
-     * @param bool                $autoLastModified
+     * @param string $contentDisposition
+     * @param bool $autoEtag
+     * @param bool $autoLastModified
      *
      * @return BinaryFileResponse
      */
-    public function setFile($file, $contentDisposition = null, $autoLastModified = true)
+    public function setFile( $file, $contentDisposition = null, $autoLastModified = true )
     {
         $this->file = $file;
 
@@ -180,14 +181,14 @@ class BinaryStreamResponse extends Response
                 {
                     if ( $start < 0 || $end > $fileSize - 1 )
                     {
-                        $this->setStatusCode( 416 );
+                        $this->setStatusCode( 416 ); // HTTP_REQUESTED_RANGE_NOT_SATISFIABLE
                     }
                     else if ( $start !== 0 || $end !== $fileSize - 1 )
                     {
                         $this->maxlen = $end < $fileSize ? $end - $start + 1 : -1;
                         $this->offset = $start;
 
-                        $this->setStatusCode( 206 );
+                        $this->setStatusCode( 206 ); // HTTP_PARTIAL_CONTENT
                         $this->headers->set( 'Content-Range', sprintf( 'bytes %s-%s/%s', $start, $end, $fileSize ) );
                         $this->headers->set( 'Content-Length', $end - $start + 1 );
                     }
@@ -227,7 +228,7 @@ class BinaryStreamResponse extends Response
      *
      * @throws LogicException when the content is not null
      */
-    public function setContent($content)
+    public function setContent( $content )
     {
         if ( null !== $content )
         {
@@ -235,13 +236,8 @@ class BinaryStreamResponse extends Response
         }
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return false
-     */
     public function getContent()
     {
-        return false;
+        return null;
     }
 }
