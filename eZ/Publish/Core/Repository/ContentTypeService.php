@@ -53,8 +53,6 @@ use DateTime;
 use Exception;
 
 /**
- * @example Examples/contenttype.php
- *
  * @package eZ\Publish\Core\Repository
  */
 class ContentTypeService implements ContentTypeServiceInterface
@@ -1260,7 +1258,8 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Get a Content Type object by identifier
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content type with the given identifier and status DEFINED can not be found
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If content type with the given identifier and status DEFINED can not be found
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If given identifier is not a string
      *
      * @param string $identifier
      *
@@ -1995,6 +1994,8 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * Instantiates a new content type group create class
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue if given identifier is not a string
+     *
      * @param string $identifier
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
@@ -2015,6 +2016,8 @@ class ContentTypeService implements ContentTypeServiceInterface
 
     /**
      * Instantiates a new content type create class
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue if given identifier is not a string
      *
      * @param string $identifier
      *
@@ -2056,6 +2059,9 @@ class ContentTypeService implements ContentTypeServiceInterface
 
     /**
      * Instantiates a field definition create struct
+
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue if given identifier is not a string
+     *          or given fieldTypeIdentifier is not a string
      *
      * @param string $fieldTypeIdentifier the required field type identifier
      * @param string $identifier the required identifier for the field definition
