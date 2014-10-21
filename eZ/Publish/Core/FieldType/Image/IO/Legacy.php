@@ -13,7 +13,7 @@ use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
-use RuntimeException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Legacy Image IOService
@@ -153,14 +153,14 @@ class Legacy implements IOServiceInterface
         {
             return $this->publishedIOService->loadBinaryFileByUri( $binaryFileUri );
         }
-        // Runtime means that the prefix didn't match, NotFound can pass through
-        catch ( RuntimeException $prefixException )
+        // InvalidArgumentException means that the prefix didn't match, NotFound can pass through
+        catch ( InvalidArgumentException $prefixException )
         {
             try
             {
                 return $this->draftIOService->loadBinaryFileByUri( $binaryFileUri );
             }
-            catch ( RuntimeException $e )
+            catch ( InvalidArgumentException $e )
             {
                 throw $prefixException;
             }
