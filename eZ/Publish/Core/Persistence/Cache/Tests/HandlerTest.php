@@ -21,6 +21,7 @@ use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
 use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHandler;
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
+use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
 use eZ\Publish\Core\Persistence\Factory as PersistenceFactory;
 use PHPUnit_Framework_TestCase;
 
@@ -91,6 +92,7 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
             new CacheTrashHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheLocationSearchHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             new CacheUrlAliasHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
+            new CacheObjectStateHandler( $this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock ),
             $this->loggerMock,
             $this->cacheMock
         );

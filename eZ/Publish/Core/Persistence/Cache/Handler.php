@@ -21,6 +21,7 @@ use eZ\Publish\Core\Persistence\Cache\SearchHandler as CacheSearchHandler;
 use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHandler;
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
+use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
 
 /**
  * Persistence Cache Handler class
@@ -83,6 +84,11 @@ class Handler implements PersistenceHandlerInterface
     protected $urlAliasHandler;
 
     /**
+     * @var ObjectStateHandler
+     */
+    protected $objectStateHandler;
+
+    /**
      * @var TransactionHandler
      */
     protected $transactionHandler;
@@ -107,6 +113,7 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\TrashHandler $trashHandler
      * @param \eZ\Publish\Core\Persistence\Cache\LocationSearchHandler $locationSearchHandler
      * @param \eZ\Publish\Core\Persistence\Cache\UrlAliasHandler $urlAliasHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler $objectStateHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
@@ -122,6 +129,7 @@ class Handler implements PersistenceHandlerInterface
         CacheTrashHandler $trashHandler,
         CacheLocationSearchHandler $locationSearchHandler,
         CacheUrlAliasHandler $urlAliasHandler,
+        CacheObjectStateHandler $objectStateHandler,
         PersistenceLogger $logger
     )
     {
@@ -137,6 +145,7 @@ class Handler implements PersistenceHandlerInterface
         $this->trashHandler = $trashHandler;
         $this->locationSearchHandler = $locationSearchHandler;
         $this->urlAliasHandler = $urlAliasHandler;
+        $this->objectStateHandler = $objectStateHandler;
         $this->logger = $logger;
     }
 
@@ -190,12 +199,10 @@ class Handler implements PersistenceHandlerInterface
 
     /**
      * @return \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
-     * @todo Create cache implementation so we can avoid injecting persistenceHandler and logger
      */
     public function objectStateHandler()
     {
-        $this->logger->logUnCachedHandler( __METHOD__ );
-        return $this->persistenceHandler->objectStateHandler();
+        return $this->objectStateHandler;
     }
 
     /**
