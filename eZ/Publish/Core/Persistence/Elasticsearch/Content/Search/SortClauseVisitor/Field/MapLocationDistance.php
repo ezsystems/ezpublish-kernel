@@ -13,6 +13,7 @@ use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\F
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use RuntimeException;
+use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
  * Visits the MapLocationDistance sort clause
@@ -51,18 +52,20 @@ class MapLocationDistance extends FieldBase
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget $target */
         $target = $sortClause->targetData;
-        $types = $this->getFieldTypes(
+        $fieldName = $this->getSortFieldName(
+            $sortClause,
             $target->typeIdentifier,
             $target->fieldIdentifier,
-            $target->languageCode
+            "value_location"
         );
 
-        if ( empty( $types ) || !isset( $types["ez_geolocation"] ) )
+        if ( $fieldName === null )
         {
             throw new RuntimeException( "No sortable fields found" );
         }
 
-        $fieldName = $types["ez_geolocation"];
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget $target */
+        $target = $sortClause->targetData;
 
         return array(
             "_geo_distance" => array(

@@ -22,11 +22,18 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 class MapLocationDistanceRange extends Field
 {
     /**
-     * Name of the field type that criterion can handle
+     * Identifier of the field type that criterion can handle
      *
      * @var string
      */
-    protected $typeName = "ez_geolocation";
+    protected $fieldTypeName = "ezgmaplocation";
+
+    /**
+     * Name of the field type's indexed field that criterion can handle
+     *
+     * @var string
+     */
+    protected $fieldName = "value_location";
 
     /**
      * Check if visitor is applicable to current criterion
@@ -68,10 +75,14 @@ class MapLocationDistanceRange extends Field
         $start *= 1000;
         $end *= 1000;
 
-        $fieldTypes = $this->getFieldTypes( $criterion );
+        $fieldNames = $this->getFieldNames(
+            $criterion,
+            $criterion->target,
+            $this->fieldTypeName,
+            $this->fieldName
+        );
 
-        if ( !isset( $fieldTypes[$criterion->target][$this->typeName] ) &&
-            !isset( $fieldTypes[$criterion->target]["custom"] ) )
+        if ( empty( $fieldNames ) )
         {
             throw new InvalidArgumentException(
                 "\$criterion->target",
@@ -83,17 +94,8 @@ class MapLocationDistanceRange extends Field
         $location = $criterion->valueData;
         $range = $this->getRange( $criterion->operator, $start, $end );
 
-        if ( isset( $fieldTypes[$criterion->target]["custom"] ) )
-        {
-            $names = $fieldTypes[$criterion->target]["custom"];
-        }
-        else
-        {
-            $names = $fieldTypes[$criterion->target][$this->typeName];
-        }
-
         $filters = array();
-        foreach ( $names as $name )
+        foreach ( $fieldNames as $name )
         {
             $filter = $range;
             $filter["fields_doc.{$name}"] = array(
