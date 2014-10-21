@@ -26,12 +26,21 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
 
     private $ioUriPrefix = 'var/test/storage';
 
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $configResolverMock;
+
     public function setUp(  )
     {
         $this->ioServiceMock = $this->getMock( 'eZ\Publish\Core\IO\IOServiceInterface' );
 
-        $this->eventListener = new StreamFileListener( $this->ioServiceMock );
-        $this->eventListener->setIoPrefix( $this->ioUriPrefix );
+        $this->configResolverMock = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
+        $this->configResolverMock
+            ->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->with( 'io.url_prefix' )
+            ->will( $this->returnValue( $this->ioUriPrefix ) );
+
+        $this->eventListener = new StreamFileListener( $this->ioServiceMock, $this->configResolverMock );
     }
 
     public function testDoesNotRespondToNonIoUri()
