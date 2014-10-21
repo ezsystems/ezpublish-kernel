@@ -238,6 +238,8 @@ services:
             - @ezpublish.fieldType.ezimage.io_service.published
             - @ezpublish.fieldType.ezimage.io_service.draft
             - @ezpublish.fieldType.ezimage.io_service.options_provider
+        # Required by ezpublish.core.io.stream_file_listener. Request listeners are initialized very early.
+        lazy: true
 
     ezpublish.fieldType.ezimage.io_service.options_provider:
         class: %ezpublish.fieldType.ezimage.io_service.options_provider.class%
