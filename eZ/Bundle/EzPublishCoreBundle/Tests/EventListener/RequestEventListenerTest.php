@@ -95,7 +95,6 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
                     array( 'onKernelRequestSetup', 190 ),
                     array( 'onKernelRequestForward', 10 ),
                     array( 'onKernelRequestRedirect', 0 ),
-                    array( 'onKernelRequestUserHash', 7 ),
                     array( 'onKernelRequestIndex', 40 ),
                 )
             ),
@@ -137,56 +136,6 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->request->attributes->set( 'semanticPathinfo', '/anyContent' );
         $this->requestEventListener->onKernelRequestIndex( $this->event );
         $this->assertFalse( $this->request->attributes->has( 'needsForward' ) );
-    }
-
-    public function testOnKernelRequestUserHashNotAuthenticate()
-    {
-        $this->assertNull( $this->requestEventListener->onKernelRequestUserHash( $this->event ) );
-        $this->assertFalse( $this->event->hasResponse() );
-        $this->assertFalse( $this->event->isPropagationStopped() );
-    }
-
-    public function testOnKernelRequestUserHashAuthenticateNoSession()
-    {
-        $this->request->headers->add(
-            array(
-                'X-HTTP-Override' => 'AUTHENTICATE',
-                'Accept' => Kernel::USER_HASH_ACCEPT_HEADER
-            )
-        );
-
-        $this->assertNull( $this->requestEventListener->onKernelRequestUserHash( $this->event ) );
-        $this->assertTrue( $this->event->hasResponse() );
-        $this->assertTrue( $this->event->isPropagationStopped() );
-        $this->assertSame( 400, $this->event->getResponse()->getStatusCode() );
-    }
-
-    public function testOnKernelRequestUserHash()
-    {
-        $hash = '123abc';
-        $this->hashGenerator
-            ->expects( $this->once() )
-            ->method( 'generate' )
-            ->will( $this->returnValue( $hash ) );
-
-        $this->request->headers->add(
-            array(
-                'X-HTTP-Override' => 'AUTHENTICATE',
-                'Accept' => Kernel::USER_HASH_ACCEPT_HEADER
-            )
-        );
-        $this->request
-            ->expects( $this->once() )
-            ->method( 'hasSession' )
-            ->will( $this->returnValue( true ) );
-
-        $this->assertNull( $this->requestEventListener->onKernelRequestUserHash( $this->event ) );
-        $this->assertTrue( $this->event->isPropagationStopped() );
-        $this->assertTrue( $this->event->hasResponse() );
-        $response = $this->event->getResponse();
-        $this->assertInstanceOf( 'Symfony\\Component\\HttpFoundation\\Response', $response );
-        $this->assertTrue( $response->headers->has( 'X-User-Hash' ) );
-        $this->assertSame( $hash, $response->headers->get( 'X-User-Hash' ) );
     }
 
     public function testOnKernelRequestForwardSubRequest()

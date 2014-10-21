@@ -19,10 +19,7 @@ abstract class HttpCache extends BaseHttpCache
 {
     const USER_HASH_HEADER = 'X-User-Hash';
 
-    protected function getSessionNamePrefix()
-    {
-        return Kernel::SESSION_NAME_PREFIX;
-    }
+    const SESSION_NAME_PREFIX = 'eZSESSID';
 
     protected function createStore()
     {

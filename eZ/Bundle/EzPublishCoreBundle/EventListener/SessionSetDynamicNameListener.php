@@ -30,6 +30,11 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
     const MARKER = "{siteaccess_hash}";
 
     /**
+     * Prefix for session name.
+     */
+    const SESSION_NAME_PREFIX = 'eZSESSID';
+
+    /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     private $configResolver;
@@ -92,9 +97,9 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
     private function getSessionName( $sessionName, SiteAccess $siteAccess )
     {
         // Add session prefix if needed.
-        if ( strpos( $sessionName, Kernel::SESSION_NAME_PREFIX ) !== 0 )
+        if ( strpos( $sessionName, static::SESSION_NAME_PREFIX ) !== 0 )
         {
-            $sessionName = Kernel::SESSION_NAME_PREFIX . '_' . $sessionName;
+            $sessionName = static::SESSION_NAME_PREFIX . '_' . $sessionName;
         }
 
         // Check if uniqueness marker is present. If so, session name will be unique for current siteaccess.
