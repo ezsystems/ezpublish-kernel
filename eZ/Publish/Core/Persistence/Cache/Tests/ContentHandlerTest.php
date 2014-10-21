@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
+use eZ\Publish\SPI\Persistence\Content\Relation as SPIRelation;
 use eZ\Publish\Core\Persistence\Cache\ContentHandler;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
@@ -443,9 +444,21 @@ class ContentHandlerTest extends HandlerTest
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Handler' );
         $this->persistenceHandlerMock
-            ->expects( $this->once() )
+            ->expects( $this->exactly( 2 ) )
             ->method( 'contentHandler' )
             ->will( $this->returnValue( $innerHandlerMock ) );
+
+        $innerHandlerMock
+            ->expects( $this->once() )
+            ->method(  'loadReverseRelations' )
+            ->with( 2, APIRelation::FIELD )
+            ->will(
+                $this->returnValue(
+                    array(
+                        new SPIRelation( array( "sourceContentId" => 42 ) ),
+                    )
+                )
+            );
 
         $innerHandlerMock
             ->expects( $this->once() )
@@ -456,13 +469,31 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'clear' )
-            ->with( 'content', 2 )
+            ->with( 'content', 42 )
             ->will( $this->returnValue( null ) );
 
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'clear' )
+            ->with( 'content', 2 )
+            ->will( $this->returnValue( null ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'clear' )
             ->with( 'content', 'info', 2 )
+            ->will( $this->returnValue( null ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 3 ) )
+            ->method( 'clear' )
+            ->with( 'content', 'info', 'remoteId' )
+            ->will( $this->returnValue( null ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 4 ) )
+            ->method( 'clear' )
+            ->with( 'location', 'subtree' )
             ->will( $this->returnValue( null ) );
 
         $handler = $this->persistenceCacheHandler->contentHandler();

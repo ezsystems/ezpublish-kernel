@@ -28,6 +28,8 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use DOMXPath;
+use DOMDocument;
 use PDO;
 
 /**
@@ -1205,6 +1207,138 @@ class DoctrineDatabase extends Gateway
                 )
             );
         }
+
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Removes relations to Content with $contentId from Relation and RelationList field type fields.
+     *
+     * @param int $contentId
+     */
+    public function removeReverseFieldRelations( $contentId )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query
+            ->select( "ezcontentobject_attribute.*" )
+            ->from( "ezcontentobject_attribute" )
+            ->innerJoin(
+                "ezcontentobject_link",
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "from_contentobject_id", "ezcontentobject_link" ),
+                        $this->dbHandler->quoteColumn( "contentobject_id", "ezcontentobject_attribute" )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "from_contentobject_version", "ezcontentobject_link" ),
+                        $this->dbHandler->quoteColumn( "version", "ezcontentobject_attribute" )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "contentclassattribute_id", "ezcontentobject_link" ),
+                        $this->dbHandler->quoteColumn( "contentclassattribute_id", "ezcontentobject_attribute" )
+                    )
+                )
+            )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "to_contentobject_id", "ezcontentobject_link" ),
+                    $query->bindValue( $contentId, null, PDO::PARAM_INT )
+                ),
+                $query->expr->gt(
+                    $query->expr->bitAnd(
+                        $this->dbHandler->quoteColumn( 'relation_type', 'ezcontentobject_link' ),
+                        $query->bindValue( 8, null, PDO::PARAM_INT )
+                    ),
+                    0
+                )
+            );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        while ( $row = $statement->fetch( PDO::FETCH_ASSOC ) )
+        {
+            if ( $row["data_type_string"] === "ezobjectrelation" )
+            {
+                $this->removeRelationFromRelationField( $row );
+            }
+
+            if ( $row["data_type_string"] === "ezobjectrelationlist" )
+            {
+                $this->removeRelationFromRelationListField( $contentId, $row );
+            }
+        }
+    }
+
+    /**
+     * Updates field value of RelationList field type identified by given $row data,
+     * removing relations toward given $contentId.
+     *
+     * @param int $contentId
+     * @param array $row
+     */
+    protected function removeRelationFromRelationListField( $contentId, array $row )
+    {
+        $document = new DOMDocument( "1.0", "utf-8" );
+        $document->loadXML( $row["data_text"] );
+
+        $xpath = new DOMXPath( $document );
+        $xpathExpression = "//related-objects/relation-list/relation-item[@contentobject-id='{$contentId}']";
+
+        $relationItems = $xpath->query( $xpathExpression );
+        foreach ( $relationItems as $relationItem )
+        {
+            $relationItem->parentNode->removeChild( $relationItem );
+        }
+
+        $query = $this->dbHandler->createUpdateQuery();
+        $query
+            ->update( "ezcontentobject_attribute" )
+            ->set(
+                "data_text",
+                $query->bindValue( $document->saveXML(), null, PDO::PARAM_STR )
+            )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "id" ),
+                        $query->bindValue( $row["id"], null, PDO::PARAM_INT )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "version" ),
+                        $query->bindValue( $row["version"], null, PDO::PARAM_INT )
+                    )
+                )
+            );
+
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Updates field value of Relation field type identified by given $row data,
+     * removing relation data.
+     *
+     * @param array $row
+     */
+    protected function removeRelationFromRelationField( array $row )
+    {
+        $query = $this->dbHandler->createUpdateQuery();
+        $query
+            ->update( "ezcontentobject_attribute" )
+            ->set( "data_int", $query->bindValue( null, null, PDO::PARAM_INT ) )
+            ->set( "sort_key_int", $query->bindValue( 0, null, PDO::PARAM_INT ) )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "id" ),
+                        $query->bindValue( $row["id"], null, PDO::PARAM_INT )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "version" ),
+                        $query->bindValue( $row["version"], null, PDO::PARAM_INT )
+                    )
+                )
+            );
 
         $query->prepare()->execute();
     }

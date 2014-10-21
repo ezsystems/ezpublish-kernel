@@ -265,6 +265,13 @@ abstract class Gateway
     abstract public function deleteRelations( $contentId, $versionNo = null );
 
     /**
+     * Removes relations to Content with $contentId from Relation and RelationList field type fields.
+     *
+     * @param int $contentId
+     */
+    abstract public function removeReverseFieldRelations( $contentId );
+
+    /**
      * Deletes the field with the given $fieldId
      *
      * @param int $fieldId
