@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Psr\Log\LoggerInterface;
 
@@ -141,6 +143,41 @@ class TranslationHelper
                 return $field;
             }
         }
+    }
+
+    /**
+     * Returns Field definition name in the appropriate language for a given content.
+     * By default, this method will return the field definition name in current language if translation is present. If not, main language will be used.
+     * If $forcedLanguage is provided, will return the field definition name in this language, if translation is present.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param string $fieldTypeIdentifier Field definition identifier.
+     * @param string $forcedLanguage Locale we want the field definition name translated in in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @return string
+     */
+    public function getTranslatedFieldDefinitionName( ContentType $contentType, $fieldTypeIdentifier, $forcedLanguage = null )
+    {
+        if ( $forcedLanguage !== null )
+        {
+            $languages = array( $forcedLanguage );
+        }
+        else
+        {
+            $languages = $this->configResolver->getParameter( 'languages' );
+        }
+
+        // Loop over prioritized languages to get the appropriate translated field definition name .
+        foreach ( $languages as $lang )
+        {
+            $fieldDefinition = $contentType->getFieldDefinition( $fieldTypeIdentifier );
+            if ( $fieldDefinition instanceof FieldDefinition && $fieldDefinition->getName( $lang ) )
+            {
+                return $fieldDefinition->getName( $lang );
+            }
+        }
+
+        return null;
     }
 
     /**
