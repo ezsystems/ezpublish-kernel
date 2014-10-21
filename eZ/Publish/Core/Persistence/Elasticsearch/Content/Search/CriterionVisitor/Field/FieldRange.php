@@ -53,11 +53,10 @@ class FieldRange extends Field
      */
     protected function getCondition( Criterion $criterion )
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
-        $fieldTypes = $this->getFieldTypes( $criterion );
+        $fieldNames = $this->getFieldNames( $criterion, $criterion->target );
         $criterion->value = (array)$criterion->value;
 
-        if ( !isset( $fieldTypes[$criterion->target] ) )
+        if ( empty( $fieldNames ) )
         {
             throw new InvalidArgumentException(
                 "\$criterion->target",
@@ -70,16 +69,13 @@ class FieldRange extends Field
         $range = $this->getRange( $criterion->operator, $start, $end );
 
         $ranges = array();
-        foreach ( $fieldTypes[$criterion->target] as $names )
+        foreach ( $fieldNames as $name )
         {
-            foreach ( $names as $name )
-            {
-                $ranges[] = array(
-                    "range" => array(
-                        "fields_doc." . $name => $range,
-                    ),
-                );
-            }
+            $ranges[] = array(
+                "range" => array(
+                    "fields_doc." . $name => $range,
+                ),
+            );
         }
 
         return $ranges;

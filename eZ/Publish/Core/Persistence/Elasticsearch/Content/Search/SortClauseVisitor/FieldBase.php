@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVis
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
 
 /**
@@ -35,20 +34,27 @@ abstract class FieldBase extends SortClauseVisitor
     }
 
     /**
-     * Get field type information
+     * Get sort field name
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param string $contentTypeIdentifier
      * @param string $fieldDefinitionIdentifier
-     * @param string $languageCode
+     * @param string $name
      *
      * @return array
      */
-    protected function getFieldTypes( $contentTypeIdentifier, $fieldDefinitionIdentifier, $languageCode )
+    protected function getSortFieldName(
+        SortClause $sortClause,
+        $contentTypeIdentifier,
+        $fieldDefinitionIdentifier,
+        $name = null
+    )
     {
-        return $this->fieldMap->getSortFieldTypes(
+        return $this->fieldMap->getSortFieldName(
+            $sortClause,
             $contentTypeIdentifier,
             $fieldDefinitionIdentifier,
-            $languageCode
+            $name
         );
     }
 

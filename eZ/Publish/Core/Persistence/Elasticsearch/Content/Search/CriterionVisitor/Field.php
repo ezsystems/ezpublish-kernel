@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisi
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
-use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Base class for Field criterion visitors
@@ -36,13 +36,27 @@ abstract class Field extends CriterionVisitor
     }
 
     /**
-     * Get field type information
+     * Get field names
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param string $fieldDefinitionIdentifier
+     * @param string $fieldTypeIdentifier
+     * @param string $name
+     *
      * @return array
      */
-    protected function getFieldTypes( CustomFieldInterface $criterion )
+    protected function getFieldNames(
+        Criterion $criterion,
+        $fieldDefinitionIdentifier,
+        $fieldTypeIdentifier = null,
+        $name = null
+    )
     {
-        return $this->fieldMap->getFieldTypes( $criterion );
+        return $this->fieldMap->getFieldNames(
+            $criterion,
+            $fieldDefinitionIdentifier,
+            $fieldTypeIdentifier,
+            $name
+        );
     }
 }
