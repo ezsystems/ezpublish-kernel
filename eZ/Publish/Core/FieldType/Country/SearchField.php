@@ -47,4 +47,14 @@ class SearchField implements Indexable
             'value' => new Search\FieldType\MultipleStringField(),
         );
     }
+
+    /**
+     * Get name of the default field to be used for query and sort
+     *
+     * @return string
+     */
+    public function getDefaultField()
+    {
+        return "value";
+    }
 }

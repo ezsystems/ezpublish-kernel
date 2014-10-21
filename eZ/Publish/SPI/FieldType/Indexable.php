@@ -34,5 +34,12 @@ interface Indexable
      * @return \eZ\Publish\SPI\Persistence\Content\Search\FieldType[]
      */
     public function getIndexDefinition();
+
+    /**
+     * Get name of the default field to be used for query and sort
+     *
+     * @return string
+     */
+    public function getDefaultField();
 }
 
