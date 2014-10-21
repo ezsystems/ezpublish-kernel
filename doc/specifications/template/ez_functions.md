@@ -55,15 +55,15 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
 
   _Since 5.4_
 
-  `string|null = ez_trans_prop( \eZ\Publish\API\Repository\Values\ValueObject $object, string $property[, string $forceLanguage] )`
+  `string|null = ez_trans_prop( \eZ\Publish\API\Repository\Values\ValueObject $object, string $property[, string $forcedLanguage] )`
 
   A low level generic helper, will check if `{$property}s` property or `get{$property}` method exists on provided object
   Using one or the other will attempt to get a value using either forced language _or_ SiteAccess language list, with
   "default language" fallback if no other language had a value.
 
   "Default language" is a convention for Value objects that support it:
-      property: Use mainLanguageCode property if it exists, but not if alwaysAvailable exists and is true
-      method: Provide $lang = null as fallback, depends on logic of ValueObject if this gives a value or not
+   * property: Use mainLanguageCode property if it exists, but not if alwaysAvailable exists and is true
+   *  method: Provide $lang = null as fallback, depends on logic of ValueObject if this gives a value or not
 
   Example: `ez_trans_prop( versionInfo, 'name' )` will provide the same result as using `ez_content_name( content )`, in
       both cases `VersionInfo->getName($lang)` is used in prioritized language order, with initial language fallback.

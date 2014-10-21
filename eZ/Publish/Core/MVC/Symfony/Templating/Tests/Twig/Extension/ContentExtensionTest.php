@@ -18,6 +18,13 @@ use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
+/**
+ * Integration tests for ContentExtension templates
+ *
+ * Tests ContentExtension in context of site with "fre-FR, eng-US" configured as languages.
+ *
+ * @package eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension
+ */
 class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
 {
     /**
@@ -69,20 +76,36 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
 
     public $fieldDefinitions = array();
 
-    protected function getContent( $contentTypeIdentifier, $fieldsInfo )
+    /**
+     * Creates content with initial/main language being fre-FR
+     *
+     * @param string $contentTypeIdentifier
+     * @param array $fieldsData
+     * @param array $namesData
+     *
+     * @return Content
+     */
+    protected function getContent( $contentTypeIdentifier, array $fieldsData, array $namesData = array() )
     {
         $fields = array();
-        foreach ( $fieldsInfo as $type => $info )
+        foreach ( $fieldsData as $fieldTypeIdentifier => $fieldsArray )
         {
-            $fields[] = new Field( $info );
-            // Save field definitions in property for mocking purposes
-            $this->fieldDefinitions[$contentTypeIdentifier][] = new FieldDefinition(
-                array(
-                    'identifier' => $info['fieldDefIdentifier'],
-                    'id' => $info['id'],
-                    'fieldTypeIdentifier' => $type,
-                )
-            );
+            $fieldsArray = isset( $fieldsArray['id'] ) ? array( $fieldsArray ) : $fieldsArray;
+            foreach ( $fieldsArray as $fieldInfo )
+            {
+                // Save field definitions in property for mocking purposes
+                $this->fieldDefinitions[$contentTypeIdentifier][$fieldInfo['fieldDefIdentifier']] = new FieldDefinition(
+                    array(
+                        'identifier' => $fieldInfo['fieldDefIdentifier'],
+                        'id' => $fieldInfo['id'],
+                        'fieldTypeIdentifier' => $fieldTypeIdentifier,
+                        'names' => isset( $fieldInfo['fieldDefNames'] ) ? $fieldInfo['fieldDefNames'] : array(),
+                        'descriptions' => isset( $fieldInfo['fieldDefDescriptions'] ) ? $fieldInfo['fieldDefDescriptions'] : array()
+                    )
+                );
+                unset( $fieldInfo['fieldDefNames'], $fieldInfo['fieldDefDescriptions'] );
+                $fields[] = new Field( $fieldInfo );
+            }
         }
         $content = new Content(
             array(
@@ -90,6 +113,8 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
                 'versionInfo' => new VersionInfo(
                     array(
                         'versionNo' => 64,
+                        'names' => $namesData,
+                        'initialLanguageCode' => 'fre-FR',
                         'contentInfo' => new ContentInfo(
                             array(
                                 'id' => 42,
@@ -129,11 +154,19 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
         $mock = $this->getMock(
             'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'
         );
+        // Signature: ConfigResolverInterface->getParameter( $paramName, $namespace = null, $scope = null )
         $mock->expects( $this->any() )
             ->method( 'getParameter' )
+
             ->will(
                 $this->returnValueMap(
                     array(
+                        array(
+                            'languages',
+                            null,
+                            null,
+                            array( 'fre-FR', 'eng-US' )
+                        ),
                         array(
                             'field_templates',
                             null,
@@ -178,55 +211,6 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
         return $mock;
     }
 
-    private function getContainerMock()
-    {
-        $mock = $this->getMock(
-            'Symfony\\Component\\DependencyInjection\\ContainerInterface'
-        );
-
-        $mock->expects( $this->any() )
-            ->method( "get" )
-            ->with(
-                $this->logicalOr(
-                    $this->equalTo( "ezpublish.api.repository" ),
-                    $this->equalTo( "ezpublish.fieldType.ezxmltext.converter.html5" ),
-                    $this->equalTo( "ezpublish.fieldType.ezimage.variation_service" ),
-                    $this->equalTo( "ezpublish.fieldType.parameterProviderRegistry" )
-                )
-            )
-            ->will(
-                $this->returnCallback(
-                    array( $this, "containerMockCallback" )
-                )
-            );
-
-        return $mock;
-    }
-
-    /**
-     * Callback multiplexer for Container::get().
-     *
-     * @param $id
-     *
-     * @return mixed
-     */
-    public function containerMockCallback( $id )
-    {
-        switch ( $id )
-        {
-            case "ezpublish.api.repository":
-                return $this->getRepositoryMock();
-
-            case "ezpublish.fieldType.parameterProviderRegistry":
-                return $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface' );
-
-            case "ezpublish.fieldType.ezxmltext.converter.html5":
-            case "ezpublish.fieldType.ezimage.variation_service":
-        }
-
-        return null;
-    }
-
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
@@ -258,6 +242,7 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
                         return new ContentType(
                             array(
                                 'identifier' => $contentTypeId,
+                                'mainLanguageCode' => 'fre-FR',
                                 'fieldDefinitions' => $context->fieldDefinitions[$contentTypeId]
                             )
                         );

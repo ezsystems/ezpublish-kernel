@@ -1,0 +1,35 @@
+--TEST--
+"ez_content_name" function
+--TEMPLATE--
+{{ ez_content_name( content ) }}
+{{ ez_content_name( content, "eng-GB" ) }}
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'article',
+        array(),
+        array(
+            'eng-US' => 'American',
+            'fre-FR' => 'French'
+        )
+    )
+)
+--EXPECT--
+French
+French
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'article',
+        array(),
+        array(
+            'eng-GB' => 'British',
+            'eng-US' => 'American'
+        )
+    )
+)
+--EXPECT--
+American
+British
