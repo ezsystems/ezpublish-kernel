@@ -60,7 +60,7 @@ class RoleContextProvider implements ContextProviderInterface
             }
         }
 
-        $context->addParameter( 'roledIdList', $roleIds );
+        $context->addParameter( 'roleIdList', $roleIds );
         $context->addParameter( 'roleLimitationList', $limitationValues );
     }
 }

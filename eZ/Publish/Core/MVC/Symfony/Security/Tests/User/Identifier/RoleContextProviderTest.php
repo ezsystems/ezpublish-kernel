@@ -9,10 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\User\Identifier;
 
-use eZ\Publish\Core\MVC\Symfony\Security\User\Identity;
-use eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider\RoleContextProvider as RoleDefiner;
+use eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider\RoleContextProvider;
+use FOS\HttpCache\UserContext\UserContext;
+use PHPUnit_Framework_TestCase;
 
-class RoleTest extends \PHPUnit_Framework_TestCase
+class RoleContextProviderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -41,14 +42,10 @@ class RoleTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $this->roleServiceMock ) );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\Role::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\Role::setIdentity
-     */
     public function testSetIdentity()
     {
         $user = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\User\\User' );
-        $identity = new Identity();
+        $userContext = new UserContext();
 
         $this->repositoryMock
             ->expects( $this->once() )
@@ -106,16 +103,22 @@ class RoleTest extends \PHPUnit_Framework_TestCase
             ->with( $user, true )
             ->will( $this->returnValue( $returnedRoleAssignments ) );
 
-        $this->assertSame( array(), $identity->getInformation() );
-        $definer = new RoleDefiner( $this->repositoryMock );
-        $definer->setIdentity( $identity );
-        $identityInfo = $identity->getInformation();
-        $this->assertArrayHasKey( 'roleIdList', $identityInfo );
-        $this->assertSame( "$roleId1|$roleId2|$roleId3", $identityInfo['roleIdList'] );
-        $this->assertArrayHasKey( 'roleLimitationList', $identityInfo );
+        $this->assertSame( array(), $userContext->getParameters() );
+        $contextProvider = new RoleContextProvider( $this->repositoryMock );
+        $contextProvider->updateUserContext( $userContext );
+        $userContextParams = $userContext->getParameters();
+        $this->assertArrayHasKey( 'roleIdList', $userContextParams );
+        $this->assertSame( array( $roleId1, $roleId2, $roleId3 ), $userContextParams['roleIdList'] );
+        $this->assertArrayHasKey( 'roleLimitationList', $userContextParams );
         $limitationIdentifierForRole2 = get_class( $limitationForRole2 );
         $limitationIdentifierForRole3 = get_class( $limitationForRole3 );
-        $this->assertSame( "$roleId2-$limitationIdentifierForRole2:/1/2|/1/2/43,$roleId3-$limitationIdentifierForRole3:foo|bar", $identityInfo['roleLimitationList'] );
+        $this->assertSame(
+            array(
+                "$roleId2-$limitationIdentifierForRole2" => array( '/1/2', '/1/2/43' ),
+                "$roleId3-$limitationIdentifierForRole3" => array( 'foo', 'bar' )
+            ),
+            $userContextParams['roleLimitationList']
+        );
     }
 
     private function generateRoleAssignmentMock( array $properties = array() )
