@@ -84,7 +84,7 @@ class SubtreeLimitationTest extends BaseLimitationTest
         $userGroupId = $this->generateId( 'content', 13 );
 
         /* BEGIN: Use Case */
-        $subtree = '/1/5/14/';
+        $subtree = '/1/5/12/';
 
         $this->prepareLimitation( $subtree );
 
