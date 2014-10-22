@@ -35,5 +35,11 @@ class CreateUser extends Slot
                 $userContentInfo->currentVersionNo
             )
         );
+
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $userContentInfo->id );
+        foreach ( $locations as $location )
+        {
+            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+        }
     }
 }

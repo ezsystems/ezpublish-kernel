@@ -35,5 +35,12 @@ class MoveUserGroup extends Slot
                 $userGroupContentInfo->currentVersionNo
             )
         );
+
+        // TODO: buggy: fix this to be similar to MoveSubtree, they are basically the same
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $userGroupContentInfo->id );
+        foreach ( $locations as $location )
+        {
+            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+        }
     }
 }

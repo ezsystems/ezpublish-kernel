@@ -12,6 +12,8 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Base class for document field definitions
+ *
+ * @property-read string $type The type name of the facet
  */
 abstract class FieldType extends ValueObject
 {

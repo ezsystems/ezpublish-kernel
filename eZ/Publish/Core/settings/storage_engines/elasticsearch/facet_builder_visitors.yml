@@ -1,0 +1,26 @@
+parameters:
+    ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor\Aggregate
+    ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.content_type.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor\ContentType
+    ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.section.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor\Section
+    ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.user.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor\User
+
+services:
+    # Note: services tagged with 'ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor'
+    # are registered to this one using compilation pass
+    ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate:
+        class: %ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate.class%
+
+    ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.content_type:
+        class: %ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.content_type.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.section:
+        class: %ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.section.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor}
+
+    ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.user:
+        class: %ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.user.class%
+        tags:
+            - {name: ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor}

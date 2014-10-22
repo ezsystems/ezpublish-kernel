@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -34,6 +35,11 @@ class SearchServiceLocationTest extends BaseTest
         if ( $setupFactory instanceof LegacySolr )
         {
             $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+        }
+
+        if ( $setupFactory instanceof LegacyElasticsearch )
+        {
+            $this->markTestSkipped( "Field search is not yet implemented for Elasticsearch storage" );
         }
 
         parent::setUp();
@@ -1565,56 +1571,6 @@ class SearchServiceLocationTest extends BaseTest
         $this->assertEquals(
             $tree->contentInfo->mainLocationId,
             $result->searchHits[0]->valueObject->id
-        );
-    }
-
-    /**
-     * Test for the findLocations() method.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
-     */
-    public function testContentWithMultipleLocations()
-    {
-        $repository = $this->getRepository();
-        $contentService = $repository->getContentService();
-        $contentTypeService = $repository->getContentTypeService();
-        $locationService = $repository->getLocationService();
-
-        $forumType = $contentTypeService->loadContentTypeByIdentifier( "forum" );
-
-        $createStruct = $contentService->newContentCreateStruct( $forumType, "eng-GB" );
-        $createStruct->alwaysAvailable = false;
-        $createStruct->setField( "name", "An awesome duplicate forum" );
-
-        $draft = $contentService->createContent( $createStruct );
-        $content = $contentService->publishVersion( $draft->getVersionInfo() );
-
-        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct( 2 );
-        $location1 = $locationService->createLocation( $content->contentInfo, $locationCreateStruct );
-        $locationCreateStruct = $repository->getLocationService()->newLocationCreateStruct( 5 );
-        $location2 = $locationService->createLocation( $content->contentInfo, $locationCreateStruct );
-
-        $query = new LocationQuery(
-            array(
-                'filter' => new Criterion\ContentId( $content->id ),
-                'sortClauses' => array(
-                    new SortClause\Location\Id( LocationQuery::SORT_ASC )
-                )
-            )
-        );
-
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
-
-        $this->assertEquals( 2, $result->totalCount );
-        $this->assertEquals(
-            $location1->id,
-            $result->searchHits[0]->valueObject->id
-        );
-        $this->assertEquals(
-            $location2->id,
-            $result->searchHits[1]->valueObject->id
         );
     }
 
