@@ -1,0 +1,6 @@
+index:
+    analysis:
+        analyzer:
+            string_lowercase:
+                tokenizer: keyword
+                filter: lowercase

@@ -37,5 +37,11 @@ class SetContentState extends Slot
                 $contentInfo->currentVersionNo
             )
         );
+
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $contentInfo->id );
+        foreach ( $locations as $location )
+        {
+            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+        }
     }
 }
