@@ -12,6 +12,7 @@ use eZ\Publish\Core\FieldType\Image\IO\Legacy as LegacyIOService;
 use eZ\Publish\Core\FieldType\Image\IO\OptionsProvider;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 
 class LegacyTest extends PHPUnit_Framework_TestCase
@@ -224,7 +225,7 @@ class LegacyTest extends PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'loadBinaryFileByUri' )
             ->with( $binaryFileUri )
-            ->will( $this->throwException( new \RuntimeException ) );
+            ->will( $this->throwException( new InvalidArgumentException( '$id', "Prefix not found in {$binaryFile->id}" ) ) );
 
         $this->draftIoServiceMock
             ->expects( $this->once() )
