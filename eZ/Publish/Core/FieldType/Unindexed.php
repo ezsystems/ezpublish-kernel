@@ -38,5 +38,15 @@ class Unindexed implements Indexable
     {
         return array();
     }
+
+    /**
+     * Get name of the default field to be used for query and sort
+     *
+     * @return string
+     */
+    public function getDefaultField()
+    {
+        return null;
+    }
 }
 

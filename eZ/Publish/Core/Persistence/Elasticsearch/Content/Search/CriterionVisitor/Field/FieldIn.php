@@ -50,12 +50,11 @@ class FieldIn extends Field
      */
     protected function getCondition( Criterion $criterion )
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Field $criterion */
-        $fieldTypes = $this->getFieldTypes( $criterion );
+        $fieldNames = $this->getFieldNames( $criterion, $criterion->target );
 
         $values = (array)$criterion->value;
 
-        if ( !isset( $fieldTypes[$criterion->target] ) )
+        if ( empty( $fieldNames ) )
         {
             throw new InvalidArgumentException(
                 "\$criterion->target",
@@ -63,26 +62,21 @@ class FieldIn extends Field
             );
         }
 
-        $terms = array();
-        foreach ( $fieldTypes[$criterion->target] as $type => $names )
+        $fields = array();
+        foreach ( $fieldNames as $name )
         {
-            // TODO possibly we'll need to dispatch by $type, need more tests
-            $fields = array();
+            $fields[] = "fields_doc." . $name;
+        }
 
-            foreach ( $names as $name )
-            {
-                $fields[] = "fields_doc." . $name;
-            }
-
-            foreach ( $values as $value )
-            {
-                $terms[] = array(
-                    "multi_match" => array(
-                        "query" => $value,
-                        "fields" => $fields,
-                    ),
-                );
-            }
+        $terms = array();
+        foreach ( $values as $value )
+        {
+            $terms[] = array(
+                "multi_match" => array(
+                    "query" => $value,
+                    "fields" => $fields,
+                ),
+            );
         }
 
         return $terms;

@@ -2266,6 +2266,46 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for the findContent() method.
+     *
+     * This tests first explicitly creates sort clause on the 'short_name' which is empty
+     * for all Content instances of 'folder' ContentType. Custom sort field is then set
+     * to the index storage name of folder's 'name' field, in order to show the custom
+     * sort field working.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testSortModifiedField()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( !$setupFactory instanceof LegacyElasticsearch )
+        {
+            $this->markTestIncomplete( "Field sort clause is not yet implemented for Solr Storage Engine" );
+        }
+
+        $sortClause = new SortClause\Field( "folder", "short_name", Query::SORT_ASC, "eng-US" );
+        $sortClause->setCustomField( "folder", "short_name", "folder_name_value_ms" );
+
+        $query = new Query(
+            array(
+                "filter" => new Criterion\ContentTypeId( 1 ),
+                "offset" => 0,
+                "limit" => null,
+                "sortClauses" => array(
+                    $sortClause,
+                    new SortClause\ContentId(),
+                )
+            )
+        );
+
+        $this->assertQueryFixture(
+            $query,
+            $this->getFixtureDir() . "/SortFolderName.php"
+        );
+    }
+
+    /**
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
     protected function createTestPlaceContentType()

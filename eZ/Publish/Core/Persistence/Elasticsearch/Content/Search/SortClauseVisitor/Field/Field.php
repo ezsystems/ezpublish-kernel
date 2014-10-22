@@ -41,24 +41,19 @@ class Field extends FieldBase
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $target */
         $target = $sortClause->targetData;
-        $types = $this->getFieldTypes(
+        $fieldName = $this->getSortFieldName(
+            $sortClause,
             $target->typeIdentifier,
-            $target->fieldIdentifier,
-            $target->languageCode
+            $target->fieldIdentifier
         );
 
-        if ( empty( $types ) )
+        if ( $fieldName === null )
         {
             throw new RuntimeException( "No sortable fields found" );
         }
 
-        // TODO: should we somehow define/control what is to be used for sorting in this case?
-        if ( count( $types ) > 1 )
-        {
-            throw new RuntimeException( "Multiple sortable fields found" );
-        }
-
-        $fieldName = reset( $types );
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $target */
+        $target = $sortClause->targetData;
 
         return array(
             "fields_doc.{$fieldName}" => array(
