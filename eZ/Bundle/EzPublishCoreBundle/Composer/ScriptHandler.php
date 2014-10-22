@@ -24,6 +24,20 @@ class ScriptHandler extends DistributionBundleScriptHandler
         $options = self::getOptions( $event );
         $appDir = $options['symfony-app-dir'];
         $webDir = $options['symfony-web-dir'];
+        $env = isset( $options['ezpublish-asset-dump-env'] ) ? $options['ezpublish-asset-dump-env'] : "";
+
+        if ( !$env )
+        {
+            $env = $event->getIO()->ask(
+                "<question>Which environment would you like to dump production assets for?</question> (Default: 'prod', type 'none' to skip) ",
+                'prod'
+            );
+        }
+
+        if ( $env === 'none' )
+        {
+            return;
+        }
 
         if ( !is_dir( $appDir ) )
         {
@@ -37,6 +51,21 @@ class ScriptHandler extends DistributionBundleScriptHandler
             return;
         }
 
-        static::executeCommand( $event, $appDir, 'assetic:dump --env=prod ' . escapeshellarg( $webDir ) );
+        static::executeCommand( $event, $appDir, 'assetic:dump --env=' . escapeshellarg( $env ) . ' ' . escapeshellarg( $webDir ) );
+    }
+
+    /**
+     * Just dump help text on how to dump assets
+     *
+     * Typically to use this instead on composer update as dump command uses prod environment where cache is not cleared,
+     * causing it to sometimes crash when cache needs to be cleared.
+     *
+     * @param $event CommandEvent A instance
+     */
+    public static function dumpAssetsHelpText( CommandEvent $event )
+    {
+        $event->getIO()->write( '<info>To dump eZ Publish production assets, execute the following:</info>' );
+        $event->getIO()->write( '    php ezpublish/console assetic:dump --env=prod web' );
+        $event->getIO()->write( '' );
     }
 }
