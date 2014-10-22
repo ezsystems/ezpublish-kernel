@@ -158,6 +158,10 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         // PreviewHelper expectations
         $this->previewHelper
             ->expects( $this->once() )
+            ->method( 'getOriginalSiteAccess' )
+            ->will( $this->returnValue( $previousSiteAccess ) );
+        $this->previewHelper
+            ->expects( $this->once() )
             ->method( 'changeConfigScope' )
             ->with( $previewSiteAccessName )
             ->will( $this->returnValue( $previewSiteAccess ) );
@@ -185,6 +189,70 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             $expectedResponse,
             $controller->previewContentAction( $contentId, $versionNo, $lang, $previewSiteAccessName )
+        );
+    }
+
+
+    public function testPreviewDefaultSiteaccess()
+    {
+        $contentId = 123;
+        $lang = 'eng-GB';
+        $versionNo = 3;
+        $locationId = 456;
+        $content = $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Content' );
+        $location = $this->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\Location' )
+            ->setConstructorArgs( array( array( 'id' => $locationId ) ) )
+            ->getMockForAbstractClass();
+
+        // Repository expectations
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'getPreviewLocation' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $location ) );
+        $this->contentService
+            ->expects( $this->once() )
+            ->method( 'loadContent' )
+            ->with( $contentId, array( $lang ), $versionNo )
+            ->will( $this->returnValue( $content ) );
+        $this->securityContext
+            ->expects( $this->once() )
+            ->method( 'isGranted' )
+            ->with( $this->equalTo( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
+            ->will( $this->returnValue( true ) );
+
+        $previousSiteAccessName = 'foo';
+        $previousSiteAccess = new SiteAccess( $previousSiteAccessName );
+        $request = $this->getMock( 'Symfony\Component\HttpFoundation\Request', array( 'duplicate' ) );
+
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'getOriginalSiteAccess' )
+            ->will( $this->returnValue( $previousSiteAccess ) );
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'restoreConfigScope' );
+
+        // Request expectations
+        $duplicatedRequest = $this->getDuplicatedRequest( $location, $content, $previousSiteAccess );
+        $request
+            ->expects( $this->once() )
+            ->method( 'duplicate' )
+            ->will( $this->returnValue( $duplicatedRequest ) );
+
+        // Kernel expectations
+        $expectedResponse = new Response();
+        $this->httpKernel
+            ->expects( $this->once() )
+            ->method( 'handle' )
+            ->with( $duplicatedRequest, HttpKernelInterface::SUB_REQUEST )
+            ->will( $this->returnValue( $expectedResponse ) );
+
+        $controller = $this->getPreviewController();
+        $controller->setRequest( $request );
+        $this->assertSame(
+            $expectedResponse,
+            $controller->previewContentAction( $contentId, $versionNo, $lang )
         );
     }
 

@@ -68,7 +68,7 @@ class PreviewController
         $this->request = $request;
     }
 
-    public function previewContentAction( $contentId, $versionNo, $language, $siteAccessName )
+    public function previewContentAction( $contentId, $versionNo, $language, $siteAccessName = null )
     {
         try
         {
@@ -85,10 +85,15 @@ class PreviewController
             throw new AccessDeniedException();
         }
 
-        $newSiteAccess = $this->previewHelper->changeConfigScope( $siteAccessName );
+        $siteAccess = $this->previewHelper->getOriginalSiteAccess();
+        // Only switch if $siteAccessName is set and different from original
+        if ( $siteAccessName !== null && $siteAccessName !== $siteAccess->name )
+        {
+            $siteAccess = $this->previewHelper->changeConfigScope( $siteAccessName );
+        }
 
         $response = $this->kernel->handle(
-            $this->getForwardRequest( $location, $content, $newSiteAccess ),
+            $this->getForwardRequest( $location, $content, $siteAccess ),
             HttpKernelInterface::SUB_REQUEST
         );
         $response->headers->remove( 'cache-control' );
