@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\TransactionHandler;
  *
  * Wraps around a SignalDispatcher to add knowledge of transactions to be able to queue signals
  * if there is currently a transaction in progress. Signals which where part of transaction that
- * are rolled back are deleted. Signals on sucessfull
+ * are rolled back are deleted. Signals on successful
  *
  * @internal
  */
