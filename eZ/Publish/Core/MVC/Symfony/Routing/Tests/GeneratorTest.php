@@ -79,8 +79,8 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
         $matcher
             ->expects( $this->once() )
             ->method( 'analyseLink' )
-            ->with( $fullUri )
-            ->will( $this->returnValue( $fullUri ) );
+            ->with( $uri )
+            ->will( $this->returnValue( $uri ) );
 
         if ( $absolute )
         {
@@ -113,8 +113,8 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
         $matcher
             ->expects( $this->once() )
             ->method( 'analyseLink' )
-            ->with( $fullUri )
-            ->will( $this->returnValue( $fullUri ) );
+            ->with( $uri )
+            ->will( $this->returnValue( $uri ) );
 
         if ( $absolute )
         {
