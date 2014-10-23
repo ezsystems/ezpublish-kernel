@@ -82,7 +82,7 @@ class UrlStorage extends GatewayBasedStorage
         $gateway = $this->getGateway( $context );
         $id = $field->value->data["urlId"];
 
-        $map = $gateway->getIdUrlMap( array( $id ) );
+        $map = $gateway->getIdUrlMap( array( (int)$id ) );
 
         // URL id is not in the DB
         if ( !isset( $map[$id] ) && isset( $this->logger ) )
