@@ -39,7 +39,7 @@ eZ\Publish\API\Repository\Values\Content\Field Object
 ```
 
 
-### Legacy compatiblity
+### Legacy compatibility
 Legacy still requires non absolute path to store images (var/site/storage/images...). In order to work around this, an
 `UrlRedecorator`, that converts back and forth between the legacy uri prefix and the one in use in the application, has
 been added. It is used in all places where a legacy URL is returned/expected, and takes care of making sure the value
@@ -64,7 +64,7 @@ Defaults to `$var_dir$/$storage_dir$`. Ex: `var/ezdemo_site/storage`.
 #### `io.root_dir`
 The physical root dir where binary files are stored.
 
-Defaults to `%ezpublish_legacy.root_dir%/$var_dir$/$storag_dir$`. Not meant to be overridden
+Defaults to `%ezpublish_legacy.root_dir%/$var_dir$/$storage_dir$`. Not meant to be overridden
 
 ### Services
 
@@ -83,5 +83,5 @@ Three UrlDecorator services are introduced:
   internal storage format for uris. Uses a Prefix, not an AbsolutePrefix, meaning that no leading / is added.
 
 In addition, an UrlRedecorator service, `ezpublish.core.io.image_fieldtype.legacy_url_redecorator`, uses both decorators
-abive to convert URIs between what is used on the new stack, and what format legacy expects (relative urls from the
+above to convert URIs between what is used on the new stack, and what format legacy expects (relative urls from the
 ezpublish root).
