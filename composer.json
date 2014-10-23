@@ -18,7 +18,6 @@
         "ext-SPL": "*",
         "ext-xsl": "*",
         "zetacomponents/mail": "~1.8",
-        "zetacomponents/php-generator": "~1.1",
         "symfony/symfony": "~2.3",
         "symfony-cmf/routing": "~1.1",
         "qafoo/rmf": "1.0.*",

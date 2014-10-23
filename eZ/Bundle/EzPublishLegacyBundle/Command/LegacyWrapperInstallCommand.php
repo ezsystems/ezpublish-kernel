@@ -16,8 +16,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Finder\Finder;
-use ezcPhpGenerator;
-use ezcPhpGeneratorParameter;
 
 class LegacyWrapperInstallCommand extends ContainerAwareCommand
 {
@@ -94,6 +92,11 @@ EOT
         if ( $input->getOption( 'relative' ) )
         {
             $legacyRootDir = $filesystem->makePathRelative( realpath( $legacyRootDir ), realpath( $targetArg ) );
+            $rootDirCode = "__DIR__ . DIRECTORY_SEPARATOR . '{$legacyRootDir}'";
+        }
+        else
+        {
+            $rootDirCode = "'{$legacyRootDir}'";
         }
 
         $output->writeln( "Installing wrappers for eZ Publish legacy front controllers (rest & cluster) with path $legacyRootDir" );
@@ -101,29 +104,22 @@ EOT
         {
             $newFrontController = "$targetArg/$frontController";
             $filesystem->remove( $newFrontController );
-            $generator = new ezcPhpGenerator( $newFrontController, false );
-            $generator->lineBreak = "\n";
-            $generator->appendCustomCode(
-                <<<EOT
+
+            $code = <<<EOT
 <?php
 /**
  * File containing the wrapper around the legacy $frontController file
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- */
-EOT
-            );
-            $generator->appendValueAssignment( 'legacyRoot', $legacyRootDir );
-            $generator->appendFunctionCall(
-                'chdir',
-                array(
-                    new ezcPhpGeneratorParameter( 'legacyRoot' )
-                )
-            );
-            $generator->appendCustomCode( "require \$legacyRoot . '/$frontController';" );
-            $generator->appendEmptyLines();
-            $generator->finish();
+ *\/
+
+ \$legacyRoot = {$rootDirCode};
+ chdir( \$legacyRoot );
+ require '{$frontController}';
+
+EOT;
+            $filesystem->dumpFile( $newFrontController, $code );
         }
     }
 }
