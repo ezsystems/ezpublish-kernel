@@ -66,6 +66,16 @@ class ContentPreviewHelper implements SiteAccessAware
     }
 
     /**
+     * Return original SiteAccess
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    public function getOriginalSiteAccess()
+    {
+        return $this->originalSiteAccess;
+    }
+
+    /**
      * Switches configuration scope to $siteAccessName and returns the new SiteAccess to use for preview.
      *
      * @param string $siteAccessName
