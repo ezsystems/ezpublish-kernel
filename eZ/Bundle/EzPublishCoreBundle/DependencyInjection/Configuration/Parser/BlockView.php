@@ -35,6 +35,15 @@ class BlockView extends View
                         ->prototype( "array" )
                             ->children()
                                 ->scalarNode( "template" )->isRequired()->info( "Your template path, as MyBundle:subdir:my_template.html.twig" )->end()
+                                ->scalarNode( 'controller' )
+                                    ->info(
+<<<EOT
+Use custom controller instead of the default one to display a block matching your rules.
+You can use the controller reference notation supported by Symfony.
+EOT
+                                    )
+                                    ->example( 'MyBundle:MyControllerClass:viewBlock' )
+                                ->end()
                                 ->arrayNode( "match" )
                                     ->info( "Condition matchers configuration" )
                                     ->useAttributeAsKey( "key" )

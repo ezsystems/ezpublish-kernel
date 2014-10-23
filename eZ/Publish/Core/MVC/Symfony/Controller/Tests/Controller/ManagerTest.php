@@ -29,6 +29,11 @@ class ManagerTest extends PHPUnit_Framework_TestCase
      */
     private $contentMatcherFactory;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $blockMatcherFactory;
+
     protected function setUp()
     {
         parent::setUp();
@@ -40,9 +45,14 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentMatcherFactory' )
             ->disableOriginalConstructor()
             ->getMock();
+        $this->blockMatcherFactory = $this
+            ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\BlockMatcherFactory' )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->controllerManager = new Manager(
             $this->locationMatcherFactory,
             $this->contentMatcherFactory,
+            $this->blockMatcherFactory,
             $this->getMock( 'Psr\\Log\\LoggerInterface' )
         );
     }
@@ -162,6 +172,63 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $controllerIdentifier = 'AcmeTestBundle:Test:foo';
 
         $this->contentMatcherFactory
+            ->expects( $this->once() )
+            ->method( 'match' )
+            ->with( $valueObject, $viewType )
+            ->will( $this->returnValue( array( 'controller' => $controllerIdentifier ) ) );
+
+        $controllerReference = $this->controllerManager->getControllerReference( $valueObject, $viewType );
+        $this->assertInstanceOf( 'Symfony\\Component\\HttpKernel\\Controller\\ControllerReference', $controllerReference );
+        $this->assertSame( $controllerIdentifier, $controllerReference->controller );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\MVC\Symfony\Controller\Manager::__construct
+     * @covers eZ\Publish\Core\MVC\Symfony\Controller\Manager::getControllerReference
+     */
+    public function testGetControllerReferenceBlockMatchFail()
+    {
+        $valueObject = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' );
+        $viewType = 'block';
+
+        $this->blockMatcherFactory
+            ->expects( $this->once() )
+            ->method( 'match' )
+            ->with( $valueObject, $viewType )
+            ->will( $this->returnValue( null ) );
+
+        $this->assertNull( $this->controllerManager->getControllerReference( $valueObject, $viewType ) );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\MVC\Symfony\Controller\Manager::__construct
+     * @covers eZ\Publish\Core\MVC\Symfony\Controller\Manager::getControllerReference
+     */
+    public function testGetControllerReferenceBlockNoController()
+    {
+        $valueObject = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' );
+        $viewType = 'block';
+
+        $this->blockMatcherFactory
+            ->expects( $this->once() )
+            ->method( 'match' )
+            ->with( $valueObject, $viewType )
+            ->will( $this->returnValue( array( 'template' => 'foo.html.twig' ) ) );
+
+        $this->assertNull( $this->controllerManager->getControllerReference( $valueObject, $viewType ) );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\MVC\Symfony\Controller\Manager::__construct
+     * @covers eZ\Publish\Core\MVC\Symfony\Controller\Manager::getControllerReference
+     */
+    public function testGetControllerReferenceBlock()
+    {
+        $valueObject = $this->getMock( 'eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Block' );
+        $viewType = 'block';
+        $controllerIdentifier = 'AcmeTestBundle:Test:foo';
+
+        $this->blockMatcherFactory
             ->expects( $this->once() )
             ->method( 'match' )
             ->with( $valueObject, $viewType )
