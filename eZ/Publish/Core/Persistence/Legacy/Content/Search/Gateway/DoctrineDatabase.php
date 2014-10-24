@@ -175,7 +175,7 @@ class DoctrineDatabase extends Gateway
         return $query->expr->lAnd(
             $condition,
             $query->expr->in(
-                $this->handler->quoteColumn( 'id' ),
+                $this->handler->quoteColumn( 'id', 'ezcontentobject' ),
                 $translationQuery
             )
         );
