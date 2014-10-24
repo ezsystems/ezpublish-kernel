@@ -20,6 +20,7 @@ interface Handler
     public function contentHandler();
 
     /**
+     * @deprecated In 5.4, moved to own Search SPI
      * @return \eZ\Publish\SPI\Search\Handler
      */
     public function searchHandler();
@@ -40,6 +41,7 @@ interface Handler
     public function locationHandler();
 
     /**
+     * @deprecated In 5.4, moved to own Search SPI
      * @return \eZ\Publish\SPI\Search\Location\Handler
      */
     public function locationSearchHandler();
