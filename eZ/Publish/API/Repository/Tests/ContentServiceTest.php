@@ -1307,6 +1307,36 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the updateContent_WithDifferentUser() method.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testNewContentUpdateStruct
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentDraft
+     * @group user
+     * @group field-type
+     */
+    public function testUpdateContent_WithDifferentUser()
+    {
+        /* BEGIN: Use Case */
+        $arrayWithDraftVersion2 = $this->createUpdatedDraftVersion2_NotAdmin();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $arrayWithDraftVersion2[0]
+        );
+
+        $this->assertEquals(
+            $this->generateId( 'user', $arrayWithDraftVersion2[1] ),
+            $arrayWithDraftVersion2[0]->versionInfo->creatorId,
+            "creatorId is not properly set on new Version"
+        );
+
+        return $arrayWithDraftVersion2[0];
+    }
+
+    /**
      * Test for the updateContent() method.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
