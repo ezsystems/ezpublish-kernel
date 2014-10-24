@@ -1071,7 +1071,6 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
 
     public function testMatchAllFilter()
     {
-        $this->markTestIncomplete( "Needs SearchHit" );
         $result = $this->getLocationSearchHandler()->findLocations(
             new LocationQuery(
                 array(
@@ -1082,7 +1081,8 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
-        $this->assertCount( 100, $result );
+        $this->assertCount( 10, $result->searchHits );
+        $this->assertEquals( 186, $result->totalCount );
         $this->assertSearchResults(
             array( 2, 5, 12, 13, 14, 15, 43, 44, 45, 48 ),
             $result
@@ -1151,7 +1151,6 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
 
     public function testFullTextFilterNoStopwordRemoval()
     {
-        $this->markTestIncomplete( "Needs SearchHit" );
         $handler = $this->getLocationSearchHandler(
             array(
                 'searchThresholdValue' => PHP_INT_MAX
@@ -1169,13 +1168,15 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
             )
         );
 
+        $this->assertEquals( 26, $result->totalCount );
+        $this->assertCount( 10, $result->searchHits );
         $this->assertEquals(
             10,
             count(
                 array_map(
                     function ( $hit )
                     {
-                        return $hit->valueObject->contentInfo->id;
+                        return $hit->valueObject->id;
                     },
                     $result->searchHits
                 )
