@@ -35,7 +35,7 @@
         "oneup/flysystem-bundle": "~0.4",
         "friendsofsymfony/http-cache-bundle": "~1.0",
         "symfony/expression-language": "~2.4",
-        "sensio/framework-extra-bundle": "~2.2|~3.0"
+        "sensio/framework-extra-bundle": "~3.0"
     },
     "require-dev": {
         "ezsystems/ezpublish-legacy": "@dev",
