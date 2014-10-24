@@ -47,7 +47,7 @@ class DepthRange extends CriterionVisitor
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
     {
         $start = $criterion->value[0];
         $end = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
@@ -72,7 +72,7 @@ class DepthRange extends CriterionVisitor
      *
      * @return mixed
      */
-    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher )
     {
         $start = $criterion->value[0];
         $end = isset( $criterion->value[1] ) ? $criterion->value[1] : null;

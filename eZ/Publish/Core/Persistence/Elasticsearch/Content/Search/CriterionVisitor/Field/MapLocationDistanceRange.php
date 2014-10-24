@@ -119,7 +119,7 @@ class MapLocationDistanceRange extends Field
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
     {
         return array(
             "nested" => array(
@@ -141,7 +141,7 @@ class MapLocationDistanceRange extends Field
      *
      * @return mixed
      */
-    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher )
     {
         return array(
             "nested" => array(

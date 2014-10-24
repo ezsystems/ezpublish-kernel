@@ -35,7 +35,7 @@ abstract class CriterionVisitor
      *
      * @return mixed Hash representation of Elasticsearch filter abstract syntax tree
      */
-    abstract public function visitFilter( Criterion $criterion, CriterionVisitorDispatcher $dispatcher = null );
+    abstract public function visitFilter( Criterion $criterion, CriterionVisitorDispatcher $dispatcher );
 
     /**
      * Map field value to a proper Elasticsearch query representation
@@ -47,7 +47,7 @@ abstract class CriterionVisitor
      *
      * @return mixed Hash representation of Elasticsearch query abstract syntax tree
      */
-    public function visitQuery( Criterion $criterion, CriterionVisitorDispatcher $dispatcher = null )
+    public function visitQuery( Criterion $criterion, CriterionVisitorDispatcher $dispatcher )
     {
         return $this->visitFilter( $criterion, $dispatcher );
     }

@@ -37,7 +37,7 @@ abstract class CustomField extends CriterionVisitor
      *
      * @return mixed
      */
-    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher )
     {
         return array(
             "nested" => array(

@@ -74,7 +74,7 @@ class CustomFieldIn extends CustomField
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
     {
         return array(
             "nested" => array(

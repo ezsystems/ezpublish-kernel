@@ -47,7 +47,7 @@ class UserMetadataIn extends CriterionVisitor
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
     {
         switch ( $criterion->target )
         {

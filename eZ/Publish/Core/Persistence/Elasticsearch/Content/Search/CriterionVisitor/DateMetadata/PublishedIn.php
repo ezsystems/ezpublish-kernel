@@ -46,7 +46,7 @@ class PublishedIn extends DateMetadata
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
     {
         if ( count( $criterion->value ) > 1 )
         {

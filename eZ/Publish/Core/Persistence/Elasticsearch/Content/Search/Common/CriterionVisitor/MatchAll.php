@@ -39,7 +39,7 @@ class MatchAll extends CriterionVisitor
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
     {
         return array(
             "match_all" => new ArrayObject(),

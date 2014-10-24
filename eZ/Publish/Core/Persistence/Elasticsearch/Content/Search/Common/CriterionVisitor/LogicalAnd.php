@@ -38,7 +38,7 @@ class LogicalAnd extends CriterionVisitor
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
     {
         /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         return array(
@@ -60,7 +60,7 @@ class LogicalAnd extends CriterionVisitor
      *
      * @return mixed
      */
-    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher )
     {
         /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         return array(

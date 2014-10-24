@@ -49,7 +49,7 @@ class PublishedRange extends DateMetadata
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
     {
         $start = $this->getNativeTime( $criterion->value[0] );
         $end = isset( $criterion->value[1] ) ? $this->getNativeTime( $criterion->value[1] ) : null;
