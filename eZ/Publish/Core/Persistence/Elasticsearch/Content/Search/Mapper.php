@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content\Search\Field;
+use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Section;
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
+use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;

@@ -33,7 +33,7 @@ class Document extends ValueObject
     /**
      * An array of fields describing a document.
      *
-     * @var \eZ\Publish\SPI\Persistence\Content\Search\Field[]
+     * @var \eZ\Publish\SPI\Search\Field[]
      */
     public $fields = array();
 }

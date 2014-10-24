@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType\DocumentField;
-use eZ\Publish\SPI\Persistence\Content\Search\Field;
+use eZ\Publish\SPI\Search\FieldType\DocumentField;
+use eZ\Publish\SPI\Search\Field;
 
 /**
  * Maps DocumentField document field values to something Elasticsearch can index.
@@ -21,7 +21,7 @@ class DocumentMapper extends FieldValueMapper
     /**
      * Check if field can be mapped
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return boolean
      */
@@ -33,7 +33,7 @@ class DocumentMapper extends FieldValueMapper
     /**
      * Map field value to a proper Elasticsearch representation
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return mixed
      */

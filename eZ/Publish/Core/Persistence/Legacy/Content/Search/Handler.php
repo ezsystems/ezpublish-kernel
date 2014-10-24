@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;

@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
-use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandler;
+use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
@@ -60,7 +60,7 @@ class ContentUpdater
     /**
      * Creates a new content updater
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandler
+     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler

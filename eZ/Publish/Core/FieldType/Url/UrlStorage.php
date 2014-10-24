@@ -129,7 +129,7 @@ class UrlStorage extends GatewayBasedStorage
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
+     * @return \eZ\Publish\SPI\Search\Field[]
      */
     public function getIndexData( VersionInfo $versionInfo, Field $field, array $context )
     {

@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\Search\Field;
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
+use eZ\Publish\SPI\Search\Field;
+use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Maps raw document field values to something Solr can index.
@@ -21,7 +21,7 @@ class GeoLocationMapper extends FieldValueMapper
     /**
      * Check if field can be mapped
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return boolean
      */
@@ -33,7 +33,7 @@ class GeoLocationMapper extends FieldValueMapper
     /**
      * Map field value to a proper Solr representation
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return mixed
      */

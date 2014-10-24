@@ -56,7 +56,7 @@ class SearchHandlerTest extends HandlerTest
             ->expects( $this->never() )
             ->method( $this->anything() );
 
-        $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler' );
+        $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Search\\Handler' );
         $this->persistenceHandlerMock
             ->expects( $this->once() )
             ->method( 'searchHandler' )

@@ -10,17 +10,17 @@
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Search\Handler
+ * @see eZ\Publish\SPI\Search\Handler
  */
 class SearchHandler extends AbstractHandler implements SearchHandlerInterface
 {
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::findContent
+     * @see eZ\Publish\SPI\Search\Handler::findContent
      */
     function findContent( Query $query, array $fieldFilters = array() )
     {
@@ -29,7 +29,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::findSingle
+     * @see eZ\Publish\SPI\Search\Handler::findSingle
      */
     public function findSingle( Criterion $filter, array $fieldFilters = array() )
     {
@@ -38,7 +38,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::suggest
+     * @see eZ\Publish\SPI\Search\Handler::suggest
      */
     public function suggest( $prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null )
     {
@@ -56,7 +56,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::indexContent
+     * @see eZ\Publish\SPI\Search\Handler::indexContent
      */
     public function indexContent( Content $content )
     {
@@ -65,7 +65,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::deleteContent
+     * @see eZ\Publish\SPI\Search\Handler::deleteContent
      */
     public function deleteContent( $contentID, $versionID = null )
     {
@@ -74,7 +74,7 @@ class SearchHandler extends AbstractHandler implements SearchHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Search\Handler::deleteLocation
+     * @see eZ\Publish\SPI\Search\Handler::deleteLocation
      */
     public function deleteLocation( $locationId )
     {

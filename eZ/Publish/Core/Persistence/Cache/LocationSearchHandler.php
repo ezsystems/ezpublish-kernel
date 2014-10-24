@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as LocationSearchHandlerInterface;
+use eZ\Publish\SPI\Search\Location\Handler as LocationSearchHandlerInterface;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Location\Search\Handler
+ * @see eZ\Publish\SPI\Search\Location\Handler
  */
 class LocationSearchHandler extends AbstractHandler implements LocationSearchHandlerInterface
 {

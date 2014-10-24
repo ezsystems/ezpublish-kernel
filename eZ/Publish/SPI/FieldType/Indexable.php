@@ -24,14 +24,14 @@ interface Indexable
      *
      * @param Field $field
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
+     * @return \eZ\Publish\SPI\Search\Field[]
      */
     public function getIndexData( Field $field );
 
     /**
      * Get index field types for search backend
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\FieldType[]
+     * @return \eZ\Publish\SPI\Search\FieldType[]
      */
     public function getIndexDefinition();
 }

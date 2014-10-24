@@ -20,7 +20,7 @@ interface Handler
     public function contentHandler();
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Handler
+     * @return \eZ\Publish\SPI\Search\Handler
      */
     public function searchHandler();
 
@@ -40,7 +40,7 @@ interface Handler
     public function locationHandler();
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler
+     * @return \eZ\Publish\SPI\Search\Location\Handler
      */
     public function locationSearchHandler();
 

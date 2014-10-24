@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
+use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Generator for Elasticsearch field names

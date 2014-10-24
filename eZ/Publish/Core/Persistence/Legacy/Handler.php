@@ -13,10 +13,10 @@ use eZ\Publish\SPI\Persistence\Handler as HandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as LocationSearchHandler;
+use eZ\Publish\SPI\Search\Location\Handler as LocationSearchHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
-use eZ\Publish\SPI\Persistence\Content\Search\Handler as ContentSearchHandler;
+use eZ\Publish\SPI\Search\Handler as ContentSearchHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandler;
@@ -35,7 +35,7 @@ class Handler implements HandlerInterface
     protected $contentHandler;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Search\Handler
+     * @var \eZ\Publish\SPI\Search\Handler
      */
     protected $contentSearchHandler;
 
@@ -55,7 +55,7 @@ class Handler implements HandlerInterface
     protected $locationHandler;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler
+     * @var \eZ\Publish\SPI\Search\Location\Handler
      */
     protected $locationSearchHandler;
 
