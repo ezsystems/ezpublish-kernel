@@ -61,7 +61,7 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
   Using one or the other will attempt to get a value using either forced language _or_ SiteAccess language list, with
   _main language_ fallback if no other language had a value.
 
-  _Main language_ is attempted to be applied in the following way for Value objects that suports this:
+  _Main language_ is attempted to be applied in the following way for Value objects that support this:
    * property: Use mainLanguageCode property if it exists, but not if alwaysAvailable exists and is true
    *  method: Provide $langueage = null as argument to method, depends on logic of ValueObject if this gives a value or not
 
