@@ -157,7 +157,6 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
         // Signature: ConfigResolverInterface->getParameter( $paramName, $namespace = null, $scope = null )
         $mock->expects( $this->any() )
             ->method( 'getParameter' )
-
             ->will(
                 $this->returnValueMap(
                     array(
