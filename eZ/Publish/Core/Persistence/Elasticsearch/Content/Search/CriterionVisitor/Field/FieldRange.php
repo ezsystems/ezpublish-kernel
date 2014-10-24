@@ -92,10 +92,11 @@ class FieldRange extends Field
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
         return array(
             "nested" => array(
@@ -114,10 +115,11 @@ class FieldRange extends Field
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher )
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
         return array(
             "nested" => array(

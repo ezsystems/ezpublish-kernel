@@ -182,13 +182,15 @@ class Native extends Gateway
                     "query" => array(
                         $this->criterionVisitorDispatcher->dispatch(
                             $query->query,
-                            CriterionVisitorDispatcher::CONTEXT_QUERY
+                            CriterionVisitorDispatcher::CONTEXT_QUERY,
+                            $fieldFilters
                         ),
                     ),
                     "filter" => array(
                         $this->criterionVisitorDispatcher->dispatch(
                             $query->filter,
-                            CriterionVisitorDispatcher::CONTEXT_FILTER
+                            CriterionVisitorDispatcher::CONTEXT_FILTER,
+                            $fieldFilters
                         ),
                     ),
                 ),

@@ -93,7 +93,7 @@ class CriterionVisitorDispatcher
         {
             if ( $visitor->canVisit( $criterion ) )
             {
-                return $visitor->{ $this->contextMethodMap[$context] }( $criterion, $this );
+                return $visitor->{ $this->contextMethodMap[$context] }( $criterion, $this, $fieldFilters );
             }
         }
 

@@ -35,17 +35,18 @@ class LogicalOr extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
         /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         return array(
             "or" => array_map(
-                function ( $value ) use ( $dispatcher )
+                function ( $value ) use ( $dispatcher, $fieldFilters )
                 {
-                    return $dispatcher->dispatch( $value, Dispatcher::CONTEXT_FILTER );
+                    return $dispatcher->dispatch( $value, Dispatcher::CONTEXT_FILTER, $fieldFilters );
                 },
                 $criterion->criteria
             )
@@ -57,18 +58,19 @@ class LogicalOr extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher )
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
         /** @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
         return array(
             "bool" => array(
                 "should" => array_map(
-                    function ( $value ) use ( $dispatcher )
+                    function ( $value ) use ( $dispatcher, $fieldFilters )
                     {
-                        return $dispatcher->dispatch( $value, Dispatcher::CONTEXT_FILTER );
+                        return $dispatcher->dispatch( $value, Dispatcher::CONTEXT_FILTER, $fieldFilters );
                     },
                     $criterion->criteria
                 ),

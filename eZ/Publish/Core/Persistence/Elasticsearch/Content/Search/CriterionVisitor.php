@@ -32,10 +32,15 @@ abstract class CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed Hash representation of Elasticsearch filter abstract syntax tree
      */
-    abstract public function visitFilter( Criterion $criterion, CriterionVisitorDispatcher $dispatcher );
+    abstract public function visitFilter(
+        Criterion $criterion,
+        CriterionVisitorDispatcher $dispatcher,
+        array $fieldFilters
+    );
 
     /**
      * Map field value to a proper Elasticsearch query representation
@@ -44,12 +49,13 @@ abstract class CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed Hash representation of Elasticsearch query abstract syntax tree
      */
-    public function visitQuery( Criterion $criterion, CriterionVisitorDispatcher $dispatcher )
+    public function visitQuery( Criterion $criterion, CriterionVisitorDispatcher $dispatcher, array $fieldFilters )
     {
-        return $this->visitFilter( $criterion, $dispatcher );
+        return $this->visitFilter( $criterion, $dispatcher, $fieldFilters );
     }
 
     /**
