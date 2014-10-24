@@ -66,7 +66,8 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
    *  method: Provide $langueage = null as argument to method, depends on logic of ValueObject if this gives a value or not
 
   Example: `ez_trans_prop( versionInfo, 'name' )` will provide the same result as using `ez_content_name( content )`, in
-      both cases `VersionInfo->getName($lang)` is used in prioritized language order, with initial language fallback.
+      both cases `VersionInfo->getName( $lang )` is internally used in prioritized language order, with main language fallback.
+      
 
 
 ## Rendering helpers
