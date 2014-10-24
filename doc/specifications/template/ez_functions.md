@@ -59,9 +59,9 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
 
   A low level generic helper, will check if `{$property}s` property or `get{$property}` method exists on provided object
   Using one or the other will attempt to get a value using either forced language _or_ SiteAccess language list, with
-  "default language" fallback if no other language had a value.
+  _main language_ fallback if no other language had a value.
 
-  "Default language" is a convention for Value objects that support it:
+  _Main language_ is attempted to be applied in the following way for Value objects that supoport this:
    * property: Use mainLanguageCode property if it exists, but not if alwaysAvailable exists and is true
    *  method: Provide $lang = null as fallback, depends on logic of ValueObject if this gives a value or not
 
