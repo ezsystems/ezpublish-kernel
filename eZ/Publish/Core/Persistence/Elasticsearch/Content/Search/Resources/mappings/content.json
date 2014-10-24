@@ -1,6 +1,7 @@
 {
     "content": {
         "dynamic": false,
+        "_all" : { "enabled": false },
         "properties": {
             "id": { "type": "integer", "index": "not_analyzed" },
             "type_id": { "type": "string", "index": "not_analyzed" },
@@ -41,6 +42,7 @@
                 "type": "nested",
                 "dynamic": true,
                 "properties": {
+                    "meta_all": { "type": "string" },
                     "meta_language_code_s": { "type": "string", "index": "not_analyzed" },
                     "meta_is_main_translation_b": { "type": "boolean", "index": "not_analyzed" },
                     "user_first_name_value_ms": { "type": "string", "analyzer": "string_lowercase", "copy_to": "fields_doc.custom_field" },
@@ -54,55 +56,79 @@
                 "field_string": {
                     "path_match": "fields_doc.*_*s",
                     "match_mapping_type": "string",
-                    "mapping": { "type": "string", "analyzer": "string_lowercase" }
+                    "mapping": {
+                        "type": "string",
+                        "analyzer": "string_lowercase",
+                        "copy_to": "fields_doc.meta_all"
+                    }
                 }
             },
             {
                 "field_id": {
                     "path_match": "fields_doc.*_id",
                     "match_mapping_type": "string",
-                    "mapping": { "type": "string", "index": "not_analyzed" }
+                    "mapping": {
+                        "type": "string",
+                        "index": "not_analyzed"
+                    }
                 }
             },
             {
                 "field_integer": {
                     "path_match": "fields_doc.*_i",
                     "match_mapping_type": "integer",
-                    "mapping": { "type": "integer", "index": "not_analyzed" }
+                    "mapping": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
                 }
             },
             {
                 "field_integer": {
                     "path_match": "fields_doc.*_f",
                     "match_mapping_type": "float",
-                    "mapping": { "type": "integer", "index": "not_analyzed" }
+                    "mapping": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
                 }
             },
             {
                 "field_integer": {
                     "path_match": "fields_doc.*_l",
                     "match_mapping_type": "long",
-                    "mapping": { "type": "integer", "index": "not_analyzed" }
+                    "mapping": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
                 }
             },
             {
                 "field_integer": {
                     "path_match": "fields_doc.*_d",
                     "match_mapping_type": "double",
-                    "mapping": { "type": "integer", "index": "not_analyzed" }
+                    "mapping": {
+                        "type": "integer",
+                        "index": "not_analyzed"
+                    }
                 }
             },
             {
                 "field_integer": {
                     "path_match": "fields_doc.*_b",
                     "match_mapping_type": "boolean",
-                    "mapping": { "type": "boolean", "index": "not_analyzed" }
+                    "mapping": {
+                        "type": "boolean",
+                        "index": "not_analyzed"
+                    }
                 }
             },
             {
                 "field_geo_point": {
                     "path_match": "fields_doc.*_gl",
-                    "mapping": { "type": "geo_point" }
+                    "mapping": {
+                        "type": "geo_point"
+                    }
                 }
             }
         ]
