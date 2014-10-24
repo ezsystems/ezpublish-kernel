@@ -61,9 +61,9 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
   Using one or the other will attempt to get a value using either forced language _or_ SiteAccess language list, with
   _main language_ fallback if no other language had a value.
 
-  _Main language_ is attempted to be applied in the following way for Value objects that supoport this:
+  _Main language_ is attempted to be applied in the following way for Value objects that suports this:
    * property: Use mainLanguageCode property if it exists, but not if alwaysAvailable exists and is true
-   *  method: Provide $lang = null as fallback, depends on logic of ValueObject if this gives a value or not
+   *  method: Provide $langueage = null as argument to method, depends on logic of ValueObject if this gives a value or not
 
   Example: `ez_trans_prop( versionInfo, 'name' )` will provide the same result as using `ez_content_name( content )`, in
       both cases `VersionInfo->getName($lang)` is used in prioritized language order, with initial language fallback.
