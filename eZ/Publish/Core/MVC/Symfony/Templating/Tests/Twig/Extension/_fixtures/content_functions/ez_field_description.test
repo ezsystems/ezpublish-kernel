@@ -1,0 +1,49 @@
+--TEST--
+"ez_field_description" function
+--TEMPLATE--
+{{ ez_field_description( content, 'testfield' ) }}
+{{ ez_field_description( content, 'testfield', "eng-GB" ) }}
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'article',
+        array(
+            'ezxmltext' => array(
+                'id' => 5,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR',
+                'fieldDefDescriptions' => array(
+                    'eng-US' => 'American description',
+                    'fre-FR' => 'French description',
+                )
+            )
+        )
+    )
+)
+--EXPECT--
+French description
+French description
+
+--DATA--
+return array(
+    'content' => $this->getContent(
+        'article',
+        array(
+            'ezxmltext' => array(
+                'id' => 5,
+                'fieldDefIdentifier' => 'testfield',
+                'value' => 'foo2',
+                'languageCode' => 'fre-FR',
+                'fieldDefDescriptions' => array(
+                  'eng-GB' => 'British description',
+                  'eng-US' => 'American description',
+                )
+            )
+        )
+    )
+)
+--EXPECT--
+American description
+British description

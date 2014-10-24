@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistryInterface;
@@ -31,7 +33,6 @@ use Twig_Environment;
 use Twig_SimpleFunction;
 use Twig_SimpleFilter;
 use Twig_Template;
-use InvalidArgumentException;
 use LogicException;
 
 /**
@@ -229,6 +230,18 @@ class ContentExtension extends Twig_Extension
                 'ez_is_field_empty',
                 array( $this, 'isFieldEmpty' )
             ),
+            new Twig_SimpleFunction(
+                'ez_field_name',
+                array( $this, 'getTranslatedFieldDefinitionName' )
+            ),
+            new Twig_SimpleFunction(
+                'ez_field_description',
+                array( $this, 'getTranslatedFieldDefinitionDescription' )
+            ),
+            new Twig_SimpleFunction(
+                'ez_trans_prop',
+                array( $this, 'getTranslatedProperty' )
+            ),
         );
     }
 
@@ -354,7 +367,8 @@ class ContentExtension extends Twig_Extension
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param string $fieldIdentifier Identifier for the field we want to render
      * @param array $params An array of parameters to pass to the field view
-     * @throws \InvalidArgumentException If $fieldIdentifier is invalid in $content
+     *
+     * @throws InvalidArgumentException
      * @return string The HTML markup
      */
     public function renderField( Content $content, $fieldIdentifier, array $params = array() )
@@ -364,7 +378,8 @@ class ContentExtension extends Twig_Extension
         if ( !$field instanceof Field )
         {
             throw new InvalidArgumentException(
-                "Invalid field identifier '$fieldIdentifier' for content #{$content->contentInfo->id}"
+                '$fieldIdentifier',
+                "Invalid for content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
             );
         }
 
@@ -599,13 +614,14 @@ class ContentExtension extends Twig_Extension
      */
     protected function getFieldTypeIdentifier( Content $content, Field $field )
     {
-        $contentType = $this->repository->getContentTypeService()->loadContentType(
-            $content->getVersionInfo()->getContentInfo()->contentTypeId
-        );
-        $key = $contentType->identifier . '  ' . $field->fieldDefIdentifier;
+        $contentInfo = $content->getVersionInfo()->getContentInfo();
+        $key = $contentInfo->contentTypeId . '  ' . $field->fieldDefIdentifier;
 
         if ( !isset( $this->fieldTypeIdentifiers[$key] ) )
         {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $contentInfo->contentTypeId
+            );
             $this->fieldTypeIdentifiers[$key] = $contentType
                 ->getFieldDefinition( $field->fieldDefIdentifier )
                 ->fieldTypeIdentifier;
@@ -649,6 +665,99 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
+     * Gets name of a FieldDefinition name by loading ContentType based on Content/ContentInfo object
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $content Must be Content or ContentInfo object
+     * @param string $fieldDefIdentifier Identifier for the field we want to get the name from
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content object.
+     *
+     * @return string|null
+     */
+    public function getTranslatedFieldDefinitionName( ValueObject $content, $fieldDefIdentifier, $forcedLanguage = null )
+    {
+        if ( $contentType = $this->getContentType( $content ) )
+        {
+            return $this->translationHelper->getTranslatedFieldDefinitionProperty(
+                $contentType,
+                $fieldDefIdentifier,
+                'name',
+                $forcedLanguage
+            );
+        }
+
+        throw new InvalidArgumentType( '$content', 'Content|ContentInfo', $content );
+    }
+
+    /**
+     * Gets name of a FieldDefinition description by loading ContentType based on Content/ContentInfo object
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $content Must be Content or ContentInfo object
+     * @param string $fieldDefIdentifier Identifier for the field we want to get the name from
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType When $content is not a valid Content object.
+     *
+     * @return string|null
+     */
+    public function getTranslatedFieldDefinitionDescription( ValueObject $content, $fieldDefIdentifier, $forcedLanguage = null )
+    {
+        if ( $contentType = $this->getContentType( $content ) )
+        {
+            return $this->translationHelper->getTranslatedFieldDefinitionProperty(
+                $contentType,
+                $fieldDefIdentifier,
+                'description',
+                $forcedLanguage
+            );
+        }
+
+        throw new InvalidArgumentType( '$content', 'Content|ContentInfo', $content );
+    }
+
+    /**
+     * Gets translated property generic helper
+     *
+     * For generic use, expects property in singular form. For instance if 'name' is provided it will first look for
+     * property called 'names' and look for correct translation there, otherwise fallback to getName() method if set.
+     *
+     * Languages will consist of either forced language or current languages list, in addition helper will check if for
+     * mainLanguage property and append that to languages if alwaysAvailable property is true or non-existing.
+     *
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object Must be Content, VersionInfo or ContentInfo object
+     * @param string $property Property name, example 'name', 'description'
+     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $property does not exists as plural or as method
+     *
+     * @return string|null
+     */
+    public function getTranslatedProperty( ValueObject $object, $property, $forcedLanguage = null )
+    {
+        $pluralProperty = $property . 's';
+        if ( isset( $object->$pluralProperty ) )
+        {
+            return $this->translationHelper->getTranslatedByProperty(
+                $object,
+                $pluralProperty,
+                $forcedLanguage
+            );
+        }
+        else if ( method_exists( $object, 'get' . $property ) )
+        {
+            return $this->translationHelper->getTranslatedByMethod(
+                $object,
+                'get' . $property,
+                $forcedLanguage
+            );
+        }
+
+        throw new InvalidArgumentValue( '$property', $property, get_class( $object ) );
+    }
+
+    /**
      * Checks if a given field is considered empty.
      * This method accepts field as Objects or by identifiers.
      *
@@ -668,5 +777,25 @@ class ContentExtension extends Twig_Extension
         }
 
         return $this->fieldHelper->isFieldEmpty( $content, $fieldDefIdentifier, $forcedLanguage );
+    }
+
+    /**
+     * Get ContentType by Content/ContentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content|\eZ\Publish\API\Repository\Values\Content\ContentInfo $content
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType|null
+     */
+    private function getContentType( ValueObject $content )
+    {
+        if ( $content instanceof Content )
+        {
+            return $this->repository->getContentTypeService()->loadContentType(
+                $content->getVersionInfo()->getContentInfo()->contentTypeId
+            );
+        }
+        else if ( $content instanceof ContentInfo )
+        {
+            return $this->repository->getContentTypeService()->loadContentType( $content->contentTypeId );
+        }
     }
 }
