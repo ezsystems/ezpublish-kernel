@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
+use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Generator for Solr field names

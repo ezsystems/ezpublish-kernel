@@ -37,11 +37,11 @@ abstract class Base extends PHPUnit_Framework_TestCase
     private $persistenceMock;
 
     /**
-     * The Content / Location / ... handlers for the persistence handler mocks
-     * @var \PHPUnit_Framework_MockObject_MockObject[] Key is relative to "\eZ\Publish\SPI\Persistence\"
+     * The Content / Location / Search ... handlers for the persistence / Search / .. handler mocks
+     * @var \PHPUnit_Framework_MockObject_MockObject[] Key is relative to "\eZ\Publish\SPI\"
      * @see getPersistenceMockHandler()
      */
-    private $persistenceMockHandlers = array();
+    private $spiMockHandlers = array();
 
     /**
      * @var \eZ\Publish\SPI\IO\Handler|\PHPUnit_Framework_MockObject_MockObject
@@ -109,7 +109,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
             $this->persistenceMock->expects( $this->any() )
                 ->method( 'searchHandler' )
-                ->will(  $this->returnValue( $this->getPersistenceMockHandler( 'Content\\Search\\Handler' ) ) );
+                ->will(  $this->returnValue( $this->getSPIMockHandler( 'Search\\Handler' ) ) );
 
             $this->persistenceMock->expects( $this->any() )
                 ->method( 'contentTypeHandler' )
@@ -152,6 +152,29 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a SPI Handler mock
+     *
+     * @param string $handler For instance "Content\\Type\\Handler" or "Search\\Handler", must be relative to "eZ\Publish\SPI"
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getSPIMockHandler( $handler )
+    {
+        if ( !isset( $this->spiMockHandlers[$handler] ) )
+        {
+            $this->spiMockHandlers[$handler] = $this->getMock(
+                "eZ\\Publish\\SPI\\{$handler}",
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+
+        return $this->spiMockHandlers[$handler];
+    }
+
+    /**
      * Returns a persistence Handler mock
      *
      * @param string $handler For instance "Content\\Type\\Handler", must be relative to "eZ\Publish\SPI\Persistence"
@@ -160,18 +183,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
      */
     protected function getPersistenceMockHandler( $handler )
     {
-        if ( !isset( $this->persistenceMockHandlers[$handler] ) )
-        {
-            $this->persistenceMockHandlers[$handler] = $this->getMock(
-                "eZ\\Publish\\SPI\\Persistence\\{$handler}",
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-
-        return $this->persistenceMockHandlers[$handler];
+        return $this->getSPIMockHandler( "Persistence\\{$handler}" );
     }
 
     /**

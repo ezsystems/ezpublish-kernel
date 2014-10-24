@@ -47,7 +47,7 @@ class PersistenceHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
         $handler = $this->persistenceCacheHandler->searchHandler();
-        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler', $handler );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Search\\Handler', $handler );
         $this->assertInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Cache\\SearchHandler', $handler );
     }
 

@@ -198,7 +198,7 @@ class Native extends Gateway
     /**
      * Indexes a content object
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field[][] $documents
+     * @param \eZ\Publish\SPI\Search\Field[][] $documents
      * @todo $documents should be generated more on demand then this and sent to Solr in chunks before final commit
      *
      * @return void

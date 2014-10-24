@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
-use eZ\Publish\SPI\Persistence\Content\Search\Field;
+use eZ\Publish\SPI\Search\FieldType;
+use eZ\Publish\SPI\Search\Field;
 use DOMDocument;
 
 /**
@@ -22,7 +22,7 @@ class StringMapper extends FieldValueMapper
     /**
      * Check if field can be mapped
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return boolean
      */
@@ -36,7 +36,7 @@ class StringMapper extends FieldValueMapper
     /**
      * Map field value to a proper Elasticsearch representation
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field $field
+     * @param \eZ\Publish\SPI\Search\Field $field
      *
      * @return mixed
      */

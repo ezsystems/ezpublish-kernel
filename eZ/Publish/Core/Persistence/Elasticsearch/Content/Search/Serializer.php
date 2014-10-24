@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
 
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType\DocumentField;
+use eZ\Publish\SPI\Search\FieldType\DocumentField;
 
 /**
  * Serializer serializes a Document to a string that can be passed

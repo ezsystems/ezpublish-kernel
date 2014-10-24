@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\TextLine;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\FieldType\Indexable;
-use eZ\Publish\SPI\Persistence\Content\Search;
+use eZ\Publish\SPI\Search;
 
 /**
  * Indexable definition for TextLine field type
@@ -23,7 +23,7 @@ class SearchField implements Indexable
      *
      * @param Field $field
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\Field[]
+     * @return \eZ\Publish\SPI\Search\Field[]
      */
     public function getIndexData( Field $field )
     {
@@ -39,7 +39,7 @@ class SearchField implements Indexable
     /**
      * Get index field types for search backend
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Search\FieldType[]
+     * @return \eZ\Publish\SPI\Search\FieldType[]
      */
     public function getIndexDefinition()
     {

@@ -10,8 +10,8 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\Search\Field;
-use eZ\Publish\SPI\Persistence\Content\Search\FieldType;
+use eZ\Publish\SPI\Search\Field;
+use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * Maps raw document field values to something Solr can index.

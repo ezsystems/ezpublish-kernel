@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\SPI\Persistence\Content\Search;
+namespace eZ\Publish\SPI\Search;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;

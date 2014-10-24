@@ -33,7 +33,7 @@ abstract class Gateway
     /**
      * Indexes a content object
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Field[][] $documents
+     * @param \eZ\Publish\SPI\Search\Field[][] $documents
      *
      * @return void
      */

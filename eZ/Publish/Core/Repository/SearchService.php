@@ -21,8 +21,8 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\SPI\Persistence\Content\Search\Handler;
-use eZ\Publish\SPI\Persistence\Content\Location\Search\Handler as LocationSearchHandler;
+use eZ\Publish\SPI\Search\Handler;
+use eZ\Publish\SPI\Search\Location\Handler as LocationSearchHandler;
 
 /**
  * Search service
@@ -43,12 +43,12 @@ class SearchService implements SearchServiceInterface
     protected $repository;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Search\Handler
+     * @var \eZ\Publish\SPI\Search\Handler
      */
     protected $searchHandler;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler
+     * @var \eZ\Publish\SPI\Search\Location\Handler
      */
     protected $locationSearchHandler;
 
@@ -71,8 +71,8 @@ class SearchService implements SearchServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \eZ\Publish\SPI\Persistence\Content\Search\Handler $searchHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Search\Handler $locationSearchHandler
+     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
+     * @param \eZ\Publish\SPI\Search\Location\Handler $locationSearchHandler
      * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
      * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
      * @param array $settings

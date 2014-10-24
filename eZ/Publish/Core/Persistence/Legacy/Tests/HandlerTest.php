@@ -64,7 +64,7 @@ class HandlerTest extends TestCase
         $searchHandler = $handler->searchHandler();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler',
+            'eZ\\Publish\\SPI\\Search\\Handler',
             $searchHandler
         );
         $this->assertInstanceOf(
