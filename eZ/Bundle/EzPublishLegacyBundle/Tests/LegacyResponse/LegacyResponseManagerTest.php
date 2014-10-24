@@ -186,7 +186,7 @@ class LegacyResponseManagerTest extends PHPUnit_Framework_TestCase
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta charset="UTF-8" />
         <meta http-equiv="refresh" content="1;url=$uriInContent" />
 
         <title>Redirecting to $uriInContent</title>
