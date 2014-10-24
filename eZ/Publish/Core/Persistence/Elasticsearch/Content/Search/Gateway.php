@@ -36,10 +36,11 @@ abstract class Gateway
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param string $type
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    abstract public function find( Query $query, $type );
+    abstract public function find( Query $query, $type, array $fieldFilters = array() );
 
     /**
      * Finds and returns documents of a given $type for a given $query string.
