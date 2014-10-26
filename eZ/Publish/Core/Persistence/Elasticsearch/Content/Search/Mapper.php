@@ -284,6 +284,14 @@ class Mapper
                 $content->versionInfo->contentInfo->mainLanguageCode === $languageCode,
                 new FieldType\BooleanField()
             );
+            $fields[] = new Field(
+                'meta_is_always_available',
+                (
+                    $content->versionInfo->contentInfo->mainLanguageCode === $languageCode &&
+                    $content->versionInfo->contentInfo->alwaysAvailable
+                ),
+                new FieldType\BooleanField()
+            );
 
             foreach ( $fieldMap[$languageCode] as $field )
             {
