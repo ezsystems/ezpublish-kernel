@@ -86,7 +86,7 @@ before_script:
   # Switch to another Symfony version if asked for
   - if [ $SYMFONY_VERSION != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;
   # Install packages using composer
-  - composer install --dev --prefer-source
+  - composer install --dev --prefer-dist
   # Setup Solr / Elastic search if asked for
   - if [ "$TEST_CONFIG" == "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
   - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl -L https://raw.github.com/moliware/travis-solr/797595/travis-solr.sh | SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
