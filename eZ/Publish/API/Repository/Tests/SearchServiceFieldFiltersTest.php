@@ -166,6 +166,38 @@ class SearchServiceFieldFiltersTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
+     * Demonstrating how mismatch between field filters and language filtering criteria
+     * when using non-field filtering criteria can cause NotFound exception.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends \eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testFieldFiltersCauseNotFoundException()
+    {
+        // Content with id=54 exists only in eng-US language!
+        $query = new Query(
+            array(
+                "filter" => new Criterion\ContentId( 54 ),
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        // The content will be found, but field filtering in the service will cause the exception.
+        $fieldFilters = array(
+            "languages" => array(
+                "eng-GB",
+            ),
+        );
+
+        $searchService->findContent( $query, $fieldFilters );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
