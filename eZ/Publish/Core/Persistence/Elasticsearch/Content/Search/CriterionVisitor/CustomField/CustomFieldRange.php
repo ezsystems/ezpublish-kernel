@@ -75,13 +75,25 @@ class CustomFieldRange extends CustomField
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        return array(
+        $filter = array(
             "nested" => array(
                 "path" => "fields_doc",
-                "filter" => array(
-                    "or" => $this->getCondition( $criterion ),
-                ),
+                "filter" => $this->getCondition( $criterion ),
             ),
         );
+
+        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+
+        if ( $fieldFilter !== null )
+        {
+            $filter["nested"]["filter"] = array(
+                "and" => array(
+                    $fieldFilter,
+                    $filter["nested"]["filter"],
+                ),
+            );
+        }
+
+        return $filter;
     }
 }

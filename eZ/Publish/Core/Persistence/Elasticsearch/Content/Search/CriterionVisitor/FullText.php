@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 /**
  * Visits the FullText criterion
  */
-class FullText extends CriterionVisitor
+class FullText extends FieldFilterBase
 {
     /**
      * Field map
@@ -124,7 +124,7 @@ class FullText extends CriterionVisitor
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        return array(
+        $filter = array(
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
@@ -132,6 +132,22 @@ class FullText extends CriterionVisitor
                 ),
             ),
         );
+
+        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+
+        if ( $fieldFilters !== null )
+        {
+            $filter["nested"]["filter"] = array(
+                "bool" => array(
+                    "must" => array(
+                        $fieldFilter,
+                        $filter["nested"]["filter"],
+                    ),
+                ),
+            );
+        }
+
+        return $filter;
     }
 
     /**
@@ -147,11 +163,32 @@ class FullText extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        return array(
-            "nested" => array(
-                "path" => "fields_doc",
-                "query" => $this->getCondition( $criterion ),
-            ),
-        );
+        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+
+        if ( $fieldFilter === null )
+        {
+            $query = array(
+                "nested" => array(
+                    "path" => "fields_doc",
+                    "query" => $this->getCondition( $criterion ),
+                ),
+            );
+        }
+        else
+        {
+            $query = array(
+                "nested" => array(
+                    "path" => "fields_doc",
+                    "query" => array(
+                        "filtered" => array(
+                            "query" => $this->getCondition( $criterion ),
+                            "filter" => $fieldFilter,
+                        ),
+                    ),
+                ),
+            );
+        }
+
+        return $query;
     }
 }

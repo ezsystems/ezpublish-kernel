@@ -77,7 +77,7 @@ class CustomFieldIn extends CustomField
      */
     public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        return array(
+        $filter = array(
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
@@ -90,5 +90,21 @@ class CustomFieldIn extends CustomField
                 ),
             ),
         );
+
+        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+
+        if ( $fieldFilter !== null )
+        {
+            $filter["nested"]["filter"] = array(
+                "bool" => array(
+                    "must" => array(
+                        $fieldFilter,
+                        $filter["nested"]["filter"],
+                    ),
+                ),
+            );
+        }
+
+        return $filter;
     }
 }

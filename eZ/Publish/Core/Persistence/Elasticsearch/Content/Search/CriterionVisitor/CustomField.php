@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 /**
  * Base class for CustomField criterion visitors
  */
-abstract class CustomField extends CriterionVisitor
+abstract class CustomField extends FieldFilterBase
 {
     /**
      * Returns nested condition common for filter and query contexts.
@@ -40,16 +40,39 @@ abstract class CustomField extends CriterionVisitor
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        return array(
-            "nested" => array(
-                "path" => "fields_doc",
-                "query" => array(
-                    "bool" => array(
-                        "should" => $this->getCondition( $criterion ),
-                        "minimum_should_match" => 1,
-                    ),
-                ),
+        $query = array(
+            "bool" => array(
+                "should" => $this->getCondition( $criterion ),
+                "minimum_should_match" => 1,
             ),
         );
+
+        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+
+        if ( $fieldFilter === null )
+        {
+            $query = array(
+                "nested" => array(
+                    "path" => "fields_doc",
+                    "query" => $query,
+                ),
+            );
+        }
+        else
+        {
+            $query = array(
+                "nested" => array(
+                    "path" => "fields_doc",
+                    "query" => array(
+                        "filtered" => array(
+                            "query" => $query,
+                            "filter" => $fieldFilter,
+                        ),
+                    ),
+                ),
+            );
+        }
+
+        return $query;
     }
 }
