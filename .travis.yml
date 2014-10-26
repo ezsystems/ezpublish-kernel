@@ -76,14 +76,21 @@ branches:
 
 # setup requirements for running unit tests
 before_script:
+  # Disable xdebug to speed things up as we don't currently generate coverge on travis
+  - phpenv config-rm xdebug.ini
+  # Setup DB
   - if [ $DB == "mysql" ]; then mysql -e "CREATE DATABASE IF NOT EXISTS $DB_NAME;" -uroot ; fi
   - if [ $DB == "postgresql" ]; then psql -c "CREATE DATABASE $DB_NAME;" -U postgres ; psql -c "CREATE EXTENSION pgcrypto;" -U postgres $DB_NAME ; fi
+  # Setup github key to avoid api rate limit
   - ./composer_install_github_key.sh
+  # Switch to another Symfony version if asked for
   - if [ $SYMFONY_VERSION != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;
-  - composer install --dev --prefer-source
+  # Install packages using composer
+  - composer install --dev --prefer-dist
+  # Setup Solr / Elastic search if asked for
   - if [ "$TEST_CONFIG" == "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
   - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl -L https://raw.github.com/moliware/travis-solr/797595/travis-solr.sh | SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
- # Detecting timezone issues by testing on random timezone
+  # Detecting timezone issues by testing on random timezone
   - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
   - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
   - echo "$TEST_TIMEZONE"
