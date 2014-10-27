@@ -103,13 +103,15 @@ abstract class Generator implements SiteAccessAware
             }
         }
 
-        $url = $requestContext->getBaseUrl() . $this->doGenerate( $urlResource, $parameters );
+        $url = $this->doGenerate( $urlResource, $parameters );
 
         // Add the SiteAccess URI back if needed.
         if ( $siteAccess && $siteAccess->matcher instanceof SiteAccess\URILexer )
         {
             $url = $siteAccess->matcher->analyseLink( $url );
         }
+
+        $url = $requestContext->getBaseUrl() . $url;
 
         if ( $absolute )
         {
