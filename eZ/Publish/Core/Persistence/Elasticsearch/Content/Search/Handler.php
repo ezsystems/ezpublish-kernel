@@ -68,9 +68,7 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        // TODO add field filters to the query
-
-        $data = $this->gateway->find( $query, "content" );
+        $data = $this->gateway->find( $query, "content", $fieldFilters );
 
         return $this->extractor->extract( $data );
     }

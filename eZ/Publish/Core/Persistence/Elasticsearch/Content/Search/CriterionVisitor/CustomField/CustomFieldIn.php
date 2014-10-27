@@ -71,12 +71,13 @@ class CustomFieldIn extends CustomField
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        return array(
+        $filter = array(
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
@@ -89,5 +90,21 @@ class CustomFieldIn extends CustomField
                 ),
             ),
         );
+
+        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+
+        if ( $fieldFilter !== null )
+        {
+            $filter["nested"]["filter"] = array(
+                "bool" => array(
+                    "must" => array(
+                        $fieldFilter,
+                        $filter["nested"]["filter"],
+                    ),
+                ),
+            );
+        }
+
+        return $filter;
     }
 }

@@ -76,10 +76,11 @@ class CriterionVisitorDispatcher
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $context
+     * @param array $fieldFilters
      *
      * @return string
      */
-    public function dispatch( Criterion $criterion, $context )
+    public function dispatch( Criterion $criterion, $context, array $fieldFilters = array() )
     {
         if ( !isset( $this->contextMethodMap[$context] ) )
         {
@@ -92,7 +93,7 @@ class CriterionVisitorDispatcher
         {
             if ( $visitor->canVisit( $criterion ) )
             {
-                return $visitor->{ $this->contextMethodMap[$context] }( $criterion, $this );
+                return $visitor->{ $this->contextMethodMap[$context] }( $criterion, $this, $fieldFilters );
             }
         }
 

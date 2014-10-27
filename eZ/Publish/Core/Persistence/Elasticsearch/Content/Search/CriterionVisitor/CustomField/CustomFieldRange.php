@@ -69,18 +69,31 @@ class CustomFieldRange extends CustomField
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        return array(
+        $filter = array(
             "nested" => array(
                 "path" => "fields_doc",
-                "filter" => array(
-                    "or" => $this->getCondition( $criterion ),
-                ),
+                "filter" => $this->getCondition( $criterion ),
             ),
         );
+
+        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+
+        if ( $fieldFilter !== null )
+        {
+            $filter["nested"]["filter"] = array(
+                "and" => array(
+                    $fieldFilter,
+                    $filter["nested"]["filter"],
+                ),
+            );
+        }
+
+        return $filter;
     }
 }

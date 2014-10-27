@@ -159,10 +159,11 @@ class Native extends Gateway
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      * @param string $type
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    public function find( Query $query, $type )
+    public function find( Query $query, $type, array $fieldFilters = array() )
     {
         $aggregationList = array_map(
             array( $this->facetBuilderVisitor, 'visit' ),
@@ -181,13 +182,15 @@ class Native extends Gateway
                     "query" => array(
                         $this->criterionVisitorDispatcher->dispatch(
                             $query->query,
-                            CriterionVisitorDispatcher::CONTEXT_QUERY
+                            CriterionVisitorDispatcher::CONTEXT_QUERY,
+                            $fieldFilters
                         ),
                     ),
                     "filter" => array(
                         $this->criterionVisitorDispatcher->dispatch(
                             $query->filter,
-                            CriterionVisitorDispatcher::CONTEXT_FILTER
+                            CriterionVisitorDispatcher::CONTEXT_FILTER,
+                            $fieldFilters
                         ),
                     ),
                 ),

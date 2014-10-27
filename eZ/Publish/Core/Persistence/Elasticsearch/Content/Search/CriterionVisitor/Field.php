@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 /**
  * Base class for Field criterion visitors
  */
-abstract class Field extends CriterionVisitor
+abstract class Field extends FieldFilterBase
 {
     /**
      * Field map

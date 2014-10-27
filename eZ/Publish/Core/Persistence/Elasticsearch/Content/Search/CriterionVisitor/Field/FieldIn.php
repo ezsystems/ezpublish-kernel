@@ -85,7 +85,12 @@ class FieldIn extends Field
             }
         }
 
-        return $terms;
+        return array(
+            "bool" => array(
+                "should" => $terms,
+                "minimum_should_match" => 1,
+            ),
+        );
     }
 
     /**
@@ -95,24 +100,36 @@ class FieldIn extends Field
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitFilter( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        return array(
+        $filter = array(
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
-                    "query" => array(
-                        "bool" => array(
-                            "should" => $this->getCondition( $criterion ),
-                            "minimum_should_match" => 1,
-                        ),
-                    ),
+                    "query" => $this->getCondition( $criterion ),
                 ),
             ),
         );
+
+        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+
+        if ( $fieldFilters !== null )
+        {
+            $filter["nested"]["filter"] = array(
+                "bool" => array(
+                    "must" => array(
+                        $fieldFilter,
+                        $filter["nested"]["filter"],
+                    ),
+                ),
+            );
+        }
+
+        return $filter;
     }
 
     /**
@@ -122,21 +139,38 @@ class FieldIn extends Field
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param array $fieldFilters
      *
      * @return mixed
      */
-    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher = null )
+    public function visitQuery( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        return array(
-            "nested" => array(
-                "path" => "fields_doc",
-                "query" => array(
-                    "bool" => array(
-                        "should" => $this->getCondition( $criterion ),
-                        "minimum_should_match" => 1,
+        $fieldFilter = $this->getFieldFilter( $fieldFilters );
+
+        if ( $fieldFilter === null )
+        {
+            $query = array(
+                "nested" => array(
+                    "path" => "fields_doc",
+                    "query" => $this->getCondition( $criterion ),
+                ),
+            );
+        }
+        else
+        {
+            $query = array(
+                "nested" => array(
+                    "path" => "fields_doc",
+                    "query" => array(
+                        "filtered" => array(
+                            "query" => $this->getCondition( $criterion ),
+                            "filter" => $fieldFilter,
+                        ),
                     ),
                 ),
-            ),
-        );
+            );
+        }
+
+        return $query;
     }
 }
