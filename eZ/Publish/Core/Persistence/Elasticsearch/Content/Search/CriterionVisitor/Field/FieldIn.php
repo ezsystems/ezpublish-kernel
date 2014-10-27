@@ -85,7 +85,12 @@ class FieldIn extends Field
             }
         }
 
-        return $terms;
+        return array(
+            "bool" => array(
+                "should" => $terms,
+                "minimum_should_match" => 1,
+            ),
+        );
     }
 
     /**
@@ -105,12 +110,7 @@ class FieldIn extends Field
             "nested" => array(
                 "path" => "fields_doc",
                 "filter" => array(
-                    "query" => array(
-                        "bool" => array(
-                            "should" => $this->getCondition( $criterion ),
-                            "minimum_should_match" => 1,
-                        ),
-                    ),
+                    "query" => $this->getCondition( $criterion ),
                 ),
             ),
         );
@@ -145,13 +145,6 @@ class FieldIn extends Field
      */
     public function visitQuery( Criterion $criterion, Dispatcher $dispatcher, array $fieldFilters )
     {
-        $query = array(
-            "bool" => array(
-                "should" => $this->getCondition( $criterion ),
-                "minimum_should_match" => 1,
-            ),
-        );
-
         $fieldFilter = $this->getFieldFilter( $fieldFilters );
 
         if ( $fieldFilter === null )
@@ -159,7 +152,7 @@ class FieldIn extends Field
             $query = array(
                 "nested" => array(
                     "path" => "fields_doc",
-                    "query" => $query,
+                    "query" => $this->getCondition( $criterion ),
                 ),
             );
         }
@@ -170,7 +163,7 @@ class FieldIn extends Field
                     "path" => "fields_doc",
                     "query" => array(
                         "filtered" => array(
-                            "query" => $query,
+                            "query" => $this->getCondition( $criterion ),
                             "filter" => $fieldFilter,
                         ),
                     ),
