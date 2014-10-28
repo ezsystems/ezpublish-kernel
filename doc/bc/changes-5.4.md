@@ -66,6 +66,19 @@ Changes affecting version compatibility with former or future versions.
 
   If you have code that expects exception(load) or no content (search) if not a specific language
   exists, you should then review your code and consider setting these properties to false.
+  
+* HTTP cache is now always purged using a single HTTP request, being emulated (`local`) or real, always using `X-Location-Id` header.
+  `X-Group-Location-Id` is not used any more and is thus deprecated.
+  
+  As a result, semantic setting `ezpublish.http_cache.purge_type` now only accepts `local` or `http` as values.
+  `multiple_http` and `single_http` are deprecated and are now considered as `http`. You may change them to use `http`:
+  
+  ```diff
+    ezpublish:
+        http_cache:
+    -        purge_type: multiple_http
+    +        purge_type: http
+    ```
 
 ## Deprecations
 
@@ -92,7 +105,20 @@ Changes affecting version compatibility with former or future versions.
 
   and by getting the URI from the returned value object.
   `getExternalPath()`, that returns the id seen from the IOService, can be replaced by `IOService::loadBinaryFileByUri()`.
+  
+* Semantic setting `ezpublish.http_cache.timeout` has been deprecated and is no longer used. It can be safely removed.
 
+  ```diff
+  ezpublish:
+      http_cache:
+  -        timeout: 1
+  ```
+  
+* *Identity definer* services (using `ezpublish.identity_definer` tag) are deprecated in favor of 
+  [custom Context Providers from `FOSHttpCacheBundle`](http://foshttpcachebundle.readthedocs.org/en/latest/reference/configuration/user-context.html#custom-context-providers).
+  
+  `ezpublish.identity_definer` service tag and related classes/interfaces will be removed in v6.0
+  
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).
