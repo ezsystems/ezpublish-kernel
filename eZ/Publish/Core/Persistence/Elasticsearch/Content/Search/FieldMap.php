@@ -222,7 +222,7 @@ class FieldMap
      *
      * @return mixed|string
      */
-    protected function getIndexFieldName(
+    public function getIndexFieldName(
         $criterionOrSortClause,
         $contentTypeIdentifier,
         $fieldDefinitionIdentifier,
