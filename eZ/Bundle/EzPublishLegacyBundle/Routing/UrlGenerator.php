@@ -46,17 +46,25 @@ class UrlGenerator extends Generator
      */
     public function doGenerate( $legacyModuleUri, array $parameters )
     {
+        // Getting query string
+        $uriComponents = parse_url( $legacyModuleUri );
+        $legacyModuleUri = isset( $uriComponents['path'] ) ? $uriComponents['path'] : '';
+        $queryString = isset( $uriComponents['query'] ) ? '?' . $uriComponents['query'] : '';
+
         // Removing leading and trailing slashes
         if ( strpos( $legacyModuleUri, '/' ) === 0 )
             $legacyModuleUri = substr( $legacyModuleUri, 1 );
         if ( strrpos( $legacyModuleUri, '/' ) === ( strlen( $legacyModuleUri ) - 1 ) )
             $legacyModuleUri = substr( $legacyModuleUri, 0, -1 );
 
+        // Removing siteaccess parameter
+        if( isset( $parameters['siteaccess'] ) )
+            unset( $parameters[ 'siteaccess' ] );
+
         list( $moduleName, $viewName ) = explode( '/', $legacyModuleUri );
-        $siteAccess = $this->siteAccess;
 
         return $this->getLegacyKernel()->runCallback(
-            function () use ( $legacyModuleUri, $moduleName, $viewName, $parameters, $siteAccess )
+            function () use ( $legacyModuleUri, $moduleName, $viewName, $parameters, $queryString )
             {
                 $module = eZModule::findModule( $moduleName );
                 if ( !$module instanceof eZModule )
@@ -75,7 +83,7 @@ class UrlGenerator extends Generator
                     $unorderedParams .= "/($paramName)/$paramValue";
                 }
 
-                return "/$legacyModuleUri$unorderedParams";
+                return "/$legacyModuleUri$unorderedParams$queryString";
             },
             false,
             false
