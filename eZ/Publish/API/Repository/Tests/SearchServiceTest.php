@@ -357,6 +357,110 @@ class SearchServiceTest extends BaseTest
                     );
                 }
             ),
+            array(
+                array(
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::MODIFIER,
+                        Criterion\Operator::EQ,
+                        14
+                    ),
+                    'sortClauses' => array(
+                        new SortClause\ContentId(),
+                    ),
+                ),
+                $fixtureDir . 'UserMetadata.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::MODIFIER,
+                        Criterion\Operator::IN,
+                        array( 14 )
+                    ),
+                    'sortClauses' => array(
+                        new SortClause\ContentId(),
+                    ),
+                ),
+                $fixtureDir . 'UserMetadata.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::OWNER,
+                        Criterion\Operator::EQ,
+                        14
+                    ),
+                    'sortClauses' => array(
+                        new SortClause\ContentId(),
+                    ),
+                ),
+                $fixtureDir . 'UserMetadata.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::OWNER,
+                        Criterion\Operator::IN,
+                        array( 14 )
+                    ),
+                    'sortClauses' => array(
+                        new SortClause\ContentId(),
+                    ),
+                ),
+                $fixtureDir . 'UserMetadata.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::GROUP,
+                        Criterion\Operator::EQ,
+                        12
+                    ),
+                    'sortClauses' => array(
+                        new SortClause\ContentId(),
+                    ),
+                ),
+                $fixtureDir . 'UserMetadata.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::GROUP,
+                        Criterion\Operator::IN,
+                        array( 12 )
+                    ),
+                    'sortClauses' => array(
+                        new SortClause\ContentId(),
+                    ),
+                ),
+                $fixtureDir . 'UserMetadata.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::GROUP,
+                        Criterion\Operator::EQ,
+                        4
+                    ),
+                    'sortClauses' => array(
+                        new SortClause\ContentId(),
+                    ),
+                ),
+                $fixtureDir . 'UserMetadata.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\UserMetadata(
+                        Criterion\UserMetadata::GROUP,
+                        Criterion\Operator::IN,
+                        array( 4 )
+                    ),
+                    'sortClauses' => array(
+                        new SortClause\ContentId(),
+                    ),
+                ),
+                $fixtureDir . 'UserMetadata.php',
+            ),
         );
     }
 
@@ -3648,6 +3752,269 @@ class SearchServiceTest extends BaseTest
             ),
             $this->mapResultContentIds( $result )
         );
+    }
+
+    protected function createContentForTestUserMetadataGroupHorizontal()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $userService = $repository->getUserService();
+        $administratorUser = $repository->getCurrentUser();
+        // ID of the "Administrators" user group in an eZ Publish demo installation
+        $administratorsUserGroupId = 12;
+        // ID of the "Editors" user group in an eZ Publish demo installation
+        $editorsUserGroupId = 13;
+
+        $administratorsUserGroup = $userService->loadUserGroup( $administratorsUserGroupId );
+        $editorsUserGroup = $userService->loadUserGroup( $editorsUserGroupId );
+
+        // Add additional Location for Administrators UserGroup under Editors UserGroup Location
+        $locationCreateStruct = $locationService->newLocationCreateStruct(
+            $editorsUserGroup->contentInfo->mainLocationId
+        );
+        $newAdministratorsUserGroupLocation = $locationService->createLocation(
+            $administratorsUserGroup->contentInfo,
+            $locationCreateStruct
+        );
+
+        // Add additional Location for administrator user under newly created UserGroup Location
+        $locationCreateStruct = $locationService->newLocationCreateStruct(
+            $newAdministratorsUserGroupLocation->id
+        );
+        $locationService->createLocation(
+            $administratorUser->contentInfo,
+            $locationCreateStruct
+        );
+
+        // Create a Content to be found through Editors UserGroup id.
+        // This ensures data is indexed, it could also be done by updating metadata of
+        // an existing Content, but slot would need to reindex Content and that should
+        // be tested elsewhere (dedicated indexing integration tests, missing ATM).
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( "folder" );
+
+        $createStruct = $contentService->newContentCreateStruct( $contentType, "eng-GB" );
+        $createStruct->setField( "name", "test" );
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( 2 );
+        $draft = $contentService->createContent( $createStruct, array( $locationCreateStruct ) );
+        $content = $contentService->publishVersion( $draft->getVersionInfo() );
+        $contentTypeService->createContentTypeDraft( $contentType );
+
+        return $content;
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testUserMetadataGroupHorizontalFilterContent( $queryType = null )
+    {
+        if ( $queryType === null )
+        {
+            $queryType = "filter";
+        }
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $editorsUserGroupId = 13;
+
+        $content = $this->createContentForTestUserMetadataGroupHorizontal();
+
+        $criteria = array();
+        $setupFactory = $this->getSetupFactory();
+
+        // Do not limit for LSE, as it does not not require reindexing.
+        // See explanation below.
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        {
+            $criteria[] = new Criterion\ContentTypeIdentifier( "folder" );
+        }
+
+        $criteria[] = new Criterion\UserMetadata(
+            Criterion\UserMetadata::GROUP,
+            Criterion\Operator::EQ,
+            $editorsUserGroupId
+        );
+
+        $query = new Query(
+            array(
+                $queryType => new Criterion\LogicalAnd( $criteria ),
+                'sortClauses' => array(
+                    new SortClause\ContentId(),
+                ),
+            )
+        );
+
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        {
+            $result = $searchService->findContent( $query );
+
+            // Administrator User is owned by itself, when additional Locations are added
+            // it should be reindexed and its UserGroups will updated, which means it should
+            // also be found as a Content of Editors UserGroup. However we do not handle this
+            // in slots yet, and also miss SPI methods to do it without using Search (also
+            // needed to decouple services), because as indexing is asynchronous Search
+            // should not eat its own dog food for reindexing.
+            $this->assertEquals( 1, $result->totalCount );
+
+            $this->assertEquals(
+                $content->id,
+                $result->searchHits[0]->valueObject->id
+            );
+        }
+        else
+        {
+            // This is how it should eventually work for all search engines,
+            // with required reindexing slots properly implemented.
+
+            $result = $searchService->findContent( $query );
+
+            // Assert last hit manually, as id will change because it is created in test
+            // and not present it base fixture.
+            $foundContent1 = array_pop( $result->searchHits );
+            $result->totalCount = $result->totalCount - 1;
+            $this->assertEquals( $content->id, $foundContent1->valueObject->id );
+
+            $this->simplifySearchResult( $result );
+            $this->assertEquals(
+                include $this->getFixtureDir() . "/UserMetadata.php",
+                $result,
+                "Search results do not match.",
+                .1 // Be quite generous regarding delay -- most important for scores
+            );
+        }
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testUserMetadataGroupHorizontalQueryContent()
+    {
+        $this->testUserMetadataGroupHorizontalFilterContent( "query" );
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testUserMetadataGroupHorizontalFilterLocation( $queryType = null )
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Location Search is not yet implemented for Solr storage" );
+        }
+
+        if ( $queryType === null )
+        {
+            $queryType = "filter";
+        }
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $editorsUserGroupId = 13;
+
+        $content = $this->createContentForTestUserMetadataGroupHorizontal();
+
+        $criteria = array();
+        $setupFactory = $this->getSetupFactory();
+
+        // Do not limit for LSE, as it does not not require reindexing.
+        // See explanation below.
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        {
+            $criteria[] = new Criterion\ContentTypeIdentifier( "folder" );
+        }
+
+        $criteria[] = new Criterion\UserMetadata(
+            Criterion\UserMetadata::GROUP,
+            Criterion\Operator::EQ,
+            $editorsUserGroupId
+        );
+
+        $query = new LocationQuery(
+            array(
+                $queryType => new Criterion\LogicalAnd( $criteria ),
+                'sortClauses' => array(
+                    new SortClause\Location\Id(),
+                ),
+            )
+        );
+
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        {
+            $result = $searchService->findLocations( $query );
+
+            // Administrator User is owned by itself, when additional Locations are added
+            // it should be reindexed and its UserGroups will updated, which means it should
+            // also be found as a Content of Editors UserGroup. However we do not handle this
+            // in slots yet, and also miss SPI methods to do it without using Search (also
+            // needed to decouple services), because as indexing is asynchronous Search
+            // should not eat its own dog food for reindexing.
+            $this->assertEquals( 1, $result->totalCount );
+
+            $this->assertEquals(
+                $content->contentInfo->mainLocationId,
+                $result->searchHits[0]->valueObject->id
+            );
+        }
+        else
+        {
+            // This is how it should eventually work for all search engines,
+            // with required reindexing slots properly implemented.
+
+            $result = $searchService->findLocations( $query );
+
+            // Assert last two hits manually, as ids will change because they are created
+            // in test and not present in base fixture.
+            $foundLocation1 = array_pop( $result->searchHits );
+            $foundLocation2 = array_pop( $result->searchHits );
+            // Remove additional Administrators UserGroup Location
+            array_pop( $result->searchHits );
+            $result->totalCount = $result->totalCount - 2;
+            $this->assertEquals(
+                $content->versionInfo->contentInfo->mainLocationId,
+                $foundLocation1->valueObject->id
+            );
+            $this->assertEquals(
+                $repository->getCurrentUser()->id,
+                $foundLocation2->valueObject->contentId
+            );
+
+            $this->simplifySearchResult( $result );
+            $this->assertEquals(
+                include $this->getFixtureDir() . "/UserMetadataLocation.php",
+                $result,
+                "Search results do not match.",
+                .1 // Be quite generous regarding delay -- most important for scores
+            );
+        }
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testUserMetadataGroupHorizontalQueryLocation()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Location Search is not yet implemented for Solr storage" );
+        }
+
+        $this->testUserMetadataGroupHorizontalFilterLocation( "query" );
     }
 
     /**
