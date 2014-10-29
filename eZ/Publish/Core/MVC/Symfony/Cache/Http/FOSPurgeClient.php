@@ -12,6 +12,12 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Http;
 use eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface;
 use FOS\HttpCacheBundle\CacheManager;
 
+/**
+ * Purge client based on FOSHttpCacheBundle.
+ *
+ * Only support BAN requests on purpose, to be able to invalidate cache for a
+ * collection of Location/Content objects.
+ */
 class FOSPurgeClient implements PurgeClientInterface
 {
     /**

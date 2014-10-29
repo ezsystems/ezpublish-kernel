@@ -14,6 +14,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * HttpCache related compiler pass.
+ *
+ * Ensures Varnish proxy client is correctly configured.
+ */
 class HttpCachePass implements CompilerPassInterface
 {
     public function process( ContainerBuilder $container )

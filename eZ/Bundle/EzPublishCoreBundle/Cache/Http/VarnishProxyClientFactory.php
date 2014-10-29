@@ -21,11 +21,17 @@ class VarnishProxyClientFactory
      * @var ConfigResolverInterface
      */
     private $configResolver;
+
     /**
      * @var DynamicSettingParserInterface
      */
     private $dynamicSettingParser;
 
+    /**
+     * Configured class for Varnish proxy client service.
+     *
+     * @var string
+     */
     private $proxyClientClass;
 
     public function __construct(
