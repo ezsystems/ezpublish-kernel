@@ -12,10 +12,13 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Routing;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 
-class FallbackRouter implements RouterInterface
+class FallbackRouter implements RouterInterface, RequestMatcherInterface
 {
     const ROUTE_NAME = 'ez_legacy';
 
@@ -117,26 +120,18 @@ class FallbackRouter implements RouterInterface
         throw new RouteNotFoundException();
     }
 
-    /**
-     * Tries to match a URL with a set of routes.
-     *
-     * If the matcher can not find information, it must throw one of the exceptions documented
-     * below.
-     *
-     * @param string $pathinfo The path info to be parsed (raw format, i.e. not urldecoded)
-     *
-     * @return array An array of parameters
-     *
-     * @throws ResourceNotFoundException If the resource could not be found
-     * @throws MethodNotAllowedException If the resource was found but the request method is not allowed
-     *
-     * @api
-     */
     public function match( $pathinfo )
     {
+        throw new RuntimeException( "The UrlAliasRouter doesn't support the match() method. Please use matchRequest() instead." );
+    }
+
+    public function matchRequest( Request $request )
+    {
+        $moduleUri = $request->attributes->get( 'semanticPathinfo' ) . '?' . $request->getQueryString();
         return array(
             "_route" => self::ROUTE_NAME,
             "_controller" => "ezpublish_legacy.controller:indexAction",
+            "module_uri" => $moduleUri
         );
     }
 }
