@@ -802,15 +802,7 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Returns the roles assigned to the given user
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param boolean $inherited
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException If the current user is not allowed to read a role
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid User object
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment[]
+     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
      */
     public function getRoleAssignmentsForUser( User $user, $inherited = false )
     {
