@@ -127,7 +127,9 @@ class FallbackRouter implements RouterInterface, RequestMatcherInterface
 
     public function matchRequest( Request $request )
     {
-        $moduleUri = $request->attributes->get( 'semanticPathinfo' ) . '?' . $request->getQueryString();
+        $moduleUri = rtrim( $request->attributes->get( 'semanticPathinfo', $request->getPathInfo() ), '/' )
+                     . $request->attributes->get( 'viewParametersString', '' )
+                     . '?' . $request->getQueryString();
         return array(
             "_route" => self::ROUTE_NAME,
             "_controller" => "ezpublish_legacy.controller:indexAction",
