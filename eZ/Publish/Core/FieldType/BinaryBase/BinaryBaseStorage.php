@@ -24,11 +24,6 @@ use Psr\Log\LoggerInterface;
 class BinaryBaseStorage extends GatewayBasedStorage
 {
     /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
      * An instance of IOService configured to store to the images folder
      *
      * @var IOServiceInterface
@@ -50,15 +45,13 @@ class BinaryBaseStorage extends GatewayBasedStorage
      * @param IOServiceInterface $IOService
      * @param PathGenerator $pathGenerator
      * @param MimeTypeDetector $mimeTypeDetector
-     * @param LoggerInterface $logger
      */
-    public function __construct( array $gateways, IOServiceInterface $IOService, PathGenerator $pathGenerator, MimeTypeDetector $mimeTypeDetector, LoggerInterface $logger = null )
+    public function __construct( array $gateways, IOServiceInterface $IOService, PathGenerator $pathGenerator, MimeTypeDetector $mimeTypeDetector )
     {
         parent::__construct( $gateways );
         $this->IOService = $IOService;
         $this->pathGenerator = $pathGenerator;
         $this->mimeTypeDetector = $mimeTypeDetector;
-        $this->logger = $logger;
     }
 
     /**
@@ -167,20 +160,8 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         if ( $fileCounts[$fileReference['id']] === 0 )
         {
-            try
-            {
-                $binaryFile = $this->IOService->loadBinaryFile( $fileReference['id'] );
-                $this->IOService->deleteBinaryFile( $binaryFile );
-            }
-            catch ( NotFoundException $e )
-            {
-                if ( isset( $this->logger ) )
-                {
-                    $binaryFileId = $this->IOService->getInternalPath( $fileReference['id'] );
-                    $this->logger->error( "BinaryFile with ID $binaryFileId not found" );
-                }
-                return;
-            }
+            $binaryFile = $this->IOService->loadBinaryFile( $fileReference['id'] );
+            $this->IOService->deleteBinaryFile( $binaryFile );
         }
     }
 
@@ -201,21 +182,9 @@ class BinaryBaseStorage extends GatewayBasedStorage
         $field->value->externalData = $this->getGateway( $context )->getFileReferenceData( $field->id, $versionInfo->versionNo );
         if ( $field->value->externalData !== null )
         {
-            try
-            {
-                $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] );
-                $field->value->externalData['fileSize'] = $binaryFile->size;
-                $field->value->externalData['uri'] = $binaryFile->uri;
-            }
-            catch ( NotFoundException $e )
-            {
-                if ( isset( $this->logger ) )
-                {
-                    $fileId = $this->IOService->getInternalPath( $field->value->externalData['id'] );
-                    $this->logger->error( "BinaryFile with ID $fileId not found" );
-                }
-                return;
-            }
+            $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] );
+            $field->value->externalData['fileSize'] = $binaryFile->size;
+            $field->value->externalData['uri'] = $binaryFile->uri;
         }
     }
 
@@ -247,19 +216,8 @@ class BinaryBaseStorage extends GatewayBasedStorage
         {
             if ( $count === 0 )
             {
-                try
-                {
-                    $binaryFile = $this->IOService->loadBinaryFile( $filePath );
-                    $this->IOService->deleteBinaryFile( $binaryFile );
-                }
-                catch ( NotFoundException $e )
-                {
-                    if ( isset( $this->logger ) )
-                    {
-                        $filePath = $this->IOService->getInternalPath( $filePath );
-                        $this->logger->error( "BinaryFile with ID $filePath not found" );
-                    }
-                }
+                $binaryFile = $this->IOService->loadBinaryFile( $filePath );
+                $this->IOService->deleteBinaryFile( $binaryFile );
             }
         }
     }

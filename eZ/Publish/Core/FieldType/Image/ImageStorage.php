@@ -28,11 +28,6 @@ use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface as DeprecationWarner;
 class ImageStorage extends GatewayBasedStorage
 {
     /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
      * The IO Service used to manipulate data
      *
      * @var IOServiceInterface
@@ -65,15 +60,13 @@ class ImageStorage extends GatewayBasedStorage
         PathGenerator $pathGenerator,
         MetadataHandler $imageSizeMetadataHandler,
         DeprecationWarner $deprecationWarner,
-        AliasCleanerInterface $aliasCleaner = null,
-        LoggerInterface $logger = null
+        AliasCleanerInterface $aliasCleaner = null
     )
     {
         parent::__construct( $gateways );
         $this->IOService = $IOService;
         $this->pathGenerator = $pathGenerator;
         $this->imageSizeMetadataHandler = $imageSizeMetadataHandler;
-        $this->logger = $logger;
         $this->deprecationWarner = $deprecationWarner;
         $this->aliasCleaner = $aliasCleaner;
     }
@@ -182,18 +175,7 @@ class ImageStorage extends GatewayBasedStorage
                 return false;
             }
 
-            try
-            {
-                $this->IOService->loadBinaryFile( $field->value->data['id'] );
-            }
-            catch ( NotFoundException $e )
-            {
-                if ( isset( $this->logger ) )
-                {
-                    $this->logger->error( "Image with ID {$field->value->data['id']} not found" );
-                }
-                return false;
-            }
+            $this->IOService->loadBinaryFile( $field->value->data['id'] );
 
             $field->value->data = array_merge(
                 $field->value->data,
@@ -227,21 +209,7 @@ class ImageStorage extends GatewayBasedStorage
         if ( $field->value->data !== null )
         {
             $field->value->data['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
-
-            try
-            {
-                // @todo Test if file exists first ? What do we do then ?
-                $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
-            }
-            catch ( NotFoundException $e )
-            {
-                if ( isset( $this->logger ) )
-                {
-                    $this->logger->error( "Image with id {$field->value->data['id']} not found" );
-                }
-                return;
-            }
-
+            $binaryFile = $this->IOService->loadBinaryFile( $field->value->data['id'] );
             $field->value->data['id'] = $binaryFile->id;
             $field->value->data['fileSize'] = $binaryFile->size;
             $field->value->data['uri'] = $binaryFile->uri;
@@ -281,18 +249,8 @@ class ImageStorage extends GatewayBasedStorage
                 $gateway->removeImageReferences( $storedFilePath, $versionInfo->versionNo, $fieldId );
                 if ( $gateway->countImageReferences( $storedFilePath ) === 0 )
                 {
-                    try
-                    {
-                        $binaryFile = $this->IOService->loadBinaryFileByUri( $storedFilePath );
-                        $this->IOService->deleteBinaryFile( $binaryFile );
-                    }
-                    catch ( NotFoundException $e )
-                    {
-                        if ( isset( $this->logger ) )
-                        {
-                            $this->logger->error( "Image with id $storedFilePath not found" );
-                        }
-                    }
+                    $binaryFile = $this->IOService->loadBinaryFileByUri( $storedFilePath );
+                    $this->IOService->deleteBinaryFile( $binaryFile );
                 }
             }
         }
