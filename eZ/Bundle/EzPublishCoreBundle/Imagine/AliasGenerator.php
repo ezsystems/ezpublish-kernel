@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 use eZ\Publish\API\Repository\Exceptions\SourceImageNotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -19,6 +20,7 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Liip\ImagineBundle\Imagine\Filter\FilterManager;
@@ -80,7 +82,9 @@ class AliasGenerator implements VariationHandler
     /**
      * {@inheritDoc}
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException If field value is not an instance of \eZ\Publish\Core\FieldType\Image\Value.
+     * @throws \eZ\Publish\API\Repository\Exceptions\SourceImageNotFoundException If source image cannot be found.
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException If a problem occurs with generated variation.
      */
     public function getVariation( Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array() )
     {
@@ -121,7 +125,18 @@ class AliasGenerator implements VariationHandler
             $this->logger->debug( "'$variationName' variation on $originalPath is already generated. Loading from cache." );
         }
 
-        $aliasInfo = new SplFileInfo( $this->ioResolver->resolve( $originalPath, $variationName ) );
+        try
+        {
+            $aliasInfo = new SplFileInfo(
+                $this->ioResolver->resolve( $originalPath, $variationName )
+            );
+        }
+        // If for somme reason image alias cannot be resolved, throw the appropriate exception.
+        catch ( NotResolvableException $e )
+        {
+            throw new InvalidVariationException( $variationName, 'image', 0, $e );
+        }
+
         return new ImageVariation(
             array(
                 'name'         => $variationName,
