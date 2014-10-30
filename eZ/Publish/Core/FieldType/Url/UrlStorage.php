@@ -78,10 +78,15 @@ class UrlStorage extends GatewayBasedStorage
      */
     public function getFieldData( VersionInfo $versionInfo, Field $field, array $context )
     {
+        $id = $field->value->data["urlId"];
+        if ( empty( $id ) )
+        {
+            $field->value->externalData = null;
+            return;
+        }
+
         /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway $gateway */
         $gateway = $this->getGateway( $context );
-        $id = $field->value->data["urlId"];
-
         $map = $gateway->getIdUrlMap( array( $id ) );
 
         // URL id is not in the DB

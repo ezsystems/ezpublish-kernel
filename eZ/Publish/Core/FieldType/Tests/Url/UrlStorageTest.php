@@ -144,6 +144,25 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( "", $field->value->externalData );
     }
 
+    public function testGetFieldDataWithEmptyUrlId()
+    {
+        $versionInfo = new VersionInfo();
+        $fieldValue = new FieldValue( array( "data" => array( "urlId" => null ) ) );
+        $field = new Field( array( "id" => 42, "value" => $fieldValue ) );
+        $gateway = $this->getGatewayMock();
+
+        $gateway
+            ->expects( $this->never() )
+            ->method( "getIdUrlMap" );
+
+        $logger = $this->getLoggerMock();
+        $logger
+            ->expects( $this->never() )
+            ->method( "error" );
+
+        $this->assertEquals( null, $field->value->externalData );
+    }
+
     public function testDeleteFieldData()
     {
         $versionInfo = new VersionInfo( array( "versionNo" => 24 ) );
