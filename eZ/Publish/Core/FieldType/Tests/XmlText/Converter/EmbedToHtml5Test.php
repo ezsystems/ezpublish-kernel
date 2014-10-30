@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\FieldType\Tests\XmlText\Converter;
 use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use PHPUnit_Framework_TestCase;
+use DOMDocument;
 
 /**
  * Tests the EmbedToHtml5 Preconverter
@@ -206,6 +207,14 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         return $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\LocationService' )
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getLoggerMock()
+    {
+        return $this->getMock( "Psr\\Log\\LoggerInterface" );
     }
 
     /**
@@ -516,5 +525,141 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         );
 
         $converter->convert( $dom );
+    }
+
+    public function dataProviderForTestEmbedContentNotFound()
+    {
+        return array(
+            array(
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed object_id="42"/></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"/>',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello <embed object_id="42"/> goodbye</paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello  goodbye</paragraph></section>',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello <embed size="medium" object_id="42"/> goodbye</link></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello  goodbye</link></paragraph></section>',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link><embed object_id="42"/></link></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"/>',
+            ),
+        );
+    }
+
+    /**
+     * @param string $input
+     * @param string $output
+     *
+     * @dataProvider dataProviderForTestEmbedContentNotFound
+     */
+    public function testEmbedContentNotFound( $input, $output )
+    {
+        $viewManager = $this->getMockViewManager();
+        $contentService = $this->getMockContentService();
+        $repository = $this->getMockRepository( $contentService, null );
+        $logger = $this->getLoggerMock();
+
+        $contentService->expects( $this->once() )
+            ->method( "loadContent" )
+            ->with( $this->equalTo( 42 ) )
+            ->will(
+                $this->throwException(
+                    $this->getMock( "eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException" )
+                )
+            );
+
+        $logger->expects( $this->once() )
+            ->method( "error" )
+            ->with(
+                "While generating embed for xmltext, could not locate Content object with ID 42"
+            );
+
+        $converter = new EmbedToHtml5(
+            $viewManager,
+            $repository,
+            array( "view", "class", "node_id", "object_id" ),
+            $logger
+        );
+
+        $document = new DOMDocument();
+        $document->loadXML( $input );
+
+        $converter->convert( $document );
+
+        $outputDocument = new DOMDocument();
+        $outputDocument->loadXML( $output );
+
+        $this->assertEquals( $outputDocument, $document );
+    }
+
+    public function dataProviderForTestEmbedLocationNotFound()
+    {
+        return array(
+            array(
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed node_id="42"/></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"/>',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello <embed node_id="42"/> goodbye</paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello  goodbye</paragraph></section>',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello <embed node_id="42"/> goodbye</link></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello  goodbye</link></paragraph></section>',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link><embed node_id="42"/></link></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"/>',
+            ),
+        );
+    }
+
+    /**
+     * @param string $input
+     * @param string $output
+     *
+     * @dataProvider dataProviderForTestEmbedLocationNotFound
+     */
+    public function testEmbedLocationNotFound( $input, $output )
+    {
+        $viewManager = $this->getMockViewManager();
+        $locationService = $this->getMockLocationService();
+        $repository = $this->getMockRepository( null, $locationService );
+        $logger = $this->getLoggerMock();
+
+        $locationService->expects( $this->once() )
+            ->method( "loadLocation" )
+            ->with( $this->equalTo( 42 ) )
+            ->will(
+                $this->throwException(
+                    $this->getMock( "eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException" )
+                )
+            );
+
+        $logger->expects( $this->once() )
+            ->method( "error" )
+            ->with(
+                "While generating embed for xmltext, could not locate Location with ID 42"
+            );
+
+        $converter = new EmbedToHtml5(
+            $viewManager,
+            $repository,
+            array( "view", "class", "node_id", "object_id" ),
+            $logger
+        );
+
+        $document = new DOMDocument();
+        $document->loadXML( $input );
+
+        $converter->convert( $document );
+
+        $outputDocument = new DOMDocument();
+        $outputDocument->loadXML( $output );
+
+        $this->assertEquals( $outputDocument, $document );
     }
 }
