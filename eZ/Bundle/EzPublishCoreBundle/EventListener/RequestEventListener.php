@@ -67,8 +67,6 @@ class RequestEventListener implements EventSubscriberInterface
                 array( 'onKernelRequestSetup', 190 ),
                 array( 'onKernelRequestForward', 10 ),
                 array( 'onKernelRequestRedirect', 0 ),
-                // onKernelRequestUserHash needs to be just after Firewall (prio 8), so that user is already logged in the repository.
-                array( 'onKernelRequestUserHash', 7 ),
                 // onKernelRequestIndex needs to be before the router (prio 32)
                 array( 'onKernelRequestIndex', 40 ),
             )
@@ -204,40 +202,5 @@ class RequestEventListener implements EventSubscriberInterface
                     );
             }
         }
-    }
-
-    /**
-     * Returns a Response containing the current user hash if needed.
-     *
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-     */
-    public function onKernelRequestUserHash( GetResponseEvent $event )
-    {
-        $request = $event->getRequest();
-
-        if (
-            $request->headers->get( 'X-HTTP-Override' ) !== 'AUTHENTICATE'
-            || $request->headers->get( 'Accept' ) !== Kernel::USER_HASH_ACCEPT_HEADER
-        )
-        {
-            return;
-        }
-
-        // We must have a session at that point since we're supposed to be connected
-        if ( !$request->hasSession() )
-        {
-            $event->setResponse( new Response( '', 400 ) );
-            $event->stopPropagation();
-            return;
-        }
-
-        $userHash = $this->hashGenerator->generate();
-        if ( $this->logger )
-            $this->logger->debug( "UserHash: $userHash" );
-
-        $response = new Response();
-        $response->headers->set( 'X-User-Hash', $userHash );
-        $event->setResponse( $response );
-        $event->stopPropagation();
     }
 }

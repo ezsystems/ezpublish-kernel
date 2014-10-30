@@ -11,30 +11,15 @@ namespace eZ\Bundle\EzPublishCoreBundle;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocationAwareStore;
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\RequestAwarePurger;
-use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache as BaseHttpCache;
+use FOS\HttpCacheBundle\HttpCache as BaseHttpCache;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 abstract class HttpCache extends BaseHttpCache
 {
-    public function handle( Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true )
-    {
-        // Forbid direct AUTHENTICATE requests to get user hash
-        if (
-            $request->headers->get( 'X-HTTP-Override' ) === 'AUTHENTICATE'
-            && $request->headers->get( 'Accept' ) === Kernel::USER_HASH_ACCEPT_HEADER
-        )
-        {
-            return new Response( '', 405 );
-        }
+    const USER_HASH_HEADER = 'X-User-Hash';
 
-        if ( $request->isMethodSafe() )
-        {
-            $request->headers->set( 'X-User-Hash', $this->kernel->generateUserHash( $request ) );
-        }
-        return parent::handle( $request, $type, $catch );
-    }
+    const SESSION_NAME_PREFIX = 'eZSESSID';
 
     protected function createStore()
     {
@@ -52,7 +37,7 @@ abstract class HttpCache extends BaseHttpCache
      */
     protected function invalidate( Request $request, $catch = false )
     {
-        if ( $request->getMethod() !== 'PURGE' )
+        if ( $request->getMethod() !== 'PURGE' && $request->getMethod() !== 'BAN' )
         {
             return parent::invalidate( $request, $catch );
         }

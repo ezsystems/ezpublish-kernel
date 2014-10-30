@@ -14,14 +14,17 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorAwareInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Formatter\YamlSuggestionFormatter;
+use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Loader\FileLoader;
 use Symfony\Component\Config\FileLocator;
 use InvalidArgumentException;
+use Symfony\Component\Yaml\Yaml;
 
-class EzPublishCoreExtension extends Extension
+class EzPublishCoreExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector
@@ -323,6 +326,7 @@ class EzPublishCoreExtension extends Extension
     private function handleCache( array $config, ContainerBuilder $container, FileLoader $loader )
     {
         $loader->load( 'cache.yml' );
+
         if ( isset( $config['http_cache']['purge_type'] ) )
         {
             switch ( $config['http_cache']['purge_type'] )
@@ -330,11 +334,8 @@ class EzPublishCoreExtension extends Extension
                 case 'local':
                     $purgeService = 'ezpublish.http_cache.purge_client.local';
                     break;
-                case 'single_http':
-                    $purgeService = 'ezpublish.http_cache.purge_client.single_request';
-                    break;
-                case 'multiple_http':
-                    $purgeService = 'ezpublish.http_cache.purge_client.multi_request';
+                case 'http':
+                    $purgeService = 'ezpublish.http_cache.purge_client.fos';
                     break;
                 default:
                     if ( !$container->has( $config['http_cache']['purge_type'] ) )
@@ -346,11 +347,6 @@ class EzPublishCoreExtension extends Extension
             }
 
             $container->setAlias( 'ezpublish.http_cache.purge_client', $purgeService );
-        }
-
-        if ( isset( $config['http_cache']['timeout'] ) )
-        {
-            $container->setParameter( 'ezpublish.http_cache.purge_client.http_client.timeout', (int)$config['http_cache']['timeout'] );
         }
     }
 
@@ -444,5 +440,14 @@ class EzPublishCoreExtension extends Extension
     private function handleImage( array $config, ContainerBuilder $container, FileLoader $loader )
     {
         $loader->load( 'image.yml' );
+    }
+
+    public function prepend( ContainerBuilder $container )
+    {
+        // Default settings for FOSHttpCacheBundle
+        $configFile = __DIR__ . '/../Resources/config/fos_http_cache.yml';
+        $config = Yaml::parse( file_get_contents( $configFile ) );
+        $container->prependExtensionConfig( 'fos_http_cache', $config );
+        $container->addResource( new FileResource( $configFile ) );
     }
 }

@@ -141,15 +141,27 @@ class LocationAwareStore extends Store implements ContentPurger
         }
 
         // Purge everything
-        if ( $request->headers->get( 'X-Location-Id' ) === '*' )
+        $locationId = $request->headers->get( 'X-Location-Id' );
+        if ( $locationId === '*' || $locationId === '.*' )
         {
             return $this->purgeAllContent();
         }
 
+        // Usage of X-Group-Location-Id is deprecated.
         if ( $request->headers->has( 'X-Group-Location-Id' ) )
+        {
             $aLocationId = explode( '; ', $request->headers->get( 'X-Group-Location-Id' ) );
+        }
+        // Equivalent to X-Group-Location-Id, using a simple Regexp:
+        // (123|456|789) => Purge for #123, #456 and #789 location IDs.
+        else if ( $locationId[0] === '(' && substr( $locationId, -1 ) === ')' )
+        {
+            $aLocationId = explode( '|', substr( $locationId, 1, -1 ) );
+        }
         else
-            $aLocationId = array( $request->headers->get( 'X-Location-Id' ) );
+        {
+            $aLocationId = array( $locationId );
+        }
 
         if ( empty( $aLocationId ) )
             return false;

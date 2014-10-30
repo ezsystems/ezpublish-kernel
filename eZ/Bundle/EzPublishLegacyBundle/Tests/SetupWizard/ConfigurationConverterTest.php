@@ -183,7 +183,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     'enabled' => true,
                     'path' => '/usr/bin/convert',
                 ),
-                'http_cache' => array( 'purge_type' => 'local' )
             ),
             'stash' => array(
                 'caches' => array(

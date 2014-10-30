@@ -242,12 +242,11 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
      * @param string $expectedPurgeService
      * @param int $expectedTimeout
      */
-    public function testCacheConfiguration( array $customCacheConfig, $expectedPurgeService, $expectedTimeout )
+    public function testCacheConfiguration( array $customCacheConfig, $expectedPurgeService )
     {
         $this->load( $customCacheConfig );
 
         $this->assertContainerBuilderHasAlias( 'ezpublish.http_cache.purge_client', $expectedPurgeService );
-        $this->assertContainerBuilderHasParameter( 'ezpublish.http_cache.purge_client.http_client.timeout', $expectedTimeout );
     }
 
     public function cacheConfigurationProvider()
@@ -256,24 +255,27 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             array( array(), 'ezpublish.http_cache.purge_client.local', 1 ),
             array(
                 array(
-                    'http_cache' => array( 'purge_type' => 'local', 'timeout' => 12 )
+                    'http_cache' => array( 'purge_type' => 'local' )
                 ),
                 'ezpublish.http_cache.purge_client.local',
-                12
             ),
             array(
                 array(
-                    'http_cache' => array( 'purge_type' => 'multiple_http', 'timeout' => 5 )
+                    'http_cache' => array( 'purge_type' => 'multiple_http' )
                 ),
-                'ezpublish.http_cache.purge_client.multi_request',
-                5
+                'ezpublish.http_cache.purge_client.fos',
             ),
             array(
                 array(
-                    'http_cache' => array( 'purge_type' => 'single_http', 'timeout' => 1 )
+                    'http_cache' => array( 'purge_type' => 'single_http' )
                 ),
-                'ezpublish.http_cache.purge_client.single_request',
-                1
+                'ezpublish.http_cache.purge_client.fos',
+            ),
+            array(
+                array(
+                    'http_cache' => array( 'purge_type' => 'http' )
+                ),
+                'ezpublish.http_cache.purge_client.fos',
             ),
         );
     }

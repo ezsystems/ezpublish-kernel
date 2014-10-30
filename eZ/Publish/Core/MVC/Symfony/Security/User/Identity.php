@@ -14,6 +14,8 @@ use eZ\Publish\SPI\User\Identity as IdentityInterface;
 /**
  * Represents a user "identity", or footprint.
  * Instance can be transformed to a hash and used as an identity token.
+ *
+ * @deprecated since 5.4. Will be removed in 6.0. Use FOSHttpCacheBundle user context feature instead.
  */
 class Identity implements IdentityInterface
 {

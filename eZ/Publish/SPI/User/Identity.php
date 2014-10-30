@@ -15,6 +15,8 @@ namespace eZ\Publish\SPI\User;
  *
  * Typical use case is for content cache variation that you want to make vary on a bunch of user information (e.g. assigned roles).
  * The more you add information, the more specific and fine grained your cache variation will be.
+ *
+ * @deprecated since 5.4. Will be removed in 6.0. Use FOSHttpCacheBundle user context feature instead.
  */
 interface Identity
 {

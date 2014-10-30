@@ -10,7 +10,7 @@ parameters:
     security.http_utils.class: eZ\Publish\Core\MVC\Symfony\Security\HttpUtils
     ezpublish.user.identity.class: eZ\Publish\Core\MVC\Symfony\Security\User\Identity
     ezpublish.user.hash_generator.class: eZ\Publish\Core\MVC\Symfony\Security\User\HashGenerator
-    ezpublish.user.identity_definer.role_id.class: eZ\Publish\Core\MVC\Symfony\Security\User\IdentityDefiner\Role
+    ezpublish.user.identity_definer.role_id.class: eZ\Publish\Core\MVC\Symfony\Security\User\ContextProvider\RoleContextProvider
 
 services:
     ezpublish.security.user_provider:
@@ -53,12 +53,13 @@ services:
 
     ezpublish.user.hash_generator:
         class: %ezpublish.user.hash_generator.class%
-        argugments: [[]]
         calls:
             - [setIdentity, [@ezpublish.user.identity]]
+        tags:
+            - { name: fos_http_cache.user_context_provider }
 
     ezpublish.user.identity_definer.role_id:
         class: %ezpublish.user.identity_definer.role_id.class%
         arguments: [@ezpublish.api.repository]
         tags:
-            - { name: ezpublish.identity_definer }
+            - { name: fos_http_cache.user_context_provider }

@@ -96,7 +96,8 @@ parameters:
         template: EzPublishCoreBundle:FieldType/RichText/embed:location_inline_denied.html.twig
 
     # Cache settings
-    ezsettings.default.http_cache.purge_servers: ["http://localhost/"]   # Server(s) URL(s) that will be used for purging HTTP cache with PURGE requests.
+    # Server(s) URL(s) that will be used for purging HTTP cache with BAN requests.
+    ezsettings.default.http_cache.purge_servers: []
 
     # Treemenu settings (admin interface)
     ezsettings.default.treemenu.http_cache: true        # Whether to use HttpCache or not for admin tree menu

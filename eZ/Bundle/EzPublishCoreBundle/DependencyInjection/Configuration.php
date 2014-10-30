@@ -244,35 +244,42 @@ EOT;
     {
         $purgeTypeInfo = <<<EOT
 Http cache purge type.
-#   Cache purge for content/locations is triggered when needed (e.g. on publish) and will result in one or several Http PURGE requests.
-#   Can be "local", "single_http" or "multiple_http".
-#   If "local" is used, an Http PURGE request will be emulated when needed.
-#   If "single" is used, only one Http PURGE request will be sent, with X-Group-Location-Id header (each location id will be separated by "; ".
-#   If "multiple" is used, an Http PURGE request will be sent for each location, with X-Location-Id header.
+
+Cache purge for content/locations is triggered when needed (e.g. on publish) and will result in one or several Http PURGE requests.
+Can be "local" or "http" or a valid service ID:
+- If "local" is used, an Http PURGE request will be emulated when needed (e.g. when using Symfony internal reverse proxy).
+- If "http" is used, only one Http BAN request will be sent, with X-Location-Id header containing locationIds to ban.
+  X-Location-Id consists in a Regexp containing locationIds to ban.
+  Examples:
+   - (123|456|789) => Purge locations #123, #456, #789.
+   - .* => Purge all locations.
+- If a serviceId is provided, it must be defined in the ServiceContainer and must implement eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface.
 EOT;
 
         $rootNode
             ->children()
                 ->arrayNode( 'http_cache' )
-                    ->info( 'Http cache configuration' )
                     ->children()
                         ->scalarNode( 'purge_type' )
                             ->info( $purgeTypeInfo )
                             ->defaultValue( 'local' )
-                        ->end()
-                        ->scalarNode( 'timeout' )
-                            ->info( 'Timeout for each Http PURGE request, in seconds.' )
-                            ->validate()
+                            ->beforeNormalization()
                                 ->ifTrue(
                                     function ( $v )
                                     {
-                                        return !is_int( $v );
+                                        $http = array( 'multiple_http' => true, 'single_http' => true );
+                                        return isset( $http[$v] );
                                     }
                                 )
-                                ->thenInvalid( 'ezpublish.http_cache.timeout can only be an integer.' )
+                                ->then(
+                                    function ()
+                                    {
+                                        return 'http';
+                                    }
+                                )
                             ->end()
-                            ->defaultValue( 1 )
                         ->end()
+                        ->scalarNode( 'timeout' )->info( 'DEPRECATED' )->end()
                     ->end()
                 ->end()
             ->end();
