@@ -15,6 +15,8 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use PHPUnit_Framework_TestCase;
 
@@ -320,5 +322,59 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
             )
         );
         $this->assertEquals( $expected, $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName ) );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\SourceImageNotFoundException
+     */
+    public function testGetVariationOriginalNotFound()
+    {
+        $this->dataLoader
+            ->expects( $this->once() )
+            ->method( 'find' )
+            ->will( $this->throwException( new NotLoadableException() ) );
+
+        $field = new Field( array( 'value' => new ImageValue() ) );
+        $this->aliasGenerator->getVariation( $field, new VersionInfo(), 'foo' );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
+     */
+    public function testGetVariationInvalidVariation()
+    {
+        $originalPath = 'foo/bar/image.jpg';
+        $variationName = 'my_variation';
+        $imageId = '123-45';
+        $imageValue = new ImageValue( array( 'id' => $originalPath, 'imageId' => $imageId ) );
+        $field = new Field( array( 'value' => $imageValue ) );
+
+        $this->ioResolver
+            ->expects( $this->once() )
+            ->method( 'isStored' )
+            ->with( $originalPath, $variationName )
+            ->will( $this->returnValue( true ) );
+
+        $this->logger
+            ->expects( $this->once() )
+            ->method( 'debug' );
+
+        $this->dataLoader
+            ->expects( $this->once() )
+            ->method( 'find' );
+        $this->filterManager
+            ->expects( $this->never() )
+            ->method( 'applyFilter' );
+        $this->ioResolver
+            ->expects( $this->never() )
+            ->method( 'store' );
+
+        $this->ioResolver
+            ->expects( $this->once() )
+            ->method( 'resolve' )
+            ->with( $originalPath, $variationName )
+            ->will( $this->throwException( new NotResolvableException() ) );
+
+        $this->aliasGenerator->getVariation( $field, new VersionInfo(), $variationName );
     }
 }
