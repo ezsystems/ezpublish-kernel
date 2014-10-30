@@ -10,12 +10,11 @@
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
-use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Relation;
-use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  * Mock Test case for RelationProcessor service
@@ -25,113 +24,17 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the __construct() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::__construct
+     * @covers \eZ\Publish\Core\Repository\Helper\RelationProcessor::__construct
      */
     public function testConstructor()
     {
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
 
         $this->assertAttributeSame(
-            $this->getRepositoryMock(),
-            "repository",
-            $relationProcessor
-        );
-
-        $this->assertAttributeSame(
             $this->getPersistenceMock(),
             "persistenceHandler",
             $relationProcessor
         );
-    }
-
-    /**
-     * Test for the getFieldRelations() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::getFieldRelations
-     */
-    public function testGetFieldRelations()
-    {
-        $relationProcessor = $this->getPartlyMockedRelationProcessor( array( "appendFieldRelations" ) );
-        $repositoryMock = $this->getRepositoryMock();
-        $fieldTypeServiceMock = $this->getFieldTypeServiceMock();
-        $contentServiceMock = $this->getMock( "eZ\\Publish\\API\\Repository\\ContentService" );
-        $contentInfoMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
-        $contentTypeMock = $this->getMockForAbstractClass( "eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType" );
-        $fieldValueMock = $this->getMockForAbstractClass( "eZ\\Publish\\Core\\FieldType\\Value" );
-        $fieldTypeMock = $this->getMock( "eZ\\Publish\\SPI\\FieldType\\FieldType" );
-        $contentMock = $this->getMock(
-            "eZ\\Publish\\API\\Repository\\Values\\Content\\Content",
-            array( "__get", "getFields", "getFieldValue", "getVersionInfo", "getFieldsByLanguage" )
-        );
-
-        $contentMock->expects( $this->any() )
-            ->method( "__get" )
-            ->with( "contentType" )
-            ->will( $this->returnValue( $contentTypeMock ) );
-
-        $repositoryMock->expects( $this->once() )
-            ->method( "getContentService" )
-            ->will( $this->returnValue( $contentServiceMock ) );
-
-        $repositoryMock->expects( $this->once() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
-
-        $contentServiceMock->expects( $this->once() )
-            ->method( "loadContentByContentInfo" )
-            ->with( $contentInfoMock )
-            ->will( $this->returnValue( $contentMock ) );
-
-        $contentMock->expects( $this->once() )
-            ->method( "getFields" )
-            ->will(
-                $this->returnValue(
-                    array(
-                        new Field(
-                            array(
-                                "fieldDefIdentifier" => "test_fielddefinition_identifier",
-                                "value" => 42,
-                            )
-                        )
-                    )
-                )
-            );
-
-        $contentTypeMock->expects( $this->once() )
-            ->method( "getFieldDefinition" )
-            ->with( "test_fielddefinition_identifier" )
-            ->will(
-                $this->returnValue(
-                    new FieldDefinition(
-                        array(
-                            "id" => 24,
-                            "fieldTypeIdentifier" => "test_fieldtype_identifier",
-                        )
-                    )
-                )
-            );
-
-        $fieldTypeServiceMock->expects( $this->once() )
-            ->method( "buildFieldType" )
-            ->with( "test_fieldtype_identifier" )
-            ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $fieldTypeMock->expects( $this->once() )
-            ->method( "acceptValue" )
-            ->with( 42 )
-            ->will( $this->returnValue( $fieldValueMock ) );
-
-        $relationProcessor->expects( $this->once() )
-            ->method( "appendFieldRelations" )
-            ->with(
-                array(),
-                array(),
-                $fieldTypeMock,
-                $fieldValueMock,
-                24
-            );
-
-        $relationProcessor->getFieldRelations( $contentInfoMock );
     }
 
     public function providerForTestAppendRelations()
@@ -228,34 +131,29 @@ class RelationProcessorTest extends BaseServiceMockTest
      * Test for the appendFieldRelations() method.
      *
      * @dataProvider providerForTestAppendRelations
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::appendFieldRelations
+     * @covers \eZ\Publish\Core\Repository\Helper\RelationProcessor::appendFieldRelations
      */
     public function testAppendFieldRelations( array $fieldRelations, array $expected )
     {
-        $repositoryMock = $this->getRepositoryMock();
+        $locationHandler = $this->getPersistenceMock()->locationHandler();
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
         $fieldValueMock = $this->getMockForAbstractClass( "eZ\\Publish\\Core\\FieldType\\Value" );
         $fieldTypeMock = $this->getMock( "eZ\\Publish\\SPI\\FieldType\\FieldType" );
-        $locationServiceMock = $this->getMock( "eZ\\Publish\\API\\Repository\\LocationService" );
         $locationCallCount = 0;
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getLocationService" )
-            ->will( $this->returnValue( $locationServiceMock ) );
 
         $fieldTypeMock->expects( $this->once() )
             ->method( "getRelations" )
             ->with( $this->equalTo( $fieldValueMock ) )
             ->will( $this->returnValue( $fieldRelations ) );
 
-        $this->assertLocationServiceExpectation(
-            $locationServiceMock,
+        $this->assertLocationHandlerExpectation(
+            $locationHandler,
             $fieldRelations,
             Relation::LINK,
             $locationCallCount
         );
-        $this->assertLocationServiceExpectation(
-            $locationServiceMock,
+        $this->assertLocationHandlerExpectation(
+            $locationHandler,
             $fieldRelations,
             Relation::EMBED,
             $locationCallCount
@@ -278,19 +176,19 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Assert loading Locations to find Content id in {@link RelationProcessor::appendFieldRelations()} method.
      */
-    protected function assertLocationServiceExpectation( $locationServiceMock, $fieldRelations, $type, &$callCounter )
+    protected function assertLocationHandlerExpectation( $locationHandlerMock, $fieldRelations, $type, &$callCounter )
     {
         if ( isset( $fieldRelations[$type]["locationIds"] ) )
         {
             foreach ( $fieldRelations[$type]["locationIds"] as $locationId )
             {
-                $locationServiceMock->expects( $this->at( $callCounter ) )
-                    ->method( "loadLocation" )
+                $locationHandlerMock->expects( $this->at( $callCounter ) )
+                    ->method( "load" )
                     ->with( $this->equalTo( $locationId ) )
                     ->will(
                         $this->returnValue(
                             new Location(
-                                array( "contentInfo" => new ContentInfo( array( "id" => $locationId + 100 ) ) )
+                                array( "contentId" => $locationId + 100 )
                             )
                         )
                     );
@@ -303,19 +201,14 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the appendFieldRelations() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::appendFieldRelations
+     * @covers \eZ\Publish\Core\Repository\Helper\RelationProcessor::appendFieldRelations
      */
     public function testAppendFieldRelationsLocationMappingWorks()
     {
-        $repositoryMock = $this->getRepositoryMock();
+        $locationHandler = $this->getPersistenceMock()->locationHandler();
         $relationProcessor = $this->getPartlyMockedRelationProcessor();
         $fieldValueMock = $this->getMockForAbstractClass( "eZ\\Publish\\Core\\FieldType\\Value" );
         $fieldTypeMock = $this->getMock( "eZ\\Publish\\SPI\\FieldType\\FieldType" );
-        $locationServiceMock = $this->getMock( "eZ\\Publish\\API\\Repository\\LocationService" );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getLocationService" )
-            ->will( $this->returnValue( $locationServiceMock ) );
 
         $fieldTypeMock->expects( $this->once() )
             ->method( "getRelations" )
@@ -336,13 +229,13 @@ class RelationProcessorTest extends BaseServiceMockTest
                 )
             );
 
-        $locationServiceMock->expects( $this->once() )
-            ->method( "loadLocation" )
+        $locationHandler->expects( $this->once() )
+            ->method( "load" )
             ->with( $this->equalTo( 100 ) )
             ->will(
                 $this->returnValue(
                     new Location(
-                        array( "contentInfo" => new ContentInfo( array( "id" => 200 ) ) )
+                        array( "contentId" => 200 )
                     )
                 )
             );
@@ -371,7 +264,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the processFieldRelations() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::processFieldRelations
+     * @covers \eZ\Publish\Core\Repository\Helper\RelationProcessor::processFieldRelations
      */
     public function testProcessFieldRelationsNoChanges()
     {
@@ -436,7 +329,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the processFieldRelations() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::processFieldRelations
+     * @covers \eZ\Publish\Core\Repository\Helper\RelationProcessor::processFieldRelations
      */
     public function testProcessFieldRelationsAddsRelations()
     {
@@ -531,7 +424,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     /**
      * Test for the processFieldRelations() method.
      *
-     * @covers \eZ\Publish\Core\Repository\RelationProcessor::processFieldRelations
+     * @covers \eZ\Publish\Core\Repository\Helper\RelationProcessor::processFieldRelations
      */
     public function testProcessFieldRelationsRemovesRelations()
     {
@@ -633,15 +526,14 @@ class RelationProcessorTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\RelationProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getPartlyMockedRelationProcessor( array $methods = null )
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RelationProcessor",
+            "eZ\\Publish\\Core\\Repository\\Helper\\RelationProcessor",
             $methods,
             array(
-                $this->getRepositoryMock(),
                 $this->getPersistenceMock()
             )
         );
@@ -653,7 +545,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     protected function getFieldTypeServiceMock()
     {
         return $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\FieldTypeService",
+            "eZ\\Publish\\Core\\Repository\\Helper\\FieldTypeService",
             array(),
             array(),
             '',

@@ -127,14 +127,14 @@ class Repository implements RepositoryInterface
     /**
      * Instance of name schema resolver service
      *
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
     protected $nameSchemaService;
 
     /**
      * Instance of relation processor service
      *
-     * @var \eZ\Publish\Core\Repository\RelationProcessor
+     * @var \eZ\Publish\Core\Repository\Helper\RelationProcessor
      */
     protected $relationProcessor;
 
@@ -160,9 +160,21 @@ class Repository implements RepositoryInterface
     protected $serviceSettings;
 
     /**
+     * Instance of role service
+     *
+     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
+     */
+    protected $limitationService;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper
+     */
+    protected $roleDomainMapper;
+
+    /**
      * Instance of domain mapper
      *
-     * @var \eZ\Publish\Core\Repository\DomainMapper
+     * @var \eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected $domainMapper;
 
@@ -330,7 +342,8 @@ class Repository implements RepositoryInterface
 
         // Uses SPI to avoid triggering permission checks in Role/User service
         $permissionSets = array();
-        $roleService = $this->getRoleService();
+        $roleDomainMapper = $this->getRoleDomainMapper();
+        $limitationService = $this->getLimitationService();
         $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId( $user->id, true );
         foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
@@ -354,13 +367,13 @@ class Repository implements RepositoryInterface
                 if ( $spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null )
                     return true;
 
-                $permissionSet['policies'][] = $roleService->buildDomainPolicyObject( $spiPolicy );
+                $permissionSet['policies'][] = $roleDomainMapper->buildDomainPolicyObject( $spiPolicy );
             }
 
             if ( !empty( $permissionSet['policies'] ) )
             {
                 if ( $spiRoleAssignment->limitationIdentifier !== null )
-                    $permissionSet['limitation'] = $roleService
+                    $permissionSet['limitation'] = $limitationService
                         ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
                         ->buildValue( $spiRoleAssignment->values );
 
@@ -411,7 +424,7 @@ class Repository implements RepositoryInterface
             );
         }
 
-        $roleService = $this->getRoleService();
+        $limitationService = $this->getLimitationService();
         $currentUser = $this->getCurrentUser();
         foreach ( $permissionSets as $permissionSet )
         {
@@ -425,7 +438,7 @@ class Repository implements RepositoryInterface
              */
             if ( $permissionSet['limitation'] instanceof Limitation )
             {
-                $type = $roleService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
+                $type = $limitationService->getLimitationType( $permissionSet['limitation']->getIdentifier() );
                 $accessVote = $type->evaluate( $permissionSet['limitation'], $currentUser, $object, $targets );
                 if ( $accessVote === LimitationType::ACCESS_DENIED )
                     continue;
@@ -456,7 +469,7 @@ class Repository implements RepositoryInterface
                 $limitationsPass = true;
                 foreach ( $limitations as $limitation )
                 {
-                    $type = $roleService->getLimitationType( $limitation->getIdentifier() );
+                    $type = $limitationService->getLimitationType( $limitation->getIdentifier() );
                     $accessVote = $type->evaluate( $limitation, $currentUser, $object, $targets );
                     /**
                      * For policy limitation atm only support ACCESS_GRANTED
@@ -697,9 +710,39 @@ class Repository implements RepositoryInterface
         $this->roleService = new RoleService(
             $this,
             $this->persistenceHandler->userHandler(),
+            $this->getLimitationService(),
+            $this->getRoleDomainMapper(),
             $this->serviceSettings['role']
         );
         return $this->roleService;
+    }
+
+    /**
+     * Get LimitationService
+     *
+     * @return \eZ\Publish\Core\Repository\Helper\LimitationService
+     */
+    protected function getLimitationService()
+    {
+        if ( $this->limitationService !== null )
+            return $this->limitationService;
+
+        $this->limitationService = new Helper\LimitationService( $this->serviceSettings['role'] );
+        return $this->limitationService;
+    }
+
+    /**
+     * Get RoleDomainMapper
+     *
+     * @return \eZ\Publish\Core\Repository\Helper\RoleDomainMapper
+     */
+    protected function getRoleDomainMapper()
+    {
+        if ( $this->roleDomainMapper !== null )
+            return $this->roleDomainMapper;
+
+        $this->roleDomainMapper = new Helper\RoleDomainMapper( $this->getLimitationService() );
+        return $this->roleDomainMapper;
     }
 
     /**
@@ -733,7 +776,7 @@ class Repository implements RepositoryInterface
         if ( $this->fieldTypeService !== null )
             return $this->fieldTypeService;
 
-        $this->fieldTypeService = new FieldTypeService( $this->serviceSettings['fieldType'] );
+        $this->fieldTypeService = new Helper\FieldTypeService( $this->serviceSettings['fieldType'] );
         return $this->fieldTypeService;
     }
 
@@ -744,14 +787,20 @@ class Repository implements RepositoryInterface
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
-     * @return \eZ\Publish\Core\Repository\NameSchemaService
+     * @internal
+     * @private
+     * @return \eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
-    protected function getNameSchemaService()
+    public function getNameSchemaService()
     {
         if ( $this->nameSchemaService !== null )
             return $this->nameSchemaService;
 
-        $this->nameSchemaService = new NameSchemaService( $this, $this->serviceSettings['nameSchema'] );
+        $this->nameSchemaService = new Helper\NameSchemaService(
+            $this->persistenceHandler->contentTypeHandler(),
+            $this->getFieldTypeService(),
+            $this->serviceSettings['nameSchema']
+        );
         return $this->nameSchemaService;
     }
 
@@ -762,14 +811,14 @@ class Repository implements RepositoryInterface
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
-     * @return \eZ\Publish\Core\Repository\RelationProcessor
+     * @return \eZ\Publish\Core\Repository\Helper\RelationProcessor
      */
     protected function getRelationProcessor()
     {
         if ( $this->relationProcessor !== null )
             return $this->relationProcessor;
 
-        $this->relationProcessor = new RelationProcessor( $this, $this->persistenceHandler );
+        $this->relationProcessor = new Helper\RelationProcessor( $this->persistenceHandler );
         return $this->relationProcessor;
     }
 
@@ -780,17 +829,27 @@ class Repository implements RepositoryInterface
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
-     * @return \eZ\Publish\Core\Repository\DomainMapper
+     * @return \eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected function getDomainMapper()
     {
         if ( $this->domainMapper !== null )
             return $this->domainMapper;
 
-        $this->domainMapper = new DomainMapper(
-            $this,
+        $this->domainMapper = new Helper\DomainMapper(
+            $this->persistenceHandler->contentHandler(),
+            $this->persistenceHandler->locationHandler(),
             $this->persistenceHandler->contentTypeHandler(),
-            $this->persistenceHandler->contentLanguageHandler()
+            $this->persistenceHandler->contentLanguageHandler(),
+            $this->getFieldTypeService(),
+            array(
+                'user' => new Helper\DomainTypeMapper\UserDomainTypeMapper(
+                    $this->persistenceHandler->userHandler()
+                ),
+                'user_group' => new Helper\DomainTypeMapper\UserGroupDomainTypeMapper(
+                    $this->persistenceHandler->locationHandler()
+                )
+            )
         );
         return $this->domainMapper;
     }

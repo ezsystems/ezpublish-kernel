@@ -49,7 +49,7 @@ class TrashService implements TrashServiceInterface
     protected $settings;
 
     /**
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
     protected $nameSchemaService;
 
@@ -58,13 +58,13 @@ class TrashService implements TrashServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
+     * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $handler,
-        NameSchemaService $nameSchemaService,
+        Helper\NameSchemaService $nameSchemaService,
         array $settings = array()
     )
     {

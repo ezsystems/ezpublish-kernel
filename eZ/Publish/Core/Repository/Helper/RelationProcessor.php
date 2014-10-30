@@ -7,12 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\Helper;
 
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
@@ -26,11 +24,6 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreat
 class RelationProcessor
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
-    protected $repository;
-
-    /**
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $persistenceHandler;
@@ -38,42 +31,11 @@ class RelationProcessor
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
      */
-    public function __construct( RepositoryInterface $repository, Handler $handler )
+    public function __construct( Handler $handler )
     {
-        $this->repository = $repository;
         $this->persistenceHandler = $handler;
-    }
-
-    /**
-     * Returns field relations data for the current version of the given $contentInfo.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @return mixed
-     */
-    public function getFieldRelations( ContentInfo $contentInfo )
-    {
-        $relations = array();
-        $locationIdToContentIdMapping = array();
-        $content = $this->repository->getContentService()->loadContentByContentInfo( $contentInfo );
-
-        foreach ( $content->getFields() as $field )
-        {
-            $fieldDefinition = $content->contentType->getFieldDefinition( $field->fieldDefIdentifier );
-            $fieldType = $this->repository->getFieldTypeService()->buildFieldType( $fieldDefinition->fieldTypeIdentifier );
-            $this->appendFieldRelations(
-                $relations,
-                $locationIdToContentIdMapping,
-                $fieldType,
-                $fieldType->acceptValue( $field->value ),
-                $fieldDefinition->id
-            );
-        }
-
-        return $relations;
     }
 
     /**
@@ -122,7 +84,7 @@ class RelationProcessor
                     {
                         if ( !isset( $locationIdToContentIdMapping[$locationId] ) )
                         {
-                            $location = $this->repository->getLocationService()->loadLocation( $locationId );
+                            $location = $this->persistenceHandler->locationHandler()->load( $locationId );
                             $locationIdToContentIdMapping[$locationId] = $location->contentId;
                         }
 

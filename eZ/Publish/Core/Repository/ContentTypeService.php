@@ -73,7 +73,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     protected $settings;
 
     /**
-     * @var \eZ\Publish\Core\Repository\DomainMapper
+     * @var \eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected $domainMapper;
 
@@ -82,13 +82,13 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $contentTypeHandler,
-        DomainMapper $domainMapper,
+        Helper\DomainMapper $domainMapper,
         array $settings = array()
     )
     {

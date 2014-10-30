@@ -7,9 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\Helper;
 
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as TypeHandler;
 
@@ -46,14 +47,14 @@ use DateTime;
 class DomainMapper
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
-    protected $contentLanguageHandler;
+    protected $contentHandler;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
-    protected $repository;
+    protected $locationHandler;
 
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
@@ -61,17 +62,47 @@ class DomainMapper
     protected $contentTypeHandler;
 
     /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     */
+    protected $contentLanguageHandler;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeService
+     */
+    protected $fieldTypeService;
+
+    /**
+     * List of DomainTypeMappers with key corresponding to content type identifier
+     *
+     * @var \eZ\Publish\Core\Repository\DomainType\DomainTypeMapper[]
+     */
+    protected $customDomainMappers;
+
+    /**
      * Setups service with reference to repository.
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
+     * @param \eZ\Publish\Core\Repository\Helper\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\Core\Repository\DomainType\DomainTypeMapper[] $customDomainMappers
      */
-    public function __construct( RepositoryInterface $repository, TypeHandler $contentTypeHandler, LanguageHandler $contentLanguageHandler )
+    public function __construct(
+        ContentHandler $contentHandler,
+        LocationHandler $locationHandler,
+        TypeHandler $contentTypeHandler,
+        LanguageHandler $contentLanguageHandler,
+        FieldTypeService $fieldTypeService,
+        array $customDomainMappers
+    )
     {
-        $this->repository = $repository;
+        $this->contentHandler = $contentHandler;
+        $this->locationHandler = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->contentLanguageHandler = $contentLanguageHandler;
+        $this->fieldTypeService = $fieldTypeService;
+        $this->customDomainMappers = $customDomainMappers;
     }
 
     /**
@@ -91,12 +122,20 @@ class DomainMapper
             );
         }
 
-        return new Content(
-            array(
-                "internalFields" => $this->buildDomainFields( $spiContent->fields, $contentType ),
-                "versionInfo" => $this->buildVersionInfoDomainObject( $spiContent->versionInfo )
-            )
+        $properties = array(
+            "internalFields" => $this->buildDomainFields( $spiContent->fields, $contentType ),
+            "versionInfo" => $this->buildVersionInfoDomainObject( $spiContent->versionInfo )
         );
+
+        if ( isset( $this->customDomainMappers[ $contentType->identifier ] ) )
+        {
+            return $this->customDomainMappers[ $contentType->identifier ]->buildContentObject(
+                $spiContent,
+                $properties
+            );
+        }
+
+        return new Content( $properties );
     }
 
     /**
@@ -120,15 +159,13 @@ class DomainMapper
             $fieldIdentifierMap[$fieldDefinitions->id] = $fieldDefinitions->identifier;
         }
 
-        $fieldTypeService = $this->repository->getFieldTypeService();
-
         $fields = array();
         foreach ( $spiFields as $spiField )
         {
             $fields[] = new Field(
                 array(
                     "id" => $spiField->id,
-                    "value" => $fieldTypeService->buildFieldType( $spiField->type )
+                    "value" => $this->fieldTypeService->buildFieldType( $spiField->type )
                         ->fromPersistenceValue( $spiField->value ),
                     "languageCode" => $spiField->languageCode,
                     "fieldDefIdentifier" => $fieldIdentifierMap[$spiField->fieldDefinitionId]
@@ -269,6 +306,7 @@ class DomainMapper
     {
         // TODO: this is hardcoded workaround for missing ContentInfo on root location
         if ( $spiLocation->id == 1 )
+        {
             $contentInfo = new ContentInfo(
                 array(
                     'id' => 0,
@@ -278,8 +316,13 @@ class DomainMapper
                     'contentTypeId' => 1,
                 )
             );
+        }
         else
-            $contentInfo = $this->repository->getContentService()->internalLoadContentInfo( $spiLocation->contentId );
+        {
+            $contentInfo = $this->buildContentInfoDomainObject(
+                $this->contentHandler->loadContentInfo( $spiLocation->contentId )
+            );
+        }
 
         return new Location(
             array(
@@ -353,7 +396,7 @@ class DomainMapper
         {
             try
             {
-                $this->repository->getLocationService()->loadLocationByRemoteId( $remoteId );
+                $this->locationHandler->loadByRemoteId( $remoteId );
                 throw new InvalidArgumentException(
                     "\$locationCreateStructs",
                     "Another Location with remoteId '{$remoteId}' exists"

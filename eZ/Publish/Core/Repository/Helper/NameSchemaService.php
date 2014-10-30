@@ -7,11 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository\Helper;
 
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
 
 /**
  * NameSchemaService is internal service for resolving content name and url alias patterns.
@@ -47,9 +49,14 @@ class NameSchemaService
     const META_STRING = 'EZMETAGROUP_';
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
-    protected $repository;
+    protected $contentTypeHandler;
+
+    /**
+     * @var FieldTypeService
+     */
+    protected $fieldTypeService;
 
     /**
      * @var array
@@ -59,14 +66,14 @@ class NameSchemaService
     /**
      * Constructs a object to resolve $nameSchema with $contentVersion fields values
      *
-     * @param \eZ\Publish\API\Repository\Repository $repository
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param FieldTypeService $fieldTypeService
      * @param array $settings
-     *
-     * @return \eZ\Publish\Core\Repository\NameSchemaService
      */
-    public function __construct( RepositoryInterface $repository, array $settings = array() )
+    public function __construct( ContentTypeHandler $contentTypeHandler, FieldTypeService $fieldTypeService, array $settings = array() )
     {
-        $this->repository = $repository;
+        $this->contentTypeHandler = $contentTypeHandler;
+        $this->fieldTypeService = $fieldTypeService;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             'limit' => 150,
@@ -86,9 +93,7 @@ class NameSchemaService
     {
         if ( $contentType === null )
         {
-            $contentType = $this->repository->getContentTypeService()->loadContentType(
-                $content->contentInfo->contentTypeId
-            );
+            $contentType = $this->contentTypeHandler->load( $content->contentInfo->contentTypeId );
         }
 
         return $this->resolve(
@@ -115,9 +120,7 @@ class NameSchemaService
     {
         if ( $contentType === null )
         {
-            $contentType = $this->repository->getContentTypeService()->loadContentType(
-                $content->contentInfo->contentTypeId
-            );
+            $contentType = $this->contentTypeHandler->load( $content->contentInfo->contentTypeId );
         }
 
         $languageCodes = $languageCodes ?: $content->versionInfo->languageCodes;
@@ -168,13 +171,13 @@ class NameSchemaService
      * Returns the real name for a content name pattern
      *
      * @param string $nameSchema
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type|\eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param array $fieldMap
      * @param array $languageCodes
      *
      * @return string
      */
-    public function resolve( $nameSchema, ContentType $contentType, array $fieldMap, array $languageCodes )
+    public function resolve( $nameSchema, $contentType, array $fieldMap, array $languageCodes )
     {
         list( $filteredNameSchema, $groupLookupTable ) = $this->filterNameSchema( $nameSchema );
         $tokens = $this->extractTokens( $filteredNameSchema );
@@ -214,13 +217,14 @@ class NameSchemaService
      * @see \eZ\Publish\Core\Repository\FieldType::getName()
      *
      * @param string[] $schemaIdentifiers
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType $fieldDefinitions
+     * @param \eZ\Publish\SPI\Persistence\Content\Type|\eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param array $fieldMap
      * @param string $languageCode
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      * @return string[] Key is the field identifier, value is the title value
      */
-    protected function getFieldTitles( array $schemaIdentifiers, ContentType $contentType, array $fieldMap, $languageCode )
+    protected function getFieldTitles( array $schemaIdentifiers, $contentType, array $fieldMap, $languageCode )
     {
         $fieldTitles = array();
 
@@ -228,10 +232,30 @@ class NameSchemaService
         {
             if ( isset( $fieldMap[$fieldDefinitionIdentifier][$languageCode] ) )
             {
-                $fieldDefinition = $contentType->getFieldDefinition( $fieldDefinitionIdentifier );
-                $fieldType = $this->repository->getFieldTypeService()->getFieldType(
-                    $fieldDefinition->fieldTypeIdentifier
-                );
+                if ( $contentType instanceof SPIContentType )
+                {
+                    foreach ( $contentType->fieldDefinitions as $fieldDefinition )
+                    {
+                        if ( $fieldDefinition->identifier === $fieldDefinitionIdentifier )
+                            break;
+                    }
+
+                    $fieldType = $this->fieldTypeService->buildFieldType(
+                        $fieldDefinition->fieldType
+                    );
+                }
+                else if ( $contentType instanceof ContentType )
+                {
+                    $fieldDefinition = $contentType->getFieldDefinition( $fieldDefinitionIdentifier );
+                    $fieldType = $this->fieldTypeService->buildFieldType(
+                        $fieldDefinition->fieldTypeIdentifier
+                    );
+                }
+                else
+                {
+                    throw new InvalidArgumentType( "\$contentType", "API or SPI variant of ContentType" );
+                }
+
                 $fieldTitles[$fieldDefinitionIdentifier] = $fieldType->getName(
                     $fieldMap[$fieldDefinitionIdentifier][$languageCode]
                 );

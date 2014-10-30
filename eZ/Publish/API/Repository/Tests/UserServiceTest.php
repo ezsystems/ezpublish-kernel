@@ -245,6 +245,7 @@ class UserServiceTest extends BaseTest
      */
     public function testCreateUserGroupIncrementsParentSubGroupCount()
     {
+        $this->markTestSkipped( "->subGroupCount @deprecated as of 5.4 and now returns null" );
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
         $mainGroupId = $this->generateId( 'group', 4 );
@@ -500,6 +501,7 @@ class UserServiceTest extends BaseTest
      */
     public function testMoveUserGroupIncrementsSubGroupCountOnNewParent()
     {
+        $this->markTestSkipped( "->subGroupCount @deprecated as of 5.4 and now returns null" );
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -532,6 +534,7 @@ class UserServiceTest extends BaseTest
      */
     public function testMoveUserGroupDecrementsSubGroupCountOnOldParent()
     {
+        $this->markTestSkipped( "->subGroupCount @deprecated as of 5.4 and now returns null" );
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 

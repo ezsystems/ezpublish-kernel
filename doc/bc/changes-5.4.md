@@ -80,6 +80,22 @@ Changes affecting version compatibility with former or future versions.
     +        purge_type: http
     ```
 
+* New `DomainTypeMapper` feature causing load and search for Content now returns sub classes of Content
+  5.4 introduces a concept of `DomainTypeMapper` and `Custom DomainType` meaning load and search operations
+  for content might now return directly User and UserGroup classes.
+
+  How to fix: This can cause problems for you if you have any code type checking on `Core` classes as
+  opposed to `API` classes, grep for `eZ\Publish\Core\Repository\Values` in your code to detect these.
+
+* eZ\Publish\API\Repository\Values\User\UserGroup->subGroupCount now returns value `null`
+  subGroupCount which was deprecated in 5.3.3 is now disabled as part of refactoring in
+  Repository for the new `Custom DomainType` feature.
+
+* Internal function UserGroup->content and User->content no longer works
+  As part of `Custom DomainType` feature these domain objects now _are_ Content, as
+  opposed to being a decorator for Content. TL;DR: API is exactly the same as before but the
+  internals has changed and hence un-documented features like User->content is refactored away.
+
 ## Deprecations
 
 * `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.

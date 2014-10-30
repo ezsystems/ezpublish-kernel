@@ -198,13 +198,8 @@ class SecurityTest extends PHPUnit_Framework_TestCase
             ->expects( $this->any() )
             ->method( 'getContentInfo' )
             ->will( $this->returnValue( new ContentInfo( array( 'id' => $userId ) ) ) );
-        $content = $this->getMockForAbstractClass( 'eZ\Publish\API\Repository\Values\Content\Content' );
-        $content
-            ->expects( $this->any() )
-            ->method( 'getVersionInfo' )
-            ->will( $this->returnValue( $versionInfo ) );
 
-        return new User( array( 'content' => $content ) );
+        return new User( array( 'versionInfo' => $versionInfo ) );
     }
 
     public function testOnLegacyKernelWebBuildLegacyMode()
