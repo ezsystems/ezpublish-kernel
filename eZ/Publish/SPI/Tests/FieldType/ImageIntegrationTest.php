@@ -70,7 +70,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     /**
      * Get handler with required custom field types registered
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
@@ -79,16 +79,16 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
 
         $urlRedecorator = self::$container->get( "ezpublish.core.io.image_fieldtype.legacy_url_redecorator" );
 
-        $ioService = self::$container->get( "ezpublish.fieldType.ezimage.io_service" );
+        $this->ioService = self::$container->get( "ezpublish.fieldType.ezimage.io_service" );
         return $this->getHandler(
             'ezimage',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Image( $ioService, $urlRedecorator ),
+            new Legacy\Content\FieldValue\Converter\Image( $this->ioService, $urlRedecorator ),
             new FieldType\Image\ImageStorage(
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage( $urlRedecorator ),
                 ),
-                $ioService,
+                $this->ioService,
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
                 new IO\MetadataHandler\ImageSize(),
                 $this->getDeprecationWarnerMock(),
@@ -311,5 +311,20 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             )
         );
     }
+
+    /**
+     * Overridden to take into account that image moves externaldata to data, unlike BinaryBase.
+     *
+     * @param $content
+     *
+     * @return mixed
+     */
+    protected function deleteStoredFile( $content )
+    {
+        return $this->ioService->deleteBinaryFile(
+            $this->ioService->loadBinaryFile( $content->fields[1]->value->data['id'] )
+        );
+    }
+
 }
 

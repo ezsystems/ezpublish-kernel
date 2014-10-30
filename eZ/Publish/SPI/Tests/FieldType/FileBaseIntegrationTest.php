@@ -3,6 +3,7 @@
 namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use FileSystemIterator;
@@ -20,6 +21,38 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      * @var string
      */
     protected static $tmpDir;
+
+    /** @var IOServiceInterface */
+    protected $ioService;
+
+    /**
+     * @see EZP-23534
+     */
+    public function testLoadingContentWithMissingFileWorks()
+    {
+        $contentType = $this->createContentType();
+        $content = $this->createContent( $contentType, $this->getInitialValue() );
+
+        // delete the binary file object
+        $this->deleteStoredFile( $content );
+
+        // try loading the content again. It should work even though the image isn't physically here
+        $this->getCustomHandler()->contentHandler()->load( $content->versionInfo->contentInfo->id, 1 );
+    }
+
+    /**
+     * Deletes the binary file stored in the field
+     *
+     * @param $content
+     *
+     * @return mixed
+     */
+    protected function deleteStoredFile( $content )
+    {
+        return $this->ioService->deleteBinaryFile(
+            $this->ioService->loadBinaryFile( $content->fields[1]->value->externalData['id'] )
+        );
+    }
 
     /**
      * Returns prefix used by the IOService
