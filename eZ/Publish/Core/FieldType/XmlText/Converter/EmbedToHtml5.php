@@ -15,6 +15,8 @@ use DOMDocument;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Converts embedded elements from internal XmlText representation to HTML5
@@ -37,11 +39,22 @@ class EmbedToHtml5 implements Converter
      */
     protected $repository;
 
-    public function __construct( ViewManagerInterface $viewManager, Repository $repository, array $excludedAttributes )
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    public function __construct(
+        ViewManagerInterface $viewManager,
+        Repository $repository,
+        array $excludedAttributes,
+        LoggerInterface $logger = null
+    )
     {
         $this->viewManager = $viewManager;
         $this->repository = $repository;
         $this->excludedAttributes = array_fill_keys( $excludedAttributes, true );
+        $this->logger = $logger;
     }
 
     /**
@@ -76,56 +89,114 @@ class EmbedToHtml5 implements Converter
 
             if ( $contentId = $embed->getAttribute( "object_id" ) )
             {
-                /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
-                $content = $this->repository->sudo(
-                    function ( Repository $repository ) use ( $contentId )
+                try
+                {
+                    /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
+                    $content = $this->repository->sudo(
+                        function ( Repository $repository ) use ( $contentId )
+                        {
+                            return $repository->getContentService()->loadContent( $contentId );
+                        }
+                    );
+
+                    if (
+                        !$this->repository->canUser( 'content', 'read', $content )
+                        && !$this->repository->canUser( 'content', 'view_embed', $content )
+                    )
                     {
-                        return $repository->getContentService()->loadContent( $contentId );
+                        throw new UnauthorizedException( 'content', 'read', array( 'contentId' => $contentId ) );
                     }
-                );
 
-                if (
-                    !$this->repository->canUser( 'content', 'read', $content )
-                    && !$this->repository->canUser( 'content', 'view_embed', $content )
-                )
-                {
-                    throw new UnauthorizedException( 'content', 'read', array( 'contentId' => $contentId ) );
+                    // Check published status of the Content
+                    if (
+                        $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+                        && !$this->repository->canUser( 'content', 'versionread', $content )
+                    )
+                    {
+                        throw new UnauthorizedException( 'content', 'versionread', array( 'contentId' => $contentId ) );
+                    }
+
+                    $embedContent = $this->viewManager->renderContent( $content, $view, $parameters );
                 }
-
-                // Check published status of the Content
-                if (
-                    $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
-                    && !$this->repository->canUser( 'content', 'versionread', $content )
-                )
+                catch ( APINotFoundException $e )
                 {
-                    throw new UnauthorizedException( 'content', 'versionread', array( 'contentId' => $contentId ) );
+                    if ( $this->logger )
+                    {
+                        $this->logger->error(
+                            "While generating embed for xmltext, could not locate " .
+                            "Content object with ID " . $contentId
+                        );
+                    }
                 }
-
-                $embedContent = $this->viewManager->renderContent( $content, $view, $parameters );
             }
             else if ( $locationId = $embed->getAttribute( "node_id" ) )
             {
-                /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
-                $location = $this->repository->sudo(
-                    function ( Repository $repository ) use ( $locationId )
-                    {
-                        return $repository->getLocationService()->loadLocation( $locationId );
-                    }
-                );
-
-                if (
-                    !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location )
-                    && !$this->repository->canUser( 'content', 'view_embed', $location->getContentInfo(), $location )
-                )
+                try
                 {
-                    throw new UnauthorizedException( 'content', 'read', array( 'locationId' => $location->id ) );
-                }
+                    /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
+                    $location = $this->repository->sudo(
+                        function ( Repository $repository ) use ( $locationId )
+                        {
+                            return $repository->getLocationService()->loadLocation( $locationId );
+                        }
+                    );
 
-                $embedContent = $this->viewManager->renderLocation( $location, $view, $parameters );
+                    if (
+                        !$this->repository->canUser( 'content', 'read', $location->getContentInfo(), $location )
+                        && !$this->repository->canUser( 'content', 'view_embed', $location->getContentInfo(), $location )
+                    )
+                    {
+                        throw new UnauthorizedException( 'content', 'read', array( 'locationId' => $location->id ) );
+                    }
+
+                    $embedContent = $this->viewManager->renderLocation( $location, $view, $parameters );
+                }
+                catch ( APINotFoundException $e )
+                {
+                    if ( $this->logger )
+                    {
+                        $this->logger->error(
+                            "While generating embed for xmltext, could not locate " .
+                            "Location with ID " . $locationId
+                        );
+                    }
+                }
             }
 
-            if ( $embedContent !== null )
+            if ( $embedContent === null )
+            {
+                // Remove tmp paragraph
+                if ( $embed->parentNode->lookupNamespaceUri( 'tmp' ) !== null )
+                {
+                    $embed->parentNode->parentNode->removeChild( $embed->parentNode );
+                }
+                // Remove empty link
+                else if ( $embed->parentNode->localName === "link" && $embed->parentNode->childNodes->length === 1 )
+                {
+                    // Remove paragraph with empty link
+                    if (
+                        $embed->parentNode->parentNode->localName === "paragraph" &&
+                        $embed->parentNode->parentNode->childNodes->length === 1
+                    )
+                    {
+                        $embed->parentNode->parentNode->parentNode->removeChild( $embed->parentNode->parentNode );
+                    }
+                    // Remove empty link
+                    else
+                    {
+                        $embed->parentNode->parentNode->removeChild( $embed->parentNode );
+                    }
+                }
+                // Remove empty embed
+                else
+                {
+                    $embed->parentNode->removeChild( $embed );
+                }
+            }
+            else
+            {
                 $embed->appendChild( $xmlDoc->createCDATASection( $embedContent ) );
+            }
         }
     }
 

@@ -116,6 +116,7 @@ services:
             - @ezpublish.fieldtype.ezxmltext.converter.view_manager
             - @ezpublish.api.repository
             - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
+            - @?logger
         tags:
             - { name: ezpublish.ezxml.converter }
 
