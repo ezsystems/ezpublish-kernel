@@ -325,7 +325,7 @@ class AliasGeneratorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\SourceImageNotFoundException
+     * @expectedException \eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException
      */
     public function testGetVariationOriginalNotFound()
     {

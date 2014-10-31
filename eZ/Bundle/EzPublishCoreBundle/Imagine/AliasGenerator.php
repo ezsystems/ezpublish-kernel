@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
-use eZ\Publish\API\Repository\Exceptions\SourceImageNotFoundException;
+use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\SPI\Variation\Values\ImageVariation;
@@ -83,7 +83,7 @@ class AliasGenerator implements VariationHandler
      * {@inheritDoc}
      *
      * @throws \InvalidArgumentException If field value is not an instance of \eZ\Publish\Core\FieldType\Image\Value.
-     * @throws \eZ\Publish\API\Repository\Exceptions\SourceImageNotFoundException If source image cannot be found.
+     * @throws \eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException If source image cannot be found.
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException If a problem occurs with generated variation.
      */
     public function getVariation( Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array() )
@@ -131,7 +131,7 @@ class AliasGenerator implements VariationHandler
                 $this->ioResolver->resolve( $originalPath, $variationName )
             );
         }
-        // If for somme reason image alias cannot be resolved, throw the appropriate exception.
+        // If for some reason image alias cannot be resolved, throw the appropriate exception.
         catch ( NotResolvableException $e )
         {
             throw new InvalidVariationException( $variationName, 'image', 0, $e );

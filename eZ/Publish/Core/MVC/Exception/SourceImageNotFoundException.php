@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Exceptions;
+namespace eZ\Publish\Core\MVC\Exception;
 
-use RuntimeException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
-class SourceImageNotFoundException extends RuntimeException
+class SourceImageNotFoundException extends NotFoundException
 {
 }
