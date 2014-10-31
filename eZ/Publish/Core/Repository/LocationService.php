@@ -59,12 +59,12 @@ class LocationService implements LocationServiceInterface
     protected $settings;
 
     /**
-     * @var \eZ\Publish\Core\Repository\DomainMapper
+     * @var \eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected $domainMapper;
 
     /**
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
     protected $nameSchemaService;
 
@@ -78,16 +78,16 @@ class LocationService implements LocationServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
+     * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
      * @param \eZ\Publish\Core\Repository\PermissionsCriterionHandler $permissionsCriterionHandler
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $handler,
-        DomainMapper $domainMapper,
-        NameSchemaService $nameSchemaService,
+        Helper\DomainMapper $domainMapper,
+        Helper\NameSchemaService $nameSchemaService,
         PermissionsCriterionHandler $permissionsCriterionHandler,
         array $settings = array()
     )

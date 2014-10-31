@@ -23,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 abstract class Base extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\Repository
      */
     protected $repository;
 
