@@ -17,6 +17,8 @@ services:
             - @ezpublish.core.io.metadata_handler
             - @ezpublish.core.io.binarydata_handler
             - @ezpublish.core.io.mimeTypeDetector
+        calls:
+            - [ setLogger, [@?logger ] ]
 
     ezpublish.core.io.mimeTypeDetector.fileinfo:
         class: %ezpublish.core.io.mimeTypeDetector.fileinfo.class%

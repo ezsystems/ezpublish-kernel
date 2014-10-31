@@ -79,6 +79,10 @@ Changes affecting version compatibility with former or future versions.
     -        purge_type: multiple_http
     +        purge_type: http
     ```
+* The usual `IOService` is overridden by a `TolerantIOService`. It replaces the previous `try/catch` blocks in
+  binary FieldTypes external storage. When one of the IO layers returns a not found, a MissingBinaryFile will be
+  returned, with fake properties: the requested id, no uri, no file size... if logging is enabled, an info message
+  will still be logged.
 
 ## Deprecations
 
