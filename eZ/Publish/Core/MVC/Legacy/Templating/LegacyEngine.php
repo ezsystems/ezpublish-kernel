@@ -120,7 +120,8 @@ class LegacyEngine implements EngineInterface
         return $this->getLegacyKernel()->runCallback(
             function () use ( $name )
             {
-                return eZTemplate::factory()->fetch( $name ) !== false;
+                $legacyTemplate = eZTemplate::factory()->loadURIRoot( $name, false, $extraParameters );
+                return !empty( $legacyTemplate );
             }
         );
     }

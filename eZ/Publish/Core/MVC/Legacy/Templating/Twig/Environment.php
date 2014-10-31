@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Legacy\Templating\Twig;
 
 use Twig_Environment;
+use Twig_Error_Loader;
 use eZ\Publish\Core\MVC\Legacy\Templating\LegacyEngine;
 
 class Environment extends Twig_Environment
@@ -39,6 +40,11 @@ class Environment extends Twig_Environment
 
         if ( is_string( $name ) && $this->legacyEngine->supports( $name ) )
         {
+            if ( !$this->legacyEngine->exists( $name ) )
+            {
+                throw new Twig_Error_Loader( "Unable to find the template \"$name\"" );
+            }
+
             $this->legacyTemplatesCache[$name] = new Template( $name, $this, $this->legacyEngine );
             return $this->legacyTemplatesCache[$name];
         }
