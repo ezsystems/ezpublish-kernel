@@ -78,23 +78,31 @@ class ContentTypeService implements ContentTypeServiceInterface
     protected $domainMapper;
 
     /**
+     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
+     */
+    protected $fieldTypeRegistry;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry $fieldTypeRegistry
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $contentTypeHandler,
         Helper\DomainMapper $domainMapper,
+        Helper\FieldTypeRegistry $fieldTypeRegistry,
         array $settings = array()
     )
     {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->domainMapper = $domainMapper;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
@@ -846,7 +854,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         foreach ( $contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct )
         {
             /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-            $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+            $fieldType = $this->fieldTypeRegistry->getFieldType(
                 $fieldDefinitionCreateStruct->fieldTypeIdentifier
             );
 
@@ -1059,7 +1067,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     protected function buildSPIFieldDefinitionUpdate( FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct, APIFieldDefinition $fieldDefinition )
     {
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+        $fieldType = $this->fieldTypeRegistry->getFieldType(
             $fieldDefinition->fieldTypeIdentifier
         );
 
@@ -1194,7 +1202,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     protected function buildFieldDefinitionDomainObject( SPIFieldDefinition $spiFieldDefinition )
     {
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-        $fieldType = $this->repository->getFieldTypeService()->buildFieldType( $spiFieldDefinition->fieldType );
+        $fieldType = $this->fieldTypeRegistry->getFieldType( $spiFieldDefinition->fieldType );
         $fieldDefinition = new FieldDefinition(
             array(
                 "names" => $spiFieldDefinition->name,
@@ -1758,7 +1766,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-        $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+        $fieldType = $this->fieldTypeRegistry->getFieldType(
             $fieldDefinitionCreateStruct->fieldTypeIdentifier
         );
 

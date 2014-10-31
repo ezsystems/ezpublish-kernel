@@ -133,7 +133,7 @@ class DomainMapperTest extends BaseServiceMockTest
             $this->getPersistenceMockHandler( 'Content\\Location\\Handler' ),
             $this->getTypeHandlerMock(),
             $this->getLanguageHandlerMock(),
-            $this->getFieldTypeServiceMock()
+            $this->getFieldTypeRegistryMock()
         );
     }
 

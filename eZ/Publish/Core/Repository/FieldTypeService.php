@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the eZ\Publish\API\Repository\FieldTypeService class.
+ * File containing FieldTypeService class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -25,12 +25,12 @@ use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
 class FieldTypeService implements FieldTypeServiceInterface
 {
     /**
-     * @var array Hash of SPI FieldTypes or callable callbacks to generate one.
+     * @var Helper\FieldTypeRegistry
      */
-    protected $settings;
+    protected $fieldTypeRegistry;
 
     /**
-     * Holds an array of FieldType objects
+     * Holds an array of FieldType objects to avoid re creating them all the time from SPI variants
      *
      * @var \eZ\Publish\API\Repository\FieldType[]
      */
@@ -39,11 +39,11 @@ class FieldTypeService implements FieldTypeServiceInterface
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param array $settings Hash of SPI FieldTypes or callable callbacks to generate one.
+     * @param Helper\FieldTypeRegistry $fieldTypeRegistry Registry for SPI FieldTypes
      */
-    public function __construct( array $settings = array() )
+    public function __construct( Helper\FieldTypeRegistry $fieldTypeRegistry )
     {
-        $this->settings = $settings;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     /**
@@ -53,12 +53,12 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function getFieldTypes()
     {
-        foreach ( array_keys( $this->settings ) as $identifier )
+        foreach ( $this->fieldTypeRegistry->getFieldTypes() as $identifier => $spiFieldType )
         {
             if ( isset( $this->fieldTypes[$identifier] ) )
                 continue;
 
-            $this->fieldTypes[$identifier] = $this->getFieldType( $identifier );
+            $this->fieldTypes[$identifier] = new FieldType( $spiFieldType );
         }
 
         return $this->fieldTypes;
@@ -80,7 +80,7 @@ class FieldTypeService implements FieldTypeServiceInterface
             return $this->fieldTypes[$identifier];
         }
 
-        return ( $this->fieldTypes[$identifier] = new FieldType( $this->buildFieldType( $identifier ) ) );
+        return ( $this->fieldTypes[$identifier] = new FieldType( $this->fieldTypeRegistry->getFieldType( $identifier ) ) );
     }
 
     /**
@@ -92,40 +92,6 @@ class FieldTypeService implements FieldTypeServiceInterface
      */
     public function hasFieldType( $identifier )
     {
-        return isset( $this->settings[$identifier] );
-    }
-
-    /**
-     * Instantiates a FieldType\Type object
-     *
-     * @todo Move this to a internal service provided to services that needs this (including this)
-     *
-     * @access private This function is for internal use only.
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $type not properly setup
-     *         with settings injected to service
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\SPI\FieldType\FieldType
-     */
-    public function buildFieldType( $identifier )
-    {
-        if ( !isset( $this->settings[$identifier] ) )
-        {
-            throw new FieldTypeNotFoundException( $identifier );
-        }
-
-        if ( $this->settings[$identifier] instanceof SPIFieldType )
-        {
-            return $this->settings[$identifier];
-        }
-        else if ( !is_callable( $this->settings[$identifier] ) )
-        {
-            throw new InvalidArgumentException( "\$settings[$identifier]", 'must be instance of SPI\\FieldType\\FieldType or callback to generate it' );
-        }
-
-        /** @var $closure \Closure */
-        $closure = $this->settings[$identifier];
-        return $closure();
+        return $this->fieldTypeRegistry->hasFieldType( $identifier );
     }
 }

@@ -352,7 +352,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testIsEmptyValue( $value )
     {
-        $this->assertTrue( $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->isEmptyValue( $value ) );
+        $this->assertTrue( $this->getRepository()->getFieldTypeService()->getFieldType( $this->getTypeName() )->isEmptyValue( $value ) );
     }
 
     abstract public function providerForTestIsEmptyValue();
@@ -363,7 +363,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      */
     public function testIsNotEmptyValue( $value )
     {
-        $this->assertFalse( $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->isEmptyValue( $value ) );
+        $this->assertFalse( $this->getRepository()->getFieldTypeService()->getFieldType( $this->getTypeName() )->isEmptyValue( $value ) );
     }
 
     abstract public function providerForTestIsNotEmptyValue();
@@ -608,7 +608,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     public function testCreateContentWithEmptyFieldValue()
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType $fieldType */
-        $fieldType = $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() );
+        $fieldType = $this->getRepository()->getFieldTypeService()->getFieldType( $this->getTypeName() );
 
         return $this->createContent( $fieldType->getEmptyValue() );
     }
@@ -665,11 +665,17 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     public function testLoadEmptyFieldValueData( $field )
     {
         /** @var \eZ\Publish\Core\FieldType\FieldType $fieldType */
-        $fieldType = $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() );
+        $fieldType = $this->getRepository()->getFieldTypeService()->getFieldType( $this->getTypeName() );
+
+        // @todo either test this not using acceptValue, or add to API (but is not meant for high level API, so..)
+        $refObject = new \ReflectionObject( $fieldType );
+        $refProperty = $refObject->getProperty( 'internalFieldType' );
+        $refProperty->setAccessible( true );
+        $spiFieldType = $refProperty->getValue( $fieldType );
 
         $this->assertEquals(
             $fieldType->getEmptyValue(),
-            $fieldType->acceptValue( $field->value )
+            $spiFieldType->acceptValue( $field->value )
         );
     }
 
@@ -961,7 +967,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $this->assertCount( 2, $content->getFields() );
 
         $this->assertTrue(
-            $this->getRepository()->getFieldTypeService()->buildFieldType(
+            $this->getRepository()->getFieldTypeService()->getFieldType(
                 $this->getTypeName()
             )->isEmptyValue(
                 $content->getFieldValue( "data" )

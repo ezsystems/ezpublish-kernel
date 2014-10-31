@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
-use eZ\Publish\Core\Repository\FieldTypeService;
 
 /**
  * NameSchemaService is internal service for resolving content name and url alias patterns.
@@ -55,9 +54,9 @@ class NameSchemaService
     protected $contentTypeHandler;
 
     /**
-     * @var FieldTypeService
+     * @var FieldTypeRegistry
      */
-    protected $fieldTypeService;
+    protected $fieldTypeRegistry;
 
     /**
      * @var array
@@ -68,13 +67,13 @@ class NameSchemaService
      * Constructs a object to resolve $nameSchema with $contentVersion fields values
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param FieldTypeService $fieldTypeService
+     * @param FieldTypeRegistry $fieldTypeRegistry
      * @param array $settings
      */
-    public function __construct( ContentTypeHandler $contentTypeHandler, FieldTypeService $fieldTypeService, array $settings = array() )
+    public function __construct( ContentTypeHandler $contentTypeHandler, FieldTypeRegistry $fieldTypeRegistry, array $settings = array() )
     {
         $this->contentTypeHandler = $contentTypeHandler;
-        $this->fieldTypeService = $fieldTypeService;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             'limit' => 150,
@@ -251,14 +250,14 @@ class NameSchemaService
                         continue;
                     }
 
-                    $fieldType = $this->fieldTypeService->buildFieldType(
+                    $fieldType = $this->fieldTypeRegistry->getFieldType(
                         $fieldDefinition->fieldType
                     );
                 }
                 else if ( $contentType instanceof ContentType )
                 {
                     $fieldDefinition = $contentType->getFieldDefinition( $fieldDefinitionIdentifier );
-                    $fieldType = $this->fieldTypeService->buildFieldType(
+                    $fieldType = $this->fieldTypeRegistry->getFieldType(
                         $fieldDefinition->fieldTypeIdentifier
                     );
                 }

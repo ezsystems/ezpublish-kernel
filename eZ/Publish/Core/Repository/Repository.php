@@ -125,6 +125,13 @@ class Repository implements RepositoryInterface
     protected $fieldTypeService;
 
     /**
+     * Instance of FieldTypeRegistry
+     *
+     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
+     */
+    private $fieldTypeRegistry;
+
+    /**
      * Instance of name schema resolver service
      *
      * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
@@ -507,6 +514,7 @@ class Repository implements RepositoryInterface
             $this->getDomainMapper(),
             $this->getRelationProcessor(),
             $this->getNameSchemaService(),
+            $this->getFieldTypeRegistry(),
             $this->serviceSettings['content']
         );
         return $this->contentService;
@@ -549,6 +557,7 @@ class Repository implements RepositoryInterface
             $this,
             $this->persistenceHandler->contentTypeHandler(),
             $this->getDomainMapper(),
+            $this->getFieldTypeRegistry(),
             $this->serviceSettings['contentType']
         );
         return $this->contentTypeService;
@@ -771,8 +780,20 @@ class Repository implements RepositoryInterface
         if ( $this->fieldTypeService !== null )
             return $this->fieldTypeService;
 
-        $this->fieldTypeService = new FieldTypeService( $this->serviceSettings['fieldType'] );
+        $this->fieldTypeService = new FieldTypeService( $this->getFieldTypeRegistry() );
         return $this->fieldTypeService;
+    }
+
+    /**
+     * @return Helper\FieldTypeRegistry
+     */
+    protected function getFieldTypeRegistry()
+    {
+        if ( $this->fieldTypeRegistry !== null )
+            return $this->fieldTypeRegistry;
+
+        $this->fieldTypeRegistry = new Helper\FieldTypeRegistry( $this->serviceSettings['fieldType'] );
+        return $this->fieldTypeRegistry;
     }
 
     /**
@@ -793,7 +814,7 @@ class Repository implements RepositoryInterface
 
         $this->nameSchemaService = new Helper\NameSchemaService(
             $this->persistenceHandler->contentTypeHandler(),
-            $this->getFieldTypeService(),
+            $this->getFieldTypeRegistry(),
             $this->serviceSettings['nameSchema']
         );
         return $this->nameSchemaService;
@@ -836,7 +857,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->locationHandler(),
             $this->persistenceHandler->contentTypeHandler(),
             $this->persistenceHandler->contentLanguageHandler(),
-            $this->getFieldTypeService()
+            $this->getFieldTypeRegistry()
         );
         return $this->domainMapper;
     }

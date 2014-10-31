@@ -324,7 +324,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
 
         $this->assertCount( 2, $content->getFields() );
         $this->assertEquals(
-            $this->getRepository()->getFieldTypeService()->buildFieldType( $this->getTypeName() )->getEmptyValue(),
+            $this->getRepository()->getFieldTypeService()->getFieldType( $this->getTypeName() )->getEmptyValue(),
             $content->getFieldValue( "data" )
         );
     }

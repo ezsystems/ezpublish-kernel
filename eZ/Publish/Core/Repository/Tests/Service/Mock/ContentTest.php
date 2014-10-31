@@ -62,6 +62,7 @@ class ContentTest extends BaseServiceMockTest
         $domainMapperMock = $this->getDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
+        $fieldTypeRegistryMock = $this->getFieldTypeRegistryMock();
         $settings = array( "settings" );
 
         $service = new ContentService(
@@ -70,6 +71,7 @@ class ContentTest extends BaseServiceMockTest
             $domainMapperMock,
             $relationProcessorMock,
             $nameSchemaServiceMock,
+            $fieldTypeRegistryMock,
             $settings
         );
 
@@ -100,6 +102,12 @@ class ContentTest extends BaseServiceMockTest
         $this->assertAttributeSame(
             $nameSchemaServiceMock,
             "nameSchemaService",
+            $service
+        );
+
+        $this->assertAttributeSame(
+            $fieldTypeRegistryMock,
+            "fieldTypeRegistry",
             $service
         );
 
@@ -1226,13 +1234,9 @@ class ContentTest extends BaseServiceMockTest
             ->method( "validate" )
             ->will( $this->returnValue( array() ) );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $relationProcessorMock
             ->expects( $this->exactly( count( $fieldDefinitions ) * count( $languageCodes ) ) )
@@ -2092,13 +2096,9 @@ class ContentTest extends BaseServiceMockTest
             ->method( "validate" )
             ->will( $this->returnValue( array() ) );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         return $contentCreateStruct;
     }
@@ -2269,13 +2269,9 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $relationProcessorMock
             ->expects( $this->any() )
@@ -3199,13 +3195,9 @@ class ContentTest extends BaseServiceMockTest
             ->method( "validate" )
             ->will( $this->returnValue( array() ) );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $relationProcessorMock
             ->expects( $this->exactly( count( $fieldDefinitions ) * count( $languageCodes ) ) )
@@ -4942,13 +4934,9 @@ class ContentTest extends BaseServiceMockTest
                 $this->isInstanceOf( "eZ\\Publish\\Core\\FieldType\\Value" )
             );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $contentUpdateStruct = new ContentUpdateStruct(
             array(
@@ -5180,13 +5168,9 @@ class ContentTest extends BaseServiceMockTest
             }
         }
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $contentUpdateStruct = new ContentUpdateStruct(
             array(
@@ -5839,6 +5823,7 @@ class ContentTest extends BaseServiceMockTest
                     $this->getDomainMapperMock(),
                     $this->getRelationProcessorMock(),
                     $this->getNameSchemaServiceMock(),
+                    $this->getFieldTypeRegistryMock(),
                     array()
                 )
             );

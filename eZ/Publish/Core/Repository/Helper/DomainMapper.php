@@ -23,7 +23,6 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\FieldTypeService;
 
 use eZ\Publish\SPI\Persistence\Content as SPIContent;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
@@ -68,9 +67,9 @@ class DomainMapper
     protected $contentLanguageHandler;
 
     /**
-     * @var \eZ\Publish\Core\Repository\FieldTypeService
+     * @var FieldTypeRegistry
      */
-    protected $fieldTypeService;
+    protected $fieldTypeRegistry;
 
     /**
      * Setups service with reference to repository.
@@ -79,21 +78,21 @@ class DomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
-     * @param \eZ\Publish\Core\Repository\FieldTypeService $fieldTypeService
+     * @param FieldTypeRegistry $fieldTypeRegistry
      */
     public function __construct(
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
         TypeHandler $contentTypeHandler,
         LanguageHandler $contentLanguageHandler,
-        FieldTypeService $fieldTypeService
+        FieldTypeRegistry $fieldTypeRegistry
     )
     {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->contentLanguageHandler = $contentLanguageHandler;
-        $this->fieldTypeService = $fieldTypeService;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
 
     /**
@@ -148,7 +147,7 @@ class DomainMapper
             $fields[] = new Field(
                 array(
                     "id" => $spiField->id,
-                    "value" => $this->fieldTypeService->buildFieldType( $spiField->type )
+                    "value" => $this->fieldTypeRegistry->getFieldType( $spiField->type )
                         ->fromPersistenceValue( $spiField->value ),
                     "languageCode" => $spiField->languageCode,
                     "fieldDefIdentifier" => $fieldIdentifierMap[$spiField->fieldDefinitionId]
