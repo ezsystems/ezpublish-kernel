@@ -1,19 +1,19 @@
 <?php
 
 return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state(array(
-   'facets' => 
+   'facets' =>
   array (
   ),
-   'searchHits' => 
+   'searchHits' =>
   array (
-    0 => 
+    0 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
-       'valueObject' => 
+       'valueObject' =>
       array (
         'id' => 58,
         'title' => 'Contact Us',
       ),
-       'score' => 1.0769257999999999,
+       'score' => 0.8675349,
        'index' => NULL,
        'highlight' => NULL,
     )),
@@ -21,7 +21,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
    'spellSuggestion' => NULL,
    'time' => 1,
    'timedOut' => NULL,
-   'maxScore' => 1.0769257999999999,
+   'maxScore' => 0.8675349,
    'totalCount' => 1,
 ));
 
