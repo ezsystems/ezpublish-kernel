@@ -75,7 +75,9 @@ class FullText extends FieldFilterBase
         $fields = $this->getFieldTypes( $criterion );
 
         // Add field document custom _all field
-        $queryFields = array( "fields_doc.meta_all" );
+        $queryFields = array(
+            "fields_doc.meta_all_*",
+        );
 
         // Add boosted fields if any
         foreach ( $criterion->boost as $field => $boost )
