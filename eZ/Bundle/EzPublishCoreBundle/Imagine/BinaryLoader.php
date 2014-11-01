@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Liip\ImagineBundle\Binary\Loader\LoaderInterface;
 use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\Binary;
@@ -43,17 +44,22 @@ class BinaryLoader implements LoaderInterface
         try
         {
             $binaryFile = $this->ioService->loadBinaryFile( $path );
+            // Treat a MissingBinaryFile as a not loadable file.
+            if ( $binaryFile instanceof MissingBinaryFile )
+            {
+                throw new NotLoadableException( "Source image not found in $path" );
+            }
+
             $mimeType = $this->ioService->getMimeType( $path );
+            return new Binary(
+                $this->ioService->getFileContents( $binaryFile ),
+                $mimeType,
+                $this->extensionGuesser->guess( $mimeType )
+            );
         }
         catch ( NotFoundException $e )
         {
             throw new NotLoadableException( "Source image not found in $path", 0, $e );
         }
-
-        return new Binary(
-            $this->ioService->getFileContents( $binaryFile ),
-            $mimeType,
-            $this->extensionGuesser->guess( $mimeType )
-        );
     }
 }

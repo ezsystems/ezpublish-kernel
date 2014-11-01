@@ -254,7 +254,7 @@ abstract class BaseIntegrationTest extends TestCase
      * Performs the creation of the content type with a field of the field type
      * under test
      *
-     * @return ContentType
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     protected function createContentType()
     {

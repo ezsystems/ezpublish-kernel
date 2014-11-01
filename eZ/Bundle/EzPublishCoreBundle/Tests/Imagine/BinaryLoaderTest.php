@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Values\BinaryFile;
+use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Liip\ImagineBundle\Model\Binary;
 use PHPUnit_Framework_TestCase;
 
@@ -51,6 +52,21 @@ class BinaryLoaderTest extends PHPUnit_Framework_TestCase
             ->method( 'loadBinaryFile' )
             ->with( $path )
             ->will( $this->throwException( new NotFoundException( 'foo', 'bar' ) ) );
+
+        $this->binaryLoader->find( $path );
+    }
+
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
+     */
+    public function testFindMissing()
+    {
+        $path = 'something.jpg';
+        $this->ioService
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFile' )
+            ->with( $path )
+            ->will( $this->returnValue( new MissingBinaryFile() ) );
 
         $this->binaryLoader->find( $path );
     }

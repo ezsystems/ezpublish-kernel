@@ -11,8 +11,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Liip\ImagineBundle\Model\Binary;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -123,6 +125,36 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
 
         $result = $this->imageResolver->resolve( $path, $filter );
         $this->assertSame( $expected, $result );
+    }
+
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException
+     */
+    public function testResolveMissing()
+    {
+        $path = 'foo/something.jpg';
+        $this->ioService
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFile' )
+            ->with( $path )
+            ->will( $this->returnValue( new MissingBinaryFile() ) );
+
+        $this->imageResolver->resolve( $path, 'some_filter' );
+    }
+
+    /**
+     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException
+     */
+    public function testResolveNotFound()
+    {
+        $path = 'foo/something.jpg';
+        $this->ioService
+            ->expects( $this->once() )
+            ->method( 'loadBinaryFile' )
+            ->with( $path )
+            ->will( $this->throwException( new NotFoundException( 'foo', 'bar' ) ) );
+
+        $this->imageResolver->resolve( $path, 'some_filter' );
     }
 
     public function resolveProvider()

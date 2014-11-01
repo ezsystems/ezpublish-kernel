@@ -71,6 +71,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         $fieldType = new FieldType\BinaryFile\Type();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessor() );
 
+        $this->ioService = self::$container->get( "ezpublish.fieldType.ezbinaryfile.io_service" );
         return $this->getHandler(
             'ezbinaryfile',
             $fieldType,
@@ -79,7 +80,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                 array(
                     'LegacyStorage' => new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage(),
                 ),
-                self::$container->get( "ezpublish.fieldType.ezbinaryfile.io_service" ),
+                $this->ioService,
                 new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
                 new FileInfo()
             )

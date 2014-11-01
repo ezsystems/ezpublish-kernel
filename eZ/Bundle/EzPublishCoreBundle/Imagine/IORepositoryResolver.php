@@ -9,8 +9,11 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\IOServiceInterface;
+use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use Liip\ImagineBundle\Binary\BinaryInterface;
+use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Symfony\Component\Routing\RequestContext;
@@ -51,13 +54,31 @@ class IORepositoryResolver implements ResolverInterface
 
     public function resolve( $path, $filter )
     {
-        $path = $this->ioService->loadBinaryFile( $path )->uri;
-        $path = $filter !== static::VARIATION_ORIGINAL ? $this->getFilePath( $path, $filter ) : $path;
-        return sprintf(
-            '%s%s',
-            $path[0] === '/' ? $this->getBaseUrl() : '',
-            $path
-        );
+        try
+        {
+            $binaryFile = $this->ioService->loadBinaryFile( $path );
+            // Treat a MissingBinaryFile as a not loadable file.
+            if ( $binaryFile instanceof MissingBinaryFile )
+            {
+                throw new NotResolvableException( "Variation image not found in $path" );
+            }
+
+            $path = $binaryFile->uri;
+            $path = $filter !== static::VARIATION_ORIGINAL ? $this->getFilePath(
+                $path,
+                $filter
+            ) : $path;
+
+            return sprintf(
+                '%s%s',
+                $path[0] === '/' ? $this->getBaseUrl() : '',
+                $path
+            );
+        }
+        catch ( NotFoundException $e )
+        {
+            throw new NotResolvableException( "Variation image not found in $path", 0, $e );
+        }
     }
 
     /**
