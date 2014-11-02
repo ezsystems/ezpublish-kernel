@@ -9,4 +9,5 @@ services:
             - @ezpublish.image_alias.imagine.alias_cleaner
             - @ezpublish.fieldType.ezimage.io_service
             - @ezpublish.core.io.image_fieldtype.legacy_url_redecorator
+            - @logger
         lazy: true
