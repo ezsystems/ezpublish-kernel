@@ -1,6 +1,6 @@
 # Legacy DFS cluster
 
-> Added in 5.4 / 2014.09
+> Added in 5.4 / 2014.11
 
 ## Summary
 Adds a `legacy_dfs_cluster` IO metadata handler. It stores metadata in the `ezdfsfile` table from the legacy

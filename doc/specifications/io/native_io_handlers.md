@@ -1,6 +1,6 @@
 # Native IO handler
 
-Starting from versions 5.4 / 2014.09, a native IO handler is available. The LegacyKernel IO handler, that runs legacy
+Starting from versions 5.4 / 2014.11, a native IO handler is available. The LegacyKernel IO handler, that runs legacy
 kernel callbacks, is removed.
 
 The unique `IOHandler` interface is removed, replace by two distinct interfaces:

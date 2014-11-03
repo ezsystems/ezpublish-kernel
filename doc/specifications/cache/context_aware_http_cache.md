@@ -1,6 +1,6 @@
 # Context aware HTTP cache
 
-> **Important**: As of v5.4 / v2014.09, usage of `FOSHttpCacheBundle has been introduced.
+> **Important**: As of v5.4 / v2014.11, usage of `FOSHttpCacheBundle has been introduced.
 > Please [refer to dedicated specification](fos_http_cache.md).
 
 ## Description

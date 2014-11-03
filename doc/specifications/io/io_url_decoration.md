@@ -1,6 +1,6 @@
 # IO URL decoration
 
-> Added in 5.4 / 2014.09
+> Added in 5.4 / 2014.11
 
 It should be possible to set any prefix for images and binary files served by the application.
 This includes absolute URIs to static hosts. It is also possible to use ConfigResolver parameters to set the prefix.
