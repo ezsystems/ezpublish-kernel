@@ -172,14 +172,12 @@ class TranslationHelper
     /**
      * Gets translated property generic helper
      *
-     * For generic use, expects property in singular form. For instance if 'name' is provided it will first look for
-     * property called 'names' and look for correct translation there, otherwise fallback to getName() method if set.
+     * For generic use, expects array property as-is on value object, typically $object->$property[$language]
      *
      * Languages will consist of either forced language or current languages list, in addition helper will check if for
      * mainLanguage property and append that to languages if alwaysAvailable property is true or non-existing.
      *
-     *
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object Must be Content, VersionInfo or ContentInfo object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object  Can be any kid of Value object which directly holds the translated property
      * @param string $property Property name, example 'names', 'descriptions'
      * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
      *
@@ -216,14 +214,12 @@ class TranslationHelper
     /**
      * Gets translated method generic helper
      *
-     * For generic use, expects property in singular form. For instance if 'name' is provided it will first look for
-     * property called 'names' and look for correct translation there, otherwise fallback to getName() method if set.
+     * For generic use, expects method exposing translated property as-is on value object, typically $object->$method($language)
      *
      * Languages will consist of either forced language or current languages list, in addition helper will append null
      * to list of languages so method may fallback to main/initial language if supported by domain.
      *
-     *
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object Must be Content, VersionInfo or ContentInfo object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object  Can be any kind of Value object which directly holds the methods that provides translated value.
      * @param string $method Method name, example 'getName', 'description'
      * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
      *

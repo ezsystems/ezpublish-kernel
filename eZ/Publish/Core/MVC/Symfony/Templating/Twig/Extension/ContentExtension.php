@@ -736,7 +736,7 @@ class ContentExtension extends Twig_Extension
      * mainLanguage property and append that to languages if alwaysAvailable property is true or non-existing.
      *
      *
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object Must be Content, VersionInfo or ContentInfo object
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object Can be any kid of Value object which directly holds the translated data
      * @param string $property Property name, example 'name', 'description'
      * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
      *
