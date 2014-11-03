@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -26,6 +27,8 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use InvalidArgumentException;
+use LogicException;
 
 class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
 {
@@ -49,9 +52,9 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     protected $urlAliasService;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\API\Repository\ContentService
      */
-    protected $repository;
+    protected $contentService;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
@@ -73,6 +76,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     public function __construct(
         LocationService $locationService,
         URLAliasService $urlAliasService,
+        ContentService $contentService,
         UrlAliasGenerator $generator,
         RequestContext $requestContext,
         LoggerInterface $logger = null
@@ -80,6 +84,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     {
         $this->locationService = $locationService;
         $this->urlAliasService = $urlAliasService;
+        $this->contentService = $contentService;
         $this->generator = $generator;
         $this->requestContext = $requestContext !== null ? $requestContext : new RequestContext();
         $this->logger = $logger;
@@ -311,25 +316,41 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
         // Normal route name
         if ( $name === self::URL_ALIAS_ROUTE_NAME )
         {
-            // We must have at least 'location' or 'locationId' to retrieve the UrlAlias
-            if ( !isset( $parameters['location'] ) && !isset( $parameters['locationId'] ) )
+            if ( isset( $parameters['location'] ) || isset( $parameters['locationId'] ) )
             {
-                throw new \InvalidArgumentException(
-                    "When generating an UrlAlias route, either 'location' or 'locationId must be provided."
+                // Check if location is a valid Location object
+                if ( isset( $parameters['location'] ) && !$parameters['location'] instanceof Location )
+                {
+                    throw new LogicException(
+                        "When generating an UrlAlias route, 'location' parameter must be a valid eZ\\Publish\\API\\Repository\\Values\\Content\\Location."
+                    );
+                }
+
+                $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->locationService->loadLocation( $parameters['locationId'] );
+                unset( $parameters['location'], $parameters['locationId'], $parameters['viewType'], $parameters['layout'] );
+                return $this->generator->generate( $location, $parameters, $absolute );
+            }
+
+            if ( isset( $parameters['contentId'] ) )
+            {
+                $contentInfo = $this->contentService->loadContentInfo( $parameters['contentId'] );
+                unset( $parameters['contentId'], $parameters['viewType'], $parameters['layout'] );
+
+                if ( empty( $contentInfo->mainLocationId ) )
+                {
+                    throw new LogicException( "Cannot generate an UrlAlias route for content without main location." );
+                }
+
+                return $this->generator->generate(
+                    $this->locationService->loadLocation( $contentInfo->mainLocationId ),
+                    $parameters,
+                    $absolute
                 );
             }
 
-            // Check if location is a valid Location object
-            if ( isset( $parameters['location'] ) && !$parameters['location'] instanceof Location )
-            {
-                throw new \LogicException(
-                    "When generating an UrlAlias route, 'location' parameter must be a valid eZ\\Publish\\API\\Repository\\Values\\Content\\Location."
-                );
-            }
-
-            $location = isset( $parameters['location'] ) ? $parameters['location'] : $this->locationService->loadLocation( $parameters['locationId'] );
-            unset( $parameters['location'], $parameters['locationId'], $parameters['viewType'], $parameters['layout'] );
-            return $this->generator->generate( $location, $parameters, $absolute );
+            throw new InvalidArgumentException(
+                "When generating an UrlAlias route, either 'location', 'locationId' or 'contentId' must be provided."
+            );
         }
 
         throw new RouteNotFoundException( 'Could not match route' );
