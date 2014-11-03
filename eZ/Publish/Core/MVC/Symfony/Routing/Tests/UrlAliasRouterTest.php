@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\ContentService;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\HttpFoundation\Request;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -19,6 +20,9 @@ use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use PHPUnit_Framework_TestCase;
 
@@ -38,6 +42,11 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $locationService;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contentService;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -67,6 +76,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
             ->getMock();
         $this->urlAliasService = $this->getMock( 'eZ\\Publish\\API\\Repository\\URLAliasService' );
         $this->locationService = $this->getMock( 'eZ\\Publish\\API\\Repository\\LocationService' );
+        $this->contentService = $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' );
         $this->urlALiasGenerator = $this
             ->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\Generator\\UrlAliasGenerator' )
             ->setConstructorArgs(
@@ -79,20 +89,21 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
             ->getMock();
         $this->requestContext = new RequestContext();
 
-        $this->router = $this->getRouter( $this->locationService, $this->urlAliasService, $this->urlALiasGenerator, $this->requestContext );
+        $this->router = $this->getRouter( $this->locationService, $this->urlAliasService, $this->contentService, $this->urlALiasGenerator, $this->requestContext );
     }
 
     /**
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param UrlAliasGenerator $urlAliasGenerator
      * @param RequestContext $requestContext
      *
      * @return UrlAliasRouter
      */
-    protected function getRouter( LocationService $locationService, URLAliasService $urlAliasService, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
+    protected function getRouter( LocationService $locationService, URLAliasService $urlAliasService, ContentService $contentService, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
     {
-        return new UrlAliasRouter( $locationService, $urlAliasService, $urlAliasGenerator, $requestContext );
+        return new UrlAliasRouter( $locationService, $urlAliasService, $contentService, $urlAliasGenerator, $requestContext );
     }
 
     /**
@@ -664,6 +675,69 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
                 $parameters + array( 'location' => $location ),
                 $absolute
             )
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
+     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
+     */
+    public function testGenerateWithContentId()
+    {
+        $locationId = 123;
+        $contentId = 456;
+        $location = new Location( array( 'id' => $locationId ) );
+        $contentInfo = new ContentInfo( array( 'id' => $contentId, 'mainLocationId' => $locationId ) );
+        $parameters = array( 'some' => 'thing' );
+        $absolute = false;
+        $generatedLink = '/foo/bar';
+        $this->contentService
+            ->expects( $this->once() )
+            ->method( 'loadContentInfo' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $contentInfo ) );
+        $this->locationService
+            ->expects( $this->once() )
+            ->method( 'loadLocation' )
+            ->with( $contentInfo->mainLocationId )
+            ->will( $this->returnValue( $location ) );
+        $this->urlALiasGenerator
+            ->expects( $this->once() )
+            ->method( 'generate' )
+            ->with( $location, $parameters, $absolute )
+            ->will( $this->returnValue( $generatedLink ) );
+        $this->assertSame(
+            $generatedLink,
+            $this->router->generate(
+                UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+                $parameters + array( 'contentId' => $contentId ),
+                $absolute
+            )
+        );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
+     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
+     *
+     * @expectedException \LogicException
+     */
+    public function testGenerateWithContentIdWithMissingMainLocation()
+    {
+        $contentId = 456;
+        $contentInfo = new ContentInfo( array( 'id' => $contentId, 'mainLocationId' => null ) );
+        $parameters = array( 'some' => 'thing' );
+        $absolute = false;
+        $this->contentService
+            ->expects( $this->once() )
+            ->method( 'loadContentInfo' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $contentInfo ) );
+
+        $this->router->generate(
+            UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            $parameters + array( 'contentId' => $contentId ),
+            $absolute
         );
     }
 }

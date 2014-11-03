@@ -44,6 +44,7 @@ services:
         arguments:
             - @ezpublish.api.service.location
             - @ezpublish.api.service.url_alias
+            - @ezpublish.api.service.content
             - @ezpublish.urlalias_generator
             - @?router.request_context
             - @?logger

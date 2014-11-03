@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Routing;
 
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\ContentService;
 use Symfony\Component\Routing\RequestContext;
 use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -43,9 +44,9 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
         parent::setUp();
     }
 
-    protected function getRouter( LocationService $locationService, URLAliasService $urlAliasService, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
+    protected function getRouter( LocationService $locationService, URLAliasService $urlAliasService, ContentService $contentService, UrlAliasGenerator $urlAliasGenerator, RequestContext $requestContext )
     {
-        $router = new UrlAliasRouter( $locationService, $urlAliasService, $urlAliasGenerator, $requestContext );
+        $router = new UrlAliasRouter( $locationService, $urlAliasService, $contentService, $urlAliasGenerator, $requestContext );
         $router->setConfigResolver( $this->configResolver );
         return $router;
     }
