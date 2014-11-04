@@ -77,6 +77,7 @@ class BuzzDriver implements DriverInterface
     {
         // prepare client
         $curl = new Curl();
+        $curl->setTimeout( 10 );
         $curl->send(
             $this->request,
             $this->response
