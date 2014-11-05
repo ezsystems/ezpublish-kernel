@@ -9,7 +9,11 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\EventListener\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener;
+use eZ\Publish\Core\MVC\Symfony\MVCEvents;
+use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -81,5 +85,115 @@ class SiteAccessMatchListenerTest extends PHPUnit_Framework_TestCase
 
         $this->listener->onKernelRequest( $event );
         $this->assertFalse( $request->attributes->has( 'siteaccess' ) );
+    }
+
+    public function testOnKernelRequestSerializedSA()
+    {
+        $siteAccess = new SiteAccess();
+        $request = new Request();
+        $request->attributes->set( 'serialized_siteaccess', serialize( $siteAccess ) );
+        $event = new GetResponseEvent(
+            $this->getMock( '\Symfony\Component\HttpKernel\HttpKernelInterface' ),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST
+        );
+
+        $this->userHashMatcher
+            ->expects( $this->once() )
+            ->method( 'matches' )
+            ->with( $request )
+            ->will( $this->returnValue( false ) );
+
+        $this->saRouter
+            ->expects( $this->never() )
+            ->method( 'match' );
+
+        $postSAMatchEvent = new PostSiteAccessMatchEvent( $siteAccess, $request, $event->getRequestType() );
+        $this->eventDispatcher
+            ->expects( $this->once() )
+            ->method( 'dispatch' )
+            ->with( MVCEvents::SITEACCESS, $this->equalTo( $postSAMatchEvent ) );
+
+        $this->listener->onKernelRequest( $event );
+        $this->assertEquals( $siteAccess, $request->attributes->get( 'siteaccess' ) );
+        $this->assertFalse( $request->attributes->has( 'serialized_siteaccess' ) );
+    }
+
+    public function testOnKernelRequestSiteAccessPresent()
+    {
+        $siteAccess = new SiteAccess();
+        $request = new Request();
+        $request->attributes->set( 'siteaccess', $siteAccess );
+        $event = new GetResponseEvent(
+            $this->getMock( '\Symfony\Component\HttpKernel\HttpKernelInterface' ),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST
+        );
+
+        $this->userHashMatcher
+            ->expects( $this->once() )
+            ->method( 'matches' )
+            ->with( $request )
+            ->will( $this->returnValue( false ) );
+
+        $this->saRouter
+            ->expects( $this->never() )
+            ->method( 'match' );
+
+        $postSAMatchEvent = new PostSiteAccessMatchEvent( $siteAccess, $request, $event->getRequestType() );
+        $this->eventDispatcher
+            ->expects( $this->once() )
+            ->method( 'dispatch' )
+            ->with( MVCEvents::SITEACCESS, $this->equalTo( $postSAMatchEvent ) );
+
+        $this->listener->onKernelRequest( $event );
+        $this->assertSame( $siteAccess, $request->attributes->get( 'siteaccess' ) );
+    }
+
+    public function testOnKernelRequest()
+    {
+        $siteAccess = new SiteAccess();
+        $scheme = 'https';
+        $host = 'phoenix-rises.fm';
+        $port = 1234;
+        $path = '/foo/bar';
+        $request = Request::create( sprintf( '%s://%s:%d%s', $scheme, $host, $port, $path ) );
+        $event = new GetResponseEvent(
+            $this->getMock( '\Symfony\Component\HttpKernel\HttpKernelInterface' ),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST
+        );
+
+        $this->userHashMatcher
+            ->expects( $this->once() )
+            ->method( 'matches' )
+            ->with( $request )
+            ->will( $this->returnValue( false ) );
+
+        $simplifiedRequest = new SimplifiedRequest(
+            array(
+                'scheme'      => $request->getScheme(),
+                'host'        => $request->getHost(),
+                'port'        => $request->getPort(),
+                'pathinfo'    => $request->getPathInfo(),
+                'queryParams' => $request->query->all(),
+                'languages'   => $request->getLanguages(),
+                'headers'     => $request->headers->all()
+            )
+        );
+        $this->saRouter
+            ->expects( $this->once() )
+            ->method( 'match' )
+            ->with( $this->equalTo( $simplifiedRequest ) )
+            ->will( $this->returnValue( $siteAccess ) );
+
+        $postSAMatchEvent = new PostSiteAccessMatchEvent( $siteAccess, $request, $event->getRequestType() );
+        $this->eventDispatcher
+            ->expects( $this->once() )
+            ->method( 'dispatch' )
+            ->with( MVCEvents::SITEACCESS, $this->equalTo( $postSAMatchEvent ) );
+
+        $this->listener->onKernelRequest( $event );
+        $this->assertSame( $siteAccess, $request->attributes->get( 'siteaccess' ) );
     }
 }
