@@ -24,9 +24,9 @@ env:
 matrix:
   allow_failures:
     - php: hhvm
-      env: TEST_CONFIG="phpunit.xml"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.6@beta"
     - php: hhvm
-      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.6@beta"
   exclude:
 # 5.4 run: unit test + postgres integration test
     - php: 5.4
@@ -48,7 +48,7 @@ matrix:
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
 # 5.6 run: unit test + sqlite integration test
     - php: 5.6
-      env: TEST_CONFIG="phpunit.xml"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.6@beta"
     - php: 5.6
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
     - php: 5.6
@@ -59,7 +59,7 @@ matrix:
       env: ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # hhvm run: unit test + sqlite integration test
     - php: hhvm
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.6@beta"
+      env: TEST_CONFIG="phpunit.xml"
     - php: hhvm
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
     - php: hhvm
