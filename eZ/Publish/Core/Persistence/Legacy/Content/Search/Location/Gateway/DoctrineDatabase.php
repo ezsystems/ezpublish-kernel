@@ -120,7 +120,7 @@ class DoctrineDatabase extends Gateway
                 $selectQuery->bindValue( 1, null, PDO::PARAM_INT )
             ),
             $selectQuery->expr->neq(
-                $this->handler->quoteColumn( "depth" ),
+                $this->handler->quoteColumn( "depth", "ezcontentobject_tree" ),
                 $selectQuery->bindValue( 0, null, PDO::PARAM_INT )
             )
         );
@@ -187,7 +187,7 @@ class DoctrineDatabase extends Gateway
                 $query->bindValue( 1, null, PDO::PARAM_INT )
             ),
             $query->expr->neq(
-                $this->handler->quoteColumn( "depth" ),
+                $this->handler->quoteColumn( "depth", "ezcontentobject_tree" ),
                 $query->bindValue( 0, null, PDO::PARAM_INT )
             )
         );
