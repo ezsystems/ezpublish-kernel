@@ -113,7 +113,7 @@ services:
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
         arguments:
-            - @ezpublish.fieldtype.ezxmltext.converter.view_manager
+            - @fragment.handler
             - @ezpublish.api.repository
             - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
             - @?logger
