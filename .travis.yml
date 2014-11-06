@@ -14,60 +14,60 @@ env:
   matrix:
     # If SYMFONY_VERSION is not specified, will take the latest available.
     - TEST_CONFIG="phpunit.xml"
-    - TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
-    - TEST_CONFIG="phpunit-integration-legacy.xml"
-    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
-    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
-    - SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
-    - ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="2.3.*"
+    - TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.6@beta"
+    - TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.6@beta"
+    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
+    - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
+    - SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+    - ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 
 matrix:
   allow_failures:
     - php: hhvm
-      env: TEST_CONFIG="phpunit.xml"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.6@beta"
     - php: hhvm
-      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.6@beta"
   exclude:
 # 5.4 run: unit test + postgres integration test
     - php: 5.4
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.6@beta"
     - php: 5.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.6@beta"
     - php: 5.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
     - php: 5.4
-      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
+      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - php: 5.4
-      env: ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="2.3.*"
+      env: ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # 5.5 run: unit test (Symfony 2.3) + mysql integration test + solr 4.x integration test
     - php: 5.5
       env: TEST_CONFIG="phpunit.xml"
     - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.6@beta"
     - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
 # 5.6 run: unit test + sqlite integration test
     - php: 5.6
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.6@beta"
     - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
     - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
     - php: 5.6
-      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
+      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - php: 5.6
-      env: ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="2.3.*"
+      env: ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # hhvm run: unit test + sqlite integration test
     - php: hhvm
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit.xml"
     - php: hhvm
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
     - php: hhvm
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME" SYMFONY_VERSION="2.3.*"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
     - php: hhvm
-      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SYMFONY_VERSION="2.3.*"
+      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - php: hhvm
-      env: ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="2.3.*"
+      env: ELASTICSEARCH_VERSION="1.4.0.Beta1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 
 # test only master (+ Pull requests)
 branches:
