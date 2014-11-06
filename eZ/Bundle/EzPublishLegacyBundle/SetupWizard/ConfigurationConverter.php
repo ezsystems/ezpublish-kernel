@@ -134,11 +134,15 @@ class ConfigurationConverter
             $settings['ezpublish']['imagemagick']['enabled'] = false;
         }
 
-        $variations = $this->getImageVariations( $siteList, $groupName );
-
-        foreach ( $variations as $siteaccess => $imgSettings )
+        // Dump image variations for unsupported packages only (i.e. not ezdemo)
+        // Image variations for ezdemo are defined in DemoBundle
+        if ( !isset( $this->supportedPackages[$sitePackage] ) )
         {
-            $settings['ezpublish']['system'][$siteaccess]['image_variations'] = $imgSettings;
+            $variations = $this->getImageVariations( $siteList, $groupName );
+            foreach ( $variations as $siteaccess => $imgSettings )
+            {
+                $settings['ezpublish']['system'][$siteaccess]['image_variations'] = $imgSettings;
+            }
         }
 
         foreach ( $siteList as $siteaccess )

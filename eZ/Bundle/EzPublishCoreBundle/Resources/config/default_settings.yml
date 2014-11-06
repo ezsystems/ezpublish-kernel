@@ -140,43 +140,6 @@ parameters:
             reference: reference
             filters:
                 geometry/scaledownonly: [300, 300]
-        rss:
-            reference: reference
-            filters:
-                geometry/scale: [88, 31]
-        campaign:
-            reference: ~
-            filters:
-                geometry/scalewidthdownonly: [770]
-                geometry/crop: [770, 390, 0, 0]
-        backgroundimage:
-            reference: ~
-            filters:
-                geometry/scalewidthdownonly: [770]
-                geometry/crop: [770, 390, 0, 0]
-        highlighted:
-            reference: ~
-            filters:
-                geometry/scalewidthdownonly: [300]
-                geometry/crop: [300, 300, 0, 0]
-        galleryfull:
-            reference: ~
-            filters:
-                geometry/scalewidthdownonly: [770]
-        contentgrid:
-            reference: ~
-            filters:
-                geometry/scalewidthdownonly: [770]
-                geometry/crop: [370, 160, 0, 0]
-        gallery:
-            reference: ~
-            filters:
-                geometry/scalewidthdownonly: [770]
-                geometry/crop: [770, 390, 0, 0]
-        imagefull:
-            reference: ~
-            filters:
-                geometry/scalewidthdownonly: [770]
 
     # ImageMagick
     # TODO: Deprecated. Move this to ezpublish_legacy.

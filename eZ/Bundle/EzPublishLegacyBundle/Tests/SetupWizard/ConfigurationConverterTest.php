@@ -158,19 +158,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     'ezdemo_group' => array(
                         'repository' => 'eng_repository',
                         'var_dir' => 'var/ezdemo_site',
-                        'image_variations' => array(
-                            'large' => array(
-                                'reference' => null, 'filters' => array(
-                                    array( 'name' => 'geometry/scaledownonly', 'params' => array( 360, 440 ) )
-                                )
-                            ),
-                            'infoboximage' => array(
-                                'reference' => null, 'filters' => array(
-                                    array( 'name' => 'geometry/scalewidth', 'params' => array( 75 ) ),
-                                    array( 'name' => 'flatten' )
-                                )
-                            ),
-                        ),
                         'languages' => array( 'eng-GB' )
                     ),
                     'eng' => array(),
@@ -342,11 +329,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
         );
         unset( $element[IDX_MOCK_PARAMETERS]['getGroup']['infoboximage_admin'] );
 
-        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['eng']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
-        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
-        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
-        unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['image_variations']['infoboximage'] );
-        unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'] );
         $data[] = $element;
 
         // different parameter for an alias in ezdemo_site_admin
@@ -360,11 +342,6 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
             )
         );
 
-        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['eng']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
-        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
-        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['image_variations'] = $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'];
-        $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_site_admin']['image_variations']['large']['filters'][0]['params'] = array( 100, 100 );
-        unset( $element[IDX_EXPECTED_RESULT]['ezpublish']['system']['ezdemo_group']['image_variations'] );
         $data[] = $element;
 
         // several languages and same for all SA
