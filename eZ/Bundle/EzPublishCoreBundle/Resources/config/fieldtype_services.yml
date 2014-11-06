@@ -104,16 +104,10 @@ services:
             - %ezpublish.fieldType.ezxmltext.converter.html5.resources%
             - @ezpublish.config.resolver
 
-    # Duplicating view_manager service to be sure to have a different instance for ezxmltext converter.
-    # This is to avoid circular dependecies with view_manager.
-    ezpublish.fieldtype.ezxmltext.converter.view_manager:
-        class: %ezpublish.view_manager.class%
-        parent: ezpublish.view_manager
-
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
         arguments:
-            - @ezpublish.fieldtype.ezxmltext.converter.view_manager
+            - @fragment.handler
             - @ezpublish.api.repository
             - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
             - @?logger
