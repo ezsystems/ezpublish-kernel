@@ -26,8 +26,6 @@ A few limitations still remain:
 
 * It is not possible to use dynamic settings in your semantic configuration (e.g. `config.yml` or `ezpublish.yml`)
   as they are meant primarily for parameter injection in services.
-* It is not possible to concatenate a dynamic setting, either with other dynamic settings or with container parameters.
-  Workaround is to use separate arguments/setters.
 * It is not possible to define an array of options having dynamic settings. They will not be parsed. Workaround is to use
   separate arguments/setters.
 * Injecting dynamic settings in request listeners is **not recommended**, as it won't be resolved with the correct scope 
