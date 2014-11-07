@@ -13,6 +13,7 @@ use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use PHPUnit_Framework_TestCase;
 use DOMDocument;
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
  * Tests the EmbedToHtml5 Preconverter
@@ -182,9 +183,9 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getMockViewManager()
+    protected function getMockFragmentHandler()
     {
-        return $this->getMockBuilder( 'eZ\\Publish\\Core\\MVC\\Symfony\\View\\Manager' )
+        return $this->getMockBuilder( 'Symfony\\Component\\HttpKernel\\Fragment\\FragmentHandler' )
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -260,7 +261,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->loadXML( $xmlString );
 
-        $viewManager = $this->getMockViewManager();
+        $fragmentHandler = $this->getMockFragmentHandler();
         $contentService = $this->getMockContentService();
 
         $versionInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo' );
@@ -295,16 +296,22 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 );
         }
 
-        $viewManager->expects( $this->once() )
-            ->method( 'renderContent' )
+        $fragmentHandler->expects( $this->once() )
+            ->method( 'render' )
             ->with(
-                $this->equalTo( $content ),
-                $this->equalTo( $view ),
-                $this->equalTo( $parameters )
+                new ControllerReference(
+                    'ez_content:embedContent',
+                    array(
+                        'contentId' => $contentId,
+                        'viewType' => $view,
+                        'layout' => false,
+                        'params' => $parameters
+                    )
+                )
             );
 
         $converter = new EmbedToHtml5(
-            $viewManager,
+            $fragmentHandler,
             $repository,
             array( 'view', 'class', 'node_id', 'object_id' )
         );
@@ -324,7 +331,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->loadXML( $xmlString );
 
-        $viewManager = $this->getMockViewManager();
+        $fragmentHandler = $this->getMockFragmentHandler();
         $locationService = $this->getMockLocationService();
 
         $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
@@ -355,16 +362,22 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 );
         }
 
-        $viewManager->expects( $this->once() )
-            ->method( 'renderLocation' )
+        $fragmentHandler->expects( $this->once() )
+            ->method( 'render' )
             ->with(
-                $this->equalTo( $location ),
-                $this->equalTo( $view ),
-                $this->equalTo( $parameters )
+                new ControllerReference(
+                    'ez_content:embedLocation',
+                    array(
+                        'locationId' => $locationId,
+                        'viewType' => $view,
+                        'layout' => false,
+                        'params' => $parameters
+                    )
+                )
             );
 
         $converter = new EmbedToHtml5(
-            $viewManager,
+            $fragmentHandler,
             $repository,
             array( 'view', 'class', 'node_id', 'object_id' )
         );
@@ -433,7 +446,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" object_id="42"/></paragraph></section>' );
 
-        $viewManager = $this->getMockViewManager();
+        $fragmentHandler = $this->getMockFragmentHandler();
         $contentService = $this->getMockContentService();
 
         $versionInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo' );
@@ -469,7 +482,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         }
 
         $converter = new EmbedToHtml5(
-            $viewManager,
+            $fragmentHandler,
             $repository,
             array( 'view', 'class', 'node_id', 'object_id' )
         );
@@ -485,7 +498,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" node_id="42"/></paragraph></section>' );
 
-        $viewManager = $this->getMockViewManager();
+        $fragmentHandler = $this->getMockFragmentHandler();
         $locationService = $this->getMockLocationService();
 
         $contentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
@@ -519,7 +532,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
             );
 
         $converter = new EmbedToHtml5(
-            $viewManager,
+            $fragmentHandler,
             $repository,
             array( 'view', 'class', 'node_id', 'object_id' )
         );
@@ -557,7 +570,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
      */
     public function testEmbedContentNotFound( $input, $output )
     {
-        $viewManager = $this->getMockViewManager();
+        $fragmentHandler = $this->getMockFragmentHandler();
         $contentService = $this->getMockContentService();
         $repository = $this->getMockRepository( $contentService, null );
         $logger = $this->getLoggerMock();
@@ -578,7 +591,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
             );
 
         $converter = new EmbedToHtml5(
-            $viewManager,
+            $fragmentHandler,
             $repository,
             array( "view", "class", "node_id", "object_id" ),
             $logger
@@ -625,7 +638,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
      */
     public function testEmbedLocationNotFound( $input, $output )
     {
-        $viewManager = $this->getMockViewManager();
+        $fragmentHandler = $this->getMockFragmentHandler();
         $locationService = $this->getMockLocationService();
         $repository = $this->getMockRepository( null, $locationService );
         $logger = $this->getLoggerMock();
@@ -646,7 +659,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
             );
 
         $converter = new EmbedToHtml5(
-            $viewManager,
+            $fragmentHandler,
             $repository,
             array( "view", "class", "node_id", "object_id" ),
             $logger

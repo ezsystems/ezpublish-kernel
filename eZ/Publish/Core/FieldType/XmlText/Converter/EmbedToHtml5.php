@@ -14,7 +14,8 @@ use eZ\Publish\API\Repository\Repository;
 use DOMDocument;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
-use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
+use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use Psr\Log\LoggerInterface;
 
@@ -30,9 +31,9 @@ class EmbedToHtml5 implements Converter
     protected $excludedAttributes = array();
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface
+     * @var \Symfony\Component\HttpKernel\Fragment\FragmentHandler
      */
-    protected $viewManager;
+    protected $fragmentHandler;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -45,13 +46,13 @@ class EmbedToHtml5 implements Converter
     protected $logger;
 
     public function __construct(
-        ViewManagerInterface $viewManager,
+        FragmentHandler $fragmentHandler,
         Repository $repository,
         array $excludedAttributes,
         LoggerInterface $logger = null
     )
     {
-        $this->viewManager = $viewManager;
+        $this->fragmentHandler = $fragmentHandler;
         $this->repository = $repository;
         $this->excludedAttributes = array_fill_keys( $excludedAttributes, true );
         $this->logger = $logger;
@@ -116,7 +117,17 @@ class EmbedToHtml5 implements Converter
                         throw new UnauthorizedException( 'content', 'versionread', array( 'contentId' => $contentId ) );
                     }
 
-                    $embedContent = $this->viewManager->renderContent( $content, $view, $parameters );
+                    $embedContent = $this->fragmentHandler->render(
+                        new ControllerReference(
+                            'ez_content:embedContent',
+                            array(
+                                'contentId' => $contentId,
+                                'viewType' => $view,
+                                'layout' => false,
+                                'params' => $parameters
+                            )
+                        )
+                    );
                 }
                 catch ( APINotFoundException $e )
                 {
@@ -149,7 +160,17 @@ class EmbedToHtml5 implements Converter
                         throw new UnauthorizedException( 'content', 'read', array( 'locationId' => $location->id ) );
                     }
 
-                    $embedContent = $this->viewManager->renderLocation( $location, $view, $parameters );
+                    $embedContent = $this->fragmentHandler->render(
+                        new ControllerReference(
+                            'ez_content:embedLocation',
+                            array(
+                                'locationId' => $locationId,
+                                'viewType' => $view,
+                                'layout' => false,
+                                'params' => $parameters
+                            )
+                        )
+                    );
                 }
                 catch ( APINotFoundException $e )
                 {
