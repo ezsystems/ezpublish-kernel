@@ -21,8 +21,6 @@ use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Symfony\View\Manager as ViewManager;
 use PHPUnit_Framework_TestCase;
 
@@ -106,11 +104,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
         return new UrlAliasRouter( $locationService, $urlAliasService, $contentService, $urlAliasGenerator, $requestContext );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::getContext
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::setContext
-     */
     public function testRequestContext()
     {
         $this->assertSame( $this->requestContext, $this->router->getContext() );
@@ -124,9 +117,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::match
-     *
      * @expectedException \RuntimeException
      */
     public function testMatch()
@@ -135,9 +125,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::supports
-     *
      * @dataProvider providerTestSupports
      */
     public function testSupports( $routeReference, $isSupported )
@@ -155,10 +142,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::getRouteCollection
-     */
     public function testGetRouteCollection()
     {
         $this->assertInstanceOf( 'Symfony\\Component\\Routing\\RouteCollection', $this->router->getRouteCollection() );
@@ -185,11 +168,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
         return $request;
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::getUrlAlias
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::matchRequest
-     */
     public function testMatchRequestLocation()
     {
         $pathInfo = '/foo/bar';
@@ -258,12 +236,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $destinationId, $request->attributes->get( 'locationId' ) );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::getUrlAlias
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::matchRequest
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
-     */
     public function testMatchRequestLocationWrongCaseUriPrefixExcluded()
     {
         $pathInfo = '/Foo/bAR';
@@ -466,11 +438,7 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Routing\Exception\ResourceNotFoundException
-     *
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::getUrlAlias
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::matchRequest
+     * @expectedException \Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
     public function testMatchRequestFail()
     {
@@ -601,11 +569,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $destination, $request->attributes->get( 'semanticPathinfo' ) );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::getUrlAlias
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::matchRequest
-     */
     public function testMatchRequestVirtual()
     {
         $pathInfo = '/foo/bar';
@@ -661,20 +624,13 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Routing\Exception\RouteNotFoundException
-     *
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
+     * @expectedException \Symfony\Component\Routing\Exception\RouteNotFoundException
      */
     public function testGenerateFail()
     {
         $this->router->generate( 'invalidRoute' );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
-     */
     public function testGenerateWithLocation()
     {
         $location = new Location();
@@ -691,9 +647,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     *
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
      */
     public function testGenerateNoLocation()
     {
@@ -702,19 +655,12 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     *
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
      */
     public function testGenerateInvalidLocation()
     {
         $this->router->generate( UrlAliasRouter::URL_ALIAS_ROUTE_NAME, array( 'location' => new \stdClass() ) );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
-     */
     public function testGenerateWithLocationId()
     {
         $locationId = 123;
@@ -742,10 +688,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
-     */
     public function testGenerateWithLocationAsParameter()
     {
         $locationId = 123;
@@ -768,10 +710,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
-     */
     public function testGenerateWithContentId()
     {
         $locationId = 123;
@@ -807,9 +745,6 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::__construct
-     * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
-     *
      * @expectedException \LogicException
      */
     public function testGenerateWithContentIdWithMissingMainLocation()
