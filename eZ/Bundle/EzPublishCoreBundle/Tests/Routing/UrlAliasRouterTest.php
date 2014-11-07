@@ -353,7 +353,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
         $pathInfo = '/shared/content/foo-bar';
         $destinationId = 789;
         $this->urlALiasGenerator
-            ->expects( $this->once() )
+            ->expects( $this->any() )
             ->method( 'isUriPrefixExcluded' )
             ->with( $pathInfo )
             ->will( $this->returnValue( true ) );

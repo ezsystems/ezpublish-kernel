@@ -234,6 +234,11 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
             )
         );
         $request = $this->getRequestByPathInfo( $pathInfo );
+        $this->urlALiasGenerator
+            ->expects( $this->once() )
+            ->method( 'isUriPrefixExcluded' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( false ) );
         $this->urlAliasService
             ->expects( $this->once() )
             ->method( 'lookup' )
@@ -259,6 +264,81 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
      * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::matchRequest
      * @covers eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter::generate
      */
+    public function testMatchRequestLocationWrongCaseUriPrefixExcluded()
+    {
+        $pathInfo = '/Foo/bAR';
+        $urlAliasPath = '/foo/bar';
+        $destinationId = 123;
+        $urlAlias = new URLAlias(
+            array(
+                'path' => $urlAliasPath,
+                'type' => UrlAlias::LOCATION,
+                'destination' => $destinationId,
+                'isHistory' => false
+            )
+        );
+        $request = $this->getRequestByPathInfo( $pathInfo );
+        $this->urlALiasGenerator
+            ->expects( $this->once() )
+            ->method( 'isUriPrefixExcluded' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( true ) );
+        $this->urlAliasService
+            ->expects( $this->once() )
+            ->method( 'lookup' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( $urlAlias ) );
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            'locationId' => $destinationId,
+            'viewType' => ViewManager::VIEW_TYPE_FULL,
+            'layout' => true
+        );
+        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
+        $this->assertTrue( $request->attributes->has( 'needsRedirect' ) );
+        $this->assertSame( $urlAliasPath, $request->attributes->get( 'semanticPathinfo' ) );
+        $this->assertSame( $destinationId, $request->attributes->get( 'locationId' ) );
+    }
+
+    public function testMatchRequestLocationCorrectCaseUriPrefixExcluded()
+    {
+        $pathInfo = $urlAliasPath = '/foo/bar';
+        $destinationId = 123;
+        $urlAlias = new URLAlias(
+            array(
+                'path' => $urlAliasPath,
+                'type' => UrlAlias::LOCATION,
+                'destination' => $destinationId,
+                'isHistory' => false
+            )
+        );
+        $request = $this->getRequestByPathInfo( $pathInfo );
+        $this->urlALiasGenerator
+            ->expects( $this->once() )
+            ->method( 'isUriPrefixExcluded' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( true ) );
+        $this->urlAliasService
+            ->expects( $this->once() )
+            ->method( 'lookup' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( $urlAlias ) );
+
+        $expected = array(
+            '_route' => UrlAliasRouter::URL_ALIAS_ROUTE_NAME,
+            '_controller' => UrlAliasRouter::LOCATION_VIEW_CONTROLLER,
+            'locationId' => $destinationId,
+            'viewType' => ViewManager::VIEW_TYPE_FULL,
+            'layout' => true
+        );
+        $this->assertEquals( $expected, $this->router->matchRequest( $request ) );
+        $this->assertFalse( $request->attributes->has( 'needsRedirect' ) );
+        $this->assertSame( $pathInfo, $request->attributes->get( 'semanticPathinfo' ) );
+        $this->assertSame( $destinationId, $request->attributes->get( 'locationId' ) );
+    }
+
     public function testMatchRequestLocationHistory()
     {
         $pathInfo = '/foo/bar';
@@ -470,6 +550,11 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
             )
         );
         $request = $this->getRequestByPathInfo( $pathInfo );
+        $this->urlALiasGenerator
+            ->expects( $this->once() )
+            ->method( 'isUriPrefixExcluded' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( false ) );
         $this->urlAliasService
             ->expects( $this->once() )
             ->method( 'lookup' )
@@ -556,6 +641,11 @@ class UrlAliasRouterTest extends PHPUnit_Framework_TestCase
             )
         );
         $request = $this->getRequestByPathInfo( $pathInfo );
+        $this->urlALiasGenerator
+            ->expects( $this->once() )
+            ->method( 'isUriPrefixExcluded' )
+            ->with( $pathInfo )
+            ->will( $this->returnValue( false ) );
         $this->urlAliasService
             ->expects( $this->once() )
             ->method( 'lookup' )

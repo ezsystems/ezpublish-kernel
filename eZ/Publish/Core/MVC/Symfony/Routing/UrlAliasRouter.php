@@ -246,8 +246,15 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      *
      * @return boolean
      */
-    protected function needsCaseRedirect( URLAlias $loadedUrlAlias, $requestedPath , $pathPrefix )
+    protected function needsCaseRedirect( URLAlias $loadedUrlAlias, $requestedPath, $pathPrefix )
     {
+        // If requested path is excluded from tree root jail, compare it to loaded UrlAlias directly.
+        if ( $this->generator->isUriPrefixExcluded( $requestedPath ) )
+        {
+            return strcmp( $loadedUrlAlias->path, $requestedPath ) !== 0;
+        }
+
+        // Compare loaded UrlAlias with requested path, prefixed with configured path prefix.
         return (
             strcmp(
                 $loadedUrlAlias->path,
