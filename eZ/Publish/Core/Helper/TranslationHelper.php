@@ -202,11 +202,13 @@ class TranslationHelper
             $languages = $this->getLanguages( $forcedLanguage );
         }
 
+        // Get property value first in case it is magic (__isset and __get) property
+        $propertyValue = $object->$property;
         foreach ( $languages as $lang )
         {
-            if ( isset( $object->$property[$lang] ) )
+            if ( isset( $propertyValue[$lang] ) )
             {
-                return $object->$property[$lang];
+                return $propertyValue[$lang];
             }
         }
     }

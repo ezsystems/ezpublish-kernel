@@ -730,11 +730,11 @@ class ContentExtension extends Twig_Extension
      * Gets translated property generic helper
      *
      * For generic use, expects property in singular form. For instance if 'name' is provided it will first look for
-     * property called 'names' and look for correct translation there, otherwise fallback to getName() method if set.
+     * getName( $lang ) method, then property called ->names[$lang], in either case look for correct translation.
      *
-     * Languages will consist of either forced language or current languages list, in addition helper will check if for
-     * mainLanguage property and append that to languages if alwaysAvailable property is true or non-existing.
-     *
+     * Languages will consist of either forced language or current SiteAccess languages list, in addition for property
+     * lookup helper will look for mainLanguage property and use it if either alwaysAvailable property is true or non-
+     * existing.
      *
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object Can be any kid of Value object which directly holds the translated data
      * @param string $property Property name, example 'name', 'description'
@@ -747,19 +747,19 @@ class ContentExtension extends Twig_Extension
     public function getTranslatedProperty( ValueObject $object, $property, $forcedLanguage = null )
     {
         $pluralProperty = $property . 's';
-        if ( isset( $object->$pluralProperty ) )
-        {
-            return $this->translationHelper->getTranslatedByProperty(
-                $object,
-                $pluralProperty,
-                $forcedLanguage
-            );
-        }
-        else if ( method_exists( $object, 'get' . $property ) )
+        if ( method_exists( $object, 'get' . $property ) )
         {
             return $this->translationHelper->getTranslatedByMethod(
                 $object,
                 'get' . $property,
+                $forcedLanguage
+            );
+        }
+        else if ( property_exists( $object, $pluralProperty ) && is_array( $object->$pluralProperty ) )
+        {
+            return $this->translationHelper->getTranslatedByProperty(
+                $object,
+                $pluralProperty,
                 $forcedLanguage
             );
         }
