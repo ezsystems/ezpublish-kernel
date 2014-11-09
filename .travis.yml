@@ -18,7 +18,7 @@ env:
     - TEST_CONFIG="phpunit-integration-legacy.xml" SYMFONY_VERSION="~2.6@beta"
     - TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
     - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
-    - SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+    - SOLR_VERSION="4.9.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - ELASTICSEARCH_VERSION="1.4.0" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 
 matrix:
@@ -36,7 +36,7 @@ matrix:
     - php: 5.4
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
     - php: 5.4
-      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+      env: SOLR_VERSION="4.9.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - php: 5.4
       env: ELASTICSEARCH_VERSION="1.4.0" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # 5.5 run: unit test (Symfony 2.3) + mysql integration test + solr 4.x integration test
@@ -54,7 +54,7 @@ matrix:
     - php: 5.6
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
     - php: 5.6
-      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+      env: SOLR_VERSION="4.9.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - php: 5.6
       env: ELASTICSEARCH_VERSION="1.4.0" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # hhvm run: unit test + sqlite integration test
@@ -65,7 +65,7 @@ matrix:
     - php: hhvm
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
     - php: hhvm
-      env: SOLR_VERSION="4.7.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
+      env: SOLR_VERSION="4.9.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - php: hhvm
       env: ELASTICSEARCH_VERSION="1.4.0" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 
