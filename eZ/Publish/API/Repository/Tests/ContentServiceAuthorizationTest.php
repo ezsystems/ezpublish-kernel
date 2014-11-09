@@ -1198,12 +1198,12 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         /* BEGIN: Use Case */
         $user = $this->createMediaUserVersion1();
 
-        // Remote id of the "Media" page of a eZ Publish demo installation.
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
+        // Remote id of the "Setup" page of a eZ Publish demo installation.
+        $setupRemoteId = '241d538ce310074e602f29f49e44e938';
 
         $versionInfo = $contentService->loadVersionInfo(
             $contentService->loadContentInfoByRemoteId(
-                $mediaRemoteId
+                $setupRemoteId
             )
         );
 

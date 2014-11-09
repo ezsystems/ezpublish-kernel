@@ -352,7 +352,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         return $this->createCustomUserVersion1(
             'Media Editor',
             'Editor',
-            new SubtreeLimitation( array( 'limitationValues' => array( '/1/48/' ) ) )
+            new SubtreeLimitation( array( 'limitationValues' => array( '/1/43/' ) ) )
         );
     }
 
