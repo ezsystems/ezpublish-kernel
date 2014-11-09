@@ -18,16 +18,6 @@ parameters:
     ezpublish.api.role.limitation_type.status.class: eZ\Publish\Core\Limitation\StatusLimitationType
 
 services:
-    ## Non implemented Limitations
-
-    # FunctionList is a ezjscore limitations, it only applies to ezjscore policies not used by
-    # API/platform stack so configuring to use "blocking" limitation to avoid LimitationNotFoundException
-    ezpublish.api.role.limitation_type.function_list:
-        class: %ezpublish.api.role.limitation_type.blocking.class%
-        arguments: ['FunctionList']
-        tags:
-            - {name: ezpublish.limitationType, alias: FunctionList}
-
     ## Implemented Limitations
     ezpublish.api.role.limitation_type.content_type:
         class: %ezpublish.api.role.limitation_type.content_type.class%
@@ -122,3 +112,28 @@ services:
         class: %ezpublish.api.role.limitation_type.status.class%
         tags:
             - {name: ezpublish.limitationType, alias: Status}
+
+    ## Non implemented Limitations
+    # Configured to use "blocking" limitation (as they are not implemented) to avoid LimitationNotFoundException
+
+    # ezjscore limitations, not applicable by API/Platform stack, users are adviced to use Symfony for ajax controllers
+    ezpublish.api.role.limitation_type.function_list:
+        class: %ezpublish.api.role.limitation_type.blocking.class%
+        arguments: ['FunctionList']
+        tags: [{name: ezpublish.limitationType, alias: FunctionList}]
+
+    # Misc limitations used by ezcomments, not applicable to Platform replacement: EzCommentsBundle
+    ezpublish.api.role.limitation_type.ezcomments.content_section:
+        class: %ezpublish.api.role.limitation_type.blocking.class%
+        arguments: ['ContentSection']
+        tags: [{name: ezpublish.limitationType, alias: ContentSection}]
+
+    ezpublish.api.role.limitation_type.ezcomments.comment_creator:
+        class: %ezpublish.api.role.limitation_type.blocking.class%
+        arguments: ['CommentCreator']
+        tags: [{name: ezpublish.limitationType, alias: CommentCreator}]
+
+    ezpublish.api.role.limitation_type.ezcomments.anti_spam:
+        class: %ezpublish.api.role.limitation_type.blocking.class%
+        arguments: ['AntiSpam']
+        tags: [{name: ezpublish.limitationType, alias: AntiSpam}]
