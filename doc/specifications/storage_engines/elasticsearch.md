@@ -115,3 +115,13 @@ Extractor is used by search handlers to extract search result from the data retu
 Currently only `Loading` extractor is implemented, which returns search hits (Location and ContentInfo) by
 loading them using the storage implementation. Alternative implementation could do the same by
 reconstructing them from the returned Elasticsearch data.
+
+### Language analysis
+
+Analyzers can be configured per language code and are always named `analyzer_<language code>`, where hyphen in
+language code is replaced by an underline. For example: `analyzer_cro_HR`, `analyzer_eng_GB`. Elasticsearch's
+analyzer aliasing feature allows configuring one and the same analyzer for multiple language codes.
+
+Only a mechanism to configure analysis per language is given. Provided analyzer configuration can only be
+considered as a starting point -- this is Elasticsearch's domain and user is expected to configure analysis
+as needed.
