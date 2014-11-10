@@ -115,27 +115,34 @@ class ContentPreviewHelper implements SiteAccessAware
     {
         // contentInfo must be reloaded as content is not published yet (e.g. no mainLocationId)
         $contentInfo = $this->contentService->loadContentInfo( $contentId );
+        $rootLocationId = $this->configResolver->getParameter( 'content.tree_root.location_id' );
         // mainLocationId already exists, content has been published at least once.
         if ( $contentInfo->mainLocationId )
         {
-            $location = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+            return $this->locationService->loadLocation( $contentInfo->mainLocationId );
         }
-        // New Content, never published, create a virtual location object.
+        // New Content, never published, try to load a draft location.
         else
         {
-            // @todo In future releases this will be a full draft location when this feature
-            // is implemented. Or it might return null when content does not have location,
-            // but for now we can't detect that so we return a virtual draft location
-            $location = new Location(
-                array(
-                    // Faking using root locationId
-                    'id' => $this->configResolver->getParameter( 'content.tree_root.location_id' ),
-                    'contentInfo' => $contentInfo,
-                    'status' => Location::STATUS_DRAFT
-                )
+            $locations = $this->locationService->loadLocations(
+                $contentInfo,
+                $this->locationService->loadLocation( $rootLocationId )
             );
+
+            if ( $locations )
+            {
+                return $locations[0];
+            }
         }
 
-        return $location;
+        // Couldn't load draft location, return a virtual location.
+        return new Location(
+            array(
+                // Faking using root locationId
+                'id' => $rootLocationId,
+                'contentInfo' => $contentInfo,
+                'status' => Location::STATUS_DRAFT
+            )
+        );
     }
 }
