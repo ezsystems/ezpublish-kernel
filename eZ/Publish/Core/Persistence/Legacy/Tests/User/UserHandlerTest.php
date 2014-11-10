@@ -154,11 +154,23 @@ class UserHandlerTest extends TestCase
             'Expected one user to be created.'
         );
 
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser_setting' ),
+            'Expected one user setting to be created.'
+        );
+
         $handler->delete( $user->id );
         $this->assertQueryResult(
             array( array( 0 ) ),
             $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
             'Expected one user to be removed.'
+        );
+
+        $this->assertQueryResult(
+            array( array( 0 ) ),
+            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser_setting' ),
+            'Expected one user setting to be removed.'
         );
     }
 
