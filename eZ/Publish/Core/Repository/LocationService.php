@@ -241,35 +241,24 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * Loads the locations for the given content object.
-     *
-     * If a $rootLocation is given, only locations that belong to this location are returned.
-     * The location list is also filtered by permissions on reading locations.
-     *
-     * @todo permissions check is missing
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
+     * @see \eZ\Publish\API\Repository\LocationService::loadLocations
      */
     public function loadLocations( ContentInfo $contentInfo, APILocation $rootLocation = null )
     {
-        if ( !$contentInfo->published )
-        {
-            throw new BadStateException( "\$contentInfo", "ContentInfo has no published versions" );
-        }
-
         $spiLocations = $this->persistenceHandler->locationHandler()->loadLocationsByContent(
             $contentInfo->id,
-            $rootLocation !== null ? $rootLocation->id : null
+            $contentInfo->published ? null : $contentInfo->currentVersionNo
         );
 
         $locations = array();
         foreach ( $spiLocations as $spiLocation )
         {
+            if ( $rootLocation !== null && strpos( $spiLocation->pathString, $rootLocation->pathString ) !== 0 )
+                continue;
+
+            if ( !$this->repository->canUser( "content", "read", $contentInfo, $spiLocation ) )
+                continue;
+
             $locations[] = $this->domainMapper->buildLocationDomainObject( $spiLocation );
         }
 

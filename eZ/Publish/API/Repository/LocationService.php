@@ -70,7 +70,7 @@ interface LocationService
      * If a $rootLocation is given, only locations that belong to this location are returned.
      * The location list is also filtered by permissions on reading locations.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
+     * If content is not published, then this method will return location drafts.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
