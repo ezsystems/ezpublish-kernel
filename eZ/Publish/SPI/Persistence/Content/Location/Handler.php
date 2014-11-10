@@ -54,16 +54,17 @@ interface Handler
      * identified by $rootLocationId
      *
      * @param int $contentId
-     * @param int $rootLocationId
+     * @param int $contentVersionNo If specified return the draft locations attached to the specific version.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
-    public function loadLocationsByContent( $contentId, $rootLocationId = null );
+    public function loadLocationsByContent( $contentId, $contentVersionNo = null );
 
     /**
      * Loads all parent Locations for unpublished Content by given $contentId.
      *
      * @access private This method is stopgap solution and will be removed once loading draft Locations is implemented.
+     * @deprecated Since 5.4
      *
      * @param mixed $contentId
      *
