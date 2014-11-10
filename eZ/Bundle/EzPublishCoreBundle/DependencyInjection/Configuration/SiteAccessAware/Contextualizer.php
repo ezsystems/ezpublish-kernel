@@ -93,9 +93,22 @@ class Contextualizer implements ContextualizerInterface
             $groupsSettings = array();
             if ( isset( $this->groupsBySiteAccess[$scope] ) && is_array( $this->groupsBySiteAccess[$scope] ) )
             {
-                $groupsSettings = $this->groupsArraySetting(
-                    $this->groupsBySiteAccess[$scope], $id,
-                    $config, $options & static::MERGE_FROM_SECOND_LEVEL
+                foreach ( $this->groupsBySiteAccess[$scope] as $group )
+                {
+                    $groupsSettings = array_merge(
+                        $groupsSettings,
+                        $this->getContainerParameter(
+                            $this->namespace . '.' . $group . '.' . $id,
+                            array()
+                        )
+                    );
+                }
+                $groupsSettings = array_merge(
+                    $groupsSettings,
+                    $this->groupsArraySetting(
+                        $this->groupsBySiteAccess[$scope], $id,
+                        $config, $options & static::MERGE_FROM_SECOND_LEVEL
+                    )
                 );
             }
 
