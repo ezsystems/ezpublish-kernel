@@ -4018,6 +4018,186 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testLanguageAnalysisSeparateContent()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( !$setupFactory instanceof LegacyElasticsearch )
+        {
+            $this->markTestSkipped( "Language analysis is implemented only for Elasticsearch storage" );
+        }
+
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreateStruct = $languageService->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = "rus-RU";
+        $languageCreateStruct->name = "Russian";
+
+        $languageService->createLanguage( $languageCreateStruct );
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            "eng-GB"
+        );
+
+        $contentCreateStruct->setField( "name", "foxes" );
+
+        $englishContent = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                array( $locationService->newLocationCreateStruct( 2 ) )
+            )->versionInfo
+        );
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            "rus-RU"
+        );
+
+        $contentCreateStruct->setField( "name", "foxes" );
+
+        $russianContent = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                array( $locationService->newLocationCreateStruct( 2 ) )
+            )->versionInfo
+        );
+
+        // Only Content in English should be found, because Content in Russian
+        // will not be correctly stemmed
+        $query = new Query(
+            array(
+                "query" => new Criterion\FullText( "foxing" )
+            )
+        );
+
+        $searchResult = $searchService->findContent( $query );
+
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $englishContent->id, $searchResult->searchHits[0]->valueObject->id );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testLanguageAnalysisSameContent()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( !$setupFactory instanceof LegacyElasticsearch )
+        {
+            $this->markTestSkipped( "Language analysis is implemented only for Elasticsearch storage" );
+        }
+
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreateStruct = $languageService->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = "rus-RU";
+        $languageCreateStruct->name = "Russian";
+
+        $languageService->createLanguage( $languageCreateStruct );
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            "eng-GB"
+        );
+
+        $contentCreateStruct->setField( "name", "foxes важнейшими", "eng-GB" );
+        $contentCreateStruct->setField( "name", "foxes важнейшими", "rus-RU" );
+
+        $mixedContent = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                array( $locationService->newLocationCreateStruct( 2 ) )
+            )->versionInfo
+        );
+
+        // Content will be found because translation in Russian will be correctly stemmed
+        $query = new Query(
+            array(
+                "query" => new Criterion\FullText( "важнее" )
+            )
+        );
+
+        $searchResult = $searchService->findContent( $query );
+
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $mixedContent->id, $searchResult->searchHits[0]->valueObject->id );
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
+     */
+    public function testLanguageAnalysisSameContentNotFound()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( !$setupFactory instanceof LegacyElasticsearch )
+        {
+            $this->markTestSkipped( "Language analysis is implemented only for Elasticsearch storage" );
+        }
+
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+        $languageService = $repository->getContentLanguageService();
+
+        $languageCreateStruct = $languageService->newLanguageCreateStruct();
+        $languageCreateStruct->languageCode = "rus-RU";
+        $languageCreateStruct->name = "Russian";
+
+        $languageService->createLanguage( $languageCreateStruct );
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
+            "eng-GB"
+        );
+
+        $contentCreateStruct->setField( "name", "foxes важнейшими", "eng-GB" );
+        $contentCreateStruct->setField( "name", "foxes важнейшими", "rus-RU" );
+
+        $mixedContent = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                array( $locationService->newLocationCreateStruct( 2 ) )
+            )->versionInfo
+        );
+
+        // Content should be found because translation in Russian will be correctly stemmed
+        $query = new Query(
+            array(
+                "query" => new Criterion\FullText( "важнее" )
+            )
+        );
+
+        // Filtering fields for only English will cause no match because the term will
+        // not be correctly stemmed
+        $searchResult = $searchService->findContent( $query, array( "languages" => array( "eng-GB" ) ) );
+
+        $this->assertEquals( 0, $searchResult->totalCount );
+    }
+
+    /**
      * Assert that query result matches the given fixture.
      *
      * @param Query $query

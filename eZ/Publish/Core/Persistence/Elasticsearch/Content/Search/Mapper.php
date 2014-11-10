@@ -320,7 +320,7 @@ class Mapper
                     foreach ( $fieldType->getIndexData( $field ) as $indexField )
                     {
                         $fields[] = new Field(
-                            $this->fieldNameGenerator->getName(
+                            $name = $this->fieldNameGenerator->getName(
                                 $indexField->name,
                                 $fieldDefinition->identifier,
                                 $contentType->identifier
@@ -328,6 +328,18 @@ class Mapper
                             $indexField->value,
                             $indexField->type
                         );
+
+                        if (
+                            $indexField->type instanceof FieldType\StringField ||
+                            $indexField->type instanceof FieldType\MultipleStringField
+                        )
+                        {
+                            $fields[] = new Field(
+                                $name . "_meta_all_" . str_replace( "-", "_", $languageCode ),
+                                $indexField->value,
+                                $indexField->type
+                            );
+                        }
                     }
                 }
             }
