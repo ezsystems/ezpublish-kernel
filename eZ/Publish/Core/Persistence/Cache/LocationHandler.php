@@ -57,11 +57,11 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler::loadLocationsByContent
      */
-    public function loadLocationsByContent( $contentId, $rootLocationId = null )
+    public function loadLocationsByContent( $contentId, $contentVersionNo = null )
     {
-        if ( $rootLocationId )
+        if ( $contentVersionNo )
         {
-            $cache = $this->cache->getItem( 'content', 'locations', $contentId, 'root', $rootLocationId );
+            $cache = $this->cache->getItem( 'content', 'locations', $contentId, 'version', $contentVersionNo );
         }
         else
         {
@@ -70,8 +70,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $locationIds = $cache->get();
         if ( $cache->isMiss() )
         {
-            $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'root' => $rootLocationId ) );
-            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $contentId, $rootLocationId );
+            $this->logger->logCall( __METHOD__, array( 'content' => $contentId, 'versionNo' => $contentVersionNo ) );
+            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $contentId, $contentVersionNo );
 
             $locationIds = array();
             foreach ( $locations as $location )
