@@ -17,7 +17,8 @@ parameters:
     ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedToHtml5
     ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes: [view, node_id, object_id]
     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class: eZ\Publish\Core\FieldType\XmlText\Converter\EzLinkToHtml5
-    ezpublish.fieldType.ezxmltext.converter.customTags.class: eZ\Publish\Core\FieldType\XmlText\Converter\CustomTags
+    ezpublish.fieldType.ezxmltext.converter.expanding.class: eZ\Publish\Core\FieldType\XmlText\Converter\Expanding
+    ezpublish.fieldType.ezxmltext.converter.embedLinking.class: eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking
 
     # RichText
     ezpublish.fieldType.ezrichtext.converter.xslt.class: eZ\Publish\Core\FieldType\RichText\Converter\Xslt
@@ -104,15 +105,15 @@ services:
             - %ezpublish.fieldType.ezxmltext.converter.html5.resources%
             - @ezpublish.config.resolver
 
-    ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
-        class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
-        arguments:
-            - @fragment.handler
-            - @ezpublish.api.repository
-            - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
-            - @?logger
+    ezpublish.fieldType.ezxmltext.converter.expanding:
+        class: %ezpublish.fieldType.ezxmltext.converter.expanding.class%
         tags:
-            - { name: ezpublish.ezxml.converter }
+            - { name: ezpublish.ezxml.converter, priority: 32 }
+
+    ezpublish.fieldType.ezxmltext.converter.embedLinking:
+        class: %ezpublish.fieldType.ezxmltext.converter.embedLinking.class%
+        tags:
+            - { name: ezpublish.ezxml.converter, priority: 24 }
 
     ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5:
         class: %ezpublish.fieldType.ezxmltext.converter.ezLinkToHtml5.class%
@@ -122,12 +123,17 @@ services:
             - @ezpublish.urlalias_router
             - @?logger
         tags:
-            - { name: ezpublish.ezxml.converter }
+            - { name: ezpublish.ezxml.converter, priority: 16 }
 
-    ezpublish.fieldType.ezxmltext.converter.customTags:
-        class: %ezpublish.fieldType.ezxmltext.converter.customTags.class%
+    ezpublish.fieldType.ezxmltext.converter.embedToHtml5:
+        class: %ezpublish.fieldType.ezxmltext.converter.embedToHtml5.class%
+        arguments:
+            - @fragment.handler
+            - @ezpublish.api.repository
+            - %ezpublish.fieldType.ezxmlText.converter.embedToHtml5.excludedAttributes%
+            - @?logger
         tags:
-            - { name: ezpublish.ezxml.converter }
+            - { name: ezpublish.ezxml.converter, priority: 8 }
 
     # RichText
     ezpublish.fieldType.ezrichtext.converter.input.ezxml:
