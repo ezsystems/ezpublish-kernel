@@ -18,6 +18,7 @@ use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use Psr\Log\LoggerInterface;
+use DOMElement;
 
 /**
  * Converts embedded elements from internal XmlText representation to HTML5
@@ -44,6 +45,13 @@ class EmbedToHtml5 implements Converter
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
+
+    /**
+     * Prefix of the link attribute names potentially copied to the embed element.
+     *
+     * @var string
+     */
+    protected $tmpPrefix = "ezlegacytmp-embed-link-";
 
     public function __construct(
         FragmentHandler $fragmentHandler,
@@ -74,19 +82,7 @@ class EmbedToHtml5 implements Converter
             }
 
             $embedContent = null;
-            $parameters = array(
-                "noLayout" => true,
-                "objectParameters" => array()
-            );
-
-            foreach ( $embed->attributes as $attribute )
-            {
-                // We only consider tags in the custom namespace, and skip disallowed names
-                if ( !isset( $this->excludedAttributes[$attribute->localName] ) )
-                {
-                    $parameters["objectParameters"][$attribute->localName] = $attribute->nodeValue;
-                }
-            }
+            $parameters = $this->getParameters( $embed );
 
             if ( $contentId = $embed->getAttribute( "object_id" ) )
             {
@@ -219,6 +215,145 @@ class EmbedToHtml5 implements Converter
                 $embed->appendChild( $xmlDoc->createCDATASection( $embedContent ) );
             }
         }
+    }
+
+    /**
+     * Returns embed's parameters.
+     *
+     * @param \DOMElement $embed
+     *
+     * @return array
+     */
+    protected function getParameters( DOMElement $embed )
+    {
+        $parameters = array(
+            "noLayout" => true,
+            "objectParameters" => array(),
+        );
+
+        $linkParameters = $this->getLinkParameters( $embed );
+
+        if ( $linkParameters !== null )
+        {
+            $parameters["linkParameters"] = $linkParameters;
+        }
+
+        foreach ( $embed->attributes as $attribute )
+        {
+            // We only consider tags in the custom namespace, and skip disallowed names
+            if (
+                !isset( $this->excludedAttributes[$attribute->localName] )
+                && $attribute->localName !== 'url'
+                && strpos( $attribute->localName, 'ezlegacytmp-embed-link-' ) !== 0
+            )
+            {
+                $parameters["objectParameters"][$attribute->localName] = $attribute->nodeValue;
+            }
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Returns embed's link parameters, or null if embed is not linked.
+     *
+     * @param \DOMElement $embed
+     *
+     * @return array|null
+     */
+    protected function getLinkParameters( DOMElement $embed )
+    {
+        if ( !$embed->hasAttribute( "url" ) )
+        {
+            return null;
+        }
+
+        $tmpPrefix = $this->tmpPrefix;
+
+        $target = $embed->getAttribute( "{$tmpPrefix}target" );
+        $title = $embed->getAttribute( "{$tmpPrefix}title" );
+        $id = $embed->getAttribute( "{$tmpPrefix}id" );
+        $class = $embed->getAttribute( "{$tmpPrefix}class" );
+        $resourceType = null;
+        $resourceId = null;
+
+        if ( $embed->hasAttribute( "{$tmpPrefix}object_id" ) )
+        {
+            $resourceType = "CONTENT";
+            $resourceId = $embed->getAttribute( "{$tmpPrefix}object_id" );
+        }
+        else if ( $embed->hasAttribute( "{$tmpPrefix}node_id" ) )
+        {
+            $resourceType = "LOCATION";
+            $resourceId = $embed->getAttribute( "{$tmpPrefix}node_id" );
+        }
+        else if ( $embed->hasAttribute( "{$tmpPrefix}url_id" ) )
+        {
+            $resourceType = "URL";
+            $resourceId = $embed->getAttribute( "{$tmpPrefix}url_id" );
+        }
+        else
+        {
+            $this->logger->error(
+                "Could not resolve XmlText embed link resource type and ID"
+            );
+        }
+
+        $parameters = array(
+            "href" => $embed->getAttribute( "url" ),
+            "target" => $target ?: null,
+            "title" => $title ?: null,
+            "id" => $id ?: null,
+            "class" => $class ?: null,
+            "resourceType" => $resourceType,
+            "resourceId" => $resourceId,
+            "wrapped" => $this->isLinkWrapped( $embed ),
+        );
+
+        return $parameters;
+    }
+
+    /**
+     * Returns boolean signifying if the embed is contained in a link element of not.
+     *
+     * After EmbedLinking converter pass this should be possible only for inline level embeds.
+     *
+     * @param \DOMElement $element
+     *
+     * @return boolean
+     */
+    protected function isLinkWrapped( DOMElement $element )
+    {
+        $parentNode = $element->parentNode;
+
+        if ( $parentNode instanceof DOMDocument )
+        {
+            return false;
+        }
+        else if ( $parentNode->localName === "link" )
+        {
+            $childCount = 0;
+
+            /** @var \DOMText|\DOMElement $node */
+            foreach ( $parentNode->childNodes as $node )
+            {
+                if ( !( $node->nodeType === XML_TEXT_NODE && $node->isWhitespaceInElementContent() ) )
+                {
+                    $childCount += 1;
+                }
+            }
+
+            if ( $childCount === 1 )
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        return $this->isLinkWrapped( $parentNode );
     }
 
     /**
