@@ -61,8 +61,7 @@ interface Handler
     public function loadByRemoteId( $remoteId );
 
     /**
-     * Loads all locations for $contentId, optionally limited to a sub tree
-     * identified by $rootLocationId
+     * Loads all locations for $contentId
      *
      * @param int $contentId
      *
@@ -71,7 +70,7 @@ interface Handler
     public function loadLocationsByContent( $contentId );
 
     /**
-     * Loads all location drafts for $contentId
+     * Loads all locations for $contentId Content draft
      *
      * @param int $contentId
      *
