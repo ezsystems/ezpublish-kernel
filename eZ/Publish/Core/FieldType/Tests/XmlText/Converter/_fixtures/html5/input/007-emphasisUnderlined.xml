@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <section>
+    <header>This is a heading.</header>
+  </section>
+  <paragraph>This is a paragraph with <custom name="underline">underlined</custom> text.</paragraph>
+</section>
