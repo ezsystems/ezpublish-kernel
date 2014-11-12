@@ -40,7 +40,8 @@ class FilterConfiguration extends BaseFilterConfiguration
             'cache' => 'ezpublish',
             'data_loader' => 'ezpublish',
             'reference' => isset( $configuredVariations[$filter]['reference'] ) ? $configuredVariations[$filter]['reference'] : null,
-            'filters' => $this->getVariationFilters( $filter, $configuredVariations )
+            'filters' => $this->getVariationFilters( $filter, $configuredVariations ),
+            'post_processors' => array()
         );
 
         return $filterConfig;
