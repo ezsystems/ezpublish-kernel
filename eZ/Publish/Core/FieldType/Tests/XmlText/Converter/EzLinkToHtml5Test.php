@@ -13,6 +13,7 @@ use eZ\Publish\Core\FieldType\XmlText\Converter\EzLinkToHtml5;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException as APIUnauthorizedException;
+use DOMXPath;
 
 /**
  * Tests the EzLinkToHtml5 Preconverter
@@ -37,6 +38,26 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link url="/test" anchor_name="anchor">object link</link>.</paragraph></section>',
                 '/test#anchor',
             ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed ezlegacytmp-embed-link-url="/test"/></section>',
+                '/test',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed ezlegacytmp-embed-link-url="/test" ezlegacytmp-embed-link-anchor_name="anchor"/></section>',
+                '/test#anchor',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline ezlegacytmp-embed-link-url="/test"/></section>',
+                '/test',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline ezlegacytmp-embed-link-url="/test" ezlegacytmp-embed-link-anchor_name="anchor"/></section>',
+                '/test#anchor',
+            ),
         );
     }
 
@@ -57,6 +78,38 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph>This is an <link object_id="104" anchor_name="anchor">object link</link>.</paragraph></section>',
+                104,
+                106,
+                'test',
+                'test#anchor',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed object_id="103" ezlegacytmp-embed-link-object_id="104"/></section>',
+                104,
+                106,
+                'test',
+                'test',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed object_id="103" ezlegacytmp-embed-link-object_id="104" ezlegacytmp-embed-link-anchor_name="anchor"/></section>',
+                104,
+                106,
+                'test',
+                'test#anchor',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline object_id="103" ezlegacytmp-embed-link-object_id="104"/></section>',
+                104,
+                106,
+                'test',
+                'test',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline object_id="103" ezlegacytmp-embed-link-object_id="104" ezlegacytmp-embed-link-anchor_name="anchor"/></section>',
                 104,
                 106,
                 'test',
@@ -85,6 +138,34 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
                 'test',
                 'test#anchor',
             ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed node_id="105" ezlegacytmp-embed-link-node_id="106"/></section>',
+                106,
+                'test',
+                'test',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed node_id="105" ezlegacytmp-embed-link-node_id="106" ezlegacytmp-embed-link-anchor_name="anchor"/></section>',
+                106,
+                'test',
+                'test#anchor',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline node_id="105" ezlegacytmp-embed-link-node_id="106"/></section>',
+                106,
+                'test',
+                'test',
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline node_id="105" ezlegacytmp-embed-link-node_id="106" ezlegacytmp-embed-link-anchor_name="anchor"/></section>',
+                106,
+                'test',
+                'test#anchor',
+            ),
         );
     }
 
@@ -109,7 +190,39 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
                 new APIUnauthorizedException( "Location", 106 ),
                 'notice',
                 'While generating links for xmltext, unauthorized to load Location with ID 106'
-            )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed node_id="105" ezlegacytmp-embed-link-node_id="106"/></section>',
+                106,
+                new APINotFoundException( "Location", 106 ),
+                'warning',
+                'While generating links for xmltext, could not locate Location with ID 106'
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed node_id="105" ezlegacytmp-embed-link-node_id="106"/></section>',
+                106,
+                new APIUnauthorizedException( "Location", 106 ),
+                'notice',
+                'While generating links for xmltext, unauthorized to load Location with ID 106'
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline node_id="105" ezlegacytmp-embed-link-node_id="106"/></section>',
+                106,
+                new APINotFoundException( "Location", 106 ),
+                'warning',
+                'While generating links for xmltext, could not locate Location with ID 106'
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline node_id="105" ezlegacytmp-embed-link-node_id="106"/></section>',
+                106,
+                new APIUnauthorizedException( "Location", 106 ),
+                'notice',
+                'While generating links for xmltext, unauthorized to load Location with ID 106'
+            ),
         );
     }
 
@@ -134,7 +247,39 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
                 new APIUnauthorizedException( "Content", 205 ),
                 'notice',
                 'While generating links for xmltext, unauthorized to load Content object with ID 205'
-            )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed object_id="204" ezlegacytmp-embed-link-object_id="205"/></section>',
+                205,
+                new APINotFoundException( "Content", 205 ),
+                'warning',
+                'While generating links for xmltext, could not locate Content object with ID 205'
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed object_id="204" ezlegacytmp-embed-link-object_id="205"/></section>',
+                205,
+                new APIUnauthorizedException( "Content", 205 ),
+                'notice',
+                'While generating links for xmltext, unauthorized to load Content object with ID 205'
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline object_id="204" ezlegacytmp-embed-link-object_id="205"/></section>',
+                205,
+                new APINotFoundException( "Content", 205 ),
+                'warning',
+                'While generating links for xmltext, could not locate Content object with ID 205'
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><embed-inline object_id="204" ezlegacytmp-embed-link-object_id="205"/></section>',
+                205,
+                new APIUnauthorizedException( "Content", 205 ),
+                'notice',
+                'While generating links for xmltext, unauthorized to load Content object with ID 205'
+            ),
         );
     }
 
@@ -230,11 +375,16 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter );
         $converter->convert( $xmlDoc );
 
-        $links = $xmlDoc->getElementsByTagName( 'link' );
-        foreach ( $links as $link )
+        $xpath = new DOMXPath( $xmlDoc );
+        $xpathExpression = "//link|//embed|//embed-inline";
+
+        $elements = $xpath->query( $xpathExpression );
+
+        /** @var \DOMElement $element */
+        foreach ( $elements as $element )
         {
             // assumes only one link, or all pointing to same url
-            $this->assertEquals( $url, $link->getAttribute( 'url' ) );
+            $this->assertEquals( $url, $element->getAttribute( 'url' ) );
         }
     }
 
@@ -270,14 +420,15 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter );
         $converter->convert( $xmlDoc );
 
-        $links = $xmlDoc->getElementsByTagName( 'link' );
+        $xpath = new DOMXPath( $xmlDoc );
+        $xpathExpression = "//link|//embed|//embed-inline";
 
-        foreach ( $links as $link )
+        $elements = $xpath->query( $xpathExpression );
+
+        /** @var \DOMElement $element */
+        foreach ( $elements as $element )
         {
-            if ( $link->getAttribute( 'node_id' ) == $locationId )
-            {
-                $this->assertEquals( $url, $link->getAttribute( 'url' ) );
-            }
+            $this->assertEquals( $url, $element->getAttribute( 'url' ) );
         }
     }
 
@@ -325,14 +476,15 @@ class EzLinkToHtml5Test extends PHPUnit_Framework_TestCase
         $converter = new EzLinkToHtml5( $locationService, $contentService, $urlAliasRouter );
         $converter->convert( $xmlDoc );
 
-        $links = $xmlDoc->getElementsByTagName( 'link' );
+        $xpath = new DOMXPath( $xmlDoc );
+        $xpathExpression = "//link|//embed|//embed-inline";
 
-        foreach ( $links as $link )
+        $elements = $xpath->query( $xpathExpression );
+
+        /** @var \DOMElement $element */
+        foreach ( $elements as $element )
         {
-            if ( $link->getAttribute( 'object_id' ) == $contentId )
-            {
-                $this->assertEquals( $url, $link->getAttribute( 'url' ) );
-            }
+            $this->assertEquals( $url, $element->getAttribute( 'url' ) );
         }
     }
 
