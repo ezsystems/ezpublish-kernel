@@ -94,6 +94,7 @@ class Location extends ValueObject
      *
      * This field might be removed in a later version.
      *
+     * @deprecated Since 5.4, planned to be removed in 6.0
      * @var string
      */
     public $pathIdentificationString;
