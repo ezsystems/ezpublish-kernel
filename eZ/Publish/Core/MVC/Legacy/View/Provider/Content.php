@@ -58,6 +58,16 @@ class Content extends Provider implements ContentViewProviderInterface
                         $tpl->setVariable( 'object_parameters', $params["embedParams"], 'ContentView' );
                     }
 
+                    // Convert link parameters to Legacy Stack format
+                    if ( isset( $params['linkParameters'] ) )
+                    {
+                        $tpl->setVariable(
+                            'link_parameters',
+                            $this->legalizeLinkParameters( $params["linkParameters"] ),
+                            'ContentView'
+                        );
+                    }
+
                     $children = array();
                     $funcObject->process(
                         $tpl, $children, 'content_view_gui', false,
@@ -98,6 +108,66 @@ class Content extends Provider implements ContentViewProviderInterface
             new ContentView( $legacyContentClosure )
         );
         return $this->decorator;
+    }
+
+    /**
+     * Converts link parameters to Legacy Stack format
+     *
+     * @param array $linkParameters
+     *
+     * @return array
+     */
+    protected function legalizeLinkParameters( array $linkParameters )
+    {
+        $parameters = array();
+
+        if ( $linkParameters["href"] !== null )
+        {
+            $parameters["href"] = $linkParameters["href"];
+        }
+
+        if ( $linkParameters["class"] !== null )
+        {
+            $parameters["class"] = $linkParameters["class"];
+        }
+
+        if ( $linkParameters["id"] !== null )
+        {
+            $parameters["xhtml:id"] = $linkParameters["id"];
+        }
+
+        if ( $linkParameters["target"] !== null )
+        {
+            $parameters["target"] = $linkParameters["target"];
+        }
+
+        if ( $linkParameters["title"] !== null )
+        {
+            $parameters["xhtml:title"] = $linkParameters["title"];
+        }
+
+        if ( $linkParameters["resourceType"] !== null )
+        {
+            switch ( $linkParameters["resourceType"] )
+            {
+                case "CONTENT":
+                    $parameters["object_id"] = $linkParameters["resourceId"];
+                    break;
+
+                case "LOCATION":
+                    $parameters["node_id"] = $linkParameters["resourceId"];
+                    break;
+
+                case "URL":
+                    $parameters["url_id"] = $linkParameters["resourceId"];
+                    break;
+
+                default:
+                    // Don't set anything by default
+            }
+        }
+
+        return $parameters;
     }
 
     /**
