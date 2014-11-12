@@ -40,7 +40,8 @@ class FilterConfiguration extends BaseFilterConfiguration
             'cache' => 'ezpublish',
             'data_loader' => 'ezpublish',
             'reference' => isset( $configuredVariations[$filter]['reference'] ) ? $configuredVariations[$filter]['reference'] : null,
-            'filters' => $this->getVariationFilters( $filter, $configuredVariations )
+            'filters' => $this->getVariationFilters( $filter, $configuredVariations ),
+            'post_processors' => $this->getVariationPostProcessors( $filter, $configuredVariations )
         );
 
         return $filterConfig;
@@ -83,5 +84,30 @@ class FilterConfiguration extends BaseFilterConfiguration
         }
 
         return $filters;
+    }
+
+    /**
+     * Returns post processors to be used for $variationName.
+     *
+     * Both variations configured in eZ and LiipImagineBundle are used.
+     * eZ variations always have precedence.
+     *
+     * @param string $variationName
+     * @param array $configuredVariations Variations set in eZ.
+     *
+     * @return array
+     */
+    private function getVariationPostProcessors( $variationName, array $configuredVariations )
+    {
+        if ( isset( $configuredVariations[$variationName]['post_processors'] ) )
+        {
+            return $configuredVariations[$variationName]['post_processors'];
+        }
+        else if ( isset( $this->filters[$variationName]['post_processors'] ) )
+        {
+            return $this->filters[$variationName]['post_processors'];
+        }
+
+        return array();
     }
 }

@@ -82,6 +82,25 @@ The following filters have been discarded due to incompatibility:
 Please refer to [LiipImagineBundle documentation on custom filters](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md#load-your-custom-filters).
 [Imagine library documentation](http://imagine.readthedocs.org/en/latest/) may also be useful ;-).
 
+### Post-Processors
+LiipImagineBundle supports [post-processors on image aliases](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md#post-processors).
+It is possible to specify them in image alias configuration:
+
+```yaml
+ezpublish:
+    system:
+        my_siteaccess:
+            image_variations:
+                articleimage:
+                    reference: null
+                    filters:
+                        - { name: geometry/scalewidth, params: [770] }
+                    post_processors:
+                        jpegoptim: {}
+```
+
+Please refer to [post-processors documentation in LiipImagineBundle](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/filters.md#post-processors) for details.
+
 ### Drivers
 LiipImagineBundle supports GD (default), Imagick and GMagick PHP extensions and only work on image blobs (no command line tool is needed).
 See the [bundle's documentation to learn more on that topic](https://github.com/liip/LiipImagineBundle/blob/master/Resources/doc/configuration.md).

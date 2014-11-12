@@ -112,7 +112,8 @@ class FilterConfigurationTest extends PHPUnit_Framework_TestCase
                 'cache' => 'ezpublish',
                 'data_loader' => 'ezpublish',
                 'reference' => null,
-                'filters' => $filters
+                'filters' => $filters,
+                'post_processors' => array()
             ),
             $this->filterConfiguration->get( 'some_variation' )
         );
@@ -141,7 +142,8 @@ class FilterConfigurationTest extends PHPUnit_Framework_TestCase
                 'cache' => 'ezpublish',
                 'data_loader' => 'ezpublish',
                 'reference' => $reference,
-                'filters' => $filters
+                'filters' => $filters,
+                'post_processors' => array()
             ),
             $this->filterConfiguration->get( 'some_variation' )
         );
@@ -168,7 +170,8 @@ class FilterConfigurationTest extends PHPUnit_Framework_TestCase
                 'cache' => 'ezpublish',
                 'data_loader' => 'ezpublish',
                 'reference' => $reference,
-                'filters' => $filters
+                'filters' => $filters,
+                'post_processors' => array()
             ),
             $this->filterConfiguration->get( 'some_variation' )
         );

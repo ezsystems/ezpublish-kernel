@@ -57,6 +57,7 @@ class ImageTest extends AbstractParserTestCase
             $expectedParsedVariations[$sa] = array();
             foreach ( $saConfig['image_variations'] as $variationName => $imageVariationConfig )
             {
+                $imageVariationConfig['post_processors'] = array();
                 foreach ( $imageVariationConfig['filters'] as $i => $filter )
                 {
                     $imageVariationConfig['filters'][$filter['name']] = $filter['params'];
