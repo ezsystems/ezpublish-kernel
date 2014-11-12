@@ -35,21 +35,16 @@
         </xsl:element>
     </xsl:template>
 
+    <xsl:template match="paragraph[@ez-temporary]">
+        <xsl:apply-templates/>
+    </xsl:template>
+
     <xsl:template match="paragraph">
-        <xsl:choose>
-            <!-- "inline" attribute is dynamically added by CustomTags pre-converter -->
-            <xsl:when test="( ul | ol | table | literal | custom[@inline='false'] ) or (name(..)='li') or ( count(*[not(self::embed)]) = 0 and not(text()) )">
-                <xsl:apply-templates/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="embed"/>
-                <p>
-                    <xsl:copy-of select="@class"/>
-                    <xsl:copy-of select="@align"/>
-                    <xsl:apply-templates select="*[not(self::embed)] | text()"/>
-                </p>
-            </xsl:otherwise>
-        </xsl:choose>
+        <p>
+            <xsl:copy-of select="@class"/>
+            <xsl:copy-of select="@align"/>
+            <xsl:apply-templates/>
+        </p>
     </xsl:template>
 
     <xsl:template match="line">
