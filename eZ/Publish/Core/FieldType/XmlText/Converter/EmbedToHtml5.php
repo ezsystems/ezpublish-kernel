@@ -18,12 +18,34 @@ use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use Psr\Log\LoggerInterface;
+use DOMElement;
 
 /**
  * Converts embedded elements from internal XmlText representation to HTML5
  */
 class EmbedToHtml5 implements Converter
 {
+    /**
+     * Content link resource
+     *
+     * @const string
+     */
+    const LINK_RESOURCE_CONTENT = "CONTENT";
+
+    /**
+     * Location link resource
+     *
+     * @const string
+     */
+    const LINK_RESOURCE_LOCATION = "LOCATION";
+
+    /**
+     * URL link resource
+     *
+     * @const string
+     */
+    const LINK_RESOURCE_URL = "URL";
+
     /**
      * List of disallowed attributes
      * @var array
@@ -74,19 +96,7 @@ class EmbedToHtml5 implements Converter
             }
 
             $embedContent = null;
-            $parameters = array(
-                "noLayout" => true,
-                "objectParameters" => array()
-            );
-
-            foreach ( $embed->attributes as $attribute )
-            {
-                // We only consider tags in the custom namespace, and skip disallowed names
-                if ( !isset( $this->excludedAttributes[$attribute->localName] ) )
-                {
-                    $parameters["objectParameters"][$attribute->localName] = $attribute->nodeValue;
-                }
-            }
+            $parameters = $this->getParameters( $embed );
 
             if ( $contentId = $embed->getAttribute( "object_id" ) )
             {
@@ -219,6 +229,158 @@ class EmbedToHtml5 implements Converter
                 $embed->appendChild( $xmlDoc->createCDATASection( $embedContent ) );
             }
         }
+    }
+
+    /**
+     * Returns embed's parameters.
+     *
+     * @param \DOMElement $embed
+     *
+     * @return array
+     */
+    protected function getParameters( DOMElement $embed )
+    {
+        $parameters = array(
+            "noLayout" => true,
+            "objectParameters" => array(),
+        );
+
+        $linkParameters = $this->getLinkParameters( $embed );
+
+        if ( $linkParameters !== null )
+        {
+            $parameters["linkParameters"] = $linkParameters;
+        }
+
+        foreach ( $embed->attributes as $attribute )
+        {
+            // We only consider tags in the custom namespace, and skip disallowed names
+            if (
+                !isset( $this->excludedAttributes[$attribute->localName] )
+                && $attribute->localName !== 'url'
+                && strpos( $attribute->localName, EmbedLinking::TEMP_PREFIX ) !== 0
+            )
+            {
+                $parameters["objectParameters"][$attribute->localName] = $attribute->nodeValue;
+            }
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Returns embed's link parameters, or null if embed is not linked.
+     *
+     * @param \DOMElement $embed
+     *
+     * @return array|null
+     */
+    protected function getLinkParameters( DOMElement $embed )
+    {
+        if ( !$embed->hasAttribute( "url" ) )
+        {
+            return null;
+        }
+
+        $target = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "target" );
+        $title = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "title" );
+        $id = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "id" );
+        $class = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "class" );
+        $resourceFragmentIdentifier = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "anchor_name" );
+        $resourceType = null;
+        $resourceId = null;
+
+        if ( $embed->hasAttribute( EmbedLinking::TEMP_PREFIX . "object_id" ) )
+        {
+            $resourceType = static::LINK_RESOURCE_CONTENT;
+            $resourceId = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "object_id" );
+        }
+        else if ( $embed->hasAttribute( EmbedLinking::TEMP_PREFIX . "node_id" ) )
+        {
+            $resourceType = static::LINK_RESOURCE_LOCATION;
+            $resourceId = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "node_id" );
+        }
+        else if ( $embed->hasAttribute( EmbedLinking::TEMP_PREFIX . "url_id" ) )
+        {
+            $resourceType = static::LINK_RESOURCE_URL;
+            $resourceId = $embed->getAttribute( EmbedLinking::TEMP_PREFIX . "url_id" );
+        }
+        else
+        {
+            $this->logger->error(
+                "Could not resolve XmlText embed link resource type and ID"
+            );
+        }
+
+        $parameters = array(
+            "href" => $embed->getAttribute( "url" ),
+            "resourceType" => $resourceType,
+            "resourceId" => $resourceId,
+            "wrapped" => $this->isLinkWrapped( $embed ),
+        );
+
+        if ( !empty( $resourceFragmentIdentifier ) )
+        {
+            $parameters["resourceFragmentIdentifier"] = $resourceFragmentIdentifier;
+        }
+
+        if ( !empty( $target ) )
+        {
+            $parameters["target"] = $target;
+        }
+
+        if ( !empty( $title ) )
+        {
+            $parameters["title"] = $title;
+        }
+
+        if ( !empty( $id ) )
+        {
+            $parameters["id"] = $id;
+        }
+
+        if ( !empty( $class ) )
+        {
+            $parameters["class"] = $class;
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Returns boolean signifying if the embed is contained in a link element of not.
+     *
+     * After EmbedLinking converter pass this should be possible only for inline level embeds.
+     *
+     * @param \DOMElement $element
+     *
+     * @return boolean
+     */
+    protected function isLinkWrapped( DOMElement $element )
+    {
+        $parentNode = $element->parentNode;
+
+        if ( $parentNode instanceof DOMDocument )
+        {
+            return false;
+        }
+        else if ( $parentNode->localName === "link" )
+        {
+            $childCount = 0;
+
+            /** @var \DOMText|\DOMElement $node */
+            foreach ( $parentNode->childNodes as $node )
+            {
+                if ( !( $node->nodeType === XML_TEXT_NODE && $node->isWhitespaceInElementContent() ) )
+                {
+                    $childCount += 1;
+                }
+            }
+
+            return $childCount !== 1;
+        }
+
+        return $this->isLinkWrapped( $parentNode );
     }
 
     /**
