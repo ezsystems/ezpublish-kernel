@@ -27,9 +27,38 @@ class XmlTextConverterPass implements CompilerPassInterface
         }
 
         $html5ConverterDef = $container->getDefinition( 'ezpublish.fieldType.ezxmltext.converter.html5' );
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.ezxml.converter' ) as $id => $attributes )
+        $taggedServiceIds = $container->findTaggedServiceIds( 'ezpublish.ezxml.converter' );
+
+        $converterIdsByPriority = array();
+        foreach ( $taggedServiceIds as $id => $tags )
         {
-            $html5ConverterDef->addMethodCall( 'addPreConverter', array( new Reference( $id ) ) );
+            foreach ( $tags as $tag )
+            {
+                $priority = isset( $tag['priority'] ) ? (int)$tag['priority'] : 0;
+                $converterIdsByPriority[$priority][] = $id;
+            }
         }
+
+        $converterIdsByPriority = $this->sortConverterIds( $converterIdsByPriority );
+
+        foreach ( $converterIdsByPriority as $referenceId )
+        {
+            $html5ConverterDef->addMethodCall( 'addPreConverter', array( new Reference( $referenceId ) ) );
+        }
+    }
+
+    /**
+     * Transforms a two-dimensional array of converters, indexed by priority,
+     * into a flat array of Reference objects.
+     *
+     * @param array $converterIdsByPriority
+     *
+     * @return \Symfony\Component\DependencyInjection\Reference[]
+     */
+    protected function sortConverterIds( array $converterIdsByPriority )
+    {
+        krsort( $converterIdsByPriority, SORT_NUMERIC );
+
+        return call_user_func_array( 'array_merge', $converterIdsByPriority );
     }
 }

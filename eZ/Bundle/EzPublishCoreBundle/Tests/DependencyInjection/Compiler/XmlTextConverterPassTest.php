@@ -67,4 +67,55 @@ class XmlTextConverterPassTest extends AbstractCompilerPassTestCase
             array( new Reference( $serviceId ) )
         );
     }
+
+    public function testSortConverterIds()
+    {
+        $container = new ContainerBuilder();
+        $html5ConvertDef = $this->getMock(
+            'Symfony\\Component\\DependencyInjection\\Definition',
+            array(
+                'addMethodCall',
+            )
+        );
+        $container->setDefinition( 'ezpublish.fieldType.ezxmltext.converter.html5', $html5ConvertDef );
+
+        $preConverterDef1 = new Definition();
+        $preConverterDef1->addTag( 'ezpublish.ezxml.converter', array( 'priority' => 10 ) );
+        $container->setDefinition( 'foo.converter1', $preConverterDef1 );
+
+        $preConverterDef2 = new Definition();
+        $preConverterDef2->addTag( 'ezpublish.ezxml.converter', array( 'priority' => 5 ) );
+        $container->setDefinition( 'foo.converter2', $preConverterDef2 );
+
+        $preConverterDef3 = new Definition();
+        $preConverterDef3->addTag( 'ezpublish.ezxml.converter', array( 'priority' => 15 ) );
+        $container->setDefinition( 'foo.converter3', $preConverterDef3 );
+
+        $html5ConvertDef
+            ->expects( $this->at( 0 ) )
+            ->method( 'addMethodCall' )
+            ->with(
+                'addPreConverter',
+                array( new Reference( 'foo.converter3' ) )
+            );
+
+        $html5ConvertDef
+            ->expects( $this->at( 1 ) )
+            ->method( 'addMethodCall' )
+            ->with(
+                'addPreConverter',
+                array( new Reference( 'foo.converter1' ) )
+            );
+
+        $html5ConvertDef
+            ->expects( $this->at( 2 ) )
+            ->method( 'addMethodCall' )
+            ->with(
+                'addPreConverter',
+                array( new Reference( 'foo.converter2' ) )
+            );
+
+        $pass = new XmlTextConverterPass();
+        $pass->process( $container );
+    }
 }
