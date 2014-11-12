@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
+  <p class="vest">The paragraph below is close to blowing up.</p>
+  <div class="object-left"/>
+  <p class="test">
+    Tick tick tick <a id="sizzle"/>three nasty bugs
+  </p>
+  <p class="zest">The paragraph above has detonated.</p>
+</section>
