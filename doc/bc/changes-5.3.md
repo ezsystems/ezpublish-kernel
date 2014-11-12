@@ -72,6 +72,9 @@ Changes affecting version compatibility with former or future versions.
   ezpublish.fieldType.ezbinaryfile.IOService => ezpublish.fieldType.ezbinaryfile.io_service
   ezpublish.fieldType.ezimage.IOService => ezpublish.fieldType.ezimage.io (ezpublish.fieldType.ezimage.io_service also existed, but wasn't the expected one)
 
+* 5.3.4: `ViewCaching` legacy setting is now enforced and injected in legacy kernel when booted. This is to avoid persistence/Http
+  cache clear not working when publishing content.
+
 ## Deprecations
 
 * Method `eZ\Publish\API\Repository\RoleService::removePolicy` is deprecated in

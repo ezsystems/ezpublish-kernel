@@ -84,6 +84,9 @@ Changes affecting version compatibility with former or future versions.
   returned, with fake properties: the requested id, no uri, no file size... if logging is enabled, an info message
   will still be logged.
 
+* `ViewCaching` legacy setting is now enforced and injected in legacy kernel when booted. This is to avoid persistence/Http
+  cache clear not working when publishing content.
+
 ## Deprecations
 
 * `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.

@@ -183,6 +183,10 @@ class Configuration extends ContainerAware implements EventSubscriberInterface
         // User settings
         $settings["site.ini/UserSettings/AnonymousUserID"] = $this->configResolver->getParameter( "anonymous_user_id" );
 
+        // Cache settings
+        // Enforce ViewCaching to be enabled in order to persistence/http cache to be purged correctly.
+        $settings['site.ini/ContentSettings/ViewCaching'] = 'enabled';
+
         $event->getParameters()->set(
             "injected-settings",
             $settings + (array)$event->getParameters()->get( "injected-settings" )
