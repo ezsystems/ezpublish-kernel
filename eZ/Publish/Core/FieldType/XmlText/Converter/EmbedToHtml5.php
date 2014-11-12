@@ -196,33 +196,8 @@ class EmbedToHtml5 implements Converter
 
             if ( $embedContent === null )
             {
-                // Remove tmp paragraph
-                if ( $embed->parentNode->lookupNamespaceUri( 'tmp' ) !== null )
-                {
-                    $embed->parentNode->parentNode->removeChild( $embed->parentNode );
-                }
-                // Remove empty link
-                else if ( $embed->parentNode->localName === "link" && $embed->parentNode->childNodes->length === 1 )
-                {
-                    // Remove paragraph with empty link
-                    if (
-                        $embed->parentNode->parentNode->localName === "paragraph" &&
-                        $embed->parentNode->parentNode->childNodes->length === 1
-                    )
-                    {
-                        $embed->parentNode->parentNode->parentNode->removeChild( $embed->parentNode->parentNode );
-                    }
-                    // Remove empty link
-                    else
-                    {
-                        $embed->parentNode->parentNode->removeChild( $embed->parentNode );
-                    }
-                }
                 // Remove empty embed
-                else
-                {
-                    $embed->parentNode->removeChild( $embed );
-                }
+                $embed->parentNode->removeChild( $embed );
             }
             else
             {
