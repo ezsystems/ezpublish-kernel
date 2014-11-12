@@ -13,6 +13,17 @@ use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
+ *
+ *
+ * Note on Locations drafts, depending on Storage Engine limitations the following needs to be considered on SPI use:
+ * - Currently only relevant for unpublished content, however this is internal logic not exposed in API
+ * - Storage engine may generate a Location id for drafts with a identifier in the id to be able to know it is a draft
+ * - For these storage engines Location drafts are thus only supported by:
+ *  - load()
+ *  - loadLocationsByDraftContent()
+ *  - loadParentLocationsForDraftContent()
+ *  - update()
+ *  - publishDraftLocation()
  */
 interface Handler
 {
@@ -54,11 +65,19 @@ interface Handler
      * identified by $rootLocationId
      *
      * @param int $contentId
-     * @param int $contentVersionNo If specified return the draft locations attached to the specific version.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
-    public function loadLocationsByContent( $contentId, $contentVersionNo = null );
+    public function loadLocationsByContent( $contentId );
+
+    /**
+     * Loads all location drafts for $contentId
+     *
+     * @param int $contentId
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function loadLocationsByDraftContent( $contentId );
 
     /**
      * Loads all parent Locations for unpublished Content by given $contentId.
@@ -192,6 +211,28 @@ interface Handler
      * @return void
      */
     public function setSectionForSubtree( $locationId, $sectionId );
+
+    /**
+     * Changes the status of Location identified by $locationId to being published.
+     *
+     * If storage engine does not update drafts on tree operations, typically because drafts are stored separately.
+     * Then update the following:
+     * - Based on parent location data
+     *      - pathString
+     *      - pathIdentificationString
+     *      - invisible
+     *      - depth
+     * - New values if needed:
+     *      - (location)Id
+     *      - remoteId
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $locationId draft is invalid
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     */
+    public function publishDraftLocation( $locationId );
 
     /**
      * Changes main location of content identified by given $contentId to location identified by given $locationId
