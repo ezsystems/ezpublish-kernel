@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <link object_id="72" anchor_name="fragment" target="_blank" xhtml:title="title" class="class" xhtml:id="id">
+    <embed view="embed" size="medium" custom:offset="0" custom:limit="5" object_id="110"/>
+  </link>
+</section>

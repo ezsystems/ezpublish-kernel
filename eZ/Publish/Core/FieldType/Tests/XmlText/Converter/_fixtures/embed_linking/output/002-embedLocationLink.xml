@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
+         xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
+  <embed
+      view="embed"
+      size="medium"
+      custom:offset="0"
+      custom:limit="5"
+      object_id="110"
+      ezlegacytmp-embed-link-node_id="72"
+      ezlegacytmp-embed-link-anchor_name="fragment"
+      ezlegacytmp-embed-link-target="_blank"
+      ezlegacytmp-embed-link-title="title"
+      ezlegacytmp-embed-link-class="class"
+      ezlegacytmp-embed-link-id="id"
+      />
+</section>
