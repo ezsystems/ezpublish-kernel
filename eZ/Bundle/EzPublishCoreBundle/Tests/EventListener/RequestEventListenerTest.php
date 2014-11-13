@@ -34,11 +34,6 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
     private $router;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $hashGenerator;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
      */
     private $logger;
@@ -69,10 +64,9 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->router = $this->getMock( 'Symfony\Component\Routing\RouterInterface' );
-        $this->hashGenerator = $this->getMock( 'eZ\\Publish\\SPI\\HashGenerator' );
         $this->logger = $this->getMock( 'Psr\\Log\\LoggerInterface' );
 
-        $this->requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'foobar', $this->hashGenerator, $this->logger );
+        $this->requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'foobar', $this->logger );
 
         $this->request = $this
             ->getMockBuilder( 'Symfony\\Component\\HttpFoundation\\Request' )
@@ -208,7 +202,7 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
             ->method( 'getContext' )
             ->will( $this->returnValue( $this->getMock( 'Symfony\Component\Routing\RequestContext' ) ) );
 
-        $requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'setup', $this->hashGenerator, $this->logger );
+        $requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'setup', $this->logger );
         $event = new GetResponseEvent( $this->httpKernel, Request::create( '/setup' ), HttpKernelInterface::MASTER_REQUEST );
         $requestEventListener->onKernelRequestSetup( $event );
         $this->assertFalse( $event->hasResponse() );
@@ -226,7 +220,7 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
             ->method( 'getContext' )
             ->will( $this->returnValue( $this->getMock( 'Symfony\Component\Routing\RequestContext' ) ) );
 
-        $requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'setup', $this->hashGenerator, $this->logger );
+        $requestEventListener = new RequestEventListener( $this->configResolver, $this->router, 'setup', $this->logger );
         $event = new GetResponseEvent( $this->httpKernel, Request::create( '/foo/bar' ), HttpKernelInterface::MASTER_REQUEST );
         $requestEventListener->onKernelRequestSetup( $event );
         $this->assertTrue( $event->hasResponse() );

@@ -4,6 +4,7 @@ parameters:
     ezpublish.field_helper.class: eZ\Publish\Core\Helper\FieldHelper
     ezpublish.content_preview_helper.class: eZ\Publish\Core\Helper\ContentPreviewHelper
     ezpublish.config_scope_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ConfigScopeListener
+    ezpublish.dynamic_settings_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\DynamicSettingsListener
     ezpublish.config_resolver.resettable_services: []
     ezpublish.config_resolver.dynamic_settings_services: []
 
@@ -32,6 +33,12 @@ services:
         arguments:
             - @ezpublish.config.resolver.core
             - @ezpublish.view_manager
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.dynamic_settings_listener:
+        class: %ezpublish.dynamic_settings_listener.class%
+        arguments:
             - %ezpublish.config_resolver.resettable_services%
             - %ezpublish.config_resolver.dynamic_settings_services%
         calls:

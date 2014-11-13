@@ -114,4 +114,11 @@ abstract class HttpCache extends BaseHttpCache
     {
         return array( '127.0.0.1', '::1', 'fe80::1' );
     }
+
+    protected function cleanupForwardRequest( Request $forwardReq, Request $originalRequest )
+    {
+        parent::cleanupForwardRequest( $forwardReq, $originalRequest );
+        // Embed the original request as we need it to match the SiteAccess.
+        $forwardReq->attributes->set( '_ez_original_request', $originalRequest );
+    }
 }

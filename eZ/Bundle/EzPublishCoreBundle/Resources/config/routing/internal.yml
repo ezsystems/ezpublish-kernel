@@ -13,3 +13,6 @@ _ezpublishPreviewContent:
 _ezpublishPreviewContentDefaultSa:
     path: /content/versionview/{contentId}/{versionNo}/{language}
     defaults: { _controller: ezpublish.controller.content.preview:previewContentAction }
+
+_ez_user_hash:
+    path: /_fos_user_context_hash

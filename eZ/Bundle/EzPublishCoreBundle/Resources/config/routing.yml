@@ -16,6 +16,7 @@ parameters:
     ezpublish.siteaccess_match_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
     ezpublish.route_reference.generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator
     ezpublish.route_reference.listener.language_switch.class: eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener
+    ezpublish.original_request_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\OriginalRequestListener
 
 services:
     ezpublish.chain_router:
@@ -92,7 +93,6 @@ services:
             - @ezpublish.config.resolver
             - @router
             - %ezpublish.siteaccess.default%
-            - @ezpublish.user.hash_generator
             - @?logger
         tags:
             - { name: kernel.event_subscriber }
@@ -106,5 +106,10 @@ services:
     ezpublish.route_reference.listener.language_switch:
         class: %ezpublish.route_reference.listener.language_switch.class%
         arguments: [@ezpublish.translation_helper]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.original_request_listener:
+        class: %ezpublish.original_request_listener.class%
         tags:
             - { name: kernel.event_subscriber }
