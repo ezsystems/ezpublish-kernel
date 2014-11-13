@@ -15,7 +15,7 @@ Feature: Update a Content Type Group
         And I set field "identifier" to "another_string"
         And I send the request
         Then Content Type Group with identifier "another_string" exists
-        And Content Type Group with identifier "some_string" doesn't exists anymore
+        And Content Type Group with identifier "some_string" doesn't exist anymore
 
     Scenario: Get relevant information when updating a Content Type Group
         Given I have "administrator" permissions
@@ -25,7 +25,7 @@ Feature: Update a Content Type Group
         Then response status code is 200
         And response status message is "OK"
         And Content Type Group with identifier "another_string" exists
-        And Content Type Group with identifier "some_string" doesn't exists anymore
+        And Content Type Group with identifier "some_string" doesn't exist anymore
         And response has a "eZ\Publish\Core\REST\Client\Values\ContentType\ContentTypeGroup" object
 
     Scenario: Can't update the Content Type Group identifier to an existing one
@@ -46,4 +46,4 @@ Feature: Update a Content Type Group
         When I update Content Type Group with identifier "some_string" to "another_string"
         Then response has a not authorized error
         And Content Type Group with identifier "some_string" exists
-        And Content Type Group with identifier "another_string" doesn't exists
+        And Content Type Group with identifier "another_string" doesn't exist
