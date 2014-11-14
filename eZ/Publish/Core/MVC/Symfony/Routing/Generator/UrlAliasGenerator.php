@@ -158,6 +158,11 @@ class UrlAliasGenerator extends Generator
      */
     public function getPathPrefixByRootLocationId( $rootLocationId )
     {
+        if ( !$rootLocationId )
+        {
+            return '';
+        }
+
         if ( isset( $this->pathPrefixMap[$rootLocationId] ) )
         {
             return $this->pathPrefixMap[$rootLocationId];

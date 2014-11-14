@@ -46,18 +46,12 @@ class RequestEventListener implements EventSubscriberInterface
      */
     private $router;
 
-    /**
-     * @var \eZ\Publish\SPI\HashGenerator
-     */
-    private $hashGenerator;
-
-    public function __construct( ConfigResolverInterface $configResolver, RouterInterface $router, $defaultSiteAccess, HashGenerator $hashGenerator, LoggerInterface $logger = null )
+    public function __construct( ConfigResolverInterface $configResolver, RouterInterface $router, $defaultSiteAccess, LoggerInterface $logger = null )
     {
         $this->configResolver = $configResolver;
         $this->defaultSiteAccess = $defaultSiteAccess;
         $this->router = $router;
         $this->logger = $logger;
-        $this->hashGenerator = $hashGenerator;
     }
 
     public static function getSubscribedEvents()

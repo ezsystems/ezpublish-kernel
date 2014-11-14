@@ -61,7 +61,7 @@ class SiteAccessMatchListenerTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testOnKernelRequestUserHash()
+    public function testOnKernelRequestUserHashNoOriginalRequest()
     {
         $request = new Request();
         $event = new GetResponseEvent(
@@ -179,6 +179,55 @@ class SiteAccessMatchListenerTest extends PHPUnit_Framework_TestCase
                 'queryParams' => $request->query->all(),
                 'languages'   => $request->getLanguages(),
                 'headers'     => $request->headers->all()
+            )
+        );
+        $this->saRouter
+            ->expects( $this->once() )
+            ->method( 'match' )
+            ->with( $this->equalTo( $simplifiedRequest ) )
+            ->will( $this->returnValue( $siteAccess ) );
+
+        $postSAMatchEvent = new PostSiteAccessMatchEvent( $siteAccess, $request, $event->getRequestType() );
+        $this->eventDispatcher
+            ->expects( $this->once() )
+            ->method( 'dispatch' )
+            ->with( MVCEvents::SITEACCESS, $this->equalTo( $postSAMatchEvent ) );
+
+        $this->listener->onKernelRequest( $event );
+        $this->assertSame( $siteAccess, $request->attributes->get( 'siteaccess' ) );
+    }
+
+    public function testOnKernelRequestUserHashWithOriginalRequest()
+    {
+        $siteAccess = new SiteAccess();
+        $scheme = 'https';
+        $host = 'phoenix-rises.fm';
+        $port = 1234;
+        $path = '/foo/bar';
+        $originalRequest = Request::create( sprintf( '%s://%s:%d%s', $scheme, $host, $port, $path ) );
+        $request = Request::create( 'http://localhost/_fos_user_hash' );
+        $request->attributes->set( '_ez_original_request', $originalRequest );
+        $event = new GetResponseEvent(
+            $this->getMock( '\Symfony\Component\HttpKernel\HttpKernelInterface' ),
+            $request,
+            HttpKernelInterface::MASTER_REQUEST
+        );
+
+        $this->userHashMatcher
+            ->expects( $this->once() )
+            ->method( 'matches' )
+            ->with( $request )
+            ->will( $this->returnValue( true ) );
+
+        $simplifiedRequest = new SimplifiedRequest(
+            array(
+                'scheme'      => $originalRequest->getScheme(),
+                'host'        => $originalRequest->getHost(),
+                'port'        => $originalRequest->getPort(),
+                'pathinfo'    => $originalRequest->getPathInfo(),
+                'queryParams' => $originalRequest->query->all(),
+                'languages'   => $originalRequest->getLanguages(),
+                'headers'     => $originalRequest->headers->all()
             )
         );
         $this->saRouter

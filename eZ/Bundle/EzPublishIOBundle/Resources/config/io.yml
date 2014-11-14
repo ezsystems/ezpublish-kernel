@@ -69,8 +69,8 @@ services:
 
     ezpublish.core.io.image_fieldtype.legacy_url_decorator:
         class: %ezpublish.core.io.url_decorator.prefix.class%
-        arguments:
-            - "$io.legacy_url_prefix$"
+        calls:
+            - [setPrefix, ["$io.legacy_url_prefix$"]]
 
     ezpublish.core.io.stream_file_listener:
         class: %ezpublish.core.io.stream_file_listener.class%

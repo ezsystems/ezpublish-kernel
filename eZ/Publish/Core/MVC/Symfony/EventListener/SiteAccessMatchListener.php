@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\MVC\Symfony\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
@@ -68,8 +69,9 @@ class SiteAccessMatchListener implements EventSubscriberInterface
     public function onKernelRequest( GetResponseEvent $event )
     {
         $request = $event->getRequest();
+
         // Don't try to match when it's a user hash request. SiteAccess is irrelevant in this case.
-        if ( $this->userContextRequestMatcher->matches( $request ) )
+        if ( $this->userContextRequestMatcher->matches( $request ) && !$request->attributes->has( '_ez_original_request' ) )
         {
             return;
         }
@@ -85,21 +87,11 @@ class SiteAccessMatchListener implements EventSubscriberInterface
         }
         else if ( !$request->attributes->has( 'siteaccess' ) )
         {
+            // Get SiteAccess from original request if present ("_ez_original_request" attribute), or current request otherwise.
+            // "_ez_original_request" attribute is present in the case of user context hash generation (aka "user hash request").
             $request->attributes->set(
                 'siteaccess',
-                $this->siteAccessRouter->match(
-                    new SimplifiedRequest(
-                        array(
-                            'scheme'      => $request->getScheme(),
-                            'host'        => $request->getHost(),
-                            'port'        => $request->getPort(),
-                            'pathinfo'    => $request->getPathInfo(),
-                            'queryParams' => $request->query->all(),
-                            'languages'   => $request->getLanguages(),
-                            'headers'     => $request->headers->all()
-                        )
-                    )
-                )
+                $this->getSiteAccessFromRequest( $request->attributes->get( '_ez_original_request', $request ) )
             );
         }
 
@@ -109,5 +101,27 @@ class SiteAccessMatchListener implements EventSubscriberInterface
             $siteAccessEvent = new PostSiteAccessMatchEvent( $siteaccess, $request, $event->getRequestType() );
             $this->eventDispatcher->dispatch( MVCEvents::SITEACCESS, $siteAccessEvent );
         }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return SiteAccess
+     */
+    private function getSiteAccessFromRequest( Request $request )
+    {
+        return $this->siteAccessRouter->match(
+            new SimplifiedRequest(
+                array(
+                    'scheme' => $request->getScheme(),
+                    'host' => $request->getHost(),
+                    'port' => $request->getPort(),
+                    'pathinfo' => $request->getPathInfo(),
+                    'queryParams' => $request->query->all(),
+                    'languages' => $request->getLanguages(),
+                    'headers' => $request->headers->all()
+                )
+            )
+        );
     }
 }
