@@ -312,7 +312,7 @@ class SearchTest extends BaseServiceMockTest
 
         $contentServiceMock
             ->expects( $this->once() )
-            ->method( "loadContent" )
+            ->method( "internalLoadContent" )
             ->will( $this->returnValue( $contentMock ) );
 
         $result = $service->findContent( $serviceQuery, $fieldFilters, false );
@@ -394,7 +394,7 @@ class SearchTest extends BaseServiceMockTest
 
         $contentServiceMock
             ->expects( $this->once() )
-            ->method( "loadContent" )
+            ->method( "internalLoadContent" )
             ->will( $this->returnValue( $contentMock ) );
 
         $permissionsCriterionHandlerMock->expects( $this->once() )
@@ -615,7 +615,7 @@ class SearchTest extends BaseServiceMockTest
 
         $contentServiceMock
             ->expects( $this->once() )
-            ->method( "loadContent" )
+            ->method( "internalLoadContent" )
             ->will( $this->returnValue( $contentMock ) );
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $searchHandlerMock */
@@ -791,7 +791,7 @@ class SearchTest extends BaseServiceMockTest
 
         $contentServiceMock
             ->expects( $this->once() )
-            ->method( "loadContent" )
+            ->method( "internalLoadContent" )
             ->will( $this->returnValue( $contentMock ) );
 
         $result = $service->findSingle( $criterionMock, $fieldFilters, true );

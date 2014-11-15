@@ -117,7 +117,7 @@ class SearchServiceAuthorizationTest extends BaseTest
     }
 
     /**
-     * Test for the findContent() method.
+     * Test for the findContent() method, verifying disabling permissions
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findContent($query, $fieldFilters, $filterOnUserPermissions)
@@ -135,7 +135,7 @@ class SearchServiceAuthorizationTest extends BaseTest
 
         $searchService = $repository->getSearchService();
 
-        // Create a search query for content objects about "eZ Publish"
+        // Search for "Admin Users" user group which user normally does not have access to
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd(
             array(
@@ -150,14 +150,12 @@ class SearchServiceAuthorizationTest extends BaseTest
         $searchResultWithPermissions = $searchService->findContent( $query, array() );
         /* END: Use Case */
 
-        $this->assertGreaterThan(
-            $searchResultWithPermissions->totalCount,
-            $searchResultWithoutPermissions->totalCount
-        );
+        $this->assertEquals( 1, $searchResultWithoutPermissions->totalCount );
+        $this->assertEquals( 0, $searchResultWithPermissions->totalCount );
     }
 
     /**
-     * Test for the findSingle() method.
+     * Test for the findSingle() method disabling permission filtering
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
@@ -173,7 +171,7 @@ class SearchServiceAuthorizationTest extends BaseTest
         // Set new media editor as current user
         $repository->setCurrentUser( $user );
 
-        // Search for matching content
+        // Search for "Admin Users" user group which user normally does not have access to
         $content = $repository->getSearchService()->findSingle(
             new Criterion\ContentId( 12 ),
             array(),
