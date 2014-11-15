@@ -65,7 +65,7 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
      *
-     * @depends \eZ\Publish\API\Repository\Tests\LanguageServiceTest::testNewLanguageCreateStruct
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testNewLanguageCreateStruct
      *
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Maximum number of languages reached!
