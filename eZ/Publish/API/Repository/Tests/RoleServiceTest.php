@@ -42,7 +42,6 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::newRoleCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetRoleService
      */
     public function testNewRoleCreateStruct()
     {
@@ -393,7 +392,6 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::newRoleUpdateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetRoleService
      */
     public function testNewRoleUpdateStruct()
     {
@@ -501,7 +499,6 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::newPolicyCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetRoleService
      */
     public function testNewPolicyCreateStruct()
     {
@@ -765,7 +762,6 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::newPolicyUpdateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetRoleService
      */
     public function testNewPolicyUpdateStruct()
     {

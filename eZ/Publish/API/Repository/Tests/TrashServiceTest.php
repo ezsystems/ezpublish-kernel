@@ -28,7 +28,6 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\TrashService::trash()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetTrashService
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      */
     public function testTrash()

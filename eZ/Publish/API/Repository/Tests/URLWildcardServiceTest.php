@@ -25,7 +25,6 @@ class URLWildcardServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
      * @see \eZ\Publish\API\Repository\URLWildcardService::create()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetURLWildcardService
      */
     public function testCreate()
     {
