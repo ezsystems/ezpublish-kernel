@@ -26,7 +26,6 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::newLanguageCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentLanguageService
      */
     public function testNewLanguageCreateStruct()
     {
@@ -521,7 +520,6 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testCreateLanguageInTransactionWithRollback()
@@ -574,7 +572,6 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
      */
     public function testCreateLanguageInTransactionWithCommit()
@@ -620,7 +617,6 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testUpdateLanguageName
      */
     public function testUpdateLanguageNameInTransactionWithRollback()
@@ -663,7 +659,6 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::updateLanguageName()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
      * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testUpdateLanguageName
      */
     public function testUpdateLanguageNameInTransactionWithCommit()

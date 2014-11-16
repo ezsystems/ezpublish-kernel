@@ -32,7 +32,6 @@ class ObjectStateServiceTest extends BaseTest
      * @return void
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateGroupCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testNewObjectStateGroupCreateStruct()
     {
@@ -81,7 +80,6 @@ class ObjectStateServiceTest extends BaseTest
      * @return void
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateGroupUpdateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testNewObjectStateGroupUpdateStruct()
     {
@@ -128,7 +126,6 @@ class ObjectStateServiceTest extends BaseTest
      * @return void
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testNewObjectStateCreateStruct()
     {
@@ -178,7 +175,6 @@ class ObjectStateServiceTest extends BaseTest
      * @return void
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::newObjectStateUpdateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testNewObjectStateUpdateStruct()
     {
@@ -225,7 +221,6 @@ class ObjectStateServiceTest extends BaseTest
      * @return void
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectStateGroup()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      * @depends testNewObjectStateGroupCreateStructValues
      */
     public function testCreateObjectStateGroup()
@@ -331,7 +326,6 @@ class ObjectStateServiceTest extends BaseTest
      * @return void
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroup()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetObjectStateService
      */
     public function testLoadObjectStateGroup()
     {

@@ -28,7 +28,6 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::loadUserGroup()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      */
     public function testLoadUserGroup()
     {
@@ -559,7 +558,6 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::newUserGroupUpdateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      */
     public function testNewUserGroupUpdateStruct()
     {
@@ -735,7 +733,6 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::newUserCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      */
     public function testNewUserCreateStruct()
     {
@@ -1090,7 +1087,6 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::loadAnonymousUser()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      */
     public function testLoadAnonymousUser()
     {
@@ -1367,7 +1363,6 @@ class UserServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\UserService::newUserUpdateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetUserService
      */
     public function testNewUserUpdateStruct()
     {

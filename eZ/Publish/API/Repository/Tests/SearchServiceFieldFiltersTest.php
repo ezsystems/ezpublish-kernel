@@ -170,7 +170,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * when using non-field filtering criteria can cause NotFound exception.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testFieldFiltersCauseNotFoundException()
@@ -201,7 +200,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextQueryLanguageAll( $type = null )
     {
@@ -245,7 +243,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextQueryLanguage( $type = null )
     {
@@ -284,7 +281,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextQueryLanguageComplement( $type = null )
     {
@@ -323,7 +319,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextQueryLanguageEmpty( $type = null )
     {
@@ -361,7 +356,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextQueryLanguageAlwaysAvailable( $type = null )
     {
@@ -405,7 +399,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextQueryLanguageAlwaysAvailableComplement( $type = null )
     {
@@ -449,7 +442,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextQueryAlwaysAvailable( $type = null )
     {
@@ -493,7 +485,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextQueryAlwaysAvailableComplement( $type = null )
     {
@@ -533,7 +524,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextQueryAlwaysAvailableEmpty( $type = null )
     {
@@ -570,7 +560,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextFilterLanguageAll()
     {
@@ -581,7 +570,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextFilterLanguage()
     {
@@ -592,7 +580,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextFilterLanguageComplement()
     {
@@ -603,7 +590,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextFilterLanguageEmpty()
     {
@@ -614,7 +600,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextFilterLanguageAlwaysAvailable()
     {
@@ -625,7 +610,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextFilterLanguageAlwaysAvailableComplement()
     {
@@ -636,7 +620,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextFilterAlwaysAvailable()
     {
@@ -647,7 +630,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextFilterAlwaysAvailableComplement()
     {
@@ -658,7 +640,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFullTextFilterAlwaysAvailableEmpty()
     {
@@ -671,7 +652,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldQueryAll( $type = null )
     {
@@ -715,7 +695,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldQuery( $type = null )
     {
@@ -754,7 +733,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldQueryComplement( $type = null )
     {
@@ -793,7 +771,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldQueryEmpty( $type = null )
     {
@@ -831,7 +808,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldQueryLanguageAlwaysAvailable( $type = null )
     {
@@ -875,7 +851,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldQueryLanguageAlwaysAvailableComplement( $type = null )
     {
@@ -919,7 +894,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldQueryAlwaysAvailable( $type = null )
     {
@@ -963,7 +937,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldQueryAlwaysAvailableComplement( $type = null )
     {
@@ -1003,7 +976,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldQueryAlwaysAvailableEmpty( $type = null )
     {
@@ -1042,7 +1014,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeQueryAll( $type = null )
     {
@@ -1086,7 +1057,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeQuery( $type = null )
     {
@@ -1125,7 +1095,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeQueryComplement( $type = null )
     {
@@ -1164,7 +1133,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeQueryEmpty( $type = null )
     {
@@ -1202,7 +1170,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeQueryLanguageAlwaysAvailable( $type = null )
     {
@@ -1246,7 +1213,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeQueryLanguageAlwaysAvailableComplement( $type = null )
     {
@@ -1290,7 +1256,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeQueryAlwaysAvailable( $type = null )
     {
@@ -1334,7 +1299,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeQueryAlwaysAvailableComplement( $type = null )
     {
@@ -1374,7 +1338,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeQueryAlwaysAvailableEmpty( $type = null )
     {
@@ -1412,7 +1375,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFilterAll()
     {
@@ -1423,7 +1385,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFilter()
     {
@@ -1434,7 +1395,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFilterComplement()
     {
@@ -1445,7 +1405,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFilterEmpty()
     {
@@ -1456,7 +1415,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFilterLanguageAlwaysAvailable()
     {
@@ -1467,7 +1425,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFilterLanguageAlwaysAvailableComplement()
     {
@@ -1478,7 +1435,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFilterAlwaysAvailable()
     {
@@ -1489,7 +1445,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFilterAlwaysAvailableComplement()
     {
@@ -1500,7 +1455,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldFilterAlwaysAvailableEmpty()
     {
@@ -1511,7 +1465,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeFilterAll()
     {
@@ -1522,7 +1475,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeFilter()
     {
@@ -1533,7 +1485,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeFilterComplement()
     {
@@ -1544,7 +1495,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeFilterEmpty()
     {
@@ -1555,7 +1505,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeFilterLanguageAlwaysAvailable()
     {
@@ -1566,7 +1515,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeFilterLanguageAlwaysAvailableComplement()
     {
@@ -1577,7 +1525,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeFilterAlwaysAvailable()
     {
@@ -1588,7 +1535,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeFilterAlwaysAvailableComplement()
     {
@@ -1599,7 +1545,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldRangeFilterAlwaysAvailableEmpty()
     {
@@ -1612,7 +1557,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldQueryAll( $type = null )
     {
@@ -1662,7 +1606,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldQuery( $type = null )
     {
@@ -1707,7 +1650,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldQueryComplement( $type = null )
     {
@@ -1752,7 +1694,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldQueryEmpty( $type = null )
     {
@@ -1796,7 +1737,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldQueryLanguageAlwaysAvailable( $type = null )
     {
@@ -1842,7 +1782,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldQueryLanguageAlwaysAvailableComplement( $type = null )
     {
@@ -1888,7 +1827,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldQueryAlwaysAvailable( $type = null )
     {
@@ -1933,7 +1871,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldQueryAlwaysAvailableComplement( $type = null )
     {
@@ -1975,7 +1912,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldQueryAlwaysAvailableEmpty( $type = null )
     {
@@ -2016,7 +1952,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeQueryAll( $type = null )
     {
@@ -2062,7 +1997,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeQuery( $type = null )
     {
@@ -2103,7 +2037,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeQueryComplement( $type = null )
     {
@@ -2144,7 +2077,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeQueryEmpty( $type = null )
     {
@@ -2184,7 +2116,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeQueryLanguageAlwaysAvailable( $type = null )
     {
@@ -2230,7 +2161,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeQueryLanguageAlwaysAvailableComplement( $type = null )
     {
@@ -2276,7 +2206,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeQueryAlwaysAvailable( $type = null )
     {
@@ -2322,7 +2251,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeQueryAlwaysAvailableComplement( $type = null )
     {
@@ -2364,7 +2292,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeQueryAlwaysAvailableEmpty( $type = null )
     {
@@ -2403,7 +2330,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldFilterAll()
     {
@@ -2414,7 +2340,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldFilter()
     {
@@ -2425,7 +2350,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldFilterComplement()
     {
@@ -2436,7 +2360,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldFilterEmpty()
     {
@@ -2447,7 +2370,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldFilterLanguageAlwaysAvailable()
     {
@@ -2458,7 +2380,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldFilterLanguageAlwaysAvailableComplement()
     {
@@ -2469,7 +2390,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldFilterAlwaysAvailable()
     {
@@ -2480,7 +2400,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldFilterAlwaysAvailableComplement()
     {
@@ -2491,7 +2410,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldFilterAlwaysAvailableEmpty()
     {
@@ -2502,7 +2420,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeFilterAll()
     {
@@ -2513,7 +2430,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeFilter()
     {
@@ -2524,7 +2440,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeFilterComplement()
     {
@@ -2535,7 +2450,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeFilterEmpty()
     {
@@ -2546,7 +2460,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeFilterLanguageAlwaysAvailable()
     {
@@ -2557,7 +2470,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeFilterLanguageAlwaysAvailableComplement()
     {
@@ -2568,7 +2480,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeFilterAlwaysAvailable()
     {
@@ -2579,7 +2490,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeFilterAlwaysAvailableComplement()
     {
@@ -2590,7 +2500,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testModifiedFieldRangeFilterAlwaysAvailableEmpty()
     {
@@ -2603,7 +2512,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceQueryAll( $type = null )
     {
@@ -2674,7 +2582,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceQuery( $type = null )
     {
@@ -2733,7 +2640,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceQueryComplement( $type = null )
     {
@@ -2792,7 +2698,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceQueryEmpty( $type = null )
     {
@@ -2850,7 +2755,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceQueryLanguageAlwaysAvailable( $type = null )
     {
@@ -2923,7 +2827,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceQueryLanguageAlwaysAvailableComplement( $type = null )
     {
@@ -2996,7 +2899,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceQueryAlwaysAvailable( $type = null )
     {
@@ -3069,7 +2971,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceQueryAlwaysAvailableComplement( $type = null )
     {
@@ -3131,7 +3032,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceQueryAlwaysAvailableEmpty( $type = null )
     {
@@ -3190,7 +3090,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceFilterAll()
     {
@@ -3201,7 +3100,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceFilter()
     {
@@ -3212,7 +3110,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceFilterComplement()
     {
@@ -3223,7 +3120,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceFilterEmpty()
     {
@@ -3234,7 +3130,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceFilterLanguageAlwaysAvailable()
     {
@@ -3245,7 +3140,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceFilterLanguageAlwaysAvailableComplement()
     {
@@ -3256,7 +3150,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceFilterAlwaysAvailable()
     {
@@ -3267,7 +3160,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceFilterAlwaysAvailableComplement()
     {
@@ -3278,7 +3170,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMapLocationDistanceFilterAlwaysAvailableEmpty()
     {
@@ -3291,7 +3182,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldQueryAll( $type = null )
     {
@@ -3339,7 +3229,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldQuery( $type = null )
     {
@@ -3382,7 +3271,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldQueryComplement( $type = null )
     {
@@ -3425,7 +3313,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldQueryEmpty( $type = null )
     {
@@ -3467,7 +3354,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldQueryLanguageAlwaysAvailable( $type = null )
     {
@@ -3515,7 +3401,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldQueryLanguageAlwaysAvailableComplement( $type = null )
     {
@@ -3563,7 +3448,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldQueryAlwaysAvailable( $type = null )
     {
@@ -3611,7 +3495,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldQueryAlwaysAvailableComplement( $type = null )
     {
@@ -3655,7 +3538,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldQueryAlwaysAvailableEmpty( $type = null )
     {
@@ -3698,7 +3580,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeQueryAll( $type = null )
     {
@@ -3742,7 +3623,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeQuery( $type = null )
     {
@@ -3781,7 +3661,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeQueryComplement( $type = null )
     {
@@ -3820,7 +3699,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeQueryEmpty( $type = null )
     {
@@ -3858,7 +3736,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeQueryLanguageAlwaysAvailable( $type = null )
     {
@@ -3902,7 +3779,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeQueryLanguageAlwaysAvailableComplement( $type = null )
     {
@@ -3946,7 +3822,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeQueryAlwaysAvailable( $type = null )
     {
@@ -3990,7 +3865,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeQueryAlwaysAvailableComplement( $type = null )
     {
@@ -4030,7 +3904,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeQueryAlwaysAvailableEmpty( $type = null )
     {
@@ -4067,7 +3940,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldFilterAll()
     {
@@ -4078,7 +3950,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldFilter()
     {
@@ -4089,7 +3960,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldFilterComplement()
     {
@@ -4100,7 +3970,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldFilterEmpty()
     {
@@ -4111,7 +3980,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldFilterLanguageAlwaysAvailable()
     {
@@ -4122,7 +3990,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldFilterLanguageAlwaysAvailableComplement()
     {
@@ -4133,7 +4000,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldFilterAlwaysAvailable()
     {
@@ -4144,7 +4010,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldFilterAlwaysAvailableComplement()
     {
@@ -4155,7 +4020,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldFilterAlwaysAvailableEmpty()
     {
@@ -4166,7 +4030,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeFilterAll()
     {
@@ -4177,7 +4040,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeFilter()
     {
@@ -4188,7 +4050,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeFilterComplement()
     {
@@ -4199,7 +4060,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeFilterEmpty()
     {
@@ -4210,7 +4070,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeFilterLanguageAlwaysAvailable()
     {
@@ -4221,7 +4080,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeFilterLanguageAlwaysAvailableComplement()
     {
@@ -4232,7 +4090,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeFilterAlwaysAvailable()
     {
@@ -4243,7 +4100,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeFilterAlwaysAvailableComplement()
     {
@@ -4254,7 +4110,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testCustomFieldRangeFilterAlwaysAvailableEmpty()
     {
