@@ -19,7 +19,10 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
+use eZ\Publish\SPI\Search\Document;
+use eZ\Publish\SPI\Search\ChildDocuments;
 use RuntimeException;
+use XmlWriter;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -148,6 +151,11 @@ class Native extends Gateway
         // @todo: Error handling?
         $data = json_decode( $response->body );
 
+        if ( !isset( $data->response ) )
+        {
+            throw new \Exception( '->response not set: ' . var_export( array( $data, $parameters ), true ) );
+        }
+
         // @todo: Extract method
         $result = new SearchResult(
             array(
@@ -159,6 +167,11 @@ class Native extends Gateway
 
         foreach ( $data->response->docs as $doc )
         {
+            if ( !isset( $doc->name_s ) )
+            {
+                throw new \Exception( '->name_s not set: ' . var_export( array( $doc, $parameters ), true ) );
+            }
+
             $searchHit = new SearchHit(
                 array(
                     'score'       => $doc->score,
@@ -198,7 +211,7 @@ class Native extends Gateway
     /**
      * Indexes a content object
      *
-     * @param \eZ\Publish\SPI\Search\Field[][] $documents
+     * @param \eZ\Publish\SPI\Search\Document[] $documents
      * @todo $documents should be generated more on demand then this and sent to Solr in chunks before final commit
      *
      * @return void
@@ -219,6 +232,7 @@ class Native extends Gateway
 
         if ( $result->headers["status"] !== 200 )
         {
+            var_dump( $result );
             throw new RuntimeException( "Wrong HTTP status received from Solr: " . $result->headers["status"] );
         }
     }
@@ -257,8 +271,8 @@ class Native extends Gateway
             '/solr/select?' .
             http_build_query(
                 array(
-                    "q" => "path_mid:*/$locationId/*",
-                    "fl" => "*",
+                    "q" => '{!parent which="doc_type_id:content"}path_id:*/$locationId/*',
+                    "fl" => "*,[child parentFilter=doc_type_id:content childFilter=doc_type_id:location limit=100]",
                     "wt" => "json",
                 )
             )
@@ -272,7 +286,7 @@ class Native extends Gateway
         {
             // Check that this document only had one location in which case it can be removed.
             // @todo When orphaned objects will be possible, we will have to update those doc instead of removing.
-            if ( $doc->location_parent_mid == $locationParent || $doc->location_mid == $locationParent )
+            if ( count( $doc->_childDocuments_ ) === 1 )
             {
                 $contentToDelete[] = $doc->id;
             }
@@ -301,34 +315,19 @@ class Native extends Gateway
             $jsonString = "";
             foreach ( $contentToUpdate as $doc )
             {
+                // @todo How are these looking now? They are not even here until we as to expand or something
                 // Removing location references in location_parent_mid, location_mid and path_mid
                 // main_* fields are not modified since removing main node is not permitted.
-                foreach ( $doc->location_parent_mid as $key => $value )
+                foreach ( $doc->_childDocuments_ as $key => $location )
                 {
-                    if ( $value == $locationId )
-                    {
-                        unset( $doc->location_parent_mid[$key] );
-                    }
-                }
-                foreach ( $doc->location_mid as $key => $value )
-                {
-                    if ( $value == $locationId )
-                    {
-                        unset( $doc->location_mid[$key] );
-                    }
-                }
-                foreach ( $doc->path_mid as $key => $value )
-                {
-                    if ( strpos( $value, "/$locationId/" ) )
-                    {
-                        unset( $doc->path_mid[$key] );
-                    }
+                    if (
+                        $location->location_id == $locationId ||
+                        $location->partent_id == $locationId ||
+                        strpos( $location->path_id, "/$locationId/" ) === false
+                    )
+                        unset( $doc->_childDocuments_[$key] );
                 }
 
-                // Reindex arrays
-                $doc->location_parent_mid = array_values( $doc->location_parent_mid );
-                $doc->location_mid = array_values( $doc->location_mid );
-                $doc->path_mid = array_values( $doc->path_mid );
 
                 if ( !empty( $jsonString ) )
                     $jsonString .= ",";
@@ -385,29 +384,57 @@ class Native extends Gateway
      */
     protected function createUpdates( array $documents )
     {
-        $xml = new \XmlWriter();
+        $xml = new XmlWriter();
         $xml->openMemory();
         $xml->startElement( 'add' );
 
-        foreach ( $documents as $document )
-        {
-            $xml->startElement( 'doc' );
-            foreach ( $document as $field )
-            {
-                foreach ( (array)$this->fieldValueMapper->map( $field ) as $value )
-                {
-                    $xml->startElement( 'field' );
-                    $xml->writeAttribute(
-                        'name',
-                        $this->nameGenerator->getTypedName( $field->name, $field->type )
-                    );
-                    $xml->text( $value );
-                    $xml->endElement();
-                }
-            }
-            $xml->endElement();
-        }
+        $this->writeDocuments( $documents, $xml );
+
         $xml->endElement();
         return $xml->outputMemory( true );
+    }
+    /**
+     * Write documents update XML
+     *
+     * @param array $documents
+     * @param XmlWriter $xml
+     */
+    private function writeDocuments( array $documents, XmlWriter $xml )
+    {
+        foreach ( $documents as $document )
+        {
+            $this->writeDocument( $document, $xml );
+        }
+    }
+
+    /**
+     * Write document update XML
+     *
+     * @param Document $document
+     * @param XmlWriter $xml
+     */
+    private function writeDocument( Document $document, XmlWriter $xml )
+    {
+        $xml->startElement( 'doc' );
+        foreach ( $document->members as $member )
+        {
+            if ( $member instanceof ChildDocuments )
+            {
+                $this->writeDocuments( $member->members, $xml );
+                continue;
+            }
+
+            foreach ( (array)$this->fieldValueMapper->map( $member ) as $value )
+            {
+                $xml->startElement( 'field' );
+                $xml->writeAttribute(
+                    'name',
+                    $this->nameGenerator->getTypedName( $member->name, $member->type )
+                );
+                $xml->text( $value );
+                $xml->endElement();
+            }
+        }
+        $xml->endElement();
     }
 }

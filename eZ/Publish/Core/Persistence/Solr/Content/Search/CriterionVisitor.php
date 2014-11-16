@@ -37,6 +37,30 @@ abstract class CriterionVisitor
     abstract public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null );
 
     /**
+     * @param bool $childQuery
+     * @return string
+     */
+    protected function getParentJoinString( $childQuery )
+    {
+        if ( !$childQuery )
+            return '{!parent which="doc_type_id:content"}';
+
+        return '';
+    }
+
+    /**
+     * @param bool $childQuery
+     * @return string
+     */
+    protected function getChildJoinString( $childQuery )
+    {
+        if ( $childQuery )
+            return '{!child of="doc_type_id:content"}';
+
+        return '';
+    }
+
+    /**
      * Get Solr range
      *
      * Start and end are optional, depending on the respective operator. Pass

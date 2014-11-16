@@ -16,6 +16,8 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler
 use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\SPI\Search\Field;
+use eZ\Publish\SPI\Search\Document;
+use eZ\Publish\SPI\Search\ChildDocuments;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -258,10 +260,67 @@ class Handler implements SearchHandlerInterface
     {
         $locations = $this->locationHandler->loadLocationsByContent( $content->versionInfo->contentInfo->id );
         $mainLocation = null;
+        $locationDocuments = array();
         foreach ( $locations as $location )
         {
-            if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
+            if ( $mainLocation === null && $location->id == $content->versionInfo->contentInfo->mainLocationId )
                 $mainLocation = $location;
+
+            $locationDocuments[] = new Document(
+                array(
+                    // internal field
+                    new Field(
+                        'id',
+                        $location->contentId . '-' . $location->id,
+                        new FieldType\IdentifierField()
+                    ),
+                    new Field(
+                        'location',
+                        $location->id,
+                        new FieldType\IdentifierField()
+                    ),
+                    new Field(
+                        'doc_type',
+                        'location',
+                        new FieldType\IdentifierField()
+                    ),
+                    new Field(
+                        'path',
+                        $location->pathString,
+                        new FieldType\IdentifierField()
+                    ),
+                    new Field(
+                        'depth',
+                        $location->depth,
+                        new FieldType\IntegerField()
+                    ),
+                    new Field(
+                        'priority',
+                        $location->priority,
+                        new FieldType\IntegerField()
+                    ),
+                    new Field(
+                        'parent',
+                        $location->parentId,
+                        new FieldType\IdentifierField()
+                    ),
+                    new Field(
+                        'location_remote',
+                        $location->remoteId,
+                        new FieldType\IdentifierField()
+                    ),
+                    new Field(
+                        'hidden',
+                        $location->hidden,
+                        new FieldType\BooleanField()
+                    ),
+                    new Field(
+                        'invisible',
+                        $location->invisible,
+                        new FieldType\BooleanField()
+                    ),
+                )
+            );
         }
         $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
 
@@ -274,199 +333,130 @@ class Handler implements SearchHandlerInterface
         // Add owner user id as it can also be considered as user group.
         $ancestorLocationsContentIds[] = $content->versionInfo->contentInfo->ownerId ;
 
-        $document = array(
-            new Field(
-                'id',
-                $content->versionInfo->contentInfo->id,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'type',
-                $content->versionInfo->contentInfo->contentTypeId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'version',
-                $content->versionInfo->versionNo,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'status',
-                $content->versionInfo->status,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'name',
-                $content->versionInfo->contentInfo->name,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'creator',
-                $content->versionInfo->creatorId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'owner',
-                $content->versionInfo->contentInfo->ownerId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'owner_user_group',
-                $ancestorLocationsContentIds,
-                new FieldType\MultipleIdentifierField()
-            ),
-            new Field(
-                'section',
-                $content->versionInfo->contentInfo->sectionId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'section_identifier',
-                $section->identifier,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'section_name',
-                $section->name,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'remote_id',
-                $content->versionInfo->contentInfo->remoteId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'modified',
-                $content->versionInfo->contentInfo->modificationDate,
-                new FieldType\DateField()
-            ),
-            new Field(
-                'published',
-                $content->versionInfo->contentInfo->publicationDate,
-                new FieldType\DateField()
-            ),
-            new Field(
-                'path',
-                array_map(
-                    function ( $location )
-                    {
-                        return $location->pathString;
-                    },
-                    $locations
+        $document = new Document(
+            array(
+                new Field(
+                    'id',
+                    $content->versionInfo->contentInfo->id,
+                    new FieldType\IdentifierField()
                 ),
-                new FieldType\MultipleIdentifierField()
-            ),
-            new Field(
-                'location',
-                array_map(
-                    function ( $location )
-                    {
-                        return $location->id;
-                    },
-                    $locations
+                new Field(
+                    'doc_type',
+                    'content',
+                    new FieldType\IdentifierField()
                 ),
-                new FieldType\MultipleIdentifierField()
-            ),
-            new Field(
-                'depth',
-                array_map(
-                    function ( $location )
-                    {
-                        return $location->depth;
-                    },
-                    $locations
+                new Field(
+                    'type',
+                    $content->versionInfo->contentInfo->contentTypeId,
+                    new FieldType\IdentifierField()
                 ),
-                new FieldType\IntegerField()
-            ),
-            new Field(
-                'priority',
-                array_map(
-                    function ( $location )
-                    {
-                        return $location->priority;
-                    },
-                    $locations
+                new Field(
+                    'version',
+                    $content->versionInfo->versionNo,
+                    new FieldType\IdentifierField()
                 ),
-                new FieldType\IntegerField()
-            ),
-            new Field(
-                'location_parent',
-                array_map(
-                    function ( $location )
-                    {
-                        return $location->parentId;
-                    },
-                    $locations
+                new Field(
+                    'status',
+                    $content->versionInfo->status,
+                    new FieldType\IdentifierField()
                 ),
-                new FieldType\MultipleIdentifierField()
-            ),
-            new Field(
-                'location_remote_id',
-                array_map(
-                    function ( $location )
-                    {
-                        return $location->remoteId;
-                    },
-                    $locations
+                new Field(
+                    'name',
+                    $content->versionInfo->contentInfo->name,
+                    new FieldType\StringField()
                 ),
-                new FieldType\MultipleIdentifierField()
-            ),
-            new Field(
-                'language_code',
-                array_keys( $content->versionInfo->names ),
-                new FieldType\MultipleStringField()
-            ),
-            new Field(
-                'main_language_code',
-                $content->versionInfo->contentInfo->mainLanguageCode,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'invisible',
-                array_map(
-                    function ( $location )
-                    {
-                        return $location->invisible;
-                    },
-                    $locations
+                new Field(
+                    'creator',
+                    $content->versionInfo->creatorId,
+                    new FieldType\IdentifierField()
                 ),
-                new FieldType\MultipleBooleanField()
-            ),
-            new Field(
-                'always_available',
-                $content->versionInfo->contentInfo->alwaysAvailable,
-                new FieldType\BooleanField()
-            ),
+                new Field(
+                    'owner',
+                    $content->versionInfo->contentInfo->ownerId,
+                    new FieldType\IdentifierField()
+                ),
+                new Field(
+                    'owner_user_group',
+                    $ancestorLocationsContentIds,
+                    new FieldType\MultipleIdentifierField()
+                ),
+                new Field(
+                    'section',
+                    $content->versionInfo->contentInfo->sectionId,
+                    new FieldType\IdentifierField()
+                ),
+                new Field(
+                    'section_identifier',
+                    $section->identifier,
+                    new FieldType\IdentifierField()
+                ),
+                new Field(
+                    'section_name',
+                    $section->name,
+                    new FieldType\StringField()
+                ),
+                new Field(
+                    'remote_id',
+                    $content->versionInfo->contentInfo->remoteId,
+                    new FieldType\IdentifierField()
+                ),
+                new Field(
+                    'modified',
+                    $content->versionInfo->contentInfo->modificationDate,
+                    new FieldType\DateField()
+                ),
+                new Field(
+                    'published',
+                    $content->versionInfo->contentInfo->publicationDate,
+                    new FieldType\DateField()
+                ),
+                new Field(
+                    'language_code',
+                    array_keys( $content->versionInfo->names ),
+                    new FieldType\MultipleStringField()
+                ),
+                new Field(
+                    'main_language_code',
+                    $content->versionInfo->contentInfo->mainLanguageCode,
+                    new FieldType\StringField()
+                ),
+                new Field(
+                    'always_available',
+                    $content->versionInfo->contentInfo->alwaysAvailable,
+                    new FieldType\BooleanField()
+                ),
+                new ChildDocuments( $locationDocuments ),
+            )
         );
 
         if ( $mainLocation !== null )
         {
-            $document[] = new Field(
+            $document->members[] = new Field(
                 'main_location',
                 $mainLocation->id,
                 new FieldType\IdentifierField()
             );
-            $document[] = new Field(
+            $document->members[] = new Field(
                 'main_location_parent',
                 $mainLocation->parentId,
                 new FieldType\IdentifierField()
             );
-            $document[] = new Field(
+            $document->members[] = new Field(
                 'main_location_remote_id',
                 $mainLocation->remoteId,
                 new FieldType\IdentifierField()
             );
-            $document[] = new Field(
+            $document->members[] = new Field(
                 'main_path',
                 $mainLocation->pathString,
                 new FieldType\IdentifierField()
             );
-            $document[] = new Field(
+            $document->members[] = new Field(
                 'main_depth',
                 $mainLocation->depth,
                 new FieldType\IntegerField()
             );
-            $document[] = new Field(
+            $document->members[] = new Field(
                 'main_priority',
                 $mainLocation->priority,
                 new FieldType\IntegerField()
@@ -474,10 +464,15 @@ class Handler implements SearchHandlerInterface
         }
 
         $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
-        $document[] = new Field(
+        $document->members[] = new Field(
             'group',
             $contentType->groupIds,
             new FieldType\MultipleIdentifierField()
+        );
+        $document->members[] = new Field(
+            'type_identifier',
+            $contentType->identifier,
+            new FieldType\IdentifierField()
         );
 
         foreach ( $content->fields as $field )
@@ -492,7 +487,7 @@ class Handler implements SearchHandlerInterface
                 $fieldType = $this->fieldRegistry->getType( $field->type );
                 foreach ( $fieldType->getIndexData( $field ) as $indexField )
                 {
-                    $document[] = new Field(
+                    $document->members[] = new Field(
                         $this->fieldNameGenerator->getName(
                             $indexField->name,
                             $fieldDefinition->identifier,
@@ -514,7 +509,7 @@ class Handler implements SearchHandlerInterface
             )->id;
         }
 
-        $document[] = new Field(
+        $document->members[] = new Field(
             'object_state',
             $objectStateIds,
             new FieldType\MultipleIdentifierField()

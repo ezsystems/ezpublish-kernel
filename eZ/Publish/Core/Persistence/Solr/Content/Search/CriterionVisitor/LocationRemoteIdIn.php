@@ -43,13 +43,14 @@ class LocationRemoteIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
+        $parentJoinString = $this->getParentJoinString( false );
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value )
+                    function ( $value ) use ( $parentJoinString )
                     {
-                        return 'location_remote_id_mid:"' . $value . '"';
+                        return $parentJoinString. 'location_remote_id:"' . $value . '"';
                     },
                     $criterion->value
                 )

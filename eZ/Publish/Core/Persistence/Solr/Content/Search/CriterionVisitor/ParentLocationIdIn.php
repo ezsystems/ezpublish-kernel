@@ -43,13 +43,14 @@ class ParentLocationIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
+        $parentJoinString = $this->getParentJoinString( false );
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value )
+                    function ( $value ) use ( $parentJoinString )
                     {
-                        return 'location_parent_mid:"' . $value . '"';
+                        return $parentJoinString. 'parent_id:"' . $value . '"';
                     },
                     $criterion->value
                 )

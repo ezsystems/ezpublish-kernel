@@ -81,7 +81,7 @@ class FullText extends CriterionVisitor
             }
         }
 
-        return "(" . implode(
+        return '( doc_type_id:"content" AND ((' . implode(
             ') OR (',
             array_map(
                 function ($search) use ($criterion) {
@@ -93,7 +93,7 @@ class FullText extends CriterionVisitor
                 },
                 $queries
             )
-        ) . ")";
+        ) . ")))";
     }
 }
 

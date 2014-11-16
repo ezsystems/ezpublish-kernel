@@ -44,13 +44,14 @@ class SubtreeIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
+        $parentJoinString = $this->getParentJoinString( false );
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value )
+                    function ( $value ) use ( $parentJoinString )
                     {
-                        return 'path_mid:' . str_replace( '/', '\\/', $value ) . '*';
+                        return $parentJoinString. 'path_id:' . str_replace( '/', '\\/', $value ) . '*';
                     },
                     $criterion->value
                 )
