@@ -4,7 +4,9 @@
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">
   <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
     <ol class="orderedListClass">
-      <li class="listItemClass"><paragraph>This is a list item.</paragraph></li>
+      <li class="listItemClass">
+        <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">This is a list item.</paragraph>
+      </li>
     </ol>
   </paragraph>
 </section>
