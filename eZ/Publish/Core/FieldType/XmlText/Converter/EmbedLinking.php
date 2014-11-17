@@ -30,7 +30,6 @@ class EmbedLinking implements Converter
     public function convert( DOMDocument $document )
     {
         $xpath = new DOMXPath( $document );
-        $xpath->registerNamespace( "xhtml", "http://docbook.org/ns/xhtml" );
         // Select embeds that are linked
         // After Expanding converter such links will contain only single embed element
         $xpathExpression = "//embed[parent::link]|//embed-inline[parent::link]";
