@@ -50,20 +50,32 @@ class Content extends Provider implements ContentViewProviderInterface
                     // Used by XmlText field type
                     if ( isset( $params['objectParameters'] ) )
                     {
+                        if ( isset( $params['linkParameters'] ) && $params['linkParameters'] !== null )
+                        {
+                            $linkParameters = $params['linkParameters'];
+                        }
                         $tpl->setVariable( 'object_parameters', $params["objectParameters"], 'ContentView' );
                     }
                     // Used by RichText field type
                     else if ( isset( $params['embedParams'] ) )
                     {
-                        $tpl->setVariable( 'object_parameters', $params["embedParams"], 'ContentView' );
+                        if ( isset( $params['embedParams']['link'] ) )
+                        {
+                            $linkParameters = $params['embedParams']['link'];
+                        }
+
+                        if ( isset( $params['embedParams']['config'] ) )
+                        {
+                            $tpl->setVariable( 'object_parameters', $params['embedParams']['config'], 'ContentView' );
+                        }
                     }
 
                     // Convert link parameters to Legacy Stack format
-                    if ( isset( $params['linkParameters'] ) )
+                    if ( isset( $linkParameters ) )
                     {
                         $tpl->setVariable(
                             'link_parameters',
-                            $this->legalizeLinkParameters( $params["linkParameters"] ),
+                            $this->legalizeLinkParameters( $linkParameters ),
                             'ContentView'
                         );
                     }
@@ -121,27 +133,32 @@ class Content extends Provider implements ContentViewProviderInterface
     {
         $parameters = array();
 
-        if ( $linkParameters["href"] !== null )
+        if ( isset( $linkParameters["href"] ) )
         {
             $parameters["href"] = $linkParameters["href"];
         }
 
-        if ( $linkParameters["class"] !== null )
+        if ( isset( $linkParameters["resourceFragmentIdentifier"] ) )
+        {
+            $parameters["anchor_name"] = $linkParameters["resourceFragmentIdentifier"];
+        }
+
+        if ( isset( $linkParameters["class"] ) )
         {
             $parameters["class"] = $linkParameters["class"];
         }
 
-        if ( $linkParameters["id"] !== null )
+        if ( isset( $linkParameters["id"] ) )
         {
             $parameters["xhtml:id"] = $linkParameters["id"];
         }
 
-        if ( $linkParameters["target"] !== null )
+        if ( isset( $linkParameters["target"] ) )
         {
             $parameters["target"] = $linkParameters["target"];
         }
 
-        if ( $linkParameters["title"] !== null )
+        if ( isset( $linkParameters["title"] ) )
         {
             $parameters["xhtml:title"] = $linkParameters["title"];
         }

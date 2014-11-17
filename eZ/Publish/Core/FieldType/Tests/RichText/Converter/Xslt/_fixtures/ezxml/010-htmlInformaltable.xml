@@ -18,7 +18,9 @@
           <paragraph>21</paragraph>
           <paragraph>
             <ul class="itemizedListClass">
-              <li class="listItemClass"><paragraph>This is a list item.</paragraph></li>
+              <li class="listItemClass">
+                <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">This is a list item.</paragraph>
+              </li>
             </ul>
           </paragraph>
         </td>

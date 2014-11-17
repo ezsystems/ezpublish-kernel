@@ -439,10 +439,38 @@
       content eZ Publish embed elements.
     </a:documentation>
     <ref name="ez.embed.attlist"/>
+    <interleave>
+      <optional>
+        <ref name="ez.embed.link"/>
+      </optional>
+      <optional>
+        <element name="ezconfig">
+          <ref name="ez.config.hash"/>
+        </element>
+      </optional>
+    </interleave>
+  </define>
+
+  <define name="ez.embed.link">
+    <a:documentation>
+      Link as a property of embed.
+    </a:documentation>
+    <element name="ezlink">
+      <ref name="ez.embed.link.attlist"/>
+    </element>
+  </define>
+
+  <define name="ez.embed.link.attlist">
+    <ref name="ez.embed.link.attributes"/>
+  </define>
+
+  <define name="ez.embed.link.attributes">
+    <ref name="db.href.attributes"/>
     <optional>
-      <element name="ezconfig">
-        <ref name="ez.config.hash"/>
-      </element>
+      <ref name="db.xml.id.attribute"/>
+    </optional>
+    <optional>
+      <ref name="ez.xhtml.class.attribute"/>
     </optional>
   </define>
 
@@ -525,6 +553,9 @@
 
   <define name="ez.embed.attributes">
     <ref name="db.xlink.href.attribute"/>
+    <optional>
+      <ref name="db.xml.id.attribute"/>
+    </optional>
     <optional>
       <attribute name="view">
         <data type="string"><param name="pattern">[A-Za-z][A-Za-z0-9_\-]*</param></data>

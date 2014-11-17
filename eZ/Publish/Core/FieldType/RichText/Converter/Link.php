@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\FieldType\RichText\Converter;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Psr\Log\LoggerInterface;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use DOMDocument;
@@ -61,21 +62,26 @@ class Link implements Converter
         $document = clone $document;
         $xpath = new DOMXPath( $document );
         $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
-        $xpathExpression = "//docbook:link[starts-with( @xlink:href, 'ezlocation://' ) or starts-with( @xlink:href, 'ezcontent://' )]";
+        $linkAttributeExpression = "starts-with( @xlink:href, 'ezlocation://' ) or starts-with( @xlink:href, 'ezcontent://' )";
+        $xpathExpression = "//docbook:link[{$linkAttributeExpression}]|//docbook:ezlink";
 
         /** @var \DOMElement $link */
         foreach ( $xpath->query( $xpathExpression ) as $link )
         {
+            // Set resolved href to number character as a default if it can't be resolved
+            $hrefResolved = "#";
+            $href = $link->getAttribute( "xlink:href" );
             $location = null;
-            preg_match( "~^(.+)://([^#]*)?(#.*|\\s*)?$~", $link->getAttribute( "xlink:href" ), $matches );
+            preg_match( "~^(.+://)?([^#]*)?(#.*|\\s*)?$~", $href, $matches );
             list( , $scheme, $id, $fragment ) = $matches;
 
-            if ( $scheme === "ezcontent" )
+            if ( $scheme === "ezcontent://" )
             {
                 try
                 {
                     $contentInfo = $this->contentService->loadContentInfo( $id );
                     $location = $this->locationService->loadLocation( $contentInfo->mainLocationId );
+                    $hrefResolved = $this->urlAliasRouter->generate( $location ) . $fragment;
                 }
                 catch ( APINotFoundException $e )
                 {
@@ -98,12 +104,12 @@ class Link implements Converter
                     }
                 }
             }
-
-            if ( $scheme === "ezlocation" )
+            else if ( $scheme === "ezlocation://" )
             {
                 try
                 {
                     $location = $this->locationService->loadLocation( $id );
+                    $hrefResolved = $this->urlAliasRouter->generate( $location ) . $fragment;
                 }
                 catch ( APINotFoundException $e )
                 {
@@ -126,11 +132,23 @@ class Link implements Converter
                     }
                 }
             }
-
-            if ( $location !== null )
+            else
             {
-                $link->setAttribute( 'xlink:href', $this->urlAliasRouter->generate( $location ) . $fragment );
+                $hrefResolved = $href;
             }
+
+            $hrefAttributeName = "xlink:href";
+
+            // For embeds set the resolved href to the separate attribute
+            // Original href needs to be preserved in order to generate link parameters
+            // This will need to change with introduction of UrlService and removal of URL link
+            // resolving in external storage
+            if ( $link->localName === "ezlink" )
+            {
+                $hrefAttributeName = "href_resolved";
+            }
+
+            $link->setAttribute( $hrefAttributeName, $hrefResolved );
         }
 
         return $document;

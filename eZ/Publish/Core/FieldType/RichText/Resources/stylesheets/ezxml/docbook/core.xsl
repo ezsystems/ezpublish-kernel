@@ -7,6 +7,7 @@
     xmlns="http://docbook.org/ns/docbook"
     xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
     xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+    xmlns:ezlegacytmp="http://ez.no/xmlns/ezpublish/legacytmp"
     version="1.0">
   <xsl:output indent="yes" encoding="UTF-8"/>
 
@@ -42,7 +43,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="paragraph[self::*[namespace::*[name() = 'tmp']]]/custom">
+  <xsl:template match="paragraph[@ez-temporary]/custom">
     <xsl:element name="eztemplate" namespace="http://docbook.org/ns/docbook">
       <xsl:attribute name="name">
         <xsl:value-of select="@name"/>
@@ -93,47 +94,40 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="paragraph[self::*[namespace::*[name() = 'tmp']] and not( ancestor::*[namespace::*[name() = 'tmp']] )]">
+  <xsl:template match="paragraph[@ez-temporary]">
     <xsl:apply-templates/>
   </xsl:template>
 
   <xsl:template match="paragraph">
-    <xsl:choose>
-      <xsl:when test="( table | ul | ol ) or name( .. ) = 'li'">
-        <xsl:apply-templates/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
-          <xsl:if test="@class">
-            <xsl:attribute name="ezxhtml:class">
-              <xsl:value-of select="@class"/>
-            </xsl:attribute>
-          </xsl:if>
-          <xsl:if test="@align">
-            <xsl:attribute name="ezxhtml:textalign">
-              <xsl:value-of select="@align"/>
-            </xsl:attribute>
-          </xsl:if>
-          <xsl:variable name="lines" select="line"/>
-          <xsl:choose>
-            <xsl:when test="count( $lines ) &gt; 0">
-              <xsl:element name="literallayout" namespace="http://docbook.org/ns/docbook">
-                <xsl:attribute name="class">normal</xsl:attribute>
-                <xsl:for-each select="$lines">
-                  <xsl:apply-templates/>
-                  <xsl:if test='position() != last()'>
-                    <xsl:text>&#xa;</xsl:text>
-                  </xsl:if>
-                </xsl:for-each>
-              </xsl:element>
-            </xsl:when>
-            <xsl:otherwise>
+    <xsl:element name="para" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@align">
+        <xsl:attribute name="ezxhtml:textalign">
+          <xsl:value-of select="@align"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:variable name="lines" select="line"/>
+      <xsl:choose>
+        <xsl:when test="count( $lines ) &gt; 0">
+          <xsl:element name="literallayout" namespace="http://docbook.org/ns/docbook">
+            <xsl:attribute name="class">normal</xsl:attribute>
+            <xsl:for-each select="$lines">
               <xsl:apply-templates/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:element>
-      </xsl:otherwise>
-    </xsl:choose>
+              <xsl:if test='position() != last()'>
+                <xsl:text>&#xa;</xsl:text>
+              </xsl:if>
+            </xsl:for-each>
+          </xsl:element>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:element>
   </xsl:template>
 
   <xsl:template match="custom[@name='quote']">
@@ -155,8 +149,8 @@
 
   <xsl:template match="strong">
     <xsl:element name="emphasis" namespace="http://docbook.org/ns/docbook">
+      <xsl:attribute name="role">strong</xsl:attribute>
       <xsl:if test="@class">
-        <xsl:attribute name="role">strong</xsl:attribute>
         <xsl:attribute name="ezxhtml:class">
           <xsl:value-of select="@class"/>
         </xsl:attribute>
@@ -201,57 +195,11 @@
   </xsl:template>
 
   <xsl:template match="link">
-    <xsl:variable name="fragment">
-      <xsl:if test="@anchor_name != ''">
-        <xsl:value-of select="concat( '#', @anchor_name )"/>
-      </xsl:if>
-    </xsl:variable>
     <xsl:element name="link" namespace="http://docbook.org/ns/docbook">
-      <xsl:choose>
-        <xsl:when test="@url_id">
-          <xsl:attribute name="xlink:href">
-            <xsl:value-of select="concat( 'ezurl://', @url_id, $fragment )"/>
-          </xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@node_id">
-          <xsl:attribute name="xlink:href">
-            <xsl:value-of select="concat( 'ezlocation://', @node_id, $fragment )"/>
-          </xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@object_id">
-          <xsl:attribute name="xlink:href">
-            <xsl:value-of select="concat( 'ezcontent://', @object_id, $fragment )"/>
-          </xsl:attribute>
-        </xsl:when>
-        <xsl:when test="@anchor_name">
-          <xsl:attribute name="xlink:href">
-            <xsl:value-of select="concat( '#', @anchor_name )"/>
-          </xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:message terminate="yes">
-            Unhandled link type
-          </xsl:message>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:attribute name="xlink:show">
-        <xsl:choose>
-          <xsl:when test="@target and @target = '_blank'">
-            <xsl:value-of select="'new'"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="'none'"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:attribute>
+      <xsl:call-template name="addLinkAttributes"/>
       <xsl:if test="@xhtml:id">
         <xsl:attribute name="xml:id">
           <xsl:value-of select="@xhtml:id"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@xhtml:title">
-        <xsl:attribute name="xlink:title">
-          <xsl:value-of select="@xhtml:title"/>
         </xsl:attribute>
       </xsl:if>
       <xsl:if test="@class">
@@ -261,6 +209,56 @@
       </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="addLinkAttributes">
+    <xsl:variable name="fragment">
+      <xsl:if test="@anchor_name != ''">
+        <xsl:value-of select="concat( '#', @anchor_name )"/>
+      </xsl:if>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="@url_id">
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="concat( 'ezurl://', @url_id, $fragment )"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@node_id">
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="concat( 'ezlocation://', @node_id, $fragment )"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@object_id">
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="concat( 'ezcontent://', @object_id, $fragment )"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@anchor_name">
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="concat( '#', @anchor_name )"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:message terminate="yes">
+          Unhandled link typeccc
+        </xsl:message>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:attribute name="xlink:show">
+      <xsl:choose>
+        <xsl:when test="@target and @target = '_blank'">
+          <xsl:value-of select="'new'"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'none'"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+    <xsl:if test="@xhtml:title">
+      <xsl:attribute name="xlink:title">
+        <xsl:value-of select="@xhtml:title"/>
+      </xsl:attribute>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="header">
@@ -512,6 +510,11 @@
           </xsl:message>
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:if test="@xhtml:id">
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="@xhtml:id"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:if test="@view">
         <xsl:attribute name="view">
           <xsl:value-of select="@view"/>
@@ -527,6 +530,11 @@
           <xsl:value-of select="@align"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@*[starts-with( name( . ), 'ezlegacytmp-embed-link-' )]">
+        <xsl:element name="ezlink" namespace="http://docbook.org/ns/docbook">
+          <xsl:call-template name="addEmbedLinkAttributes"/>
+        </xsl:element>
+      </xsl:if>
       <xsl:if test="@size or @*[namespace-uri() = 'http://ez.no/namespaces/ezpublish3/custom/']">
         <xsl:element name="ezconfig" namespace="http://docbook.org/ns/docbook">
           <xsl:for-each select="@size | @*[namespace-uri() = 'http://ez.no/namespaces/ezpublish3/custom/']">
@@ -537,6 +545,58 @@
         </xsl:element>
       </xsl:if>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="addEmbedLinkAttributes">
+    <xsl:variable name="fragment">
+      <xsl:if test="@ezlegacytmp-embed-link-anchor_name != ''">
+        <xsl:value-of select="concat( '#', @ezlegacytmp-embed-link-anchor_name )"/>
+      </xsl:if>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="@ezlegacytmp-embed-link-url_id">
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="concat( 'ezurl://', @ezlegacytmp-embed-link-url_id, $fragment )"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@ezlegacytmp-embed-link-node_id">
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="concat( 'ezlocation://', @ezlegacytmp-embed-link-node_id, $fragment )"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="@ezlegacytmp-embed-link-object_id">
+        <xsl:attribute name="xlink:href">
+          <xsl:value-of select="concat( 'ezcontent://', @ezlegacytmp-embed-link-object_id, $fragment )"/>
+        </xsl:attribute>
+      </xsl:when>
+    </xsl:choose>
+    <xsl:if test="@ezlegacytmp-embed-link-url_id or @ezlegacytmp-embed-link-node_id or @ezlegacytmp-embed-link-object_id">
+      <xsl:attribute name="xlink:show">
+        <xsl:choose>
+          <xsl:when test="@ezlegacytmp-embed-link-target and @ezlegacytmp-embed-link-target = '_blank'">
+            <xsl:value-of select="'new'"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'none'"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@ezlegacytmp-embed-link-title">
+      <xsl:attribute name="xlink:title">
+        <xsl:value-of select="@ezlegacytmp-embed-link-title"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@ezlegacytmp-embed-link-id">
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="@ezlegacytmp-embed-link-id"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="@ezlegacytmp-embed-link-class">
+      <xsl:attribute name="ezxhtml:class">
+        <xsl:value-of select="@ezlegacytmp-embed-link-class"/>
+      </xsl:attribute>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="addHashValue">

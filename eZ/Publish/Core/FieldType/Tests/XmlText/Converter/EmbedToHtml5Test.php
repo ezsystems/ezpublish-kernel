@@ -133,10 +133,6 @@ url="http://ez.no"
                     'noLayout' => true,
                     'linkParameters' => array(
                         'href' => 'http://ez.no',
-                        'target' => null,
-                        'title' => null,
-                        'id' => null,
-                        'class' => null,
                         'resourceType' => null,
                         'resourceId' => null,
                         'wrapped' => false,
@@ -216,10 +212,6 @@ url="http://ez.no"
                     ),
                     'linkParameters' => array(
                         'href' => 'http://ez.no',
-                        'target' => null,
-                        'title' => null,
-                        'id' => null,
-                        'class' => null,
                         'resourceType' => null,
                         'resourceId' => null,
                         'wrapped' => false,
@@ -353,10 +345,6 @@ ezlegacytmp-embed-link-object_id="333"
                     'noLayout' => true,
                     'linkParameters' => array(
                         'href' => 'http://ez.no',
-                        'target' => null,
-                        'title' => null,
-                        'id' => null,
-                        'class' => null,
                         'resourceType' => 'CONTENT',
                         'resourceId' => '333',
                         'wrapped' => false,
@@ -385,6 +373,7 @@ ezlegacytmp-embed-link-title="title"
 ezlegacytmp-embed-link-id="id"
 ezlegacytmp-embed-link-class="class"
 ezlegacytmp-embed-link-url_id="333"
+ezlegacytmp-embed-link-anchor_name="anchovy"
 />
 </link>
 </paragraph>
@@ -407,6 +396,7 @@ ezlegacytmp-embed-link-url_id="333"
                         'class' => 'class',
                         'resourceType' => 'URL',
                         'resourceId' => '333',
+                        'resourceFragmentIdentifier' => 'anchovy',
                         'wrapped' => false,
                     ),
                 ),
