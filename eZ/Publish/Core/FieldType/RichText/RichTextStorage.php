@@ -143,7 +143,7 @@ class RichTextStorage extends GatewayBasedStorage
 
         $xpath = new DOMXPath( $document );
         $xpath->registerNamespace( "docbook", "http://docbook.org/ns/docbook" );
-        $xpathExpression = "//docbook:link[starts-with( @xlink:href, 'ezurl://' )]";
+        $xpathExpression = "//docbook:link[starts-with( @xlink:href, 'ezurl://' )]|//docbook:ezlink[starts-with( @xlink:href, 'ezurl://' )]";
 
         $links = $xpath->query( $xpathExpression );
 
