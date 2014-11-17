@@ -41,15 +41,54 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                     array(
                         "method" => "renderContentEmbed",
                         "id" => "106",
-                        "view" => "embed",
+                        "viewType" => "embed",
                         "is_inline" => false,
-                        "params" => array(
+                        "embedParams" => array(
                             "id" => "106",
-                            "view" => "embed",
-                            "params" => array()
+                            "viewType" => "embed",
                         ),
                     )
                 )
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <ezembed xlink:href="ezcontent://106" view="embed" xml:id="embed-id-1" ezxhtml:class="embed-class" ezxhtml:align="left">
+    <ezlink href_resolved="RESOLVED" xlink:href="ezurl://95#fragment1" xlink:show="new" xml:id="link-id-1" xlink:title="Link title" ezxhtml:class="link-class"/>
+  </ezembed>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <ezembed xlink:href="ezcontent://106" view="embed" xml:id="embed-id-1" ezxhtml:class="embed-class" ezxhtml:align="left">
+    <ezlink href_resolved="RESOLVED" xlink:href="ezurl://95#fragment1" xlink:show="new" xml:id="link-id-1" xlink:title="Link title" ezxhtml:class="link-class"/>
+    <ezpayload><![CDATA[106]]></ezpayload>
+  </ezembed>
+</section>',
+                array(),
+                array(
+                    array(
+                        "method" => "renderContentEmbed",
+                        "id" => "106",
+                        "viewType" => "embed",
+                        "is_inline" => false,
+                        "embedParams" => array(
+                            "id" => "106",
+                            "viewType" => "embed",
+                            "link" => array(
+                                "href" => "RESOLVED",
+                                "resourceType" => "URL",
+                                "resourceId" => null,
+                                "wrapped" => false,
+                                "target" => "_blank",
+                                "title" => "Link title",
+                                "id" => "link-id-1",
+                                "class" => "link-class",
+                            ),
+                            "class" => "embed-class",
+                            "align" => "left",
+                        ),
+                    ),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -96,12 +135,12 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                     array(
                         "method" => "renderLocationEmbed",
                         "id" => "601",
-                        "view" => "embed-inline",
+                        "viewType" => "embed-inline",
                         "is_inline" => false,
-                        "params" => array(
+                        "embedParams" => array(
                             "id" => "601",
-                            "view" => "embed-inline",
-                            "params" => array(
+                            "viewType" => "embed-inline",
+                            "config" => array(
                                 "size" => "medium",
                                 "offset" => 10,
                                 "limit" => 5,
@@ -118,6 +157,84 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                         ),
                     )
                 )
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <ezembed xlink:href="ezlocation://601" view="embed-inline">
+    <ezlink href_resolved="RESOLVED" xlink:href="ezcontent://95#fragment1" xlink:show="replace"/>
+    <ezconfig>
+      <ezvalue key="size">medium</ezvalue>
+      <ezvalue key="offset">10</ezvalue>
+      <ezvalue key="limit">5</ezvalue>
+      <ezvalue key="hey">
+          <ezvalue key="look">
+              <ezvalue key="at">
+                  <ezvalue key="this">wohoo</ezvalue>
+                  <ezvalue key="that">weeee</ezvalue>
+              </ezvalue>
+          </ezvalue>
+          <ezvalue key="what">get to the chopper</ezvalue>
+      </ezvalue>
+    </ezconfig>
+  </ezembed>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <ezembed xlink:href="ezlocation://601" view="embed-inline">
+    <ezlink href_resolved="RESOLVED" xlink:href="ezcontent://95#fragment1" xlink:show="replace"/>
+    <ezconfig>
+      <ezvalue key="size">medium</ezvalue>
+      <ezvalue key="offset">10</ezvalue>
+      <ezvalue key="limit">5</ezvalue>
+      <ezvalue key="hey">
+          <ezvalue key="look">
+              <ezvalue key="at">
+                  <ezvalue key="this">wohoo</ezvalue>
+                  <ezvalue key="that">weeee</ezvalue>
+              </ezvalue>
+          </ezvalue>
+          <ezvalue key="what">get to the chopper</ezvalue>
+      </ezvalue>
+    </ezconfig>
+    <ezpayload><![CDATA[601]]></ezpayload>
+  </ezembed>
+</section>',
+                array(),
+                array(
+                    array(
+                        "method" => "renderLocationEmbed",
+                        "id" => "601",
+                        "viewType" => "embed-inline",
+                        "is_inline" => false,
+                        "embedParams" => array(
+                            "id" => "601",
+                            "viewType" => "embed-inline",
+                            "config" => array(
+                                "size" => "medium",
+                                "offset" => 10,
+                                "limit" => 5,
+                                "hey" => array(
+                                    "look" => array(
+                                        "at" => array(
+                                            "this" => "wohoo",
+                                            "that" => "weeee"
+                                        )
+                                    ),
+                                    "what" => "get to the chopper"
+                                ),
+                            ),
+                            "link" => array(
+                                "href" => "RESOLVED",
+                                "resourceType" => "CONTENT",
+                                "resourceId" => "95",
+                                "resourceFragmentIdentifier" => "fragment1",
+                                "wrapped" => false,
+                                "target" => "_self",
+                            ),
+                        ),
+                    ),
+                ),
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -139,23 +256,97 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                     array(
                         "method" => "renderLocationEmbed",
                         "id" => "601",
-                        "view" => "embed",
+                        "viewType" => "embed",
                         "is_inline" => false,
-                        "params" => array(
+                        "embedParams" => array(
                             "id" => "601",
-                            "view" => "embed",
-                            "params" => array()
+                            "viewType" => "embed",
                         ),
                     ),
                     array(
                         "method" => "renderContentEmbed",
                         "id" => "106",
-                        "view" => "full",
+                        "viewType" => "full",
                         "is_inline" => true,
-                        "params" => array(
+                        "embedParams" => array(
                             "id" => "106",
-                            "view" => "full",
-                            "params" => array()
+                            "viewType" => "full",
+                        ),
+                    )
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <ezembedinline xlink:href="ezlocation://601" view="embed">
+    <ezlink href_resolved="RESOLVED" xlink:href="ezcontent://95"/>
+    <ezconfig>
+      <ezvalue key="size">medium</ezvalue>
+    </ezconfig>
+  </ezembedinline>
+  <paragraph>Here is one <link>linked <ezembedinline xlink:href="ezcontent://106" view="full">
+    <ezlink href_resolved="RESOLVED2" xlink:href="ezlocation://59#fragment"/>
+    <ezconfig>
+      <ezvalue key="size">small</ezvalue>
+    </ezconfig>
+  </ezembedinline> inline</link> embed</paragraph>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <ezembedinline xlink:href="ezlocation://601" view="embed">
+    <ezlink href_resolved="RESOLVED" xlink:href="ezcontent://95"/>
+    <ezconfig>
+      <ezvalue key="size">medium</ezvalue>
+    </ezconfig>
+    <ezpayload><![CDATA[601]]></ezpayload>
+  </ezembedinline>
+  <paragraph>Here is one <link>linked <ezembedinline xlink:href="ezcontent://106" view="full">
+    <ezlink href_resolved="RESOLVED2" xlink:href="ezlocation://59#fragment"/>
+    <ezconfig>
+      <ezvalue key="size">small</ezvalue>
+    </ezconfig>
+    <ezpayload><![CDATA[106]]></ezpayload>
+  </ezembedinline> inline</link> embed</paragraph>
+</section>',
+                array(),
+                array(
+                    array(
+                        "method" => "renderLocationEmbed",
+                        "id" => "601",
+                        "viewType" => "embed",
+                        "is_inline" => true,
+                        "embedParams" => array(
+                            "id" => "601",
+                            "viewType" => "embed",
+                            "config" => array(
+                                "size" => "medium",
+                            ),
+                            "link" => array(
+                                "href" => "RESOLVED",
+                                "resourceType" => "CONTENT",
+                                "resourceId" => "95",
+                                "wrapped" => false,
+                            ),
+                        ),
+                    ),
+                    array(
+                        "method" => "renderContentEmbed",
+                        "id" => "106",
+                        "viewType" => "full",
+                        "is_inline" => true,
+                        "embedParams" => array(
+                            "id" => "106",
+                            "viewType" => "full",
+                            "config" => array(
+                                "size" => "small",
+                            ),
+                            "link" => array(
+                                "href" => "RESOLVED2",
+                                "resourceType" => "LOCATION",
+                                "resourceId" => "59",
+                                "resourceFragmentIdentifier" => "fragment",
+                                "wrapped" => true,
+                            ),
                         ),
                     )
                 )
@@ -191,6 +382,36 @@ class EmbedTest extends PHPUnit_Framework_TestCase
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ezembed xlink:href="ezcontent://106" view="embed">
+    <ezlink xlink:href="ezcontent://601"/>
+  </ezembed>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xlink="http://www.w3.org/1999/xlink">
+  <ezembed xlink:href="ezcontent://106" view="embed">
+    <ezlink xlink:href="ezcontent://601"/>
+    <ezpayload><![CDATA[106]]></ezpayload>
+  </ezembed>
+</section>',
+                array(
+                    "Could not create link parameters: resolved embed link is missing",
+                ),
+                array(
+                    array(
+                        "method" => "renderContentEmbed",
+                        "id" => "106",
+                        "viewType" => "embed",
+                        "is_inline" => false,
+                        "embedParams" => array(
+                            "id" => "106",
+                            "viewType" => "embed",
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns:xlink="http://www.w3.org/1999/xlink">
   <ezembed xlink:href="ezcontent://106"/>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -204,12 +425,11 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                     array(
                         "method" => "renderContentEmbed",
                         "id" => "106",
-                        "view" => "embed",
+                        "viewType" => "embed",
                         "is_inline" => false,
-                        "params" => array(
+                        "embedParams" => array(
                             "id" => "106",
-                            "view" => "embed",
-                            "params" => array()
+                            "viewType" => "embed",
                         ),
                     )
                 )
@@ -230,12 +450,11 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                     array(
                         "method" => "renderContentEmbed",
                         "id" => "106",
-                        "view" => "embed-inline",
+                        "viewType" => "embed-inline",
                         "is_inline" => true,
-                        "params" => array(
+                        "embedParams" => array(
                             "id" => "106",
-                            "view" => "embed-inline",
-                            "params" => array()
+                            "viewType" => "embed-inline",
                         ),
                     )
                 )
@@ -274,8 +493,10 @@ class EmbedTest extends PHPUnit_Framework_TestCase
                     ->method( $params["method"] )
                     ->with(
                         $params["id"],
-                        $params["view"],
-                        $params["params"],
+                        $params["viewType"],
+                        array(
+                            "embedParams" => $params["embedParams"],
+                        ),
                         $params["is_inline"]
                     )
                     ->will( $this->returnValue( $params["id"] ) );
