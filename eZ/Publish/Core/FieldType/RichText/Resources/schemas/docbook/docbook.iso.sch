@@ -243,5 +243,9 @@
     <!--s:rule context="db:sidebar">
       <s:assert test="not(.//db:sidebar)">sidebar must not occur among the children or descendants of sidebar</s:assert>
     </s:rule-->
+    <s:rule context="db:link">
+      <s:assert test="not(.//db:link)">link must not occur in the descendants of link</s:assert>
+      <s:assert test="not(.//db:ezlink)">ezlink must not occur in the descendants of link</s:assert>
+    </s:rule>
   </s:pattern>
 </s:schema>
