@@ -249,6 +249,7 @@ class EmbedToHtml5 implements Converter
         $title = $embed->getAttribute( "{$tmpPrefix}title" );
         $id = $embed->getAttribute( "{$tmpPrefix}id" );
         $class = $embed->getAttribute( "{$tmpPrefix}class" );
+        $resourceFragmentIdentifier = $embed->getAttribute( "{$tmpPrefix}anchor_name" );
         $resourceType = null;
         $resourceId = null;
 
@@ -276,14 +277,35 @@ class EmbedToHtml5 implements Converter
 
         $parameters = array(
             "href" => $embed->getAttribute( "url" ),
-            "target" => $target ?: null,
-            "title" => $title ?: null,
-            "id" => $id ?: null,
-            "class" => $class ?: null,
             "resourceType" => $resourceType,
             "resourceId" => $resourceId,
             "wrapped" => $this->isLinkWrapped( $embed ),
         );
+
+        if ( !empty( $resourceFragmentIdentifier ) )
+        {
+            $parameters["resourceFragmentIdentifier"] = $resourceFragmentIdentifier;
+        }
+
+        if ( !empty( $target ) )
+        {
+            $parameters["target"] = $target;
+        }
+
+        if ( !empty( $title ) )
+        {
+            $parameters["title"] = $title;
+        }
+
+        if ( !empty( $id ) )
+        {
+            $parameters["id"] = $id;
+        }
+
+        if ( !empty( $class ) )
+        {
+            $parameters["class"] = $class;
+        }
 
         return $parameters;
     }
