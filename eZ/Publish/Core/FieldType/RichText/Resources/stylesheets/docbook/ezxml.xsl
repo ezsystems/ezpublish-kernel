@@ -144,50 +144,58 @@
 
   <xsl:template match="docbook:link[@xlink:href]">
     <link>
-      <xsl:choose>
-        <xsl:when test="starts-with( @xlink:href, 'ezurl://' )">
-          <xsl:attribute name="url_id">
-            <xsl:value-of select="substring-before( concat( substring-after( @xlink:href, 'ezurl://' ), '#' ), '#' )"/>
-          </xsl:attribute>
-        </xsl:when>
-        <xsl:when test="starts-with( @xlink:href, 'ezcontent://' )">
-          <xsl:call-template name="addAttributeObjectId">
-            <xsl:with-param name="href" select="@xlink:href"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="starts-with( @xlink:href, 'ezlocation://' )">
-          <xsl:call-template name="addAttributeNodeId">
-            <xsl:with-param name="href" select="@xlink:href"/>
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:when test="starts-with( @xlink:href, '#' )"/>
-        <xsl:otherwise>
-          <xsl:attribute name="href">
-            <xsl:value-of select="substring-before( concat( @xlink:href, '#' ), '#' )"/>
-          </xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:if test="contains( @xlink:href, '#' )">
-        <xsl:attribute name="anchor_name">
-          <xsl:value-of select="substring-after( @xlink:href, '#' )"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@xlink:show = 'new'">
-        <xsl:attribute name="target">_blank</xsl:attribute>
-      </xsl:if>
+      <xsl:call-template name="addLinkAttributes">
+        <xsl:with-param name="vector" select="."/>
+      </xsl:call-template>
+      <xsl:call-template name="addAttributeClassEzxhtml"/>
       <xsl:if test="@xml:id">
         <xsl:attribute name="xhtml:id">
           <xsl:value-of select="@xml:id"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:if test="@xlink:title">
-        <xsl:attribute name="xhtml:title">
-          <xsl:value-of select="@xlink:title"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:call-template name="addAttributeClassEzxhtml"/>
       <xsl:apply-templates/>
     </link>
+  </xsl:template>
+
+  <xsl:template name="addLinkAttributes">
+    <xsl:param name="vector"/>
+    <xsl:choose>
+      <xsl:when test="starts-with( $vector/@xlink:href, 'ezurl://' )">
+        <xsl:attribute name="url_id">
+          <xsl:value-of select="substring-before( concat( substring-after( $vector/@xlink:href, 'ezurl://' ), '#' ), '#' )"/>
+        </xsl:attribute>
+      </xsl:when>
+      <xsl:when test="starts-with( $vector/@xlink:href, 'ezcontent://' )">
+        <xsl:call-template name="addAttributeObjectId">
+          <xsl:with-param name="href" select="$vector/@xlink:href"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="starts-with( $vector/@xlink:href, 'ezlocation://' )">
+        <xsl:call-template name="addAttributeNodeId">
+          <xsl:with-param name="href" select="$vector/@xlink:href"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="starts-with( $vector/@xlink:href, '#' )"/>
+      <!-- rather throw an error here, and remove preceding when -->
+      <xsl:otherwise>
+        <xsl:attribute name="href">
+          <xsl:value-of select="substring-before( concat( $vector/@xlink:href, '#' ), '#' )"/>
+        </xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="contains( $vector/@xlink:href, '#' )">
+      <xsl:attribute name="anchor_name">
+        <xsl:value-of select="substring-after( $vector/@xlink:href, '#' )"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:if test="$vector/@xlink:show = 'new'">
+      <xsl:attribute name="target">_blank</xsl:attribute>
+    </xsl:if>
+    <xsl:if test="$vector/@xlink:title">
+      <xsl:attribute name="xhtml:title">
+        <xsl:value-of select="$vector/@xlink:title"/>
+      </xsl:attribute>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="docbook:title">
@@ -383,36 +391,49 @@
     </td>
   </xsl:template>
 
-  <xsl:template match="docbook:ezembed | docbook:ezembedinline">
+  <xsl:template match="docbook:ezembed">
+    <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+      <xsl:call-template name="embed"/>
+    </paragraph>
+  </xsl:template>
+
+  <xsl:template match="docbook:ezembedinline">
+    <xsl:call-template name="embed"/>
+  </xsl:template>
+
+  <xsl:template name="embed">
+    <xsl:choose>
+      <xsl:when test="docbook:ezlink">
+        <xsl:call-template name="linkedEmbed"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="embedTyped"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="embedTyped">
     <xsl:choose>
       <xsl:when test="local-name() = 'ezembed'">
-        <paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
-          <xsl:element name="embed">
-            <xsl:call-template name="embed"/>
-          </xsl:element>
-        </paragraph>
+        <xsl:element name="embed">
+          <xsl:call-template name="embedBase"/>
+        </xsl:element>
       </xsl:when>
       <xsl:otherwise>
         <xsl:element name="embed-inline">
-          <xsl:call-template name="embed"/>
+          <xsl:call-template name="embedBase"/>
         </xsl:element>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="embed">
-    <xsl:choose>
-      <xsl:when test="starts-with( @xlink:href, 'ezcontent://' )">
-        <xsl:call-template name="addAttributeObjectId">
-          <xsl:with-param name="href" select="@xlink:href"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="starts-with( @xlink:href, 'ezlocation://' )">
-        <xsl:call-template name="addAttributeNodeId">
-          <xsl:with-param name="href" select="@xlink:href"/>
-        </xsl:call-template>
-      </xsl:when>
-    </xsl:choose>
+  <xsl:template name="embedBase">
+    <xsl:if test="@xml:id">
+      <xsl:attribute name="xhtml:id">
+        <xsl:value-of select="@xml:id"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:call-template name="addEmbedTargetAttribute"/>
     <xsl:if test="@view">
       <xsl:attribute name="view">
         <xsl:value-of select="@view"/>
@@ -438,6 +459,40 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="addEmbedTargetAttribute">
+    <xsl:choose>
+      <xsl:when test="starts-with( @xlink:href, 'ezcontent://' )">
+        <xsl:call-template name="addAttributeObjectId">
+          <xsl:with-param name="href" select="@xlink:href"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="starts-with( @xlink:href, 'ezlocation://' )">
+        <xsl:call-template name="addAttributeNodeId">
+          <xsl:with-param name="href" select="@xlink:href"/>
+        </xsl:call-template>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="linkedEmbed">
+    <link>
+      <xsl:call-template name="addLinkAttributes">
+        <xsl:with-param name="vector" select="./docbook:ezlink"/>
+      </xsl:call-template>
+      <xsl:if test="./docbook:ezlink/@xml:id">
+        <xsl:attribute name="xhtml:id">
+          <xsl:value-of select="./docbook:ezlink/@xml:id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="./docbook:ezlink/@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="./docbook:ezlink/@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:call-template name="embedTyped"/>
+    </link>
   </xsl:template>
 
   <xsl:template match="docbook:eztemplate">
