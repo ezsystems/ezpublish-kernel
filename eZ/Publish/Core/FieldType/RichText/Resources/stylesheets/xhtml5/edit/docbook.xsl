@@ -444,6 +444,11 @@
 
   <xsl:template match="ezxhtml5:ezembed | ezxhtml5:ezembedinline">
     <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
+      <xsl:if test="@id">
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="@id"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:if test="@href">
         <xsl:attribute name="xlink:href">
           <xsl:value-of select="@href"/>
@@ -465,6 +470,39 @@
         </xsl:attribute>
       </xsl:if>
       <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:ezembed/ezxhtml5:ezlink | ezxhtml5:ezembedinline/ezxhtml5:ezlink">
+    <xsl:element name="ezlink" namespace="http://docbook.org/ns/docbook">
+      <xsl:attribute name="xlink:href">
+        <xsl:value-of select="@href"/>
+      </xsl:attribute>
+      <xsl:attribute name="xlink:show">
+        <xsl:choose>
+          <xsl:when test="@target and @target = '_blank'">
+            <xsl:value-of select="'new'"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'none'"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:if test="@title">
+        <xsl:attribute name="xlink:title">
+          <xsl:value-of select="@title"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@id">
+        <xsl:attribute name="xml:id">
+          <xsl:value-of select="@id"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
     </xsl:element>
   </xsl:template>
 
