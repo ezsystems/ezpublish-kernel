@@ -9,7 +9,7 @@ Version of Docbook format used as a base for eZ Publish variant is 5.0.
 Schemas for this version can be obtained here: http://docbook.org/xml/5.0/
 
 RELAX NG schema is normative, and it is preferred over the other schema languages.
-It is also recommended to validate documents using Schematron schema.
+It is also recommended to validate documents using Schematron rules.
 
 Both are provided here unmodified:
 
@@ -25,7 +25,12 @@ RELAX NG schema as a base for replacement and extension:
 
  - ezpublish.rng
 
-As Schematron schema from Docbook 5.0 release is in old Schematron 1.5 format
+Similarly, Schematron rules for eZ Publish variant of Docbook format are provided in separate
+file:
+
+ - docbook.sch
+
+As Schematron rules from Docbook 5.0 release are in old Schematron 1.5 format
 which is not handled, this file is converted to new ISO Schematron:
 
  - docbook.iso.sch
