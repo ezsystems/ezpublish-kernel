@@ -25,6 +25,7 @@ parameters:
     ezpublish.fieldType.ezrichtext.converter.aggregate.class: eZ\Publish\Core\FieldType\RichText\Converter\Aggregate
     ezpublish.fieldType.ezrichtext.converter.output.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5
     ezpublish.fieldType.ezrichtext.converter.edit.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Edit
+    ezpublish.fieldType.ezrichtext.converter.input.ezxml.normalize.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Ezxml\ToRichTextPreNormalize
     ezpublish.fieldType.ezrichtext.converter.input.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Input
     ezpublish.fieldType.ezrichtext.converter.link.class: eZ\Publish\Core\FieldType\RichText\Converter\Link
     ezpublish.fieldType.ezrichtext.converter.embed.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed
@@ -136,9 +137,25 @@ services:
             - { name: ezpublish.ezxml.converter, priority: 8 }
 
     # RichText
+    # Aggregate converter for EZXML input that other converters register to
+    # through service tags.
     ezpublish.fieldType.ezrichtext.converter.input.ezxml:
+        class: %ezpublish.fieldType.ezrichtext.converter.aggregate.class%
+
+    # Input normalizing converter should typically be the first one to execute
+    ezpublish.fieldType.ezrichtext.converter.input.ezxml.normalize:
+        class: %ezpublish.fieldType.ezrichtext.converter.input.ezxml.normalize.class%
+        arguments:
+            - @ezpublish.fieldType.ezxmltext.converter.expanding
+            - @ezpublish.fieldType.ezxmltext.converter.embedLinking
+        tags:
+            - {name: ezpublish.ezrichtext.converter.input.ezxml, priority: 0}
+
+    ezpublish.fieldType.ezrichtext.converter.input.ezxml.core:
         class: %ezpublish.fieldType.ezrichtext.converter.xslt.class%
         arguments: [%ezpublish.fieldType.ezrichtext.converter.input.ezxml.resources%]
+        tags:
+            - {name: ezpublish.ezrichtext.converter.input.ezxml, priority: 100}
 
     ezpublish.fieldType.ezrichtext.converter.input.xhtml5:
         class: %ezpublish.fieldType.ezrichtext.converter.input.html5.class%
@@ -176,7 +193,7 @@ services:
         arguments:
             - @ezpublish.fieldType.ezrichtext.renderer
         tags:
-            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
+            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 10}
 
     ezpublish.fieldType.ezrichtext.converter.embed:
         class: %ezpublish.fieldType.ezrichtext.converter.embed.class%
@@ -184,7 +201,7 @@ services:
             - @ezpublish.fieldType.ezrichtext.renderer
             - @?logger
         tags:
-            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 0}
+            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 10}
 
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5.core:
         class: %ezpublish.fieldType.ezrichtext.converter.output.html5.class%
