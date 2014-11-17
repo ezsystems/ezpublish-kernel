@@ -89,7 +89,8 @@ class Xhtml5ToDocbookTest extends BaseTest
     protected function getConversionValidationSchema()
     {
         return array(
-            __DIR__ . "/_fixtures/docbook/custom_schemas/youtube.rng"
+            __DIR__ . "/_fixtures/docbook/custom_schemas/youtube.rng",
+            __DIR__ . "/../../../../RichText/Resources/schemas/docbook/docbook.iso.sch.xsl",
         );
     }
 }
