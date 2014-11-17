@@ -13,6 +13,7 @@ use eZ\Publish\Core\FieldType\RichText\Converter\Link;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException as APIUnauthorizedException;
+use DOMDocument;
 
 /**
  * Tests the Link converter
@@ -66,7 +67,13 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="/test">Link text</link>
   </para>
 </section>',
-                '/test',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="/test">Link text</link>
+  </para>
+</section>',
             ),
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
@@ -76,7 +83,29 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="/test#anchor">Link text</link>
   </para>
 </section>',
-                '/test#anchor',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="/test#anchor">Link text</link>
+  </para>
+</section>',
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="/test#anchor"/>
+  </ezembed>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="/test#anchor" href_resolved="/test#anchor"/>
+  </ezembed>
+</section>',
             ),
         );
     }
@@ -86,10 +115,10 @@ class LinkTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerLinkXmlSample
      */
-    public function testLink( $xmlString, $url )
+    public function testLink( $input, $output )
     {
-        $xmlDoc = new \DOMDocument();
-        $xmlDoc->loadXML( $xmlString );
+        $inputDocument = new DOMDocument();
+        $inputDocument->loadXML( $input );
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
@@ -106,12 +135,12 @@ class LinkTest extends PHPUnit_Framework_TestCase
 
         $converter = new Link( $locationService, $contentService, $urlAliasRouter );
 
-        $xmlDoc = $converter->convert( $xmlDoc );
+        $outputDocument = $converter->convert( $inputDocument );
 
-        $links = $xmlDoc->getElementsByTagName( 'link' );
+        $expectedOutputDocument = new DOMDocument();
+        $expectedOutputDocument->loadXML( $output );
 
-        $this->assertEquals( 1, $links->length );
-        $this->assertEquals( $url, $links->item( 0 )->getAttribute( 'xlink:href' ) );
+        $this->assertEquals( $expectedOutputDocument, $outputDocument );
     }
 
     /**
@@ -128,8 +157,14 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="ezlocation://106">Content name</link>
   </para>
 </section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="test">Content name</link>
+  </para>
+</section>',
                 106,
-                'test',
                 'test',
             ),
             array(
@@ -140,9 +175,33 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="ezlocation://106#anchor">Content name</link>
   </para>
 </section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="test#anchor">Content name</link>
+  </para>
+</section>',
                 106,
                 'test',
-                'test#anchor',
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="ezlocation://106#anchor"/>
+  </ezembed>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="ezlocation://106#anchor" href_resolved="test#anchor"/>
+  </ezembed>
+</section>',
+                106,
+                'test',
             ),
         );
     }
@@ -152,10 +211,10 @@ class LinkTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerLocationLink
      */
-    public function testConvertLocationLink( $xmlString, $locationId, $rawUrl, $url )
+    public function testConvertLocationLink( $input, $output, $locationId, $urlResolved )
     {
-        $xmlDoc = new \DOMDocument();
-        $xmlDoc->loadXML( $xmlString );
+        $inputDocument = new DOMDocument();
+        $inputDocument->loadXML( $input );
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
@@ -171,16 +230,16 @@ class LinkTest extends PHPUnit_Framework_TestCase
         $urlAliasRouter->expects( $this->once() )
             ->method( 'generate' )
             ->with( $this->equalTo( $location ) )
-            ->will( $this->returnValue( $rawUrl ) );
+            ->will( $this->returnValue( $urlResolved ) );
 
         $converter = new Link( $locationService, $contentService, $urlAliasRouter );
 
-        $xmlDoc = $converter->convert( $xmlDoc );
+        $outputDocument = $converter->convert( $inputDocument );
 
-        $links = $xmlDoc->getElementsByTagName( 'link' );
+        $expectedOutputDocument = new DOMDocument();
+        $expectedOutputDocument->loadXML( $output );
 
-        $this->assertEquals( 1, $links->length );
-        $this->assertEquals( $url, $links->item( 0 )->getAttribute( 'xlink:href' ) );
+        $this->assertEquals( $expectedOutputDocument, $outputDocument );
     }
 
     /**
@@ -197,6 +256,13 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="ezlocation://106">Content name</link>
   </para>
 </section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="#">Content name</link>
+  </para>
+</section>',
                 106,
                 new APINotFoundException( "Location", 106 ),
                 'warning',
@@ -210,11 +276,38 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="ezlocation://106">Content name</link>
   </para>
 </section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="#">Content name</link>
+  </para>
+</section>',
                 106,
                 new APIUnauthorizedException( "Location", 106 ),
                 'notice',
                 'While generating links for richtext, unauthorized to load Location with ID 106'
-            )
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="ezlocation://106"/>
+  </ezembed>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="ezlocation://106" href_resolved="#"/>
+  </ezembed>
+</section>',
+                106,
+                new APIUnauthorizedException( "Location", 106 ),
+                'notice',
+                'While generating links for richtext, unauthorized to load Location with ID 106'
+            ),
         );
     }
 
@@ -223,10 +316,10 @@ class LinkTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerBadLocationLink
      */
-    public function testConvertBadLocationLink( $xmlString, $locationId, $exception, $logType, $logMessage )
+    public function testConvertBadLocationLink( $input, $output, $locationId, $exception, $logType, $logMessage )
     {
-        $xmlDoc = new \DOMDocument();
-        $xmlDoc->loadXML( $xmlString );
+        $inputDocument = new DOMDocument();
+        $inputDocument->loadXML( $input );
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
@@ -245,7 +338,12 @@ class LinkTest extends PHPUnit_Framework_TestCase
 
         $converter = new Link( $locationService, $contentService, $urlAliasRouter, $logger );
 
-        $converter->convert( $xmlDoc );
+        $outputDocument = $converter->convert( $inputDocument );
+
+        $expectedOutputDocument = new DOMDocument();
+        $expectedOutputDocument->loadXML( $output );
+
+        $this->assertEquals( $expectedOutputDocument, $outputDocument );
     }
 
     /**
@@ -262,9 +360,14 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="ezcontent://104">Content name</link>
   </para>
 </section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="test">Content name</link>
+  </para>
+</section>',
                 104,
-                106,
-                'test',
                 'test',
             ),
             array(
@@ -275,10 +378,33 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="ezcontent://104#anchor">Content name</link>
   </para>
 </section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="test#anchor">Content name</link>
+  </para>
+</section>',
                 104,
-                106,
                 'test',
-                'test#anchor',
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="ezcontent://104#anchor"/>
+  </ezembed>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="ezcontent://104#anchor" href_resolved="test#anchor"/>
+  </ezembed>
+</section>',
+                104,
+                'test',
             ),
         );
     }
@@ -288,10 +414,11 @@ class LinkTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerContentLink
      */
-    public function testConvertContentLink( $xmlString, $contentId, $locationId, $rawUrl, $url )
+    public function testConvertContentLink( $input, $output, $contentId, $urlResolved )
     {
-        $xmlDoc = new \DOMDocument();
-        $xmlDoc->loadXML( $xmlString );
+        $locationId = 106;
+        $inputDocument = new DOMDocument();
+        $inputDocument->loadXML( $input );
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
@@ -318,16 +445,16 @@ class LinkTest extends PHPUnit_Framework_TestCase
         $urlAliasRouter->expects( $this->once() )
             ->method( 'generate' )
             ->with( $this->equalTo( $location ) )
-            ->will( $this->returnValue( $rawUrl ) );
+            ->will( $this->returnValue( $urlResolved ) );
 
         $converter = new Link( $locationService, $contentService, $urlAliasRouter );
 
-        $xmlDoc = $converter->convert( $xmlDoc );
+        $outputDocument = $converter->convert( $inputDocument );
 
-        $links = $xmlDoc->getElementsByTagName( 'link' );
+        $expectedOutputDocument = new DOMDocument();
+        $expectedOutputDocument->loadXML( $output );
 
-        $this->assertEquals( 1, $links->length );
-        $this->assertEquals( $url, $links->item( 0 )->getAttribute( 'xlink:href' ) );
+        $this->assertEquals( $expectedOutputDocument, $outputDocument );
     }
 
     /**
@@ -344,6 +471,13 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="ezcontent://205">Content name</link>
   </para>
 </section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="#">Content name</link>
+  </para>
+</section>',
                 205,
                 new APINotFoundException( "Content", 205 ),
                 'warning',
@@ -357,11 +491,38 @@ class LinkTest extends PHPUnit_Framework_TestCase
     <link xlink:href="ezcontent://205">Content name</link>
   </para>
 </section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <para>
+    <link xlink:href="#">Content name</link>
+  </para>
+</section>',
                 205,
                 new APIUnauthorizedException( "Content", 205 ),
                 'notice',
                 'While generating links for richtext, unauthorized to load Content object with ID 205'
-            )
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="ezcontent://205"/>
+  </ezembed>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
+  <title>Link example</title>
+  <ezembed>
+    <ezlink xlink:href="ezcontent://205" href_resolved="#"/>
+  </ezembed>
+</section>',
+                205,
+                new APIUnauthorizedException( "Content", 205 ),
+                'notice',
+                'While generating links for richtext, unauthorized to load Content object with ID 205'
+            ),
         );
     }
 
@@ -370,10 +531,10 @@ class LinkTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerBadContentLink
      */
-    public function testConvertBadContentLink( $xmlString, $contentId, $exception, $logType, $logMessage )
+    public function testConvertBadContentLink( $input, $output, $contentId, $exception, $logType, $logMessage )
     {
-        $xmlDoc = new \DOMDocument();
-        $xmlDoc->loadXML( $xmlString );
+        $inputDocument = new DOMDocument();
+        $inputDocument->loadXML( $input );
 
         $contentService = $this->getMockContentService();
         $locationService = $this->getMockLocationService();
@@ -392,6 +553,11 @@ class LinkTest extends PHPUnit_Framework_TestCase
 
         $converter = new Link( $locationService, $contentService, $urlAliasRouter, $logger );
 
-        $converter->convert( $xmlDoc );
+        $outputDocument = $converter->convert( $inputDocument );
+
+        $expectedOutputDocument = new DOMDocument();
+        $expectedOutputDocument->loadXML( $output );
+
+        $this->assertEquals( $expectedOutputDocument, $outputDocument );
     }
 }
