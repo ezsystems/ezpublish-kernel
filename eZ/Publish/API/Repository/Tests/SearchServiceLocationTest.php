@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
+use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -18,7 +19,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
 
 /**
  * Test case for Location operations in the SearchService.
@@ -830,6 +830,15 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testQueryModifiedField()
     {
+        // Check using get_class since the others extend SetupFactory\Legacy
+        if ( get_class( $this->getSetupFactory() ) === '\eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->markTestIncomplete(
+                "Custom fields not supported by LegacySE " .
+                "(@todo: Legacy should fallback to just querying normal field so this should be tested here)"
+            );
+        }
+
         $query = new LocationQuery(
             array(
                 'query' => new Criterion\Field(

@@ -1026,7 +1026,7 @@ class RoleServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\RoleService::deletePolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::loadRole
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
      */
     public function testDeletePolicy()

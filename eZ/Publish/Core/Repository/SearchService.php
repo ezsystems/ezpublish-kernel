@@ -137,10 +137,11 @@ class SearchService implements SearchServiceInterface
         $contentService = $this->repository->getContentService();
         foreach ( $result->searchHits as $hit )
         {
-            $hit->valueObject = $contentService->loadContent(
+            $hit->valueObject = $contentService->internalLoadContent(
                 $hit->valueObject->id,
                 ( !empty( $fieldFilters['languages'] ) ? $fieldFilters['languages'] : null ),
                 null,
+                false,
                 ( isset( $fieldFilters['useAlwaysAvailable'] ) ? $fieldFilters['useAlwaysAvailable'] : true )
             );
         }
@@ -265,10 +266,11 @@ class SearchService implements SearchServiceInterface
         }
 
         $contentInfo = $this->searchHandler->findSingle( $filter, $fieldFilters );
-        return $this->repository->getContentService()->loadContent(
+        return $this->repository->getContentService()->internalLoadContent(
             $contentInfo->id,
             ( !empty( $fieldFilters['languages'] ) ? $fieldFilters['languages'] : null ),
             null,
+            false,
             ( isset( $fieldFilters['useAlwaysAvailable'] ) ? $fieldFilters['useAlwaysAvailable'] : true )
         );
     }

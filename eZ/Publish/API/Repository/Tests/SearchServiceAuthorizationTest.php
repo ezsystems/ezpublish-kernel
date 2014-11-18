@@ -27,7 +27,7 @@ class SearchServiceAuthorizationTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindContent
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindContentFiltered
      */
     public function testFindContent()
     {
@@ -57,7 +57,7 @@ class SearchServiceAuthorizationTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindContent
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindContentFiltered
      */
     public function testFindContentEmptyResult()
     {
@@ -112,6 +112,103 @@ class SearchServiceAuthorizationTest extends BaseTest
             new Criterion\ContentId(
                 array( 4 )
             )
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the findContent() method, verifying disabling permissions
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findContent($query, $fieldFilters, $filterOnUserPermissions)
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
+     */
+    public function testFindContentWithUserPermissionFilter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Set new media editor as current user
+        $repository->setCurrentUser( $user );
+
+        $searchService = $repository->getSearchService();
+
+        // Search for "Admin Users" user group which user normally does not have access to
+        $query = new Query();
+        $query->filter = new Criterion\LogicalAnd(
+            array(
+                new Criterion\ContentId( 12 ),
+            )
+        );
+
+        // Search for matching content
+        $searchResultWithoutPermissions = $searchService->findContent( $query, array(), false );
+
+        // Search for matching content
+        $searchResultWithPermissions = $searchService->findContent( $query, array() );
+        /* END: Use Case */
+
+        $this->assertEquals( 1, $searchResultWithoutPermissions->totalCount );
+        $this->assertEquals( 0, $searchResultWithPermissions->totalCount );
+    }
+
+    /**
+     * Test for the findSingle() method disabling permission filtering
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
+     */
+    public function testFindSingleWithUserPermissionFilter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Set new media editor as current user
+        $repository->setCurrentUser( $user );
+
+        // Search for "Admin Users" user group which user normally does not have access to
+        $content = $repository->getSearchService()->findSingle(
+            new Criterion\ContentId( 12 ),
+            array(),
+            false
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            $content
+        );
+    }
+
+    /**
+     * Test for the findSingle() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $fieldFilters, $filterOnUserPermissions)
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
+     */
+    public function testFindSingleThrowsNotFoundExceptionWithUserPermissionFilter()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $user = $this->createMediaUserVersion1();
+
+        // Set new media editor as current user
+        $repository->setCurrentUser( $user );
+
+        $searchService = $repository->getSearchService();
+
+        // This call will fail with a "NotFoundException", because the current
+        // user has no access to the "Admin Users" user group
+        $searchService->findSingle(
+            new Criterion\ContentId( 12 )
         );
         /* END: Use Case */
     }
