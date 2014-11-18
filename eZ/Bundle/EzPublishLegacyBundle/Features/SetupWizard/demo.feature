@@ -53,17 +53,19 @@ Feature: Install eZ Publish Demo with/without content
     @content
     Scenario: Choose Demo Site (with content) for installation
         Given I am on "Site package" step
-        When I select "eZ Publish Demo Site" package version "5.4.0alpha1"
+        When I select "eZ Publish Demo Site" package version "5.4.0"
         And I click at "Next" button
         Then I see "Site package" step
-        And I see "eZ Publish Demo Site" package version "5.4-0-alpha1" imported
-        And I see following packages for version "5.4.0-alpha1" imported:
+        And I see "eZ Publish Demo Site" package version "5.4-0" imported
+        And I see following packages for version "5.3.0" imported:
             | package                   |
             | ezwt_extension            |
             | ezstarrating_extension    |
             | ezgmaplocation_extension  |
-            | ezdemo_extension          |
             | ezflow_extension          |
+        And I see following packages for version "5.4.0" imported:
+            | package                   |
+            | ezdemo_extension          |
             | ezdemo_classes            |
             | ezdemo_democontent        |
         And I don't see "Not Imported" message
@@ -71,17 +73,19 @@ Feature: Install eZ Publish Demo with/without content
     @clean
     Scenario: Choose Demo Site (without content) for installation
         Given I am on "Site package" step
-        When I select "eZ Publish Demo Site (without demo content)" package version "5.4.0alpha1"
+        When I select "eZ Publish Demo Site (without demo content)" package version "5.4.0"
         And I click at "Next" button
         Then I see "Site package" step
-        And I see "eZ Publish Demo Site (without demo content)" package version "5.4-0-alpha1" imported
-        And I see following packages for version "5.4.0-alpha1" imported:
+        And I see "eZ Publish Demo Site (without demo content)" package version "5.4-0" imported
+        And I see following packages for version "5.3.0" imported:
             | package                   |
             | ezwt_extension            |
             | ezstarrating_extension    |
             | ezgmaplocation_extension  |
-            | ezdemo_extension          |
             | ezflow_extension          |
+        And I see following packages for version "5.4.0" imported:
+            | package                   |
+            | ezdemo_extension          |
             | ezdemo_classes            |
             | ezdemo_democontent_clean  |
         And I don't see "Not Imported" message
