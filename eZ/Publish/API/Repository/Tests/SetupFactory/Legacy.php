@@ -234,7 +234,7 @@ class Legacy extends SetupFactory
 
     protected function getInitialVarDir()
     {
-        return __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/var';
+        return __DIR__ . '/../../../../../../var';
     }
 
     protected function cleanupVarDir( $sourceDir )
