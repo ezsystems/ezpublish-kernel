@@ -96,6 +96,7 @@ class ViewController extends Controller
      * @param array $params
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -160,6 +161,7 @@ class ViewController extends Controller
      * @param array $params
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -246,6 +248,7 @@ class ViewController extends Controller
      * @param array $params
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -300,6 +303,7 @@ class ViewController extends Controller
      * @param array $params
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
