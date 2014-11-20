@@ -41,11 +41,11 @@ class Repository implements RepositoryInterface
     protected $currentUser;
 
     /**
-     * Flag to specify if current execution is sudo mode, only set by {@see sudo()}.
+     * Counter for the current sudo nesting level {@see sudo()}.
      *
-     * @var bool
+     * @var int
      */
-    private $sudoFlag = false;
+    private $sudoNestingLevel = 0;
 
     /**
      * Instance of content service
@@ -191,8 +191,6 @@ class Repository implements RepositoryInterface
     private $transactionCount = 0;
 
     /**
-
-    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
@@ -290,21 +288,18 @@ class Repository implements RepositoryInterface
      */
     public function sudo( \Closure $callback )
     {
-        if ( $this->sudoFlag === true )
-            throw new RuntimeException( "Recursive sudo use detected, abort abort!" );
-
-        $this->sudoFlag = true;
+        $this->sudoNestingLevel++;
         try
         {
             $returnValue = $callback( $this );
         }
         catch ( Exception $e  )
         {
-            $this->sudoFlag = false;
+            $this->sudoNestingLevel--;
             throw $e;
         }
 
-        $this->sudoFlag = false;
+        $this->sudoNestingLevel--;
         return $returnValue;
     }
 
@@ -321,8 +316,8 @@ class Repository implements RepositoryInterface
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        // Full access if sudoFlag is set by {@see sudo()}
-        if ( $this->sudoFlag === true )
+        // Full access if sudo nesting level is set by {@see sudo()}
+        if ( $this->sudoNestingLevel > 0 )
             return true;
 
         if ( $user === null )
