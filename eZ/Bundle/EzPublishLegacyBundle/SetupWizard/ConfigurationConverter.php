@@ -477,7 +477,7 @@ class ConfigurationConverter
                 return false;
 
             case 'map':
-                return array( "Map\\Uri" => $this->resolveMapMatch( $siteaccessSettings['URIMatchMapItems'] ) );
+                return array( "Map\\URI" => $this->resolveMapMatch( $siteaccessSettings['URIMatchMapItems'] ) );
 
             case 'element':
                 return array( "URIElement" => $siteaccessSettings['URIMatchElement'] );
