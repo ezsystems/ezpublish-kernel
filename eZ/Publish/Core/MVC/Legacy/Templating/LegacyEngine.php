@@ -135,10 +135,7 @@ class LegacyEngine implements EngineInterface
      */
     public function supports( $name )
     {
-        if ( $name instanceof TemplateReference )
-        {
-            $name = $name->getLogicalName();
-        }
+        $name = (string)$name;
 
         if ( isset( $this->supportedTemplates[$name] ) )
         {
