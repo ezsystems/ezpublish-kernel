@@ -30,7 +30,7 @@ abstract class FieldValueMapper
      *
      * @param Field $field
      *
-     * @return mixed
+     * @return mixed|null Returns null on empty value
      */
     abstract public function map( Field $field );
 }

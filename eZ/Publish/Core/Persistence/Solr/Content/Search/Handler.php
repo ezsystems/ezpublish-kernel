@@ -295,6 +295,7 @@ class Handler implements SearchHandlerInterface
         $locations = $this->locationHandler->loadLocationsByContent( $content->versionInfo->contentInfo->id );
         $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
         $mainLocation = null;
+        $isSomeLocationVisible = false;
         $locationDocuments = array();
         foreach ( $locations as $location )
         {
@@ -303,6 +304,11 @@ class Handler implements SearchHandlerInterface
             if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
             {
                 $mainLocation = $location;
+            }
+
+            if ( !$location->hidden && !$location->invisible )
+            {
+                $isSomeLocationVisible = true;
             }
         }
 
@@ -406,6 +412,11 @@ class Handler implements SearchHandlerInterface
                 $content->versionInfo->contentInfo->alwaysAvailable,
                 new FieldType\BooleanField()
             ),
+            new Field(
+                'some_location_visible',
+                $isSomeLocationVisible,
+                new FieldType\BooleanField()
+            ),
         );
 
         if ( $mainLocation !== null )
@@ -426,17 +437,22 @@ class Handler implements SearchHandlerInterface
                 new FieldType\IdentifierField()
             );
             $fields[] = new Field(
-                'main_path',
+                'main_location_visible',
+                !$mainLocation->hidden && !$mainLocation->invisible,
+                new FieldType\BooleanField()
+            );
+            $fields[] = new Field(
+                'main_location_path',
                 $mainLocation->pathString,
                 new FieldType\IdentifierField()
             );
             $fields[] = new Field(
-                'main_depth',
+                'main_location_depth',
                 $mainLocation->depth,
                 new FieldType\IntegerField()
             );
             $fields[] = new Field(
-                'main_priority',
+                'main_location_priority',
                 $mainLocation->priority,
                 new FieldType\IntegerField()
             );
@@ -461,6 +477,9 @@ class Handler implements SearchHandlerInterface
                 $fieldType = $this->fieldRegistry->getType( $field->type );
                 foreach ( $fieldType->getIndexData( $field ) as $indexField )
                 {
+                    if ( $indexField->value === null )
+                        continue;
+
                     $fields[] = new Field(
                         $this->fieldNameGenerator->getName(
                             $indexField->name,

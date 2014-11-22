@@ -152,6 +152,11 @@ class Native extends Gateway
         // @todo: Error handling?
         $data = json_decode( $response->body );
 
+        if ( !isset( $data->response ) )
+        {
+            throw new \Exception( '->response not set: ' . var_export( array( $data, $parameters ), true ) );
+        }
+
         // @todo: Extract method
         $result = new SearchResult(
             array(
@@ -223,7 +228,9 @@ class Native extends Gateway
 
         if ( $result->headers["status"] !== 200 )
         {
-            throw new RuntimeException( "Wrong HTTP status received from Solr: " . $result->headers["status"] );
+            throw new RuntimeException(
+                "Wrong HTTP status received from Solr: " . $result->headers["status"] . var_export( array( $result, $updates ), true )
+            );
         }
     }
 

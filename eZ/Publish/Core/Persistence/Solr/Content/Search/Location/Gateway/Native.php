@@ -139,6 +139,11 @@ class Native extends Gateway
         // @todo: Error handling?
         $data = json_decode( $response->body );
 
+        if ( !isset( $data->response ) )
+        {
+            throw new \Exception( '->response not set: ' . var_export( array( $data, $parameters ), true ) );
+        }
+
         // @todo: Extract method
         $result = new SearchResult(
             array(

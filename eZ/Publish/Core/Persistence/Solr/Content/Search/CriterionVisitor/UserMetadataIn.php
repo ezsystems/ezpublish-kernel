@@ -58,7 +58,7 @@ class UserMetadataIn extends CriterionVisitor
 
             default:
                 throw new NotImplementedException(
-                    "No visitor available for: " . get_class( $criterion ) . ' with operator ' . $criterion->operator
+                    "No visitor available for target: " . $criterion->target . ' with operator: ' . $criterion->operator
                 );
         }
         return '(' .
