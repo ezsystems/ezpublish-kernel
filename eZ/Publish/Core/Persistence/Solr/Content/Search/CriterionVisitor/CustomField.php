@@ -34,12 +34,13 @@ class CustomField extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
-        return $criterion->target . ":" . $criterion->value;
+        return $this->getChildJoinString( $isChildQuery ) . $criterion->target . ":" . $criterion->value;
     }
 }
 

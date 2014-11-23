@@ -43,10 +43,11 @@ class ModifiedBetween extends DateMetadata
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         $start = $this->getSolrTime( $criterion->value[0] );
         $end   = isset( $criterion->value[1] ) ? $this->getSolrTime( $criterion->value[1] ) : null;
@@ -58,7 +59,7 @@ class ModifiedBetween extends DateMetadata
             $start = null;
         }
 
-        return "modified_dt:" . $this->getRange( $criterion->operator, $start, $end );
+        return $this->getChildJoinString( $isChildQuery ) . $this->getFRange( $criterion->operator, $start, $end ) . 'modified_dt';
     }
 }
 

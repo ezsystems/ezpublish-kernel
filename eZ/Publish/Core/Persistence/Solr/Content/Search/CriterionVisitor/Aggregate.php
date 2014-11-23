@@ -69,16 +69,17 @@ class Aggregate extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         foreach ( $this->visitors as $visitor )
         {
             if ( $visitor->canVisit( $criterion ) )
             {
-                return $visitor->visit( $criterion, $this );
+                return $visitor->visit( $criterion, $this, $isChildQuery );
             }
         }
 

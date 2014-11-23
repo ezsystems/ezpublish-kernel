@@ -31,30 +31,31 @@ abstract class CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    abstract public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null );
+    abstract public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false );
 
     /**
-     * @param bool $childQuery
+     * @param bool $isChildQuery
      * @return string
      */
-    protected function getParentJoinString( $childQuery )
+    protected function getParentJoinString( $isChildQuery )
     {
-        if ( !$childQuery )
+        if ( !$isChildQuery )
             return '{!parent which="doc_type_id:content"}';
 
         return '';
     }
 
     /**
-     * @param bool $childQuery
+     * @param bool $isChildQuery
      * @return string
      */
-    protected function getChildJoinString( $childQuery )
+    protected function getChildJoinString( $isChildQuery )
     {
-        if ( $childQuery )
+        if ( $isChildQuery )
             return '{!child of="doc_type_id:content"}';
 
         return '';
@@ -78,43 +79,41 @@ abstract class CriterionVisitor
      *
      * @return string
      */
-    protected function getRange( $operator, $start, $end )
+    protected function getFRange( $operator, $start, $end )
     {
-        $startBrace = '[';
-        $startValue = '*';
-        $endValue   = '*';
-        $endBrace   = ']';
+        $l = '';
+        $u = '';
+        $incl   = ' incl=true';
+        $incu   = ' incu=true';
 
         switch ( $operator )
         {
             case Operator::GT:
-                $startBrace = '{';
-                $endBrace   = '}';
+                $incl = ' incl=false';
                 // Intentionally omitted break
 
             case Operator::GTE:
-                $startValue = $start;
+                $l = ' l=' . $start;
                 break;
 
             case Operator::LT:
-                $startBrace = '{';
-                $endBrace   = '}';
+                $incu = ' incu=false';
                 // Intentionally omitted break
 
             case Operator::LTE:
-                $endValue = $end;
+                $u = ' u=' . $end;
                 break;
 
             case Operator::BETWEEN:
-                $startValue = $start;
-                $endValue   = $end;
+                $l = ' l=' . $start;
+                $u = ' u=' . $end;
                 break;
 
             default:
                 throw new \RuntimeException( "Unknown operator: $operator" );
         }
 
-        return "$startBrace$startValue TO $endValue$endBrace";
+        return "{!frange{$l}{$u}{$incl}{$incu}}";
     }
 }
 

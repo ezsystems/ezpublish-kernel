@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
@@ -33,11 +34,15 @@ class DatePublished extends SortClauseVisitor
      * Map field value to a proper Solr representation
      *
      * @param SortClause $sortClause
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( SortClause $sortClause )
+    public function visit( SortClause $sortClause, $isChildQuery = false )
     {
+        if ( $isChildQuery )
+            throw new NotImplementedException( "Not supported by Solr in combination with LocationQuery" );
+
         return 'published_dt' . $this->getDirection( $sortClause );
     }
 }

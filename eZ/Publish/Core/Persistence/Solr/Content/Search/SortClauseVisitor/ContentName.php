@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
@@ -33,12 +34,13 @@ class ContentName extends SortClauseVisitor
      * Map field value to a proper Solr representation
      *
      * @param SortClause $sortClause
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( SortClause $sortClause )
+    public function visit( SortClause $sortClause, $isChildQuery = false )
     {
-        return "name_s" . $this->getDirection( $sortClause );
+        return ( $isChildQuery ? "content_info_name_s" : "name_s" ) . $this->getDirection( $sortClause );
     }
 }
 

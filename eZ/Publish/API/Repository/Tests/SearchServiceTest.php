@@ -1958,9 +1958,9 @@ class SearchServiceTest extends BaseTest
     public function testFindAndSortContentLegacy( $queryData, $fixture, $closure = null )
     {
         $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        if ( $setupFactory instanceof LegacyElasticsearch )
         {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
+            $this->markTestSkipped( "Location search handler is not yet implemented for Elasticsearch storage" );
         }
 
         $query = new Query( $queryData );
@@ -1978,9 +1978,9 @@ class SearchServiceTest extends BaseTest
     public function testFindAndSortContentLocationsLegacy( $queryData, $fixture, $closure = null )
     {
         $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        if ( $setupFactory instanceof LegacyElasticsearch )
         {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
+            $this->markTestSkipped( "Location search handler is not yet implemented for Elasticsearch storage" );
         }
 
         $query = new LocationQuery( $queryData );
@@ -3148,12 +3148,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindMainLocation()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $plainSiteLocationId = 56;
         $designLocationId = 58;
         $partnersContentId = 59;
@@ -3197,12 +3191,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindNonMainLocation()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $designLocationId = 58;
         $partnersContentId = 59;
         $repository = $this->getRepository();
@@ -3245,12 +3233,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testSortMainLocationAscending()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $plainSiteLocationId = 56;
         $designLocationId = 58;
         $partnersContentId = 59;
@@ -3292,12 +3274,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testSortMainLocationDescending()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $plainSiteLocationId = 56;
         $designLocationId = 58;
         $partnersContentId = 59;
@@ -3339,12 +3315,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testContentWithMultipleLocations()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -3867,12 +3837,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testUserMetadataGroupHorizontalFilterLocation( $queryType = null )
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location Search is not yet implemented for Solr storage" );
-        }
-
         if ( $queryType === null )
         {
             $queryType = "filter";
@@ -3966,12 +3930,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testUserMetadataGroupHorizontalQueryLocation()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location Search is not yet implemented for Solr storage" );
-        }
-
         $this->testUserMetadataGroupHorizontalFilterLocation( "query" );
     }
 
@@ -4173,7 +4131,7 @@ class SearchServiceTest extends BaseTest
                 $setupFactory = $this->getSetupFactory();
                 if ( $setupFactory instanceof LegacySolr )
                 {
-                    $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+                    // @todo Use different fixtures like elastic search?
                 }
 
                 if ( $setupFactory instanceof LegacyElasticsearch )

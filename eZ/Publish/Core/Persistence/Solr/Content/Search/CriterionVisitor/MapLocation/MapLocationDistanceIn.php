@@ -42,10 +42,11 @@ class MapLocationDistanceIn extends MapLocation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
         $location = $criterion->valueData;
@@ -71,11 +72,12 @@ class MapLocationDistanceIn extends MapLocation
         }
 
         $queries = array();
+        $childJoinString = $this->getChildJoinString( $isChildQuery );
         foreach ( $criterion->value as $value )
         {
             foreach ( $names as $name )
             {
-                $queries[] = "geodist({$name},{$location->latitude},{$location->longitude}):{$value}";
+                $queries[] = $childJoinString . "geodist({$name},{$location->latitude},{$location->longitude}):{$value}";
             }
         }
 

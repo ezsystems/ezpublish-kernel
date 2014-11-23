@@ -38,10 +38,11 @@ class LanguageCodeIn extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         $languageCodeExpressions = array_map(
             function ( $value )
@@ -57,7 +58,7 @@ class LanguageCodeIn extends CriterionVisitor
             $languageCodeExpressions[] = "always_available_b:true";
         }
 
-        return '(' . implode( ' OR ', $languageCodeExpressions ) . ')';
+        return $this->getChildJoinString( $isChildQuery ) . '(' . implode( ' OR ', $languageCodeExpressions ) . ')';
     }
 }
 

@@ -40,15 +40,17 @@ class ModifiedIn extends DateMetadata
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         $values = array();
+        $childJoinString = $this->getChildJoinString( $isChildQuery );
         foreach ( $criterion->value as $value )
         {
-            $values[] = 'modified_dt:"' . $this->getSolrTime( $value ) . '"';
+            $values[] = $childJoinString . 'modified_dt:"' . $this->getSolrTime( $value ) . '"';
         }
         return '(' . implode( ' OR ', $values ) . ')';
     }

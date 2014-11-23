@@ -45,10 +45,11 @@ class MapLocationDistanceRange extends MapLocation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         $criterion->value = (array)$criterion->value;
 
@@ -86,6 +87,7 @@ class MapLocationDistanceRange extends MapLocation
         }
 
         $queries = array();
+        $childJoinString = $this->getChildJoinString( $isChildQuery );
         foreach ( $names as $name )
         {
             // @todo in future it should become possible to specify ranges directly on the filter (donut shape)
@@ -96,7 +98,7 @@ class MapLocationDistanceRange extends MapLocation
             }
 
             // @todo: fix for SOLR version < 4.1.0, see https://issues.apache.org/jira/browse/SOLR-4093
-            $queries[] = '_query_:"' . $query . '"';
+            $queries[] = $childJoinString. $query;
         }
 
         return '(' . implode( ' OR ', $queries ) . ')';

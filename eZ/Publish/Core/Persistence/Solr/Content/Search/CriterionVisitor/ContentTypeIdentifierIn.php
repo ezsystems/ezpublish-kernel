@@ -58,20 +58,22 @@ class ContentTypeIdentifierIn extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
+        $childJoinString = $this->getChildJoinString( $isChildQuery );
         $contentTypeHandler = $this->contentTypeHandler;
 
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value ) use ( $contentTypeHandler )
+                    function ( $value ) use ( $contentTypeHandler, $childJoinString )
                     {
-                        return 'type_id:"' . $contentTypeHandler->loadByIdentifier( $value )->id . '"';
+                        return $childJoinString . 'type_id:"' . $contentTypeHandler->loadByIdentifier( $value )->id . '"';
                     },
                     $criterion->value
                 )

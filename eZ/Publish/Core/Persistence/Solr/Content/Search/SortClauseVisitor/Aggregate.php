@@ -68,16 +68,17 @@ class Aggregate extends SortClauseVisitor
      * Map field value to a proper Solr representation
      *
      * @param SortClause $sortClause
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( SortClause $sortClause )
+    public function visit( SortClause $sortClause, $isChildQuery = false )
     {
         foreach ( $this->visitors as $visitor )
         {
             if ( $visitor->canVisit( $sortClause ) )
             {
-                return $visitor->visit( $sortClause, $this );
+                return $visitor->visit( $sortClause, $isChildQuery );
             }
         }
 

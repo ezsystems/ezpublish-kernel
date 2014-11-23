@@ -10,10 +10,13 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
 use eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Search\Location\Handler as LocationSearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;
@@ -21,6 +24,7 @@ use eZ\Publish\SPI\Search\ChildDocuments;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -45,7 +49,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class Handler implements SearchHandlerInterface
+class Handler implements SearchHandlerInterface, LocationSearchHandlerInterface
 {
     /**
      * Content locator gateway.
@@ -60,6 +64,13 @@ class Handler implements SearchHandlerInterface
      * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
      */
     protected $fieldRegistry;
+
+    /**
+     * Content handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Handler
+     */
+    protected $contentHandler;
 
     /**
      * Location handler
@@ -101,6 +112,7 @@ class Handler implements SearchHandlerInterface
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
@@ -109,6 +121,7 @@ class Handler implements SearchHandlerInterface
     public function __construct(
         Gateway $gateway,
         FieldRegistry $fieldRegistry,
+        ContentHandler $contentHandler,
         LocationHandler $locationHandler,
         ContentTypeHandler $contentTypeHandler,
         ObjectStateHandler $objectStateHandler,
@@ -118,6 +131,7 @@ class Handler implements SearchHandlerInterface
     {
         $this->gateway            = $gateway;
         $this->fieldRegistry      = $fieldRegistry;
+        $this->contentHandler     = $contentHandler;
         $this->locationHandler    = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
@@ -144,6 +158,21 @@ class Handler implements SearchHandlerInterface
         $query->query = $query->query ?: new Criterion\MatchAll();
 
         return $this->gateway->findContent( $query, $fieldFilters );
+    }
+
+    /**
+     * Finds locations for the given $query
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With Location as SearchHit->valueObject
+     */
+    public function findLocations( LocationQuery $query )
+    {
+        $query->filter = $query->filter ?: new Criterion\MatchAll();
+        $query->query = $query->query ?: new Criterion\MatchAll();
+
+        return $this->gateway->findLocations( $query );
     }
 
     /**
@@ -202,6 +231,19 @@ class Handler implements SearchHandlerInterface
     {
         $document = $this->mapContent( $content );
         $this->gateway->bulkIndexContent( array( $document ) );
+    }
+
+    /**
+     * Indexes a Location in the index storage
+     *
+     * Indexes whole content since this is needed with block join structure
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     */
+    public function indexLocation( Location $location )
+    {
+        $contentInfo = $this->contentHandler->loadContentInfo( $location->contentId );
+        $this->indexContent( $this->contentHandler->load( $contentInfo->id, $contentInfo->currentVersionNo ) );
     }
 
     /**
@@ -280,6 +322,21 @@ class Handler implements SearchHandlerInterface
                         new FieldType\IdentifierField()
                     ),
                     new Field(
+                        'content_info_name',
+                        $content->versionInfo->contentInfo->name,
+                        new FieldType\StringField()
+                    ),
+                    new Field(
+                        'content_info',
+                        $location->contentId,
+                        new FieldType\IdentifierField()
+                    ),
+                    new Field(
+                        'is_main',
+                        $location->id == $content->versionInfo->contentInfo->mainLocationId,
+                        new FieldType\BooleanField()
+                    ),
+                    new Field(
                         'doc_type',
                         'location',
                         new FieldType\IdentifierField()
@@ -319,6 +376,16 @@ class Handler implements SearchHandlerInterface
                         $location->invisible,
                         new FieldType\BooleanField()
                     ),
+                    new Field(
+                        'sort_field',
+                        $location->sortField,
+                        new FieldType\IntegerField()
+                    ),
+                    new Field(
+                        'sort_order',
+                        $location->sortOrder,
+                        new FieldType\IntegerField()
+                    ),
                 )
             );
         }
@@ -337,6 +404,12 @@ class Handler implements SearchHandlerInterface
             array(
                 new Field(
                     'id',
+                    $content->versionInfo->contentInfo->id,
+                    new FieldType\IdentifierField()
+                ),
+                // additional field to use for sort clause and filters
+                new Field(
+                    'content',
                     $content->versionInfo->contentInfo->id,
                     new FieldType\IdentifierField()
                 ),

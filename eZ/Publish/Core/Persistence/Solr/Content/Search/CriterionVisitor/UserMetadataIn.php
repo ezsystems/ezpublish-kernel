@@ -39,10 +39,11 @@ class UserMetadataIn extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         switch ( $criterion->target )
         {
@@ -61,13 +62,15 @@ class UserMetadataIn extends CriterionVisitor
                     "No visitor available for: " . get_class( $criterion ) . ' with operator ' . $criterion->operator
                 );
         }
+
+        $childJoinString = $this->getChildJoinString( $isChildQuery );
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value ) use ( $solrField )
+                    function ( $value ) use ( $solrField, $childJoinString )
                     {
-                        return "{$solrField}:\"{$value}\"";
+                        return $childJoinString . "{$solrField}:\"{$value}\"";
                     },
                     $criterion->value
                 )

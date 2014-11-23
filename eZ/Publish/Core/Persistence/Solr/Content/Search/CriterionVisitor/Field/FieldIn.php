@@ -43,10 +43,11 @@ class FieldIn extends Field
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         $fieldTypes = $this->getFieldTypes( $criterion );
 
@@ -61,13 +62,14 @@ class FieldIn extends Field
         }
 
         $queries = array();
+        $childJoinString = $this->getChildJoinString( $isChildQuery );
         foreach ( $criterion->value as $value )
         {
             foreach ( $fieldTypes[$criterion->target] as $names )
             {
                 foreach ( $names as $name )
                 {
-                    $queries[] = $name . ':"' . $value . '"';
+                    $queries[] = $childJoinString . "{!field f=\"{$name}\" v=\"" . $value . '"}';
                 }
             }
         }

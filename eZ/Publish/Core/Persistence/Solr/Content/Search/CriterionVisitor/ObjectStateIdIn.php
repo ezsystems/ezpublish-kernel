@@ -38,18 +38,20 @@ class ObjectStateIdIn extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
+        $childJoinString = $this->getChildJoinString( $isChildQuery );
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value )
+                    function ( $value ) use ( $childJoinString )
                     {
-                        return 'object_state_mid:"' . $value . '"';
+                        return $childJoinString . 'object_state_mid:"' . $value . '"';
                     },
                     $criterion->value
                 )

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
@@ -74,11 +75,15 @@ class MapLocationDistance extends SortClauseVisitor
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no sortable fields are found for the given sort clause target.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( SortClause $sortClause )
+    public function visit( SortClause $sortClause, $isChildQuery = false )
     {
+        if ( $isChildQuery )
+            throw new NotImplementedException( "Not supported by Solr in combination with LocationQuery" );
+
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface $sortClause */
         $fieldTypes = $this->getFieldTypes( $sortClause );
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause */
