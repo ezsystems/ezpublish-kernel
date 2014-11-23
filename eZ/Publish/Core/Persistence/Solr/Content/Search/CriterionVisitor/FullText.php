@@ -29,8 +29,6 @@ class FullText extends CriterionVisitor
      * Create from content type handler and field registry
      *
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap $fieldMap
-     *
-     * @return void
      */
     public function __construct( FieldMap $fieldMap )
     {
@@ -54,13 +52,16 @@ class FullText extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
+        $childJoinStr = $this->getChildJoinString( $isChildQuery );
+        $fuzzinessStr = $criterion->fuzziness < 1 ? sprintf( "~%.1f", $criterion->fuzziness ) : "";
         $queries = array(
-            "text:" . $criterion->value,
+            "{$childJoinStr}text:" . $criterion->value . $fuzzinessStr,
         );
 
         foreach ( $criterion->boost as $field => $boost )
@@ -76,24 +77,13 @@ class FullText extends CriterionVisitor
             {
                 foreach ( $fieldNames as $fieldName )
                 {
-                    $queries[] = $fieldName . ":" . $criterion->value . "^" . $boost;
+                    $queries[] = $childJoinStr . "{!type=edismax qf={$fieldName} v='{$criterion->value}^{$boost}{$fuzzinessStr}'}";
                 }
             }
         }
 
-        return "(" . implode(
-            ') OR (',
-            array_map(
-                function ($search) use ($criterion) {
-                    return $search . (
-                        $criterion->fuzziness < 1 ?
-                            sprintf( "~%.1f", $criterion->fuzziness ) :
-                            ""
-                        );
-                },
-                $queries
-            )
-        ) . ")";
+        $docType = $isChildQuery ? 'location' : 'content';
+        return '(' . implode( ') OR (', $queries ) . ")";
     }
 }
 

@@ -33,12 +33,13 @@ class ContentId extends SortClauseVisitor
      * Map field value to a proper Solr representation
      *
      * @param SortClause $sortClause
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( SortClause $sortClause )
+    public function visit( SortClause $sortClause, $isChildQuery = false )
     {
-        return 'id' . $this->getDirection( $sortClause );
+        return ( $isChildQuery ? 'content_info_id' : 'content_id' ) . $this->getDirection( $sortClause );
     }
 }
 

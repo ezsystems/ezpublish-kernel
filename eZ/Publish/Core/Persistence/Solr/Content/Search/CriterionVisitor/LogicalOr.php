@@ -34,18 +34,19 @@ class LogicalOr extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value ) use ( $subVisitor )
+                    function ( $value ) use ( $subVisitor, $isChildQuery )
                     {
-                        return $subVisitor->visit( $value );
+                        return $subVisitor->visit( $value, null, $isChildQuery );
                     },
                     $criterion->criteria
                 )

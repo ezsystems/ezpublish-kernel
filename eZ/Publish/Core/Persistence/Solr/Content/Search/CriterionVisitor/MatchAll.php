@@ -34,12 +34,14 @@ class MatchAll extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
-        return '*:*';
+        $docType = $isChildQuery ? 'location' : 'content';
+        return 'doc_type_id:"' . $docType . '"';
     }
 }
 

@@ -29,7 +29,6 @@ class LocationServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      * @see \eZ\Publish\API\Repository\LocationService::newLocationCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetLocationService
      */
     public function testNewLocationCreateStruct()
     {
@@ -892,7 +891,6 @@ class LocationServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetLocationService
      */
     public function testNewLocationUpdateStruct()
     {

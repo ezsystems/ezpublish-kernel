@@ -45,10 +45,11 @@ class FieldRange extends Field
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         $start = $criterion->value[0];
         $end   = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
@@ -72,11 +73,12 @@ class FieldRange extends Field
         }
 
         $queries = array();
+        $childJoinString = $this->getChildJoinString( $isChildQuery );
         foreach ( $fieldTypes[$criterion->target] as $names )
         {
             foreach ( $names as $name )
             {
-                $queries[] = $name . ':' . $this->getRange( $criterion->operator, $start, $end );
+                $queries[] = $childJoinString . $this->getFRange( $criterion->operator, $start, $end ) . $name;
             }
         }
 

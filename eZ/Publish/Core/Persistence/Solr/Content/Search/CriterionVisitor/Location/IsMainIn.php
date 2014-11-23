@@ -1,22 +1,22 @@
 <?php
 /**
- * File containing the Content Search handler class
+ * File containing Solr Criterion Visitor
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Location;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
- * Visits the RemoteId criterion
+ * Visits the Location\IsMainLocation criterion
  */
-class RemoteIdIn extends CriterionVisitor
+class IsMainIn extends CriterionVisitor
 {
     /**
      * CHeck if visitor is applicable to current criterion
@@ -28,9 +28,9 @@ class RemoteIdIn extends CriterionVisitor
     public function canVisit( Criterion $criterion )
     {
         return
-            $criterion instanceof Criterion\RemoteId &&
-            ( ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
-              $criterion->operator === Operator::EQ );
+            $criterion instanceof Criterion\Location\IsMainLocation &&
+                        ( ( $criterion->operator ?: Operator::IN ) === Operator::IN ||
+                          $criterion->operator === Operator::EQ );
     }
 
     /**
@@ -44,14 +44,13 @@ class RemoteIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
-        $childJoinString = $this->getChildJoinString( $isChildQuery );
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value ) use ( $childJoinString )
+                    function ( $value )
                     {
-                        return $childJoinString . 'remote_id_id:"' . $value . '"';
+                        return 'is_main_b:"' . ( Criterion\Location\IsMainLocation::NOT_MAIN === $value ? 0 : 1 ) . '"';
                     },
                     $criterion->value
                 )

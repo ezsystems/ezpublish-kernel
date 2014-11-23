@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -29,6 +30,15 @@ abstract class Gateway
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     abstract public function findContent( Query $query, array $fieldFilters = array() );
+
+    /**
+     * Finds locations for the given $query
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With Location as SearchHit->valueObject
+     */
+    abstract public function findLocations( LocationQuery $query );
 
     /**
      * Indexes a content object

@@ -12,10 +12,6 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Base class for document fields.
- *
- * @property-read $name
- * @property-read $value
- * @property-read $type
  */
 class Field extends ValueObject
 {
@@ -24,7 +20,7 @@ class Field extends ValueObject
      *
      * @var string
      */
-    protected $name;
+    public $name;
 
     /**
      * Value of the document field.
@@ -33,14 +29,14 @@ class Field extends ValueObject
      *
      * @var mixed
      */
-    protected $value;
+    public $value;
 
     /**
      * Type of the search field
      *
      * @var FieldType
      */
-    protected $type;
+    public $type;
 
     /**
      * Construct from name and value
@@ -48,8 +44,6 @@ class Field extends ValueObject
      * @param string $name
      * @param mixed $value
      * @param FieldType $type
-     *
-     * @return void
      */
     public function __construct( $name, $value, FieldType $type )
     {

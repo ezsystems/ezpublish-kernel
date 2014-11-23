@@ -72,7 +72,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::newSectionCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
      */
     public function testNewSectionCreateStruct()
     {
@@ -170,7 +169,6 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
      */
     public function testLoadSectionThrowsNotFoundException()
     {
@@ -191,7 +189,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::newSectionUpdateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
      */
     public function testNewSectionUpdateStruct()
     {
@@ -456,7 +453,6 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSectionByIdentifier()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
      */
     public function testLoadSectionByIdentifierThrowsNotFoundException()
     {
@@ -684,7 +680,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
      */
@@ -737,7 +732,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
      */
@@ -783,7 +777,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testRollback
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
      */
@@ -831,7 +824,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testCommit
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSectionByIdentifier
      */

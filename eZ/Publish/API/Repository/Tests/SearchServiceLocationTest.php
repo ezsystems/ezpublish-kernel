@@ -97,7 +97,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldCollectionContains()
     {
@@ -128,7 +127,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldCollectionContains
      */
     public function testFieldCollectionContainsNoMatch()
@@ -295,7 +293,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSort()
     {
@@ -351,7 +348,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortVariant2()
     {
@@ -407,7 +403,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortVariant3()
     {
@@ -463,7 +458,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionTranslatableField()
@@ -489,7 +483,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionNonTranslatableField()
@@ -516,7 +509,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortWithNonTranslatableField()
     {
@@ -572,7 +564,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortWithDefaultLanguage()
     {
@@ -628,7 +619,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortWithDefaultLanguageVariant2()
     {
@@ -684,7 +674,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet()
     {
@@ -721,7 +710,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
@@ -796,7 +784,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testQueryCustomField()
     {
@@ -826,7 +813,6 @@ class SearchServiceLocationTest extends BaseTest
      * copy field working.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testQueryModifiedField()
     {
@@ -894,7 +880,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceLessThanOrEqual()
@@ -974,7 +959,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceGreaterThanOrEqual()
@@ -1054,7 +1038,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceBetween()
@@ -1150,7 +1133,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceSortAscending()
@@ -1267,7 +1249,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceSortDescending()
@@ -1384,7 +1365,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceWithCustomField()
@@ -1467,7 +1447,6 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceWithCustomFieldSort()

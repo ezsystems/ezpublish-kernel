@@ -38,18 +38,20 @@ class SectionIn extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
+        $childJoinString = $this->getChildJoinString( $isChildQuery );
         return '(' .
             implode(
                 ' OR ',
                 array_map(
-                    function ( $value )
+                    function ( $value ) use ( $childJoinString )
                     {
-                        return 'section_id:"' . $value . '"';
+                        return $childJoinString . 'section_id:"' . $value . '"';
                     },
                     $criterion->value
                 )

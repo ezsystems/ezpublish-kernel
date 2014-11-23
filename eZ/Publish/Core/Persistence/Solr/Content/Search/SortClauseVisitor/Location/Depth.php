@@ -1,22 +1,21 @@
 <?php
 /**
- * File containing the SortClauseVisitor\LocationPriority class
+ * File containing the Solr Visitor for Location SortClause
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor\Location;
 
 use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
-use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
- * Visits the sortClause tree into a Solr query
+ * Visits SortClause\Location\Depth
  */
-class LocationPriority extends SortClauseVisitor
+class Depth extends SortClauseVisitor
 {
     /**
      * CHeck if visitor is applicable to current sortClause
@@ -27,7 +26,7 @@ class LocationPriority extends SortClauseVisitor
      */
     public function canVisit( SortClause $sortClause )
     {
-        return $sortClause instanceof SortClause\LocationPriority;
+        return $sortClause instanceof SortClause\Location\Depth;
     }
 
     /**
@@ -40,10 +39,7 @@ class LocationPriority extends SortClauseVisitor
      */
     public function visit( SortClause $sortClause, $isChildQuery = false )
     {
-        if ( $isChildQuery )
-            throw new NotImplementedException( "Not supported by Solr in combination with LocationQuery" );
-
-        return 'main_priority_i' . $this->getDirection( $sortClause );
+        return 'depth_i' . $this->getDirection( $sortClause );
     }
 }
 

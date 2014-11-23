@@ -34,10 +34,11 @@ class LogicalNot extends CriterionVisitor
      *
      * @param Criterion $criterion
      * @param CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
         if ( !isset( $criterion->criteria[0] ) ||
              ( count( $criterion->criteria ) > 1 ) )
@@ -45,7 +46,7 @@ class LogicalNot extends CriterionVisitor
             throw new \RuntimeException( "Invalid aggregation in LogicalNot criterion." );
         }
 
-        return '(*:* NOT (' . $subVisitor->visit( $criterion->criteria[0] ) . '))';
+        return '(*:* NOT (' . $subVisitor->visit( $criterion->criteria[0], null, $isChildQuery ) . '))';
     }
 }
 

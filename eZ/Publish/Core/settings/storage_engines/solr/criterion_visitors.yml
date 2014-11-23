@@ -29,6 +29,10 @@ parameters:
     ezpublish.persistence.solr.search.content.criterion_visitor.visibility.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Visibility
     ezpublish.persistence.solr.search.content.criterion_visitor.custom_field.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\CustomField
 
+    ezpublish.persistence.solr.search.content.criterion_visitor.location.depth_in.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Location\DepthIn
+    ezpublish.persistence.solr.search.content.criterion_visitor.location.is_main_in.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Location\IsMainIn
+    ezpublish.persistence.solr.search.content.criterion_visitor.location.priority_in.class: eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Location\PriorityIn
+
 services:
     ezpublish.persistence.solr.search.content.criterion_visitor.match_all:
         class: %ezpublish.persistence.solr.search.content.criterion_visitor.match_all.class%
@@ -187,5 +191,20 @@ services:
 
     ezpublish.persistence.solr.search.content.criterion_visitor.custom_field:
         class: %ezpublish.persistence.solr.search.content.criterion_visitor.custom_field.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.criterion_visitor}
+
+    ezpublish.persistence.solr.search.content.criterion_visitor.location.depth_in:
+        class: %ezpublish.persistence.solr.search.content.criterion_visitor.location.depth_in.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.criterion_visitor}
+
+    ezpublish.persistence.solr.search.content.criterion_visitor.location.is_main_in:
+        class: %ezpublish.persistence.solr.search.content.criterion_visitor.location.is_main_in.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.criterion_visitor}
+
+    ezpublish.persistence.solr.search.content.criterion_visitor.location.priority_in:
+        class: %ezpublish.persistence.solr.search.content.criterion_visitor.location.priority_in.class%
         tags:
             - {name: ezpublish.persistence.solr.search.content.criterion_visitor}

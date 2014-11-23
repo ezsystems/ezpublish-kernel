@@ -35,12 +35,14 @@ class Visibility extends CriterionVisitor
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
+    public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null, $isChildQuery = false )
     {
-        return "invisible_mb:" . ( $criterion->value[0] === Criterion\Visibility::HIDDEN ? "true" : "false" );
+        return $this->getParentJoinString( $isChildQuery ) .
+            'invisible_b:' . ( $criterion->value[0] === Criterion\Visibility::HIDDEN ? "true" : "false" );
     }
 }
 

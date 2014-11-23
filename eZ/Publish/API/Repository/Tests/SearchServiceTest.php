@@ -654,7 +654,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getFilterContentSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindContentFiltered( $queryData, $fixture, $closure = null )
     {
@@ -667,7 +666,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getFilterContentSearches
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindLocationsContentFiltered( $queryData, $fixture, $closure = null )
     {
@@ -679,7 +677,6 @@ class SearchServiceTest extends BaseTest
      * Test for deprecated $criterion property on query object
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @deprecated
      */
     public function testDeprecatedCriteriaProperty()
@@ -702,7 +699,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getContentQuerySearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testQueryContent( $queryData, $fixture, $closure = null )
     {
@@ -716,7 +712,6 @@ class SearchServiceTest extends BaseTest
      * @deprecated
      * @dataProvider getContentQuerySearchesDeprecated
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testQueryContentDeprecated( $queryData, $fixture, $closure = null )
     {
@@ -729,7 +724,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getContentQuerySearches
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testQueryContentLocations( $queryData, $fixture, $closure = null )
     {
@@ -742,7 +736,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getLocationQuerySearches
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testQueryLocations( $queryData, $fixture, $closure = null )
     {
@@ -791,7 +784,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getCaseInsensitiveSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindContentFieldFiltersCaseSensitivity( $queryData )
     {
@@ -807,7 +799,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getCaseInsensitiveSearches
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindLocationsFieldFiltersCaseSensitivity( $queryData )
     {
@@ -886,7 +877,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldCollectionContains()
     {
@@ -928,7 +918,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldCollectionContains
      */
     public function testFieldCollectionContainsNoMatch()
@@ -1409,7 +1398,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSort()
     {
@@ -1471,7 +1459,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortVariant2()
     {
@@ -1596,7 +1583,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionTranslatableField()
@@ -1628,7 +1614,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionNonTranslatableField()
@@ -1661,7 +1646,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortWithNonTranslatableField()
     {
@@ -1723,7 +1707,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortWithDefaultLanguage()
     {
@@ -1785,7 +1768,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortWithDefaultLanguageVariant2()
     {
@@ -1847,7 +1829,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet()
     {
@@ -1890,7 +1871,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
@@ -1974,14 +1954,13 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getSortedContentSearchesLegacy
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindAndSortContentLegacy( $queryData, $fixture, $closure = null )
     {
         $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        if ( $setupFactory instanceof LegacyElasticsearch )
         {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
+            $this->markTestSkipped( "Location search handler is not yet implemented for Elasticsearch storage" );
         }
 
         $query = new Query( $queryData );
@@ -1995,14 +1974,13 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getSortedContentSearchesLegacy
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindAndSortContentLocationsLegacy( $queryData, $fixture, $closure = null )
     {
         $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        if ( $setupFactory instanceof LegacyElasticsearch )
         {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
+            $this->markTestSkipped( "Location search handler is not yet implemented for Elasticsearch storage" );
         }
 
         $query = new LocationQuery( $queryData );
@@ -2014,7 +1992,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getSortedContentSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindAndSortContent( $queryData, $fixture, $closure = null )
     {
@@ -2028,7 +2005,6 @@ class SearchServiceTest extends BaseTest
      * @deprecated
      * @dataProvider getSortedContentSearchesDeprecated
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindAndSortContentDeprecated( $queryData, $fixture, $closure = null )
     {
@@ -2041,7 +2017,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getSortedContentSearches
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindAndSortContentLocations( $queryData, $fixture, $closure = null )
     {
@@ -2054,7 +2029,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getSortedLocationSearches
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindAndSortLocations( $queryData, $fixture, $closure = null )
     {
@@ -2304,7 +2278,6 @@ class SearchServiceTest extends BaseTest
      *
      * @dataProvider getFacettedSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindFacettedContent( Query $query, $fixture )
     {
@@ -2315,7 +2288,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testQueryCustomField()
     {
@@ -2345,7 +2317,6 @@ class SearchServiceTest extends BaseTest
      * copy field working.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testQueryModifiedField()
     {
@@ -2413,7 +2384,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceLessThanOrEqual()
@@ -2492,7 +2462,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceGreaterThanOrEqual()
@@ -2571,7 +2540,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceBetween()
@@ -2674,7 +2642,6 @@ class SearchServiceTest extends BaseTest
      * (always very precise) and flat Earth (very imprecise for this use case) models.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceBetweenPolar()
@@ -2737,7 +2704,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceSortAscending()
@@ -2853,7 +2819,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceSortDescending()
@@ -2969,7 +2934,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceWithCustomField()
@@ -3057,7 +3021,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      * @group maplocation
      */
     public function testMapLocationDistanceWithCustomFieldSort()
@@ -3182,16 +3145,9 @@ class SearchServiceTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindMainLocation()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $plainSiteLocationId = 56;
         $designLocationId = 58;
         $partnersContentId = 59;
@@ -3232,16 +3188,9 @@ class SearchServiceTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFindNonMainLocation()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $designLocationId = 58;
         $partnersContentId = 59;
         $repository = $this->getRepository();
@@ -3281,16 +3230,9 @@ class SearchServiceTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testSortMainLocationAscending()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $plainSiteLocationId = 56;
         $designLocationId = 58;
         $partnersContentId = 59;
@@ -3329,16 +3271,9 @@ class SearchServiceTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testSortMainLocationDescending()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $plainSiteLocationId = 56;
         $designLocationId = 58;
         $partnersContentId = 59;
@@ -3377,16 +3312,9 @@ class SearchServiceTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testContentWithMultipleLocations()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -3433,7 +3361,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldLt()
     {
@@ -3499,7 +3426,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldLte()
     {
@@ -3565,7 +3491,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldGt()
     {
@@ -3631,7 +3556,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldGte()
     {
@@ -3699,7 +3623,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testFieldBetween()
     {
@@ -3818,7 +3741,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testUserMetadataGroupHorizontalFilterContent( $queryType = null )
     {
@@ -3902,7 +3824,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testUserMetadataGroupHorizontalQueryContent()
     {
@@ -3913,16 +3834,9 @@ class SearchServiceTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testUserMetadataGroupHorizontalFilterLocation( $queryType = null )
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location Search is not yet implemented for Solr storage" );
-        }
-
         if ( $queryType === null )
         {
             $queryType = "filter";
@@ -4013,16 +3927,9 @@ class SearchServiceTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testUserMetadataGroupHorizontalQueryLocation()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location Search is not yet implemented for Solr storage" );
-        }
-
         $this->testUserMetadataGroupHorizontalFilterLocation( "query" );
     }
 
@@ -4030,7 +3937,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testLanguageAnalysisSeparateContent()
     {
@@ -4099,7 +4005,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testLanguageAnalysisSameContent()
     {
@@ -4154,7 +4059,6 @@ class SearchServiceTest extends BaseTest
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSearchService
      */
     public function testLanguageAnalysisSameContentNotFound()
     {
@@ -4215,7 +4119,7 @@ class SearchServiceTest extends BaseTest
      *
      * @return void
      */
-    protected function assertQueryFixture( Query $query, $fixture, $closure = null )
+    protected function assertQueryFixture( Query $query, $fixture, $closure = null, $ignoreScore = true )
     {
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -4227,7 +4131,7 @@ class SearchServiceTest extends BaseTest
                 $setupFactory = $this->getSetupFactory();
                 if ( $setupFactory instanceof LegacySolr )
                 {
-                    $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+                    // @todo Use different fixtures like elastic search?
                 }
 
                 if ( $setupFactory instanceof LegacyElasticsearch )
@@ -4277,6 +4181,24 @@ class SearchServiceTest extends BaseTest
         {
             $closure( $fixture );
             $closure( $result );
+        }
+
+        if ( $ignoreScore )
+        {
+            foreach ( array( $fixture, $result ) as $result )
+            {
+                $property = new \ReflectionProperty(get_class($result), 'maxScore');
+                $property->setAccessible( true );
+                $property->setValue( $result, 0.0 );
+
+                foreach ( $result->searchHits as $hit )
+                {
+                    $property = new \ReflectionProperty(get_class($hit), 'score');
+                    $property->setAccessible( true );
+                    $property->setValue( $hit, 0.0 );
+
+                }
+            }
         }
 
         $this->assertEquals(

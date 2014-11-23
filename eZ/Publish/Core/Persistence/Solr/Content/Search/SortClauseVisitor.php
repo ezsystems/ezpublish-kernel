@@ -29,10 +29,11 @@ abstract class SortClauseVisitor
      * Map field value to a proper Solr representation
      *
      * @param SortClause $sortClause
+     * @param bool $isChildQuery
      *
      * @return string
      */
-    abstract public function visit( SortClause $sortClause );
+    abstract public function visit( SortClause $sortClause, $isChildQuery = false );
 
     /**
      * Get solr sort direction for sort clause
