@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Controller;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -56,7 +57,7 @@ class WebsiteToolbarController extends Controller
      *
      * @param mixed $locationId
      */
-    public function websiteToolbarAction( $locationId )
+    public function websiteToolbarAction( $locationId, Request $request )
     {
         $response = new Response();
 
@@ -83,6 +84,7 @@ class WebsiteToolbarController extends Controller
             $parameters['form_token'] = $this->csrfProvider->generateCsrfToken( 'legacy' );
         }
 
+        $parameters['redirect_uri'] = $request->attributes->get( 'semanticPathinfo' );
         $response->setContent(
             $this->legacyTemplateEngine->render( 'design:parts/website_toolbar.tpl', $parameters )
         );
