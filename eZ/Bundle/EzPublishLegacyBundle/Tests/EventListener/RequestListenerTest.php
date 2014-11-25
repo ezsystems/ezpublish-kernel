@@ -84,6 +84,10 @@ class RequestListenerTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $session ) );
         $session
             ->expects( $this->once() )
+            ->method( 'isStarted' )
+            ->will( $this->returnValue( true ) );
+        $session
+            ->expects( $this->once() )
             ->method( 'has' )
             ->with( 'eZUserLoggedInID' )
             ->will( $this->returnValue( true ) );

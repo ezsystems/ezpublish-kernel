@@ -63,7 +63,7 @@ class RequestListener implements EventSubscriberInterface
         if (
             $event->getRequestType() !== HttpKernelInterface::MASTER_REQUEST
             || !$this->configResolver->getParameter( 'legacy_mode' )
-            || !$request->getSession()->has( 'eZUserLoggedInID' )
+            || !( $request->getSession()->isStarted() && $request->getSession()->has( 'eZUserLoggedInID' ) )
         )
         {
             return;
