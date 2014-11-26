@@ -212,8 +212,7 @@ class DoctrineDatabase extends Gateway
     protected function getContentInfoList( Criterion $filter, $sort, $offset, $limit, $translations, array $fieldMap )
     {
         $query = $this->handler->createSelectQuery();
-        $query->select(
-            'DISTINCT ezcontentobject.id',
+        $query->selectDistinct(
             'ezcontentobject.*',
             $this->handler->aliasedColumn( $query, 'main_node_id', 'main_tree' )
         );
