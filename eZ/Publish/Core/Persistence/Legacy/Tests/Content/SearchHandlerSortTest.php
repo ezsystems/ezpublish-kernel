@@ -468,7 +468,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             "media" => array( 41, 49, 50, 51, 57, 58, 59, 60, 61, 62, 63, 64, 66, 200, 201 ),
             "protected" => array( 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164 ),
             "setup" => array( 45, 52 ),
-            "users" => array( 4, 10, 11, 12, 13, 14, 42 ),
+            "users" => array( 4, 10, 11, 12, 13, 14, 42, 226 ),
         );
         $contentIds = array_map(
             function ( $hit )
@@ -477,8 +477,16 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             },
             $result->searchHits
         );
-        $index = 0;
 
+        $expectedCount = 0;
+        foreach ( $idMapSet as $set )
+        {
+            $expectedCount += count( $set );
+        }
+
+        $this->assertEquals( $expectedCount, $result->totalCount );
+
+        $index = 0;
         foreach ( $idMapSet as $idSet )
         {
             $contentIdsSubset = array_slice( $contentIds, $index, $count = count( $idSet ) );

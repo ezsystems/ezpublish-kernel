@@ -497,7 +497,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
             "media" => array( 43, 51, 52, 53, 59, 60, 61, 62, 63, 64, 65, 66, 68, 202, 203 ),
             "protected" => array( 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166 ),
             "setup" => array( 48, 54 ),
-            "users" => array( 5, 12, 13, 14, 15, 44, 45 ),
+            "users" => array( 5, 12, 13, 14, 15, 44, 45, 228 ),
         );
         $locationIds = array_map(
             function ( $hit )
@@ -506,8 +506,16 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
             },
             $result->searchHits
         );
-        $index = 0;
 
+        $expectedCount = 0;
+        foreach ( $idMapSet as $set )
+        {
+            $expectedCount += count( $set );
+        }
+
+        $this->assertEquals( $expectedCount, $result->totalCount );
+
+        $index = 0;
         foreach ( $idMapSet as $idSet )
         {
             $locationIdsSubset = array_slice( $locationIds, $index, $count = count( $idSet ) );
