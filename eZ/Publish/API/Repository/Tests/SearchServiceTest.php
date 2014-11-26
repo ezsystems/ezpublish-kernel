@@ -1133,6 +1133,31 @@ class SearchServiceTest extends BaseTest
                 ),
                 $fixtureDir . 'SortFolderName.php',
             ),
+            array(
+                array(
+                    'filter' => new Criterion\ContentTypeId( array( 1, 3 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-US" ),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortFieldMultipleTypes.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\ContentTypeId( array( 1, 3 ) ),
+                    'offset' => 3,
+                    'limit' => 5,
+                    'sortClauses' => array(
+                        new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-US" ),
+                        new SortClause\Field( "template_look", "title", Query::SORT_ASC ),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortFieldMultipleTypesSlice.php',
+            ),
         );
     }
 
