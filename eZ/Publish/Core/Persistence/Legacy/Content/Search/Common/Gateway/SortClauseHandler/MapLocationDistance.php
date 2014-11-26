@@ -15,6 +15,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseH
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use PDO;
 
 /**
  * Content locator gateway implementation using the DoctrineDatabase.
@@ -114,25 +115,31 @@ class MapLocationDistance extends SortClauseHandler
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
+     * @param array $fieldMap
      *
      * @return void
      */
-    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number )
+    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number, array $fieldMap )
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
         $fieldTarget = $sortClause->targetData;
+        $fieldDefinitionId = $fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier];
         $table = $this->getSortTableName( $number );
         $externalTable = $this->getSortTableName( $number, "ezgmaplocation" );
 
         if ( $fieldTarget->languageCode === null )
         {
             $query
-                ->innerJoin(
+                ->leftJoin(
                     $query->alias(
                         $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
                         $this->dbHandler->quoteIdentifier( $table )
                     ),
                     $query->expr->lAnd(
+                        $query->expr->eq(
+                            $query->bindValue( $fieldDefinitionId, null, PDO::PARAM_INT ),
+                            $this->dbHandler->quoteColumn( "contentclassattribute_id", $table )
+                        ),
                         $query->expr->eq(
                             $this->dbHandler->quoteColumn( "contentobject_id", $table ),
                             $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
@@ -154,12 +161,16 @@ class MapLocationDistance extends SortClauseHandler
         else
         {
             $query
-                ->innerJoin(
+                ->leftJoin(
                     $query->alias(
                         $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
                         $this->dbHandler->quoteIdentifier( $table )
                     ),
                     $query->expr->lAnd(
+                        $query->expr->eq(
+                            $query->bindValue( $fieldDefinitionId, null, PDO::PARAM_INT ),
+                            $this->dbHandler->quoteColumn( "contentclassattribute_id", $table )
+                        ),
                         $query->expr->eq(
                             $this->dbHandler->quoteColumn( "contentobject_id", $table ),
                             $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
@@ -174,7 +185,7 @@ class MapLocationDistance extends SortClauseHandler
                                 $query->bindValue(
                                     $this->languageHandler->loadByLanguageCode( $fieldTarget->languageCode )->id,
                                     null,
-                                    \PDO::PARAM_INT
+                                    PDO::PARAM_INT
                                 )
                             ),
                             0
@@ -184,7 +195,7 @@ class MapLocationDistance extends SortClauseHandler
         }
 
         $query
-            ->innerJoin(
+            ->leftJoin(
                 $query->alias(
                     $this->dbHandler->quoteTable( "ezgmaplocation" ),
                     $this->dbHandler->quoteIdentifier( $externalTable )
@@ -197,46 +208,6 @@ class MapLocationDistance extends SortClauseHandler
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( "contentobject_attribute_id", $externalTable ),
                         $this->dbHandler->quoteColumn( "id", $table )
-                    )
-                )
-            )
-            ->innerJoin(
-                $query->alias(
-                    $this->dbHandler->quoteTable( "ezcontentclass_attribute" ),
-                    $this->dbHandler->quoteIdentifier( "cc_attr_$number" )
-                ),
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "contentclassattribute_id", $table ),
-                        $this->dbHandler->quoteColumn( "id", "cc_attr_$number" )
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "identifier", "cc_attr_$number" ),
-                        $query->bindValue( $fieldTarget->fieldIdentifier )
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "version", "cc_attr_$number" ),
-                        $query->bindValue( Type::STATUS_DEFINED, null, \PDO::PARAM_INT )
-                    )
-                )
-            )
-            ->innerJoin(
-                $query->alias(
-                    $this->dbHandler->quoteTable( "ezcontentclass" ),
-                    $this->dbHandler->quoteIdentifier( "cc_$number" )
-                ),
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "contentclass_id", "cc_attr_$number" ),
-                        $this->dbHandler->quoteColumn( "id", "cc_$number" )
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "identifier", "cc_$number" ),
-                        $query->bindValue( $fieldTarget->typeIdentifier )
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( "version", "cc_$number" ),
-                        $query->bindValue( Type::STATUS_DEFINED, null, \PDO::PARAM_INT )
                     )
                 )
             );
