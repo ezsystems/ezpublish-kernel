@@ -1152,7 +1152,7 @@ class SearchServiceTest extends BaseTest
                     'limit' => 5,
                     'sortClauses' => array(
                         new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-US" ),
-                        new SortClause\Field( "template_look", "title", Query::SORT_ASC ),
+                        new SortClause\Field( "user", "first_name", Query::SORT_ASC, "eng-US" ),
                         new SortClause\ContentId(),
                     )
                 ),
