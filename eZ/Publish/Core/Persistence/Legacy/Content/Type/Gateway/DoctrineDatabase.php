@@ -1317,4 +1317,55 @@ class DoctrineDatabase extends Gateway
             );
         }
     }
+
+    /**
+     * Returns field mapping data
+     *
+     * Returns an associative array with ContentType and FieldDefinition identifiers as
+     * first and second level keys respectively, and FieldDefinition ID as value.
+     *
+     * @return array
+     */
+    public function getFieldMap()
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query
+            ->select(
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "id", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteIdentifier( "field_id" )
+                ),
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "identifier", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteIdentifier( "field_identifier" )
+                ),
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "identifier", "ezcontentclass" ),
+                    $this->dbHandler->quoteIdentifier( "type_identifier" )
+                )
+            )
+            ->from(
+                $this->dbHandler->quoteTable( "ezcontentclass_attribute" )
+            )
+            ->innerJoin(
+                $this->dbHandler->quoteTable( "ezcontentclass" ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "contentclass_id", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteColumn( "id", "ezcontentclass" )
+                )
+            );
+
+        $statement = $query->prepare( $query );
+        $statement->execute();
+
+        $map = array();
+        $rows= $statement->fetchAll( \PDO::FETCH_ASSOC );
+
+        foreach ( $rows as $row )
+        {
+            $map[$row["type_identifier"]][$row["field_identifier"]] = $row["field_id"];
+        }
+
+        return $map;
+    }
 }

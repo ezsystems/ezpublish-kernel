@@ -21,6 +21,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\Criterion
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler as CommonSortClauseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\SortClauseHandler as LocationSortClauseHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 
 /**
  * Test case for LocationSearchHandler
@@ -112,6 +113,10 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
                         new CommonSortClauseHandler\SectionName( $this->getDatabaseHandler() ),
                         new CommonSortClauseHandler\Field( $this->getDatabaseHandler(), $this->getLanguageHandler() ),
                     )
+                ),
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
                 )
             ),
             $this->getLocationMapperMock()

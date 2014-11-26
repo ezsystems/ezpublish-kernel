@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 
 /**
  * Test case for ContentSearchHandler
@@ -90,6 +91,10 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                         new Content\Search\Common\Gateway\SortClauseHandler\ContentName( $db ),
                         new Content\Search\Common\Gateway\SortClauseHandler\Field( $db, $this->getLanguageHandler() ),
                     )
+                ),
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
                 )
             ),
             $this->getContentMapperMock()

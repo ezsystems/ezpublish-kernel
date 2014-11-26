@@ -22,6 +22,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 
 /**
  * Test case for ContentSearchHandler
@@ -229,6 +230,10 @@ class SearchHandlerTest extends LanguageAwareTestCase
                     array(
                         new Content\Search\Common\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                     )
+                ),
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
                 )
             ),
             $this->getContentMapperMock()
