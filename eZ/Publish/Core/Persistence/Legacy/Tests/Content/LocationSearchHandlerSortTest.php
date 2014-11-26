@@ -93,6 +93,7 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\LogicalAnd( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\MatchAll( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\SectionId( $this->getDatabaseHandler() ),
+                        new CommonCriterionHandler\ContentTypeIdentifier( $this->getDatabaseHandler() ),
                     )
                 ),
                 new SortClauseConverter(
@@ -526,7 +527,12 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $result = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\SectionId( array( 1 ) ),
+                    'filter' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\SectionId( array( 1 ) ),
+                            new Criterion\ContentTypeIdentifier( array( "article" ) ),
+                        )
+                    ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(
@@ -593,7 +599,12 @@ class LocationSearchHandlerSortTest extends LanguageAwareTestCase
         $result = $handler->findLocations(
             new LocationQuery(
                 array(
-                    'filter' => new Criterion\SectionId( array( 1 ) ),
+                    'filter' => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\SectionId( array( 1 ) ),
+                            new Criterion\ContentTypeIdentifier( "product" ),
+                        )
+                    ),
                     'offset' => 0,
                     'limit' => null,
                     'sortClauses' => array(

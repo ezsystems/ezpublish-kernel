@@ -76,6 +76,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                         new Content\Search\Common\Gateway\CriterionHandler\MatchAll( $db ),
                         new Content\Search\Common\Gateway\CriterionHandler\LogicalAnd( $db ),
                         new Content\Search\Common\Gateway\CriterionHandler\SectionId( $db ),
+                        new Content\Search\Common\Gateway\CriterionHandler\ContentTypeIdentifier( $db ),
                     )
                 ),
                 new Content\Search\Common\Gateway\SortClauseConverter(
@@ -526,7 +527,12 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter'      => new Criterion\SectionId( array( 1 ) ),
+                    'filter'      => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\SectionId( array( 1 ) ),
+                            new Criterion\ContentTypeIdentifier( array( "article" ) ),
+                        )
+                    ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
@@ -593,7 +599,12 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter'      => new Criterion\SectionId( array( 1 ) ),
+                    'filter'      => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\SectionId( array( 1 ) ),
+                            new Criterion\ContentTypeIdentifier( "product" ),
+                        )
+                    ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
