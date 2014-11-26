@@ -1148,6 +1148,18 @@ class SearchServiceTest extends BaseTest
             array(
                 array(
                     'filter' => new Criterion\ContentTypeId( array( 1, 3 ) ),
+                    'offset' => 0,
+                    'limit' => null,
+                    'sortClauses' => array(
+                        new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-US" ),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortFieldMultipleTypesReverse.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\ContentTypeId( array( 1, 3 ) ),
                     'offset' => 3,
                     'limit' => 5,
                     'sortClauses' => array(
@@ -1157,6 +1169,19 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . 'SortFieldMultipleTypesSlice.php',
+            ),
+            array(
+                array(
+                    'filter' => new Criterion\ContentTypeId( array( 1, 3 ) ),
+                    'offset' => 3,
+                    'limit' => 5,
+                    'sortClauses' => array(
+                        new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-US" ),
+                        new SortClause\Field( "user", "first_name", Query::SORT_ASC, "eng-US" ),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortFieldMultipleTypesSliceReverse.php',
             ),
         );
     }
