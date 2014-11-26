@@ -129,101 +129,50 @@ class Field extends SortClauseHandler
 
         if ( $fieldTarget->languageCode === null )
         {
-            $query
-                ->leftJoin(
-                    $query->alias(
-                        $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
-                        $this->dbHandler->quoteIdentifier( $table )
-                    ),
-                    $query->expr->lAnd(
-                        $query->expr->eq(
-                            $query->bindValue( $fieldDefinitionId, null, PDO::PARAM_INT ),
-                            $this->dbHandler->quoteColumn( "contentclassattribute_id", $table )
-                        ),
-                        $query->expr->eq(
-                            $this->dbHandler->quoteColumn( "contentobject_id", $table ),
-                            $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
-                        ),
-                        $query->expr->eq(
-                            $this->dbHandler->quoteColumn( "version", $table ),
-                            $this->dbHandler->quoteColumn( "current_version", "ezcontentobject" )
-                        ),
-                        $query->expr->gt(
-                            $query->expr->bitAnd(
-                                $query->expr->bitAnd( $this->dbHandler->quoteColumn( "language_id", $table ), ~1 ),
-                                $this->dbHandler->quoteColumn( "initial_language_id", "ezcontentobject" )
-                            ),
-                            0
-                        )
-                    )
-                );
+            $languageExpression = $query->expr->gt(
+                $query->expr->bitAnd(
+                    $query->expr->bitAnd( $this->dbHandler->quoteColumn( "language_id", $table ), ~1 ),
+                    $this->dbHandler->quoteColumn( "initial_language_id", "ezcontentobject" )
+                ),
+                0
+            );
         }
         else
         {
-            $linkTable = $table . "_main_language";
-            $query
-                ->leftJoin(
-                    $query->alias(
-                        $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
-                        $this->dbHandler->quoteIdentifier( $linkTable )
-                    ),
-                    $query->expr->lAnd(
-                        $query->expr->eq(
-                            $query->bindValue( $fieldDefinitionId, null, PDO::PARAM_INT ),
-                            $this->dbHandler->quoteColumn( "contentclassattribute_id", $linkTable )
-                        ),
-                        $query->expr->eq(
-                            $this->dbHandler->quoteColumn( "contentobject_id", $linkTable ),
-                            $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
-                        ),
-                        $query->expr->eq(
-                            $this->dbHandler->quoteColumn( "version", $linkTable ),
-                            $this->dbHandler->quoteColumn( "current_version", "ezcontentobject" )
-                        ),
-                        $query->expr->gt(
-                            $query->expr->bitAnd(
-                                $query->expr->bitAnd( $this->dbHandler->quoteColumn( "language_id", $linkTable ), ~1 ),
-                                $this->dbHandler->quoteColumn( "initial_language_id", "ezcontentobject" )
-                            ),
-                            0
-                        )
+            $languageExpression = $query->expr->gt(
+                $query->expr->bitAnd(
+                    $query->expr->bitAnd( $this->dbHandler->quoteColumn( "language_id", $table ), ~1 ),
+                    $query->bindValue(
+                        $this->languageHandler->loadByLanguageCode( $fieldTarget->languageCode )->id,
+                        null,
+                        \PDO::PARAM_INT
                     )
-                )
-                ->leftJoin(
-                    $query->alias(
-                        $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
-                        $this->dbHandler->quoteIdentifier( $table )
-                    ),
-                    $query->expr->lAnd(
-                        $query->expr->eq(
-                            $query->bindValue( $fieldDefinitionId, null, PDO::PARAM_INT ),
-                            $this->dbHandler->quoteColumn( "contentclassattribute_id", $table )
-                        ),
-                        $query->expr->eq(
-                            $this->dbHandler->quoteColumn( "contentobject_id", $linkTable ),
-                            $this->dbHandler->quoteColumn( "contentobject_id", $table )
-                        ),
-                        $query->expr->eq(
-                            $this->dbHandler->quoteColumn( "contentclassattribute_id", $linkTable ),
-                            $this->dbHandler->quoteColumn( "contentclassattribute_id", $table )
-                        ),
-                        $query->expr->eq(
-                            $this->dbHandler->quoteColumn( "version", $linkTable ),
-                            $this->dbHandler->quoteColumn( "version", $table )
-                        ),
-                        $query->expr->gt(
-                            $query->expr->bitAnd(
-                                $query->expr->bitAnd( $this->dbHandler->quoteColumn( "language_id", $table ), ~1 ),
-                                $query->bindValue(
-                                    $this->languageHandler->loadByLanguageCode( $fieldTarget->languageCode )->id,
-                                    null,
-                                    \PDO::PARAM_INT
-                                )
-                            ),
-                            0
-                        )
-                    )
-                );
+                ),
+                0
+            );
         }
+
+        $query
+            ->leftJoin(
+                $query->alias(
+                    $this->dbHandler->quoteTable( "ezcontentobject_attribute" ),
+                    $this->dbHandler->quoteIdentifier( $table )
+                ),
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $query->bindValue( $fieldDefinitionId, null, PDO::PARAM_INT ),
+                        $this->dbHandler->quoteColumn( "contentclassattribute_id", $table )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "contentobject_id", $table ),
+                        $this->dbHandler->quoteColumn( "id", "ezcontentobject" )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( "version", $table ),
+                        $this->dbHandler->quoteColumn( "current_version", "ezcontentobject" )
+                    ),
+                    $languageExpression
+                )
+            );
     }
 }
