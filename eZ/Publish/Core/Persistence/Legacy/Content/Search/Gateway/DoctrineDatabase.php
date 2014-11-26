@@ -13,10 +13,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaCon
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
-use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
@@ -54,51 +51,21 @@ class DoctrineDatabase extends Gateway
     protected $sortClauseConverter;
 
     /**
-     * Content load query builder
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
-     */
-    protected $queryBuilder;
-
-    /**
-     * Caching language handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected $languageHandler;
-
-    /**
-     * Language mask generator
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected $languageMaskGenerator;
-
-    /**
      * Construct from handler handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter $criteriaConverter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter $sortClauseConverter
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder $queryBuilder
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(
         DatabaseHandler $handler,
         CriteriaConverter $criteriaConverter,
-        SortClauseConverter $sortClauseConverter,
-        QueryBuilder $queryBuilder,
-        LanguageHandler $languageHandler,
-        LanguageMaskGenerator $languageMaskGenerator
+        SortClauseConverter $sortClauseConverter
     )
     {
         $this->handler = $handler;
         $this->criteriaConverter = $criteriaConverter;
         $this->sortClauseConverter = $sortClauseConverter;
-        $this->queryBuilder = $queryBuilder;
-        $this->languageHandler = $languageHandler;
-        $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
     /**

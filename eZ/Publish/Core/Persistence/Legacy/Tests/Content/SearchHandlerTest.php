@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -230,10 +229,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
                     array(
                         new Content\Search\Common\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                     )
-                ),
-                new QueryBuilder( $this->getDatabaseHandler() ),
-                $this->getLanguageHandler(),
-                $this->getLanguageMaskGenerator()
+                )
             ),
             $this->getContentMapperMock()
         );

@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -91,10 +90,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                         new Content\Search\Common\Gateway\SortClauseHandler\ContentName( $db ),
                         new Content\Search\Common\Gateway\SortClauseHandler\Field( $db, $this->getLanguageHandler() ),
                     )
-                ),
-                new QueryBuilder( $this->getDatabaseHandler() ),
-                $this->getLanguageHandler(),
-                $this->getLanguageMaskGenerator()
+                )
             ),
             $this->getContentMapperMock()
         );
