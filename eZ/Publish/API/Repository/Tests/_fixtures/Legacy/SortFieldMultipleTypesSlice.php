@@ -10,8 +10,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                 eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
                     'valueObject' =>
                         array (
-                            'id' => 13,
-                            'title' => 'Editors',
+                            'id' => 41,
+                            'title' => 'Media',
                         ),
                     'score' => NULL,
                     'index' => NULL,
@@ -21,8 +21,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                 eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
                     'valueObject' =>
                         array (
-                            'id' => 42,
-                            'title' => 'Anonymous Users',
+                            'id' => 51,
+                            'title' => 'Multimedia',
                         ),
                     'score' => NULL,
                     'index' => NULL,
@@ -32,8 +32,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                 eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
                     'valueObject' =>
                         array (
-                            'id' => 59,
-                            'title' => 'Partners',
+                            'id' => 45,
+                            'title' => 'Setup',
                         ),
                     'score' => NULL,
                     'index' => NULL,
@@ -43,8 +43,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                 eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
                     'valueObject' =>
                         array (
-                            'id' => 56,
-                            'title' => 'Design',
+                            'id' => 4,
+                            'title' => 'Users',
                         ),
                     'score' => NULL,
                     'index' => NULL,
@@ -54,8 +54,8 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
                 eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
                     'valueObject' =>
                         array (
-                            'id' => 50,
-                            'title' => 'Files',
+                            'id' => 11,
+                            'title' => 'Members',
                         ),
                     'score' => NULL,
                     'index' => NULL,

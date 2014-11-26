@@ -71,7 +71,17 @@ class SortClauseConverter
                 {
                     foreach ( (array)$handler->applySelect( $query, $sortClause, $nr ) as $column )
                     {
-                        $this->sortColumns[$column] = $sortClause->direction;
+                        if ( strrpos( $column, "_null", -6 ) === false )
+                        {
+                            $direction = $sortClause->direction;
+                        }
+                        else
+                        {
+                            // Always sort null last
+                            $direction = SelectQuery::ASC;
+                        }
+
+                        $this->sortColumns[$column] = $direction;
                     }
                     continue 2;
                 }
