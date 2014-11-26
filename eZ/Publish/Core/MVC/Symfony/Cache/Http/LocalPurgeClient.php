@@ -43,8 +43,8 @@ class LocalPurgeClient implements PurgeClientInterface
         if ( !is_array( $locationIds ) )
             $locationIds = array( $locationIds );
 
-        $purgeRequest = Request::create( 'http://localhost/', 'PURGE' );
-        $purgeRequest->headers->set( 'X-Group-Location-Id', implode( '; ', $locationIds ) );
+        $purgeRequest = Request::create( 'http://localhost/', 'BAN' );
+        $purgeRequest->headers->set( 'X-Location-Id', '(' . implode( '|', $locationIds ) . ')' );
         $this->cacheStore->purgeByRequest( $purgeRequest );
     }
 
