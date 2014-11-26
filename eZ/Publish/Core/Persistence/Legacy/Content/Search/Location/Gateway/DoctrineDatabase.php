@@ -75,7 +75,8 @@ class DoctrineDatabase extends Gateway
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null )
     {
-        $count = $this->getTotalCount( $criterion, $sortClauses );
+        $fieldMap = $this->getFieldMap();
+        $count = $this->getTotalCount( $criterion, $sortClauses, $fieldMap );
         if ( $limit === 0 )
         {
             return array( "count" => $count, "rows" => array() );
@@ -104,7 +105,7 @@ class DoctrineDatabase extends Gateway
 
         if ( $sortClauses !== null )
         {
-            $this->sortClauseConverter->applyJoin( $selectQuery, $sortClauses );
+            $this->sortClauseConverter->applyJoin( $selectQuery, $sortClauses, $fieldMap );
         }
 
         $selectQuery->where(
@@ -149,10 +150,11 @@ class DoctrineDatabase extends Gateway
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $fieldMap
      *
      * @return array
      */
-    protected function getTotalCount( Criterion $criterion, $sortClauses )
+    protected function getTotalCount( Criterion $criterion, $sortClauses, array $fieldMap )
     {
         $query = $this->handler->createSelectQuery();
         $query
@@ -171,7 +173,7 @@ class DoctrineDatabase extends Gateway
 
         if ( $sortClauses !== null )
         {
-            $this->sortClauseConverter->applyJoin( $query, $sortClauses );
+            $this->sortClauseConverter->applyJoin( $query, $sortClauses, $fieldMap );
         }
 
         $query->where(
@@ -197,5 +199,58 @@ class DoctrineDatabase extends Gateway
 
         $res = $statement->fetchAll( PDO::FETCH_ASSOC );
         return (int)$res[0]['count'];
+    }
+
+    /**
+     * Returns field mapping data
+     *
+     * Returns an associative array with ContentType and FieldDefinition identifiers as
+     * first and second level keys respectively, and FieldDefinition ID as value.
+     *
+     * @todo Implement this in ContentType Handler using stash
+     *
+     * @return array
+     */
+    protected function getFieldMap()
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select(
+                $this->handler->alias(
+                    $this->handler->quoteColumn( "id", "ezcontentclass_attribute" ),
+                    $this->handler->quoteIdentifier( "field_id" )
+                ),
+                $this->handler->alias(
+                    $this->handler->quoteColumn( "identifier", "ezcontentclass_attribute" ),
+                    $this->handler->quoteIdentifier( "field_identifier" )
+                ),
+                $this->handler->alias(
+                    $this->handler->quoteColumn( "identifier", "ezcontentclass" ),
+                    $this->handler->quoteIdentifier( "type_identifier" )
+                )
+            )
+            ->from(
+                $this->handler->quoteTable( "ezcontentclass_attribute" )
+            )
+            ->innerJoin(
+                $this->handler->quoteTable( "ezcontentclass" ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( "contentclass_id", "ezcontentclass_attribute" ),
+                    $this->handler->quoteColumn( "id", "ezcontentclass" )
+                )
+            );
+
+        $statement = $query->prepare( $query );
+        $statement->execute();
+
+        $map = array();
+        $rows= $statement->fetchAll( \PDO::FETCH_ASSOC );
+
+        foreach ( $rows as $row )
+        {
+            $map[$row["type_identifier"]][$row["field_identifier"]] = $row["field_id"];
+        }
+
+        return $map;
     }
 }

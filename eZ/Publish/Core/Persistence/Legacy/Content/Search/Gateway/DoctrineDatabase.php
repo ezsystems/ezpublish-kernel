@@ -118,13 +118,14 @@ class DoctrineDatabase extends Gateway
     {
         $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
-        $count = $this->getResultCount( $filter, $sort, $translations );
+        $fieldMap = $this->getFieldMap();
+        $count = $this->getResultCount( $filter, $sort, $translations, $fieldMap );
         if ( $limit === 0 || $count <= $offset )
         {
             return array( 'count' => $count, 'rows' => array() );
         }
 
-        $contentInfoList = $this->getContentInfoList( $filter, $sort, $offset, $limit, $translations );
+        $contentInfoList = $this->getContentInfoList( $filter, $sort, $offset, $limit, $translations, $fieldMap );
 
         return array(
             'count' => $count,
@@ -188,8 +189,9 @@ class DoctrineDatabase extends Gateway
      * @param array $sort
      * @param mixed $translations
      * @return int
+     * @param array $fieldMap
      */
-    protected function getResultCount( Criterion $filter, $sort, $translations )
+    protected function getResultCount( Criterion $filter, $sort, $translations, array $fieldMap )
     {
         $query = $this->handler->createSelectQuery();
 
@@ -203,9 +205,10 @@ class DoctrineDatabase extends Gateway
                 'ezcontentobject_version.contentobject_id'
             );
 
+        // Should be possible to remove it now, since Field sort clauses do not filter any more
         if ( $sort !== null )
         {
-            $this->sortClauseConverter->applyJoin( $query, $sort );
+            $this->sortClauseConverter->applyJoin( $query, $sort, $fieldMap );
         }
 
         $query->where(
@@ -226,10 +229,11 @@ class DoctrineDatabase extends Gateway
      * @param mixed $offset
      * @param mixed $limit
      * @param mixed $translations
+     * @param array $fieldMap
      *
      * @return int[]
      */
-    protected function getContentInfoList( Criterion $filter, $sort, $offset, $limit, $translations )
+    protected function getContentInfoList( Criterion $filter, $sort, $offset, $limit, $translations, array $fieldMap )
     {
         $query = $this->handler->createSelectQuery();
         $query->select(
@@ -268,7 +272,7 @@ class DoctrineDatabase extends Gateway
 
         if ( $sort !== null )
         {
-            $this->sortClauseConverter->applyJoin( $query, $sort );
+            $this->sortClauseConverter->applyJoin( $query, $sort, $fieldMap );
         }
 
         $query->where(
@@ -286,6 +290,59 @@ class DoctrineDatabase extends Gateway
         $statement->execute();
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Returns field mapping data
+     *
+     * Returns an associative array with ContentType and FieldDefinition identifiers as
+     * first and second level keys respectively, and FieldDefinition ID as value.
+     *
+     * @todo Implement this in ContentType Handler using stash
+     *
+     * @return array
+     */
+    protected function getFieldMap()
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select(
+                $this->handler->alias(
+                    $this->handler->quoteColumn( "id", "ezcontentclass_attribute" ),
+                    $this->handler->quoteIdentifier( "field_id" )
+                ),
+                $this->handler->alias(
+                    $this->handler->quoteColumn( "identifier", "ezcontentclass_attribute" ),
+                    $this->handler->quoteIdentifier( "field_identifier" )
+                ),
+                $this->handler->alias(
+                    $this->handler->quoteColumn( "identifier", "ezcontentclass" ),
+                    $this->handler->quoteIdentifier( "type_identifier" )
+                )
+            )
+            ->from(
+                $this->handler->quoteTable( "ezcontentclass_attribute" )
+            )
+            ->innerJoin(
+                $this->handler->quoteTable( "ezcontentclass" ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( "contentclass_id", "ezcontentclass_attribute" ),
+                    $this->handler->quoteColumn( "id", "ezcontentclass" )
+                )
+            );
+
+        $statement = $query->prepare( $query );
+        $statement->execute();
+
+        $map = array();
+        $rows= $statement->fetchAll( \PDO::FETCH_ASSOC );
+
+        foreach ( $rows as $row )
+        {
+            $map[$row["type_identifier"]][$row["field_identifier"]] = $row["field_id"];
+        }
+
+        return $map;
     }
 }
 
