@@ -16,6 +16,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\MapLocationDistance;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
@@ -94,7 +96,7 @@ class DoctrineDatabase extends Gateway
     {
         $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
-        $fieldMap = $this->contentTypeGateway->getFieldMap();
+        $fieldMap = $this->getFieldMap( $sort );
         $count = $this->getResultCount( $filter, $sort, $translations, $fieldMap );
         if ( $limit === 0 || $count <= $offset )
         {
@@ -265,6 +267,28 @@ class DoctrineDatabase extends Gateway
         $statement->execute();
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Returns the field map if given $sortClauses contain a Field sort clause.
+     *
+     * Otherwise an empty array is returned.
+     *
+     * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     *
+     * @return array
+     */
+    protected function getFieldMap( $sortClauses )
+    {
+        foreach ( (array)$sortClauses as $sortClause )
+        {
+            if ( $sortClause instanceof Field || $sortClause instanceof MapLocationDistance )
+            {
+                return $this->contentTypeGateway->getFieldMap();
+            }
+        }
+
+        return array();
     }
 }
 
