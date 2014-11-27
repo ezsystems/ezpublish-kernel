@@ -103,9 +103,174 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                     array( 'content', 'read', true ),
                     array( 'content', 'versionread', true ),
                 )
-            )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+<embed
+align="right"
+class="itemized_sub_items"
+custom:limit="5"
+custom:offset="3"
+object_id="104"
+size="medium"
+view="embed"
+url="http://ez.no"
+/>
+</paragraph>
+</section>',
+                104,
+                APIVersionInfo::STATUS_DRAFT,
+                'embed',
+                array(
+                    'objectParameters' => array(
+                        'align' => 'right',
+                        'size' => 'medium',
+                        'offset' => 3,
+                        'limit' => 5,
+                    ),
+                    'noLayout' => true,
+                    'linkParameters' => array(
+                        'href' => 'http://ez.no',
+                        'resourceType' => null,
+                        'resourceId' => null,
+                        'wrapped' => false,
+                    ),
+                ),
+                array(
+                    array( 'content', 'read', true ),
+                    array( 'content', 'versionread', true ),
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+<embed
+class="itemized_sub_items"
+custom:limit="5"
+custom:funkyattrib="3"
+object_id="107"
+size="medium"
+view="embed"
+url="http://ez.no"
+ezlegacytmp-embed-link-target="target"
+ezlegacytmp-embed-link-title="title"
+ezlegacytmp-embed-link-id="id"
+ezlegacytmp-embed-link-class="class"
+ezlegacytmp-embed-link-node_id="111"
+/>
+</paragraph>
+</section>',
+                107,
+                APIVersionInfo::STATUS_DRAFT,
+                'embed',
+                array(
+                    'objectParameters' => array(
+                        'size' => 'medium',
+                        'funkyattrib' => 3,
+                        'limit' => 5,
+                    ),
+                    'noLayout' => true,
+                    'linkParameters' => array(
+                        'href' => 'http://ez.no',
+                        'target' => 'target',
+                        'title' => 'title',
+                        'id' => 'id',
+                        'class' => 'class',
+                        'resourceType' => 'LOCATION',
+                        'resourceId' => '111',
+                        'wrapped' => false,
+                    ),
+                ),
+                array(
+                    array( 'content', 'read', false ),
+                    array( 'content', 'view_embed', true ),
+                    array( 'content', 'versionread', true ),
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+<paragraph>
+<embed-inline
+object_id="110"
+size="small"
+view="embed-inline"
+url="http://ez.no"
+/>
+</paragraph>
+</section>',
+                110,
+                APIVersionInfo::STATUS_PUBLISHED,
+                'embed-inline',
+                array(
+                    'noLayout' => true,
+                    'objectParameters' => array(
+                        'size' => 'small'
+                    ),
+                    'linkParameters' => array(
+                        'href' => 'http://ez.no',
+                        'resourceType' => null,
+                        'resourceId' => null,
+                        'wrapped' => false,
+                    ),
+                ),
+                array(
+                    array( 'content', 'read', true ),
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+<paragraph>
+<embed
+align="left"
+custom:limit="5"
+custom:offset="0"
+object_id="113"
+size="large"
+view="embed"
+url="http://ez.no"
+ezlegacytmp-embed-link-target="target"
+ezlegacytmp-embed-link-title="title"
+ezlegacytmp-embed-link-id="id"
+ezlegacytmp-embed-link-class="class"
+ezlegacytmp-embed-link-url_id="333"
+/>
+</paragraph>
+</section>',
+                113,
+                APIVersionInfo::STATUS_DRAFT,
+                'embed',
+                array(
+                    'noLayout' => true,
+                    'objectParameters' => array(
+                        'align' => 'left',
+                        'size' => 'large',
+                        'limit' => '5',
+                        'offset' => '0',
+                    ),
+                    'linkParameters' => array(
+                        'href' => 'http://ez.no',
+                        'target' => 'target',
+                        'title' => 'title',
+                        'id' => 'id',
+                        'class' => 'class',
+                        'resourceType' => 'URL',
+                        'resourceId' => '333',
+                        'wrapped' => false,
+                    ),
+                ),
+                array(
+                    array( 'content', 'read', true ),
+                    array( 'content', 'versionread', true ),
+                )
+            ),
         );
     }
+
     /**
      * @return array
      */
@@ -149,6 +314,97 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                     array( 'content', 'view_embed', true ),
                 )
             ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+<embed
+align="right"
+class="itemized_sub_items"
+custom:limit="7"
+custom:offset="2"
+node_id="114"
+size="medium"
+view="embed"
+url="http://ez.no"
+ezlegacytmp-embed-link-url_id="111"
+ezlegacytmp-embed-link-node_id="222"
+ezlegacytmp-embed-link-object_id="333"
+/>
+</paragraph>
+</section>',
+                114,
+                'embed',
+                array(
+                    'objectParameters' => array(
+                        'align' => 'right',
+                        'size' => 'medium',
+                        'offset' => 2,
+                        'limit' => 7,
+                    ),
+                    'noLayout' => true,
+                    'linkParameters' => array(
+                        'href' => 'http://ez.no',
+                        'resourceType' => 'CONTENT',
+                        'resourceId' => '333',
+                        'wrapped' => false,
+                    ),
+                ),
+                array(
+                    array( 'content', 'read', true ),
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns="http://www.w3.org/1999/html">
+<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+<link>
+<embed
+align="right"
+class="itemized_sub_items"
+custom:limit="7"
+custom:offset="2"
+node_id="114"
+size="medium"
+view="embed"
+url="http://ez.no"
+ezlegacytmp-embed-link-target="target"
+ezlegacytmp-embed-link-title="title"
+ezlegacytmp-embed-link-id="id"
+ezlegacytmp-embed-link-class="class"
+ezlegacytmp-embed-link-url_id="333"
+ezlegacytmp-embed-link-anchor_name="anchovy"
+/>
+</link>
+</paragraph>
+</section>',
+                114,
+                'embed',
+                array(
+                    'objectParameters' => array(
+                        'align' => 'right',
+                        'size' => 'medium',
+                        'offset' => 2,
+                        'limit' => 7,
+                    ),
+                    'noLayout' => true,
+                    'linkParameters' => array(
+                        'href' => 'http://ez.no',
+                        'target' => 'target',
+                        'title' => 'title',
+                        'id' => 'id',
+                        'class' => 'class',
+                        'resourceType' => 'URL',
+                        'resourceId' => '333',
+                        'resourceFragmentIdentifier' => 'anchovy',
+                        'wrapped' => false,
+                    ),
+                ),
+                array(
+                    array( 'content', 'read', false ),
+                    array( 'content', 'view_embed', true ),
+                )
+            ),
         );
     }
 
@@ -171,6 +427,158 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                         'size' => 'medium',
                         'limit' => 5,
                         'offset' => 3,
+                    ),
+                ),
+                array(
+                    array( 'content', 'read', true ),
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+<paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">
+<embed
+align="right"
+class="itemized_sub_items"
+custom:limit="5"
+custom:offset="3"
+custom:object_id="105"
+object_id="104"
+size="medium"
+view="embed"
+url="http://ez.no"
+ezlegacytmp-embed-link-target="target"
+ezlegacytmp-embed-link-title="title"
+ezlegacytmp-embed-link-id="id"
+ezlegacytmp-embed-link-class="class"
+ezlegacytmp-embed-link-url_id="111"
+ezlegacytmp-embed-link-node_id="222"
+/>
+</paragraph>
+</section>',
+                104,
+                APIVersionInfo::STATUS_PUBLISHED,
+                'embed',
+                array(
+                    'noLayout' => true,
+                    'objectParameters' => array(
+                        'align' => 'right',
+                        'size' => 'medium',
+                        'limit' => 5,
+                        'offset' => 3,
+                    ),
+                    'linkParameters' => array(
+                        'href' => 'http://ez.no',
+                        'target' => 'target',
+                        'title' => 'title',
+                        'id' => 'id',
+                        'class' => 'class',
+                        'resourceType' => 'LOCATION',
+                        'resourceId' => '222',
+                        'wrapped' => false,
+                    ),
+                ),
+                array(
+                    array( 'content', 'read', true ),
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+<paragraph>
+<link>
+<embed-inline
+align="right"
+class="itemized_sub_items"
+custom:limit="5"
+custom:offset="3"
+custom:object_id="105"
+object_id="104"
+size="medium"
+view="embed"
+url="http://ez.no"
+ezlegacytmp-embed-link-target="target"
+ezlegacytmp-embed-link-title="title"
+ezlegacytmp-embed-link-id="id"
+ezlegacytmp-embed-link-class="class"
+ezlegacytmp-embed-link-url_id="111"
+ezlegacytmp-embed-link-node_id="222"
+/>
+and that was embedded
+</link>
+</paragraph>
+</section>',
+                104,
+                APIVersionInfo::STATUS_PUBLISHED,
+                'embed',
+                array(
+                    'noLayout' => true,
+                    'objectParameters' => array(
+                        'align' => 'right',
+                        'size' => 'medium',
+                        'limit' => 5,
+                        'offset' => 3,
+                    ),
+                    'linkParameters' => array(
+                        'href' => 'http://ez.no',
+                        'target' => 'target',
+                        'title' => 'title',
+                        'id' => 'id',
+                        'class' => 'class',
+                        'resourceType' => 'LOCATION',
+                        'resourceId' => '222',
+                        'wrapped' => true,
+                    ),
+                ),
+                array(
+                    array( 'content', 'read', true ),
+                )
+            ),
+            array(
+                '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/">
+<paragraph>
+<link>
+<embed-inline
+align="right"
+class="itemized_sub_items"
+custom:limit="5"
+custom:offset="3"
+custom:object_id="105"
+object_id="104"
+size="medium"
+view="embed"
+url="http://ez.no"
+ezlegacytmp-embed-link-target="target"
+ezlegacytmp-embed-link-title="title"
+ezlegacytmp-embed-link-id="id"
+ezlegacytmp-embed-link-class="class"
+ezlegacytmp-embed-link-url_id="111"
+ezlegacytmp-embed-link-node_id="222"
+/>
+</link>
+</paragraph>
+</section>',
+                104,
+                APIVersionInfo::STATUS_PUBLISHED,
+                'embed',
+                array(
+                    'noLayout' => true,
+                    'objectParameters' => array(
+                        'align' => 'right',
+                        'size' => 'medium',
+                        'limit' => 5,
+                        'offset' => 3,
+                    ),
+                    'linkParameters' => array(
+                        'href' => 'http://ez.no',
+                        'target' => 'target',
+                        'title' => 'title',
+                        'id' => 'id',
+                        'class' => 'class',
+                        'resourceType' => 'LOCATION',
+                        'resourceId' => '222',
+                        'wrapped' => false,
                     ),
                 ),
                 array(
@@ -313,7 +721,8 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( 'view', 'class', 'node_id', 'object_id' )
+            array( 'view', 'class', 'node_id', 'object_id' ),
+            $this->getMock( 'Psr\\Log\\LoggerInterface' )
         );
 
         $converter->convert( $dom );
@@ -379,7 +788,8 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( 'view', 'class', 'node_id', 'object_id' )
+            array( 'view', 'class', 'node_id', 'object_id' ),
+            $this->getMock( 'Psr\\Log\\LoggerInterface' )
         );
 
         $converter->convert( $dom );
@@ -444,7 +854,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
     public function testEmbedContentThrowsUnauthorizedException( $permissionsMap )
     {
         $dom = new \DOMDocument();
-        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" object_id="42"/></paragraph></section>' );
+        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" object_id="42" url="http://www.ez.no"/></paragraph></section>' );
 
         $fragmentHandler = $this->getMockFragmentHandler();
         $contentService = $this->getMockContentService();
@@ -484,7 +894,8 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( 'view', 'class', 'node_id', 'object_id' )
+            array( 'view', 'class', 'node_id', 'object_id' ),
+            $this->getMock( 'Psr\\Log\\LoggerInterface' )
         );
 
         $converter->convert( $dom );
@@ -496,7 +907,7 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
     public function testEmbedLocationThrowsUnauthorizedException()
     {
         $dom = new \DOMDocument();
-        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" node_id="42"/></paragraph></section>' );
+        $dom->loadXML( '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed view="embed" node_id="42" url="http://www.ez.no"/></paragraph></section>' );
 
         $fragmentHandler = $this->getMockFragmentHandler();
         $locationService = $this->getMockLocationService();
@@ -534,7 +945,8 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
         $converter = new EmbedToHtml5(
             $fragmentHandler,
             $repository,
-            array( 'view', 'class', 'node_id', 'object_id' )
+            array( 'view', 'class', 'node_id', 'object_id' ),
+            $this->getMock( 'Psr\\Log\\LoggerInterface' )
         );
 
         $converter->convert( $dom );
@@ -544,20 +956,20 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed object_id="42"/></paragraph></section>',
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"/>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed object_id="42" url="http://www.ez.no"/></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"/></section>',
             ),
             array(
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello <embed object_id="42"/> goodbye</paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello <embed object_id="42" url="http://www.ez.no"/> goodbye</paragraph></section>',
                 '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello  goodbye</paragraph></section>',
             ),
             array(
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello <embed size="medium" object_id="42"/> goodbye</link></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello <embed size="medium" object_id="42" url="http://www.ez.no"/> goodbye</link></paragraph></section>',
                 '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello  goodbye</link></paragraph></section>',
             ),
             array(
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link><embed object_id="42"/></link></paragraph></section>',
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"/>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link><embed object_id="42" url="http://www.ez.no"/></link></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link/></paragraph></section>',
             ),
         );
     }
@@ -584,7 +996,13 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $logger->expects( $this->once() )
+        $logger->expects( $this->at( 0 ) )
+            ->method( "error" )
+            ->with(
+                "Could not resolve XmlText embed link resource type and ID"
+            );
+
+        $logger->expects( $this->at( 1 ) )
             ->method( "error" )
             ->with(
                 "While generating embed for xmltext, could not locate Content object with ID 42"
@@ -612,20 +1030,20 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed node_id="42"/></paragraph></section>',
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"/>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><embed node_id="42" url="http://www.ez.no"/></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"/></section>',
             ),
             array(
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello <embed node_id="42"/> goodbye</paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello <embed node_id="42" url="http://www.ez.no"/> goodbye</paragraph></section>',
                 '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>hello  goodbye</paragraph></section>',
             ),
             array(
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello <embed node_id="42"/> goodbye</link></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello <embed node_id="42" url="http://www.ez.no"/> goodbye</link></paragraph></section>',
                 '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link>hello  goodbye</link></paragraph></section>',
             ),
             array(
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link><embed node_id="42"/></link></paragraph></section>',
-                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"/>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link><embed node_id="42" url="http://www.ez.no"/></link></paragraph></section>',
+                '<?xml version="1.0" encoding="utf-8"?><section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><link/></paragraph></section>',
             ),
         );
     }
@@ -652,7 +1070,13 @@ class EmbedToHtml5Test extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $logger->expects( $this->once() )
+        $logger->expects( $this->at( 0 ) )
+            ->method( "error" )
+            ->with(
+                "Could not resolve XmlText embed link resource type and ID"
+            );
+
+        $logger->expects( $this->at( 1 ) )
             ->method( "error" )
             ->with(
                 "While generating embed for xmltext, could not locate Location with ID 42"

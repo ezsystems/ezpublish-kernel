@@ -9,12 +9,13 @@
 
 namespace eZ\Publish\Core\FieldType\Tests\XmlText\Converter;
 
+use eZ\Publish\Core\FieldType\XmlText\Converter\Expanding;
+use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking;
 use eZ\Publish\Core\FieldType\XmlText\Converter\Html5;
 use PHPUnit_Framework_TestCase;
 use DOMDocument;
 use DOMNodeList;
 use DOMXPath;
-use XSLTProcessor;
 
 /**
  * Tests the Html5 converter
@@ -93,7 +94,7 @@ class Html5Test extends PHPUnit_Framework_TestCase
         return array(
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><anchor name="start"/>This is the start</paragraph></section>',
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph><anchor name="start"/>This is the start</paragraph></section>',
                 '//a[@id="start"]',
                 function ( DOMNodeList $xpathResult ) use ( $that )
                 {
@@ -124,7 +125,7 @@ class Html5Test extends PHPUnit_Framework_TestCase
             ),
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
-<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">This is a long line with <anchor name="inside"/> an anchor in the middle</paragraph></section>',
+<section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph>This is a long line with <anchor name="inside"/> an anchor in the middle</paragraph></section>',
                 '//a[@id="inside"]',
                 function ( DOMNodeList $xpathResult ) use ( $that )
                 {
@@ -167,8 +168,8 @@ class Html5Test extends PHPUnit_Framework_TestCase
                     $that->assertEquals( $xpathResult->length, 1 );
                     $doc = $xpathResult->item( 0 )->ownerDocument;
                     $that->assertEquals(
-                        trim( $doc->saveXML( $doc->documentElement ) ),
-                        '<pre>This is a &lt;em&gt;emphasized&lt;/em&gt; text</pre>'
+                        '<pre>This is a &lt;em&gt;emphasized&lt;/em&gt; text</pre>',
+                        trim( $doc->saveXML( $doc->documentElement ) )
                     );
                 }
             ),
@@ -181,8 +182,8 @@ class Html5Test extends PHPUnit_Framework_TestCase
                     $that->assertEquals( $xpathResult->length, 1 );
                     $doc = $xpathResult->item( 0 )->ownerDocument;
                     $that->assertEquals(
-                        $doc->saveXML( $doc->documentElement ),
-                        '<iframe src="http://www.ez.no" width="500"/>'
+                        '<iframe src="http://www.ez.no" width="500"/>',
+                        $doc->saveXML( $doc->documentElement )
                     );
                 }
             ),
@@ -195,8 +196,8 @@ class Html5Test extends PHPUnit_Framework_TestCase
                     $that->assertEquals( $xpathResult->length, 1 );
                     $doc = $xpathResult->item( 0 )->ownerDocument;
                     $that->assertEquals(
-                        $doc->saveXML( $doc->documentElement ),
-                        '<div class="dummy"><p>First paragraph</p><p>Second paragraph with <strong>strong</strong></p></div>'
+                        '<div class="dummy"><p>First paragraph</p><p>Second paragraph with <strong>strong</strong></p></div>',
+                        $doc->saveXML( $doc->documentElement )
                     );
                 }
             )
@@ -210,7 +211,14 @@ class Html5Test extends PHPUnit_Framework_TestCase
     {
         $dom = new DomDocument();
         $dom->loadXML( $xml );
-        $html5 = new Html5( $this->getDefaultStylesheet(), array() );
+        $html5 = new Html5(
+            $this->getDefaultStylesheet(),
+            array(),
+            array(
+                new Expanding(),
+                new EmbedLinking(),
+            )
+        );
 
         $result = new DomDocument();
         $result->loadXML( $html5->convert( $dom ) );
@@ -225,7 +233,14 @@ class Html5Test extends PHPUnit_Framework_TestCase
             '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">This is only a literal with &lt;strong&gt;strong&lt;/strong&gt; text</literal></paragraph></section>'
         );
-        $html5 = new Html5( $this->getDefaultStylesheet(), array() );
+        $html5 = new Html5(
+            $this->getDefaultStylesheet(),
+            array(),
+            array(
+                new Expanding(),
+                new EmbedLinking(),
+            )
+        );
         $result = $html5->convert( $dom );
 
         $this->assertEquals(
@@ -238,7 +253,14 @@ class Html5Test extends PHPUnit_Framework_TestCase
             '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><literal class="html">This is text followed by an iframe &lt;iframe src="http://www.ez.no" /&gt;</literal></paragraph></section>'
         );
-        $html5 = new Html5( $this->getDefaultStylesheet(), array() );
+        $html5 = new Html5(
+            $this->getDefaultStylesheet(),
+            array(),
+            array(
+                new Expanding(),
+                new EmbedLinking(),
+            )
+        );
         $result = $html5->convert( $dom );
 
         $this->assertEquals(
@@ -305,19 +327,25 @@ class Html5Test extends PHPUnit_Framework_TestCase
 </section>'
         );
 
-        $xslDoc = new DOMDocument;
-        $xslDoc->load( $this->getDefaultStylesheet() );
+        $html5 = new Html5(
+            $this->getDefaultStylesheet(),
+            array(),
+            array(
+                new Expanding(),
+                new EmbedLinking(),
+            )
+        );
+        $result = $html5->convert( $xmlDoc );
 
-        $xsltProcessor = new XSLTProcessor();
-        $xsltProcessor->importStyleSheet( $xslDoc );
-        $xsltProcessor->registerPHPFunctions();
 
-        $result = $xsltProcessor->transformToXML( $xmlDoc );
-        $result = preg_replace( "/^ *[\r\n]*/m", "", $result );
+        // Make <br> tags valid
+        $result = str_replace( "<br>", "<br/>", $result );
+        // Make a valid XML document string
+        $result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><section xmlns=\"http://ez.no/namespaces/ezpublish5/xhtml5\">{$result}</section>";
 
-        $this->assertEquals(
-            $result,
-            '<a name="eztoc_1_1" id="eztoc_1_1"></a><h2>Heading 2</h2>
+        $convertedDocument = $this->createDocument( $result, false );
+
+        $aux = '<a name="eztoc_1_1" id="eztoc_1_1"></a><h2>Heading 2</h2>
 <a name="eztoc_1_2" id="eztoc_1_2"></a><h2>Heading 2</h2>
 <a name="eztoc_1_3_1" id="eztoc_1_3_1"></a><h3>Heading 3</h3>
 <table class="class1" border="1" cellpadding="2" cellspacing="0" width="100%" style="width:100%;" summary="summary1">
@@ -338,7 +366,14 @@ class Html5Test extends PHPUnit_Framework_TestCase
 </td>
 </tr>
 </table>
-'
+';
+        $aux = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><section xmlns=\"http://ez.no/namespaces/ezpublish5/xhtml5\">{$aux}</section>";
+
+        $expectedDocument = $this->createDocument( $aux, false );
+
+        $this->assertEquals(
+            $expectedDocument,
+            $convertedDocument
         );
     }
 
@@ -371,12 +406,96 @@ class Html5Test extends PHPUnit_Framework_TestCase
         $dom = new DomDocument();
         $dom->loadXML( $xml );
 
-        $html5 = new Html5( $this->getDefaultStylesheet(), array() );
+        $html5 = new Html5(
+            $this->getDefaultStylesheet(),
+            array(),
+            array(
+                new Expanding(),
+                new EmbedLinking(),
+            )
+        );
         $result = $html5->convert( $dom );
 
         $this->assertEquals(
             $expected,
             trim( $result )
+        );
+    }
+
+    /**
+     * Provider for conversion test.
+     *
+     * @return array
+     */
+    public function providerForTestConvert()
+    {
+        $map = array();
+
+        foreach ( glob( __DIR__ . "/_fixtures/html5/input/*.xml" ) as $inputFilePath )
+        {
+            $basename = basename( $inputFilePath, ".xml" );
+            $outputFilePath = __DIR__ . "/_fixtures/html5/output/{$basename}.xml";
+
+            $map[] = array( $inputFilePath, $outputFilePath );
+        }
+
+        return $map;
+    }
+
+    /**
+     * @param string $xml
+     * @param boolean $isPath
+     *
+     * @return \DOMDocument
+     */
+    protected function createDocument( $xml, $isPath = true )
+    {
+        $document = new DOMDocument();
+
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = false;
+
+        if ( $isPath === true )
+        {
+            $xml = file_get_contents( $xml );
+        }
+
+        $document->loadXml( $xml );
+
+        return $document;
+    }
+
+    /**
+     * @param string $inputFilePath
+     * @param string $outputFilePath
+     *
+     * @dataProvider providerForTestConvert
+     */
+    public function testConvert( $inputFilePath, $outputFilePath )
+    {
+        $inputDocument = $this->createDocument( $inputFilePath );
+
+        $html5 = new Html5(
+            $this->getDefaultStylesheet(),
+            array(),
+            array(
+                new Expanding(),
+                new EmbedLinking(),
+            )
+        );
+
+        $result = $html5->convert( $inputDocument );
+        // Make <br> tags valid
+        $result = str_replace( "<br>", "<br/>", $result );
+        // Make a valid XML document string
+        $result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><section xmlns=\"http://ez.no/namespaces/ezpublish5/xhtml5\">{$result}</section>";
+
+        $convertedDocument = $this->createDocument( $result, false );
+        $expectedDocument = $this->createDocument( $outputFilePath );
+
+        $this->assertEquals(
+            $expectedDocument,
+            $convertedDocument
         );
     }
 }
