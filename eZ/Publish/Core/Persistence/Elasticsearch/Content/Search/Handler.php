@@ -28,7 +28,7 @@ class Handler implements SearchHandlerInterface
     protected $gateway;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\MapperInterface
      */
     protected $mapper;
 
@@ -41,7 +41,7 @@ class Handler implements SearchHandlerInterface
 
     public function __construct(
         Gateway $gateway,
-        Mapper $mapper,
+        MapperInterface $mapper,
         Extractor $extractor
     )
     {

@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the Elasticsearch Mapper class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
+namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper;
 
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Persistence\Content;
@@ -21,12 +21,16 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\MapperInterface;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document;
 
 /**
- * Mapper maps Content and Location objects to a Document object, representing a
- * document in Elasticsearch index storage.
+ * Standard Mapper implementation maps:
+ *  - Content with its fields and corresponding Locations
+ *  - Locations with Content data but without Content fields
  */
-class Mapper
+class StandardMapper implements MapperInterface
 {
     /**
      * Field name generator
