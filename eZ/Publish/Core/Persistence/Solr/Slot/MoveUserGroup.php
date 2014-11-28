@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Solr\Slot;
 /**
  * A Solr slot handling MoveUserGroupSignal.
  */
-class MoveUserGroup extends Slot
+class MoveUserGroup extends MoveSubtree
 {
     /**
      * Receive the given $signal and react on it
@@ -29,18 +29,8 @@ class MoveUserGroup extends Slot
 
         $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->userGroupId );
 
-        $this->persistenceHandler->searchHandler()->indexContent(
-            $this->persistenceHandler->contentHandler()->load(
-                $userGroupContentInfo->id,
-                $userGroupContentInfo->currentVersionNo
-            )
-        );
-
-        // TODO: buggy: fix this to be similar to MoveSubtree, they are basically the same
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $userGroupContentInfo->id );
-        foreach ( $locations as $location )
-        {
-            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
-        }
+        // Moving UserGroup moves its main Location, so we only need to
+        // (re)index main Location's subtree
+        $this->indexSubtree( $userGroupContentInfo->mainLocationId );
     }
 }
