@@ -140,7 +140,7 @@ class StandardMapper implements MapperInterface
         $locationDocuments = array();
         foreach ( $locations as $location )
         {
-            $locationDocuments[] = $this->mapLocation( $location, $content );
+            $locationDocuments[] = $this->mapContentLocation( $location, $content );
         }
 
         // UserGroups and Users are Content, but permissions cascade is achieved through
@@ -369,7 +369,7 @@ class StandardMapper implements MapperInterface
      *
      * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
      */
-    protected function mapLocation( Location $location, Content $content )
+    protected function mapContentLocation( Location $location, Content $content )
     {
         $fields = array(
             new Field(
@@ -445,13 +445,13 @@ class StandardMapper implements MapperInterface
      *
      * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
      */
-    public function mapContentLocation( Location $location )
+    public function mapLocation( Location $location )
     {
         $contentInfo = $this->contentHandler->loadContentInfo( $location->contentId );
         $content = $this->contentHandler->load( $location->contentId, $contentInfo->currentVersionNo );
         $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
 
-        $document = $this->mapLocation( $location, $content );
+        $document = $this->mapContentLocation( $location, $content );
         $document->id = $location->id;
         $document->type = "location";
 

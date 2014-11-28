@@ -88,7 +88,7 @@ class Handler implements SearchHandlerInterface
      */
     public function indexLocation( Location $location )
     {
-        $document = $this->mapper->mapContentLocation( $location );
+        $document = $this->mapper->mapLocation( $location );
 
         $this->gateway->index( $document );
     }
@@ -107,7 +107,7 @@ class Handler implements SearchHandlerInterface
         $documents = array();
         foreach ( $locations as $location )
         {
-            $documents[] = $this->mapper->mapContentLocation( $location );
+            $documents[] = $this->mapper->mapLocation( $location );
         }
 
         $this->gateway->bulkIndex( $documents );
