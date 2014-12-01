@@ -279,6 +279,37 @@ class SectionServiceTest extends BaseTest
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
+    public function testUpdateSectionWithSectionIdentifierOnNameUpdate()
+    {
+        $repository = $this->getRepository();
+
+        $standardSectionId = $this->generateId( 'section', 1 );
+        /* BEGIN: Use Case */
+        // $standardSectionId contains the ID of the "Standard" section in a eZ
+        // Publish demo installation.
+
+        $sectionService = $repository->getSectionService();
+
+        $section = $sectionService->loadSection( $standardSectionId );
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->name = 'New section name';
+
+        // section identifier remains the same
+        $sectionUpdate->identifier = $section->identifier;
+
+        $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
+        /* END: Use Case */
+
+        $this->assertEquals( 'standard', $updatedSection->identifier );
+    }
+
+    /**
+     * Test for the updateSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
+     */
     public function testUpdateSectionKeepsSectionNameOnIdentifierUpdate()
     {
         $repository = $this->getRepository();
