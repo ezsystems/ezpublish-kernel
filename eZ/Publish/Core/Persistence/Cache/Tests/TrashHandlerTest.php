@@ -128,6 +128,12 @@ class TrashHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'clear' )
+            ->with( 'content' )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'clear' )
             ->with( 'user', 'role', 'assignments', 'byGroup' )
             ->will( $this->returnValue( true ) );
 
