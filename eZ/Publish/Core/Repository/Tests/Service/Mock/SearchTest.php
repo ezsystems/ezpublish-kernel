@@ -1106,14 +1106,14 @@ class SearchTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\DomainMapper
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected function getDomainMapperMock()
     {
         if ( !isset( $this->domainMapperMock ) )
         {
             $this->domainMapperMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainMapper" )
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\Helper\\DomainMapper" )
                 ->disableOriginalConstructor()
                 ->getMock();
         }

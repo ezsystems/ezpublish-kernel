@@ -60,6 +60,16 @@ class RoleService implements RoleServiceInterface
     protected $userHandler;
 
     /**
+     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
+     */
+    protected $limitationService;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper
+     */
+    protected $roleDomainMapper;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -69,15 +79,24 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
+     * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
+     * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param array $settings
      */
-    public function __construct( RepositoryInterface $repository, Handler $userHandler, array $settings = array() )
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $userHandler,
+        Helper\LimitationService $limitationService,
+        Helper\RoleDomainMapper $roleDomainMapper,
+        array $settings = array()
+    )
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
+        $this->limitationService = $limitationService;
+        $this->roleDomainMapper = $roleDomainMapper;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
-            'limitationTypes' => array(),
             'limitationMap' => array(
                 // @todo Inject these dynamically by activated eZ Controllers, see PR #252
                 'content' => array(
@@ -145,7 +164,7 @@ class RoleService implements RoleServiceInterface
             throw new LimitationValidationException( $limitationValidationErrors );
         }
 
-        $spiRole = $this->buildPersistenceRoleObject( $roleCreateStruct );
+        $spiRole = $this->roleDomainMapper->buildPersistenceRoleObject( $roleCreateStruct );
 
         $this->repository->beginTransaction();
         try
@@ -159,7 +178,7 @@ class RoleService implements RoleServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainRoleObject( $createdRole );
+        return $this->roleDomainMapper->buildDomainRoleObject( $createdRole );
     }
 
     /**
@@ -265,7 +284,7 @@ class RoleService implements RoleServiceInterface
             throw new LimitationValidationException( $limitationValidationErrors );
         }
 
-        $spiPolicy = $this->buildPersistencePolicyObject(
+        $spiPolicy = $this->roleDomainMapper->buildPersistencePolicyObject(
             $policyCreateStruct->module,
             $policyCreateStruct->function,
             $limitations
@@ -391,7 +410,7 @@ class RoleService implements RoleServiceInterface
             throw new LimitationValidationException( $limitationValidationErrors );
         }
 
-        $spiPolicy = $this->buildPersistencePolicyObject(
+        $spiPolicy = $this->roleDomainMapper->buildPersistencePolicyObject(
             $policy->module,
             $policy->function,
             $limitations
@@ -411,7 +430,7 @@ class RoleService implements RoleServiceInterface
             throw $e;
         }
 
-        return $this->buildDomainPolicyObject( $spiPolicy );
+        return $this->roleDomainMapper->buildDomainPolicyObject( $spiPolicy );
     }
 
     /**
@@ -430,7 +449,7 @@ class RoleService implements RoleServiceInterface
             throw new UnauthorizedException( 'role', 'read' );
 
         $spiRole = $this->userHandler->loadRole( $id );
-        return $this->buildDomainRoleObject( $spiRole );
+        return $this->roleDomainMapper->buildDomainRoleObject( $spiRole );
     }
 
     /**
@@ -452,7 +471,7 @@ class RoleService implements RoleServiceInterface
             throw new UnauthorizedException( 'role', 'read' );
 
         $spiRole = $this->userHandler->loadRoleByIdentifier( $identifier );
-        return $this->buildDomainRoleObject( $spiRole );
+        return $this->roleDomainMapper->buildDomainRoleObject( $spiRole );
     }
 
     /**
@@ -472,7 +491,7 @@ class RoleService implements RoleServiceInterface
         $roles = array();
         foreach ( $spiRoles as $spiRole )
         {
-            $roles[] = $this->buildDomainRoleObject( $spiRole );
+            $roles[] = $this->roleDomainMapper->buildDomainRoleObject( $spiRole );
         }
 
         return $roles;
@@ -521,7 +540,7 @@ class RoleService implements RoleServiceInterface
         $policies = array();
         foreach ( $spiPolicies as $spiPolicy )
         {
-            $policies[] = $this->buildDomainPolicyObject( $spiPolicy );
+            $policies[] = $this->roleDomainMapper->buildDomainPolicyObject( $spiPolicy );
         }
 
         if ( empty( $policies ) )
@@ -552,7 +571,7 @@ class RoleService implements RoleServiceInterface
         }
         else
         {
-            $limitationValidationErrors = $this->validateLimitation( $roleLimitation );
+            $limitationValidationErrors = $this->limitationService->validateLimitation( $roleLimitation );
             if ( !empty( $limitationValidationErrors ) )
             {
                 throw new LimitationValidationException( $limitationValidationErrors );
@@ -652,7 +671,7 @@ class RoleService implements RoleServiceInterface
         }
         else
         {
-            $limitationValidationErrors = $this->validateLimitation( $roleLimitation );
+            $limitationValidationErrors = $this->limitationService->validateLimitation( $roleLimitation );
             if ( !empty( $limitationValidationErrors ) )
             {
                 throw new LimitationValidationException( $limitationValidationErrors );
@@ -755,7 +774,7 @@ class RoleService implements RoleServiceInterface
             try
             {
                 $user = $userService->loadUser( $spiRoleAssignment->contentId );
-                $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject(
+                $roleAssignments[] = $this->roleDomainMapper->buildDomainUserRoleAssignmentObject(
                     $spiRoleAssignment,
                     $user,
                     $role
@@ -766,7 +785,7 @@ class RoleService implements RoleServiceInterface
                 try
                 {
                     $userGroup = $userService->loadUserGroup( $spiRoleAssignment->contentId );
-                    $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject(
+                    $roleAssignments[] = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
                         $spiRoleAssignment,
                         $userGroup,
                         $role
@@ -802,10 +821,24 @@ class RoleService implements RoleServiceInterface
         $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $user->id, $inherited );
         foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
+            $role = $this->loadRole( $spiRoleAssignment->roleId );
             if ( !$inherited || $spiRoleAssignment->contentId == $user->id )
-                $roleAssignments[] = $this->buildDomainUserRoleAssignmentObject( $spiRoleAssignment, $user );
+            {
+                $roleAssignments[] = $this->roleDomainMapper->buildDomainUserRoleAssignmentObject(
+                    $spiRoleAssignment,
+                    $user,
+                    $role
+                );
+            }
             else
-                $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject( $spiRoleAssignment );
+            {
+                $userGroup = $this->repository->getUserService()->loadUserGroup( $spiRoleAssignment->contentId );
+                $roleAssignments[] = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
+                    $spiRoleAssignment,
+                    $userGroup,
+                    $role
+                );
+            }
         }
 
         return $roleAssignments;
@@ -829,7 +862,12 @@ class RoleService implements RoleServiceInterface
         $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId( $userGroup->id );
         foreach ( $spiRoleAssignments as $spiRoleAssignment )
         {
-            $roleAssignments[] = $this->buildDomainUserGroupRoleAssignmentObject( $spiRoleAssignment, $userGroup );
+            $role = $this->loadRole( $spiRoleAssignment->roleId );
+            $roleAssignments[] = $this->roleDomainMapper->buildDomainUserGroupRoleAssignmentObject(
+                $spiRoleAssignment,
+                $userGroup,
+                $role
+            );
         }
 
         return $roleAssignments;
@@ -896,124 +934,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Maps provided SPI Role value object to API Role value object
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\Role $role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    protected function buildDomainRoleObject( SPIRole $role )
-    {
-        $rolePolicies = array();
-        foreach ( $role->policies as $spiPolicy )
-        {
-            $rolePolicies[] = $this->buildDomainPolicyObject( $spiPolicy, $role );
-        }
-
-        return new Role(
-            array(
-                'id' => $role->id,
-                'identifier' => $role->identifier,
-                'policies' => $rolePolicies
-            )
-        );
-    }
-
-    /**
-     * Maps provided SPI Policy value object to API Policy value object
-     *
-     * @uses getLimitationType
-     * @access private Only accessible for other services and the internals of the repository
-     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
-     * @param \eZ\Publish\SPI\Persistence\User\Role|null $role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy
-     */
-    public function buildDomainPolicyObject( SPIPolicy $policy, SPIRole $role = null )
-    {
-        $policyLimitations = array();
-        if ( $policy->module !== '*' && $policy->function !== '*' && $policy->limitations !== '*' )
-        {
-            foreach ( $policy->limitations as $identifier => $values )
-            {
-                $policyLimitations[] = $this->getLimitationType( $identifier )->buildValue( $values );
-            }
-        }
-
-        return new Policy(
-            array(
-                'id' => $policy->id,
-                'roleId' => $role !== null ? $role->id : $policy->roleId,
-                'module' => $policy->module,
-                'function' => $policy->function,
-                'limitations' => $policyLimitations
-            )
-        );
-    }
-
-    /**
-     * Builds the API UserRoleAssignment object from provided SPI RoleAssignment object
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment $spiRoleAssignment
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserRoleAssignment
-     */
-    public function buildDomainUserRoleAssignmentObject( SPIRoleAssignment $spiRoleAssignment, User $user = null, APIRole $role = null )
-    {
-        $limitation = null;
-        if ( !empty( $spiRoleAssignment->limitationIdentifier ) )
-        {
-            $limitation = $this
-                ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
-                ->buildValue( $spiRoleAssignment->values );
-        }
-
-        $user = $user ?: $this->repository->getUserService()->loadUser( $spiRoleAssignment->contentId );
-        $role = $role ?: $this->loadRole( $spiRoleAssignment->roleId );
-
-        return new UserRoleAssignment(
-            array(
-                'limitation' => $limitation,
-                'role' => $role,
-                'user' => $user
-            )
-        );
-    }
-
-    /**
-     * Builds the API UserGroupRoleAssignment object from provided SPI RoleAssignment object
-     *
-     * @param \eZ\Publish\SPI\Persistence\User\RoleAssignment $spiRoleAssignment
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
-     */
-    public function buildDomainUserGroupRoleAssignmentObject( SPIRoleAssignment $spiRoleAssignment, UserGroup $userGroup = null, APIRole $role = null )
-    {
-        $limitation = null;
-        if ( !empty( $spiRoleAssignment->limitationIdentifier ) )
-        {
-            $limitation = $this
-                ->getLimitationType( $spiRoleAssignment->limitationIdentifier )
-                ->buildValue( $spiRoleAssignment->values );
-        }
-
-        $userGroup = $userGroup ?: $this->repository->getUserService()->loadUserGroup( $spiRoleAssignment->contentId );
-        $role = $role ?: $this->loadRole( $spiRoleAssignment->roleId );
-
-        return new UserGroupRoleAssignment(
-            array(
-                'limitation' => $limitation,
-                'role' => $role,
-                'userGroup' => $userGroup
-            )
-        );
-    }
-
-    /**
      * Returns the LimitationType registered with the given identifier
      *
      * Returns the correct implementation of API Limitation value object
@@ -1023,14 +943,11 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\SPI\Limitation\Type
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
+     * @throws \RuntimeException if there is no LimitationType with $identifier
      */
     public function getLimitationType( $identifier )
     {
-        if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
-            throw new LimitationNotFoundException( $identifier );
-
-        return $this->settings['limitationTypes'][$identifier];
+        return $this->limitationService->getLimitationType( $identifier );
     }
 
     /**
@@ -1054,75 +971,23 @@ class RoleService implements RoleServiceInterface
             return array();
 
         $types = array();
-        foreach ( array_keys( $this->settings['limitationMap'][$module][$function] ) as $identifier )
+        try
         {
-            if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
+            foreach ( array_keys( $this->settings['limitationMap'][$module][$function] ) as $identifier )
             {
-                throw new BadStateException(
-                    '$identifier',
-                    "limitationType[{$identifier}] is not configured but was configured on limitationMap[{$module}][{$function}]"
-                );
+                $types[$identifier] = $this->limitationService->getLimitationType( $identifier );
             }
-            $types[$identifier] = $this->settings['limitationTypes'][$identifier];
         }
-        return $types;
-    }
-
-    /**
-     * Creates SPI Role value object from provided API role create struct
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\Role
-     */
-    protected function buildPersistenceRoleObject( APIRoleCreateStruct $roleCreateStruct )
-    {
-        $policiesToCreate = array();
-        foreach ( $roleCreateStruct->getPolicies() as $policyCreateStruct )
+        catch ( LimitationNotFoundException $e )
         {
-            $policiesToCreate[] = $this->buildPersistencePolicyObject(
-                $policyCreateStruct->module,
-                $policyCreateStruct->function,
-                $policyCreateStruct->getLimitations()
+            throw new BadStateException(
+                "{$module}/{$function}",
+                "limitationMap configuration is referring to non existing identifier: {$identifier}",
+                $e
             );
         }
 
-        return new SPIRole(
-            array(
-                'identifier' => $roleCreateStruct->identifier,
-                'policies' => $policiesToCreate
-            )
-        );
-    }
-
-    /**
-     * Creates SPI Policy value object from provided module, function and limitations
-     *
-     * @param string $module
-     * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
-     *
-     * @return \eZ\Publish\SPI\Persistence\User\Policy
-     */
-    protected function buildPersistencePolicyObject( $module, $function, array $limitations )
-    {
-        $limitationsToCreate = "*";
-        if ( $module !== '*' && $function !== '*' && !empty( $limitations ) )
-        {
-            $limitationsToCreate = array();
-            foreach ( $limitations as $limitation )
-            {
-                $limitationsToCreate[$limitation->getIdentifier()] = $limitation->limitationValues;
-            }
-        }
-
-        return new SPIPolicy(
-            array(
-                'module' => $module,
-                'function' => $function,
-                'limitations' => $limitationsToCreate
-            )
-        );
+        return $types;
     }
 
     /**
@@ -1156,8 +1021,6 @@ class RoleService implements RoleServiceInterface
 
     /**
      * Validates Policy context: Limitations on a module and function.
-     *
-     * @uses validateLimitations()
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the same limitation is repeated or if
      *                                                                   limitation is not allowed on module/function
@@ -1195,63 +1058,7 @@ class RoleService implements RoleServiceInterface
             }
         }
 
-        return $this->validateLimitations( $limitations );
-    }
-
-    /**
-     * Validates an array of Limitations.
-     *
-     * @uses validateLimitation()
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
-     *
-     * @return \eZ\Publish\Core\FieldType\ValidationError[][]
-     */
-    protected function validateLimitations( array $limitations )
-    {
-        $allErrors = array();
-        foreach ( $limitations as $limitation )
-        {
-            $errors = $this->validateLimitation( $limitation );
-            if ( !empty( $errors ) )
-            {
-                $allErrors[$limitation->getIdentifier()] = $errors;
-            }
-        }
-
-        return $allErrors;
-    }
-
-    /**
-     * Validates single Limitation.
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException If the Role settings is in a bad state
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
-     *
-     * @return \eZ\Publish\Core\FieldType\ValidationError[]
-     */
-    protected function validateLimitation( Limitation $limitation )
-    {
-        $identifier = $limitation->getIdentifier();
-        if ( !isset( $this->settings['limitationTypes'][$identifier] ) )
-        {
-            throw new BadStateException(
-                '$identifier',
-                "limitationType[{$identifier}] is not configured"
-            );
-        }
-
-        /**
-         * @var $type \eZ\Publish\SPI\Limitation\Type
-         */
-        $type = $this->settings['limitationTypes'][$identifier];
-
-        // This will throw if it does not pass
-        $type->acceptValue( $limitation );
-
-        // This return array of validation errors
-        return $type->validate( $limitation );
+        return $this->limitationService->validateLimitations( $limitations );
     }
 
     /**

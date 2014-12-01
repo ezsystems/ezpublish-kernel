@@ -73,6 +73,42 @@ abstract class Base extends PHPUnit_Framework_TestCase
         return $this->repository;
     }
 
+    protected $fieldTypeServiceMock;
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\FieldTypeService
+     */
+    protected function getFieldTypeServiceMock()
+    {
+        if ( !isset( $this->fieldTypeServiceMock ) )
+        {
+            $this->fieldTypeServiceMock = $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\FieldTypeService" )
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->fieldTypeServiceMock;
+    }
+
+    protected $fieldTypeRegistryMock;
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
+     */
+    protected function getFieldTypeRegistryMock()
+    {
+        if ( !isset( $this->fieldTypeRegistryMock ) )
+        {
+            $this->fieldTypeRegistryMock = $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\Helper\\FieldTypeRegistry" )
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->fieldTypeRegistryMock;
+    }
+
     /**
      * @return \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
      */

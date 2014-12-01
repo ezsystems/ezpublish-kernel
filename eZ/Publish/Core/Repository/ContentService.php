@@ -70,36 +70,43 @@ class ContentService implements ContentServiceInterface
     protected $settings;
 
     /**
-     * @var \eZ\Publish\Core\Repository\DomainMapper
+     * @var \eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected $domainMapper;
 
     /**
-     * @var \eZ\Publish\Core\Repository\RelationProcessor
+     * @var \eZ\Publish\Core\Repository\Helper\RelationProcessor
      */
     protected $relationProcessor;
 
     /**
-     * @var \eZ\Publish\Core\Repository\NameSchemaService
+     * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
     protected $nameSchemaService;
+
+    /**
+     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
+     */
+    protected $fieldTypeRegistry;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \eZ\Publish\Core\Repository\DomainMapper $domainMapper
-     * @param \eZ\Publish\Core\Repository\RelationProcessor $relationProcessor
-     * @param \eZ\Publish\Core\Repository\NameSchemaService $nameSchemaService
+     * @param \eZ\Publish\Core\Repository\Helper\DomainMapper $domainMapper
+     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
+     * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
+     * @param \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry $fieldTypeRegistry,
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $handler,
-        DomainMapper $domainMapper,
-        RelationProcessor $relationProcessor,
-        NameSchemaService $nameSchemaService,
+        Helper\DomainMapper $domainMapper,
+        Helper\RelationProcessor $relationProcessor,
+        Helper\NameSchemaService $nameSchemaService,
+        Helper\FieldTypeRegistry $fieldTypeRegistry,
         array $settings = array()
     )
     {
@@ -108,6 +115,7 @@ class ContentService implements ContentServiceInterface
         $this->domainMapper = $domainMapper;
         $this->relationProcessor = $relationProcessor;
         $this->nameSchemaService = $nameSchemaService;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
@@ -571,7 +579,7 @@ class ContentService implements ContentServiceInterface
         foreach ( $contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition )
         {
             /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
-            $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+            $fieldType = $this->fieldTypeRegistry->getFieldType(
                 $fieldDefinition->fieldTypeIdentifier
             );
 
@@ -1267,7 +1275,7 @@ class ContentService implements ContentServiceInterface
         foreach ( $contentType->getFieldDefinitions() as $fieldDefinition )
         {
             /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
-            $fieldType = $this->repository->getFieldTypeService()->buildFieldType(
+            $fieldType = $this->fieldTypeRegistry->getFieldType(
                 $fieldDefinition->fieldTypeIdentifier
             );
 

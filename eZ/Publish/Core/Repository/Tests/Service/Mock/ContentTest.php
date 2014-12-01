@@ -62,6 +62,7 @@ class ContentTest extends BaseServiceMockTest
         $domainMapperMock = $this->getDomainMapperMock();
         $relationProcessorMock = $this->getRelationProcessorMock();
         $nameSchemaServiceMock = $this->getNameSchemaServiceMock();
+        $fieldTypeRegistryMock = $this->getFieldTypeRegistryMock();
         $settings = array( "settings" );
 
         $service = new ContentService(
@@ -70,6 +71,7 @@ class ContentTest extends BaseServiceMockTest
             $domainMapperMock,
             $relationProcessorMock,
             $nameSchemaServiceMock,
+            $fieldTypeRegistryMock,
             $settings
         );
 
@@ -100,6 +102,12 @@ class ContentTest extends BaseServiceMockTest
         $this->assertAttributeSame(
             $nameSchemaServiceMock,
             "nameSchemaService",
+            $service
+        );
+
+        $this->assertAttributeSame(
+            $fieldTypeRegistryMock,
+            "fieldTypeRegistry",
             $service
         );
 
@@ -1226,13 +1234,9 @@ class ContentTest extends BaseServiceMockTest
             ->method( "validate" )
             ->will( $this->returnValue( array() ) );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $relationProcessorMock
             ->expects( $this->exactly( count( $fieldDefinitions ) * count( $languageCodes ) ) )
@@ -2092,13 +2096,9 @@ class ContentTest extends BaseServiceMockTest
             ->method( "validate" )
             ->will( $this->returnValue( array() ) );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         return $contentCreateStruct;
     }
@@ -2269,13 +2269,9 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $relationProcessorMock
             ->expects( $this->any() )
@@ -3199,13 +3195,9 @@ class ContentTest extends BaseServiceMockTest
             ->method( "validate" )
             ->will( $this->returnValue( array() ) );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $relationProcessorMock
             ->expects( $this->exactly( count( $fieldDefinitions ) * count( $languageCodes ) ) )
@@ -3230,8 +3222,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo( $content ),
                 $this->equalTo( $values ),
-                $this->equalTo( $languageCodes ),
-                $this->equalTo( $contentType )
+                $this->equalTo( $languageCodes )
             )->will( $this->returnValue( array() ) );
 
         $existingRelations = array( "RELATIONS!!!" );
@@ -4943,13 +4934,9 @@ class ContentTest extends BaseServiceMockTest
                 $this->isInstanceOf( "eZ\\Publish\\Core\\FieldType\\Value" )
             );
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $contentUpdateStruct = new ContentUpdateStruct(
             array(
@@ -5181,13 +5168,9 @@ class ContentTest extends BaseServiceMockTest
             }
         }
 
-        $fieldTypeServiceMock->expects( $this->any() )
-            ->method( "buildFieldType" )
+        $this->getFieldTypeRegistryMock()->expects( $this->any() )
+            ->method( "getFieldType" )
             ->will( $this->returnValue( $fieldTypeMock ) );
-
-        $repositoryMock->expects( $this->any() )
-            ->method( "getFieldTypeService" )
-            ->will( $this->returnValue( $fieldTypeServiceMock ) );
 
         $contentUpdateStruct = new ContentUpdateStruct(
             array(
@@ -5726,14 +5709,14 @@ class ContentTest extends BaseServiceMockTest
     protected $domainMapperMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\DomainMapper
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\DomainMapper
      */
     protected function getDomainMapperMock()
     {
         if ( !isset( $this->domainMapperMock ) )
         {
             $this->domainMapperMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\DomainMapper" )
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\Helper\\DomainMapper" )
                 ->disableOriginalConstructor()
                 ->getMock();
         }
@@ -5744,14 +5727,14 @@ class ContentTest extends BaseServiceMockTest
     protected $relationProcessorMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\RelationProcessor
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\RelationProcessor
      */
     protected function getRelationProcessorMock()
     {
         if ( !isset( $this->relationProcessorMock ) )
         {
             $this->relationProcessorMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\RelationProcessor" )
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\Helper\\RelationProcessor" )
                 ->disableOriginalConstructor()
                 ->getMock();
         }
@@ -5762,37 +5745,19 @@ class ContentTest extends BaseServiceMockTest
     protected $nameSchemaServiceMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\NameSchemaService
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\NameSchemaService
      */
     protected function getNameSchemaServiceMock()
     {
         if ( !isset( $this->nameSchemaServiceMock ) )
         {
             $this->nameSchemaServiceMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\NameSchemaService" )
+                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\Helper\\NameSchemaService" )
                 ->disableOriginalConstructor()
                 ->getMock();
         }
 
         return $this->nameSchemaServiceMock;
-    }
-
-    protected $fieldTypeServiceMock;
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\FieldTypeService
-     */
-    protected function getFieldTypeServiceMock()
-    {
-        if ( !isset( $this->fieldTypeServiceMock ) )
-        {
-            $this->fieldTypeServiceMock = $this
-                ->getMockBuilder( "eZ\\Publish\\Core\\Repository\\FieldTypeService" )
-                ->disableOriginalConstructor()
-                ->getMock();
-        }
-
-        return $this->fieldTypeServiceMock;
     }
 
     protected $contentTypeServiceMock;
@@ -5858,6 +5823,7 @@ class ContentTest extends BaseServiceMockTest
                     $this->getDomainMapperMock(),
                     $this->getRelationProcessorMock(),
                     $this->getNameSchemaServiceMock(),
+                    $this->getFieldTypeRegistryMock(),
                     array()
                 )
             );

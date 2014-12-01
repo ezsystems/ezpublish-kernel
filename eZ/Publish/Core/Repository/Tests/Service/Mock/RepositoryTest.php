@@ -285,16 +285,16 @@ class RepositoryTest extends BaseServiceMockTest
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
-        $roleServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleService",
-            array(),
+        $roleDomainMapper = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper",
+            array( "buildDomainPolicyObject" ),
             array(),
             '',
             false
         );
         $repositoryMock = $this->getMock(
             "eZ\\Publish\\Core\\Repository\\Repository",
-            array( "getRoleService", "getCurrentUser" ),
+            array( "getRoleDomainMapper", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
             )
@@ -302,8 +302,8 @@ class RepositoryTest extends BaseServiceMockTest
 
         $repositoryMock
             ->expects( $this->once() )
-            ->method( "getRoleService" )
-            ->will( $this->returnValue( $roleServiceMock ) );
+            ->method( "getRoleDomainMapper" )
+            ->will( $this->returnValue( $roleDomainMapper ) );
         $repositoryMock
             ->expects( $this->once() )
             ->method( "getCurrentUser" )
@@ -344,7 +344,7 @@ class RepositoryTest extends BaseServiceMockTest
                     $permissionSet["policies"][] = $policyName;
                 }
 
-                $roleServiceMock
+                $roleDomainMapper
                     ->expects( $this->at( $count++ ) )
                     ->method( "buildDomainPolicyObject" )
                     ->with( $policy )
@@ -426,16 +426,16 @@ class RepositoryTest extends BaseServiceMockTest
     {
         /** @var $userHandlerMock \PHPUnit_Framework_MockObject_MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
-        $roleServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleService",
-            array(),
+        $roleDomainMapper = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper",
+            array( "buildDomainPolicyObject" ),
             array(),
             '',
             false
         );
         $repositoryMock = $this->getMock(
             "eZ\\Publish\\Core\\Repository\\Repository",
-            array( "getRoleService", "getCurrentUser" ),
+            array( "getRoleDomainMapper", "getCurrentUser" ),
             array(
                 $this->getPersistenceMock(),
             )
@@ -443,8 +443,8 @@ class RepositoryTest extends BaseServiceMockTest
 
         $repositoryMock
             ->expects( $this->once() )
-            ->method( "getRoleService" )
-            ->will( $this->returnValue( $roleServiceMock ) );
+            ->method( "getRoleDomainMapper" )
+            ->will( $this->returnValue( $roleDomainMapper ) );
         $repositoryMock
             ->expects( $this->once() )
             ->method( "getCurrentUser" )
@@ -484,7 +484,7 @@ class RepositoryTest extends BaseServiceMockTest
                     $permissionSet["policies"][] = $policyName;
                 }
 
-                $roleServiceMock
+                $roleDomainMapper
                     ->expects( $this->at( $count++ ) )
                     ->method( "buildDomainPolicyObject" )
                     ->with( $policy )
@@ -553,14 +553,18 @@ class RepositoryTest extends BaseServiceMockTest
         $limitationTypeMock = $this->getMock( "eZ\\Publish\\SPI\\Limitation\\Type" );
         $repositoryMock = $this->getMock(
             "eZ\\Publish\\Core\\Repository\\Repository",
-            array( "getRoleService", "getCurrentUser" ),
+            array( "getRoleDomainMapper", "getCurrentUser", "getLimitationService" ),
             array(
                 $this->getPersistenceMock(),
             )
         );
-        $roleServiceMock = $this->getMock(
-            "eZ\\Publish\\Core\\Repository\\RoleService",
-            array( "buildDomainPolicyObject", "getLimitationType" ),
+        $limitationService = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\Helper\\LimitationService",
+            array( "getLimitationType" )
+        );
+        $roleDomainMapper = $this->getMock(
+            "eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper",
+            array( "buildDomainPolicyObject" ),
             array(),
             '',
             false
@@ -568,8 +572,12 @@ class RepositoryTest extends BaseServiceMockTest
 
         $repositoryMock
             ->expects( $this->once() )
-            ->method( "getRoleService" )
-            ->will( $this->returnValue( $roleServiceMock ) );
+            ->method( "getRoleDomainMapper" )
+            ->will( $this->returnValue( $roleDomainMapper ) );
+        $repositoryMock
+            ->expects( $this->once() )
+            ->method( "getLimitationService" )
+            ->will( $this->returnValue( $limitationService ) );
         $repositoryMock
             ->expects( $this->once() )
             ->method( "getCurrentUser" )
@@ -599,7 +607,7 @@ class RepositoryTest extends BaseServiceMockTest
             {
                 $policyName = "policy-{$i}-{$k}";
                 $permissionSet["policies"][] = $policyName;
-                $roleServiceMock
+                $roleDomainMapper
                     ->expects( $this->at( $k ) )
                     ->method( "buildDomainPolicyObject" )
                     ->with( $policy )
@@ -612,7 +620,7 @@ class RepositoryTest extends BaseServiceMockTest
                 ->method( "buildValue" )
                 ->with( $roleAssignment->values )
                 ->will( $this->returnValue( $permissionSet["limitation"] ) );
-            $roleServiceMock
+            $limitationService
                 ->expects( $this->any() )
                 ->method( "getLimitationType" )
                 ->with( $roleAssignment->limitationIdentifier )
@@ -888,22 +896,35 @@ class RepositoryTest extends BaseServiceMockTest
         $valueObject = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\ValueObject" );
         $repositoryMock = $this->getMock(
             "eZ\\Publish\\Core\\Repository\\Repository",
-            array( "getCurrentUser", "getRoleService", "hasAccess" ),
+            array( "getCurrentUser", "hasAccess", "getLimitationService" ),
             array(),
             "",
             false
         );
         $roleServiceMock = $this->getMock(
             "eZ\\Publish\\Core\\Repository\\RoleService",
-            array( "getLimitationType" ),
             array(),
+            array(
+                $this->getRepositoryMock(),
+                $this->getPersistenceMockHandler( "User\\Handler" ),
+                $limitationService = $this->getMock(
+                    "eZ\\Publish\\Core\\Repository\\Helper\\LimitationService",
+                    array( "getLimitationType" )
+                ),
+                $this->getMock(
+                    "eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper",
+                    array(),
+                    array( $limitationService )
+                ),
+            ),
             "",
             false
         );
+
         $repositoryMock
             ->expects( $this->once() )
-            ->method( "getRoleService" )
-            ->will( $this->returnValue( $roleServiceMock ) );
+            ->method( "getLimitationService" )
+            ->will( $this->returnValue( $limitationService ) );
 
         $permissionSets = $this->getPermissionSetsMock();
         $repositoryMock
@@ -927,7 +948,7 @@ class RepositoryTest extends BaseServiceMockTest
                 ->method( "evaluate" )
                 ->with( $permissionSets[$i]["limitation"], $userMock, $valueObject, array( $valueObject ) )
                 ->will( $this->returnValue( $roleLimitationEvaluations[$i] ) );
-            $roleServiceMock
+            $limitationService
                 ->expects( $this->at( $invocation++ ) )
                 ->method( "getLimitationType" )
                 ->with( "test-role-limitation-identifier" )
@@ -952,7 +973,7 @@ class RepositoryTest extends BaseServiceMockTest
                         ->method( "evaluate" )
                         ->with( $limitations[$k], $userMock, $valueObject, array( $valueObject ) )
                         ->will( $this->returnValue( $policyLimitationEvaluations[$i][$j][$k] ) );
-                    $roleServiceMock
+                    $limitationService
                         ->expects( $this->at( $invocation++ ) )
                         ->method( "getLimitationType" )
                         ->with( "test-policy-limitation-identifier" )
