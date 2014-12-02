@@ -141,8 +141,12 @@ class SectionService implements SectionServiceInterface
             try
             {
                 $existingSection = $this->loadSectionByIdentifier( $sectionUpdateStruct->identifier );
-                if ( $existingSection !== null )
+
+                // Allowing identifier update only for the same section
+                if ( $existingSection->id != $section->id )
+                {
                     throw new InvalidArgumentException( "sectionUpdateStruct", "section with specified identifier already exists" );
+                }
             }
             catch ( APINotFoundException $e )
             {
