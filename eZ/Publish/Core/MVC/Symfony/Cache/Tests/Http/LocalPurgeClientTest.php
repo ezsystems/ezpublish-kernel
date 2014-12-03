@@ -7,6 +7,19 @@
  * @version //autogentag//
  */
 
+namespace Symfony\Component\HttpFoundation;
+
+/**
+ * Avoid test failure caused by time passing between generating expected & actual object
+ *
+ * @return int
+ */
+function time()
+{
+    return 1417624982;
+}
+
+
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Cache\Http\LocalPurgeClient;
