@@ -380,7 +380,7 @@ class ContentExtension extends Twig_Extension
         {
             throw new InvalidArgumentException(
                 '$fieldIdentifier',
-                "Invalid for content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
+                "'{$fieldIdentifier}' field not present on content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
             );
         }
 
