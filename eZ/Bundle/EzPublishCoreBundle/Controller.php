@@ -52,18 +52,6 @@ class Controller extends BaseController
     }
 
     /**
-     * Checks if current user has granted access to provided attribute
-     *
-     * @param \eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute $attribute
-     *
-     * @return boolean
-     */
-    public function isGranted( AuthorizationAttribute $attribute )
-    {
-        return $this->container->get( 'security.context' )->isGranted( $attribute );
-    }
-
-    /**
      * Returns the general helper service, exposed in Twig templates as "ezpublish" global variable.
      *
      * @return \eZ\Publish\Core\MVC\Legacy\Templating\GlobalHelper
