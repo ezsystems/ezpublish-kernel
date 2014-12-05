@@ -317,7 +317,8 @@ class Type extends FieldType
             'uri' => $value->uri,
             'inputUri' => $value->inputUri,
             'width' => $value->width,
-            'height' => $value->height
+            'height' => $value->height,
+            'mimeType' => $value->mimeType
         );
     }
 
@@ -381,6 +382,9 @@ class Type extends FieldType
                     : null ),
                 'height' => ( isset( $fieldValue->data['height'] )
                     ? $fieldValue->data['height']
+                    : null ),
+                'mimeType' => ( isset( $fieldValue->data['mimeType'] )
+                    ? $fieldValue->data['mimeType']
                     : null ),
             )
         );

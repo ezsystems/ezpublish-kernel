@@ -86,6 +86,12 @@ class Value extends BaseValue
     public $height;
 
     /**
+     * The image's mime type, eg. "image/png"
+     * @var string
+     */
+    public $mimeType;
+
+    /**
      * Construct a new Value object.
      *
      * @param array $imageData

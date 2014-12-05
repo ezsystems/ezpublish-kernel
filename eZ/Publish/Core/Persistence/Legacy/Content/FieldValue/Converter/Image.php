@@ -140,7 +140,7 @@ EOT;
             htmlspecialchars( $pathInfo['dirname'] ), // dirpath
             htmlspecialchars( $imageData['uri'] ), // url
             htmlspecialchars( $pathInfo['basename'] ), // @todo: Needs original file name, for whatever reason?
-            htmlspecialchars( $imageData['mime'] ), // mime_type
+            htmlspecialchars( $imageData['mimeType'] ), // mime_type
             htmlspecialchars( $imageData['width'] ), // width
             htmlspecialchars( $imageData['height'] ), // height
             htmlspecialchars( $imageData['alternativeText'] ), // alternative_text
@@ -212,7 +212,7 @@ EOT;
         $extractedData['fileName'] = $ezimageTag->getAttribute( 'filename' );
         $extractedData['width'] = $ezimageTag->getAttribute( 'width' );
         $extractedData['height'] = $ezimageTag->getAttribute( 'height' );
-        $extractedData['mime'] = $ezimageTag->getAttribute( 'mime_type' );
+        $extractedData['mimeType'] = $ezimageTag->getAttribute( 'mime_type' );
 
         if ( !$ezimageTag->hasAttribute( 'alternative_text' ) )
         {

@@ -358,7 +358,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                     'imageId' => null,
                     'uri' => null,
                     'width' => null,
-                    'height' => null
+                    'height' => null,
+                    'mimeType' => null
                 ),
             ),
             array(
@@ -371,7 +372,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                         'imageId' => '1-2',
                         'uri' => "/$path",
                         'width' => 123,
-                        'height' => 456
+                        'height' => 456,
+                        'mimeType' => 'image/jpeg'
                     )
                 ),
                 array(
@@ -384,7 +386,8 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                     'imageId' => '1-2',
                     'uri' => "/$path",
                     'width' => 123,
-                    'height' => 456
+                    'height' => 456,
+                    'mimeType' => 'image/jpeg'
                 ),
             ),
         );

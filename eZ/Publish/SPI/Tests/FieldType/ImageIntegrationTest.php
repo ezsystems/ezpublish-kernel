@@ -199,6 +199,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $this->assertIOUriExists( $field->value->data['uri'] );
         $this->assertEquals( 'Ice-Flower.jpg', $field->value->data['fileName'] );
         $this->assertEquals( 'An icy flower.', $field->value->data['alternativeText'] );
+        $this->assertEquals( 'image/jpeg', $field->value->data['mimeType'] );
         $this->assertNull( $field->value->externalData );
     }
 
