@@ -304,14 +304,14 @@ class LocationHandlerTest extends HandlerTest
     /**
      * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
      */
-    public function testLoadLocationsByContentWithRootIsMiss()
+    public function testLoadLocationsByContentWithVersionIsMiss()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $cacheItemMock = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
             ->expects( $this->once() )
             ->method( 'getItem' )
-            ->with( 'content', 'locations', '44', 'root', '2' )
+            ->with( 'content', 'locations', '44', 'version', '2' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock
@@ -348,7 +348,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * @covers eZ\Publish\Core\Persistence\Cache\LocationHandler::loadLocationsByContent
      */
-    public function testLoadLocationsByContentWithRootHasCache()
+    public function testLoadLocationsByContentWithVersionHasCache()
     {
         $this->loggerMock->expects( $this->never() )->method( $this->anything() );
 
@@ -360,7 +360,7 @@ class LocationHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'getItem' )
-            ->with( 'content', 'locations', '44', 'root', '2' )
+            ->with( 'content', 'locations', '44', 'version', '2' )
             ->will( $this->returnValue( $cacheItemMock ) );
 
         $cacheItemMock

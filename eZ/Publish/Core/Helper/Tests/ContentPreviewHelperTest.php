@@ -13,6 +13,7 @@ use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 
 class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
@@ -96,6 +97,12 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
     {
         $contentId = 123;
         $rootLocationId = 456;
+        $rootLocation = new Location( array( 'id' => $rootLocationId ) );
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'content.tree_root.location_id' )
+            ->will( $this->returnValue( $rootLocationId ) );
         $contentInfo = $this
             ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\ContentInfo' )
             ->setConstructorArgs( array( array( 'id' => $contentId ) ) )
@@ -106,13 +113,56 @@ class ContentPreviewHelperTest extends PHPUnit_Framework_TestCase
             ->with( $contentId )
             ->will( $this->returnValue( $contentInfo ) );
         $this->locationService
-            ->expects( $this->never() )
-            ->method( 'loadLocation' );
+            ->expects( $this->once() )
+            ->method( 'loadLocation' )
+            ->with( $rootLocationId )
+            ->will( $this->returnValue( $rootLocation ) );
+        $draftLocation = new Location( array( 'status' => Location::STATUS_DRAFT ) );
+        $this->locationService
+            ->expects( $this->once() )
+            ->method( 'loadLocations' )
+            ->with( $contentInfo, $rootLocation )
+            ->will( $this->returnValue( array( $draftLocation ) ) );
+
+        $helper = new ContentPreviewHelper(
+            $this->contentService,
+            $this->locationService,
+            $this->eventDispatcher,
+            $this->configResolver
+        );
+
+        $this->assertSame( $draftLocation, $helper->getPreviewLocation( $contentId ) );
+    }
+
+    public function testGetPreviewLocationNoMainLocationNoDraftLocation()
+    {
+        $contentId = 123;
+        $rootLocationId = 456;
+        $rootLocation = new Location( array( 'id' => $rootLocationId ) );
         $this->configResolver
             ->expects( $this->once() )
             ->method( 'getParameter' )
             ->with( 'content.tree_root.location_id' )
             ->will( $this->returnValue( $rootLocationId ) );
+        $contentInfo = $this
+            ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\ContentInfo' )
+            ->setConstructorArgs( array( array( 'id' => $contentId ) ) )
+            ->getMockForAbstractClass();
+        $this->contentService
+            ->expects( $this->once() )
+            ->method( 'loadContentInfo' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $contentInfo ) );
+        $this->locationService
+            ->expects( $this->once() )
+            ->method( 'loadLocation' )
+            ->with( $rootLocationId )
+            ->will( $this->returnValue( $rootLocation ) );
+        $this->locationService
+            ->expects( $this->once() )
+            ->method( 'loadLocations' )
+            ->with( $contentInfo, $rootLocation )
+            ->will( $this->returnValue( array() ) );
 
         $helper = new ContentPreviewHelper(
             $this->contentService,

@@ -151,6 +151,8 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
         // Load locations if no specific placement was provided
         if ( $targets === null )
         {
+            // If not published assume content/create is being checked and check using parents, some
+            // cleanup to make sure this is also handled in evaluateForContentCreateStruct() would be beneficial.
             if ( $object->published )
                 $targets = $this->persistence->locationHandler()->loadLocationsByContent( $object->id );
             else// @todo Need support for draft locations to to work correctly

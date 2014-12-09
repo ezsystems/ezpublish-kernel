@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 abstract class AbstractHandler
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
+     * @var \Stash\Interfaces\PoolInterface
      */
     protected $cache;
 

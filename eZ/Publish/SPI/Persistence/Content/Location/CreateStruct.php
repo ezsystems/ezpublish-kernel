@@ -14,6 +14,13 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 class CreateStruct extends ValueObject
 {
     /**
+     * For newly created unpublished content the $status should be Location::STATUS_DRAFT, Location::STATUS_PUBLISHED otherwise
+     *
+     * @var int
+     */
+    public $status;
+
+    /**
      * Location priority
      *
      * Position of the Location among its siblings when sorted using priority
