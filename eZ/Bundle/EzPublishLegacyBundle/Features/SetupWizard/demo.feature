@@ -6,7 +6,7 @@ Feature: Install eZ Publish Demo with/without content
 
     Scenario: Choose english UK as setup wizard language
         Given I am on the "Setup Wizard" page
-        And I am on "Welcome to eZ Publish Community Project 5.4.0alpha1" step
+        And I am on "Welcome to eZ Publish Community Project 5.90.0alpha1" step
         When I select "English (United Kingdom)"
         And I click at "Next" button
         Then I see "Outgoing Email" step
