@@ -732,7 +732,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::testUpdate
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::update
      */
     public function testUpdate()
     {
@@ -847,7 +847,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::testSetContentState
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::setContentState
      */
     public function testSetContentState()
     {
@@ -875,7 +875,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::testGetContentState
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::getContentState
      */
     public function testGetContentState()
     {
@@ -925,7 +925,7 @@ class ObjectStateHandlerTest extends HandlerTest
     }
 
     /**
-     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::testGetContentState
+     * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::getContentState
      */
     public function testGetContentStateCached()
     {
@@ -980,7 +980,7 @@ class ObjectStateHandlerTest extends HandlerTest
     /**
      * @covers \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler::getContentCount
      */
-    public function getContentCount()
+    public function testGetContentCount()
     {
         $expectedCount = 2;
 
@@ -998,7 +998,7 @@ class ObjectStateHandlerTest extends HandlerTest
             ->with( 1 )
             ->will( $this->returnValue( $expectedCount ) );
 
-        $this->logger->logCall( __METHOD__, array( 'stateId' => $stateId ) );
+        //$this->logger->logCall( __METHOD__, array( 'stateId' => $stateId ) );
 
         $handler = $this->persistenceCacheHandler->objectStateHandler();
         $count = $handler->getContentCount( 1 );
