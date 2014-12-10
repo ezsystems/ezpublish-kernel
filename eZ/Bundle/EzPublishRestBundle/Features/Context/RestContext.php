@@ -28,9 +28,14 @@ class RestContext extends Context
     use SubContext\ContentTypeGroup;
     use SubContext\Exception;
 
+    const AUTHTYPE_BASICHTTP  = 'http_basic';
+    const AUTHTYPE_SESSION    = 'session';
+
     const DEFAULT_URL = 'http://localhost/';
     const DEFAULT_DRIVER = 'GuzzleDriver';
     const DEFAULT_BODY_TYPE = 'json';
+
+    const DEFAULT_AUTH_TYPE = self::AUTHTYPE_SESSION;
 
     /**
      * Rest driver for all requests and responses
@@ -40,22 +45,45 @@ class RestContext extends Context
     protected $restDriver;
 
     /**
+     * @var string
+     */
+    private $url;
+
+    /**
+     * @var string
+     */
+    private $driver;
+
+    /**
      * Initialize class
      *
      * @param string $url    Base URL for REST calls
      * @param string $driver REST Driver to be used
-     * @param string $json   
+     * @param string $json
      *
      * @return void
      */
     public function __construct(
         $url = self::DEFAULT_URL,
         $driver = self::DEFAULT_DRIVER,
-        $type = self::DEFAULT_BODY_TYPE
+        $type = self::DEFAULT_BODY_TYPE,
+        $authType = self::DEFAULT_AUTH_TYPE
     )
     {
-        $this->setRestDriver( $driver, $url );
+        $this->driver = $driver;
+        $this->url = $url;
         $this->restBodyType = $type;
+        $this->authType = $authType;
+
+        $this->setRestDriver( $this->driver, $this->url );
+    }
+
+    /**
+     * @BeforeScenario
+     */
+    private function resetDriver()
+    {
+        $this->setRestDriver( $this->driver, $this->url );
     }
 
     /**
@@ -93,6 +121,7 @@ class RestContext extends Context
         $this->restDriver->setResource(
             $this->changeMappedValuesOnUrl( $resource )
         );
+        $this->responseObject = null;
     }
 
     /**
