@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Helper;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as PersistenceLocationHandler;
 
 /**
  * Provides location(s) for a content. Handles unpublished content that does not have an actual location yet.
@@ -29,17 +29,17 @@ class PreviewLocationProvider
     /**
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
-     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      */
     public function __construct(
         LocationService $locationService,
         ContentService $contentService,
-        PersistenceHandler $persistenceHandler
+        PersistenceLocationHandler $locationHandler
     )
     {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
-        $this->locationHandler = $persistenceHandler->locationHandler();
+        $this->locationHandler = $locationHandler;
     }
 
     /**

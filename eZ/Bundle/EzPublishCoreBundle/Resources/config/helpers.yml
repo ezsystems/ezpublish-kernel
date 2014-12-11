@@ -49,4 +49,7 @@ services:
 
     ezpublish.content_preview.location_provider:
         class: %ezpublish.content_preview.location_provider.class%
-        arguments: [@ezpublish.api.service.location, @ezpublish.api.service.content, @ezpublish.api.persistence_handler]
+        arguments:
+            - @ezpublish.api.service.location
+            - @ezpublish.api.service.content
+            - @ezpublish.spi.persistence.cache.locationHandler

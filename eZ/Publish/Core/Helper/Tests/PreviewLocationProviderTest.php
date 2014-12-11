@@ -9,11 +9,7 @@
 
 namespace eZ\Publish\Core\Helper\Tests;
 
-use eZ\Publish\API\Repository\LocationService;
-use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
-use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
-use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
@@ -36,15 +32,11 @@ class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+
         $this->contentService = $this->getMock( 'eZ\Publish\API\Repository\ContentService' );
         $this->locationService = $this->getMock( 'eZ\Publish\API\Repository\LocationService' );
-
         $this->locationHandler = $this->getMock( 'eZ\Publish\SPI\Persistence\Content\Location\Handler' );
-
-        $persistenceHandler = $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' );
-        $persistenceHandler->expects( $this->any() )->method( 'locationHandler' )->will( $this->returnValue( $this->locationHandler ) );
-
-        $this->provider = new PreviewLocationProvider( $this->locationService, $this->contentService, $persistenceHandler );
+        $this->provider = new PreviewLocationProvider( $this->locationService, $this->contentService, $this->locationHandler );
     }
 
     public function testGetPreviewLocationDraft()
