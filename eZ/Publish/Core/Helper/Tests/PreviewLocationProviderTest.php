@@ -100,4 +100,29 @@ class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $location, $returnedLocation );
         $this->assertSame( $contentInfo, $returnedLocation->contentInfo );
     }
+
+    public function testGetPreviewLocationNoLocation()
+    {
+        $contentId = 123;
+
+        $contentInfo = $this
+            ->getMockBuilder( 'eZ\Publish\API\Repository\Values\Content\ContentInfo' )
+            ->setConstructorArgs( array( array( 'id' => $contentId ) ) )
+            ->getMockForAbstractClass();
+        $this->contentService
+            ->expects( $this->once() )
+            ->method( 'loadContentInfo' )
+            ->with( $contentId )
+            ->will( $this->returnValue( $contentInfo ) );
+        $this->locationHandler
+            ->expects( $this->once() )
+            ->method( 'loadParentLocationsForDraftContent' )
+            ->with( $contentId )
+            ->will( $this->returnValue( array() ) );
+
+        $this->locationHandler->expects( $this->never() )->method( 'loadLocation' );
+
+        $this->assertNull( $this->provider->loadMainLocation( $contentId ) );
+    }
+
 }

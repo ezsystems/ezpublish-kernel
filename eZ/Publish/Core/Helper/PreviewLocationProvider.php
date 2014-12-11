@@ -45,12 +45,14 @@ class PreviewLocationProvider
     /**
      * Loads the main location for $contentId
      *
-     * If the content does not have a location (yet), an Location draft is returned.
+     * If the content does not have a location (yet), but has a Location draft, it is returned instead.
      * Location drafts do not have an id (it is set to null), and can be tested using the isDraft() method.
+     *
+     * If the content doesn't have a location nor a location draft, null is returned.
      *
      * @param mixed $contentInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location|null
      */
     public function loadMainLocation( $contentId )
     {
