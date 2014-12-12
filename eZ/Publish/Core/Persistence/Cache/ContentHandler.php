@@ -98,12 +98,18 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function loadContentInfoByRemoteId( $remoteId )
     {
-        $cache = $this->cache->getItem( 'content', 'info', 'remoteId', $remoteId );
-        $contentInfo = $cache->get();
+        // Using 'id' to avoid using the old key which contained the full object duplicating cache in loadContentInfo
+        $cache = $this->cache->getItem( 'content', 'info', 'remoteId', 'id', $remoteId );
+        $contentId = $cache->get();
         if ( $cache->isMiss() )
         {
             $this->logger->logCall( __METHOD__, array( 'content' => $remoteId ) );
-            $cache->set( $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId( $remoteId ) );
+            $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId( $remoteId );
+            $cache->set( $contentInfo->id );
+        }
+        else
+        {
+            $contentInfo = $this->loadContentInfo( $contentId );
         }
         return $contentInfo;
     }

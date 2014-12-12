@@ -101,15 +101,10 @@ class TrashHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 4 ) )
             ->method( 'clear' )
-            ->with( 'content', 'info', 'remoteId' );
-
-        $this->cacheMock
-            ->expects( $this->at( 5 ) )
-            ->method( 'clear' )
             ->with( 'content', 'locations', 44 );
 
         $this->cacheMock
-            ->expects( $this->at( 6 ) )
+            ->expects( $this->at( 5 ) )
             ->method( 'clear' )
             ->with( 'user', 'role', 'assignments', 'byGroup' );
 
@@ -158,15 +153,10 @@ class TrashHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 3 ) )
             ->method( 'clear' )
-            ->with( 'content', 'info', 'remoteId' );
-
-        $this->cacheMock
-            ->expects( $this->at( 4 ) )
-            ->method( 'clear' )
             ->with( 'content', 'locations', 44 );
 
         $this->cacheMock
-            ->expects( $this->at( 5 ) )
+            ->expects( $this->at( 4 ) )
             ->method( 'clear' )
             ->with( 'user', 'role', 'assignments', 'byGroup' );
 

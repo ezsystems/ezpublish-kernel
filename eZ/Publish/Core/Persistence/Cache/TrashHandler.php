@@ -39,7 +39,6 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
         $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', $location->contentId );
         $this->cache->clear( 'content', 'info', $location->contentId );
-        $this->cache->clear( 'content', 'info', 'remoteId' );
         $this->cache->clear( 'content', 'locations', $location->contentId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
         return $return;
@@ -55,7 +54,6 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
         $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', $trashed->contentId );
         $this->cache->clear( 'content', 'info', $trashed->contentId );
-        $this->cache->clear( 'content', 'info', 'remoteId' );
         $this->cache->clear( 'content', 'locations', $trashed->contentId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
         return $return;
