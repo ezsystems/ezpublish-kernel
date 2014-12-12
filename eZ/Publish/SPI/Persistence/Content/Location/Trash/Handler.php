@@ -10,6 +10,8 @@
 namespace eZ\Publish\SPI\Persistence\Content\Location\Trash;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 
 /**
  * The Trash Handler interface defines operations on Location elements in the storage engine.
@@ -35,11 +37,11 @@ interface Handler
      * Moves all locations in the subtree to the Trash. The associated content
      * objects are left untouched.
      *
-     * @param mixed $locationId
+     * @param Location $location
      *
      * @return null|\eZ\Publish\SPI\Persistence\Content\Location\Trashed null if location was deleted, otherwise Trashed object
      */
-    public function trashSubtree( $locationId );
+    public function trashSubtree( Location $location );
 
     /**
      * Returns a trashed location to normal state.
@@ -50,14 +52,14 @@ interface Handler
      *
      * Returns newly restored location Id.
      *
-     * @param mixed $trashedId
-     * @param mixed $newParentId
+     * @param Trashed $trashed
+     * @param Location $newParent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If $newParentId is invalid
      *
      * @return int Newly restored location id
      */
-    public function recover( $trashedId, $newParentId );
+    public function recover( Trashed $trashed, Location $newParent );
 
     /**
      * Returns an array of all trashed locations satisfying the $criterion (if provided),
@@ -85,9 +87,9 @@ interface Handler
      * Removes a trashed location identified by $trashedLocationId from trash
      * Associated content has to be deleted
      *
-     * @param int $trashedId
+     * @param Trashed $trashed
      *
      * @return void
      */
-    public function deleteTrashItem( $trashedId );
+    public function deleteTrashItem( Trashed $trashed );
 }

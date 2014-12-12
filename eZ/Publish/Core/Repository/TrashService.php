@@ -121,11 +121,13 @@ class TrashService implements TrashServiceInterface
         if ( $this->repository->canUser( 'content', 'manage_locations', $location->getContentInfo(), $location ) !== true )
             throw new UnauthorizedException( 'content', 'manage_locations' );
 
+        $spiLocation = $this->persistenceHandler->locationHandler()->load( $location->id );
+
         $this->repository->beginTransaction();
         try
         {
-            $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree( $location->id );
-            $this->persistenceHandler->urlAliasHandler()->locationDeleted( $location->id );
+            $spiTrashItem = $this->persistenceHandler->trashHandler()->trashSubtree( $spiLocation );
+            $this->persistenceHandler->urlAliasHandler()->locationDeleted( $spiLocation->id );
             $this->repository->commit();
         }
         catch ( Exception $e )
@@ -165,13 +167,15 @@ class TrashService implements TrashServiceInterface
         if ( $this->repository->hasAccess( 'content', 'restore' ) !== true )
             throw new UnauthorizedException( 'content', 'restore' );
 
+        $spiNewParentLocation = $this->persistenceHandler->locationHandler()->load( $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId );
+        $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem( $trashItem->id );
+
         $this->repository->beginTransaction();
         try
         {
-            $newParentLocationId = $newParentLocation ? $newParentLocation->id : $trashItem->parentLocationId;
             $newLocationId = $this->persistenceHandler->trashHandler()->recover(
-                $trashItem->id,
-                $newParentLocationId
+                $spiTrashItem,
+                $spiNewParentLocation
             );
 
             $content = $this->repository->getContentService()->loadContent( $trashItem->contentId );
@@ -182,7 +186,7 @@ class TrashService implements TrashServiceInterface
             {
                 $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
                     $newLocationId,
-                    $newParentLocationId,
+                    $spiNewParentLocation->id,
                     $name,
                     $languageCode,
                     $content->contentInfo->alwaysAvailable
@@ -244,10 +248,12 @@ class TrashService implements TrashServiceInterface
         if ( !is_numeric( $trashItem->id ) )
             throw new InvalidArgumentValue( "id", $trashItem->id, "TrashItem" );
 
+        $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem( $trashItem->id );
+
         $this->repository->beginTransaction();
         try
         {
-            $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashItem->id );
+            $this->persistenceHandler->trashHandler()->deleteTrashItem( $spiTrashItem );
             $this->repository->commit();
         }
         catch ( Exception $e )

@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed as SPITrashed;
 
 /**
@@ -57,6 +58,7 @@ class TrashHandlerTest extends HandlerTest
     public function testTrashSubtree()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
+        $location = new SPILocation( array( 'id' => 31, 'contentId' => 44 ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
         $this->persistenceHandlerMock
@@ -65,13 +67,13 @@ class TrashHandlerTest extends HandlerTest
             ->will( $this->returnValue( $innerHandlerMock ) );
 
         $trashed = new SPITrashed(
-            array( 'id' => 33, 'contentId' => 31  )
+            array( 'id' => 33, 'contentId' => 44  )
         );
 
         $innerHandlerMock
             ->expects( $this->once() )
             ->method(  'trashSubtree' )
-            ->with( 33 )
+            ->with( $location )
             ->will(
                 $this->returnValue( $trashed )
             );
@@ -79,23 +81,40 @@ class TrashHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'clear' )
-            ->with( 'location' )
-            ->will( $this->returnValue( true ) );
+            ->with( 'location', 31 );
 
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'clear' )
-            ->with( 'content' )
-            ->will( $this->returnValue( true ) );
+            ->with( 'location', 'subtree' );
 
         $this->cacheMock
             ->expects( $this->at( 2 ) )
             ->method( 'clear' )
-            ->with( 'user', 'role', 'assignments', 'byGroup' )
-            ->will( $this->returnValue( true ) );
+            ->with( 'content', 44 );
+
+        $this->cacheMock
+            ->expects( $this->at( 3 ) )
+            ->method( 'clear' )
+            ->with( 'content', 'info', 44 );
+
+        $this->cacheMock
+            ->expects( $this->at( 4 ) )
+            ->method( 'clear' )
+            ->with( 'content', 'info', 'remoteId' );
+
+        $this->cacheMock
+            ->expects( $this->at( 5 ) )
+            ->method( 'clear' )
+            ->with( 'content', 'locations', 44 );
+
+        $this->cacheMock
+            ->expects( $this->at( 6 ) )
+            ->method( 'clear' )
+            ->with( 'user', 'role', 'assignments', 'byGroup' );
 
         $handler = $this->persistenceCacheHandler->trashHandler();
-        $this->assertSame( $trashed, $handler->trashSubtree( 33 ) );
+        $this->assertSame( $trashed, $handler->trashSubtree( $location ) );
     }
 
     /**
@@ -104,6 +123,8 @@ class TrashHandlerTest extends HandlerTest
     public function testRecover()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
+        $trashed = new SPITrashed( array( 'id' => 33, 'contentId' => 44 ) );
+        $newParent = new SPILocation( array( 'id' => 31, 'contentId' => 42 ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
         $this->persistenceHandlerMock
@@ -114,7 +135,7 @@ class TrashHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects( $this->once() )
             ->method(  'recover' )
-            ->with( 33, 66 )
+            ->with( $trashed, $newParent )
             ->will(
                 $this->returnValue( 99 )
             );
@@ -122,23 +143,35 @@ class TrashHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects( $this->at( 0 ) )
             ->method( 'clear' )
-            ->with( 'location', 'subtree' )
-            ->will( $this->returnValue( true ) );
+            ->with( 'location', 'subtree' );
 
         $this->cacheMock
             ->expects( $this->at( 1 ) )
             ->method( 'clear' )
-            ->with( 'content' )
-            ->will( $this->returnValue( true ) );
+            ->with( 'content', 44 );
 
         $this->cacheMock
             ->expects( $this->at( 2 ) )
             ->method( 'clear' )
-            ->with( 'user', 'role', 'assignments', 'byGroup' )
-            ->will( $this->returnValue( true ) );
+            ->with( 'content', 'info', 44 );
+
+        $this->cacheMock
+            ->expects( $this->at( 3 ) )
+            ->method( 'clear' )
+            ->with( 'content', 'info', 'remoteId' );
+
+        $this->cacheMock
+            ->expects( $this->at( 4 ) )
+            ->method( 'clear' )
+            ->with( 'content', 'locations', 44 );
+
+        $this->cacheMock
+            ->expects( $this->at( 5 ) )
+            ->method( 'clear' )
+            ->with( 'user', 'role', 'assignments', 'byGroup' );
 
         $handler = $this->persistenceCacheHandler->trashHandler();
-        $this->assertEquals( 99, $handler->recover( 33, 66 ) );
+        $this->assertEquals( 99, $handler->recover( $trashed, $newParent ) );
     }
 
     /**
@@ -204,6 +237,7 @@ class TrashHandlerTest extends HandlerTest
     public function testDeleteTrashItem()
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
+        $trashed = new SPITrashed( array( 'id' => 33, 'contentId' => 44 ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler' );
         $this->persistenceHandlerMock
@@ -214,13 +248,29 @@ class TrashHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects( $this->once() )
             ->method(  'deleteTrashItem' )
-            ->with( 33 );
+            ->with( $trashed );
 
         $this->cacheMock
-            ->expects( $this->never() )
-            ->method( $this->anything() );
+            ->expects( $this->at( 0 ) )
+            ->method( 'clear' )
+            ->with( 'content', 44 );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'content', 'info', 44 );
+
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'clear' )
+            ->with( 'content', 'info', 'remoteId' );
+
+        $this->cacheMock
+            ->expects( $this->at( 3 ) )
+            ->method( 'clear' )
+            ->with( 'content', 'locations', 44 );
 
         $handler = $this->persistenceCacheHandler->trashHandler();
-        $handler->deleteTrashItem( 33 );
+        $handler->deleteTrashItem( $trashed );
     }
 }
