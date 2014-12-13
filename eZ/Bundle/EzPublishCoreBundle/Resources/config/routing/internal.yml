@@ -1,8 +1,15 @@
 # Internal routes
-_ezpublishLocation:
-    path: /content/location/{locationId}/{viewType}/{layout}
+_ezpublishContent_with_location:
+    path: /content/view/{contentId}/{locationId}/{viewType}/{layout}
     defaults:
-        _controller: ez_content:viewLocation
+        _controller: ez_content:viewContent
+        viewType: full
+        layout: true
+
+_ezpublishContent:
+    path: /content/view/{contentId}/{viewType}/{layout}
+    defaults:
+        _controller: ez_content:viewContent
         viewType: full
         layout: true
 
