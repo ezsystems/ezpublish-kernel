@@ -24,6 +24,7 @@ services:
         class: %ezpublish.persistence.legacy.url_alias.mapper.class%
         arguments:
             - @ezpublish.persistence.legacy.language.mask_generator
+            - @ezpublish.spi.persistence.legacy.location.handler
 
     ezpublish.spi.persistence.legacy.url_alias.handler:
         class: %ezpublish.spi.persistence.legacy.url_alias.handler.class%

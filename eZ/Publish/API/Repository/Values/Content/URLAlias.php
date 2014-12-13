@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $id A unique identifier for the alias
  * @property-read int $type The type of the URL Alias i.e. one of URLAlias::LOCATION, URLAlias::RESOURCE, URLAlias::VIRTUAL
  * @property-read mixed $destination If type = URLAlias::LOCATION it is a Location id otherwise a string (e.g. /content/search)
+ * @property-read mixed $destinationContentId If type = URLAlias::LOCATION it is a ContentId, otherwise null.
  * @property-read string $path the alias path
  * @property-read string[] languageCodes the languages for which this alias is valid
  * @property-read boolean $alwaysAvailable Fallback indicator for other languages
@@ -52,6 +53,13 @@ class URLAlias extends ValueObject
      * @var mixed
      */
     protected $destination;
+
+    /**
+     * Only set if type is set to URLAlias::LOCATION
+     *
+     * @var mixed
+     */
+    protected $destinationContentId;
 
     /**
      * the full path of the alias
