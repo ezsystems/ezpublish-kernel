@@ -79,7 +79,7 @@ class ViewControllerListener implements EventSubscriberInterface
         }
         try
         {
-            if ( $request->attributes->has( 'locationId' ) )
+            /*if ( $request->attributes->has( 'locationId' ) )
             {
                 $valueObject = $this->repository->getLocationService()->loadLocation(
                     $request->attributes->get( 'locationId' )
@@ -90,7 +90,7 @@ class ViewControllerListener implements EventSubscriberInterface
                 $valueObject = $request->attributes->get( 'location' );
                 $request->attributes->set( 'locationId', $valueObject->id );
             }
-            else if ( $request->attributes->has( 'contentId' ) )
+            else */if ( $request->attributes->has( 'contentId' ) )
             {
                 $valueObject = $this->repository->sudo(
                     function ( $repository ) use ( $request )
