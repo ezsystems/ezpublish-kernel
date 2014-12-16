@@ -1,14 +1,21 @@
-<div class="{% if align is defined %}align-{{ align }}{% endif %}{% if class is defined %} {{ class }}{% endif %}">
-{{
-    render(
-        controller(
-            "ez_content:embedContent",
-            {
-                "contentId": id,
-                "viewType": view,
-                "params": params
-            }
+{% set params = { "objectParameters": {} } %}
+{% if embedParams.config is defined  %}
+    {% set params = params|merge( { "objectParameters": embedParams.config } ) %}
+{% endif %}
+{% if embedParams.link is defined  %}
+    {% set params = params|merge( { "linkParameters": embedParams.link } ) %}
+{% endif %}
+<div class="{% if embedParams.align is defined %}align-{{ embedParams.align }}{% endif %}{% if embedParams.class is defined %} {{ embedParams.class }}{% endif %}">
+    {{
+        render(
+            controller(
+                "ez_content:embedContent",
+                {
+                    "contentId": embedParams.id,
+                    "viewType": embedParams.viewType,
+                    "params": params
+                }
+            )
         )
-    )
-}}
+    }}
 </div>

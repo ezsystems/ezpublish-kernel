@@ -9,11 +9,38 @@
 
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Xslt;
 
+use eZ\Publish\Core\FieldType\RichText\Converter\Aggregate;
+use eZ\Publish\Core\FieldType\XmlText\Converter\Expanding;
+use eZ\Publish\Core\FieldType\RichText\Converter\Ezxml\ToRichTextPreNormalize;
+use eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking;
+use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
+
 /**
  * Tests conversion from legacy ezxml to docbook format
  */
 class EzxmlToDocbookTest extends BaseTest
 {
+    /**
+     * @return \eZ\Publish\Core\FieldType\RichText\Converter\Xslt
+     */
+    protected function getConverter()
+    {
+        if ( $this->converter === null )
+        {
+            $this->converter = new Aggregate(
+                array(
+                    new ToRichTextPreNormalize( new Expanding(), new EmbedLinking() ),
+                    new Xslt(
+                        $this->getConversionTransformationStylesheet(),
+                        $this->getCustomConversionTransformationStylesheets()
+                    )
+                )
+            );
+        }
+
+        return $this->converter;
+    }
+
     /**
      * Returns subdirectories for input and output fixtures.
      *
@@ -93,7 +120,8 @@ class EzxmlToDocbookTest extends BaseTest
     protected function getConversionValidationSchema()
     {
         return array(
-            __DIR__ . "/_fixtures/docbook/custom_schemas/youtube.rng"
+            __DIR__ . "/_fixtures/docbook/custom_schemas/youtube.rng",
+            __DIR__ . "/../../../../RichText/Resources/schemas/docbook/docbook.iso.sch.xsl",
         );
     }
 }
