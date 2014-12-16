@@ -21,32 +21,23 @@ class AliasCleaner implements AliasCleanerInterface
     private $innerAliasCleaner;
 
     /**
-     * @var IOServiceInterface
-     */
-    private $ioService;
-
-    /**
      * @var UrlRedecoratorInterface
      */
     private $urlRedecorator;
 
     public function __construct(
         AliasCleanerInterface $innerAliasCleaner,
-        IOServiceInterface $ioService,
         UrlRedecoratorInterface $urlRedecorator
     )
     {
         $this->innerAliasCleaner = $innerAliasCleaner;
-        $this->ioService = $ioService;
         $this->urlRedecorator = $urlRedecorator;
     }
 
     public function removeAliases( $originalPath )
     {
         $this->innerAliasCleaner->removeAliases(
-            $this->ioService->loadBinaryFileByUri(
-                $this->urlRedecorator->redecorateFromTarget( $originalPath )
-            )
+            $this->urlRedecorator->redecorateFromTarget( $originalPath )
         );
     }
 }
