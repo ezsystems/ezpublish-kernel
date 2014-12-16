@@ -9,6 +9,9 @@
 
 namespace eZ\Publish\API\Repository\Tests;
 
+
+use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy as LegacySetupFactory;
+
 /**
  * Test case for maximum number of languages supported in the LanguageService.
  *
@@ -40,13 +43,35 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
         $languageCreate = $this->languageService->newLanguageCreateStruct();
         $languageCreate->enabled = true;
 
+        // SKIP If using sqlite, PHP 5.3 and 64bit, tests will fail as int column seems to be limited to 32bit on 64bit
+        if ( PHP_VERSION_ID < 50400 && PHP_INT_SIZE === 8 )
+        {
+            $setupFactory = $this->getSetupFactory();
+            if ( $setupFactory instanceof LegacySetupFactory && $setupFactory->getDB() === 'sqlite' )
+            {
+                $this->markTestSkipped( "Skip on Sqlite, PHP 5.3 and 64bit, as int column is limited to 32bit on 64bit" );
+            }
+        }
+
         // Create as much languages as possible
         for ( $i = count( $this->languageService->loadLanguages() ) + 1; $i <= 8 * PHP_INT_SIZE - 2; ++$i )
         {
             $languageCreate->name = "Language $i";
             $languageCreate->languageCode = sprintf( "lan-%02d", $i );
 
-            $this->createdLanguages[] = $this->languageService->createLanguage( $languageCreate );
+            try
+            {
+                $this->createdLanguages[] = $this->languageService->createLanguage( $languageCreate );
+            }
+            catch ( \Exception $e )
+            {
+                if ( PHP_INT_SIZE === 8 && $i === 32 )
+                {
+                    throw new \Exception( "PHP/HHVM is 64bit, but seems INT column in db only supports 32bit", 0, $e );
+                }
+
+                throw new \Exception( "Unknown issue on iteration $i, PHP_INT_SIZE: " . PHP_INT_SIZE, 0, $e );
+            }
         }
     }
 
