@@ -407,4 +407,14 @@ class Legacy extends SetupFactory
 
         return self::$serviceContainer;
     }
+
+    /**
+     * Get the Database name
+     *
+     * @return string
+     */
+    public function getDB()
+    {
+        return self::$db;
+    }
 }
