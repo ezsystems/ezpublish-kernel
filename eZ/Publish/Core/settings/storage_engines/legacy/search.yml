@@ -13,9 +13,7 @@ services:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.persistence.legacy.search.gateway.criteria_converter.content
             - @ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content
-            - @ezpublish.persistence.legacy.content.query_builder
-            - @ezpublish.spi.persistence.legacy.language.handler
-            - @ezpublish.persistence.legacy.language.mask_generator
+            - @ezpublish.persistence.legacy.content_type.gateway
 
     ezpublish.persistence.legacy.search.gateway.content.exception_conversion:
         class: %ezpublish.persistence.legacy.search.gateway.content.exception_conversion.class%
@@ -32,6 +30,7 @@ services:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.persistence.legacy.search.gateway.criteria_converter.location
             - @ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location
+            - @ezpublish.persistence.legacy.content_type.gateway
 
     ezpublish.persistence.legacy.search.gateway.location.exception_conversion:
         class: %ezpublish.persistence.legacy.search.gateway.location.exception_conversion.class%

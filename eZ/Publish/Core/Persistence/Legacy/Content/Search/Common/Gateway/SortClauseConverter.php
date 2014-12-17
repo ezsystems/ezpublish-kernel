@@ -71,7 +71,17 @@ class SortClauseConverter
                 {
                     foreach ( (array)$handler->applySelect( $query, $sortClause, $nr ) as $column )
                     {
-                        $this->sortColumns[$column] = $sortClause->direction;
+                        if ( strrpos( $column, "_null", -6 ) === false )
+                        {
+                            $direction = $sortClause->direction;
+                        }
+                        else
+                        {
+                            // Always sort null last
+                            $direction = SelectQuery::ASC;
+                        }
+
+                        $this->sortColumns[$column] = $direction;
                     }
                     continue 2;
                 }
@@ -88,8 +98,9 @@ class SortClauseConverter
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $fieldMap
      */
-    public function applyJoin( SelectQuery $query, array $sortClauses )
+    public function applyJoin( SelectQuery $query, array $sortClauses, array $fieldMap )
     {
         foreach ( $sortClauses as $nr => $sortClause )
         {
@@ -97,7 +108,7 @@ class SortClauseConverter
             {
                 if ( $handler->accept( $sortClause ) )
                 {
-                    $handler->applyJoin( $query, $sortClause, $nr );
+                    $handler->applyJoin( $query, $sortClause, $nr, $fieldMap );
                     continue 2;
                 }
             }
@@ -120,7 +131,6 @@ class SortClauseConverter
                 $direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC
             );
         }
-
         // @todo Review needed
         // The following line was added because without it, loading sub user groups through the Public API
         // fails with the database error "Unknown column sort_column_0". The change does not break any

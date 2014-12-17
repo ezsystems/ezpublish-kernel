@@ -675,4 +675,28 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException( 'Database error', 0, $e );
         }
     }
+
+    /**
+     * Returns field mapping data
+     *
+     * Returns an associative array with ContentType and FieldDefinition identifiers as
+     * first and second level keys respectively, and FieldDefinition ID as value.
+     *
+     * @return array
+     */
+    public function getFieldMap()
+    {
+        try
+        {
+            return $this->innerGateway->getFieldMap();
+        }
+        catch ( DBALException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+    }
 }

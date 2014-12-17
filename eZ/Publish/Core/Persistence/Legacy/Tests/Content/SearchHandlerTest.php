@@ -10,7 +10,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -23,6 +22,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 
 /**
  * Test case for ContentSearchHandler
@@ -231,9 +231,10 @@ class SearchHandlerTest extends LanguageAwareTestCase
                         new Content\Search\Common\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                     )
                 ),
-                new QueryBuilder( $this->getDatabaseHandler() ),
-                $this->getLanguageHandler(),
-                $this->getLanguageMaskGenerator()
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
+                )
             ),
             $this->getContentMapperMock()
         );

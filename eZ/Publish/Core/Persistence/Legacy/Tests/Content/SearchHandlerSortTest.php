@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -17,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 
 /**
  * Test case for ContentSearchHandler
@@ -76,6 +76,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                         new Content\Search\Common\Gateway\CriterionHandler\MatchAll( $db ),
                         new Content\Search\Common\Gateway\CriterionHandler\LogicalAnd( $db ),
                         new Content\Search\Common\Gateway\CriterionHandler\SectionId( $db ),
+                        new Content\Search\Common\Gateway\CriterionHandler\ContentTypeIdentifier( $db ),
                     )
                 ),
                 new Content\Search\Common\Gateway\SortClauseConverter(
@@ -91,9 +92,10 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
                         new Content\Search\Common\Gateway\SortClauseHandler\Field( $db, $this->getLanguageHandler() ),
                     )
                 ),
-                new QueryBuilder( $this->getDatabaseHandler() ),
-                $this->getLanguageHandler(),
-                $this->getLanguageMaskGenerator()
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
+                )
             ),
             $this->getContentMapperMock()
         );
@@ -467,7 +469,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             "media" => array( 41, 49, 50, 51, 57, 58, 59, 60, 61, 62, 63, 64, 66, 200, 201 ),
             "protected" => array( 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164 ),
             "setup" => array( 45, 52 ),
-            "users" => array( 4, 10, 11, 12, 13, 14, 42 ),
+            "users" => array( 4, 10, 11, 12, 13, 14, 42, 226 ),
         );
         $contentIds = array_map(
             function ( $hit )
@@ -476,8 +478,16 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
             },
             $result->searchHits
         );
-        $index = 0;
 
+        $expectedCount = 0;
+        foreach ( $idMapSet as $set )
+        {
+            $expectedCount += count( $set );
+        }
+
+        $this->assertEquals( $expectedCount, $result->totalCount );
+
+        $index = 0;
         foreach ( $idMapSet as $idSet )
         {
             $contentIdsSubset = array_slice( $contentIds, $index, $count = count( $idSet ) );
@@ -526,7 +536,12 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter'      => new Criterion\SectionId( array( 1 ) ),
+                    'filter'      => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\SectionId( array( 1 ) ),
+                            new Criterion\ContentTypeIdentifier( array( "article" ) ),
+                        )
+                    ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(
@@ -593,7 +608,12 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         $result = $locator->findContent(
             new Query(
                 array(
-                    'filter'      => new Criterion\SectionId( array( 1 ) ),
+                    'filter'      => new Criterion\LogicalAnd(
+                        array(
+                            new Criterion\SectionId( array( 1 ) ),
+                            new Criterion\ContentTypeIdentifier( "product" ),
+                        )
+                    ),
                     'offset'      => 0,
                     'limit'       => null,
                     'sortClauses' => array(

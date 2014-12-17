@@ -27,6 +27,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 
 /**
  * Test case for LocationSearchHandler
@@ -187,6 +188,10 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
                         new LocationSortClauseHandler\Location\Id( $this->getDatabaseHandler() ),
                         new CommonSortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                     )
+                ),
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
                 )
             ),
             $this->getLocationMapperMock()

@@ -9,15 +9,15 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as ContentTypeGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
-use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\MapLocationDistance;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
@@ -54,25 +54,9 @@ class DoctrineDatabase extends Gateway
     protected $sortClauseConverter;
 
     /**
-     * Content load query builder
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
-    protected $queryBuilder;
-
-    /**
-     * Caching language handler
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-     */
-    protected $languageHandler;
-
-    /**
-     * Language mask generator
-     *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
-    protected $languageMaskGenerator;
+    protected $contentTypeGateway;
 
     /**
      * Construct from handler handler
@@ -80,25 +64,19 @@ class DoctrineDatabase extends Gateway
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter $criteriaConverter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter $sortClauseConverter
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder $queryBuilder
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
      */
     public function __construct(
         DatabaseHandler $handler,
         CriteriaConverter $criteriaConverter,
         SortClauseConverter $sortClauseConverter,
-        QueryBuilder $queryBuilder,
-        LanguageHandler $languageHandler,
-        LanguageMaskGenerator $languageMaskGenerator
+        ContentTypeGateway $contentTypeGateway
     )
     {
         $this->handler = $handler;
         $this->criteriaConverter = $criteriaConverter;
         $this->sortClauseConverter = $sortClauseConverter;
-        $this->queryBuilder = $queryBuilder;
-        $this->languageHandler = $languageHandler;
-        $this->languageMaskGenerator = $languageMaskGenerator;
+        $this->contentTypeGateway = $contentTypeGateway;
     }
 
     /**
@@ -118,13 +96,14 @@ class DoctrineDatabase extends Gateway
     {
         $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
-        $count = $this->getResultCount( $filter, $sort, $translations );
+        $fieldMap = $this->getFieldMap( $sort );
+        $count = $this->getResultCount( $filter, $sort, $translations, $fieldMap );
         if ( $limit === 0 || $count <= $offset )
         {
             return array( 'count' => $count, 'rows' => array() );
         }
 
-        $contentInfoList = $this->getContentInfoList( $filter, $sort, $offset, $limit, $translations );
+        $contentInfoList = $this->getContentInfoList( $filter, $sort, $offset, $limit, $translations, $fieldMap );
 
         return array(
             'count' => $count,
@@ -188,8 +167,9 @@ class DoctrineDatabase extends Gateway
      * @param array $sort
      * @param mixed $translations
      * @return int
+     * @param array $fieldMap
      */
-    protected function getResultCount( Criterion $filter, $sort, $translations )
+    protected function getResultCount( Criterion $filter, $sort, $translations, array $fieldMap )
     {
         $query = $this->handler->createSelectQuery();
 
@@ -203,9 +183,10 @@ class DoctrineDatabase extends Gateway
                 'ezcontentobject_version.contentobject_id'
             );
 
+        // Should be possible to remove it now, since Field sort clauses do not filter any more
         if ( $sort !== null )
         {
-            $this->sortClauseConverter->applyJoin( $query, $sort );
+            $this->sortClauseConverter->applyJoin( $query, $sort, $fieldMap );
         }
 
         $query->where(
@@ -226,14 +207,14 @@ class DoctrineDatabase extends Gateway
      * @param mixed $offset
      * @param mixed $limit
      * @param mixed $translations
+     * @param array $fieldMap
      *
      * @return int[]
      */
-    protected function getContentInfoList( Criterion $filter, $sort, $offset, $limit, $translations )
+    protected function getContentInfoList( Criterion $filter, $sort, $offset, $limit, $translations, array $fieldMap )
     {
         $query = $this->handler->createSelectQuery();
-        $query->select(
-            'DISTINCT ezcontentobject.id',
+        $query->selectDistinct(
             'ezcontentobject.*',
             $this->handler->aliasedColumn( $query, 'main_node_id', 'main_tree' )
         );
@@ -268,7 +249,7 @@ class DoctrineDatabase extends Gateway
 
         if ( $sort !== null )
         {
-            $this->sortClauseConverter->applyJoin( $query, $sort );
+            $this->sortClauseConverter->applyJoin( $query, $sort, $fieldMap );
         }
 
         $query->where(
@@ -286,6 +267,28 @@ class DoctrineDatabase extends Gateway
         $statement->execute();
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Returns the field map if given $sortClauses contain a Field sort clause.
+     *
+     * Otherwise an empty array is returned.
+     *
+     * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     *
+     * @return array
+     */
+    protected function getFieldMap( $sortClauses )
+    {
+        foreach ( (array)$sortClauses as $sortClause )
+        {
+            if ( $sortClause instanceof Field || $sortClause instanceof MapLocationDistance )
+            {
+                return $this->contentTypeGateway->getFieldMap();
+            }
+        }
+
+        return array();
     }
 }
 

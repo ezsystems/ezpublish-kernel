@@ -9,12 +9,15 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as ContentTypeGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause\MapLocationDistance;
 use PDO;
 
 /**
@@ -46,21 +49,29 @@ class DoctrineDatabase extends Gateway
     private $sortClauseConverter;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
+     */
+    protected $contentTypeGateway;
+
+    /**
      * Construct from database handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter $criteriaConverter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter $sortClauseConverter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
      */
     public function __construct(
         DatabaseHandler $handler,
         CriteriaConverter $criteriaConverter,
-        SortClauseConverter $sortClauseConverter
+        SortClauseConverter $sortClauseConverter,
+        ContentTypeGateway $contentTypeGateway
     )
     {
         $this->handler = $handler;
         $this->criteriaConverter = $criteriaConverter;
         $this->sortClauseConverter = $sortClauseConverter;
+        $this->contentTypeGateway = $contentTypeGateway;
     }
 
     /**
@@ -75,7 +86,8 @@ class DoctrineDatabase extends Gateway
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null )
     {
-        $count = $this->getTotalCount( $criterion, $sortClauses );
+        $fieldMap = $this->getFieldMap( $sortClauses );
+        $count = $this->getTotalCount( $criterion, $sortClauses, $fieldMap );
         if ( $limit === 0 )
         {
             return array( "count" => $count, "rows" => array() );
@@ -104,7 +116,7 @@ class DoctrineDatabase extends Gateway
 
         if ( $sortClauses !== null )
         {
-            $this->sortClauseConverter->applyJoin( $selectQuery, $sortClauses );
+            $this->sortClauseConverter->applyJoin( $selectQuery, $sortClauses, $fieldMap );
         }
 
         $selectQuery->where(
@@ -149,10 +161,11 @@ class DoctrineDatabase extends Gateway
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param array $fieldMap
      *
      * @return array
      */
-    protected function getTotalCount( Criterion $criterion, $sortClauses )
+    protected function getTotalCount( Criterion $criterion, $sortClauses, array $fieldMap )
     {
         $query = $this->handler->createSelectQuery();
         $query
@@ -171,7 +184,7 @@ class DoctrineDatabase extends Gateway
 
         if ( $sortClauses !== null )
         {
-            $this->sortClauseConverter->applyJoin( $query, $sortClauses );
+            $this->sortClauseConverter->applyJoin( $query, $sortClauses, $fieldMap );
         }
 
         $query->where(
@@ -197,5 +210,27 @@ class DoctrineDatabase extends Gateway
 
         $res = $statement->fetchAll( PDO::FETCH_ASSOC );
         return (int)$res[0]['count'];
+    }
+
+    /**
+     * Returns the field map if given $sortClauses contain a Field sort clause.
+     *
+     * Otherwise an empty array is returned.
+     *
+     * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     *
+     * @return array
+     */
+    protected function getFieldMap( $sortClauses )
+    {
+        foreach ( (array)$sortClauses as $sortClause )
+        {
+            if ( $sortClause instanceof Field || $sortClause instanceof MapLocationDistance )
+            {
+                return $this->contentTypeGateway->getFieldMap();
+            }
+        }
+
+        return array();
     }
 }
