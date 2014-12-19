@@ -104,12 +104,9 @@
     <xsl:template match="td | th">
         <xsl:copy>
             <xsl:choose>
-                <xsl:when test="@valign">
-                    <xsl:attribute name="valign">
-                        <xsl:value-of select="@valign"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="style">vertical-align: <xsl:value-of select="@valign"/>;
-                    </xsl:attribute>
+                <xsl:when test="@custom:valign">
+                    <xsl:attribute name="valign"><xsl:value-of select="@custom:valign"/></xsl:attribute>
+                    <xsl:attribute name="style">vertical-align: <xsl:value-of select="@custom:valign"/>;</xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="valign">top</xsl:attribute>
