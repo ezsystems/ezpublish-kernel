@@ -160,6 +160,15 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
             ->expects( $this->never() )
             ->method( "error" );
 
+        $storage = $this->getPartlyMockedStorage( array( "getGateway" ) );
+        $storage
+            ->expects( $this->any() )
+            ->method( "getGateway" )
+            ->with( $this->getContext() )
+            ->will( $this->returnValue( $gateway ) );
+
+        $storage->getFieldData( $versionInfo, $field, $this->getContext() );
+
         $this->assertEquals( null, $field->value->externalData );
     }
 
