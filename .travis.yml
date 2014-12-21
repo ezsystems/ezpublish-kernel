@@ -3,6 +3,11 @@ language: php
 # hint that we don't need sudo to use container based test system
 sudo: false
 
+ # cache composer cache across builds
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
   global:
