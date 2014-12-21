@@ -1,5 +1,8 @@
 language: php
 
+# hint that we don't need sudo to use container based test system
+sudo: false
+
 # execute unit tests, integration test stubs and integration tests using legacy storage engine
 env:
   global:
@@ -36,8 +39,9 @@ matrix:
       env: TEST_CONFIG="phpunit.xml"
     - php: 5.6
       env: TEST_CONFIG="phpunit-integration-legacy.xml"
-    - php: 5.6
-      env: BEHAT_PROFILE="demo" TEST="clean"
+# Disable to test containers, this should ideally be covered by dowstream build feature of travis anyway..
+#    - php: 5.6
+#      env: BEHAT_PROFILE="demo" TEST="clean"
 # hhvm-nightly
     - php: hhvm-nightly
       env: TEST_CONFIG="phpunit.xml"
