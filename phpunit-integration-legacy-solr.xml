@@ -54,6 +54,9 @@
             <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
             <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
         </testsuite>
+        <testsuite name="eZ\Publish\API\Repository\Tests\Regression">
+            <directory>eZ/Publish/API/Repository/Tests/Regression/</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist>

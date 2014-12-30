@@ -1076,6 +1076,18 @@ class SearchServiceTest extends BaseTest
             ),
             array(
                 array(
+                    'filter' => new Criterion\SectionId( array( 2 ) ),
+                    'offset' => 0,
+                    'limit' => 10,
+                    'sortClauses' => array(
+                        new SortClause\DateModified(),
+                        new SortClause\ContentId(),
+                    )
+                ),
+                $fixtureDir . 'SortDateModified.php',
+            ),
+            array(
+                array(
                     'filter' => new Criterion\SectionId( array( 4, 2, 6, 3 ) ),
                     'offset' => 0,
                     'limit' => null,
@@ -2008,7 +2020,7 @@ class SearchServiceTest extends BaseTest
     public function testFindAndSortContentLegacy( $queryData, $fixture, $closure = null )
     {
         $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        if (/* $setupFactory instanceof LegacySolr ||*/ $setupFactory instanceof LegacyElasticsearch )
         {
             $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
         }
@@ -2028,7 +2040,7 @@ class SearchServiceTest extends BaseTest
     public function testFindAndSortContentLocationsLegacy( $queryData, $fixture, $closure = null )
     {
         $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        if (/* $setupFactory instanceof LegacySolr ||*/ $setupFactory instanceof LegacyElasticsearch )
         {
             $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
         }
@@ -3198,12 +3210,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindMainLocation()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $plainSiteLocationId = 56;
         $designLocationId = 58;
         $partnersContentId = 59;
@@ -3247,12 +3253,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testFindNonMainLocation()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $designLocationId = 58;
         $partnersContentId = 59;
         $repository = $this->getRepository();
@@ -3295,12 +3295,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testSortMainLocationAscending()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $plainSiteLocationId = 56;
         $designLocationId = 58;
         $partnersContentId = 59;
@@ -3342,12 +3336,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testSortMainLocationDescending()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $plainSiteLocationId = 56;
         $designLocationId = 58;
         $partnersContentId = 59;
@@ -3389,12 +3377,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testContentWithMultipleLocations()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
         $contentTypeService = $repository->getContentTypeService();
@@ -3917,12 +3899,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testUserMetadataGroupHorizontalFilterLocation( $queryType = null )
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location Search is not yet implemented for Solr storage" );
-        }
-
         if ( $queryType === null )
         {
             $queryType = "filter";
@@ -4016,12 +3992,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testUserMetadataGroupHorizontalQueryLocation()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location Search is not yet implemented for Solr storage" );
-        }
-
         $this->testUserMetadataGroupHorizontalFilterLocation( "query" );
     }
 
@@ -4211,7 +4181,7 @@ class SearchServiceTest extends BaseTest
      *
      * @return void
      */
-    protected function assertQueryFixture( Query $query, $fixture, $closure = null )
+    protected function assertQueryFixture( Query $query, $fixture, $closure = null, $ignoreScore = true )
     {
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -4223,7 +4193,7 @@ class SearchServiceTest extends BaseTest
                 $setupFactory = $this->getSetupFactory();
                 if ( $setupFactory instanceof LegacySolr )
                 {
-                    $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
+                    // @todo When we want to test score again by default we will need fixtures for Solr
                 }
 
                 if ( $setupFactory instanceof LegacyElasticsearch )
@@ -4275,11 +4245,29 @@ class SearchServiceTest extends BaseTest
             $closure( $result );
         }
 
+        if ( $ignoreScore )
+        {
+            foreach ( array( $fixture, $result ) as $result )
+            {
+                $property = new \ReflectionProperty(get_class($result), 'maxScore');
+                $property->setAccessible( true );
+                $property->setValue( $result, 0.0 );
+
+                foreach ( $result->searchHits as $hit )
+                {
+                    $property = new \ReflectionProperty(get_class($hit), 'score');
+                    $property->setAccessible( true );
+                    $property->setValue( $hit, 0.0 );
+
+                }
+            }
+        }
+
         $this->assertEquals(
             $fixture,
             $result,
             "Search results do not match.",
-            .1 // Be quite generous regarding delay -- most important for scores
+            .99 // Be quite generous regarding delay -- most important for scores
         );
     }
 

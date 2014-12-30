@@ -43,18 +43,18 @@ class LocationRemoteIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        return '(' .
-            implode(
-                ' OR ',
-                array_map(
-                    function ( $value )
-                    {
-                        return 'location_remote_id_mid:"' . $value . '"';
-                    },
-                    $criterion->value
-                )
-            ) .
-            ')';
+        $condition = implode(
+            ' OR ',
+            array_map(
+                function ( $id )
+                {
+                    return 'remote_id_id:"' . $id . '"';
+                },
+                $criterion->value
+            )
+        );
+
+        return "{!parent which='document_type_id:content' v='{$condition}'}";
     }
 }
 

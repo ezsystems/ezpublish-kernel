@@ -38,7 +38,7 @@ class LocationPriority extends SortClauseVisitor
      */
     public function visit( SortClause $sortClause )
     {
-        return 'main_priority_i' . $this->getDirection( $sortClause );
+        return 'main_location_priority_i' . $this->getDirection( $sortClause );
     }
 }
 

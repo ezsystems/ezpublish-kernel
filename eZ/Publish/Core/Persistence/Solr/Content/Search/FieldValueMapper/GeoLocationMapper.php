@@ -35,10 +35,13 @@ class GeoLocationMapper extends FieldValueMapper
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *
-     * @return mixed
+     * @return mixed|null Returns null on empty value
      */
     public function map( Field $field )
     {
+        if ( $field->value["latitude"] === null || $field->value["longitude"] === null )
+            return null;
+
         return $field->value["latitude"] . "," . $field->value["longitude"];
     }
 }
