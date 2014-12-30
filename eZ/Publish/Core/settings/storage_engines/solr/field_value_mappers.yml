@@ -4,6 +4,7 @@ parameters:
     ezpublish.persistence.solr.search.content.field_value_mapper.string.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\StringMapper
     ezpublish.persistence.solr.search.content.field_value_mapper.multiple_string.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\MultipleStringMapper
     ezpublish.persistence.solr.search.content.field_value_mapper.integer.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\IntegerMapper
+    ezpublish.persistence.solr.search.content.field_value_mapper.multiple_integer.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\MultipleIntegerMapper
     ezpublish.persistence.solr.search.content.field_value_mapper.date.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\DateMapper
     ezpublish.persistence.solr.search.content.field_value_mapper.price.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\PriceMapper
     ezpublish.persistence.solr.search.content.field_value_mapper.boolean.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper\BooleanMapper
@@ -33,6 +34,11 @@ services:
 
     ezpublish.persistence.solr.search.content.field_value_mapper.integer:
         class: %ezpublish.persistence.solr.search.content.field_value_mapper.integer.class%
+        tags:
+            - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
+
+    ezpublish.persistence.solr.search.content.field_value_mapper.multiple_integer:
+        class: %ezpublish.persistence.solr.search.content.field_value_mapper.multiple_integer.class%
         tags:
             - {name: ezpublish.persistence.solr.search.content.field_value_mapper}
 

@@ -32,11 +32,6 @@ class SearchServiceLocationTest extends BaseTest
     protected function setUp()
     {
         $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr storage" );
-        }
-
         if ( $setupFactory instanceof LegacyElasticsearch )
         {
             $this->markTestSkipped( "Field search is not yet implemented for Elasticsearch storage" );
@@ -102,19 +97,28 @@ class SearchServiceLocationTest extends BaseTest
     {
         $testContent = $this->createMultipleCountriesContent();
 
+        $setupFactory = $this->getSetupFactory();
+        // @todo index full contries data
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        {
+            $country = "BE";
+        }
+        else
+        {
+            $country = "Belgium";
+        }
+
         $query = new LocationQuery(
             array(
                 'criterion' => new Criterion\Field(
                     "countries",
                     Criterion\Operator::CONTAINS,
-                    "Belgium"
+                    $country
                 )
             )
         );
 
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 1, $result->totalCount );
         $this->assertEquals(
@@ -127,7 +131,7 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFieldCollectionContains
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceLocationTest::testFieldCollectionContains
      */
     public function testFieldCollectionContainsNoMatch()
     {
@@ -142,9 +146,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 0, $result->totalCount );
     }
@@ -154,10 +156,7 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testInvalidFieldIdentifierRange()
     {
-        $repository    = $this->getRepository();
-        $searchService = $repository->getSearchService();
-
-        $searchService->findLocations(
+        $this->findLocationsWithSkipOnNotImplementedException(
             new LocationQuery(
                 array(
                     'filter' => new Criterion\Field(
@@ -176,10 +175,7 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testInvalidFieldIdentifierIn()
     {
-        $repository    = $this->getRepository();
-        $searchService = $repository->getSearchService();
-
-        $searchService->findLocations(
+        $this->findLocationsWithSkipOnNotImplementedException(
             new LocationQuery(
                 array(
                     'filter' => new Criterion\Field(
@@ -198,10 +194,7 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testFindLocationsWithNonSearchableField()
     {
-        $repository    = $this->getRepository();
-        $searchService = $repository->getSearchService();
-
-        $searchService->findLocations(
+        $this->findLocationsWithSkipOnNotImplementedException(
             new LocationQuery(
                 array(
                     'filter' => new Criterion\Field(
@@ -319,8 +312,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 4, $result->totalCount );
 
@@ -374,8 +366,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 4, $result->totalCount );
 
@@ -429,8 +420,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 4, $result->totalCount );
 
@@ -474,9 +464,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $searchService->findLocations( $query );
+        $this->findLocationsWithSkipOnNotImplementedException( $query );
     }
 
     /**
@@ -500,9 +488,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-        $searchService->findLocations( $query );
+        $this->findLocationsWithSkipOnNotImplementedException( $query );
     }
 
     /**
@@ -535,8 +521,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 4, $result->totalCount );
 
@@ -590,8 +575,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 4, $result->totalCount );
 
@@ -645,8 +629,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 4, $result->totalCount );
 
@@ -700,8 +683,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 4, $result->totalCount );
     }
@@ -710,7 +692,7 @@ class SearchServiceLocationTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceLocationTest::testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
     {
@@ -739,8 +721,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 4, $result->totalCount );
 
@@ -945,8 +926,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 1, $result->totalCount );
         $this->assertEquals(
@@ -1024,8 +1004,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 1, $result->totalCount );
         $this->assertEquals(
@@ -1119,8 +1098,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 1, $result->totalCount );
         $this->assertEquals(
@@ -1227,8 +1205,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 3, $result->totalCount );
         $this->assertEquals(
@@ -1343,8 +1320,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 3, $result->totalCount );
         $this->assertEquals(
@@ -1433,8 +1409,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 1, $result->totalCount );
         $this->assertEquals(
@@ -1544,8 +1519,7 @@ class SearchServiceLocationTest extends BaseTest
             )
         );
 
-        $searchService = $repository->getSearchService();
-        $result = $searchService->findLocations( $query );
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
 
         $this->assertEquals( 3, $result->totalCount );
         $this->assertEquals(
@@ -1563,6 +1537,30 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
+     * Search using $searchService->findLocations but make sure to skip if NotImplementedException
+     *
+     * @param LocationQuery $query
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     */
+    protected function findLocationsWithSkipOnNotImplementedException( LocationQuery $query )
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        try
+        {
+            return $searchService->findLocations( $query );
+        }
+        catch ( NotImplementedException $e )
+        {
+            $this->markTestSkipped(
+                "This feature is not supported by the current search backend: " . $e->getMessage()
+            );
+        }
+    }
+
+    /**
      * Assert that query result matches the given fixture.
      *
      * @param LocationQuery $query
@@ -1571,22 +1569,10 @@ class SearchServiceLocationTest extends BaseTest
      *
      * @return void
      */
-    protected function assertQueryFixture( LocationQuery $query, $fixture, $closure = null )
+    protected function assertQueryFixture( LocationQuery $query, $fixture, $closure = null, $ignoreScore = true )
     {
-        $repository    = $this->getRepository();
-        $searchService = $repository->getSearchService();
-
-        try
-        {
-            $result = $searchService->findLocations( $query );
-            $this->simplifySearchResult( $result );
-        }
-        catch ( NotImplementedException $e )
-        {
-            $this->markTestSkipped(
-                "This feature is not supported by the current search backend: " . $e->getMessage()
-            );
-        }
+        $result = $this->findLocationsWithSkipOnNotImplementedException( $query );
+        $this->simplifySearchResult( $result );
 
         if ( !is_file( $fixture ) )
         {
@@ -1604,13 +1590,34 @@ class SearchServiceLocationTest extends BaseTest
             }
         }
 
+        $fixture = include $fixture;
+
         if ( $closure !== null )
         {
+            $closure( $fixture );
             $closure( $result );
         }
 
+        if ( $ignoreScore )
+        {
+            foreach ( array( $fixture, $result ) as $result )
+            {
+                $property = new \ReflectionProperty(get_class($result), 'maxScore');
+                $property->setAccessible( true );
+                $property->setValue( $result, 0.0 );
+
+                foreach ( $result->searchHits as $hit )
+                {
+                    $property = new \ReflectionProperty(get_class($hit), 'score');
+                    $property->setAccessible( true );
+                    $property->setValue( $hit, 0.0 );
+
+                }
+            }
+        }
+
         $this->assertEquals(
-            include $fixture,
+            $fixture,
             $result,
             "Search results do not match.",
             .1 // Be quite generous regarding delay -- most important for scores
