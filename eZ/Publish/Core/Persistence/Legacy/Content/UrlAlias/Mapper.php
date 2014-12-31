@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 
@@ -25,13 +26,20 @@ class Mapper
     protected $languageMaskGenerator;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
+     */
+    private $locationHandler;
+
+    /**
      * Creates a new UrlWildcard Handler
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler $locationHandler
      */
-    public function __construct( LanguageMaskGenerator $languageMaskGenerator )
+    public function __construct( LanguageMaskGenerator $languageMaskGenerator, LocationHandler $locationHandler )
     {
         $this->languageMaskGenerator = $languageMaskGenerator;
+        $this->locationHandler = $locationHandler;
     }
 
     /**
@@ -54,6 +62,8 @@ class Mapper
         $urlAlias->isCustom = (boolean)$data["is_alias"];
         $urlAlias->forward = $data["is_alias"] && $data["alias_redirects"];
         $urlAlias->destination = $destination;
+        if ( $type === UrlAlias::LOCATION )
+            $urlAlias->destinationContentId = $this->locationHandler->load( $destination )->contentId;
         $urlAlias->type = $type;
 
         return $urlAlias;
@@ -90,12 +100,14 @@ class Mapper
         {
             $actionType = $matches[1];
             $actionValue = isset( $matches[2] ) ? $matches[2] : false;
+            $destinationContentId = null;
 
             switch ( $actionType )
             {
                 case "eznode":
                     $type = UrlAlias::LOCATION;
                     $destination = $actionValue;
+                    $destinationContentId = $this->locationHandler->load( $actionValue )->contentId;
                     break;
 
                 case "module":
@@ -119,7 +131,7 @@ class Mapper
             throw new \RuntimeException( "Action '{$action}' is not valid" );
         }
 
-        return array( $type, $destination );
+        return array( $type, $destination, $destinationContentId );
     }
 
     /**

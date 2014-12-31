@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
@@ -242,8 +243,9 @@ class ViewController extends Controller
      * Main action for viewing content.
      * Response will be cached with HttpCache validation model (Etag)
      *
-     * @param int $contentId
+     * @param mixed $contentId
      * @param string $viewType
+     * @param mixed $locationId
      * @param boolean $layout
      * @param array $params
      *
@@ -253,11 +255,11 @@ class ViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContent( $contentId, $viewType, $layout = false, array $params = array() )
+    public function viewContent( $contentId, $viewType, $locationId = false, $layout = false, array $params = array() )
     {
         if ( $viewType === "embed" )
         {
-            return $this->embedContent( $contentId, $viewType, $layout, $params );
+            return $this->embedContent( $contentId, $viewType, $locationId, $layout, $params );
         }
 
         $this->performAccessChecks();
@@ -267,14 +269,20 @@ class ViewController extends Controller
         {
             $content = $this->getRepository()->getContentService()->loadContent( $contentId );
 
+            if ( $locationId === false && isset( $content->contentInfo->mainLocationId ) ) {
+                $locationId = $content->contentInfo->mainLocationId;
+            }
+
+            $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
+
             if ( $response->isNotModified( $this->getRequest() ) )
             {
                 return $response;
             }
 
-            $response->headers->set( 'X-Location-Id', $content->contentInfo->mainLocationId );
+            $response->headers->set( 'X-Location-Id', $locationId );
             $response->setContent(
-                $this->renderContent( $content, $viewType, $layout, $params )
+                $this->renderContent( $content, $viewType, $location, $layout, $params )
             );
 
             return $response;
@@ -299,16 +307,14 @@ class ViewController extends Controller
      *
      * @param int $contentId
      * @param string $viewType
+     * @param mixed|bool $locationId
      * @param boolean $layout
      * @param array $params
      *
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Exception
-     *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Exception
      */
-    public function embedContent( $contentId, $viewType, $layout = false, array $params = array() )
+    public function embedContent( $contentId, $viewType, $locationId = false, $layout = false, array $params = array() )
     {
         $this->performAccessChecks();
         $response = $this->buildResponse();
@@ -352,8 +358,24 @@ class ViewController extends Controller
                 return $response;
             }
 
+            // @todo Should we provide the location if none has been specifically requested ? Where does flexibility start ?
+            if ( $locationId === false )
+            {
+                $location = false;
+            }
+            else
+            {
+                /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
+                $location = $this->getRepository()->sudo(
+                    function ( $repository ) use ( $locationId )
+                    {
+                        return $repository->getLocationService()->load( $locationId );
+                    }
+                );
+            }
+
             $response->setContent(
-                $this->renderContent( $content, $viewType, $layout, $params )
+                $this->renderContent( $content, $viewType, $location, $layout, $params )
             );
 
             return $response;
@@ -416,12 +438,15 @@ class ViewController extends Controller
      *
      * @param Content $content
      * @param string $viewType
+     * @param Location|bool $location
      * @param boolean $layout
      * @param array $params
+     *
+     * @return string
      */
-    protected function renderContent( $content, $viewType, $layout = false, array $params = array() )
+    protected function renderContent( $content, $viewType, $location = null, $layout = false, array $params = array() )
     {
-        return $this->viewManager->renderContent( $content, $viewType, $params + array( 'noLayout' => !$layout ) );
+        return $this->viewManager->renderContent( $content, $location, $viewType, $params + array( 'noLayout' => !$layout ) );
     }
 
     /**

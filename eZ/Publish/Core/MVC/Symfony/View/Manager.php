@@ -221,15 +221,15 @@ class Manager implements ViewManagerInterface
      * $content will be injected in the selected template.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content. Default is 'full'.
      * @param array $parameters Parameters to pass to the template called to
      *        render the view. By default, it's empty. 'content' entry is
      *        reserved for the Content that is rendered.
-     * @throws \RuntimeException
      *
      * @return string
      */
-    public function renderContent( Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
+    public function renderContent( Content $content, Location $location = null, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() )
     {
         $contentInfo = $content->getVersionInfo()->getContentInfo();
         foreach ( $this->getAllContentViewProviders() as $viewProvider )
@@ -238,6 +238,7 @@ class Manager implements ViewManagerInterface
             if ( $view instanceof ContentViewInterface )
             {
                 $parameters['content'] = $content;
+                $parameters['location'] = $location;
                 return $this->renderContentView( $view, $parameters );
             }
         }

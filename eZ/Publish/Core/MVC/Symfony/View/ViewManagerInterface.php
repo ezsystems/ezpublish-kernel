@@ -23,6 +23,7 @@ interface ViewManagerInterface
      * $content will be injected in the selected template.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param string $viewType Variation of display for your content. Default is 'full'.
      * @param array $parameters Parameters to pass to the template called to
      *        render the view. By default, it's empty. 'content' entry is
@@ -31,23 +32,7 @@ interface ViewManagerInterface
      *
      * @return string
      */
-    public function renderContent( Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() );
-
-    /**
-     * Renders $location by selecting the right template for $viewType.
-     * $content and $location will be injected in the selected template.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param string $viewType Variation of display for your content. Default is 'full'.
-     * @param array $parameters Parameters to pass to the template called to
-     *        render the view. By default, it's empty. 'location' and 'content'
-     *        entries are reserved for the Location (and its Content) that is
-     *        viewed.
-     * @throws \RuntimeException
-     *
-     * @return string
-     */
-    public function renderLocation( Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() );
+    public function renderContent( Content $content, Location $location = null, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array() );
 
     /**
      * Renders $block by selecting the right template.

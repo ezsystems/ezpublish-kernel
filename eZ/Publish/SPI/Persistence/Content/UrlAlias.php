@@ -45,6 +45,13 @@ class UrlAlias extends ValueObject
     public $destination;
 
     /**
+     * Only set if type is set to URLAlias::LOCATION
+     *
+     * @var mixed
+     */
+    public $destinationContentId;
+
+    /**
      * Holds normalized path data
      *
      * Example:

@@ -816,6 +816,7 @@ class URLAliasService implements URLAliasServiceInterface
                 "id" => $spiUrlAlias->id,
                 "type" => $spiUrlAlias->type,
                 "destination" => $spiUrlAlias->destination,
+                "destinationContentId" => $spiUrlAlias->destinationContentId,
                 "languageCodes" => $spiUrlAlias->languageCodes,
                 "alwaysAvailable" => $spiUrlAlias->alwaysAvailable,
                 "path" => "/" . $path,
