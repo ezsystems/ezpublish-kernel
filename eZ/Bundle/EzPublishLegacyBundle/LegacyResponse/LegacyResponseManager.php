@@ -112,6 +112,8 @@ class LegacyResponseManager
     {
         // Remove duplicate Location header.
         $this->removeHeader( 'location' );
+        // Remove duplicate Content-Type header.
+        $this->removeHeader( 'content-type' );
         return new RedirectResponse( $redirectResult->getTargetUrl(), $redirectResult->getStatusCode() );
     }
 
