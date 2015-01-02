@@ -221,7 +221,7 @@ class RoleServiceTest extends ServiceTest
             ),
             array(
                 'getRoleAssignmentsForUser',
-                array( $user ),
+                array( $user, true ),
                 array( $roleAssignement ),
                 0
             ),
