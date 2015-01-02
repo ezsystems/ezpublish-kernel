@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 use EzSystems\BehatBundle\Helper\ValueObject as ValueObjectHelper;
 use eZ\Bundle\EzPublishRestBundle\Features\Context\Helper;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\REST\Server\Values\SessionInput;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use PHPUnit_Framework_Assert as Assertion;
@@ -322,7 +323,11 @@ trait EzRest
     {
         $repository = $this->getRepository();
 
-        switch( $objectType ) {
+        switch( $objectType )
+        {
+            case "SessionInput":
+                $this->requestObject = new SessionInput();
+                break;
             case "ContentTypeGroupCreateStruct":
                 $this->requestObject = $repository
                     ->getContentTypeService()
