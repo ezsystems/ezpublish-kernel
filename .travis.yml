@@ -21,7 +21,13 @@ env:
     - SOLR_VERSION="4.10.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - ELASTICSEARCH_VERSION="1.4.1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
 matrix:
+  fast_finish: true
   allow_failures:
     - php: hhvm
       env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.6@beta"
