@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests\Controller\Content;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
@@ -43,6 +44,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
      */
     protected $securityContext;
 
+    /** @var PreviewLocationProvider|\PHPUnit_Framework_MockObject_MockObject */
+    protected $locationProvider;
+
     protected function setUp()
     {
         parent::setUp();
@@ -54,6 +58,10 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->securityContext = $this->getMock( 'Symfony\Component\Security\Core\SecurityContextInterface' );
+        $this->locationProvider = $this
+            ->getMockBuilder( 'eZ\Publish\Core\Helper\PreviewLocationProvider' )
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -65,7 +73,8 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             $this->contentService,
             $this->httpKernel,
             $this->previewHelper,
-            $this->securityContext
+            $this->securityContext,
+            $this->locationProvider
         );
 
         return $controller;
@@ -102,9 +111,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->setConstructorArgs( array( array( 'id' => $contentId ) ) )
             ->getMockForAbstractClass();
 
-        $this->previewHelper
+        $this->locationProvider
             ->expects( $this->once() )
-            ->method( 'getPreviewLocation' )
+            ->method( 'loadMainLocation' )
             ->with( $contentId )
             ->will( $this->returnValue( $this->getMock( 'eZ\Publish\API\Repository\Values\Content\Location' ) ) );
         $this->contentService
@@ -133,9 +142,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         // Repository expectations
-        $this->previewHelper
+        $this->locationProvider
             ->expects( $this->once() )
-            ->method( 'getPreviewLocation' )
+            ->method( 'loadMainLocation' )
             ->with( $contentId )
             ->will( $this->returnValue( $location ) );
         $this->contentService
@@ -192,7 +201,6 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         );
     }
 
-
     public function testPreviewDefaultSiteaccess()
     {
         $contentId = 123;
@@ -205,9 +213,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         // Repository expectations
-        $this->previewHelper
+        $this->locationProvider
             ->expects( $this->once() )
-            ->method( 'getPreviewLocation' )
+            ->method( 'loadMainLocation' )
             ->with( $contentId )
             ->will( $this->returnValue( $location ) );
         $this->contentService

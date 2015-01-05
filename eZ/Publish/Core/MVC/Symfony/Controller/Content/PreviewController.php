@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Helper\ContentPreviewHelper;
+use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
@@ -50,17 +51,24 @@ class PreviewController
      */
     private $request;
 
+    /**
+     * @var \eZ\Publish\Core\Helper\PreviewLocationProvider
+     */
+    private $locationProvider;
+
     public function __construct(
         ContentService $contentService,
         HttpKernelInterface $kernel,
         ContentPreviewHelper $previewHelper,
-        SecurityContextInterface $securityContext
+        SecurityContextInterface $securityContext,
+        PreviewLocationProvider $locationProvider
     )
     {
         $this->contentService = $contentService;
         $this->kernel = $kernel;
         $this->previewHelper = $previewHelper;
         $this->securityContext = $securityContext;
+        $this->locationProvider = $locationProvider;
     }
 
     public function setRequest( Request $request = null )
@@ -73,7 +81,7 @@ class PreviewController
         try
         {
             $content = $this->contentService->loadContent( $contentId, array( $language ), $versionNo );
-            $location = $this->previewHelper->getPreviewLocation( $contentId );
+            $location = $this->locationProvider->loadMainLocation( $contentId );
         }
         catch ( UnauthorizedException $e )
         {

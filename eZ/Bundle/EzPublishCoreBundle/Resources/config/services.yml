@@ -65,6 +65,7 @@ services:
             - @http_kernel
             - @ezpublish.content_preview_helper
             - @security.context
+            - @ezpublish.content_preview.location_provider
         calls:
             - [setRequest, [@?request=]]
 
