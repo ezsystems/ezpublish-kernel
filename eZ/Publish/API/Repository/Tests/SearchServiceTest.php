@@ -2383,7 +2383,7 @@ class SearchServiceTest extends BaseTest
     public function testQueryModifiedField()
     {
         // Check using get_class since the others extend SetupFactory\Legacy
-        if ( get_class( $this->getSetupFactory() ) === '\eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
         {
             $this->markTestIncomplete(
                 "Custom fields not supported by LegacySE " .
