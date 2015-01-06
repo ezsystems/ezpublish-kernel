@@ -49,7 +49,7 @@ class Field extends FieldBase
 
         if ( empty( $types ) )
         {
-            throw new RuntimeException( "No sortable fields found" );
+            throw new RuntimeException( "No sortable fields found for '{$target->fieldIdentifier}' on '{$target->typeIdentifier}'" );
         }
 
         // TODO: should we somehow define/control what is to be used for sorting in this case?

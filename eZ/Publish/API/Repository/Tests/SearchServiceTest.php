@@ -2020,9 +2020,9 @@ class SearchServiceTest extends BaseTest
     public function testFindAndSortContentLegacy( $queryData, $fixture, $closure = null )
     {
         $setupFactory = $this->getSetupFactory();
-        if (/* $setupFactory instanceof LegacySolr ||*/ $setupFactory instanceof LegacyElasticsearch )
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
         {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
+            $this->markTestSkipped( "ezsetting is not indexable on Solr and Elasticsearch storage" );
         }
 
         $query = new Query( $queryData );
@@ -2040,9 +2040,9 @@ class SearchServiceTest extends BaseTest
     public function testFindAndSortContentLocationsLegacy( $queryData, $fixture, $closure = null )
     {
         $setupFactory = $this->getSetupFactory();
-        if (/* $setupFactory instanceof LegacySolr ||*/ $setupFactory instanceof LegacyElasticsearch )
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
         {
-            $this->markTestSkipped( "Location search handler is not yet implemented for Solr and Elasticsearch storage" );
+            $this->markTestSkipped( "ezsetting is not indexable on Solr and Elasticsearch storage" );
         }
 
         $query = new LocationQuery( $queryData );
@@ -2383,7 +2383,7 @@ class SearchServiceTest extends BaseTest
     public function testQueryModifiedField()
     {
         // Check using get_class since the others extend SetupFactory\Legacy
-        if ( get_class( $this->getSetupFactory() ) === '\eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
         {
             $this->markTestIncomplete(
                 "Custom fields not supported by LegacySE " .
