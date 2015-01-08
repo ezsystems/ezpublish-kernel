@@ -10,6 +10,12 @@ parameters:
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
 
+    # Param converters
+    ezpublish.param_converter.content.class: eZ\Bundle\EzPublishCoreBundle\Converter\ContentParamConverter
+    ezpublish.param_converter.content.priority: -2
+    ezpublish.param_converter.location.class: eZ\Bundle\EzPublishCoreBundle\Converter\LocationParamConverter
+    ezpublish.param_converter.location.priority: -2
+
     # FragmentRenderer overrides
     ezpublish.decorated_fragment_renderer.inline.class: eZ\Bundle\EzPublishCoreBundle\Fragment\InlineFragmentRenderer
     ezpublish.decorated_fragment_renderer.class: eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer
@@ -118,3 +124,18 @@ services:
             - [setFragmentPath, [%fragment.path%]]
             - [setSiteAccess, [@ezpublish.siteaccess]]
         abstract: true
+
+    ezpublish.param_converter.content:
+        class: %ezpublish.param_converter.content.class%
+        arguments:
+            - @ezpublish.api.service.content
+        tags:
+            - { name: request.param_converter, priority: %ezpublish.param_converter.content.priority%, converter: ez_content_converter }
+
+    ezpublish.param_converter.location:
+        class: %ezpublish.param_converter.location.class%
+        arguments:
+            - @ezpublish.api.service.location
+        tags:
+            - { name: request.param_converter, priority: %ezpublish.param_converter.location.priority%, converter: ez_location_converter }
+
