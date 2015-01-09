@@ -1,0 +1,19 @@
+{% if collector.legacytemplates.full|length > 0 %}
+    <h3>Loaded legacy templates</h3>
+    <table>
+        <tr>
+            <th>Requested</th>
+            <th><abbr title="Usage count">#</abbr></th>
+            <th>Override</th>
+            <th>Path</th>
+        </tr>
+        {% for tpl, info in collector.legacytemplates.full %}
+            <tr>
+                <td>{{ tpl }}</td>
+                <td>{{ collector.legacytemplates.compact[tpl] }}</td>
+                <td>{% if tpl != info.loaded %}{{ info.loaded }}{% else %}N/A{% endif %}</td>
+                <td>{{ info.fullPath }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}

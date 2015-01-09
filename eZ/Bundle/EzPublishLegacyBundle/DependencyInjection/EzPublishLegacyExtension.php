@@ -51,6 +51,8 @@ class EzPublishLegacyExtension extends Extension
         // SignalSlot settings
         $loader->load( 'slot.yml' );
 
+        $loader->load( 'debug.yml' );
+
         // Default settings
         $loader->load( 'default_settings.yml' );
 

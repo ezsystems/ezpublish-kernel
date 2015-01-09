@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzPublishDataCollector class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,67 +9,39 @@
 
 namespace eZ\Bundle\EzPublishDebugBundle\Collector;
 
-use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
+use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 
 /**
- * Collects list of templates from eZ 5 stack or Legacy Stack
- * Collects number of calls made to SPI Persistence as logged by eZ\Publish\Core\Persistence\Cache\*.
+ * Data collector listing SPI cache calls.
  */
-class EzPublishDataCollector extends DataCollector
+class PersistenceCacheCollector extends DataCollector
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
+     * @var PersistenceLogger
      */
-    protected $logger;
+    private $logger;
 
-    /**
-     * @var \Closure
-     */
-    protected $legacyKernel;
-
-    /**
-     * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
-     */
-    public function __construct( PersistenceLogger $logger, \Closure $legacyKernel )
+    public function __construct( PersistenceLogger $logger )
     {
         $this->logger = $logger;
-        $this->legacyKernel = $legacyKernel;
     }
 
-    /**
-     * Collects data for the given Request and Response.
-     *
-     * @param Request    $request   A Request instance
-     * @param Response   $response  A Response instance
-     * @param \Exception $exception An Exception instance
-     *
-     * @api
-     */
     public function collect( Request $request, Response $response, \Exception $exception = null )
     {
-        $this->data = array(
+        $this->data = [
             'count' => $this->logger->getCount(),
             'calls_logging_enabled' => $this->logger->isCallsLoggingEnabled(),
             'calls' => $this->logger->getCalls(),
             'handlers' => $this->logger->getLoadedUnCachedHandlers(),
-            'templates' => TemplateDebugInfo::getTemplatesList(),
-            'legacy_templates' => TemplateDebugInfo::getLegacyTemplatesList( $this->legacyKernel )
-        );
+        ];
     }
 
-    /**
-     * Returns the name of the collector.
-     *
-     * @return string The collector name
-     *
-     * @api
-     */
     public function getName()
     {
-        return 'ezpublish.debug.toolbar';
+        return 'ezpublish.debug.persistence';
     }
 
     /**
@@ -101,7 +73,7 @@ class EzPublishDataCollector extends DataCollector
      */
     public function getCalls()
     {
-        $calls = array();
+        $calls = [];
         foreach ( $this->data['calls'] as $call )
         {
             list( $class, $method ) = explode( '::', $call['method'] );
@@ -126,7 +98,7 @@ class EzPublishDataCollector extends DataCollector
      */
     public function getHandlers()
     {
-        $handlers = array();
+        $handlers = [];
         foreach ( $this->data['handlers'] as $handler => $count )
         {
             list( $class, $method ) = explode( '::', $handler );
@@ -144,25 +116,5 @@ class EzPublishDataCollector extends DataCollector
     public function getHandlersCount()
     {
         return array_sum( $this->data['handlers'] );
-    }
-
-    /**
-     * Returns templates list
-     *
-     * @return array
-     */
-    public function getTemplates()
-    {
-        return $this->data['templates'];
-    }
-
-    /**
-     * Returns templates list
-     *
-     * @return array
-     */
-    public function getLegacyTemplates()
-    {
-        return $this->data['legacy_templates'];
     }
 }
