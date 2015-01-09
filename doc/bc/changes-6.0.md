@@ -15,3 +15,6 @@ Changes affecting version compatibility with former or future versions.
 
 
 ## Removed features
+
+* `getLegacyKernel()` shorthand method in `eZ\Bundle\EzPublishCoreBundle\Controller` has been removed.
+  If you used it, please base your controller on `eZ\Bundle\EzPublishLegacyBundle\Controller` instead.
