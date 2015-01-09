@@ -37,7 +37,24 @@ class TemplateDebugInfo
             $templateStats = $legacyKernel()->runCallback(
                 function ()
                 {
-                    return eZTemplate::templatesUsageStatistics();
+                    if ( eZTemplate::isTemplatesUsageStatisticsEnabled() )
+                    {
+                        return eZTemplate::templatesUsageStatistics();
+                    }
+                    else
+                    {
+                        $stats = [];
+                        foreach ( eZTemplate::instance()->templateFetchList() as $tpl )
+                        {
+                            $stats[] = [
+                                'requested-template-name' => $tpl,
+                                'actual-template-name' => $tpl,
+                                'template-filename' => $tpl
+                            ];
+                        }
+
+                        return $stats;
+                    }
                 },
                 false,
                 false
