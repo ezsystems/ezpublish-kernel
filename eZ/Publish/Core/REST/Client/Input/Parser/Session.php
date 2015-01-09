@@ -54,7 +54,6 @@ class Session extends BaseParser
      */
     public function parse( array $data, ParsingDispatcher $parsingDispatcher )
     {
-
         if ( !array_key_exists( '_href', $data['User'] ) )
         {
             throw new Exceptions\Parser( "Missing '_href' attribute for User element in Session." );

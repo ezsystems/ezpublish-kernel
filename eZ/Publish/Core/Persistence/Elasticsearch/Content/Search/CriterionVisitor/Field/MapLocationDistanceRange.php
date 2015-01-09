@@ -161,7 +161,7 @@ class MapLocationDistanceRange extends Field
     {
         $query = array(
             "filtered" => array(
-                "filter" =>  array(
+                "filter" => array(
                     "or" => $this->getCondition( $criterion ),
                 ),
             ),

@@ -28,7 +28,6 @@ class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
     /** @var \eZ\Publish\Core\Helper\PreviewLocationProvider */
     private $provider;
 
-
     protected function setUp()
     {
         parent::setUp();

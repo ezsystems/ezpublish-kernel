@@ -319,7 +319,7 @@ class Handler implements SearchHandlerInterface
             $content->versionInfo->contentInfo->ownerId
         );
         // Add owner user id as it can also be considered as user group.
-        $ancestorLocationsContentIds[] = $content->versionInfo->contentInfo->ownerId ;
+        $ancestorLocationsContentIds[] = $content->versionInfo->contentInfo->ownerId;
 
         $fields = array(
             new Field(

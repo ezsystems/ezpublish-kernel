@@ -1359,7 +1359,7 @@ class DoctrineDatabase extends Gateway
         $statement->execute();
 
         $map = array();
-        $rows= $statement->fetchAll( \PDO::FETCH_ASSOC );
+        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
 
         foreach ( $rows as $row )
         {

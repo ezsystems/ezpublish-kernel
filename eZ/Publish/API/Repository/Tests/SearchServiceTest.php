@@ -4249,16 +4249,15 @@ class SearchServiceTest extends BaseTest
         {
             foreach ( array( $fixture, $result ) as $result )
             {
-                $property = new \ReflectionProperty(get_class($result), 'maxScore');
+                $property = new \ReflectionProperty( get_class( $result ), 'maxScore' );
                 $property->setAccessible( true );
                 $property->setValue( $result, 0.0 );
 
                 foreach ( $result->searchHits as $hit )
                 {
-                    $property = new \ReflectionProperty(get_class($hit), 'score');
+                    $property = new \ReflectionProperty( get_class( $hit ), 'score' );
                     $property->setAccessible( true );
                     $property->setValue( $hit, 0.0 );
-
                 }
             }
         }

@@ -9,7 +9,6 @@ namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 
-
 /**
  * Converts an URL from one decorator to another.
  *

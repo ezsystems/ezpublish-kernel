@@ -66,7 +66,6 @@ trait Authentication
      */
     public function createSession( $login, $password )
     {
-
         $this->createRequest( 'post', '/user/sessions' );
         $this->setHeaderWithObject( 'accept', 'Session' );
         $this->setHeaderWithObject( 'content-type', 'SessionInput' );

@@ -1370,7 +1370,6 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $this->assertEquals( 0, $searchResult->totalCount );
     }
 
-
     /**
      * Test for the findContent() method.
      *

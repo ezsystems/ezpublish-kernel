@@ -337,7 +337,6 @@ class Html5Test extends PHPUnit_Framework_TestCase
         );
         $result = $html5->convert( $xmlDoc );
 
-
         // Make <br> tags valid
         $result = str_replace( "<br>", "<br/>", $result );
         // Make a valid XML document string

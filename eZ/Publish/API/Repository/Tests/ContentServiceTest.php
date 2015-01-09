@@ -1309,10 +1309,10 @@ class ContentServiceTest extends BaseContentServiceTest
      * @group user
      * @group field-type
      */
-    public function testUpdateContent_WithDifferentUser()
+    public function testUpdateContentWithDifferentUser()
     {
         /* BEGIN: Use Case */
-        $arrayWithDraftVersion2 = $this->createUpdatedDraftVersion2_NotAdmin();
+        $arrayWithDraftVersion2 = $this->createUpdatedDraftVersion2NotAdmin();
         /* END: Use Case */
 
         $this->assertInstanceOf(
