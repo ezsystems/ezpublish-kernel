@@ -213,7 +213,7 @@ abstract class Gateway
     /**
      * Updates an existing location.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * Will not throw anything if location id is invalid or no entries are affected.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId

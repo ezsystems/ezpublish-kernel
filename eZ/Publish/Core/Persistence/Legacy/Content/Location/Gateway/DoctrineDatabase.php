@@ -986,7 +986,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Updates an existing location.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * Will not throw anything if location id is invalid or no entries are affected.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
@@ -1024,10 +1024,12 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        if ( $statement->rowCount() < 1 )
+        // Commented due to EZP-23302: Update Location fails if no change is performed with the update
+        // Should be fixed with PDO::MYSQL_ATTR_FOUND_ROWS instead
+        /*if ( $statement->rowCount() < 1 )
         {
             throw new NotFound( 'location', $locationId );
-        }
+        }*/
     }
 
     /**
