@@ -126,6 +126,9 @@ Changes affecting version compatibility with former or future versions.
   
   `ezpublish.identity_definer` service tag and related classes/interfaces will be removed in v6.0
   
+* 5.4.2: `eZ\Bundle\EzPublishCoreBundle\Controller::getLegacyKernel()` is deprecated (will be removed in v6.0).
+  Use `eZ\Bundle\EzPublishLegacyBundle\Controller::getLegacyKernel()` instead. 
+  
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).
