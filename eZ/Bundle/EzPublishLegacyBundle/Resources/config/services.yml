@@ -297,6 +297,8 @@ services:
 
     ezpublish_legacy.legacy_kernel_listener:
         class: %ezpublish_legacy.legacy_kernel_listener.class%
+        calls:
+            - [setContainer, [@service_container]]
         tags:
             - { name: kernel.event_subscriber }
 
