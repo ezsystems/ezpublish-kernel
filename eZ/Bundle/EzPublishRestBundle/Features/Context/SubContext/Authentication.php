@@ -51,7 +51,7 @@ trait Authentication
         switch ( $this->authType )
         {
             case self::AUTHTYPE_BASICHTTP:
-                $this->restDriver->setAuthentication( '', '' );
+                $this->restDriver->setAuthentication( 'anonymous', '' );
                 break;
             case self::AUTHTYPE_SESSION:
                 $this->cleanupSession();
