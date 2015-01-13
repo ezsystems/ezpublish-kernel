@@ -1,7 +1,7 @@
 parameters:
     # Below default parameters, to be defined in ezpublish/config/config.yml
-    #ezpublish_legacy.enabled: false
-    #ezpublish_legacy.root_dir: ~
+    ezpublish_legacy.enabled: true
+    ezpublish_legacy.root_dir: %kernel.root_dir%/../ezpublish_legacy
 
     ezpublish.default_router.legacy_aware_routes: ['_ezpublishLegacyTreeMenu', 'ezpublish_rest_', '_ezpublishPreviewContent', '_wdt', '_profiler', '_assetic']
 

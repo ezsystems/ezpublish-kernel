@@ -37,7 +37,10 @@ class EzPublishLegacyExtension extends Extension
         // Security services
         $loader->load( 'security.yml' );
 
-        $container->setParameter( 'ezpublish_legacy.root_dir', $config['root_dir'] );
+        if ( isset( $config['root_dir'] ) )
+        {
+            $container->setParameter( 'ezpublish_legacy.root_dir', $config['root_dir'] );
+        }
 
         // Templating
         $loader->load( 'templating.yml' );

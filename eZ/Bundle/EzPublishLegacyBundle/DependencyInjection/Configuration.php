@@ -21,7 +21,7 @@ class Configuration extends SiteAccessConfiguration
         $rootNode = $treeBuilder->root( 'ez_publish_legacy' );
         $rootNode
             ->children()
-                ->booleanNode( 'enabled' )->defaultFalse()->end()
+                ->booleanNode( 'enabled' )->defaultTrue()->end()
                 ->scalarNode( 'root_dir' )
                     ->validate()
                         ->ifTrue(
