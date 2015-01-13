@@ -1,0 +1,12 @@
+parameters:
+    ezpublish_legacy.debug.templates_collector.class: eZ\Bundle\EzPublishLegacyBundle\Collector\LegacyTemplatesCollector
+
+services:
+    ezpublish_legacy.debug.templates_collector:
+        class: %ezpublish_legacy.debug.templates_collector.class%
+        arguments: [@ezpublish_legacy.kernel]
+        tags:
+            -
+                name: ezpublish_data_collector
+                panelTemplate: "EzPublishLegacyBundle:Profiler/templates:panel.html.twig"
+                toolbarTemplate: "EzPublishLegacyBundle:Profiler/templates:toolbar.html.twig"

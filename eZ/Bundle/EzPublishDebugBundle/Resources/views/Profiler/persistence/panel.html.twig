@@ -1,0 +1,30 @@
+<table>
+    <tr>
+        <th>Total Uncached SPI calls:</th>
+        <td>{{ collector.count }}</td>
+    </tr>
+    {% if collector.handlerscount %}
+        <tr>
+            <th>Uncached SPI handlers(times loaded):</th>
+            <td>{{ collector.handlers|join(', ') }}</td>
+        </tr>
+    {% endif %}
+</table>
+
+{% if collector.callsLoggingEnabled %}
+    <h3>Uncached SPI calls</h3>
+    <table>
+        <tr>
+            <th>Class</th>
+            <th>Method</th>
+            <th>Arguments</th>
+        </tr>
+        {% for call in collector.calls %}
+            <tr>
+                <td>{{ call.class }}</td>
+                <td>{{ call.method }}</td>
+                <td>{{ call.arguments }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}
