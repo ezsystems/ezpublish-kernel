@@ -10,7 +10,10 @@
 namespace eZ\Bundle\EzPublishLegacyBundle;
 
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Compiler\LegacyBundlesPass;
+use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Compiler\RelatedSiteAccessesCleanupPass;
+use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Compiler\RoutingPass;
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Security\SSOFactory;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Compiler\LegacyPass;
 use eZ\Bundle\EzPublishLegacyBundle\DependencyInjection\Compiler\TwigPass;
@@ -42,9 +45,11 @@ class EzPublishLegacyBundle extends Bundle
     public function build( ContainerBuilder $container )
     {
         parent::build( $container );
+        $container->addCompilerPass( new RelatedSiteAccessesCleanupPass(), PassConfig::TYPE_OPTIMIZE );
         $container->addCompilerPass( new LegacyPass() );
         $container->addCompilerPass( new TwigPass() );
         $container->addCompilerPass( new LegacyBundlesPass( $this->kernel ) );
+        $container->addCompilerPass( new RoutingPass() );
 
         /** @var \Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension $securityExtension */
         $securityExtension = $container->getExtension( 'security' );

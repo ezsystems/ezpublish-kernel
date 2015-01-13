@@ -59,18 +59,37 @@ class EzPublishLegacyExtension extends Extension
         $processor = new ConfigurationProcessor( $container, 'ezpublish_legacy' );
         $processor->mapConfig(
             $config,
-            function ( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizerInterface )
+            function ( array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer )
             {
                 if ( isset( $scopeSettings['templating']['view_layout'] ) )
                 {
-                    $contextualizerInterface->setContextualParameter( 'view_default_layout', $currentScope, $scopeSettings['templating']['view_layout'] );
+                    $contextualizer->setContextualParameter( 'view_default_layout', $currentScope, $scopeSettings['templating']['view_layout'] );
                 }
 
                 if ( isset( $scopeSettings['templating']['module_layout'] ) )
                 {
-                    $contextualizerInterface->setContextualParameter( 'module_default_layout', $currentScope, $scopeSettings['templating']['module_layout'] );
+                    $contextualizer->setContextualParameter( 'module_default_layout', $currentScope, $scopeSettings['templating']['module_layout'] );
+                }
+
+                if ( isset( $scopeSettings['legacy_mode'] ) )
+                {
+                    $container = $contextualizer->getContainer();
+                    $container->setParameter( "ezsettings.$currentScope.legacy_mode", $scopeSettings['legacy_mode'] );
+                    $container->setParameter( "ezsettings.$currentScope.url_alias_router", !$scopeSettings['legacy_mode'] );
                 }
             }
         );
+
+        // Define additional routes that are allowed with legacy_mode: true.
+        if ( isset( $config['legacy_aware_routes'] ) )
+        {
+            $container->setParameter(
+                'ezpublish.default_router.legacy_aware_routes',
+                array_merge(
+                    $container->getParameter( 'ezpublish.default_router.legacy_aware_routes' ),
+                    $config['legacy_aware_routes']
+                )
+            );
+        }
     }
 }

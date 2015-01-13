@@ -249,10 +249,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         {
             $container->setParameter(
                 'ezpublish.default_router.legacy_aware_routes',
-                array_merge(
-                    $container->getParameter( 'ezpublish.default_router.legacy_aware_routes' ),
-                    $config['router']['default_router']['legacy_aware_routes']
-                )
+                $config['router']['default_router']['legacy_aware_routes']
             );
         }
     }
@@ -394,12 +391,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         // First build the SiteAccess relation map, indexed by repository and rootLocationId.
         foreach ( $saList as $sa )
         {
-            // Exclude siteaccesses in legacy_mode (e.g. admin interface)
-            if ( $configResolver->getParameter( 'legacy_mode', 'ezsettings', $sa ) === true )
-            {
-                continue;
-            }
-
             $repository = $configResolver->getParameter( 'repository', 'ezsettings', $sa );
             if ( !isset( $saRelationMap[$repository] ) )
             {
@@ -418,11 +409,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         // Now build the related SiteAccesses list, based on the relation map.
         foreach ( $saList as $sa )
         {
-            if ( $configResolver->getParameter( 'legacy_mode', 'ezsettings', $sa ) === true )
-            {
-                continue;
-            }
-
             $repository = $configResolver->getParameter( 'repository', 'ezsettings', $sa );
             $rootLocationId = $configResolver->getParameter( 'content.tree_root.location_id', 'ezsettings', $sa );
             $container->setParameter(

@@ -109,24 +109,9 @@ class CommonTest extends AbstractParserTestCase
         );
     }
 
-    public function testLegacyMode()
-    {
-        $this->load( array( 'system' => array( 'ezdemo_site' => array( 'legacy_mode' => true ) ) ) );
-        $this->assertConfigResolverParameterValue( 'legacy_mode', true, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'url_alias_router', false, 'ezdemo_site' );
-    }
-
-    public function testNotLegacyMode()
-    {
-        $this->load( array( 'system' => array( 'ezdemo_site' => array( 'legacy_mode' => false ) ) ) );
-        $this->assertConfigResolverParameterValue( 'legacy_mode', false, 'ezdemo_site' );
-        $this->assertConfigResolverParameterValue( 'url_alias_router', true, 'ezdemo_site' );
-    }
-
     public function testNonExistentSettings()
     {
         $this->load();
-        $this->assertConfigResolverParameterValue( 'legacy_mode', false, 'ezdemo_site' );
         $this->assertConfigResolverParameterValue( 'url_alias_router', true, 'ezdemo_site' );
         $this->assertConfigResolverParameterValue( 'cache_pool_name', 'default', 'ezdemo_site' );
         $this->assertConfigResolverParameterValue( 'var_dir', 'var', 'ezdemo_site' );

@@ -53,9 +53,10 @@ class ConfigurationConverter
      */
     public function fromLegacy( $sitePackage, $adminSiteaccess )
     {
-        $settings = array();
-        $settings['ezpublish'] = array();
-        $settings['ezpublish']['siteaccess'] = array();
+        $settings = [
+            'ezpublish' => ['siteaccess' => []],
+            'ez_publish_legacy' => ['enabled' => true]
+        ];
         $defaultSiteaccess = $this->getParameter( 'SiteSettings', 'DefaultAccess' );
         $settings['ezpublish']['siteaccess']['default_siteaccess'] = $defaultSiteaccess;
         $siteList = $this->getParameter( 'SiteAccessSettings', 'AvailableSiteAccessList' );
@@ -97,12 +98,16 @@ class ConfigurationConverter
         {
             foreach ( $siteList as $siteaccess )
             {
-                $settings['ezpublish']['system'][$siteaccess] = array( 'legacy_mode' => true );
+                $settings['ez_publish_legacy']['system'][$siteaccess] = ['legacy_mode' => true];
             }
         }
         else
         {
-            $settings['ezpublish']['system'][$adminSiteaccess] += array( 'legacy_mode' => true );
+            if ( !isset( $settings['ez_publish_legacy']['system'][$adminSiteaccess] ) )
+            {
+                $settings['ez_publish_legacy']['system'][$adminSiteaccess] = [];
+            }
+            $settings['ez_publish_legacy']['system'][$adminSiteaccess] += ['legacy_mode' => true];
         }
 
         $languages = $this->getLanguages( $siteList, $groupName );

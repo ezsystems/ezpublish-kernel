@@ -354,7 +354,7 @@ EOT;
                                 ->end()
                                 ->arrayNode( 'legacy_aware_routes' )
                                     ->prototype( 'scalar' )->end()
-                                    ->info( 'Routes that are allowed when legacy_mode is true. Must be routes identifiers (e.g. "my_route_name"). Can be a prefix, so that all routes beginning with given prefix will be taken into account.' )
+                                    ->info( 'DEPRECATED. Use ez_publish_legacy.legacy_aware_routes instead.' )
                                 ->end()
                             ->end()
                         ->end()

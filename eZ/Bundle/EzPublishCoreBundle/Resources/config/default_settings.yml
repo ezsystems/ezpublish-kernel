@@ -17,7 +17,6 @@ parameters:
     ezpublish.session_name.default: "eZSESSID{siteaccess_hash}"
     ezsettings.default.session_name: %ezpublish.session_name.default%    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
     ezsettings.default.session: { name: %ezpublish.session_name.default% } # Session options that will override options from framework
-    ezsettings.default.legacy_mode: false
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
     ezsettings.default.index_page: ~                    # The page to show when accessing IndexPage (/)
     ezsettings.default.default_page: ~                  # The default page to show, e.g. after user login this will be used for default redirection

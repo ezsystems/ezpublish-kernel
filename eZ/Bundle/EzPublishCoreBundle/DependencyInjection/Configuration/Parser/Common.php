@@ -77,8 +77,9 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                 ->cannotBeEmpty()
                 ->info( 'Directory where binary files (from ezbinaryfile field type) are stored. Default value is "original"' )
             ->end()
+            // @deprecated since 5.4.2. Will be removed in 6.0.
             ->booleanNode( 'legacy_mode' )
-                ->info( 'Whether to use legacy mode or not. If true, will let the legacy kernel handle url aliases.' )
+                ->info( 'DEPRECATED. Use ez_publish_legacy.system.your_siteaccess.legacy_mode instead.' )
             ->end()
             // @deprecated since 5.3. Will be removed in 6.x.
             ->scalarNode( 'session_name' )
@@ -148,6 +149,7 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             $this->addDatabaseConfigSuggestion( $currentScope, $scopeSettings['database'] );
         if ( isset( $scopeSettings['repository'] ) )
             $contextualizer->setContextualParameter( 'repository', $currentScope, $scopeSettings['repository'] );
+        // @deprecated since 5.4.2
         if ( isset( $scopeSettings['legacy_mode'] ) )
         {
             $contextualizer->setContextualParameter( 'legacy_mode', $currentScope, $scopeSettings['legacy_mode'] );

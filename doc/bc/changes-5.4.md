@@ -129,6 +129,26 @@ Changes affecting version compatibility with former or future versions.
 * 5.4.2: `eZ\Bundle\EzPublishCoreBundle\Controller::getLegacyKernel()` is deprecated (will be removed in v6.0).
   Use `eZ\Bundle\EzPublishLegacyBundle\Controller::getLegacyKernel()` instead. 
   
+* 5.4.2: `legacy_mode` setting is deprecated and will be removed in v6.0.
+  Move your setting to `ez_publish_legacy` (LegacyBundle) namespace instead:
+  
+  ```yml
+  # This is deprecated
+  ezpublish:
+      system:
+          my_siteaccess:
+              legacy_mode: true
+              
+  # New setting
+  ez_publish_legacy:
+      system:
+          my_siteaccess:
+              legacy_mode: true
+  ```
+
+* 5.4.2: `legacy_aware_routes` setting is deprecated and will be removed in v6.0.
+  Move your setting to `ez_publish_legacy` instead.
+  
 No further changes are known in this release at the time of writing.
 See online on your corresponding eZ Publish version for
 updated list of known issues (missing features, breaks and errata).

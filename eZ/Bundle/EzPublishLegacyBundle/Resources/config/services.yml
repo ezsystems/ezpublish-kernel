@@ -3,6 +3,12 @@ parameters:
     #ezpublish_legacy.enabled: false
     #ezpublish_legacy.root_dir: ~
 
+    ezpublish.default_router.legacy_aware_routes: ['_ezpublishLegacyTreeMenu', 'ezpublish_rest_', '_ezpublishPreviewContent', '_wdt', '_profiler', '_assetic']
+
+    # Core overrides
+    router.class: eZ\Bundle\EzPublishLegacyBundle\Routing\DefaultRouter
+    ezpublish.security.login_listener.class: eZ\Bundle\EzPublishLegacyBundle\Security\SecurityListener
+
     ezpublish_legacy.kernel.lazy_loader.class: eZ\Publish\Core\MVC\Legacy\Kernel\Loader
     ezpublish_legacy.kernel_handler.class: ezpKernelHandler
     ezpublish_legacy.kernel_handler.web.class: ezpKernelWeb

@@ -6,3 +6,5 @@ parameters:
 
     # Pagelayout to use while rendering a content view in legacy
     ezpublish_legacy.default.view_default_layout: EzPublishLegacyBundle::legacy_view_default_pagelayout.html.twig
+
+    ezsettings.default.legacy_mode: false
