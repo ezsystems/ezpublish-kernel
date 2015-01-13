@@ -133,7 +133,7 @@ class QueryBuilder
             )
         );
 
-        if ( $translations !== null )
+        if ( !empty( $translations ) )
         {
             $query->where(
                 $query->expr->in(
