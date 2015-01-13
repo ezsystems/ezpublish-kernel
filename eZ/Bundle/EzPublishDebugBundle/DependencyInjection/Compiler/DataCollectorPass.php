@@ -26,7 +26,8 @@ class DataCollectorPass implements CompilerPassInterface
             foreach ( $attributes as $attribute )
             {
                 $dataCollectorDef->addMethodCall(
-                    'addCollector', [
+                    'addCollector',
+                    [
                         new Reference( $id ),
                         isset( $attribute['panelTemplate'] ) ? $attribute['panelTemplate'] : null,
                         isset( $attribute['toolbarTemplate'] ) ? $attribute['toolbarTemplate'] : null,
