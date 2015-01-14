@@ -229,6 +229,10 @@ services:
         tags:
             - { name: kernel.cache_clearer }
 
+    ezpublish_legacy.switchable_gateway_cache_purger:
+        class: eZ\Bundle\EzPublishLegacyBundle\Cache\SwitchableHttpCachePurger
+        arguments: [@ezpublish.http_cache.purger]
+
     ezpublish_legacy.content_exception_handler:
         class: %ezpublish_legacy.content_exception_handler.class%
         arguments: [@ezpublish_legacy.content_view_provider, @ezpublish_legacy.location_view_provider, @?logger]

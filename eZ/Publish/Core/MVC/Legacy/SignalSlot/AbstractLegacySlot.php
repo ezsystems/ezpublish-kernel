@@ -9,7 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\SignalSlot;
 
-use eZ\Publish\Core\MVC\Legacy\SignalSlot\Slot;
+use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
+use eZ\Publish\Core\MVC\Legacy\Cache\Switchable;
+use eZ\Publish\Core\SignalSlot\Slot;
 use Closure;
 use ezpKernelHandler;
 
@@ -24,14 +26,29 @@ abstract class AbstractLegacySlot extends Slot
     private $legacyKernel;
 
     /**
-     * @param \Closure|\ezpKernelHandler $legacyKernel
+     * @var \eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger
      */
-    public function __construct( $legacyKernel )
+    private $persistenceCacheClearer;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger
+     */
+    private $httpCacheClearer;
+
+    /**
+     * @param \Closure|\ezpKernelHandler $legacyKernel
+     * @param \eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger $persistenceCacheClearer
+     * @param \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger $httpCacheClearer
+     */
+    public function __construct( $legacyKernel, PersistenceCachePurger $persistenceCacheClearer, Switchable $httpCacheClearer )
     {
         if ( $legacyKernel instanceof Closure || $legacyKernel instanceof ezpKernelHandler )
             $this->legacyKernel = $legacyKernel;
         else
             throw new \RuntimeException( "Legacy slot only accepts \$legacyKernel instance of Closure or ezpKernelHandler" );
+
+        $this->persistenceCacheClearer = $persistenceCacheClearer;
+        $this->httpCacheClearer = $httpCacheClearer;
     }
 
     /**
@@ -45,6 +62,9 @@ abstract class AbstractLegacySlot extends Slot
      */
     protected function runLegacyKernelCallback( $callback )
     {
+        $this->persistenceCacheClearer->setEnabled( false );
+        $this->httpCacheClearer->switchOff();
+
         // Initialize legacy kernel if not already done
         if ( $this->legacyKernel instanceof Closure )
         {
@@ -52,10 +72,15 @@ abstract class AbstractLegacySlot extends Slot
             $this->legacyKernel = $legacyKernelClosure();
         }
 
-        return $this->legacyKernel->runCallback(
+        $return = $this->legacyKernel->runCallback(
             $callback,
             false,
             false
         );
+
+        $this->persistenceCacheClearer->setEnabled( true );
+        $this->httpCacheClearer->switchOn();
+
+        return $return;
     }
 }

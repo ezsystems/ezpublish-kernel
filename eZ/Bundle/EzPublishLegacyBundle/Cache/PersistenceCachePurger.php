@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 
+use eZ\Publish\Core\MVC\Legacy\Cache\Switchable;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
