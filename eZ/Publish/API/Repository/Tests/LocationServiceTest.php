@@ -1011,6 +1011,42 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the updateLocation() method.
+     * Ref EZP-23302: Update Location fails if no change is performed with the update
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testUpdateLocationTwice()
+    {
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId( 'location', 5 );
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+        $repository->setCurrentUser( $repository->getUserService()->loadUser( 14 ) );
+
+        $originalLocation = $locationService->loadLocation( $locationId );
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+        $updateStruct->priority = 42;
+
+        $updatedLocation = $locationService->updateLocation(
+            $originalLocation, $updateStruct
+        );
+
+        // Repeated update with the same, unchanged struct
+        $secondUpdatedLocation = $locationService->updateLocation(
+            $updatedLocation, $updateStruct
+        );
+        /* END: Use Case */
+
+        $this->assertEquals( $updatedLocation->priority, 42 );
+        $this->assertEquals( $secondUpdatedLocation->priority, 42 );
+    }
+
+    /**
      * Test for the swapLocation() method.
      *
      * @return void
