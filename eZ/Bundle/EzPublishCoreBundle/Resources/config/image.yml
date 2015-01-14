@@ -65,7 +65,7 @@ services:
 
     ezpublish.image_alias.imagine.cache_resolver:
         class: %ezpublish.image_alias.imagine.cache_resolver.class%
-        arguments: [@ezpublish.fieldType.ezimage.io_service, @router.request_context, @liip_imagine.filter.configuration]
+        arguments: [@ezpublish.fieldType.ezimage.io_service, @liip_imagine.filter.configuration]
         tags:
             - { name: liip_imagine.cache.resolver, resolver: ezpublish }
 

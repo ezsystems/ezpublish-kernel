@@ -16,7 +16,6 @@ use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
-use Symfony\Component\Routing\RequestContext;
 
 /**
  * LiipImagineBundle cache resolver using eZ IO repository.
@@ -31,19 +30,13 @@ class IORepositoryResolver implements ResolverInterface
     private $ioService;
 
     /**
-     * @var \Symfony\Component\Routing\RequestContext
-     */
-    private $requestContext;
-
-    /**
      * @var FilterConfiguration
      */
     private $filterConfiguration;
 
-    public function __construct( IOServiceInterface $ioService, RequestContext $requestContext, FilterConfiguration $filterConfiguration )
+    public function __construct( IOServiceInterface $ioService, FilterConfiguration $filterConfiguration )
     {
         $this->ioService = $ioService;
-        $this->requestContext = $requestContext;
         $this->filterConfiguration = $filterConfiguration;
     }
 
@@ -64,16 +57,10 @@ class IORepositoryResolver implements ResolverInterface
             }
 
             $path = $binaryFile->uri;
-            $path = $filter !== static::VARIATION_ORIGINAL ? $this->getFilePath(
+            return $filter !== static::VARIATION_ORIGINAL ? $this->getFilePath(
                 $path,
                 $filter
             ) : $path;
-
-            return sprintf(
-                '%s%s',
-                $path[0] === '/' ? $this->getBaseUrl() : '',
-                $path
-            );
         }
         catch ( NotFoundException $e )
         {
@@ -150,41 +137,6 @@ class IORepositoryResolver implements ResolverInterface
             $info['filename'],
             $filter,
             empty( $info['extension'] ) ? '' : '.' . $info['extension']
-        );
-    }
-
-    /**
-     * Returns base URL, with scheme, host and port, for current request context.
-     * If no delivery URL is configured for current SiteAccess, will return base URL from current RequestContext.
-     *
-     * @return string
-     */
-    protected function getBaseUrl()
-    {
-        $port = '';
-        if ( $this->requestContext->getScheme() === 'https' && $this->requestContext->getHttpsPort() != 443 )
-        {
-            $port = ":{$this->requestContext->getHttpsPort()}";
-        }
-
-        if ( $this->requestContext->getScheme() === 'http' && $this->requestContext->getHttpPort() != 80 )
-        {
-            $port = ":{$this->requestContext->getHttpPort()}";
-        }
-
-        $baseUrl = $this->requestContext->getBaseUrl();
-        if ( substr( $this->requestContext->getBaseUrl(), -4 ) === '.php' )
-        {
-            $baseUrl = pathinfo( $this->requestContext->getBaseurl(), PATHINFO_DIRNAME );
-        }
-        $baseUrl = rtrim( $baseUrl, '/\\' );
-
-        return sprintf(
-            '%s://%s%s%s',
-            $this->requestContext->getScheme(),
-            $this->requestContext->getHost(),
-            $port,
-            $baseUrl
         );
     }
 }
