@@ -80,7 +80,7 @@ class LegacySetupController extends ContainerAware
     {
         // Ensure that persistence cache purger is disabled as legacy cache will be cleared by legacy setup wizard while
         // everything is not ready yet to clear SPI cache (no connection to repository yet).
-        $this->persistenceCachePurger->setEnabled( false );
+        $this->persistenceCachePurger->switchOff();
 
         // we disable injection of settings to Legacy Kernel during setup
         $this->kernelFactory->setBuildEventsEnabled( false );
