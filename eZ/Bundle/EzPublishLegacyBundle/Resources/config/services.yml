@@ -192,7 +192,7 @@ services:
         class: %ezpublish_legacy.configuration_mapper.class%
         arguments:
             - @ezpublish.config.resolver.core
-            - @ezpublish.http_cache.purger
+            - @ezpublish_legacy.switchable_http_cache_purger
             - @ezpublish_legacy.persistence_cache_purger
             - @ezpublish.urlalias_generator
             - @ezpublish.api.storage_engine.legacy.dbhandler
