@@ -28,7 +28,7 @@ class SwitchableHttpCachePurger implements GatewayCachePurger
     {
         if ( $this->getSwitch() === false )
         {
-            return;
+            return $cacheElements;
         }
 
         $this->gatewayCachePurger->purge( $cacheElements );
