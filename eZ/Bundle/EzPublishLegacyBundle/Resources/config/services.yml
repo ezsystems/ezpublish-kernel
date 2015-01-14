@@ -229,7 +229,7 @@ services:
         tags:
             - { name: kernel.cache_clearer }
 
-    ezpublish_legacy.switchable_gateway_cache_purger:
+    ezpublish_legacy.switchable_http_cache_purger:
         class: eZ\Bundle\EzPublishLegacyBundle\Cache\SwitchableHttpCachePurger
         arguments: [@ezpublish.http_cache.purger]
 

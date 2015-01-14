@@ -9,7 +9,6 @@
 
 namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 
-use eZ\Publish\Core\MVC\Legacy\Cache\Switchable;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -22,6 +21,8 @@ use Psr\Log\LoggerInterface;
  */
 class PersistenceCachePurger implements CacheClearerInterface
 {
+    use Switchable;
+
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
      */
@@ -38,13 +39,6 @@ class PersistenceCachePurger implements CacheClearerInterface
      * @var bool
      */
     protected $allCleared = false;
-
-    /**
-     * Activation flag.
-     *
-     * @var bool
-     */
-    protected $enabled = true;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -137,11 +131,14 @@ class PersistenceCachePurger implements CacheClearerInterface
     public function content( $locationIds = null )
     {
         if ( $this->allCleared === true || $this->enabled === false )
-            return;
+            return $locationIds;
 
         if ( $locationIds === null )
         {
-            $this->cache->clear( 'content' );
+            if ( $this->getSwitch() === true )
+            {
+                $this->cache->clear( 'content' );
+            }
             goto relatedCache;
         }
         else if ( !is_array( $locationIds ) )
@@ -153,6 +150,9 @@ class PersistenceCachePurger implements CacheClearerInterface
         {
             if ( !is_scalar( $id ) )
                 throw new InvalidArgumentType( "\$id", "int[]|null", $id );
+
+            if ( $this->getSwitch() === false )
+                continue;
 
             try
             {
@@ -188,7 +188,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function contentType( $id = null )
     {
-        if ( $this->allCleared === true || $this->enabled === false )
+        if ( $this->allCleared === true || $this->enabled === false || $this->getSwitch() === false )
             return;
 
         if ( $id === null )

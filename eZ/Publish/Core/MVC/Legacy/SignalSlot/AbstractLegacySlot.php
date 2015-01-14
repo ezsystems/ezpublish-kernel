@@ -9,8 +9,6 @@
 
 namespace eZ\Publish\Core\MVC\Legacy\SignalSlot;
 
-use eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger;
-use eZ\Publish\Core\MVC\Legacy\Cache\Switchable;
 use eZ\Publish\Core\SignalSlot\Slot;
 use Closure;
 use ezpKernelHandler;
@@ -26,21 +24,21 @@ abstract class AbstractLegacySlot extends Slot
     private $legacyKernel;
 
     /**
-     * @var \eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger
+     * @var \eZ\Bundle\EzPublishLegacyBundle\Cache\Switchable
      */
     private $persistenceCacheClearer;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger
+     * @var \eZ\Bundle\EzPublishLegacyBundle\Cache\Switchable
      */
     private $httpCacheClearer;
 
     /**
      * @param \Closure|\ezpKernelHandler $legacyKernel
-     * @param \eZ\Bundle\EzPublishLegacyBundle\Cache\PersistenceCachePurger $persistenceCacheClearer
-     * @param \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger $httpCacheClearer
+     * @param \eZ\Bundle\EzPublishLegacyBundle\Cache\Switchable $persistenceCacheClearer
+     * @param \eZ\Bundle\EzPublishLegacyBundle\Cache\Switchable $httpCacheClearer
      */
-    public function __construct( $legacyKernel, PersistenceCachePurger $persistenceCacheClearer, Switchable $httpCacheClearer )
+    public function __construct( $legacyKernel, $persistenceCacheClearer, $httpCacheClearer )
     {
         if ( $legacyKernel instanceof Closure || $legacyKernel instanceof ezpKernelHandler )
             $this->legacyKernel = $legacyKernel;
@@ -62,7 +60,7 @@ abstract class AbstractLegacySlot extends Slot
      */
     protected function runLegacyKernelCallback( $callback )
     {
-        $this->persistenceCacheClearer->setEnabled( false );
+        $this->persistenceCacheClearer->switchOff();
         $this->httpCacheClearer->switchOff();
 
         // Initialize legacy kernel if not already done
@@ -78,7 +76,7 @@ abstract class AbstractLegacySlot extends Slot
             false
         );
 
-        $this->persistenceCacheClearer->setEnabled( true );
+        $this->persistenceCacheClearer->switchOn();
         $this->httpCacheClearer->switchOn();
 
         return $return;

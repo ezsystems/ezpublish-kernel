@@ -17,16 +17,27 @@ use PHPUnit_Framework_TestCase;
  */
 class LegacySlotsTest extends PHPUnit_Framework_TestCase
 {
-    const SIGNAL_SLOT_NS = 'eZ\Publish\Core\MVC\Legacy\SignalSlot';
+    const SIGNAL_SLOT_NS = 'eZ\Publish\Core\SignalSlot';
+    const LEGACY_SIGNAL_SLOT_NS = 'eZ\Publish\Core\MVC\Legacy\SignalSlot';
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $ezpKernelHandlerMock;
 
+    /** @var \eZ\Bundle\EzPublishLegacyBundle\Cache\Switchable|\PHPUnit_Framework_MockObject_MockObject */
+    private $persistenceCachePurgerMock;
+
+    /** @var \eZ\Bundle\EzPublishLegacyBundle\Cache\Switchable|\PHPUnit_Framework_MockObject_MockObject */
+    private $httpCachePurgerMock;
+
     public function setUp()
     {
-        $this->ezpKernelHandlerMock = $this->getMock( 'ezpKernelHandler' );
+        $this->ezpKernelHandlerMock = $this->getMock( '\ezpKernelHandler' );
+
+        $this->persistenceCachePurgerMock = $this->getMockForTrait( 'eZ\Bundle\EzPublishLegacyBundle\Cache\Switchable' );
+        $this->httpCachePurgerMock = $this->getMockForTrait( 'eZ\Bundle\EzPublishLegacyBundle\Cache\Switchable' );
+
         parent::setUp();
     }
 
@@ -36,12 +47,17 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
     public function testAbstractLegacySlot()
     {
         $ezpKernelHandlerMock = $this->ezpKernelHandlerMock;
+
         $legacySlotMock = $this->getMock(
-            'eZ\Publish\Core\MVC\SignalSlot\SignalSlot\Slot\AbstractLegacySlot',
+            'eZ\Publish\Core\MVC\Legacy\SignalSlot\AbstractLegacySlot',
             // methods
             array(),
             // ctor arguments
-            array( $ezpKernelHandlerMock )
+            array(
+                $ezpKernelHandlerMock,
+                $this->persistenceCachePurgerMock,
+                $this->httpCachePurgerMock
+            )
         );
 
         $reflectionProperty = new \ReflectionProperty( 'eZ\Publish\Core\MVC\Legacy\SignalSlot\AbstractLegacySlot', 'legacyKernel' );
@@ -77,7 +93,7 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
     {
         $ezpKernelHandlerMock = $this->ezpKernelHandlerMock;
         $signalClassName = self::SIGNAL_SLOT_NS . '\\Signal\\' . $signalName;
-        $slotClassName = self::SIGNAL_SLOT_NS . '\\Slot\\' . $slotName;
+        $slotClassName = self::LEGACY_SIGNAL_SLOT_NS . '\\' . $slotName;
 
         /**
          * @var \eZ\Publish\Core\SignalSlot\Slot $slot
@@ -86,7 +102,9 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
             function () use ( $ezpKernelHandlerMock )
             {
                 return $ezpKernelHandlerMock;
-            }
+            },
+            $this->persistenceCachePurgerMock,
+            $this->httpCachePurgerMock
         );
 
         $ezpKernelHandlerMock
@@ -107,7 +125,7 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
     public function testLegacySlotsInValidSignal( $slotName )
     {
         $ezpKernelHandlerMock = $this->ezpKernelHandlerMock;
-        $slotClassName = self::SIGNAL_SLOT_NS . '\\Slot\\' . $slotName;
+        $slotClassName = self::LEGACY_SIGNAL_SLOT_NS . '\\' . $slotName;
 
         /**
          * @var \eZ\Publish\Core\SignalSlot\Slot $slot
@@ -116,7 +134,9 @@ class LegacySlotsTest extends PHPUnit_Framework_TestCase
             function () use ( $ezpKernelHandlerMock )
             {
                 return $ezpKernelHandlerMock;
-            }
+            },
+            $this->persistenceCachePurgerMock,
+            $this->httpCachePurgerMock
         );
 
         $ezpKernelHandlerMock
