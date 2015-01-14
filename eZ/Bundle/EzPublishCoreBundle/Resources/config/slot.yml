@@ -1,0 +1,137 @@
+parameters:
+    ezpublish.http_cache.signalslot.assign_section.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\AssignSectionSlot
+    ezpublish.http_cache.signalslot.copy_content.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\CopyContentSlot
+    ezpublish.http_cache.signalslot.create_location.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\CreateLocationSlot
+    ezpublish.http_cache.signalslot.delete_content.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DeleteContentSlot
+    ezpublish.http_cache.signalslot.delete_location.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DeleteLocationSlot
+    ezpublish.http_cache.signalslot.delete_version.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DeleteVersionSlot
+    ezpublish.http_cache.signalslot.hide_location.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\HideLocationSlot
+    ezpublish.http_cache.signalslot.move_subtree.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\MoveSubtreeSlot
+    ezpublish.http_cache.signalslot.publish_version.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\PublishVersionSlot
+    ezpublish.http_cache.signalslot.set_content_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\SetContentStateSlot
+    ezpublish.http_cache.signalslot.create_object_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\CreateObjectStateSlot
+    ezpublish.http_cache.signalslot.create_object_state_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\CreateObjectStateGroupSlot
+    ezpublish.http_cache.signalslot.delete_object_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DeleteObjectStateSlot
+    ezpublish.http_cache.signalslot.delete_object_state_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DeleteObjectStateGroupSlot
+    ezpublish.http_cache.signalslot.set_priority_of_object_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\SetPriorityOfObjectStateSlot
+    ezpublish.http_cache.signalslot.update_object_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateObjectStateSlot
+    ezpublish.http_cache.signalslot.update_object_state_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateObjectStateGroupSlot
+    ezpublish.http_cache.signalslot.swap_location.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\SwapLocationSlot
+    ezpublish.http_cache.signalslot.unhide_location.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UnhideLocationSlot
+    ezpublish.http_cache.signalslot.update_location.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateLocationSlot
+    ezpublish.http_cache.signalslot.publish_content_type_draft.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\PublishContentTypeDraftSlot
+    ezpublish.http_cache.signalslot.create_language.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\CreateLanguageSlot
+    ezpublish.http_cache.signalslot.delete_language.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DeleteLanguageSlot
+    ezpublish.http_cache.signalslot.disable_language.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DisableLanguageSlot
+    ezpublish.http_cache.signalslot.enable_language.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\EnableLanguageSlot
+    ezpublish.http_cache.signalslot.update_language_name.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateLanguageNameSlot
+    ezpublish.http_cache.signalslot.update_user.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateUserSlot
+    ezpublish.http_cache.signalslot.assign_user_to_user_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\AssignUserToUserGroupSlot
+    ezpublish.http_cache.signalslot.unassign_user_from_user_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UnassignUserFromUserGroupSlot
+
+services:
+    ezpublish.http_cache.signalslot.base:
+        class: eZ\Publish\Core\MVC\Symfony\SignalSlot\AbstractSlot
+        arguments: [@ezpublish.http_cache.purger, @ezpublish.api.service.content]
+
+    ezpublish.http_cache.signalslot.assign_section:
+        class: %ezpublish.http_cache.signalslot.assign_section.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: SectionService\AssignSectionSignal }
+
+    ezpublish.http_cache.signalslot.copy_content:
+        class: %ezpublish.http_cache.signalslot.copy_content.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\CopyContentSignal }
+
+    ezpublish.http_cache.signalslot.create_location:
+        class: %ezpublish.http_cache.signalslot.create_location.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\CreateLocationSignal }
+
+    ezpublish.http_cache.signalslot.delete_content:
+        class: %ezpublish.http_cache.signalslot.delete_content.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\DeleteContentSignal }
+
+    ezpublish.http_cache.signalslot.delete_location:
+        class: %ezpublish.http_cache.signalslot.delete_location.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\DeleteLocationSignal }
+
+    ezpublish.http_cache.signalslot.delete_version:
+        class: %ezpublish.http_cache.signalslot.delete_version.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\DeleteVersionSignal }
+
+    ezpublish.http_cache.signalslot.hide_location:
+        class: %ezpublish.http_cache.signalslot.hide_location.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\HideLocationSignal }
+
+    ezpublish.http_cache.signalslot.move_subtree:
+        class: %ezpublish.http_cache.signalslot.move_subtree.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\MoveSubtreeSignal }
+
+    ezpublish.http_cache.signalslot.publish_version:
+        class: %ezpublish.http_cache.signalslot.publish_version.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentService\PublishVersionSignal }
+
+    ezpublish.http_cache.signalslot.set_content_state:
+        class: %ezpublish.http_cache.signalslot.set_content_state.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: ObjectStateService\SetContentStateSignal }
+
+    ezpublish.http_cache.signalslot.swap_location:
+        class: %ezpublish.http_cache.signalslot.swap_location.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\SwapLocationSignal }
+
+    ezpublish.http_cache.signalslot.unhide_location:
+        class: %ezpublish.http_cache.signalslot.unhide_location.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\UnhideLocationSignal }
+
+    ezpublish.http_cache.signalslot.update_location:
+        class: %ezpublish.http_cache.signalslot.update_location.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: LocationService\UpdateLocationSignal }
+
+    ezpublish.http_cache.signalslot.publish_content_type_draft:
+        class: %ezpublish.http_cache.signalslot.publish_content_type_draft.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: ContentTypeService\PublishContentTypeDraftSignal }
+
+    ezpublish.http_cache.signalslot.update_user:
+        class: %ezpublish.http_cache.signalslot.update_user.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: UserService\UpdateUserSignal }
+
+    ezpublish.http_cache.signalslot.assign_user_to_user_group:
+        class: %ezpublish.http_cache.signalslot.assign_user_to_user_group.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: UserService\AssignUserToUserGroupSignal }
+
+    ezpublish.http_cache.signalslot.unassign_user_from_user_group:
+        class: %ezpublish.http_cache.signalslot.unassign_user_from_user_group.class%
+        parent: ezpublish.http_cache.signalslot.base
+        tags:
+            - { name: ezpublish.api.slot, signal: UserService\UnAssignUserFromUserGroupSignal }
