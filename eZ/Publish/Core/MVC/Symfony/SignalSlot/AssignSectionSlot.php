@@ -29,15 +29,10 @@ class AssignSectionSlot extends AbstractSlot
     public function receive( Signal $signal )
     {
         if ( !$signal instanceof Signal\SectionService\AssignSectionSignal )
-            return;// @todo Error Logging? No exception seem to be defined for this case
+        {
+            return;
+        }
 
-        $this->runLegacyKernelCallback(
-            function () use ( $signal )
-            {
-                eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                eZSearch::updateObjectsSection( array( $signal->contentId ), $signal->sectionId );
-                eZContentObject::clearCache();// Clear all object memory cache to free memory
-            }
-        );
+        $this->httpCacheClearer->purge( $this->getLocationId( $signal->contentId ) );
     }
 }

@@ -29,15 +29,10 @@ class CopyContentSlot extends AbstractSlot
     public function receive( Signal $signal )
     {
         if ( !$signal instanceof Signal\ContentService\CopyContentSignal )
+        {
             return;
+        }
 
-        $this->runLegacyKernelCallback(
-            function () use ( $signal )
-            {
-                eZContentCacheManager::clearContentCacheIfNeeded( $signal->dstContentId );
-                eZContentOperationCollection::registerSearchObject( $signal->dstContentId );
-                eZContentObject::clearCache();// Clear all object memory cache to free memory
-            }
-        );
+        $this->httpCacheClearer->purge( $this->getLocationId( $signal->dstContentId ) );
     }
 }

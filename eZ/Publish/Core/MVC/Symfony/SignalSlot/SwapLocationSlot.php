@@ -29,16 +29,15 @@ class SwapLocationSlot extends AbstractSlot
     public function receive( Signal $signal )
     {
         if ( !$signal instanceof Signal\LocationService\SwapLocationSignal )
+        {
             return;
+        }
 
-        $this->runLegacyKernelCallback(
-            function () use ( $signal )
-            {
-                eZContentCacheManager::clearContentCacheIfNeeded( $signal->content1Id );
-                eZContentCacheManager::clearContentCacheIfNeeded( $signal->content2Id );
-                eZSearch::swapNode( $signal->location1Id, $signal->location2Id );
-                eZContentObject::clearCache();// Clear all object memory cache to free memory
-            }
+        $this->httpCacheClearer->purge(
+            array(
+                $this->getLocationId( $signal->content1Id ),
+                $this->getLocationId( $signal->content2Id )
+            )
         );
     }
 }
