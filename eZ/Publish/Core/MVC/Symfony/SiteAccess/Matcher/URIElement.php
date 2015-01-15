@@ -29,6 +29,13 @@ class URIElement implements VersatileMatcher, URILexer
     private $elementNumber;
 
     /**
+     * URI elements used for matching as an array.
+     *
+     * @var array
+     */
+    private $uriElements;
+
+    /**
      * Constructor.
      *
      * @param int $elementNumber Number of elements to take into account.
@@ -36,6 +43,11 @@ class URIElement implements VersatileMatcher, URILexer
     public function __construct( $elementNumber )
     {
         $this->elementNumber = (int)$elementNumber;
+    }
+
+    public function __sleep()
+    {
+        return array( 'elementNumber', 'uriElements' );
     }
 
     /**
@@ -63,6 +75,15 @@ class URIElement implements VersatileMatcher, URILexer
      */
     protected function getURIElements()
     {
+        if ( isset( $this->uriElements ) )
+        {
+            return $this->uriElements;
+        }
+        else if ( !isset( $this->request ) )
+        {
+            return array();
+        }
+
         $elements = array_slice(
             explode( "/", $this->request->pathinfo ),
             1,
@@ -79,7 +100,7 @@ class URIElement implements VersatileMatcher, URILexer
         if ( count( $elements ) !== $this->elementNumber )
             throw new LogicException( 'The number of provided elements to consider is different than the number of elements found in the URI' );
 
-        return $elements;
+        return $this->uriElements = $elements;
     }
 
     public function getName()
