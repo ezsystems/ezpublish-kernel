@@ -31,7 +31,7 @@ class SwitchableHttpCachePurger implements GatewayCachePurger
             return $cacheElements;
         }
 
-        $this->gatewayCachePurger->purge( $cacheElements );
+        return $this->gatewayCachePurger->purge( $cacheElements );
     }
 
     public function purgeAll()
