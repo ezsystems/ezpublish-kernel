@@ -66,7 +66,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function all()
     {
-        if ( $this->getSwitch() === false )
+        if ( $this->isSwitchedOff() )
             return;
 
         $this->cache->clear();
@@ -108,7 +108,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function content( $locationIds = null )
     {
-        if ( $this->allCleared === true || $this->getSwitch() === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return $locationIds;
 
         if ( $locationIds === null )
@@ -160,7 +160,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function contentType( $id = null )
     {
-        if ( $this->allCleared === true || $this->getSwitch() === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         if ( $id === null )
@@ -187,7 +187,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function contentTypeGroup( $id = null )
     {
-        if ( $this->allCleared === true || $this->getSwitch() === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         if ( $id === null )
@@ -215,7 +215,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function section( $id = null )
     {
-        if ( $this->allCleared === true || $this->getSwitch() === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         if ( $id === null )
@@ -239,7 +239,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function languages( $ids )
     {
-        if ( $this->allCleared === true || $this->getSwitch() === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         $ids = (array)$ids;
@@ -255,7 +255,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function user( $id = null )
     {
-        if ( $this->allCleared === true || $this->getSwitch() === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         if ( $id === null )

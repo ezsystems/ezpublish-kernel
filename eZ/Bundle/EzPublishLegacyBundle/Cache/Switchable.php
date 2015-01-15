@@ -23,11 +23,20 @@ trait Switchable
     }
 
     /**
-     * Returns the value of the switch
+     * Checks if the switch is off
      * @return bool
      */
-    public function getSwitch()
+    public function isSwitchedOn()
     {
         return $this->isSwitchedOn;
+    }
+
+    /**
+     * Checks if the switch is off
+     * @return bool
+     */
+    public function isSwitchedOff()
+    {
+        return !$this->isSwitchedOn;
     }
 }
