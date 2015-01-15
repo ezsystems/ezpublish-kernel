@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Regex\URI as RegexMatcher;
@@ -125,5 +126,23 @@ class RouterURIRegexTest extends PHPUnit_Framework_TestCase
     {
         $matcher = new RegexMatcher( array(), array() );
         $this->assertSame( 'uri:regexp', $matcher->getName() );
+    }
+
+    public function testSerialize()
+    {
+        $matcher = new RegexMatcher(
+            array(
+                'regex' => '^/foo(\\w+)bar',
+                'itemNumber' => 2
+            )
+        );
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => '/foo/bar' ) ) );
+        $sa = new SiteAccess( 'test', 'test', $matcher );
+        $serializedSA1 = serialize( $sa );
+
+        $matcher->setRequest( new SimplifiedRequest( array( 'pathinfo' => '/foo/bar/baz' ) ) );
+        $serializedSA2 = serialize( $sa );
+
+        $this->assertSame( $serializedSA1, $serializedSA2 );
     }
 }
