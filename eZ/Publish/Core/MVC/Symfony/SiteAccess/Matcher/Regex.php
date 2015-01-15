@@ -41,6 +41,11 @@ abstract class Regex implements Matcher
     protected $request;
 
     /**
+     * @var string
+     */
+    protected $matchedSiteAccess;
+
+    /**
      * Constructor.
      *
      * @param string $regex Regular Expression to use.
@@ -52,20 +57,36 @@ abstract class Regex implements Matcher
         $this->itemNumber = $itemNumber;
     }
 
-    /**
-     * Returns matching Siteaccess.
-     *
-     * @return string|false Siteaccess matched or false.
-     */
+    public function __sleep()
+    {
+        return array( 'regex', 'itemNumber', 'matchedSiteAccess' );
+    }
+
     public function match()
     {
+        return $this->getMatchedSiteAccess();
+    }
+
+    /**
+     * Returns matched SiteAccess.
+     *
+     * @return string|bool
+     */
+    protected function getMatchedSiteAccess()
+    {
+        if ( isset( $this->matchedSiteAccess ) )
+        {
+            return $this->matchedSiteAccess;
+        }
+
         preg_match(
             "@{$this->regex}@",
             $this->element,
             $match
         );
 
-        return isset( $match[$this->itemNumber] ) ? $match[$this->itemNumber] : false;
+        $this->matchedSiteAccess = isset( $match[$this->itemNumber] ) ? $match[$this->itemNumber] : false;
+        return $this->matchedSiteAccess;
     }
 
     /**
