@@ -31,13 +31,6 @@ class SetContentStateSlot extends AbstractSlot
         if ( !$signal instanceof Signal\ObjectStateService\SetContentStateSignal )
             return;
 
-        $this->runLegacyKernelCallback(
-            function () use ( $signal )
-            {
-                eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                eZSearch::updateObjectState( $signal->contentId, array( $signal->objectStateId ) );
-                eZContentObject::clearCache();// Clear all object memory cache to free memory
-            }
-        );
+        $this->httpCacheClearer->purge( $this->getLocationId( $signal->contentId ) );
     }
 }

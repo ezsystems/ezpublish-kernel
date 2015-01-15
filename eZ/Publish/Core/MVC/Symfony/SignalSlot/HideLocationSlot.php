@@ -29,16 +29,10 @@ class HideLocationSlot extends AbstractSlot
     public function receive( Signal $signal )
     {
         if ( !$signal instanceof Signal\LocationService\HideLocationSignal )
+        {
             return;
+        }
 
-        $this->runLegacyKernelCallback(
-            function () use ( $signal )
-            {
-                $node = eZContentObjectTreeNode::fetch( $signal->locationId );
-                eZContentObjectTreeNode::clearViewCacheForSubtree( $node );
-                eZSearch::updateNodeVisibility( $signal->locationId, 'hide' );
-                eZContentObject::clearCache();// Clear all object memory cache to free memory
-            }
-        );
+        $this->httpCacheClearer->purge( $signal->locationId );
     }
 }

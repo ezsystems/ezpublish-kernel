@@ -29,15 +29,10 @@ class DeleteContentSlot extends AbstractSlot
     public function receive( Signal $signal )
     {
         if ( !$signal instanceof Signal\ContentService\DeleteContentSignal )
+        {
             return;
+        }
 
-        $this->runLegacyKernelCallback(
-            function () use ( $signal )
-            {
-                eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId );
-                eZSearch::removeObjectById( $signal->contentId, null );
-                eZContentObject::clearCache();// Clear all object memory cache to free memory
-            }
-        );
+        $this->httpCacheClearer->purge( $this->getLocationId( $signal->contentId ) );
     }
 }

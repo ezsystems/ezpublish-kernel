@@ -29,16 +29,10 @@ class CreateLocationSlot extends AbstractSlot
     public function receive( Signal $signal )
     {
         if ( !$signal instanceof Signal\LocationService\CreateLocationSignal )
+        {
             return;
+        }
 
-        $this->runLegacyKernelCallback(
-            function () use ( $signal )
-            {
-                eZContentCacheManager::clearContentCacheIfNeeded( $signal->contentId, true, array( $signal->locationId ) );
-                $object = eZContentObject::fetch( $signal->contentId );
-                eZSearch::addNodeAssignment( $object->mainNodeID(), $signal->contentId, $signal->locationId );
-                eZContentObject::clearCache();// Clear all object memory cache to free memory
-            }
-        );
+        $this->httpCacheClearer->purge( $this->getLocationId( $signal->contentId ) );
     }
 }

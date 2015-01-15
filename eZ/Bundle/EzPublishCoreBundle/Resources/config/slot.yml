@@ -9,22 +9,10 @@ parameters:
     ezpublish.http_cache.signalslot.move_subtree.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\MoveSubtreeSlot
     ezpublish.http_cache.signalslot.publish_version.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\PublishVersionSlot
     ezpublish.http_cache.signalslot.set_content_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\SetContentStateSlot
-    ezpublish.http_cache.signalslot.create_object_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\CreateObjectStateSlot
     ezpublish.http_cache.signalslot.create_object_state_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\CreateObjectStateGroupSlot
-    ezpublish.http_cache.signalslot.delete_object_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DeleteObjectStateSlot
-    ezpublish.http_cache.signalslot.delete_object_state_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DeleteObjectStateGroupSlot
-    ezpublish.http_cache.signalslot.set_priority_of_object_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\SetPriorityOfObjectStateSlot
-    ezpublish.http_cache.signalslot.update_object_state.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateObjectStateSlot
-    ezpublish.http_cache.signalslot.update_object_state_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateObjectStateGroupSlot
     ezpublish.http_cache.signalslot.swap_location.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\SwapLocationSlot
     ezpublish.http_cache.signalslot.unhide_location.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UnhideLocationSlot
     ezpublish.http_cache.signalslot.update_location.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateLocationSlot
-    ezpublish.http_cache.signalslot.publish_content_type_draft.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\PublishContentTypeDraftSlot
-    ezpublish.http_cache.signalslot.create_language.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\CreateLanguageSlot
-    ezpublish.http_cache.signalslot.delete_language.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DeleteLanguageSlot
-    ezpublish.http_cache.signalslot.disable_language.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\DisableLanguageSlot
-    ezpublish.http_cache.signalslot.enable_language.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\EnableLanguageSlot
-    ezpublish.http_cache.signalslot.update_language_name.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateLanguageNameSlot
     ezpublish.http_cache.signalslot.update_user.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UpdateUserSlot
     ezpublish.http_cache.signalslot.assign_user_to_user_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\AssignUserToUserGroupSlot
     ezpublish.http_cache.signalslot.unassign_user_from_user_group.class: eZ\Publish\Core\MVC\Symfony\SignalSlot\UnassignUserFromUserGroupSlot
@@ -111,12 +99,6 @@ services:
         parent: ezpublish.http_cache.signalslot.base
         tags:
             - { name: ezpublish.api.slot, signal: LocationService\UpdateLocationSignal }
-
-    ezpublish.http_cache.signalslot.publish_content_type_draft:
-        class: %ezpublish.http_cache.signalslot.publish_content_type_draft.class%
-        parent: ezpublish.http_cache.signalslot.base
-        tags:
-            - { name: ezpublish.api.slot, signal: ContentTypeService\PublishContentTypeDraftSignal }
 
     ezpublish.http_cache.signalslot.update_user:
         class: %ezpublish.http_cache.signalslot.update_user.class%

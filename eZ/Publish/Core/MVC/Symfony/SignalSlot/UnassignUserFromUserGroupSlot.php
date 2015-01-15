@@ -32,12 +32,6 @@ class UnassignUserFromUserGroupSlot extends AbstractSlot
             return;
         }
 
-        $this->runLegacyKernelCallback(
-            function ()
-            {
-                eZContentCacheManager::clearAllContentCache();
-                eZRole::expireCache();
-            }
-        );
+        $this->httpCacheClearer->purgeAll();
     }
 }
