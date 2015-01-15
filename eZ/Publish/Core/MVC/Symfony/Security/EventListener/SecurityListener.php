@@ -44,29 +44,29 @@ class SecurityListener implements EventSubscriberInterface
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    private $configResolver;
+    protected $configResolver;
 
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
-    private $eventDispatcher;
+    protected $eventDispatcher;
 
     /**
      * @var \Symfony\Component\Security\Core\SecurityContextInterface
      */
-    private $securityContext;
+    protected $securityContext;
 
     /**
      * The fragment path (for ESI/Hinclude...).
      *
      * @var string
      */
-    private $fragmentPath;
+    protected $fragmentPath;
 
     public function __construct(
         Repository $repository,
@@ -195,14 +195,8 @@ class SecurityListener implements EventSubscriberInterface
     public function onKernelRequest( GetResponseEvent $event )
     {
         $request = $event->getRequest();
-        if (
-            !(
-                // Ignore sub-requests, including fragments.
-                $this->isMasterRequest( $request, $event->getRequestType() )
-                // In legacy_mode, roles and policies must be delegated to legacy kernel.
-                && !$this->configResolver->getParameter( 'legacy_mode' )
-            )
-        )
+        // Ignore sub-requests, including fragments.
+        if ( !$this->isMasterRequest( $request, $event->getRequestType() ) )
         {
             return;
         }

@@ -134,6 +134,14 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                     )
                 )
             ),
+            'ez_publish_legacy' => array(
+                'enabled' => true,
+                'system' => array(
+                    'ezdemo_site_admin' => array(
+                        'legacy_mode' => true
+                    )
+                )
+            ),
             'ezpublish' => array(
                 'repositories' => array(
                     'eng_repository' => array( 'engine' => 'legacy', 'connection' => 'eng_repository_connection' )
@@ -161,9 +169,7 @@ class ConfigurationConverterTest extends LegacyBasedTestCase
                         'languages' => array( 'eng-GB' )
                     ),
                     'eng' => array(),
-                    'ezdemo_site_admin' => array(
-                        'legacy_mode' => true,
-                    ),
+                    'ezdemo_site_admin' => array(),
                 ),
 
                 'imagemagick' => array(

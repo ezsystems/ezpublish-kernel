@@ -48,9 +48,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 'ezdemo_site' => array(),
                 'eng' => array(),
                 'fre' => array(),
-                'ezdemo_site_admin' => array(
-                    'legacy_mode' => true
-                ),
+                'ezdemo_site_admin' => array(),
             )
         );
 
@@ -109,7 +107,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         }
         $this->assertContainerBuilderHasParameter( 'ezpublish.siteaccess.groups_by_siteaccess', $groupsBySiteaccess );
 
-        $relatedSiteAccesses = array( 'ezdemo_site', 'eng', 'fre' );
+        $relatedSiteAccesses = array( 'ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin' );
         $this->assertContainerBuilderHasParameter(
             'ezpublish.siteaccess.relation_map',
             array(
@@ -228,11 +226,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         // See ezpublish_minimal_no_siteaccess.yml fixture
         $this->assertContains( 'foo_route', $nonSiteaccessAwareRoutes );
         $this->assertContains( 'my_prefix_', $nonSiteaccessAwareRoutes );
-
-        $this->assertTrue( $this->container->hasParameter( 'ezpublish.default_router.legacy_aware_routes' ) );
-        $legacyAwareRoutes = $this->container->getParameter( 'ezpublish.default_router.legacy_aware_routes' );
-        $this->assertContains( 'legacy_foo_route', $legacyAwareRoutes );
-        $this->assertContains( 'my_prefix_', $legacyAwareRoutes );
     }
 
     /**
@@ -337,10 +330,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $config = array(
             'siteaccess' => array(
                 'default_siteaccess' => 'ezdemo_site',
-                'list' => array( 'ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin', 'ezdemo_site2', 'eng2', 'ezdemo_site3', 'fre3' ),
+                'list' => array( 'ezdemo_site', 'eng', 'fre', 'ezdemo_site2', 'eng2', 'ezdemo_site3', 'fre3' ),
                 'groups' => array(
-                    'ezdemo_group' => array( 'ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin' ),
-                    'ezdemo_frontend_group' => array( 'ezdemo_site', 'eng', 'fre' ),
+                    'ezdemo_group' => array( 'ezdemo_site', 'eng', 'fre' ),
                     'ezdemo_group2' => array( 'ezdemo_site2', 'eng2' ),
                     'ezdemo_group3' => array( 'ezdemo_site3', 'fre3' ),
                 ),
@@ -366,7 +358,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 'ezdemo_group3' => array(
                     'repository' => $fooRepo,
                 ),
-                'ezdemo_site_admin' => array( 'legacy_mode' => true )
             )
         ) + $this->siteaccessConfig;
 

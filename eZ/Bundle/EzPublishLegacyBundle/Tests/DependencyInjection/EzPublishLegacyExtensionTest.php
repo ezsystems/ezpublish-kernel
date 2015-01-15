@@ -25,7 +25,7 @@ class EzPublishLegacyExtensionTest extends AbstractExtensionTestCase
 
     public function testBundleNotEnabled()
     {
-        $this->load();
+        $this->load( ['enabled' => false] );
         $this->assertContainerBuilderHasParameter( 'ezpublish_legacy.enabled', false );
         $this->assertFalse( $this->container->hasParameter( 'ezpublish_legacy.root_dir' ) );
         $this->assertContainerBuilderNotHasService( 'ezpublish_legacy.kernel.lazy' );

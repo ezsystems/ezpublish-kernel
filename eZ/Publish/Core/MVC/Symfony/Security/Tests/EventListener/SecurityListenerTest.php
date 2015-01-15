@@ -25,27 +25,27 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $repository;
+    protected $repository;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $configResolver;
+    protected $configResolver;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $eventDispatcher;
+    protected $eventDispatcher;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $securityContext;
+    protected $securityContext;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener
      */
-    private $listener;
+    protected $listener;
 
     protected function setUp()
     {
@@ -54,7 +54,17 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->eventDispatcher = $this->getMock( 'Symfony\Component\EventDispatcher\EventDispatcherInterface' );
         $this->securityContext = $this->getMock( 'Symfony\Component\Security\Core\SecurityContextInterface' );
-        $this->listener = new SecurityListener( $this->repository, $this->configResolver, $this->eventDispatcher, $this->securityContext );
+        $this->listener = $this->generateListener();
+    }
+
+    protected function generateListener()
+    {
+        return new SecurityListener(
+            $this->repository,
+            $this->configResolver,
+            $this->eventDispatcher,
+            $this->securityContext
+        );
     }
 
     public function testGetSubscribedEvents()
@@ -279,29 +289,6 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $this->listener->onKernelRequest( $event );
     }
 
-    public function testOnKernelRequestLegacyMode()
-    {
-        $event = new GetResponseEvent(
-            $this->getMock( 'Symfony\Component\HttpKernel\HttpKernelInterface' ),
-            new Request(),
-            HttpKernelInterface::MASTER_REQUEST
-        );
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( true ) );
-
-        $this->securityContext
-            ->expects( $this->never() )
-            ->method( 'getToken' );
-        $this->securityContext
-            ->expects( $this->never() )
-            ->method( 'isGranted' );
-
-        $this->listener->onKernelRequest( $event );
-    }
-
     public function testOnKernelRequestNoSiteAccess()
     {
         $event = new GetResponseEvent(
@@ -309,12 +296,6 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             new Request(),
             HttpKernelInterface::MASTER_REQUEST
         );
-
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
 
         $this->securityContext
             ->expects( $this->never() )
@@ -335,12 +316,6 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
-
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
 
         $this->securityContext
             ->expects( $this->once() )
@@ -364,12 +339,6 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             HttpKernelInterface::MASTER_REQUEST
         );
 
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
-
         $this->securityContext
             ->expects( $this->once() )
             ->method( 'getToken' )
@@ -381,11 +350,10 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $this->listener->onKernelRequest( $event );
     }
 
-    /**
-     * @expectedException \eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException
-     */
     public function testOnKernelRequestAccessDenied()
     {
+        $this->setExpectedException( 'eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException' );
+
         $request = new Request();
         $request->attributes->set( 'siteaccess', new SiteAccess() );
         $event = new GetResponseEvent(
@@ -393,12 +361,6 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
-
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
 
         $token = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
         $token
@@ -427,12 +389,6 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
-
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'legacy_mode' )
-            ->will( $this->returnValue( false ) );
 
         $token = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
         $token
