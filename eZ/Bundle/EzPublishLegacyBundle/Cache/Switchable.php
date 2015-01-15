@@ -10,16 +10,16 @@ namespace eZ\Bundle\EzPublishLegacyBundle\Cache;
 trait Switchable
 {
     /** @var bool */
-    private $enabled = true;
+    private $isSwitchedOn = true;
 
     public function switchOn()
     {
-        $this->enabled = true;
+        $this->isSwitchedOn = true;
     }
 
     public function switchOff()
     {
-        $this->enabled = false;
+        $this->isSwitchedOn = false;
     }
 
     /**
@@ -28,6 +28,6 @@ trait Switchable
      */
     public function getSwitch()
     {
-        return $this->enabled;
+        return $this->isSwitchedOn;
     }
 }
