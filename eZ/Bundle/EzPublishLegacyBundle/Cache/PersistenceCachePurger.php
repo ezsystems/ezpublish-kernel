@@ -21,6 +21,8 @@ use Psr\Log\LoggerInterface;
  */
 class PersistenceCachePurger implements CacheClearerInterface
 {
+    use Switchable;
+
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
      */
@@ -37,13 +39,6 @@ class PersistenceCachePurger implements CacheClearerInterface
      * @var bool
      */
     protected $allCleared = false;
-
-    /**
-     * Activation flag.
-     *
-     * @var bool
-     */
-    protected $enabled = true;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -71,7 +66,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function all()
     {
-        if ( $this->enabled === false )
+        if ( $this->isSwitchedOff() )
             return;
 
         $this->cache->clear();
@@ -101,28 +96,6 @@ class PersistenceCachePurger implements CacheClearerInterface
     }
 
     /**
-     * Enables or disables cache purger.
-     * Disabling the cache purger might be useful in certain situations
-     * (like setup wizard where legacy cache is cleared but everything is not set yet to correctly clear SPI cache).
-     *
-     * @param bool $isEnabled
-     */
-    public function setEnabled( $isEnabled )
-    {
-        $this->enabled = (bool)$isEnabled;
-    }
-
-    /**
-     * Checks if cache purger is enabled or not.
-     *
-     * @return bool
-     */
-    public function isEnabled()
-    {
-        return $this->enabled;
-    }
-
-    /**
      * Clear all content persistence cache, or by locationIds (legacy content/cache mechanism is location based).
      *
      * Either way all location and urlAlias cache is cleared as well.
@@ -135,8 +108,8 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function content( $locationIds = null )
     {
-        if ( $this->allCleared === true || $this->enabled === false )
-            return;
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
+            return $locationIds;
 
         if ( $locationIds === null )
         {
@@ -187,7 +160,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function contentType( $id = null )
     {
-        if ( $this->allCleared === true || $this->enabled === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         if ( $id === null )
@@ -214,7 +187,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function contentTypeGroup( $id = null )
     {
-        if ( $this->allCleared === true || $this->enabled === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         if ( $id === null )
@@ -242,7 +215,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function section( $id = null )
     {
-        if ( $this->allCleared === true || $this->enabled === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         if ( $id === null )
@@ -266,7 +239,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function languages( $ids )
     {
-        if ( $this->allCleared === true || $this->enabled === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         $ids = (array)$ids;
@@ -282,7 +255,7 @@ class PersistenceCachePurger implements CacheClearerInterface
      */
     public function user( $id = null )
     {
-        if ( $this->allCleared === true || $this->enabled === false )
+        if ( $this->allCleared === true || $this->isSwitchedOff() )
             return;
 
         if ( $id === null )
