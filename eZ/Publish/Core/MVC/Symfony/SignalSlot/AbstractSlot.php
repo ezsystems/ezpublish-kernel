@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\SignalSlot;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
+use eZ\Publish\Core\SignalSlot\Signal;
 use eZ\Publish\Core\SignalSlot\Slot;
 
 /**
@@ -41,4 +42,31 @@ abstract class AbstractSlot extends Slot
     {
         return $this->contentService->loadContentInfo( $contentId )->mainLocationId;
     }
+
+    public function receive( Signal $signal )
+    {
+        if ( !$this->supports( $signal ) )
+        {
+            return;
+        }
+
+        $this->httpCacheClearer->purgeForContent( $this->extractContentId( $signal ) );
+    }
+
+    /**
+     * Extracts a Content ID from $signal
+     *
+     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     *
+     * @return mixed A Content ID
+     */
+    abstract protected function extractContentId( Signal $signal );
+
+    /**
+     * Checks if $signal is supported by this handler
+     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     *
+     * @return bool
+     */
+    abstract protected function supports( Signal $signal );
 }
