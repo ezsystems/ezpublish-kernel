@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SignalSlot;
 
-use eZ\Publish\Core\SignalSlot\Slot;
-use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
+use eZ\Publish\Core\SignalSlot\Slot;
 
 /**
  * A abstract legacy slot covering common functions needed for legacy slots.

@@ -10,8 +10,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZContentCacheManager;
-use eZRole;
 
 /**
  * A slot handling AssignUserToUserGroupSignal.
