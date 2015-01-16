@@ -13,6 +13,9 @@ Changes affecting version compatibility with former or future versions.
 
 ## Deprecations
 
+* `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.
+  Use `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purgeForContent()` instead.
+
 
 ## Removed features
 
