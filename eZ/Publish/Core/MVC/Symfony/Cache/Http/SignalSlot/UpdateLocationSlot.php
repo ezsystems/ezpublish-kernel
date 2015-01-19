@@ -21,7 +21,7 @@ class UpdateLocationSlot extends AbstractSlot
      */
     protected function extractContentId( Signal $signal )
     {
-        $signal->contentId;
+        return $signal->contentId;
     }
 
     protected function supports( Signal $signal )

@@ -12,5 +12,5 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
  */
 interface PurgeAllExpectation
 {
-    public function addPurgeAllExpectations();
+    public function testReceivePurgesAll( $signal );
 }
