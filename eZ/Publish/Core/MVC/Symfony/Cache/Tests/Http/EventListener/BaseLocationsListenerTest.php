@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\EventListener\Tests\CacheClear;
+namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\EventListener;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
-use eZ\Publish\Core\MVC\Symfony\EventListener\CacheClear\BaseLocationsListener;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\BaseLocationsListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
