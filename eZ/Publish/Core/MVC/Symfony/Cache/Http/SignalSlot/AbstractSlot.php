@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the AbstractLegacySlot class
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\SignalSlot;
+namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
@@ -25,22 +25,11 @@ abstract class AbstractSlot extends Slot
     protected $httpCacheClearer;
 
     /**
-     * @var \\eZ\Publish\API\Repository\ContentService
-     */
-    private $contentService;
-
-    /**
      * @param \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger $httpCacheClearer
      */
-    public function __construct( GatewayCachePurger $httpCacheClearer, ContentService $contentService )
+    public function __construct( GatewayCachePurger $httpCacheClearer )
     {
         $this->httpCacheClearer = $httpCacheClearer;
-        $this->contentService = $contentService;
-    }
-
-    protected function getLocationId( $contentId )
-    {
-        return $this->contentService->loadContentInfo( $contentId )->mainLocationId;
     }
 
     public function receive( Signal $signal )
@@ -81,5 +70,5 @@ abstract class AbstractSlot extends Slot
     protected function purgeHttpCache( Signal $signal )
     {
         return $this->httpCacheClearer->purgeForContent( $this->extractContentId( $signal ) );
-}
+    }
 }
