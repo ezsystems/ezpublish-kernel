@@ -17,19 +17,15 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class AssignUserToUserGroupSlot extends AbstractSlot
 {
     /**
-     * Receive the given $signal and react on it
-     *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
-     *
-     * @return void
+     * @param \eZ\Publish\Core\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal $signal
      */
-    public function receive( Signal $signal )
+    protected function extractContentId( Signal $signal )
     {
-        if ( !$signal instanceof Signal\UserService\AssignUserToUserGroupSignal )
-        {
-            return;
-        }
+        return $signal->userId;
+    }
 
-        $this->httpCacheClearer->purgeAll();
+    protected function supports( Signal $signal )
+    {
+        return $signal instanceof Signal\UserService\AssignUserToUserGroupSignal;
     }
 }

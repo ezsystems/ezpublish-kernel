@@ -50,7 +50,7 @@ abstract class AbstractSlot extends Slot
             return;
         }
 
-        $this->httpCacheClearer->purgeForContent( $this->extractContentId( $signal ) );
+        $this->purgeHttpCache( $signal );
     }
 
     /**
@@ -69,4 +69,17 @@ abstract class AbstractSlot extends Slot
      * @return bool
      */
     abstract protected function supports( Signal $signal );
+
+    /**
+     * Purges the HTTP cache for $signal.
+     * Meant to be overridden by implementers if required by the event.
+     *
+     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     *
+     * @return mixed
+     */
+    protected function purgeHttpCache( Signal $signal )
+    {
+        return $this->httpCacheClearer->purgeForContent( $this->extractContentId( $signal ) );
+}
 }
