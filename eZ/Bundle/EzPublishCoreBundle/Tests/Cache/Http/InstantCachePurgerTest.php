@@ -14,9 +14,6 @@ use eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\InstantCachePurgerTest as BaseT
 
 class InstantCachePurgerTest extends BaseTest
 {
-    /**
-     * @covers eZ\Bundle\EzPublishCoreBundle\Cache\Http\InstantCachePurger::clear
-     */
     public function testClear()
     {
         $this
@@ -24,7 +21,7 @@ class InstantCachePurgerTest extends BaseTest
             ->expects( $this->once() )
             ->method( 'purgeAll' );
 
-        $purger = new InstantCachePurger( $this->purgeClient );
+        $purger = new InstantCachePurger( $this->purgeClient, $this->contentService, $this->eventDispatcher );
         $purger->clear( 'cache/dir/' );
     }
 }
