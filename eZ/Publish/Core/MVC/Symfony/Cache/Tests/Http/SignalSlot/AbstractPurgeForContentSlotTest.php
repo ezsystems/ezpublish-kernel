@@ -13,19 +13,21 @@ abstract class AbstractPurgeForContentSlotTest
 {
     private static $contentId = 42;
 
-    public function addPurgeForContentExpectations()
-    {
-        $this->cachePurgerMock
-            ->expects( $this->once() )
-            ->method( 'purgeForContent' )
-            ->with( self::getContentId() );
-    }
-
     /**
      * @return mixed
      */
     public static function getContentId()
     {
         return self::$contentId;
+    }
+
+    /**
+     * @dataProvider getReceivedSignals
+     */
+    public function testReceivePurgesCacheForContent( $signal )
+    {
+        $this->cachePurgerMock->expects( $this->once() )->method( 'purgeForContent' )->with( self::getContentId() );
+        $this->cachePurgerMock->expects( $this->never() )->method( 'purgeAll' );
+        parent::receive( $signal );
     }
 }

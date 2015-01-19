@@ -53,29 +53,8 @@ abstract class AbstractSlotTest extends PHPUnit_Framework_TestCase implements Sl
         $this->slot->receive( $signal );
     }
 
-    /**
-     * @dataProvider getReceivedSignals
-     */
-    public function testReceiveClearsContentCache( $signal )
+    protected function receive( $signal )
     {
-        if ( $this instanceof PurgeForContentExpectation )
-        {
-            $this->addPurgeForContentExpectations();
-        }
-        else
-        {
-            $this->cachePurgerMock->expects( $this->never() )->method( 'purgeForContent' );
-        }
-
-        if ( $this instanceof PurgeAllExpectation )
-        {
-            $this->addPurgeAllExpectations();
-        }
-        else
-        {
-            $this->cachePurgerMock->expects( $this->never() )->method( 'purgeAll' );
-        }
-
         $this->slot->receive( $signal );
     }
 

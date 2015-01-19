@@ -15,7 +15,7 @@ use PHPUnit_Framework_MockObject_Builder_InvocationMocker;
  */
 interface PurgeForContentExpectation
 {
-    public function addPurgeForContentExpectations();
-
     public static function getContentId();
+
+    public function testReceivePurgesCacheForContent( $signal );
 }
