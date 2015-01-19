@@ -13,6 +13,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
  * A slot handling UnAssignUserFromUserGroupSignal.
+ *
+ * @todo Is this right ? Does it require a full wipe of the cache, or is it just about the user's hash ?
  */
 class UnassignUserFromUserGroupSlot extends AbstractSlot
 {

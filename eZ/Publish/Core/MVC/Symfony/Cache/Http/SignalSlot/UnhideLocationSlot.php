@@ -21,7 +21,7 @@ class UnhideLocationSlot extends AbstractSlot
      */
     protected function extractContentId( Signal $signal )
     {
-        return $signal->contentId
+        return $signal->contentId;
     }
 
     protected function supports( Signal $signal )
