@@ -19,15 +19,24 @@ class InstantCachePurgerTest extends PHPUnit_Framework_TestCase
      */
     protected $purgeClient;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $contentService;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventDispatcher;
+
     protected function setUp()
     {
         parent::setUp();
-        $this->purgeClient = $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\Cache\\PurgeClientInterface' );
+        $this->purgeClient = $this->getMock( '\eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface' );
+        $this->contentService = $this->getMock( '\eZ\Publish\API\Repository\ContentService' );
+        $this->eventDispatcher = $this->getMock( '\Symfony\Component\EventDispatcher\EventDispatcherInterface' );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger::purge
-     */
     public function testPurge()
     {
         $locationIds = array( 123, 456, 789 );
@@ -37,20 +46,17 @@ class InstantCachePurgerTest extends PHPUnit_Framework_TestCase
             ->with( $locationIds )
             ->will( $this->returnArgument( 0 ) );
 
-        $purger = new InstantCachePurger( $this->purgeClient );
+        $purger = new InstantCachePurger( $this->purgeClient, $this->contentService, $this->eventDispatcher );
         $this->assertSame( $locationIds, $purger->purge( $locationIds ) );
     }
 
-    /**
-     * @covers \eZ\Publish\Core\MVC\Symfony\Cache\Http\InstantCachePurger::purgeAll
-     */
     public function testPurgeAll()
     {
         $this->purgeClient
             ->expects( $this->once() )
             ->method( 'purgeAll' );
 
-        $purger = new InstantCachePurger( $this->purgeClient );
+        $purger = new InstantCachePurger( $this->purgeClient, $this->contentService, $this->eventDispatcher );
         $purger->purgeAll();
     }
 }
