@@ -17,19 +17,15 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CreateLocationSlot extends AbstractSlot
 {
     /**
-     * Receive the given $signal and react on it
-     *
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
-     *
-     * @return void
      */
-    public function receive( Signal $signal )
+    public function supports( Signal $signal )
     {
-        if ( !$signal instanceof Signal\LocationService\CreateLocationSignal )
-        {
-            return;
-        }
+        return $signal instanceof Signal\LocationService\CreateLocationSignal;
+    }
 
-        $this->httpCacheClearer->purge( $this->getLocationId( $signal->contentId ) );
+    protected function extractContentId( Signal $signal )
+    {
+        return $signal->contentId;
     }
 }

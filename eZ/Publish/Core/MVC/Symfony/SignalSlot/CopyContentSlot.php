@@ -17,19 +17,15 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class CopyContentSlot extends AbstractSlot
 {
     /**
-     * Receive the given $signal and react on it
-     *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
-     *
-     * @return void
+     * @param \eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal $signal
      */
-    public function receive( Signal $signal )
+    protected function extractContentId( Signal $signal )
     {
-        if ( !$signal instanceof Signal\ContentService\CopyContentSignal )
-        {
-            return;
-        }
+        return $signal->dstContentId;
+    }
 
-        $this->httpCacheClearer->purge( $this->getLocationId( $signal->dstContentId ) );
+    protected function supports( Signal $signal )
+    {
+        return $signal instanceof Signal\ContentService\CopyContentSignal;
     }
 }
