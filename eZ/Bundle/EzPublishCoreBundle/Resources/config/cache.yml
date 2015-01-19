@@ -10,6 +10,7 @@ parameters:
     ezpublish.http_cache.event_dispatcher.class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
     ezpublish.http_cache.content.base_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\BaseLocationsListener
     ezpublish.http_cache.content.parent_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\ParentLocationsListener
+    ezpublish.cache_clear.content.related_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\RelatedLocationsListener
 
 services:
     # Parameter %ezpublish.cache_pool.class% and cache decorator service are defined
@@ -72,5 +73,11 @@ services:
     ezpublish.cache_clear.content.parent_locations_listener:
         class: %ezpublish.http_cache.content.parent_locations_listener.class%
         arguments: [@ezpublish.api.service.location]
+        tags:
+            - { name: ezpublish.http_cache.event_subscriber }
+
+    ezpublish.cache_clear.content.related_locations_listener:
+        class: %ezpublish.cache_clear.content.related_locations_listener.class%
+        arguments: [@ezpublish.api.service.content, @ezpublish.api.service.location]
         tags:
             - { name: ezpublish.http_cache.event_subscriber }
