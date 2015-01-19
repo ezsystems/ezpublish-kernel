@@ -13,6 +13,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
  * A slot handling AssignUserToUserGroupSignal.
+ *
+ * @todo This might be incomplete: what about the user's own http cache (user hash) ?
  */
 class AssignUserToUserGroupSlot extends AbstractSlot
 {

@@ -7,45 +7,23 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignSectionSlot;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal;
-use eZ\Publish\Core\SignalSlot\Signal\SectionService\CreateSectionSignal;
-use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_MockObject_Builder_InvocationMocker;
 
-class AssignSectionSlotTest extends PHPUnit_Framework_TestCase
+class AssignSectionSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignSectionSlot */
-    private $slot;
-
-    /** @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger|\PHPUnit_Framework_MockObject_MockObject */
-    private $cachePurgerMock;
-
-    private $contentId = 42;
-
-    public function setUp()
+    public static function createSignal()
     {
-        $this->cachePurgerMock = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger' );
-        $this->slot = new AssignSectionSlot( $this->cachePurgerMock );
+        return new AssignSectionSignal( ['contentId' => self::getContentId()] );
     }
 
-    public function testDoesNotReceiveOtherSignals()
+    public function getSlotClass()
     {
-        $this->cachePurgerMock->expects( $this->never() )->method( 'purgeForContent' );
-        $this->cachePurgerMock->expects( $this->never() )->method( 'purgeAll' );
-
-        $this->slot->receive( new CreateSectionSignal() );
+        return 'eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot\AssignSectionSlot';
     }
 
-    public function testReceiveClearsContentCache()
+    public static function getReceivedSignalClasses()
     {
-        $this->cachePurgerMock->expects( $this->once() )->method( 'purgeForContent' )->with( $this->contentId );
-        $this->cachePurgerMock->expects( $this->never() )->method( 'purgeAll' );
-
-        $this->slot->receive( $this->createSignal() );
-    }
-
-    protected function createSignal()
-    {
-        return new AssignSectionSignal( ['contentId' => $this->contentId] );
+        return ['eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal'];
     }
 }
