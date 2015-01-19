@@ -757,6 +757,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * The content type is created in the state STATUS_DRAFT.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException In case when
      *         - array of content type groups does not contain at least one content type group
      *         - identifier or remoteId in the content type create struct already exists
@@ -774,6 +775,9 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentType( APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
     {
+        if ( $this->repository->hasAccess( 'class', 'create' ) !== true )
+            throw new UnauthorizedException( 'ContentType', 'create' );
+
         // Prevent argument mutation
         $contentTypeCreateStruct = clone $contentTypeCreateStruct;
         $this->validateInputContentTypeCreateStruct( $contentTypeCreateStruct );
