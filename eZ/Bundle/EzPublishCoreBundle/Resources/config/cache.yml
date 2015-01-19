@@ -7,8 +7,9 @@ parameters:
     ezpublish.http_cache.cache_manager.class: FOS\HttpCacheBundle\CacheManager
     ezpublish.http_cache.proxy_client.varnish.factory.class: eZ\Bundle\EzPublishCoreBundle\Cache\Http\VarnishProxyClientFactory
     ezpublish.http_cache.purge_client.fos.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\FOSPurgeClient
-    ezpublish.http_cache.content.base_locations_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\CacheClear\BaseLocationsListener
-    ezpublish.http_cache.content.parent_locations_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\CacheClear\ParentLocationsListener
+    ezpublish.http_cache.event_dispatcher.class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+    ezpublish.http_cache.content.base_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\BaseLocationsListener
+    ezpublish.http_cache.content.parent_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\ParentLocationsListener
 
 services:
     # Parameter %ezpublish.cache_pool.class% and cache decorator service are defined

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\EventListener\CacheClear;
+namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener;
 
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
@@ -15,7 +15,6 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Content cache clear listener.
  * Adds content's locations to the cache-clear list.
  */
 class BaseLocationsListener implements EventSubscriberInterface

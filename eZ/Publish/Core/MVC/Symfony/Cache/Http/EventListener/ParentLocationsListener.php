@@ -7,13 +7,17 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\MVC\Symfony\EventListener\CacheClear;
+namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener;
 
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Adds parent locations to the Http cache clear list, for given content.
+ * Will consider direct parent for all content's locations.
+ */
 class ParentLocationsListener implements EventSubscriberInterface
 {
     /**
