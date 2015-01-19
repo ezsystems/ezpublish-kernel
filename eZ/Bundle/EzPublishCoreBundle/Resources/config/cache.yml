@@ -7,7 +7,10 @@ parameters:
     ezpublish.http_cache.cache_manager.class: FOS\HttpCacheBundle\CacheManager
     ezpublish.http_cache.proxy_client.varnish.factory.class: eZ\Bundle\EzPublishCoreBundle\Cache\Http\VarnishProxyClientFactory
     ezpublish.http_cache.purge_client.fos.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\FOSPurgeClient
-    ezpublish.http_cache.content.base_locations_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\CacheClear\BaseLocationsListener
+    ezpublish.http_cache.event_dispatcher.class: Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher
+    ezpublish.http_cache.content.base_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\BaseLocationsListener
+    ezpublish.http_cache.content.parent_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\ParentLocationsListener
+    ezpublish.cache_clear.content.related_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\RelatedLocationsListener
 
 services:
     # Parameter %ezpublish.cache_pool.class% and cache decorator service are defined
@@ -25,7 +28,7 @@ services:
 
     ezpublish.http_cache.purger.instant:
         class: %ezpublish.http_cache.purger.instant.class%
-        arguments: [@ezpublish.http_cache.purge_client, @ezpublish.api.service.content, @event_dispatcher]
+        arguments: [@ezpublish.http_cache.purge_client, @ezpublish.api.service.content, @ezpublish.http_cache.event_dispatcher]
         tags:
             - { name: kernel.cache_clearer }
 
@@ -57,8 +60,24 @@ services:
     ezpublish.http_cache.purge_client:
         alias: ezpublish.http_cache.purge_client.local
 
+    ezpublish.http_cache.event_dispatcher:
+        class: %ezpublish.http_cache.event_dispatcher.class%
+        arguments: [@service_container]
+
     ezpublish.cache_clear.content.base_locations_listener:
         class: %ezpublish.http_cache.content.base_locations_listener.class%
         arguments: [@ezpublish.api.service.location]
         tags:
-            - { name: kernel.event_subscriber }
+            - { name: ezpublish.http_cache.event_subscriber }
+
+    ezpublish.cache_clear.content.parent_locations_listener:
+        class: %ezpublish.http_cache.content.parent_locations_listener.class%
+        arguments: [@ezpublish.api.service.location]
+        tags:
+            - { name: ezpublish.http_cache.event_subscriber }
+
+    ezpublish.cache_clear.content.related_locations_listener:
+        class: %ezpublish.cache_clear.content.related_locations_listener.class%
+        arguments: [@ezpublish.api.service.content, @ezpublish.api.service.location]
+        tags:
+            - { name: ezpublish.http_cache.event_subscriber }

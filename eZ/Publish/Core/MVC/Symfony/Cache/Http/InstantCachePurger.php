@@ -74,6 +74,6 @@ class InstantCachePurger implements GatewayCachePurger
             $locationIds[] = $location->id;
         }
 
-        $this->purgeClient->purge( $locationIds );
+        $this->purgeClient->purge( array_unique( $locationIds ) );
     }
 }

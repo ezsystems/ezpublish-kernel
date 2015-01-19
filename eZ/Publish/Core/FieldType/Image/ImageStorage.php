@@ -239,9 +239,7 @@ class ImageStorage extends GatewayBasedStorage
 
             if ( $this->aliasCleaner )
             {
-                $this->aliasCleaner->removeAliases(
-                    $this->IOService->loadBinaryFileByUri( $storedFiles['original'] )
-                );
+                $this->aliasCleaner->removeAliases( $storedFiles['original'] );
             }
 
             foreach ( $storedFiles as $storedFilePath )

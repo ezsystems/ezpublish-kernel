@@ -144,6 +144,6 @@ abstract class Compound implements CompoundInterface, URILexer
     public function __sleep()
     {
         // We don't need the whole matcher map and the matcher builder once serialized.
-        return array( 'config', 'subMatchers', 'request' );
+        return array( 'config', 'subMatchers' );
     }
 }

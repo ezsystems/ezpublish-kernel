@@ -30,7 +30,7 @@ interface GatewayCachePurger
      * Triggers cache purge for given content.
      * If given content has several locations, cache will be purged for all of them.
      *
-     * @param mixed|array $contentId Content ID or array of Content ID.
+     * @param mixed $contentId Content ID.
      */
     public function purgeForContent( $contentId );
 

@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\HostElement;
 use PHPUnit_Framework_TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
@@ -156,5 +157,18 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
         $matcher = new HostElement( 3 );
         $matcher->setRequest( new SimplifiedRequest( array( 'host' => 'ez.no' ) ) );
         $this->assertNull( $matcher->reverseMatch( 'foo' ) );
+    }
+
+    public function testSerialize()
+    {
+        $matcher = new HostElement( 1 );
+        $matcher->setRequest( new SimplifiedRequest( array( 'host' => 'ez.no', 'pathinfo' => '/foo/bar' ) ) );
+        $sa = new SiteAccess( 'test', 'test', $matcher );
+        $serializedSA1 = serialize( $sa );
+
+        $matcher->setRequest( new SimplifiedRequest( array( 'host' => 'ez.no', 'pathinfo' => '/foo/bar/baz' ) ) );
+        $serializedSA2 = serialize( $sa );
+
+        $this->assertSame( $serializedSA1, $serializedSA2 );
     }
 }
