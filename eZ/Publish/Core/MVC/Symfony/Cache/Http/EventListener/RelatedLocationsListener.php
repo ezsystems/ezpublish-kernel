@@ -9,8 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener;
 
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -22,19 +21,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class RelatedLocationsListener implements EventSubscriberInterface
 {
     /**
-     * @var ContentService
+     * @var \eZ\Publish\Core\Repository\Repository
+     */
+    private $repository;
+
+    /**
+     * @var \eZ\Publish\API\Repository\ContentService
      */
     private $contentService;
 
     /**
-     * @var LocationService
+     * @var \eZ\Publish\API\Repository\LocationService
      */
     private $locationService;
 
-    public function __construct( ContentService $contentService, LocationService $locationService )
+    public function __construct( Repository $repository )
     {
-        $this->contentService = $contentService;
-        $this->locationService = $locationService;
+        $this->repository = $repository;
+        $this->contentService = $repository->getContentService();
+        $this->locationService = $repository->getLocationService();
     }
 
     public static function getSubscribedEvents()
@@ -55,7 +60,15 @@ class RelatedLocationsListener implements EventSubscriberInterface
             }
         }
 
-        foreach ( $this->contentService->loadReverseRelations( $contentInfo ) as $reverseRelation )
+        // Using sudo since loading reverse relations is conditioned to content/reverserelatedlist permission and we don't need this check here.
+        /** @var \eZ\Publish\API\Repository\Values\Content\Relation[] $reverseRelations */
+        $reverseRelations = $this->repository->sudo(
+            function () use ( $contentInfo )
+            {
+                return $this->contentService->loadReverseRelations( $contentInfo );
+            }
+        );
+        foreach ( $reverseRelations as $reverseRelation )
         {
             foreach ( $this->locationService->loadLocations( $reverseRelation->getSourceContentInfo() ) as $relatedLocation )
             {

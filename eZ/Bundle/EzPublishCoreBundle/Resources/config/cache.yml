@@ -78,6 +78,6 @@ services:
 
     ezpublish.cache_clear.content.related_locations_listener:
         class: %ezpublish.cache_clear.content.related_locations_listener.class%
-        arguments: [@ezpublish.api.service.content, @ezpublish.api.service.location]
+        arguments: [@ezpublish.api.repository]
         tags:
             - { name: ezpublish.http_cache.event_subscriber }

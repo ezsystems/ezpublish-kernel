@@ -23,6 +23,11 @@ class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $repository;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     private $contentService;
 
     /**
@@ -38,9 +43,23 @@ class RelatedLocationsListenerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
+        $this->repository = $this
+            ->getMockBuilder( '\eZ\Publish\Core\Repository\Repository' )
+            ->disableOriginalConstructor()
+            ->setMethods( ['getContentService', 'getLocationService'] )
+            ->getMock();
         $this->contentService = $this->getMock( '\eZ\Publish\API\Repository\ContentService' );
         $this->locationService = $this->getMock( '\eZ\Publish\API\Repository\LocationService' );
-        $this->listener = new RelatedLocationsListener( $this->contentService, $this->locationService );
+        $this->repository
+            ->expects( $this->any() )
+            ->method( 'getContentService' )
+            ->will( $this->returnValue( $this->contentService ) );
+        $this->repository
+            ->expects( $this->any() )
+            ->method( 'getLocationService' )
+            ->will( $this->returnValue( $this->locationService ) );
+
+        $this->listener = new RelatedLocationsListener( $this->repository );
     }
 
     public function testGetSubscribedEvents()
