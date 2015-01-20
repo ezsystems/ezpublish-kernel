@@ -43,4 +43,14 @@ class SwitchableHttpCachePurger implements GatewayCachePurger
 
         $this->gatewayCachePurger->purgeAll();
     }
+
+    public function purgeForContent( $contentId )
+    {
+        if ( $this->isSwitchedOff() )
+        {
+            return;
+        }
+
+        $this->gatewayCachePurger->purgeForContent( $contentId );
+    }
 }
