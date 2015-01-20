@@ -25,7 +25,7 @@ send the cache `BAN` request.
 ## Default behavior
 By default, following locations will be added to the cache clear list:
 
-* All locations assigned to content (`BaseLocationsListener`)
+* All locations assigned to content (`AssignedLocationsListener`)
 * Parent location of all content's locations (`ParentLocationsListener`)
 * Locations for content's relations, including reverse relations (`RelatedLocationsListener`)
 

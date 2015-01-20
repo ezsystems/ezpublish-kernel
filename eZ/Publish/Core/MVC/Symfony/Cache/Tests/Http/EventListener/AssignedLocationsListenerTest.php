@@ -11,12 +11,12 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\EventListener;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent;
-use eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\BaseLocationsListener;
+use eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\AssignedLocationsListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use PHPUnit_Framework_TestCase;
 
-class BaseLocationsListenerTest extends PHPUnit_Framework_TestCase
+class AssignedLocationsListenerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -24,7 +24,7 @@ class BaseLocationsListenerTest extends PHPUnit_Framework_TestCase
     private $locationService;
 
     /**
-     * @var BaseLocationsListener
+     * @var AssignedLocationsListener
      */
     private $listener;
 
@@ -32,14 +32,14 @@ class BaseLocationsListenerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->locationService = $this->getMock( '\eZ\Publish\API\Repository\LocationService' );
-        $this->listener = new BaseLocationsListener( $this->locationService );
+        $this->listener = new AssignedLocationsListener( $this->locationService );
     }
 
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
             [MVCEvents::CACHE_CLEAR_CONTENT => ['onContentCacheClear', 100]],
-            BaseLocationsListener::getSubscribedEvents()
+            AssignedLocationsListener::getSubscribedEvents()
         );
     }
 

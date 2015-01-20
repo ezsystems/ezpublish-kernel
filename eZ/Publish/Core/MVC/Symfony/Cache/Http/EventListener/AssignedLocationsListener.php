@@ -15,9 +15,9 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Adds content's locations to the cache-clear list.
+ * Adds content's assigned locations to the cache-clear list.
  */
-class BaseLocationsListener implements EventSubscriberInterface
+class AssignedLocationsListener implements EventSubscriberInterface
 {
     /**
      * @var LocationService
