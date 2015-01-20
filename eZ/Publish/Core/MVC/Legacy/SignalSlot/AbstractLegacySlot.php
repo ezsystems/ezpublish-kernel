@@ -61,7 +61,8 @@ abstract class AbstractLegacySlot extends Slot
     protected function runLegacyKernelCallback( $callback )
     {
         $this->persistenceCacheClearer->switchOff();
-        $this->httpCacheClearer->switchOff();
+        // Temporarily disabled until smart HTTP cache clearing (EZP-23897) is implemented
+        // $this->httpCacheClearer->switchOff();
 
         // Initialize legacy kernel if not already done
         if ( $this->legacyKernel instanceof Closure )
@@ -77,7 +78,8 @@ abstract class AbstractLegacySlot extends Slot
         );
 
         $this->persistenceCacheClearer->switchOn();
-        $this->httpCacheClearer->switchOn();
+        // Temporarily disabled until smart HTTP cache clearing is (EZP-23897) implemented
+        // $this->httpCacheClearer->switchOn();
 
         return $return;
     }
