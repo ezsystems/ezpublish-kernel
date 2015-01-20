@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling CreateLocationSignal.
  */
-class CreateLocationSlot extends AbstractSlot
+class CreateLocationSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal

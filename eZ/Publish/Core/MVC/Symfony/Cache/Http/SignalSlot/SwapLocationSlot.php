@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling SwapLocationSignal.
  */
-class SwapLocationSlot extends AbstractSlot
+class SwapLocationSlot extends HttpCacheSlot
 {
     /**
      * Not required by this implementation

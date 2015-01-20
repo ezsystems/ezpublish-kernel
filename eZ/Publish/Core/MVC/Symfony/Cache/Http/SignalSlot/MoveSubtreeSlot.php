@@ -16,7 +16,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
  *
  * @todo FIXME what is this one supposed to clear ?
  */
-class MoveSubtreeSlot extends AbstractSlot
+class MoveSubtreeSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal $signal

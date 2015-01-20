@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling DeleteLocationSignal.
  */
-class DeleteLocationSlot extends AbstractSlot
+class DeleteLocationSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal $signal

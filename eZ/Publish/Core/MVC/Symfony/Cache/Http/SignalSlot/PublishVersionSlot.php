@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling PublishVersionSignal.
  */
-class PublishVersionSlot extends AbstractSlot
+class PublishVersionSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal $signal

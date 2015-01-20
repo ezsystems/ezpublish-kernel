@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling AssignSectionSignal.
  */
-class AssignSectionSlot extends AbstractSlot
+class AssignSectionSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal $signal

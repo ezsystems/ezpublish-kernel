@@ -16,7 +16,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
  *
  * @todo Is this right ? Does it require a full wipe of the cache, or is it just about the user's hash ?
  */
-class UnassignUserFromUserGroupSlot extends AbstractSlot
+class UnassignUserFromUserGroupSlot extends HttpCacheSlot
 {
     protected function purgeHttpCache( Signal $signal )
     {

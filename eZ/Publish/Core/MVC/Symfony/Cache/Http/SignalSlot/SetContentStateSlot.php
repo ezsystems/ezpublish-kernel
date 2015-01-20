@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling SetContentStateSignal.
  */
-class SetContentStateSlot extends AbstractSlot
+class SetContentStateSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal $signal

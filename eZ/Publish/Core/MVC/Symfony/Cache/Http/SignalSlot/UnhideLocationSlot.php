@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling UnhideLocationSignal.
  */
-class UnhideLocationSlot extends AbstractSlot
+class UnhideLocationSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal $signal

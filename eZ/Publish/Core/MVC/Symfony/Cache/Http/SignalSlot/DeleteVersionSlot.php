@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling DeleteVersionSignal.
  */
-class DeleteVersionSlot extends AbstractSlot
+class DeleteVersionSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteVersionSignal $signal

@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling CopyContentSignal.
  */
-class CopyContentSlot extends AbstractSlot
+class CopyContentSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal $signal

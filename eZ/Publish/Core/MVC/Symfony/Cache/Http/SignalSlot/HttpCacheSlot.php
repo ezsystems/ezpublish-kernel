@@ -17,7 +17,7 @@ use eZ\Publish\Core\SignalSlot\Slot;
 /**
  * A abstract legacy slot covering common functions needed for legacy slots.
  */
-abstract class AbstractSlot extends Slot
+abstract class HttpCacheSlot extends Slot
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger

@@ -14,7 +14,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling UpdateUserSignal.
  */
-class UpdateUserSlot extends AbstractSlot
+class UpdateUserSlot extends HttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserSignal $signal
