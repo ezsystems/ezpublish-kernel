@@ -12,9 +12,7 @@ use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal;
 use PHPUnit_Framework_MockObject_Builder_InvocationMocker;
 
-class DeleteContentSlotTest
-    extends AbstractPurgeForContentSlotTest
-    implements SlotTest, PurgeForContentExpectation
+class DeleteContentSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public static function createSignal()
     {

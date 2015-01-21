@@ -10,9 +10,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal;
 use PHPUnit_Framework_MockObject_Builder_InvocationMocker;
 
-class CopyContentSlotTest
-    extends AbstractPurgeForContentSlotTest
-    implements SlotTest, PurgeForContentExpectation
+class CopyContentSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public static function createSignal()
     {

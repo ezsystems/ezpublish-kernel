@@ -15,9 +15,7 @@ use eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal;
 use PHPUnit_Framework_MockObject_Builder_InvocationMocker;
 
-class HideLocationSlotTest
-    extends AbstractPurgeForContentSlotTest
-    implements SlotTest, PurgeForContentExpectation
+class HideLocationSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public static function createSignal()
     {

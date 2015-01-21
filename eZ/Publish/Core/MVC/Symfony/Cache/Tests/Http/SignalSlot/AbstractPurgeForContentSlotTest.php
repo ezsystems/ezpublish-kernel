@@ -7,9 +7,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-abstract class AbstractPurgeForContentSlotTest
-    extends AbstractSlotTest
-    implements PurgeForContentExpectation
+abstract class AbstractPurgeForContentSlotTest extends AbstractSlotTest implements PurgeForContentExpectation
 {
     private static $contentId = 42;
 

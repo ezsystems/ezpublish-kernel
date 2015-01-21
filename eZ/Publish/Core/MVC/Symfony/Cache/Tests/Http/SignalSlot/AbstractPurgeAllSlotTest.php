@@ -7,9 +7,7 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 
-abstract class AbstractPurgeAllSlotTest
-    extends AbstractSlotTest
-    implements PurgeAllExpectation
+abstract class AbstractPurgeAllSlotTest extends AbstractSlotTest implements PurgeAllExpectation
 {
     /**
      * @dataProvider getReceivedSignals

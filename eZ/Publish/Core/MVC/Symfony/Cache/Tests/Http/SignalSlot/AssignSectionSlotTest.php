@@ -10,9 +10,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Cache\Tests\Http\SignalSlot;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal;
 use PHPUnit_Framework_MockObject_Builder_InvocationMocker;
 
-class AssignSectionSlotTest
-    extends AbstractPurgeForContentSlotTest
-    implements SlotTest, PurgeForContentExpectation
+class AssignSectionSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public static function createSignal()
     {

@@ -11,9 +11,7 @@ use eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal;
 use PHPUnit_Framework_MockObject_Builder_InvocationMocker;
 
-class CreateLocationSlotTest
-    extends AbstractPurgeForContentSlotTest
-    implements SlotTest, PurgeForContentExpectation
+class CreateLocationSlotTest extends AbstractPurgeForContentSlotTest implements SlotTest, PurgeForContentExpectation
 {
     public static function createSignal()
     {
