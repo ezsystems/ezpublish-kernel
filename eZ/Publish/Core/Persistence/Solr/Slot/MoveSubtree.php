@@ -27,22 +27,40 @@ class MoveSubtree extends Slot
         if ( !$signal instanceof Signal\LocationService\MoveSubtreeSignal )
             return;
 
-        $contentHandler = $this->persistenceHandler->contentHandler();
+        $this->indexSubtree( $signal->locationId );
+    }
 
-        foreach (
-            $this->persistenceHandler->locationHandler()->loadSubtreeIds( $signal->locationId ) as $contentId
-        )
+    protected function indexSubtree( $locationId )
+    {
+        $contentHandler = $this->persistenceHandler->contentHandler();
+        $contentSearchHandler = $this->persistenceHandler->searchHandler();
+        $locationHandler = $this->persistenceHandler->locationHandler();
+        $locationSearchHandler = $this->persistenceHandler->locationSearchHandler();
+
+        $processedContentIdSet = array();
+        $subtreeIds = $locationHandler->loadSubtreeIds( $locationId );
+
+        foreach ( $subtreeIds as $locationId => $contentId )
         {
-            $contentInfo = $contentHandler->loadContentInfo( $contentId );
-            $this->persistenceHandler->searchHandler()->indexContent(
-                $contentHandler->load( $contentInfo->id, $contentInfo->currentVersionNo )
+            $locationSearchHandler->indexLocation(
+                $locationHandler->load( $locationId )
             );
 
-            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $contentInfo->id );
-            foreach ( $locations as $location )
+            if ( isset( $processedContentIdSet[$contentId] ) )
             {
-                $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+                continue;
             }
+
+            $contentSearchHandler->indexContent(
+                $contentHandler->load(
+                    $contentId,
+                    $contentHandler->loadContentInfo( $contentId )->currentVersionNo
+                )
+            );
+
+            // Content could be found in multiple Locations of the subtree,
+            // but we need to (re)index it only once
+            $processedContentIdSet[$contentId] = true;
         }
     }
 }
