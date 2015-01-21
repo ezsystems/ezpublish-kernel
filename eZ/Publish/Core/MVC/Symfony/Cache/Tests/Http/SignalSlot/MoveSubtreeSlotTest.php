@@ -16,9 +16,7 @@ use eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
 use PHPUnit_Framework_MockObject_Builder_InvocationMocker;
 
-class MoveSubtreeSlotTest
-    extends AbstractSlotTest
-    implements SlotTest
+class MoveSubtreeSlotTest extends AbstractPurgeAllSlotTest implements SlotTest
 {
     public static function createSignal()
     {

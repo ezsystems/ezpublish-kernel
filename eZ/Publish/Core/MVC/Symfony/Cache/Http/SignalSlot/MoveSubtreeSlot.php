@@ -18,12 +18,16 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class MoveSubtreeSlot extends HttpCacheSlot
 {
+    protected function purgeHttpCache( Signal $signal )
+    {
+        return $this->httpCacheClearer->purgeAll();
+    }
+
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal $signal
      */
     protected function extractContentId( Signal $signal )
     {
-        // @todo Will fail
         return null;
     }
 
