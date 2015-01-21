@@ -19,7 +19,7 @@ env:
     - TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
     - TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
     - SOLR_VERSION="4.10.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
-    - ELASTICSEARCH_VERSION="1.4.1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
+    - ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 
 matrix:
   allow_failures:
@@ -38,7 +38,7 @@ matrix:
     - php: 5.4
       env: SOLR_VERSION="4.10.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - php: 5.4
-      env: ELASTICSEARCH_VERSION="1.4.1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
+      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # 5.5 run: unit test (Symfony 2.3) + mysql integration test + solr 4.x integration test
     - php: 5.5
       env: TEST_CONFIG="phpunit.xml"
@@ -56,7 +56,7 @@ matrix:
     - php: 5.6
       env: SOLR_VERSION="4.10.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - php: 5.6
-      env: ELASTICSEARCH_VERSION="1.4.1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
+      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # hhvm run: unit test + sqlite integration test
     - php: hhvm
       env: TEST_CONFIG="phpunit.xml"
@@ -67,7 +67,7 @@ matrix:
     - php: hhvm
       env: SOLR_VERSION="4.10.1" TEST_CONFIG="phpunit-integration-legacy-solr.xml"
     - php: hhvm
-      env: ELASTICSEARCH_VERSION="1.4.1" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
+      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 
 # test only master (+ Pull requests)
 branches:
