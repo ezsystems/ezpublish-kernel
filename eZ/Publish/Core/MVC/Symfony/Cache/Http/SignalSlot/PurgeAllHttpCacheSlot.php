@@ -9,18 +9,26 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Cache\Http\SignalSlot;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger;
 use eZ\Publish\Core\SignalSlot\Signal;
+use eZ\Publish\Core\SignalSlot\Slot;
+use Psr\Log\LoggerInterface;
 
 /**
- * A slot handling CreateLocationSignal.
+ * An abstract slot for clearing all http caches
  */
-class CreateLocationSlot extends PurgeForContentHttpCacheSlot
+abstract class PurgeAllHttpCacheSlot extends HttpCacheSlot
 {
     /**
+     * Purges all caches
+     *
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
+     *
+     * @return mixed
      */
-    public function supports( Signal $signal )
+    protected function purgeHttpCache( Signal $signal )
     {
-        return $signal instanceof Signal\LocationService\CreateLocationSignal;
+        return $this->httpCacheClearer->purgeAll();
     }
 }

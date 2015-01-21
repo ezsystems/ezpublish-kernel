@@ -43,15 +43,6 @@ abstract class HttpCacheSlot extends Slot
     }
 
     /**
-     * Extracts a Content ID from $signal
-     *
-     * @param \eZ\Publish\Core\SignalSlot\Signal $signal
-     *
-     * @return mixed A Content ID
-     */
-    abstract protected function extractContentId( Signal $signal );
-
-    /**
      * Checks if $signal is supported by this handler
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
      *
@@ -61,14 +52,10 @@ abstract class HttpCacheSlot extends Slot
 
     /**
      * Purges the HTTP cache for $signal.
-     * Meant to be overridden by implementers if required by the event.
      *
      * @param \eZ\Publish\Core\SignalSlot\Signal $signal
      *
      * @return mixed
      */
-    protected function purgeHttpCache( Signal $signal )
-    {
-        return $this->httpCacheClearer->purgeForContent( $this->extractContentId( $signal ) );
-    }
+    abstract protected function purgeHttpCache( Signal $signal );
 }

@@ -16,7 +16,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
  *
  * @todo This might be incomplete: what about the user's own http cache (user hash) ?
  */
-class AssignUserToUserGroupSlot extends HttpCacheSlot
+class AssignUserToUserGroupSlot extends PurgeForContentHttpCacheSlot
 {
     /**
      * @param \eZ\Publish\Core\SignalSlot\Signal\UserService\AssignUserToUserGroupSignal $signal

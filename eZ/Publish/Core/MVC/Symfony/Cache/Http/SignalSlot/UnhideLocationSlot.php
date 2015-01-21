@@ -14,16 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling UnhideLocationSignal.
  */
-class UnhideLocationSlot extends HttpCacheSlot
+class UnhideLocationSlot extends PurgeForContentHttpCacheSlot
 {
-    /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal $signal
-     */
-    protected function extractContentId( Signal $signal )
-    {
-        return $signal->contentId;
-    }
-
     protected function supports( Signal $signal )
     {
         return $signal instanceof Signal\LocationService\UnhideLocationSignal;

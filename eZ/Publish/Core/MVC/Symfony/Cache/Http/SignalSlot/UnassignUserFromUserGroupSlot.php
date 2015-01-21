@@ -14,23 +14,14 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling UnAssignUserFromUserGroupSignal.
  *
- * @todo Is this right ? Does it require a full wipe of the cache, or is it just about the user's hash ?
+ * @todo
+ * Is this right ? Does it require a full wipe of the cache ? Very unlikely.
+ * The User's Content's HTTP cache must be cleared, yes.
+ * And the user must be logged out, or its user hash cleared (not sure we can without clearing for all users)
+ *
  */
-class UnassignUserFromUserGroupSlot extends HttpCacheSlot
+class UnassignUserFromUserGroupSlot extends PurgeAllHttpCacheSlot
 {
-    protected function purgeHttpCache( Signal $signal )
-    {
-        return $this->httpCacheClearer->purgeAll();
-    }
-
-    /**
-     * Not required by this implementation
-     */
-    protected function extractContentId( Signal $signal )
-    {
-        return null;
-    }
-
     protected function supports( Signal $signal )
     {
         return $signal instanceof Signal\UserService\UnAssignUserFromUserGroupSignal;

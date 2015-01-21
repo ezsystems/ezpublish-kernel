@@ -14,16 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling PublishVersionSignal.
  */
-class PublishVersionSlot extends HttpCacheSlot
+class PublishVersionSlot extends PurgeForContentHttpCacheSlot
 {
-    /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal $signal
-     */
-    protected function extractContentId( Signal $signal )
-    {
-        return $signal->contentId;
-    }
-
     protected function supports( Signal $signal )
     {
         return $signal instanceof Signal\ContentService\PublishVersionSignal;

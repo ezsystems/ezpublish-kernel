@@ -13,24 +13,9 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
  * A slot handling MoveSubtreeSignal.
- *
- * @todo FIXME what is this one supposed to clear ?
  */
-class MoveSubtreeSlot extends HttpCacheSlot
+class MoveSubtreeSlot extends PurgeAllHttpCacheSlot
 {
-    protected function purgeHttpCache( Signal $signal )
-    {
-        return $this->httpCacheClearer->purgeAll();
-    }
-
-    /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal $signal
-     */
-    protected function extractContentId( Signal $signal )
-    {
-        return null;
-    }
-
     protected function supports( Signal $signal )
     {
         return $signal instanceof Signal\LocationService\MoveSubtreeSignal;

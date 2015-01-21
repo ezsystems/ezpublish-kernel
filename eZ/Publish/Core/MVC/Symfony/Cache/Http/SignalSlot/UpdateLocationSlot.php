@@ -14,16 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling UpdateLocationSignal.
  */
-class UpdateLocationSlot extends HttpCacheSlot
+class UpdateLocationSlot extends PurgeForContentHttpCacheSlot
 {
-    /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal $signal
-     */
-    protected function extractContentId( Signal $signal )
-    {
-        return $signal->contentId;
-    }
-
     protected function supports( Signal $signal )
     {
         return $signal instanceof Signal\LocationService\UpdateLocationSignal;

@@ -14,16 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling SetContentStateSignal.
  */
-class SetContentStateSlot extends HttpCacheSlot
+class SetContentStateSlot extends PurgeForContentHttpCacheSlot
 {
-    /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal $signal
-     */
-    protected function extractContentId( Signal $signal )
-    {
-        return $signal->contentId;
-    }
-
     protected function supports( Signal $signal )
     {
         return $signal instanceof Signal\ObjectStateService\SetContentStateSignal;

@@ -14,16 +14,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
 /**
  * A slot handling DeleteContentSignal.
  */
-class DeleteContentSlot extends HttpCacheSlot
+class DeleteContentSlot extends PurgeForContentHttpCacheSlot
 {
-    /**
-     * @param \eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal $signal
-     */
-    protected function extractContentId( Signal $signal )
-    {
-        return $signal->contentId;
-    }
-
     protected function supports( Signal $signal )
     {
         return $signal instanceof Signal\ContentService\DeleteContentSignal;
