@@ -41,3 +41,8 @@ Changes affecting version compatibility with former or future versions.
   
 * `legacy_aware_routes` setting has been removed.
   Move your setting to `ez_publish_legacy` instead.
+
+* Legacy has been moved to its own package
+  Everything about legacy (`eZ/Publish/Core/MVC/Legacy` and `eZ/Bundle/EzPublishLegacyBundle` have been removed from
+  ezpublish-kernel, and moved to their own package, `ezsystems/legacy-bridge`. The namespaces haven't been changed.
+  If you rely on classes from those namespaces, please update your composer.json files to include this package as well.
