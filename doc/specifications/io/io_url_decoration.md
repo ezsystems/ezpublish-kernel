@@ -64,7 +64,7 @@ Defaults to `$var_dir$/$storage_dir$`. Ex: `var/ezdemo_site/storage`.
 #### `io.root_dir`
 The physical root dir where binary files are stored.
 
-Defaults to `%ezpublish_legacy.root_dir%/$var_dir$/$storage_dir$`. Not meant to be overridden
+Defaults to `%webroot_dir%/$var_dir$/$storage_dir$`. Not meant to be overridden
 
 ### Services
 
