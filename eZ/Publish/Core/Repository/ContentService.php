@@ -1663,7 +1663,7 @@ class ContentService implements ContentServiceInterface
 
         usort(
             $versions,
-            function ( $a, $b )
+            function ( VersionInfo $a,  VersionInfo $b )
             {
                 if ( $a->creationDate->getTimestamp() === $b->creationDate->getTimestamp() ) return 0;
                 return ( $a->creationDate->getTimestamp() < $b->creationDate->getTimestamp() ) ? -1 : 1;
