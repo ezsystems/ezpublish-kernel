@@ -84,26 +84,33 @@ class DoctrineDatabase extends Gateway
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if Criterion is not applicable to its target
      *
-     * @param Criterion $filter
+     * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @param string[] $translations
+     * @param bool $doCount
      *
      * @return mixed[][]
      */
-    public function find( Criterion $filter, $offset = 0, $limit = null, array $sort = null, array $translations = null )
+    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null, $doCount = true )
     {
         $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
         $fieldMap = $this->getFieldMap( $sort );
-        $count = $this->getResultCount( $filter, $sort, $translations, $fieldMap );
-        if ( $limit === 0 || $count <= $offset )
+        $count = $doCount ? $this->getResultCount( $criterion, $sort, $translations, $fieldMap ) : null;
+
+        if ( !$doCount && $limit === 0 )
+        {
+            throw new \RuntimeException( "Invalid query, can not disable count and request 0 items at the same time" );
+        }
+
+        if ( $limit === 0 || ( $count !== null && $count <= $offset ) )
         {
             return array( 'count' => $count, 'rows' => array() );
         }
 
-        $contentInfoList = $this->getContentInfoList( $filter, $sort, $offset, $limit, $translations, $fieldMap );
+        $contentInfoList = $this->getContentInfoList( $criterion, $sort, $offset, $limit, $translations, $fieldMap );
 
         return array(
             'count' => $count,

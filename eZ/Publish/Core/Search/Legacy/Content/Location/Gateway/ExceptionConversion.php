@@ -45,14 +45,17 @@ class ExceptionConversion extends Gateway
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     * @param bool $doCount
+     *
+     * @throws \RuntimeException
      *
      * @return mixed[][]
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null )
+    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null, $doCount = true )
     {
         try
         {
-            return $this->innerGateway->find( $criterion, $offset, $limit, $sortClauses );
+            return $this->innerGateway->find( $criterion, $offset, $limit, $sortClauses, $doCount );
         }
         catch ( DBALException $e )
         {

@@ -70,7 +70,8 @@ class Handler implements LocationSearchHandler
             new Criterion\LogicalAnd( array( $query->query, $query->filter ) ),
             $query->offset,
             $query->limit,
-            $query->sortClauses
+            $query->sortClauses,
+            $query->performCount
         );
 
         $result = new SearchResult();

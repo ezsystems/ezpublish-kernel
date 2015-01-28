@@ -94,6 +94,13 @@ class Query extends ValueObject
     public $spellcheck;
 
     /**
+     * If true, search engine should perform count even if that means extra lookup.
+     *
+     * @var boolean
+     */
+    public $performCount = true;
+
+    /**
      * Wrapper for deprecated $criterion property
      *
      * @param string $property
