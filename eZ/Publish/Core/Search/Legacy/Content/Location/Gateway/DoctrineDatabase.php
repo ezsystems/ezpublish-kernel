@@ -88,7 +88,7 @@ class DoctrineDatabase extends Gateway
     {
         $fieldMap = $this->getFieldMap( $sortClauses );
         $count = $this->getTotalCount( $criterion, $sortClauses, $fieldMap );
-        if ( $limit === 0 )
+        if ( $limit === 0 || $count <= $offset )
         {
             return array( "count" => $count, "rows" => array() );
         }
