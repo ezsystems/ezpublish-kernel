@@ -308,7 +308,7 @@ abstract class Type extends FieldType
                 // @todo There is a risk if we rely on a user built Value, since the FileSize
                 // property can be set manually, making this validation pointless
                 case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) || $parameters['maxFileSize'] == false )
+                    if ( empty( $parameters['maxFileSize'] ) )
                     {
                         // No file size limit
                         break;

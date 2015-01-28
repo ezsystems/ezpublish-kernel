@@ -1047,7 +1047,7 @@ class User extends RestController
         /** @var $session \Symfony\Component\HttpFoundation\Session\Session */
         $session = $this->request->getSession();
         $inputCsrf = $this->request->headers->get( 'X-CSRF-Token' );
-        if ( !$session->isStarted() || $session->getId() != $sessionId || $session == null )
+        if ( $session === null || !$session->isStarted() || $session->getId() != $sessionId )
         {
             throw new RestNotFoundException( "Session not valid" );
         }

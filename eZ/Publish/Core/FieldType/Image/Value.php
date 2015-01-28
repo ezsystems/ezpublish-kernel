@@ -157,7 +157,7 @@ class Value extends BaseValue
 
     public function __get( $propertyName )
     {
-        if ( $propertyName == 'path' )
+        if ( $propertyName === 'path' )
         {
             return $this->inputUri ?: $this->id;
         }
@@ -167,7 +167,7 @@ class Value extends BaseValue
 
     public function __set( $propertyName, $propertyValue )
     {
-        if ( $propertyName == 'path' )
+        if ( $propertyName === 'path' )
         {
             $this->inputUri = $propertyValue;
             return;
