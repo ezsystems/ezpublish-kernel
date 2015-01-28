@@ -13,6 +13,7 @@ use EzSystems\BehatBundle\Context\Api\Context;
 use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
 use eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Behat\Gherkin\Node\TableNode;
 use PHPUnit_Framework_Assert as Assertion;
 
 /**
