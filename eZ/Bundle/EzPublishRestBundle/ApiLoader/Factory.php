@@ -50,6 +50,11 @@ class Factory
         return new FieldTypeProcessor\BinaryProcessor( sys_get_temp_dir(), $hostPrefix );
     }
 
+    public function getMediaFieldTypeProcessor()
+    {
+        return new FieldTypeProcessor\MediaProcessor( sys_get_temp_dir() );
+    }
+
     /**
      * Factory for ezpublish_rest.field_type_processor.ezimage
      *
