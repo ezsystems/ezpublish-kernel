@@ -9,7 +9,6 @@ namespace eZ\Bundle\EzPublishIOBundle\ApiLoader;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Factory of IO handlers, given an alias
@@ -32,7 +31,7 @@ class HandlerFactory extends ContainerAware
      *
      * @return object an instance of the requested handler
      *
-     * @throws InvalidConfigurationException If the requested handler doesn't exist
+     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException If the requested handler doesn't exist
      */
     public function getConfiguredHandler( $handlerName )
     {

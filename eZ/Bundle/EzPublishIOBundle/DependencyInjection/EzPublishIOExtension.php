@@ -8,16 +8,11 @@
 namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection;
 
 use ArrayObject;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\Validator\Tests\Fixtures\Reference;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -27,12 +22,12 @@ use Symfony\Component\Validator\Tests\Fixtures\Reference;
 class EzPublishIOExtension extends Extension
 {
     /**
-     * @var ConfigurationFactory[]|ArrayObject
+     * @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|\ArrayObject
      */
     private $metadataHandlerFactories;
 
     /**
-     * @var ConfigurationFactory[]|ArrayObject
+     * @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|\ArrayObject
      */
     private $binarydataHandlerFactories;
 
@@ -46,7 +41,7 @@ class EzPublishIOExtension extends Extension
      * Registers a metadata handler configuration $factory for handler with $alias
      *
      * @param string $alias
-     * @param ConfigurationFactory $factory
+     * @param \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory $factory
      */
     public function addMetadataHandlerFactory( $alias, ConfigurationFactory $factory )
     {
@@ -57,7 +52,7 @@ class EzPublishIOExtension extends Extension
      * Registers a binarydata handler configuration $factory for handler with $alias
      *
      * @param string $alias
-     * @param ConfigurationFactory $factory
+     * @param \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory $factory
      */
     public function addBinarydataHandlerFactory( $alias, ConfigurationFactory $factory )
     {
@@ -65,7 +60,7 @@ class EzPublishIOExtension extends Extension
     }
 
     /**
-     * @return ConfigurationFactory[]|ArrayObject
+     * @return \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|\ArrayObject
      */
     public function getMetadataHandlerFactories()
     {
@@ -73,7 +68,7 @@ class EzPublishIOExtension extends Extension
     }
 
     /**
-     * @return ConfigurationFactory[]|ArrayObject
+     * @return \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|\ArrayObject
      */
     public function getBinarydataHandlerFactories()
     {
@@ -105,7 +100,7 @@ class EzPublishIOExtension extends Extension
 
     /**
      * Processes the config key $key, and registers the result in ez_io.$key.
-     * @param ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $key Configuration key, either binarydata or metadata
      */
     private function processHandlers( ContainerBuilder $container, $config, $key )
@@ -135,5 +130,4 @@ class EzPublishIOExtension extends Extension
         $configuration->setBinarydataHandlerFactories( $this->getBinarydataHandlerFactories() );
         return $configuration;
     }
-
 }

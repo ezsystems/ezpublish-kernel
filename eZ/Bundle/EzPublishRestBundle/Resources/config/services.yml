@@ -101,7 +101,6 @@ services:
     ezpublish_rest.request_parser:
         class: %ezpublish_rest.request_parser.class%
         arguments:
-            - %ezpublish_rest.path_prefix%
             - @router
 
     ezpublish_rest.parser_tools:
