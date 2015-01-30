@@ -12,8 +12,8 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVis
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\FieldBase;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use RuntimeException;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Visits the MapLocationDistance sort clause
@@ -61,7 +61,11 @@ class MapLocationDistance extends FieldBase
 
         if ( $fieldName === null )
         {
-            throw new RuntimeException( "No sortable fields found" );
+            throw new InvalidArgumentException(
+                "\$sortClause->target",
+                "No searchable fields found for the given sort clause target ".
+                "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
+            );
         }
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget $target */
