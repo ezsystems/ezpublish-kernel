@@ -897,7 +897,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $groupIds = array_map(
-            function ( $contentTypeGroup )
+            function ( ContentTypeGroup $contentTypeGroup )
             {
                 return $contentTypeGroup->id;
             },

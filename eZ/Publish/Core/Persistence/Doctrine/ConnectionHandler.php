@@ -220,7 +220,7 @@ class ConnectionHandler implements DatabaseHandler
         // process the different protocol options
         $protocol = ( !empty( $proto ) ) ? $proto : 'tcp';
         $proto_opts = rawurldecode( $proto_opts );
-        if ( $protocol == 'tcp' )
+        if ( $protocol === 'tcp' )
         {
             if ( strpos( $proto_opts, ':' ) !== false )
             {
@@ -231,7 +231,7 @@ class ConnectionHandler implements DatabaseHandler
                 $parsed['host'] = $proto_opts;
             }
         }
-        else if ( $protocol == 'unix' )
+        else if ( $protocol === 'unix' )
         {
             $parsed['unix_socket'] = $proto_opts;
         }

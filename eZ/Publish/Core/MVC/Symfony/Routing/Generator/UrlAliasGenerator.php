@@ -206,7 +206,7 @@ class UrlAliasGenerator extends Generator
     public function loadLocation( $locationId )
     {
         return $this->repository->sudo(
-            function ( $repository ) use ( $locationId )
+            function ( Repository $repository ) use ( $locationId )
             {
                 /** @var $repository \eZ\Publish\Core\Repository\Repository */
                 return $repository->getLocationService()->loadLocation( $locationId );

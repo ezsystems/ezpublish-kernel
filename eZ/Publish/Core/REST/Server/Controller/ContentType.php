@@ -22,6 +22,7 @@ use eZ\Publish\Core\REST\Server\Controller as RestController;
 use eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 
@@ -958,7 +959,7 @@ class ContentType extends RestController
                 if ( $sort === 'asc' || $sort === null )
                 {
                     usort(
-                        $contentTypes, function ($contentType1, $contentType2)
+                        $contentTypes, function ( APIContentType $contentType1, APIContentType $contentType2 )
                         {
                             return strcasecmp( $contentType1->identifier, $contentType2->identifier );
                         }
@@ -967,7 +968,7 @@ class ContentType extends RestController
                 else if ( $sort === 'desc' )
                 {
                     usort(
-                        $contentTypes, function ($contentType1, $contentType2)
+                        $contentTypes, function ( APIContentType $contentType1, APIContentType $contentType2 )
                         {
                             return strcasecmp( $contentType1->identifier, $contentType2->identifier ) * - 1;
                         }

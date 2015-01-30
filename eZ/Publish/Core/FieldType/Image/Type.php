@@ -184,7 +184,7 @@ class Type extends FieldType
             switch ( $validatorIdentifier )
             {
                 case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) || $parameters['maxFileSize'] == false )
+                    if ( empty( $parameters['maxFileSize'] ) )
                     {
                         // No file size limit
                         break;

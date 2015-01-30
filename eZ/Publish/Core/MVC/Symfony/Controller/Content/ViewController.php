@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
@@ -175,7 +176,7 @@ class ViewController extends Controller
         {
             /** @var \eZ\Publish\API\Repository\Values\Content\Location $location */
             $location = $this->getRepository()->sudo(
-                function ( $repository ) use ( $locationId )
+                function ( Repository $repository ) use ( $locationId )
                 {
                     return $repository->getLocationService()->loadLocation( $locationId );
                 }
@@ -317,7 +318,7 @@ class ViewController extends Controller
         {
             /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
             $content = $this->getRepository()->sudo(
-                function ( $repository ) use ( $contentId )
+                function ( Repository $repository ) use ( $contentId )
                 {
                     return $repository->getContentService()->loadContent( $contentId );
                 }
