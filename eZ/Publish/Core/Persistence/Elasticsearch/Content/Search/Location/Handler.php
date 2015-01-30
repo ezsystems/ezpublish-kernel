@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\MapperInterface;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
 
@@ -35,7 +35,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Document mapper
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper
+     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\MapperInterface
      */
     protected $mapper;
 
@@ -50,12 +50,12 @@ class Handler implements SearchHandlerInterface
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway $gateway
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper $mapper
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\MapperInterface $mapper
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor $extractor
      */
     public function __construct(
         Gateway $gateway,
-        Mapper $mapper,
+        MapperInterface $mapper,
         Extractor $extractor
     )
     {
@@ -88,7 +88,7 @@ class Handler implements SearchHandlerInterface
      */
     public function indexLocation( Location $location )
     {
-        $document = $this->mapper->mapContentLocation( $location );
+        $document = $this->mapper->mapLocation( $location );
 
         $this->gateway->index( $document );
     }
@@ -107,7 +107,7 @@ class Handler implements SearchHandlerInterface
         $documents = array();
         foreach ( $locations as $location )
         {
-            $documents[] = $this->mapper->mapContentLocation( $location );
+            $documents[] = $this->mapper->mapLocation( $location );
         }
 
         $this->gateway->bulkIndex( $documents );
