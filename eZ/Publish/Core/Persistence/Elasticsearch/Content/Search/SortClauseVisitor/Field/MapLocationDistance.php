@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVis
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\FieldBase;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
 
