@@ -14,6 +14,7 @@ use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
 
 /**
  * Visits the MapLocationDistance sort clause
@@ -21,11 +22,22 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 class MapLocationDistance extends FieldBase
 {
     /**
-     * Name of the field type that sort clause can handle
+     * Name of the field type's indexed field that criterion can handle.
      *
      * @var string
      */
-    protected $typeName = "ez_geolocation";
+    protected $fieldName;
+
+    /**
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap $fieldMap
+     * @param string $fieldName
+     */
+    public function __construct( FieldMap $fieldMap, $fieldName )
+    {
+        $this->fieldName = $fieldName;
+
+        parent::__construct( $fieldMap );
+    }
 
     /**
      * Check if visitor is applicable to current sortClause
@@ -56,7 +68,7 @@ class MapLocationDistance extends FieldBase
             $sortClause,
             $target->typeIdentifier,
             $target->fieldIdentifier,
-            "value_location"
+            $this->fieldName
         );
 
         if ( $fieldName === null )

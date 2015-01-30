@@ -15,6 +15,7 @@ use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
 
 /**
  * Visits the MapLocationDistance criterion
@@ -26,14 +27,29 @@ class MapLocationDistanceRange extends Field
      *
      * @var string
      */
-    protected $fieldTypeName = "ezgmaplocation";
+    protected $fieldTypeIdentifier;
 
     /**
      * Name of the field type's indexed field that criterion can handle
      *
      * @var string
      */
-    protected $fieldName = "value_location";
+    protected $fieldName;
+
+    /**
+     * Create from FieldMap, FieldType identifier and field name.
+     *
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap $fieldMap
+     * @param string $fieldTypeIdentifier
+     * @param string $fieldName
+     */
+    public function __construct( FieldMap $fieldMap, $fieldTypeIdentifier, $fieldName )
+    {
+        $this->fieldTypeIdentifier = $fieldTypeIdentifier;
+        $this->fieldName = $fieldName;
+
+        parent::__construct( $fieldMap );
+    }
 
     /**
      * Check if visitor is applicable to current criterion
@@ -78,7 +94,7 @@ class MapLocationDistanceRange extends Field
         $fieldNames = $this->getFieldNames(
             $criterion,
             $criterion->target,
-            $this->fieldTypeName,
+            $this->fieldTypeIdentifier,
             $this->fieldName
         );
 
