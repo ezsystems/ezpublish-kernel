@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Search\Location\Handler as LocationSearchHandlerInterface;
+use eZ\Publish\SPI\Search\Content\Location\Handler as LocationSearchHandlerInterface;
 
 /**
  * @see eZ\Publish\SPI\Search\Location\Handler
