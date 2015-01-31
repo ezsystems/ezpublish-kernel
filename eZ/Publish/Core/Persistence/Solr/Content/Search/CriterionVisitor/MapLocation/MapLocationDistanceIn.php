@@ -49,11 +49,16 @@ class MapLocationDistanceIn extends MapLocation
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
         $location = $criterion->valueData;
-        $fieldTypes = $this->getFieldTypes( $criterion );
         $criterion->value = (array)$criterion->value;
 
-        if ( !isset( $fieldTypes[$criterion->target][$this->typeName] ) &&
-            !isset( $fieldTypes[$criterion->target]["custom"] ) )
+        $fieldNames = $this->getFieldNames(
+            $criterion,
+            $criterion->target,
+            $this->fieldTypeIdentifier,
+            $this->fieldName
+        );
+
+        if ( empty( $fieldNames ) )
         {
             throw new InvalidArgumentException(
                 "\$criterion->target",
@@ -61,19 +66,10 @@ class MapLocationDistanceIn extends MapLocation
             );
         }
 
-        if ( isset( $fieldTypes[$criterion->target]["custom"] ) )
-        {
-            $names = $fieldTypes[$criterion->target]["custom"];
-        }
-        else
-        {
-            $names = $fieldTypes[$criterion->target][$this->typeName];
-        }
-
         $queries = array();
         foreach ( $criterion->value as $value )
         {
-            foreach ( $names as $name )
+            foreach ( $fieldNames as $name )
             {
                 $queries[] = "geodist({$name},{$location->latitude},{$location->longitude}):{$value}";
             }
