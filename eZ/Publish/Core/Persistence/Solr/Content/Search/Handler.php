@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
-use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Search\Content\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;

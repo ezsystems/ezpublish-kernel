@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Search\Location\Handler as SearchHandlerInterface;
+use eZ\Publish\SPI\Search\Content\Location\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
