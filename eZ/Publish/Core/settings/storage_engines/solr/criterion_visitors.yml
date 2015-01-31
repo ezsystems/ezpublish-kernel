@@ -190,6 +190,8 @@ services:
         class: %ezpublish.persistence.solr.search.content.criterion_visitor.map_location_distance_in.class%
         arguments:
             - @ezpublish.persistence.solr.search.content.field_map
+            - 'ezgmaplocation'
+            - 'value_location'
         tags:
             - {name: ezpublish.persistence.solr.search.content.criterion_visitor}
 
@@ -197,6 +199,8 @@ services:
         class: %ezpublish.persistence.solr.search.content.criterion_visitor.map_location_distance_range.class%
         arguments:
             - @ezpublish.persistence.solr.search.content.field_map
+            - 'ezgmaplocation'
+            - 'value_location'
         tags:
             - {name: ezpublish.persistence.solr.search.content.criterion_visitor}
 
