@@ -38,6 +38,19 @@ class FullText extends CriterionVisitor
     }
 
     /**
+     * Get field type information
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param string $fieldDefinitionIdentifier
+     *
+     * @return array
+     */
+    protected function getFieldNames( Criterion $criterion, $fieldDefinitionIdentifier )
+    {
+        return $this->fieldMap->getFieldNames( $criterion, $fieldDefinitionIdentifier );
+    }
+
+    /**
      * CHeck if visitor is applicable to current criterion
      *
      * @param Criterion $criterion
@@ -65,19 +78,11 @@ class FullText extends CriterionVisitor
 
         foreach ( $criterion->boost as $field => $boost )
         {
-            $fields = $this->fieldMap->getFieldTypes( $criterion );
+            $fieldNames = $this->getFieldNames( $criterion, $field );
 
-            if ( !isset( $fields[$field] ) )
+            foreach ( $fieldNames as $name )
             {
-                continue;
-            }
-
-            foreach ( $fields[$field] as $fieldNames )
-            {
-                foreach ( $fieldNames as $fieldName )
-                {
-                    $queries[] = $fieldName . ":" . $criterion->value . "^" . $boost;
-                }
+                $queries[] = $name . ":" . $criterion->value . "^" . $boost;
             }
         }
 
