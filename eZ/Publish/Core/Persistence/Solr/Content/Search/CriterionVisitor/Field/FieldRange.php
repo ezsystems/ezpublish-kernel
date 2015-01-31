@@ -60,10 +60,10 @@ class FieldRange extends Field
             $start = null;
         }
 
-        $fieldTypes = $this->getFieldTypes( $criterion );
+        $fieldNames = $this->getFieldNames( $criterion, $criterion->target );
         $criterion->value = (array)$criterion->value;
 
-        if ( !isset( $fieldTypes[$criterion->target] ) )
+        if ( empty( $fieldNames ) )
         {
             throw new InvalidArgumentException(
                 "\$criterion->target",
@@ -72,12 +72,9 @@ class FieldRange extends Field
         }
 
         $queries = array();
-        foreach ( $fieldTypes[$criterion->target] as $names )
+        foreach ( $fieldNames as $name )
         {
-            foreach ( $names as $name )
-            {
-                $queries[] = $name . ':' . $this->getRange( $criterion->operator, $start, $end );
-            }
+            $queries[] = $name . ':' . $this->getRange( $criterion->operator, $start, $end );
         }
 
         return '(' . implode( ' OR ', $queries ) . ')';
