@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\SPI\Search\Location;
+namespace eZ\Publish\SPI\Search\Content\Location;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\SPI\Persistence\Content\Location;
