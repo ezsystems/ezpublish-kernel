@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content\Location;
-use eZ\Publish\SPI\Search\Location\Handler as LocationSearchHandler;
+use eZ\Publish\SPI\Search\Content\Location\Handler as LocationSearchHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
@@ -51,7 +51,7 @@ class Handler implements LocationSearchHandler
     }
 
     /**
-     * @see \eZ\Publish\SPI\Search\Location\Handler::findLocations
+     * @see \eZ\Publish\SPI\Search\Content\Location\Handler::findLocations
      */
     public function findLocations( LocationQuery $query )
     {
