@@ -20,11 +20,11 @@ use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
  */
 class FullTextTest extends TestCase
 {
-    protected function getFullTextCriterionVisitor()
+    protected function getFullTextCriterionVisitor( array $fieldNames = array() )
     {
         $fieldMap = $this->getMock(
             '\\eZ\\Publish\\Core\\Persistence\\Solr\\Content\\Search\\FieldMap',
-            array( 'getFieldTypes' ),
+            array( 'getFieldNames' ),
             array(),
             '',
             false
@@ -32,13 +32,13 @@ class FullTextTest extends TestCase
 
         $fieldMap
             ->expects( $this->any() )
-            ->method( 'getFieldTypes' )
+            ->method( 'getFieldNames' )
+            ->with(
+                $this->isInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion" ),
+                $this->isType( "string" )
+            )
             ->will(
-                $this->returnValue(
-                    array(
-                        'title' => array( "ez_string" => array( 'title_1_s', 'title_2_s' ) )
-                    )
-                )
+                $this->returnValue( $fieldNames )
             );
 
         return new CriterionVisitor\FullText( $fieldMap );
@@ -71,7 +71,7 @@ class FullTextTest extends TestCase
 
     public function testVisitBoost()
     {
-        $visitor = $this->getFullTextCriterionVisitor();
+        $visitor = $this->getFullTextCriterionVisitor( array( 'title_1_s', 'title_2_s' ) );
 
         $criterion = new Criterion\FullText( "Hello" );
         $criterion->boost = array( 'title' => 2 );
@@ -99,7 +99,7 @@ class FullTextTest extends TestCase
 
     public function testVisitFuzzyBoost()
     {
-        $visitor = $this->getFullTextCriterionVisitor();
+        $visitor = $this->getFullTextCriterionVisitor( array( 'title_1_s', 'title_2_s' ) );
 
         $criterion = new Criterion\FullText( "Hello" );
         $criterion->fuzziness = .5;
