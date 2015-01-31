@@ -62,10 +62,14 @@ class MapLocationDistanceRange extends MapLocation
             $start = null;
         }
 
-        $fieldTypes = $this->getFieldTypes( $criterion );
+        $fieldNames = $this->getFieldNames(
+            $criterion,
+            $criterion->target,
+            $this->fieldTypeIdentifier,
+            $this->fieldName
+        );
 
-        if ( !isset( $fieldTypes[$criterion->target][$this->typeName] ) &&
-            !isset( $fieldTypes[$criterion->target]["custom"] ) )
+        if ( empty( $fieldNames ) )
         {
             throw new InvalidArgumentException(
                 "\$criterion->target",
@@ -76,17 +80,8 @@ class MapLocationDistanceRange extends MapLocation
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
         $location = $criterion->valueData;
 
-        if ( isset( $fieldTypes[$criterion->target]["custom"] ) )
-        {
-            $names = $fieldTypes[$criterion->target]["custom"];
-        }
-        else
-        {
-            $names = $fieldTypes[$criterion->target][$this->typeName];
-        }
-
         $queries = array();
-        foreach ( $names as $name )
+        foreach ( $fieldNames as $name )
         {
             // @todo in future it should become possible to specify ranges directly on the filter (donut shape)
             $query = "{!geofilt sfield={$name} pt={$location->latitude},{$location->longitude} d={$end}}";
