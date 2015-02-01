@@ -61,6 +61,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
         {
             $repository = new Repository(
                 $this->getPersistenceMock(),
+                $this->getSPIMockHandler( "Search\\Handler" ),
                 $serviceSettings,
                 $this->getStubbedUser( 14 )
             );
