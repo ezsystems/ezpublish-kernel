@@ -27,14 +27,14 @@ class CopyContent extends Slot
         if ( !$signal instanceof Signal\ContentService\CopyContentSignal )
             return;
 
-        $this->persistenceHandler->searchHandler()->indexContent(
+        $this->searchHandler->contentSearchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load( $signal->dstContentId, $signal->dstVersionNo )
         );
 
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $signal->dstContentId );
         foreach ( $locations as $location )
         {
-            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+            $this->searchHandler->locationSearchHandler()->indexLocation( $location );
         }
     }
 }

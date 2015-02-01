@@ -27,7 +27,7 @@ class Trash extends Slot
         if ( !$signal instanceof Signal\TrashService\TrashSignal )
             return;
 
-        $this->persistenceHandler->locationSearchHandler()->deleteLocation( $signal->locationId );
-        $this->persistenceHandler->searchHandler()->deleteLocation( $signal->locationId, $signal->contentId );
+        $this->searchHandler->locationSearchHandler()->deleteLocation( $signal->locationId );
+        $this->searchHandler->contentSearchHandler()->deleteLocation( $signal->locationId, $signal->contentId );
     }
 }

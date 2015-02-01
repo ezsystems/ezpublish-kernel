@@ -27,14 +27,14 @@ class PublishVersion extends Slot
         if ( !$signal instanceof Signal\ContentService\PublishVersionSignal )
             return;
 
-        $this->persistenceHandler->searchHandler()->indexContent(
+        $this->searchHandler->contentSearchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load( $signal->contentId, $signal->versionNo )
         );
 
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $signal->contentId );
         foreach ( $locations as $location )
         {
-            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+            $this->searchHandler->locationSearchHandler()->indexLocation( $location );
         }
     }
 }

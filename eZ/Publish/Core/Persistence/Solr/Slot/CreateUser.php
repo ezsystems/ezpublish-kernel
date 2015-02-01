@@ -29,7 +29,7 @@ class CreateUser extends Slot
 
         $userContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->userId );
 
-        $this->persistenceHandler->searchHandler()->indexContent(
+        $this->searchHandler->contentSearchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load(
                 $userContentInfo->id,
                 $userContentInfo->currentVersionNo
@@ -39,7 +39,7 @@ class CreateUser extends Slot
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $userContentInfo->id );
         foreach ( $locations as $location )
         {
-            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+            $this->searchHandler->locationSearchHandler()->indexLocation( $location );
         }
     }
 }

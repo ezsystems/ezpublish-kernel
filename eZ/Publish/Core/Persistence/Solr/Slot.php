@@ -11,7 +11,8 @@ namespace eZ\Publish\Core\Persistence\Solr;
 
 use eZ\Publish\Core\SignalSlot\Slot as BaseSlot;
 use eZ\Publish\API\Repository\Repository;
-use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Search\Handler as SearchHandler;
 
 /**
  * General slot implementation for Solr slots
@@ -28,9 +29,19 @@ abstract class Slot extends BaseSlot
      */
     protected $persistenceHandler;
 
-    public function __construct( Repository $repository, Handler $handler )
+    /**
+     * @var \eZ\Publish\SPI\Search\Handler
+     */
+    protected $searchHandler;
+
+    public function __construct(
+        Repository $repository,
+        PersistenceHandler $persistenceHandler,
+        SearchHandler $searchHandler
+    )
     {
         $this->repository = $repository;
-        $this->persistenceHandler = $handler;
+        $this->persistenceHandler = $persistenceHandler;
+        $this->searchHandler = $searchHandler;
     }
 }

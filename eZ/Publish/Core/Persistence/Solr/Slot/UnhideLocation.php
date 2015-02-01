@@ -29,11 +29,11 @@ class UnhideLocation extends Slot
             return;
         }
 
-        $this->persistenceHandler->searchHandler()->indexContent(
+        $this->searchHandler->contentSearchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load( $signal->contentId, $signal->currentVersionNo )
         );
 
-        $this->persistenceHandler->locationSearchHandler()->indexLocation(
+        $this->searchHandler->locationSearchHandler()->indexLocation(
             $this->persistenceHandler->locationHandler()->load( $signal->locationId )
         );
     }
