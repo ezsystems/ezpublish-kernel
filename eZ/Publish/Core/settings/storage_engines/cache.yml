@@ -65,20 +65,12 @@ services:
         class: %ezpublish.spi.persistence.cache.userHandler.class%
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
-    ezpublish.spi.persistence.cache.searchHandler:
-        class: %ezpublish.spi.persistence.cache.searchHandler.class%
-        parent: ezpublish.spi.persistence.cache.abstractHandler
-
     ezpublish.spi.persistence.cache.transactionhandler:
         class: %ezpublish.spi.persistence.cache.transactionhandler.class%
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.trashHandler:
         class: %ezpublish.spi.persistence.cache.trashHandler.class%
-        parent: ezpublish.spi.persistence.cache.abstractHandler
-
-    ezpublish.spi.persistence.cache.locationSearchHandler:
-        class: %ezpublish.spi.persistence.cache.locationSearchHandler.class%
         parent: ezpublish.spi.persistence.cache.abstractHandler
 
     ezpublish.spi.persistence.cache.urlAliasHandler:
@@ -99,10 +91,8 @@ services:
             - @ezpublish.spi.persistence.cache.contentLanguageHandler
             - @ezpublish.spi.persistence.cache.contentTypeHandler
             - @ezpublish.spi.persistence.cache.userHandler
-            - @ezpublish.spi.persistence.cache.searchHandler
             - @ezpublish.spi.persistence.cache.transactionhandler
             - @ezpublish.spi.persistence.cache.trashHandler
-            - @ezpublish.spi.persistence.cache.locationSearchHandler
             - @ezpublish.spi.persistence.cache.urlAliasHandler
             - @ezpublish.spi.persistence.cache.objectStateHandler
             - @ezpublish.spi.persistence.cache.persistenceLogger
