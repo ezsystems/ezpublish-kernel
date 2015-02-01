@@ -29,7 +29,7 @@ class CreateUserGroup extends Slot
 
         $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->userGroupId );
 
-        $this->persistenceHandler->searchHandler()->indexContent(
+        $this->searchHandler->contentSearchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load(
                 $userGroupContentInfo->id,
                 $userGroupContentInfo->currentVersionNo
@@ -39,7 +39,7 @@ class CreateUserGroup extends Slot
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $userGroupContentInfo->id );
         foreach ( $locations as $location )
         {
-            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+            $this->searchHandler->locationSearchHandler()->indexLocation( $location );
         }
     }
 }

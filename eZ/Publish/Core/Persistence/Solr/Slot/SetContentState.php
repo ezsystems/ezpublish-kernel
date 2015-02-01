@@ -31,7 +31,7 @@ class SetContentState extends Slot
 
         $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->contentId );
 
-        $this->persistenceHandler->searchHandler()->indexContent(
+        $this->searchHandler->contentSearchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load(
                 $contentInfo->id,
                 $contentInfo->currentVersionNo
@@ -41,7 +41,7 @@ class SetContentState extends Slot
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $contentInfo->id );
         foreach ( $locations as $location )
         {
-            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+            $this->searchHandler->locationSearchHandler()->indexLocation( $location );
         }
     }
 }
