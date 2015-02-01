@@ -13,6 +13,7 @@ imports:
 
 parameters:
     ezpublish.elasticsearch_server: http://localhost:9200/
+    ezpublish.spi.search.elasticsearch.class: eZ\Publish\Core\Persistence\Elasticsearch\Handler
     ezpublish.persistence.elasticsearch.search.serializer.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer
     ezpublish.persistence.elasticsearch.search.mapper.standard.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper\StandardMapper
     ezpublish.persistence.elasticsearch.search.gateway.native.class: eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Native
@@ -105,22 +106,11 @@ services:
             - @ezpublish.persistence.elasticsearch.search.extractor
         lazy: true
 
-    ezpublish.spi.persistence.legacy_elasticsearch:
-        class: %ezpublish.spi.persistence.legacy.class%
+    ezpublish.spi.search.legacy_elasticsearch:
+        class: %ezpublish.spi.search.elasticsearch.class%
         arguments:
-            - @ezpublish.spi.persistence.legacy.content.handler
             - @ezpublish.spi.persistence.legacy_elasticsearch.search.handler.content
-            - @ezpublish.spi.persistence.legacy.content_type.handler
-            - @ezpublish.spi.persistence.legacy.language.handler
-            - @ezpublish.spi.persistence.legacy.location.handler
             - @ezpublish.spi.persistence.legacy_elasticsearch.search.handler.location
-            - @ezpublish.spi.persistence.legacy.object_state.handler
-            - @ezpublish.spi.persistence.legacy.section.handler
-            - @ezpublish.spi.persistence.legacy.transactionhandler
-            - @ezpublish.spi.persistence.legacy.trash.handler
-            - @ezpublish.spi.persistence.legacy.url_alias.handler
-            - @ezpublish.spi.persistence.legacy.url_wildcard.handler
-            - @ezpublish.spi.persistence.legacy.user.handler
         tags:
-            - {name: ezpublish.storageEngine, alias: legacy_elasticsearch}
+            - {name: ezpublish.searchEngine, alias: legacy_elasticsearch}
         lazy: true
