@@ -11,5 +11,5 @@ services:
     ezpublish.cache_pool.spi.cache.decorator:
         class: %ezpublish.cache_pool.spi.cache.decorator.class%
 
-    ezpublish.api.storage_engine:
-        alias: ezpublish.spi.persistence.legacy_solr
+    ezpublish.spi.search_engine:
+        alias: ezpublish.spi.search.legacy_solr
