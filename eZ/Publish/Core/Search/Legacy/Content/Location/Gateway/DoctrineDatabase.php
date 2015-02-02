@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway;
+namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as ContentTypeGateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter;
+use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -39,17 +39,17 @@ class DoctrineDatabase extends Gateway
     protected $handler;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter
      */
     private $criteriaConverter;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter
      */
     private $sortClauseConverter;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Type\Gateway
      */
     protected $contentTypeGateway;
 
@@ -57,8 +57,8 @@ class DoctrineDatabase extends Gateway
      * Construct from database handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter $criteriaConverter
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter $sortClauseConverter
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $criteriaConverter
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter $sortClauseConverter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
      */
     public function __construct(

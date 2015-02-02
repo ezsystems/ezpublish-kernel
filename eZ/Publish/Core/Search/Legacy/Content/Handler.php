@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
+namespace eZ\Publish\Core\Search\Legacy\Content;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Search\Content\Handler as SearchHandlerInterface;
@@ -47,7 +47,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Content locator gateway.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Gateway
      */
     protected $gateway;
 
@@ -61,7 +61,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Creates a new content handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway $gateway
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Gateway $gateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
      */
     public function __construct( Gateway $gateway, ContentMapper $contentMapper )

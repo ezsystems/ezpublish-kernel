@@ -1,15 +1,16 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandlerSortTest class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 
-use eZ\Publish\Core\Persistence\Legacy\Content;
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
+use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
@@ -21,7 +22,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as 
 /**
  * Test case for ContentSearchHandler
  */
-class SearchHandlerSortTest extends LanguageAwareTestCase
+class HandlerSortTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
@@ -46,7 +47,7 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
         if ( !self::$setUp )
         {
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/SearchHandler/_fixtures/full_dump.php' );
+            $this->insertDatabaseFixture( __DIR__ . '/../_fixtures/full_dump.php' );
             self::$setUp = $this->handler;
         }
         else
@@ -63,33 +64,33 @@ class SearchHandlerSortTest extends LanguageAwareTestCase
      *
      * @param array $fullTextSearchConfiguration
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
+     * @return \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
         $db = $this->getDatabaseHandler();
-        return new Content\Search\Handler(
-            new Content\Search\Gateway\DoctrineDatabase(
+        return new Content\Handler(
+            new Content\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
-                new Content\Search\Common\Gateway\CriteriaConverter(
+                new Content\Common\Gateway\CriteriaConverter(
                     array(
-                        new Content\Search\Common\Gateway\CriterionHandler\MatchAll( $db ),
-                        new Content\Search\Common\Gateway\CriterionHandler\LogicalAnd( $db ),
-                        new Content\Search\Common\Gateway\CriterionHandler\SectionId( $db ),
-                        new Content\Search\Common\Gateway\CriterionHandler\ContentTypeIdentifier( $db ),
+                        new Content\Common\Gateway\CriterionHandler\MatchAll( $db ),
+                        new Content\Common\Gateway\CriterionHandler\LogicalAnd( $db ),
+                        new Content\Common\Gateway\CriterionHandler\SectionId( $db ),
+                        new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier( $db ),
                     )
                 ),
-                new Content\Search\Common\Gateway\SortClauseConverter(
+                new Content\Common\Gateway\SortClauseConverter(
                     array(
-                        new Content\Search\Gateway\SortClauseHandler\LocationPathString( $db ),
-                        new Content\Search\Gateway\SortClauseHandler\LocationDepth( $db ),
-                        new Content\Search\Gateway\SortClauseHandler\LocationPriority( $db ),
-                        new Content\Search\Common\Gateway\SortClauseHandler\DateModified( $db ),
-                        new Content\Search\Common\Gateway\SortClauseHandler\DatePublished( $db ),
-                        new Content\Search\Common\Gateway\SortClauseHandler\SectionIdentifier( $db ),
-                        new Content\Search\Common\Gateway\SortClauseHandler\SectionName( $db ),
-                        new Content\Search\Common\Gateway\SortClauseHandler\ContentName( $db ),
-                        new Content\Search\Common\Gateway\SortClauseHandler\Field( $db, $this->getLanguageHandler() ),
+                        new Content\Gateway\SortClauseHandler\LocationPathString( $db ),
+                        new Content\Gateway\SortClauseHandler\LocationDepth( $db ),
+                        new Content\Gateway\SortClauseHandler\LocationPriority( $db ),
+                        new Content\Common\Gateway\SortClauseHandler\DateModified( $db ),
+                        new Content\Common\Gateway\SortClauseHandler\DatePublished( $db ),
+                        new Content\Common\Gateway\SortClauseHandler\SectionIdentifier( $db ),
+                        new Content\Common\Gateway\SortClauseHandler\SectionName( $db ),
+                        new Content\Common\Gateway\SortClauseHandler\ContentName( $db ),
+                        new Content\Common\Gateway\SortClauseHandler\Field( $db, $this->getLanguageHandler() ),
                     )
                 ),
                 new ContentTypeGateway(

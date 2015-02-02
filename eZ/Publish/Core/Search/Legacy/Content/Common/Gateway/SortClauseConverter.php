@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway;
+namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use RuntimeException;
@@ -22,7 +22,7 @@ class SortClauseConverter
     /**
      * Sort clause handlers
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler[]
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler[]
      */
     protected $handlers;
 
@@ -36,7 +36,7 @@ class SortClauseConverter
     /**
      * Construct from an optional array of sort clause handlers
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler[] $handlers
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler[] $handlers
      */
     public function __construct( array $handlers = array() )
     {
@@ -46,7 +46,7 @@ class SortClauseConverter
     /**
      * Adds handler
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler $handler
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler $handler
      */
     public function addHandler( SortClauseHandler $handler )
     {

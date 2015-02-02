@@ -1,27 +1,28 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Search\SearchHandlerTest class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+namespace eZ\Publish\Core\Search\Legacy\Tests\Content\Location;
 
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriteriaConverter;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseConverter;
+use eZ\Publish\Core\Search\Legacy\Content\Location;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\CriterionHandler as LocationCriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler as CommonCriterionHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway\SortClauseHandler as LocationSortClauseHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\SortClauseHandler as CommonSortClauseHandler;
+use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\CriterionHandler as LocationCriterionHandler;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler as CommonCriterionHandler;
+use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler as LocationSortClauseHandler;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler as CommonSortClauseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
@@ -32,7 +33,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as 
 /**
  * Test case for LocationSearchHandler
  */
-class LocationSearchHandlerTest extends LanguageAwareTestCase
+class HandlerTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
@@ -50,7 +51,7 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
         if ( !self::$setUp )
         {
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/SearchHandler/_fixtures/full_dump.php' );
+            $this->insertDatabaseFixture( __DIR__ . '/../../_fixtures/full_dump.php' );
             self::$setUp = $this->handler;
         }
         else
@@ -84,7 +85,7 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
      *
      * @param array $fullTextSearchConfiguration
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Handler
+     * @return \eZ\Publish\Core\Search\Legacy\Content\Location\Handler
      */
     protected function getLocationSearchHandler( array $fullTextSearchConfiguration = array() )
     {
@@ -93,7 +94,7 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
             new Persistence\TransformationProcessor\PcreCompiler(
                 new Persistence\Utf8Converter()
             ),
-            glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
+            glob( __DIR__ . '/../../../../../Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
         );
         $commaSeparatedCollectionValueHandler = new CommonCriterionHandler\FieldValue\Handler\Collection(
             $this->getDatabaseHandler(),
@@ -114,8 +115,8 @@ class LocationSearchHandlerTest extends LanguageAwareTestCase
             $transformationProcessor
         );
 
-        return new Search\Location\Handler(
-            new Search\Location\Gateway\DoctrineDatabase(
+        return new Location\Handler(
+            new Location\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
                 new CriteriaConverter(
                     array(
