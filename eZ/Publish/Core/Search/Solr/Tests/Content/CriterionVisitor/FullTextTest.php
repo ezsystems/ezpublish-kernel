@@ -1,29 +1,29 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Solr\Tests\Content\Search\CriterionVisitor\FullTextTest class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Tests\Content\Search\CriterionVisitor;
+namespace eZ\Publish\Core\Search\Solr\Tests\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Tests\TestCase;
+use eZ\Publish\Core\Search\Solr\Tests\TestCase;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 
 /**
  * Test case for FullText criterion visitor
  *
- * @covers \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\FullText
+ * @covers \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\FullText
  */
 class FullTextTest extends TestCase
 {
     protected function getFullTextCriterionVisitor( array $fieldNames = array() )
     {
         $fieldMap = $this->getMock(
-            '\\eZ\\Publish\\Core\\Persistence\\Solr\\Content\\Search\\FieldMap',
+            '\\eZ\\Publish\\Core\\Search\\Solr\\Content\\FieldMap',
             array( 'getFieldNames' ),
             array(),
             '',

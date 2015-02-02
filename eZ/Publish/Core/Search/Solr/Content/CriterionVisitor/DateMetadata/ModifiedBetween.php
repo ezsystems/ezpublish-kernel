@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\DateMetadata;
+namespace eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\DateMetadata;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\DateMetadata;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\DateMetadata;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 

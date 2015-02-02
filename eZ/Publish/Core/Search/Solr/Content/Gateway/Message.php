@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
+namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 
 /**
  * Simple response struct

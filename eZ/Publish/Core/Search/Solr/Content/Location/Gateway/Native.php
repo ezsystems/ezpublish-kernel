@@ -7,16 +7,16 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Location\Gateway;
+namespace eZ\Publish\Core\Search\Solr\Content\Location\Gateway;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Location\Gateway;
+use eZ\Publish\Core\Search\Solr\Content\Location\Gateway;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
+use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
+use eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 
 /**
@@ -27,28 +27,28 @@ class Native extends Gateway
     /**
      * HTTP client to communicate with Solr server
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient
      */
     protected $client;
 
     /**
      * Query visitor
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor
+     * @var \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor
      */
     protected $criterionVisitor;
 
     /**
      * Sort clause visitor
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor
+     * @var \eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor
      */
     protected $sortClauseVisitor;
 
     /**
      * Facet builder visitor
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor
+     * @var \eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 
@@ -67,10 +67,10 @@ class Native extends Gateway
     /**
      * Construct from HTTP client
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient $client
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $criterionVisitor
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor $sortClauseVisitor
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor $facetBuilderVisitor
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient $client
+     * @param \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor $criterionVisitor
+     * @param \eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor $sortClauseVisitor
+     * @param \eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor $facetBuilderVisitor
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      */
     public function __construct(

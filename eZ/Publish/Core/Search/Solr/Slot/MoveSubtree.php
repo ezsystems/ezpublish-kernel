@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Slot;
+namespace eZ\Publish\Core\Search\Solr\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Persistence\Solr\Slot;
+use eZ\Publish\Core\Search\Solr\Slot;
 
 /**
  * A Solr slot handling MoveSubtreeSignal.

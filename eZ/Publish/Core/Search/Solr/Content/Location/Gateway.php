@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Location;
+namespace eZ\Publish\Core\Search\Solr\Content\Location;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 

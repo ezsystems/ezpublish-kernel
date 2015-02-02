@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Location;
+namespace eZ\Publish\Core\Search\Solr\Content\Location;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
+use eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator;
 
 /**
  *
@@ -26,22 +26,22 @@ class Handler implements SearchHandlerInterface
     /**
      * Content locator gateway.
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Location\Gateway
+     * @var \eZ\Publish\Core\Search\Solr\Content\Location\Gateway
      */
     protected $gateway;
 
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
     /**
      * Creates a new content handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Location\Gateway $gateway
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Search\Solr\Content\Location\Gateway $gateway
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator $fieldNameGenerator
      */
     public function __construct(
         Gateway $gateway,

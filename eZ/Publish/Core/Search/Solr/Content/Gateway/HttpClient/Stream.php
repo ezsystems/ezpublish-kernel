@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
+namespace eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Message;
+use eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient;
+use eZ\Publish\Core\Search\Solr\Content\Gateway\Message;
 
 /**
  * Simple PHP stream based HTTP client.

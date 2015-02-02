@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Location\CriterionVisitor\Field;
+namespace eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\Field;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\Field\FieldRange as ContentFieldRange;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\Field\FieldRange as ContentFieldRange;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**

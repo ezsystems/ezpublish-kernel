@@ -6,9 +6,9 @@
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+namespace eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
