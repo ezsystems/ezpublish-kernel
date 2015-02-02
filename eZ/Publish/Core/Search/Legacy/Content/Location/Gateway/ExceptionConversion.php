@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway;
+namespace eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Location\Gateway;
+use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway;
 use Doctrine\DBAL\DBALException;
 use PDOException;
 use RuntimeException;

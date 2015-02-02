@@ -1,16 +1,17 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\SearchHandlerTest class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence;
-use eZ\Publish\Core\Persistence\Legacy\Content;
+use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
@@ -27,7 +28,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as 
 /**
  * Test case for ContentSearchHandler
  */
-class SearchHandlerTest extends LanguageAwareTestCase
+class HandlerTest extends LanguageAwareTestCase
 {
     protected static $setUp = false;
 
@@ -52,7 +53,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
         if ( !self::$setUp )
         {
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/SearchHandler/_fixtures/full_dump.php' );
+            $this->insertDatabaseFixture( __DIR__ . '/../_fixtures/full_dump.php' );
             self::$setUp = $this->handler;
         }
         else
@@ -87,7 +88,7 @@ class SearchHandlerTest extends LanguageAwareTestCase
      *
      * @param array $fullTextSearchConfiguration
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
+     * @return \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
@@ -96,83 +97,83 @@ class SearchHandlerTest extends LanguageAwareTestCase
             new Persistence\TransformationProcessor\PcreCompiler(
                 new Persistence\Utf8Converter()
             ),
-            glob( __DIR__ . '/../../../Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
+            glob( __DIR__ . '/../../../../Persistence/Tests/TransformationProcessor/_fixtures/transformations/*.tr' )
         );
-        $commaSeparatedCollectionValueHandler = new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
+        $commaSeparatedCollectionValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
             $this->getDatabaseHandler(),
             $transformationProcessor,
             ","
         );
-        $hyphenSeparatedCollectionValueHandler = new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
+        $hyphenSeparatedCollectionValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Collection(
             $this->getDatabaseHandler(),
             $transformationProcessor,
             "-"
         );
-        $simpleValueHandler = new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Simple(
+        $simpleValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Simple(
             $this->getDatabaseHandler(),
             $transformationProcessor
         );
-        $compositeValueHandler = new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite(
+        $compositeValueHandler = new Content\Common\Gateway\CriterionHandler\FieldValue\Handler\Composite(
             $this->getDatabaseHandler(),
             $transformationProcessor
         );
 
-        return new Content\Search\Handler(
-            new Content\Search\Gateway\DoctrineDatabase(
+        return new Content\Handler(
+            new Content\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
-                new Content\Search\Common\Gateway\CriteriaConverter(
+                new Content\Common\Gateway\CriteriaConverter(
                     array(
-                        new Content\Search\Common\Gateway\CriterionHandler\ContentId(
+                        new Content\Common\Gateway\CriterionHandler\ContentId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\LogicalNot(
+                        new Content\Common\Gateway\CriterionHandler\LogicalNot(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\LogicalAnd(
+                        new Content\Common\Gateway\CriterionHandler\LogicalAnd(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\LogicalOr(
+                        new Content\Common\Gateway\CriterionHandler\LogicalOr(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\Subtree(
+                        new Content\Gateway\CriterionHandler\Subtree(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\ContentTypeId(
+                        new Content\Common\Gateway\CriterionHandler\ContentTypeId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
+                        new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\ContentTypeGroupId(
+                        new Content\Common\Gateway\CriterionHandler\ContentTypeGroupId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\DateMetadata(
+                        new Content\Common\Gateway\CriterionHandler\DateMetadata(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\LocationId(
+                        new Content\Gateway\CriterionHandler\LocationId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\LocationPriority(
+                        new Content\Gateway\CriterionHandler\LocationPriority(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\ParentLocationId(
+                        new Content\Gateway\CriterionHandler\ParentLocationId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\RemoteId(
+                        new Content\Common\Gateway\CriterionHandler\RemoteId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\LocationRemoteId(
+                        new Content\Gateway\CriterionHandler\LocationRemoteId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\SectionId(
+                        new Content\Common\Gateway\CriterionHandler\SectionId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\FullText(
+                        new Content\Common\Gateway\CriterionHandler\FullText(
                             $this->getDatabaseHandler(),
                             $transformationProcessor,
                             $fullTextSearchConfiguration
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\Field(
+                        new Content\Common\Gateway\CriterionHandler\Field(
                             $this->getDatabaseHandler(),
                             $this->fieldRegistry = new ConverterRegistry(
                                 array(
@@ -183,8 +184,8 @@ class SearchHandlerTest extends LanguageAwareTestCase
                                     'ezurl' => new Url()
                                 )
                             ),
-                            new Content\Search\Common\Gateway\CriterionHandler\FieldValue\Converter(
-                                new Content\Search\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
+                            new Content\Common\Gateway\CriterionHandler\FieldValue\Converter(
+                                new Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
                                     array(
                                         "ezboolean" => $simpleValueHandler,
                                         "ezcountry" => $commaSeparatedCollectionValueHandler,
@@ -202,33 +203,33 @@ class SearchHandlerTest extends LanguageAwareTestCase
                             ),
                             $transformationProcessor
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\ObjectStateId(
+                        new Content\Common\Gateway\CriterionHandler\ObjectStateId(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\LanguageCode(
+                        new Content\Common\Gateway\CriterionHandler\LanguageCode(
                             $this->getDatabaseHandler(),
                             $this->getLanguageMaskGenerator()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\Visibility(
+                        new Content\Gateway\CriterionHandler\Visibility(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\MatchAll(
+                        new Content\Common\Gateway\CriterionHandler\MatchAll(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\UserMetadata(
+                        new Content\Common\Gateway\CriterionHandler\UserMetadata(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Common\Gateway\CriterionHandler\FieldRelation(
+                        new Content\Common\Gateway\CriterionHandler\FieldRelation(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\Depth(
+                        new Content\Gateway\CriterionHandler\Depth(
                             $this->getDatabaseHandler()
                         ),
                     )
                 ),
-                new Content\Search\Common\Gateway\SortClauseConverter(
+                new Content\Common\Gateway\SortClauseConverter(
                     array(
-                        new Content\Search\Common\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
+                        new Content\Common\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                     )
                 ),
                 new ContentTypeGateway(

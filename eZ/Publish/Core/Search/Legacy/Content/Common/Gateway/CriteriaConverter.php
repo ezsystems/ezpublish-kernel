@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway;
+namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
@@ -22,14 +22,14 @@ class CriteriaConverter
     /**
      * Criterion handlers
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler[]
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler[]
      */
     protected $handlers;
 
     /**
      * Construct from an optional array of Criterion handlers
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler[] $handlers
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler[] $handlers
      */
     public function __construct( array $handlers = array() )
     {
@@ -39,7 +39,7 @@ class CriteriaConverter
     /**
      * Adds handler
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler $handler
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler $handler
      */
     public function addHandler( CriterionHandler $handler )
     {
