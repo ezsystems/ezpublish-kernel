@@ -36,7 +36,7 @@ class CriteriaConverterPass implements CompilerPassInterface
         {
             $criteriaConverterContent = $container->getDefinition( 'ezpublish.search.legacy.gateway.criteria_converter.content' );
 
-            $contentHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.criterion_handler.content' );
+            $contentHandlers = $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.criterion_handler.content' );
 
             $this->addHandlers( $criteriaConverterContent, $contentHandlers );
         }
@@ -45,7 +45,7 @@ class CriteriaConverterPass implements CompilerPassInterface
         {
             $criteriaConverterLocation = $container->getDefinition( 'ezpublish.search.legacy.gateway.criteria_converter.location' );
 
-            $locationHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.criterion_handler.location' );
+            $locationHandlers = $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.criterion_handler.location' );
 
             $this->addHandlers( $criteriaConverterLocation, $locationHandlers );
         }

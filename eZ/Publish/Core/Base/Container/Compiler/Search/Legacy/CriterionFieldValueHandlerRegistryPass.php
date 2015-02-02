@@ -29,7 +29,7 @@ class CriterionFieldValueHandlerRegistryPass implements CompilerPassInterface
 
         $registry = $container->getDefinition( 'ezpublish.search.legacy.gateway.criterion_field_value_handler.registry' );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.criterion_field_value_handler' ) as $id => $attributes )
         {
             foreach ( $attributes as $attribute )
             {

@@ -36,7 +36,7 @@ class SortClauseConverterPass implements CompilerPassInterface
         {
             $sortClauseConverterContent = $container->getDefinition( 'ezpublish.search.legacy.gateway.sort_clause_converter.content' );
 
-            $contentHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content' );
+            $contentHandlers = $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.sort_clause_handler.content' );
 
             $this->addHandlers( $sortClauseConverterContent, $contentHandlers );
         }
@@ -45,7 +45,7 @@ class SortClauseConverterPass implements CompilerPassInterface
         {
             $sortClauseConverterLocation = $container->getDefinition( 'ezpublish.search.legacy.gateway.sort_clause_converter.location' );
 
-            $locationHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location' );
+            $locationHandlers = $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.sort_clause_handler.location' );
 
             $this->addHandlers( $sortClauseConverterLocation, $locationHandlers );
         }
