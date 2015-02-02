@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Legacy;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\SortClauseConverterPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\SortClauseConverterPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -31,7 +31,7 @@ class SortClauseConverterPassTest extends AbstractCompilerPassTestCase
     public function testAddContentHandlers()
     {
         $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
+            'ezpublish.search.legacy.gateway.sort_clause_converter.content',
             new Definition()
         );
 
@@ -43,7 +43,7 @@ class SortClauseConverterPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
+            'ezpublish.search.legacy.gateway.sort_clause_converter.content',
             'addHandler',
             array( new Reference( $serviceId ) )
         );
@@ -52,7 +52,7 @@ class SortClauseConverterPassTest extends AbstractCompilerPassTestCase
     public function testAddLocationHandlers()
     {
         $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location',
+            'ezpublish.search.legacy.gateway.sort_clause_converter.location',
             new Definition()
         );
 
@@ -64,7 +64,7 @@ class SortClauseConverterPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location',
+            'ezpublish.search.legacy.gateway.sort_clause_converter.location',
             'addHandler',
             array( new Reference( $serviceId ) )
         );
@@ -73,11 +73,11 @@ class SortClauseConverterPassTest extends AbstractCompilerPassTestCase
     public function testAddLocationAndContentHandlers()
     {
         $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
+            'ezpublish.search.legacy.gateway.sort_clause_converter.content',
             new Definition()
         );
         $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location',
+            'ezpublish.search.legacy.gateway.sort_clause_converter.location',
             new Definition()
         );
 
@@ -90,13 +90,13 @@ class SortClauseConverterPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content',
+            'ezpublish.search.legacy.gateway.sort_clause_converter.content',
             'addHandler',
             array( new Reference( $commonServiceId ) )
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location',
+            'ezpublish.search.legacy.gateway.sort_clause_converter.location',
             'addHandler',
             array( new Reference( $commonServiceId ) )
         );
