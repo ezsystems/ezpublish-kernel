@@ -7,16 +7,16 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\Gateway;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Document;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Serializer;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Gateway;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 use ArrayObject;
 use RuntimeException;
 
@@ -27,46 +27,46 @@ use RuntimeException;
 class Native extends Gateway
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\HttpClient
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient
      */
     protected $client;
 
     /**
      * Document serializer
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Serializer
      */
     protected $serializer;
 
     /**
      * Query criterion visitor dispatcher
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher
      */
     protected $criterionVisitorDispatcher;
 
     /**
      * Query sort clause visitor
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor
      */
     protected $sortClauseVisitor;
 
     /**
      * Query facet builder visitor
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 
     protected $indexName;
 
     /**
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\HttpClient $client
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Serializer $serializer
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $criterionVisitorDispatcher
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor $sortClauseVisitor
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor $facetBuilderVisitor
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient $client
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Serializer $serializer
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $criterionVisitorDispatcher
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor $sortClauseVisitor
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor $facetBuilderVisitor
      * @param string $indexName
      */
     public function __construct(
@@ -89,7 +89,7 @@ class Native extends Gateway
     /**
      * Indexes a given $document.
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document $document
      */
     public function index( Document $document )
     {
@@ -117,7 +117,7 @@ class Native extends Gateway
     /**
      * Performs bulk index of a given array of documents.
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document[] $documents
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document[] $documents
      */
     public function bulkIndex( array $documents )
     {
@@ -234,7 +234,7 @@ class Native extends Gateway
      * @param string $query
      * @param string $type
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Message
      */
     public function findRaw( $query, $type )
     {

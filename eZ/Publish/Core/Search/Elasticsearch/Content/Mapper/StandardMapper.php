@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\Mapper;
 
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Persistence\Content;
@@ -21,9 +21,9 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\MapperInterface;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document;
+use eZ\Publish\Core\Search\Elasticsearch\Content\MapperInterface;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Document;
 
 /**
  * Standard Mapper implementation maps:
@@ -35,7 +35,7 @@ class StandardMapper implements MapperInterface
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
@@ -77,13 +77,13 @@ class StandardMapper implements MapperInterface
     /**
      * Field registry
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldRegistry
      */
     protected $fieldRegistry;
 
     /**
      * @param \eZ\Publish\Core\Search\Solr\Content\FieldRegistry $fieldRegistry
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator $fieldNameGenerator
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
@@ -114,7 +114,7 @@ class StandardMapper implements MapperInterface
      *
      * @param int|string $contentId
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     public function mapContentById( $contentId )
     {
@@ -130,7 +130,7 @@ class StandardMapper implements MapperInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     public function mapContent( Content $content )
     {
@@ -276,7 +276,7 @@ class StandardMapper implements MapperInterface
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document[]
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document[]
      */
     protected function mapFields( Content $content, Type $contentType )
     {
@@ -367,7 +367,7 @@ class StandardMapper implements MapperInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     protected function mapContentLocation( Location $location, Content $content )
     {
@@ -443,7 +443,7 @@ class StandardMapper implements MapperInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     public function mapLocation( Location $location )
     {

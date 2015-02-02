@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -25,7 +25,7 @@ interface MapperInterface
      *
      * @param int|string $contentId
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     public function mapContentById( $contentId );
 
@@ -34,7 +34,7 @@ interface MapperInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     public function mapContent( Content $content );
 
@@ -45,7 +45,7 @@ interface MapperInterface
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     public function mapLocation( Location $location );
 }

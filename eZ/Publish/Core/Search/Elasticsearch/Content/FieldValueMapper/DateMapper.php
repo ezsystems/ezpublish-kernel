@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
 use eZ\Publish\SPI\Search\FieldType\DateField;
 use eZ\Publish\SPI\Search\Field;
 use DateTime;

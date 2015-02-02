@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 
 /**
  * Abstract implementation of Search Extractor, which extracts search result
@@ -22,7 +22,7 @@ abstract class Extractor
     /**
      * Facet builder visitor
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor
      */
     protected $facetBuilderVisitor;
 

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\Gateway;
 
 /**
  * Simple response struct

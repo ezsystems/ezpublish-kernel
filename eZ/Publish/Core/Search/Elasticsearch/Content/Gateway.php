@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 
@@ -20,14 +20,14 @@ abstract class Gateway
     /**
      * Indexes a given $document.
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document $document
      */
     abstract public function index( Document $document );
 
     /**
      * Performs bulk index of a given array of documents.
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document[] $documents
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document[] $documents
      */
     abstract public function bulkIndex( array $documents );
 
@@ -48,7 +48,7 @@ abstract class Gateway
      * @param string $query
      * @param string $type
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Message
      */
     abstract public function findRaw( $query, $type );
 

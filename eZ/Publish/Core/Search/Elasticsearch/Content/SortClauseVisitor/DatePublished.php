@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
