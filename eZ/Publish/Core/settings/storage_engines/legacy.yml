@@ -6,8 +6,6 @@ imports:
     - {resource: storage_engines/legacy/language.yml}
     - {resource: storage_engines/legacy/location.yml}
     - {resource: storage_engines/legacy/object_state.yml}
-    - {resource: storage_engines/legacy/search.yml}
-    - {resource: storage_engines/legacy/search_query_handlers.yml}
     - {resource: storage_engines/legacy/section.yml}
     - {resource: storage_engines/legacy/trash.yml}
     - {resource: storage_engines/legacy/url_alias.yml}
