@@ -1,20 +1,20 @@
 parameters:
-    ezpublish.persistence.solr.search.content.facet_builder_visitor.content_type.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor\ContentType
-    ezpublish.persistence.solr.search.content.facet_builder_visitor.section.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor\Section
-    ezpublish.persistence.solr.search.content.facet_builder_visitor.user.class: eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor\User
+    ezpublish.search.solr.content.facet_builder_visitor.content_type.class: eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor\ContentType
+    ezpublish.search.solr.content.facet_builder_visitor.section.class: eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor\Section
+    ezpublish.search.solr.content.facet_builder_visitor.user.class: eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor\User
 
 services:
-    ezpublish.persistence.solr.search.content.facet_builder_visitor.content_type:
-        class: %ezpublish.persistence.solr.search.content.facet_builder_visitor.content_type.class%
+    ezpublish.search.solr.content.facet_builder_visitor.content_type:
+        class: %ezpublish.search.solr.content.facet_builder_visitor.content_type.class%
         tags:
-            - {name: ezpublish.persistence.solr.search.content.facet_builder_visitor}
+            - {name: ezpublish.search.solr.content.facet_builder_visitor}
 
-    ezpublish.persistence.solr.search.content.facet_builder_visitor.section:
-        class: %ezpublish.persistence.solr.search.content.facet_builder_visitor.section.class%
+    ezpublish.search.solr.content.facet_builder_visitor.section:
+        class: %ezpublish.search.solr.content.facet_builder_visitor.section.class%
         tags:
-            - {name: ezpublish.persistence.solr.search.content.facet_builder_visitor}
+            - {name: ezpublish.search.solr.content.facet_builder_visitor}
 
-    ezpublish.persistence.solr.search.content.facet_builder_visitor.user:
-        class: %ezpublish.persistence.solr.search.content.facet_builder_visitor.user.class%
+    ezpublish.search.solr.content.facet_builder_visitor.user:
+        class: %ezpublish.search.solr.content.facet_builder_visitor.user.class%
         tags:
-            - {name: ezpublish.persistence.solr.search.content.facet_builder_visitor}
+            - {name: ezpublish.search.solr.content.facet_builder_visitor}
