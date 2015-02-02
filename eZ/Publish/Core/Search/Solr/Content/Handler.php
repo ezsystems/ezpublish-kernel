@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
+namespace eZ\Publish\Core\Search\Solr\Content;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -52,14 +52,14 @@ class Handler implements SearchHandlerInterface
     /**
      * Content locator gateway.
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway
      */
     protected $gateway;
 
     /**
      * Field registry
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldRegistry
      */
     protected $fieldRegistry;
 
@@ -101,21 +101,21 @@ class Handler implements SearchHandlerInterface
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
     /**
      * Creates a new content handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway $gateway
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway $gateway
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator $fieldNameGenerator
      */
     public function __construct(
         Gateway $gateway,

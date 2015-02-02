@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\MapLocation;
+namespace eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\MapLocation;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor\MapLocation;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\MapLocation;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -44,7 +44,7 @@ class MapLocationDistanceRange extends MapLocation
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
+     * @param \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor $subVisitor
      *
      * @return string
      */

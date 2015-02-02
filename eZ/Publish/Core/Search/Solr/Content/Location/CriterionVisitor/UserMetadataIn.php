@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Location\CriterionVisitor;
+namespace eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
@@ -40,7 +40,7 @@ class UserMetadataIn extends CriterionVisitor
      * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
+     * @param \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor $subVisitor
      *
      * @return string
      */

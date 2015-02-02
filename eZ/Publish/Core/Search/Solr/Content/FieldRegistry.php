@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search;
+namespace eZ\Publish\Core\Search\Solr\Content;
 
 use eZ\Publish\SPI\FieldType\Indexable;
 

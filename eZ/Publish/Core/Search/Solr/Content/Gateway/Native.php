@@ -7,17 +7,17 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
+namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway;
+use eZ\Publish\Core\Search\Solr\Content\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldNameGenerator;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FacetBuilderVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
+use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
+use eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use RuntimeException;
 use XmlWriter;

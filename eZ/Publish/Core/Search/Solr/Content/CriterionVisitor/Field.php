@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+namespace eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\FieldMap;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
@@ -22,14 +22,14 @@ abstract class Field extends CriterionVisitor
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldMap
      */
     protected $fieldMap;
 
     /**
      * Create from content type handler and field registry
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldMap $fieldMap
      *
      * @return void
      */

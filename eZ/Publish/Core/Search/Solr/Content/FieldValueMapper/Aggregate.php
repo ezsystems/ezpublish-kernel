@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper;
+use eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
@@ -21,14 +21,14 @@ class Aggregate extends FieldValueMapper
     /**
      * Array of available mappers
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper[]
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldValueMapper[]
      */
     protected $mappers = array();
 
     /**
      * COnstruct from optional mapper array
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper[] $mappers
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldValueMapper[] $mappers
      *
      * @return void
      */
@@ -43,7 +43,7 @@ class Aggregate extends FieldValueMapper
     /**
      * Adds mapper
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldValueMapper $mapper
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldValueMapper $mapper
      *
      * @return void
      */

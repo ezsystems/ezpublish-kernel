@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+namespace eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\SortClauseVisitor;
+use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap;
+use eZ\Publish\Core\Search\Solr\Content\FieldMap;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -30,14 +30,14 @@ class MapLocationDistance extends SortClauseVisitor
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldMap
      */
     protected $fieldMap;
 
     /**
      * Create from field map and field name
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldMap $fieldMap
      * @param string $fieldName
      */
     public function __construct( FieldMap $fieldMap, $fieldName )
