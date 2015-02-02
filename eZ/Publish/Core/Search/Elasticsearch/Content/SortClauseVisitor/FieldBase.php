@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap;
 
 /**
  * Base class for Field sort clauses
@@ -21,12 +21,12 @@ abstract class FieldBase extends SortClauseVisitor
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap
      */
     protected $fieldMap;
 
     /**
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap $fieldMap
      */
     public function __construct( FieldMap $fieldMap )
     {

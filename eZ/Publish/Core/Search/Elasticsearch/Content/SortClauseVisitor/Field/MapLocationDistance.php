@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\Field;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor\Field;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\FieldBase;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor\FieldBase;
+use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap;
 
 /**
  * Visits the MapLocationDistance sort clause
@@ -28,7 +28,7 @@ class MapLocationDistance extends FieldBase
     protected $fieldName;
 
     /**
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap $fieldMap
      * @param string $fieldName
      */
     public function __construct( FieldMap $fieldMap, $fieldName )

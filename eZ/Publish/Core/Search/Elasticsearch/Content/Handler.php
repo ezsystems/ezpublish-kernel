@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -23,19 +23,19 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 class Handler implements SearchHandlerInterface
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway
      */
     protected $gateway;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Mapper
      */
     protected $mapper;
 
     /**
      * Search result extractor
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Extractor
      */
     protected $extractor;
 

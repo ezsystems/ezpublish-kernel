@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use RuntimeException;
@@ -42,14 +42,14 @@ class CriterionVisitorDispatcher
     /**
      * Array of available visitors
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor[]
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor[]
      */
     protected $visitors = array();
 
     /**
      * Construct from optional visitor array
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor[] $visitors
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor[] $visitors
      */
     public function __construct( array $visitors = array() )
     {
@@ -62,7 +62,7 @@ class CriterionVisitorDispatcher
     /**
      * Adds visitor
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor $visitor
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor $visitor
      */
     public function addVisitor( CriterionVisitor $visitor )
     {

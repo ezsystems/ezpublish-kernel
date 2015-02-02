@@ -1,21 +1,21 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\Persistence\Elasticsearch\Tests\Content\Search\FieldMapTest class
+ * File contains: eZ\Publish\Core\Search\Elasticsearch\Tests\Content\Search\FieldMapTest class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Tests\Content\Search;
+namespace eZ\Publish\Core\Search\Elasticsearch\Tests\Content;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Tests\TestCase;
+use eZ\Publish\Core\Search\Elasticsearch\Tests\TestCase;
 use ArrayObject;
 
 /**
  * Test case for FieldMap
  *
- * @covers \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap
+ * @covers \eZ\Publish\Core\Search\Elasticsearch\FieldMap
  */
 class FieldMapTest extends TestCase
 {
@@ -599,13 +599,13 @@ class FieldMapTest extends TestCase
     /**
      * @param array $methods
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getMockedFieldMap( array $methods = array() )
     {
         $fieldMap = $this
             ->getMockBuilder(
-                "eZ\\Publish\\Core\\Persistence\\Elasticsearch\\Content\\Search\\FieldMap"
+                "eZ\\Publish\\Core\\Search\\Elasticsearch\\Content\\FieldMap"
             )
             ->setConstructorArgs(
                 array(
@@ -621,19 +621,19 @@ class FieldMapTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fieldRegistryMock;
 
     /**
-     * @return \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Search\Solr\Content\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFieldRegistryMock()
     {
         if ( !isset( $this->fieldRegistryMock ) )
         {
             $this->fieldRegistryMock = $this->getMock(
-                "eZ\\Publish\\Core\\Persistence\\Solr\\Content\\Search\\FieldRegistry"
+                "eZ\\Publish\\Core\\Search\\Solr\\Content\\FieldRegistry"
             );
         }
 
@@ -681,19 +681,19 @@ class FieldMapTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fieldNameGeneratorMock;
 
     /**
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFieldNameGeneratorMock()
     {
         if ( !isset( $this->fieldNameGeneratorMock ) )
         {
             $this->fieldNameGeneratorMock = $this->getMock(
-                "eZ\\Publish\\Core\\Persistence\\Elasticsearch\\Content\\Search\\FieldNameGenerator"
+                "eZ\\Publish\\Core\\Search\\Elasticsearch\\Content\\FieldNameGenerator"
             );
         }
 

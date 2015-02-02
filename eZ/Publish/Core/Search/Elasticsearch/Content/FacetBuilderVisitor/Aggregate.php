@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use OutOfRangeException;
@@ -23,14 +23,14 @@ class Aggregate extends FacetBuilderVisitor
     /**
      * Array of available visitors
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor[]
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor[]
      */
     protected $visitors = array();
 
     /**
      * Construct from optional visitor array
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor[] $visitors
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor[] $visitors
      */
     public function __construct( array $visitors = array() )
     {
@@ -43,7 +43,7 @@ class Aggregate extends FacetBuilderVisitor
     /**
      * Adds visitor
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor $visitor
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor $visitor
      */
     public function addVisitor( FacetBuilderVisitor $visitor )
     {

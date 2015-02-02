@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\HttpClient;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\HttpClient;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Message;
 use RuntimeException;
 
 /**
@@ -69,9 +69,9 @@ class Stream implements HttpClient
      *
      * @param string $method
      * @param string $path
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message $message
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Message $message
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Message
      */
     public function request( $method, $path, Message $message = null )
     {

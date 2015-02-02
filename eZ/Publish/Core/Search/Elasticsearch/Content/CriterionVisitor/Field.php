@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -21,14 +21,14 @@ abstract class Field extends FieldFilterBase
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap
      */
     protected $fieldMap;
 
     /**
      * Create from FieldMap
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap $fieldMap
      */
     public function __construct( FieldMap $fieldMap )
     {
