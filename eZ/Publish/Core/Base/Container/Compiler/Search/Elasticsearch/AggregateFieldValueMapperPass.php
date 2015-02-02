@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,7 +25,7 @@ class AggregateFieldValueMapperPass implements CompilerPassInterface
     {
         if (
             !$container->hasDefinition(
-                'ezpublish.persistence.elasticsearch.search.content.field_value_mapper.aggregate'
+                'ezpublish.search.elasticsearch.content.field_value_mapper.aggregate'
             )
         )
         {
@@ -33,12 +33,12 @@ class AggregateFieldValueMapperPass implements CompilerPassInterface
         }
 
         $aggregateFieldValueMapperDefinition = $container->getDefinition(
-            'ezpublish.persistence.elasticsearch.search.content.field_value_mapper.aggregate'
+            'ezpublish.search.elasticsearch.content.field_value_mapper.aggregate'
         );
 
         foreach (
             $container->findTaggedServiceIds(
-                'ezpublish.persistence.elasticsearch.search.content.field_value_mapper'
+                'ezpublish.search.elasticsearch.content.field_value_mapper'
             ) as $id => $attributes
         )
         {

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,7 +25,7 @@ class AggregateFacetBuilderVisitorPass implements CompilerPassInterface
     {
         if (
             !$container->hasDefinition(
-                'ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate'
+                'ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate'
             )
         )
         {
@@ -33,12 +33,12 @@ class AggregateFacetBuilderVisitorPass implements CompilerPassInterface
         }
 
         $aggregateFacetBuilderVisitorDefinition = $container->getDefinition(
-            'ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor.aggregate'
+            'ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate'
         );
 
         foreach (
             $container->findTaggedServiceIds(
-                'ezpublish.persistence.elasticsearch.search.content.facet_builder_visitor'
+                'ezpublish.search.elasticsearch.content.facet_builder_visitor'
             ) as $id => $attributes
         )
         {

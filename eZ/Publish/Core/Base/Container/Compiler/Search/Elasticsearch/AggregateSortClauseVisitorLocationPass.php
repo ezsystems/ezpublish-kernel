@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,16 +23,16 @@ class AggregateSortClauseVisitorLocationPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.aggregate' ) )
+        if ( !$container->hasDefinition( 'ezpublish.search.elasticsearch.location.sort_clause_visitor.aggregate' ) )
         {
             return;
         }
 
         $aggregateSortClauseVisitorDefinition = $container->getDefinition(
-            'ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor.aggregate'
+            'ezpublish.search.elasticsearch.location.sort_clause_visitor.aggregate'
         );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.persistence.elasticsearch.search.location.sort_clause_visitor' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.elasticsearch.location.sort_clause_visitor' ) as $id => $attributes )
         {
             $aggregateSortClauseVisitorDefinition->addMethodCall(
                 'addVisitor',

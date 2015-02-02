@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Solr;
+namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Search\Solr;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\AggregateFieldValueMapperPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateFieldValueMapperPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -21,7 +21,7 @@ class AggregateFieldValueMapperPassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition(
-            'ezpublish.persistence.solr.search.content.field_value_mapper.aggregate',
+            'ezpublish.search.solr.content.field_value_mapper.aggregate',
             new Definition()
         );
     }
@@ -41,13 +41,13 @@ class AggregateFieldValueMapperPassTest extends AbstractCompilerPassTestCase
     {
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag( 'ezpublish.persistence.solr.search.content.field_value_mapper' );
+        $def->addTag( 'ezpublish.search.solr.content.field_value_mapper' );
         $this->setDefinition( $serviceId, $def );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.solr.search.content.field_value_mapper.aggregate',
+            'ezpublish.search.solr.content.field_value_mapper.aggregate',
             'addMapper',
             array( new Reference( $serviceId ) )
         );

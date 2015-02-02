@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Solr;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Solr;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,34 +25,34 @@ class AggregateCriterionVisitorPass implements CompilerPassInterface
     public function process( ContainerBuilder $container )
     {
         if (
-            !$container->hasDefinition( 'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate' ) &&
-            !$container->hasDefinition( 'ezpublish.persistence.solr.search.location.criterion_visitor.aggregate' )
+            !$container->hasDefinition( 'ezpublish.search.solr.content.criterion_visitor.aggregate' ) &&
+            !$container->hasDefinition( 'ezpublish.search.solr.location.criterion_visitor.aggregate' )
         )
         {
             return;
         }
 
-        if ( $container->hasDefinition( 'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate' ) )
+        if ( $container->hasDefinition( 'ezpublish.search.solr.content.criterion_visitor.aggregate' ) )
         {
             $aggregateContentCriterionVisitorDefinition = $container->getDefinition(
-                'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate'
+                'ezpublish.search.solr.content.criterion_visitor.aggregate'
             );
 
             $visitors = $container->findTaggedServiceIds(
-                'ezpublish.persistence.solr.search.content.criterion_visitor'
+                'ezpublish.search.solr.content.criterion_visitor'
             );
 
             $this->addHandlers( $aggregateContentCriterionVisitorDefinition, $visitors );
         }
 
-        if ( $container->hasDefinition( 'ezpublish.persistence.solr.search.location.criterion_visitor.aggregate' ) )
+        if ( $container->hasDefinition( 'ezpublish.search.solr.location.criterion_visitor.aggregate' ) )
         {
             $aggregateLocationCriterionVisitorDefinition = $container->getDefinition(
-                'ezpublish.persistence.solr.search.location.criterion_visitor.aggregate'
+                'ezpublish.search.solr.location.criterion_visitor.aggregate'
             );
 
             $visitors = $container->findTaggedServiceIds(
-                'ezpublish.persistence.solr.search.location.criterion_visitor'
+                'ezpublish.search.solr.location.criterion_visitor'
             );
 
             $this->addHandlers( $aggregateLocationCriterionVisitorDefinition, $visitors );

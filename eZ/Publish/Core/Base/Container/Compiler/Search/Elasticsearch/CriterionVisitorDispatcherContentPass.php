@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,16 +23,16 @@ class CriterionVisitorDispatcherContentPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.elasticsearch.search.content.criterion_visitor_dispatcher' ) )
+        if ( !$container->hasDefinition( 'ezpublish.search.elasticsearch.content.criterion_visitor_dispatcher' ) )
         {
             return;
         }
 
         $aggregateCriterionVisitorDefinition = $container->getDefinition(
-            'ezpublish.persistence.elasticsearch.search.content.criterion_visitor_dispatcher'
+            'ezpublish.search.elasticsearch.content.criterion_visitor_dispatcher'
         );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.persistence.elasticsearch.search.content.criterion_visitor' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.elasticsearch.content.criterion_visitor' ) as $id => $attributes )
         {
             $aggregateCriterionVisitorDefinition->addMethodCall(
                 'addVisitor',

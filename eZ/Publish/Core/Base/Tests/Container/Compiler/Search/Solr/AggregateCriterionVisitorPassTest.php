@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Solr;
+namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Search\Solr;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\AggregateCriterionVisitorPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateCriterionVisitorPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -21,7 +21,7 @@ class AggregateCriterionVisitorPassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition(
-            'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate',
+            'ezpublish.search.solr.content.criterion_visitor.aggregate',
             new Definition()
         );
     }
@@ -41,13 +41,13 @@ class AggregateCriterionVisitorPassTest extends AbstractCompilerPassTestCase
     {
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag( 'ezpublish.persistence.solr.search.content.criterion_visitor' );
+        $def->addTag( 'ezpublish.search.solr.content.criterion_visitor' );
         $this->setDefinition( $serviceId, $def );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.solr.search.content.criterion_visitor.aggregate',
+            'ezpublish.search.solr.content.criterion_visitor.aggregate',
             'addVisitor',
             array( new Reference( $serviceId ) )
         );

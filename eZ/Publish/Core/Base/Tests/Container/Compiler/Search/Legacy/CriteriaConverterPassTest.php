@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Legacy;
+namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Search\Legacy;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\CriteriaConverterPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriteriaConverterPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -31,19 +31,19 @@ class CriteriaConverterPassTest extends AbstractCompilerPassTestCase
     public function testAddContentHandlers()
     {
         $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.criteria_converter.content',
+            'ezpublish.search.legacy.gateway.criteria_converter.content',
             new Definition()
         );
 
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag( 'ezpublish.persistence.legacy.search.gateway.criterion_handler.content' );
+        $def->addTag( 'ezpublish.search.legacy.gateway.criterion_handler.content' );
         $this->setDefinition( $serviceId, $def );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.criteria_converter.content',
+            'ezpublish.search.legacy.gateway.criteria_converter.content',
             'addHandler',
             array( new Reference( $serviceId ) )
         );
@@ -52,19 +52,19 @@ class CriteriaConverterPassTest extends AbstractCompilerPassTestCase
     public function testAddLocationHandlers()
     {
         $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.criteria_converter.location',
+            'ezpublish.search.legacy.gateway.criteria_converter.location',
             new Definition()
         );
 
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag( 'ezpublish.persistence.legacy.search.gateway.criterion_handler.location' );
+        $def->addTag( 'ezpublish.search.legacy.gateway.criterion_handler.location' );
         $this->setDefinition( $serviceId, $def );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.criteria_converter.location',
+            'ezpublish.search.legacy.gateway.criteria_converter.location',
             'addHandler',
             array( new Reference( $serviceId ) )
         );
@@ -73,30 +73,30 @@ class CriteriaConverterPassTest extends AbstractCompilerPassTestCase
     public function testAddLocationAndContentHandlers()
     {
         $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.criteria_converter.content',
+            'ezpublish.search.legacy.gateway.criteria_converter.content',
             new Definition()
         );
         $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.criteria_converter.location',
+            'ezpublish.search.legacy.gateway.criteria_converter.location',
             new Definition()
         );
 
         $commonServiceId = 'common_service_id';
         $def = new Definition();
-        $def->addTag( 'ezpublish.persistence.legacy.search.gateway.criterion_handler.content' );
-        $def->addTag( 'ezpublish.persistence.legacy.search.gateway.criterion_handler.location' );
+        $def->addTag( 'ezpublish.search.legacy.gateway.criterion_handler.content' );
+        $def->addTag( 'ezpublish.search.legacy.gateway.criterion_handler.location' );
         $this->setDefinition( $commonServiceId, $def );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.criteria_converter.content',
+            'ezpublish.search.legacy.gateway.criteria_converter.content',
             'addHandler',
             array( new Reference( $commonServiceId ) )
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.criteria_converter.location',
+            'ezpublish.search.legacy.gateway.criteria_converter.location',
             'addHandler',
             array( new Reference( $commonServiceId ) )
         );

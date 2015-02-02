@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Legacy;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,27 +25,27 @@ class CriteriaConverterPass implements CompilerPassInterface
     public function process( ContainerBuilder $container )
     {
         if (
-            !$container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.criteria_converter.content' ) &&
-            !$container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.criteria_converter.location' )
+            !$container->hasDefinition( 'ezpublish.search.legacy.gateway.criteria_converter.content' ) &&
+            !$container->hasDefinition( 'ezpublish.search.legacy.gateway.criteria_converter.location' )
         )
         {
             return;
         }
 
-        if ( $container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.criteria_converter.content' ) )
+        if ( $container->hasDefinition( 'ezpublish.search.legacy.gateway.criteria_converter.content' ) )
         {
-            $criteriaConverterContent = $container->getDefinition( 'ezpublish.persistence.legacy.search.gateway.criteria_converter.content' );
+            $criteriaConverterContent = $container->getDefinition( 'ezpublish.search.legacy.gateway.criteria_converter.content' );
 
-            $contentHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.criterion_handler.content' );
+            $contentHandlers = $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.criterion_handler.content' );
 
             $this->addHandlers( $criteriaConverterContent, $contentHandlers );
         }
 
-        if ( $container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.criteria_converter.location' ) )
+        if ( $container->hasDefinition( 'ezpublish.search.legacy.gateway.criteria_converter.location' ) )
         {
-            $criteriaConverterLocation = $container->getDefinition( 'ezpublish.persistence.legacy.search.gateway.criteria_converter.location' );
+            $criteriaConverterLocation = $container->getDefinition( 'ezpublish.search.legacy.gateway.criteria_converter.location' );
 
-            $locationHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.criterion_handler.location' );
+            $locationHandlers = $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.criterion_handler.location' );
 
             $this->addHandlers( $criteriaConverterLocation, $locationHandlers );
         }

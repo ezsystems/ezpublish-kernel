@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Legacy;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -25,27 +25,27 @@ class SortClauseConverterPass implements CompilerPassInterface
     public function process( ContainerBuilder $container )
     {
         if (
-            !$container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content' ) &&
-            !$container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location' )
+            !$container->hasDefinition( 'ezpublish.search.legacy.gateway.sort_clause_converter.content' ) &&
+            !$container->hasDefinition( 'ezpublish.search.legacy.gateway.sort_clause_converter.location' )
         )
         {
             return;
         }
 
-        if ( $container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content' ) )
+        if ( $container->hasDefinition( 'ezpublish.search.legacy.gateway.sort_clause_converter.content' ) )
         {
-            $sortClauseConverterContent = $container->getDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.content' );
+            $sortClauseConverterContent = $container->getDefinition( 'ezpublish.search.legacy.gateway.sort_clause_converter.content' );
 
-            $contentHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content' );
+            $contentHandlers = $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.sort_clause_handler.content' );
 
             $this->addHandlers( $sortClauseConverterContent, $contentHandlers );
         }
 
-        if ( $container->hasDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location' ) )
+        if ( $container->hasDefinition( 'ezpublish.search.legacy.gateway.sort_clause_converter.location' ) )
         {
-            $sortClauseConverterLocation = $container->getDefinition( 'ezpublish.persistence.legacy.search.gateway.sort_clause_converter.location' );
+            $sortClauseConverterLocation = $container->getDefinition( 'ezpublish.search.legacy.gateway.sort_clause_converter.location' );
 
-            $locationHandlers = $container->findTaggedServiceIds( 'ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location' );
+            $locationHandlers = $container->findTaggedServiceIds( 'ezpublish.search.legacy.gateway.sort_clause_handler.location' );
 
             $this->addHandlers( $sortClauseConverterLocation, $locationHandlers );
         }

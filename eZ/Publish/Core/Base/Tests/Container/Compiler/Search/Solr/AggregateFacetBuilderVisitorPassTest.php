@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Solr;
+namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Search\Solr;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateFacetBuilderVisitorPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -21,7 +21,7 @@ class AggregateFacetBuilderVisitorPassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition(
-            'ezpublish.persistence.solr.search.content.facet_builder_visitor.aggregate',
+            'ezpublish.search.solr.content.facet_builder_visitor.aggregate',
             new Definition()
         );
     }
@@ -41,13 +41,13 @@ class AggregateFacetBuilderVisitorPassTest extends AbstractCompilerPassTestCase
     {
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag( 'ezpublish.persistence.solr.search.content.facet_builder_visitor' );
+        $def->addTag( 'ezpublish.search.solr.content.facet_builder_visitor' );
         $this->setDefinition( $serviceId, $def );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.solr.search.content.facet_builder_visitor.aggregate',
+            'ezpublish.search.solr.content.facet_builder_visitor.aggregate',
             'addVisitor',
             array( new Reference( $serviceId ) )
         );
