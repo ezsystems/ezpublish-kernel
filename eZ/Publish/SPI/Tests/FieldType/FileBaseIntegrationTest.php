@@ -151,6 +151,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         $loader->load( 'fieldtype_external_storages.yml' );
         $loader->load( 'storage_engines/common.yml' );
         $loader->load( 'storage_engines/legacy.yml' );
+        $loader->load( 'search_engines/legacy.yml' );
         $loader->load( 'storage_engines/cache.yml' );
         $loader->load( 'settings.yml' );
         $loader->load( 'fieldtype_services.yml' );
