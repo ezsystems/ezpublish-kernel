@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Legacy;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\CriterionFieldValueHandlerRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -21,7 +21,7 @@ class CriterionFieldValueHandlerRegistryPassTest extends AbstractCompilerPassTes
     {
         parent::setUp();
         $this->setDefinition(
-            'ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.registry',
+            'ezpublish.search.legacy.gateway.criterion_field_value_handler.registry',
             new Definition()
         );
     }
@@ -51,7 +51,7 @@ class CriterionFieldValueHandlerRegistryPassTest extends AbstractCompilerPassTes
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.registry',
+            'ezpublish.search.legacy.gateway.criterion_field_value_handler.registry',
             'register',
             array( $fieldTypeIdentifier, new Reference( $serviceId ) )
         );
@@ -71,7 +71,7 @@ class CriterionFieldValueHandlerRegistryPassTest extends AbstractCompilerPassTes
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler.registry',
+            'ezpublish.search.legacy.gateway.criterion_field_value_handler.registry',
             'register',
             array( $fieldTypeIdentifier, new Reference( $serviceId ) )
         );
