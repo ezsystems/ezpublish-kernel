@@ -35,7 +35,7 @@ services:
     ezpublish.persistence.legacy.content_type.content_updater:
         class: %ezpublish.persistence.legacy.content_type.content_updater.class%
         arguments:
-            - @ezpublish.spi.persistence.legacy.search.handler.content
+            - @ezpublish.spi.search.legacy.handler.content
             - @ezpublish.persistence.legacy.content.gateway
             - @ezpublish.persistence.legacy.field_value_converter.registry
             - @ezpublish.persistence.legacy.external_storage_handler
