@@ -6,8 +6,8 @@ imports:
     - {resource: storage_engines/legacy/language.yml}
     - {resource: storage_engines/legacy/location.yml}
     - {resource: storage_engines/legacy/object_state.yml}
-    - {resource: storage_engines/legacy/search.yml}
-    - {resource: storage_engines/legacy/search_query_handlers.yml}
+    #- {resource: storage_engines/legacy/search.yml}
+    #- {resource: storage_engines/legacy/search_query_handlers.yml}
     - {resource: storage_engines/legacy/section.yml}
     - {resource: storage_engines/legacy/trash.yml}
     - {resource: storage_engines/legacy/url_alias.yml}
@@ -15,7 +15,6 @@ imports:
     - {resource: storage_engines/legacy/user.yml}
 
 parameters:
-    ezpublish.spi.search.legacy.class: eZ\Publish\Core\Persistence\Legacy\Content\Search\MainHandler
     ezpublish.spi.persistence.legacy.class: eZ\Publish\Core\Persistence\Legacy\Handler
     ezpublish.api.storage_engine.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
     ezpublish.persistence.connection.class: Doctrine\DBAL\Driver\Connection
@@ -62,12 +61,3 @@ services:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.spi.persistence.legacy.content_type.handler.caching
             - @ezpublish.spi.persistence.legacy.language.handler.caching
-
-    ezpublish.spi.search.legacy:
-        class: %ezpublish.spi.search.legacy.class%
-        arguments:
-            - @ezpublish.spi.persistence.legacy.search.handler.content
-            - @ezpublish.spi.persistence.legacy.search.handler.location
-        tags:
-            - {name: ezpublish.searchEngine, alias: legacy}
-        lazy: true
