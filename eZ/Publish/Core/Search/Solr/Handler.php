@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr;
+namespace eZ\Publish\Core\Search\Solr;
 
 use eZ\Publish\SPI\Search\Handler as HandlerInterface;
 use eZ\Publish\SPI\Search\Content\Handler as ContentSearchHandler;

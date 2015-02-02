@@ -6,9 +6,9 @@
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Location\CriterionVisitor;
+namespace eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -32,7 +32,7 @@ class MatchNone extends CriterionVisitor
      * Map field value to a proper Solr representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\CriterionVisitor $subVisitor
+     * @param \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor $subVisitor
      *
      * @return string
      */

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr;
+namespace eZ\Publish\Core\Search\Solr;
 
 use eZ\Publish\Core\SignalSlot\Slot as BaseSlot;
 use eZ\Publish\API\Repository\Repository;

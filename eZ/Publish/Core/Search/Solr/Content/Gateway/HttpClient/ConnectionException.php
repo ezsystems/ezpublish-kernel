@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\HttpClient;
+namespace eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient;
 
 use RuntimeException;
 
