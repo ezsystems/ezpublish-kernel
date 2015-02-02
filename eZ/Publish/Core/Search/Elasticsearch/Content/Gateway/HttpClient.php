@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\Gateway;
 
 /**
  * Interface for Http Client implementations
@@ -21,9 +21,9 @@ interface HttpClient
      *
      * @param string $method
      * @param string $path
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message $message
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Message $message
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\Message
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\Message
      */
     public function request( $method, $path, Message $message = null );
 }

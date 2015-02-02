@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway\HttpClient;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient;
 
 use RuntimeException;
 

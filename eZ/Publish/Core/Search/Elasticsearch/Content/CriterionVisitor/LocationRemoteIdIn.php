@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher as Dispatcher;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
@@ -67,7 +67,7 @@ class LocationRemoteIdIn extends CriterionVisitor
      * Map field value to a proper Elasticsearch filter representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $fieldFilters
      *
      * @return mixed
@@ -86,7 +86,7 @@ class LocationRemoteIdIn extends CriterionVisitor
      * Map field value to a proper Elasticsearch query representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $fieldFilters
      *
      * @return mixed

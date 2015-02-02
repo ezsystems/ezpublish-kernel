@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher as Dispatcher;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
@@ -23,14 +23,14 @@ class FullText extends FieldFilterBase
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap
      */
     protected $fieldMap;
 
     /**
      * Create from field map
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap $fieldMap
      */
     public function __construct( FieldMap $fieldMap )
     {
@@ -113,7 +113,7 @@ class FullText extends FieldFilterBase
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $fieldFilters
      *
      * @return mixed
@@ -152,7 +152,7 @@ class FullText extends FieldFilterBase
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $fieldFilters
      *
      * @return mixed

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Persistence\Content;
@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Section;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
+use eZ\Publish\Core\Search\Solr\Content\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
@@ -31,7 +31,7 @@ class Mapper
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
@@ -73,13 +73,13 @@ class Mapper
     /**
      * Field registry
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldRegistry
      */
     protected $fieldRegistry;
 
     /**
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator $fieldNameGenerator
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
@@ -110,7 +110,7 @@ class Mapper
      *
      * @param int|string $contentId
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     public function mapContentById( $contentId )
     {
@@ -126,7 +126,7 @@ class Mapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     public function mapContent( Content $content )
     {
@@ -272,7 +272,7 @@ class Mapper
      * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param \eZ\Publish\SPI\Persistence\Content\Type $contentType
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document[]
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document[]
      */
     protected function mapFields( Content $content, Type $contentType )
     {
@@ -363,7 +363,7 @@ class Mapper
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     protected function mapLocation( Location $location, Content $content )
     {
@@ -439,7 +439,7 @@ class Mapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      *
-     * @return \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document
+     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\Document
      */
     public function mapContentLocation( Location $location )
     {

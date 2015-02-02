@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\SPI\Search\FieldType\DocumentField;
 
@@ -20,20 +20,20 @@ class Serializer
     /**
      * Field value mapper
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper
      */
     protected $fieldValueMapper;
 
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator
      */
     protected $nameGenerator;
 
     /**
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper $fieldValueMapper
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator $nameGenerator
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper $fieldValueMapper
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator $nameGenerator
      */
     public function __construct(
         FieldValueMapper $fieldValueMapper,
@@ -47,7 +47,7 @@ class Serializer
     /**
      * Returns document _source that can be used for (bulk) indexing.
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document $document
      *
      * @return string
      */
@@ -61,11 +61,11 @@ class Serializer
      *
      * Note: _index parameter is omitted because it is configurable
      * on a gateway and passed as a part of the REST resource
-     * in {@link \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway::bulkIndex()}.
+     * in {@link \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway::bulkIndex()}.
      *
-     * @see \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway::bulkIndex()
+     * @see \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway::bulkIndex()
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document $document
      *
      * @return string
      */
@@ -88,7 +88,7 @@ class Serializer
      * Implemented in a separate method because of a recursion needed to
      * handle nested documents.
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Document $document
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Document $document
      *
      * @return array
      */

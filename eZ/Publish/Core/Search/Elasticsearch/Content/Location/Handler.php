@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\Location;
 
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -16,9 +16,9 @@ use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Mapper;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Extractor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Gateway;
 
 /**
  * The Location Search Handler interface defines search operations on Location elements in the storage engine.
@@ -28,30 +28,30 @@ class Handler implements SearchHandlerInterface
     /**
      * Content locator gateway.
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway
      */
     protected $gateway;
 
     /**
      * Document mapper
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Mapper
      */
     protected $mapper;
 
     /**
      * Search result extractor
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Extractor
      */
     protected $extractor;
 
     /**
      * Creates a new content handler.
      *
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Gateway $gateway
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Mapper $mapper
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor $extractor
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway $gateway
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Mapper $mapper
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Extractor $extractor
      */
     public function __construct(
         Gateway $gateway,

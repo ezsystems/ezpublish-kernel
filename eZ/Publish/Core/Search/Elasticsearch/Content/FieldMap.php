@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
+use eZ\Publish\Core\Search\Solr\Content\FieldRegistry;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use RuntimeException;
@@ -25,7 +25,7 @@ class FieldMap
     /**
      * Field registry
      *
-     * @var \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry
+     * @var \eZ\Publish\Core\Search\Solr\Content\FieldRegistry
      */
     protected $fieldRegistry;
 
@@ -39,7 +39,7 @@ class FieldMap
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator
      */
     protected $nameGenerator;
 
@@ -53,9 +53,9 @@ class FieldMap
     /**
      * Create from content type handler and field registry
      *
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator $nameGenerator
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator $nameGenerator
      */
     public function __construct(
         FieldRegistry $fieldRegistry,

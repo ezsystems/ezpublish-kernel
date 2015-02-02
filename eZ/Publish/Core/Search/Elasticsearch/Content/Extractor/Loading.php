@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\Extractor;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Extractor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\Extractor;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FacetBuilderVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 use RuntimeException;
 
 /**

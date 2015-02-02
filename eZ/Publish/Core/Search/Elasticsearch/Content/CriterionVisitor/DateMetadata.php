@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use InvalidArgumentException;
 use DateTime;
 use Exception;

@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\CustomField;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\CustomField;
 
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher as Dispatcher;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor;
-use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitor\CustomField;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
+use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor\CustomField;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
@@ -68,7 +68,7 @@ class CustomFieldRange extends CustomField
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given criterion target.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\CriterionVisitorDispatcher $dispatcher
+     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher $dispatcher
      * @param array $fieldFilters
      *
      * @return mixed

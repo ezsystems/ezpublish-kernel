@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldValueMapper;
+namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
 
 use eZ\Publish\SPI\Search\FieldType\MultipleStringField;
 use eZ\Publish\SPI\Search\Field;

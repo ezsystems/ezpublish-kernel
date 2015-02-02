@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Elasticsearch;
+namespace eZ\Publish\Core\Search\Elasticsearch;
 
 use eZ\Publish\SPI\Search\Handler as HandlerInterface;
 use eZ\Publish\SPI\Search\Content\Handler as ContentSearchHandler;
