@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
+namespace eZ\Publish\Core\Search\Legacy;
 
 use eZ\Publish\SPI\Search\Handler as HandlerInterface;
 use eZ\Publish\SPI\Search\Content\Handler as ContentSearchHandler;
@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Search\Content\Location\Handler as LocationSearchHandler;
 /**
  * The main handler for the Legacy Search Engine
  */
-class MainHandler implements HandlerInterface
+class Handler implements HandlerInterface
 {
     /**
      * @var \eZ\Publish\SPI\Search\Content\Handler

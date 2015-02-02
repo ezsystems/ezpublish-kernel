@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue;
+namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue;
 
 use OutOfBoundsException;
 
@@ -20,14 +20,14 @@ class HandlerRegistry
      * Map of Criterion field value handlers where key is field type identifier
      * and value is field value handler.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler[]
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler[]
      */
     protected $map = array();
 
     /**
      * Create field value handler registry with handler map.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler[] $map
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler[] $map
      *        Map of Criterion field value handlers where key is field type identifier and value field value handler
      */
     public function __construct( array $map = array() )
@@ -42,7 +42,7 @@ class HandlerRegistry
      * Register $handler for $fieldTypeIdentifier.
      *
      * @param string $fieldTypeIdentifier
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler $handler
+     * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler $handler
      */
     public function register( $fieldTypeIdentifier, $handler )
     {
@@ -56,7 +56,7 @@ class HandlerRegistry
      *
      * @param string $fieldTypeIdentifier
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\Common\Gateway\CriterionHandler\FieldValue\Handler
+     * @return \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler
      */
     public function get( $fieldTypeIdentifier )
     {
