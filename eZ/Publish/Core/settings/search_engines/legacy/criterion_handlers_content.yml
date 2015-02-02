@@ -1,0 +1,64 @@
+parameters:
+    ezpublish.search.legacy.gateway.criterion_handler.content.depth.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\Depth
+    ezpublish.search.legacy.gateway.criterion_handler.content.location_id.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\LocationId
+    ezpublish.search.legacy.gateway.criterion_handler.content.location_priority.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\LocationPriority
+    ezpublish.search.legacy.gateway.criterion_handler.content.location_remote_id.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\LocationRemoteId
+    ezpublish.search.legacy.gateway.criterion_handler.content.parent_location_id.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\ParentLocationId
+    ezpublish.search.legacy.gateway.criterion_handler.content.subtree.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\Subtree
+    ezpublish.search.legacy.gateway.criterion_handler.content.permission_subtree.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\PermissionSubtree
+    ezpublish.search.legacy.gateway.criterion_handler.content.visibility.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\CriterionHandler\Visibility
+
+services:
+    # Note: services tagged with:
+    #  - ezpublish.search.legacy.gateway.criterion_handler.content
+    # are registered to this one using compilation pass
+    ezpublish.search.legacy.gateway.criteria_converter.content:
+        class: %ezpublish.search.legacy.gateway.criteria_converter.class%
+
+    ezpublish.search.legacy.gateway.criterion_handler.content.depth:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.content.depth.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+
+    ezpublish.search.legacy.gateway.criterion_handler.content.location_id:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.content.location_id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+
+    ezpublish.search.legacy.gateway.criterion_handler.content.location_priority:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.content.location_priority.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+
+    ezpublish.search.legacy.gateway.criterion_handler.content.location_remote_id:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.content.location_remote_id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+
+    ezpublish.search.legacy.gateway.criterion_handler.content.parent_location_id:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.content.parent_location_id.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+
+    ezpublish.search.legacy.gateway.criterion_handler.content.subtree:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.content.subtree.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+
+    ezpublish.search.legacy.gateway.criterion_handler.content.permission_subtree:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.content.permission_subtree.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
+
+    ezpublish.search.legacy.gateway.criterion_handler.content.visibility:
+        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        class: %ezpublish.search.legacy.gateway.criterion_handler.content.visibility.class%
+        tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
