@@ -14,16 +14,16 @@ services:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.content.location_depth.class%
         tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.content.location_path_string:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.content.location_path_string.class%
         tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.content.location_priority:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.content.location_priority.class%
         tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}

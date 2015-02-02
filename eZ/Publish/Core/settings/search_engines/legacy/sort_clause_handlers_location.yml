@@ -17,34 +17,34 @@ services:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.id.class%
         tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.depth:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.depth.class%
         tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.path:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.path.class%
         tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.is_main_location:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.is_main_location.class%
         tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.priority:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.priority.class%
         tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.visibility:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.visibility.class%
         tags:
-            - {name: ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
