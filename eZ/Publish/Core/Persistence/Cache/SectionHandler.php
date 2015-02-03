@@ -106,7 +106,6 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
 
         $this->cache->clear( 'content', $contentId );
         $this->cache->clear( 'content', 'info', $contentId );
-        $this->cache->clear( 'content', 'info', 'remoteId' );
 
         return $return;
     }

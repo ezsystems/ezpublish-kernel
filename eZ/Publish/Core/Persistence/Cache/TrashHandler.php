@@ -9,8 +9,10 @@
 
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 
 /**
  * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
@@ -27,27 +29,32 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function trashSubtree( $locationId )
+    public function trashSubtree( Location $location )
     {
-        $this->logger->logCall( __METHOD__, array( 'locationId' => $locationId ) );
-        $return = $this->persistenceHandler->trashHandler()->trashSubtree( $locationId );
-        $this->cache->clear( 'location' );//TIMBER!
-        $this->cache->clear( 'content' );//TIMBER!
+        $this->logger->logCall( __METHOD__, array( 'locationId' => $location->id ) );
+        $return = $this->persistenceHandler->trashHandler()->trashSubtree( $location );
+        $this->cache->clear( 'location', $location->id );
+        $this->cache->clear( 'location', 'subtree' );
+        $this->cache->clear( 'content', $location->contentId );
+        $this->cache->clear( 'content', 'info', $location->contentId );
+        $this->cache->clear( 'content', 'locations', $location->contentId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
         return $return;
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function recover( $trashedId, $newParentId )
+    public function recover( Trashed $trashed, Location $newParent )
     {
-        $this->logger->logCall( __METHOD__, array( 'id' => $trashedId, 'newParentId' => $newParentId ) );
-        $return = $this->persistenceHandler->trashHandler()->recover( $trashedId, $newParentId );
+        $this->logger->logCall( __METHOD__, array( 'id' => $trashed->id, 'newParentId' => $newParent->id ) );
+        $return = $this->persistenceHandler->trashHandler()->recover( $trashed, $newParent );
         $this->cache->clear( 'location', 'subtree' );
-        $this->cache->clear( 'content' );//TIMBER!
+        $this->cache->clear( 'content', $trashed->contentId );
+        $this->cache->clear( 'content', 'info', $trashed->contentId );
+        $this->cache->clear( 'content', 'locations', $trashed->contentId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup' );
         return $return;
     }
@@ -73,9 +80,13 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     /**
      * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
-    public function deleteTrashItem( $trashedId )
+    public function deleteTrashItem( Trashed $trashed )
     {
-        $this->logger->logCall( __METHOD__, array( 'id' => $trashedId ) );
-        $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashedId );
+        $this->logger->logCall( __METHOD__, array( 'id' => $trashed->id ) );
+        $this->persistenceHandler->trashHandler()->deleteTrashItem( $trashed );
+        $this->cache->clear( 'content', $trashed->contentId );
+        $this->cache->clear( 'content', 'info', $trashed->contentId );
+        $this->cache->clear( 'content', 'info', 'remoteId' );
+        $this->cache->clear( 'content', 'locations', $trashed->contentId );
     }
 }

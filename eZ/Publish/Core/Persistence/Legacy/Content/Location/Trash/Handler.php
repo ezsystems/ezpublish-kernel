@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
 
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
@@ -96,21 +97,21 @@ class Handler implements BaseTrashHandler
      * Moves all locations in the subtree to the Trash. The associated content
      * objects are left untouched.
      *
-     * @param mixed $locationId
+     * @param Location $location
      *
      * @todo Handle field types actions
      *
      * @return null|\eZ\Publish\SPI\Persistence\Content\Location\Trashed null if location was deleted, otherwise Trashed object
      */
-    public function trashSubtree( $locationId )
+    public function trashSubtree( Location $location )
     {
-        $locationRows = $this->locationGateway->getSubtreeContent( $locationId );
+        $locationRows = $this->locationGateway->getSubtreeContent( $location->id );
         $isLocationRemoved = false;
         $parentLocationId = null;
 
         foreach ( $locationRows as $locationRow )
         {
-            if ( $locationRow["node_id"] == $locationId )
+            if ( $locationRow["node_id"] == $location->id )
             {
                 $parentLocationId = $locationRow["parent_node_id"];
             }
@@ -121,7 +122,7 @@ class Handler implements BaseTrashHandler
             }
             else
             {
-                if ( $locationRow["node_id"] == $locationId )
+                if ( $locationRow["node_id"] == $location->id )
                 {
                     $isLocationRemoved = true;
                 }
@@ -149,7 +150,7 @@ class Handler implements BaseTrashHandler
             $this->locationHandler->markSubtreeModified( $parentLocationId, time() );
         }
 
-        return $isLocationRemoved ? null : $this->loadTrashItem( $locationId );
+        return $isLocationRemoved ? null : $this->loadTrashItem( $location->id );
     }
 
     /**
@@ -161,16 +162,16 @@ class Handler implements BaseTrashHandler
      *
      * Returns newly restored location Id.
      *
-     * @param mixed $trashedId
-     * @param mixed $newParentId
+     * @param Trashed $trashed
+     * @param Location $newParent
      *
      * @return int Newly restored location id
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException If $newParentId is invalid
      * @todo Handle field types actions
      */
-    public function recover( $trashedId, $newParentId )
+    public function recover( Trashed $trashed, Location $newParent )
     {
-        return $this->locationGateway->untrashLocation( $trashedId, $newParentId )->id;
+        return $this->locationGateway->untrashLocation( $trashed->id, $newParent->id )->id;
     }
 
     /**
@@ -210,7 +211,7 @@ class Handler implements BaseTrashHandler
         $trashedItems = $this->findTrashItems();
         foreach ( $trashedItems as $item )
         {
-            $this->delete( $item );
+            $this->deleteTrashItem( $item );
         }
 
         $this->locationGateway->cleanupTrash();
@@ -220,28 +221,15 @@ class Handler implements BaseTrashHandler
      * Removes a trashed location identified by $trashedLocationId from trash
      * Associated content has to be deleted
      *
-     * @param int $trashedId
+     * @param  Trashed $trashed
      *
      * @return void
      */
-    public function deleteTrashItem( $trashedId )
+    public function deleteTrashItem( Trashed $trashed )
     {
-        $this->delete( $this->loadTrashItem( $trashedId ) );
-    }
+        $this->locationGateway->removeElementFromTrash( $trashed->id );
 
-    /**
-     * Triggers delete operations for $trashItem.
-     * If there is no more locations for corresponding content, then it will be deleted as well.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Trashed $trashItem
-     *
-     * @return void
-     */
-    protected function delete( Trashed $trashItem )
-    {
-        $this->locationGateway->removeElementFromTrash( $trashItem->id );
-
-        if ( $this->locationGateway->countLocationsByContentId( $trashItem->contentId ) < 1 )
-            $this->contentHandler->deleteContent( $trashItem->contentId );
+        if ( $this->locationGateway->countLocationsByContentId( $trashed->contentId ) < 1 )
+            $this->contentHandler->deleteContent( $trashed->contentId );
     }
 }

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler;
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 
 /**
@@ -130,7 +131,7 @@ class TrashHandlerTest extends TestCase
             ->with( $array, null, new Trashed() )
             ->will( $this->returnValue( new Trashed( array( 'id' => 20 ) ) ) );
 
-        $trashedObject = $handler->trashSubtree( 20 );
+        $trashedObject = $handler->trashSubtree( new Location( array( 'id' => 20 ) ) );
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashedObject );
         self::assertSame( 20, $trashedObject->id );
     }
@@ -192,7 +193,7 @@ class TrashHandlerTest extends TestCase
             ->method( 'markSubtreeModified' )
             ->with( 40 );
 
-        $returnValue = $handler->trashSubtree( 20 );
+        $returnValue = $handler->trashSubtree( new Location( array( 'id' => 20 ) ) );
         self::assertNull( $returnValue );
     }
 
@@ -284,7 +285,7 @@ class TrashHandlerTest extends TestCase
             ->with( $array, null, new Trashed() )
             ->will( $this->returnValue( new Trashed( array( 'id' => 20 ) ) ) );
 
-        $trashedObject = $handler->trashSubtree( 20 );
+        $trashedObject = $handler->trashSubtree( new Location( array( 'id' => 20 ) ) );
         self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashedObject );
         self::assertSame( 20, $trashedObject->id );
     }
@@ -302,11 +303,11 @@ class TrashHandlerTest extends TestCase
             ->with( 69, 23 )
             ->will(
                 $this->returnValue(
-                    new Trashed( array( 'id' => 70 ) )
+                    new Location( array( 'id' => 70 ) )
                 )
             );
 
-        self::assertSame( 70, $handler->recover( 69, 23 ) );
+        self::assertSame( 70, $handler->recover( new Trashed( array( 'id' => 69 ) ), new Location( array( 'id' => 23 ) ) ) );
     }
 
     /**
@@ -407,33 +408,12 @@ class TrashHandlerTest extends TestCase
         $handler = $this->getTrashHandler();
 
         $this->locationGateway
-            ->expects( $this->once() )
-            ->method( 'loadTrashByLocation' )
-            ->with( 69 )
-            ->will(
-                $this->returnValue(
-                    array(
-                        'node_id' => 69,
-                        'contentobject_id' => 67,
-                        'path_string' => '/1/2/69'
-                    )
-                )
-            );
+            ->expects( $this->never() )
+            ->method( 'loadTrashByLocation' );
 
         $this->locationMapper
-            ->expects( $this->once() )
-            ->method( 'createLocationFromRow' )
-            ->will(
-                $this->returnValue(
-                    new Trashed(
-                        array(
-                            'id' => 69,
-                            'contentId' => 67,
-                            'pathString' => '/1/2/69'
-                        )
-                    )
-                )
-            );
+            ->expects( $this->never() )
+            ->method( 'createLocationFromRow' );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -451,7 +431,7 @@ class TrashHandlerTest extends TestCase
             ->method( 'deleteContent' )
             ->with( 67 );
 
-        $handler->deleteTrashItem( 69 );
+        $handler->deleteTrashItem( new Trashed( array( 'id' => 69, 'contentId' => 67 ) ) );
     }
 
     /**
@@ -462,33 +442,12 @@ class TrashHandlerTest extends TestCase
         $handler = $this->getTrashHandler();
 
         $this->locationGateway
-            ->expects( $this->once() )
-            ->method( 'loadTrashByLocation' )
-            ->with( 69 )
-            ->will(
-                $this->returnValue(
-                    array(
-                        'node_id' => 69,
-                        'contentobject_id' => 67,
-                        'path_string' => '/1/2/69'
-                    )
-                )
-            );
+            ->expects( $this->never() )
+            ->method( 'loadTrashByLocation' );
 
         $this->locationMapper
-            ->expects( $this->once() )
-            ->method( 'createLocationFromRow' )
-            ->will(
-                $this->returnValue(
-                    new Trashed(
-                        array(
-                            'id' => 69,
-                            'contentId' => 67,
-                            'pathString' => '/1/2/69'
-                        )
-                    )
-                )
-            );
+            ->expects( $this->never() )
+            ->method( 'createLocationFromRow' );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -505,6 +464,6 @@ class TrashHandlerTest extends TestCase
             ->expects( $this->never() )
             ->method( 'deleteContent' );
 
-        $handler->deleteTrashItem( 69 );
+        $handler->deleteTrashItem( new Trashed( array( 'id' => 69, 'contentId' => 67 ) ) );
     }
 }
