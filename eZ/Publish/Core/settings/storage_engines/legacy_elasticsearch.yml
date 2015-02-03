@@ -7,7 +7,7 @@ imports:
     - {resource: storage_engines/elasticsearch/facet_builder_visitors.yml}
     - {resource: storage_engines/elasticsearch/field_value_mappers.yml}
     - {resource: storage_engines/elasticsearch/services.yml}
-    - {resource: storage_engines/solr/slots.yml}
+    - {resource: search_engines/solr/slots.yml}
     - {resource: storage_engines/elasticsearch/sort_clause_visitors_content.yml}
     - {resource: storage_engines/elasticsearch/sort_clause_visitors_location.yml}
 
@@ -33,7 +33,7 @@ services:
     ezpublish.persistence.elasticsearch.search.mapper.standard:
         class: %ezpublish.persistence.elasticsearch.search.mapper.standard.class%
         arguments:
-            - @ezpublish.persistence.solr.search.field_registry
+            - @ezpublish.search.solr.field_registry
             - @ezpublish.persistence.elasticsearch.search.content.field_name_generator
             - @ezpublish.spi.persistence.legacy.content.handler
             - @ezpublish.spi.persistence.legacy.location.handler
@@ -71,7 +71,7 @@ services:
     ezpublish.persistence.legacy_elasticsearch.search.content.field_map:
         class: %ezpublish.persistence.elasticsearch.search.content.field_map.class%
         arguments:
-            - @ezpublish.persistence.solr.search.field_registry
+            - @ezpublish.search.solr.field_registry
             - @ezpublish.spi.persistence.legacy.content_type.handler
             - @ezpublish.persistence.elasticsearch.search.content.field_name_generator
 
