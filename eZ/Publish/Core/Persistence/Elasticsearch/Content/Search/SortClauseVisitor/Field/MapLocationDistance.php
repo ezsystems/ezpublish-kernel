@@ -12,7 +12,8 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVis
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\FieldBase;
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use RuntimeException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap;
 
 /**
  * Visits the MapLocationDistance sort clause
@@ -20,11 +21,22 @@ use RuntimeException;
 class MapLocationDistance extends FieldBase
 {
     /**
-     * Name of the field type that sort clause can handle
+     * Name of the field type's indexed field that criterion can handle.
      *
      * @var string
      */
-    protected $typeName = "ez_geolocation";
+    protected $fieldName;
+
+    /**
+     * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldMap $fieldMap
+     * @param string $fieldName
+     */
+    public function __construct( FieldMap $fieldMap, $fieldName )
+    {
+        $this->fieldName = $fieldName;
+
+        parent::__construct( $fieldMap );
+    }
 
     /**
      * Check if visitor is applicable to current sortClause
@@ -51,18 +63,24 @@ class MapLocationDistance extends FieldBase
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget $target */
         $target = $sortClause->targetData;
-        $types = $this->getFieldTypes(
+        $fieldName = $this->getSortFieldName(
+            $sortClause,
             $target->typeIdentifier,
             $target->fieldIdentifier,
-            $target->languageCode
+            $this->fieldName
         );
 
-        if ( empty( $types ) || !isset( $types["ez_geolocation"] ) )
+        if ( $fieldName === null )
         {
-            throw new RuntimeException( "No sortable fields found" );
+            throw new InvalidArgumentException(
+                "\$sortClause->target",
+                "No searchable fields found for the given sort clause target ".
+                "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
+            );
         }
 
-        $fieldName = $types["ez_geolocation"];
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\MapLocationTarget $target */
+        $target = $sortClause->targetData;
 
         return array(
             "_geo_distance" => array(

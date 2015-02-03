@@ -67,24 +67,26 @@ services:
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 
-    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_in:
-        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_in.class%
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_base:
+        abstract: true
         arguments:
             - @ezpublish.persistence.elasticsearch.search.content.field_map
+
+    ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_in:
+        parent: ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_base
+        class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_in.class%
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_range:
+        parent: ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_base
         class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_range.class%
-        arguments:
-            - @ezpublish.persistence.elasticsearch.search.content.field_map
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.fulltext:
+        parent: ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_base
         class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.fulltext.class%
-        arguments:
-            - @ezpublish.persistence.elasticsearch.search.content.field_map
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 
@@ -134,9 +136,11 @@ services:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 
     ezpublish.persistence.elasticsearch.search.content.criterion_visitor.map_location_distance_range:
+        parent: ezpublish.persistence.elasticsearch.search.content.criterion_visitor.field_base
         class: %ezpublish.persistence.elasticsearch.search.content.criterion_visitor.map_location_distance_range.class%
         arguments:
-            - @ezpublish.persistence.elasticsearch.search.content.field_map
+            - 'ezgmaplocation'
+            - 'value_location'
         tags:
             - {name: ezpublish.persistence.elasticsearch.search.content.criterion_visitor}
 

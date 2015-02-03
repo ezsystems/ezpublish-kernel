@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVis
 
 use eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\SortClauseVisitor\FieldBase;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use RuntimeException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Visits the Field sort clause
@@ -33,6 +33,8 @@ class Field extends FieldBase
     /**
      * Map field value to a proper Elasticsearch representation
      *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no sortable fields are found for the given sort clause target.
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      *
      * @return mixed
@@ -41,24 +43,23 @@ class Field extends FieldBase
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $target */
         $target = $sortClause->targetData;
-        $types = $this->getFieldTypes(
+        $fieldName = $this->getSortFieldName(
+            $sortClause,
             $target->typeIdentifier,
-            $target->fieldIdentifier,
-            $target->languageCode
+            $target->fieldIdentifier
         );
 
-        if ( empty( $types ) )
+        if ( $fieldName === null )
         {
-            throw new RuntimeException( "No sortable fields found for '{$target->fieldIdentifier}' on '{$target->typeIdentifier}'" );
+            throw new InvalidArgumentException(
+                "\$sortClause->target",
+                "No searchable fields found for the given sort clause target ".
+                "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
+            );
         }
 
-        // TODO: should we somehow define/control what is to be used for sorting in this case?
-        if ( count( $types ) > 1 )
-        {
-            throw new RuntimeException( "Multiple sortable fields found" );
-        }
-
-        $fieldName = reset( $types );
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $target */
+        $target = $sortClause->targetData;
 
         return array(
             "fields_doc.{$fieldName}" => array(

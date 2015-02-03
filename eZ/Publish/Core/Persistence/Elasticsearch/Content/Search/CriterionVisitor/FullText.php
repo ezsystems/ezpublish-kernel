@@ -40,12 +40,14 @@ class FullText extends FieldFilterBase
     /**
      * Get field type information
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface $criterion
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param string $fieldDefinitionIdentifier
+     *
      * @return array
      */
-    protected function getFieldTypes( CustomFieldInterface $criterion )
+    protected function getFieldNames( Criterion $criterion, $fieldDefinitionIdentifier )
     {
-        return $this->fieldMap->getFieldTypes( $criterion );
+        return $this->fieldMap->getFieldNames( $criterion, $fieldDefinitionIdentifier );
     }
 
     /**
@@ -71,28 +73,20 @@ class FullText extends FieldFilterBase
      */
     protected function getCondition( Criterion $criterion )
     {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
-        $fields = $this->getFieldTypes( $criterion );
-
         // Add field document custom _all field
         $queryFields = array(
             "fields_doc.meta_all_*",
         );
 
         // Add boosted fields if any
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
         foreach ( $criterion->boost as $field => $boost )
         {
-            if ( !isset( $fields[$field] ) )
-            {
-                continue;
-            }
+            $fieldNames = $this->getFieldNames( $criterion, $field );
 
-            foreach ( $fields[$field] as $fieldNames )
+            foreach ( $fieldNames as $fieldName )
             {
-                foreach ( $fieldNames as $fieldName )
-                {
-                    $queryFields[] = sprintf( "fields_doc.{$fieldName}^%.1f", $boost );
-                }
+                $queryFields[] = sprintf( "fields_doc.{$fieldName}^%.1f", $boost );
             }
         }
 
