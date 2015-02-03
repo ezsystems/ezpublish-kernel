@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Section;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry;
+use eZ\Publish\Core\Search\Solr\Content\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
@@ -78,7 +78,7 @@ class Mapper
     protected $fieldRegistry;
 
     /**
-     * @param \eZ\Publish\Core\Persistence\Solr\Content\Search\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\Core\Search\Solr\Content\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator $fieldNameGenerator
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
