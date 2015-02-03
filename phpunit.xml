@@ -38,6 +38,9 @@
     <testsuite name="eZ\Publish\Core\Search\Solr">
       <directory>eZ/Publish/Core/Search/Solr/Tests</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\Search\Elasticsearch">
+      <directory>eZ/Publish/Core/Search/Elasticsearch/Tests</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\IO">
       <directory>eZ/Publish/Core/IO/Tests</directory>
     </testsuite>

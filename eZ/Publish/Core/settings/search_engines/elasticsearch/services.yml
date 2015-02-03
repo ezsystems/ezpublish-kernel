@@ -1,0 +1,24 @@
+parameters:
+    ezpublish.search.elasticsearch.content.gateway.client.http.stream.class: eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient\Stream
+    ezpublish.search.elasticsearch.content.field_value_mapper.aggregate.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\Aggregate
+    ezpublish.search.elasticsearch.content.field_name_generator.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator
+    ezpublish.search.solr.field_registry.class: eZ\Publish\Core\Search\Solr\Content\FieldRegistry
+
+services:
+    ezpublish.search.elasticsearch.content.gateway.client.http.stream:
+        class: %ezpublish.search.elasticsearch.content.gateway.client.http.stream.class%
+        arguments:
+            - %ezpublish.elasticsearch_server%
+
+    # Note: services tagged with 'ezpublish.search.elasticsearch.content.field_value_mapper'
+    # are registered to this one using compilation pass
+    ezpublish.search.elasticsearch.content.field_value_mapper.aggregate:
+        class: %ezpublish.search.elasticsearch.content.field_value_mapper.aggregate.class%
+
+    # Note: services tagged with 'ezpublish.fieldType.indexable'
+    # are registered to this one using compilation pass
+    ezpublish.search.solr.field_registry:
+        class: %ezpublish.search.solr.field_registry.class%
+
+    ezpublish.search.elasticsearch.content.field_name_generator:
+        class: %ezpublish.search.elasticsearch.content.field_name_generator.class%

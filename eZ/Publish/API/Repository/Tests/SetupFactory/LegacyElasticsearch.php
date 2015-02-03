@@ -52,12 +52,12 @@ class LegacyElasticsearch extends Legacy
             /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
             $loader->load( 'tests/integration_legacy_elasticsearch.yml' );
 
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\CriterionVisitorDispatcherContentPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\CriterionVisitorDispatcherLocationPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateFacetBuilderVisitorPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateFieldValueMapperPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateSortClauseVisitorContentPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Elasticsearch\AggregateSortClauseVisitorLocationPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\CriterionVisitorDispatcherContentPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\CriterionVisitorDispatcherLocationPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\AggregateFacetBuilderVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\AggregateFieldValueMapperPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\AggregateSortClauseVisitorContentPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Elasticsearch\AggregateSortClauseVisitorLocationPass() );
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\FieldRegistryPass() );
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\SignalSlotPass() );
 
@@ -119,14 +119,14 @@ class LegacyElasticsearch extends Legacy
             );
         }
 
-        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler $contentSearchHandler */
+        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Handler $contentSearchHandler */
         $contentSearchHandler = $searchHandler->contentSearchHandler();
         $contentSearchHandler->setCommit( false );
         $contentSearchHandler->purgeIndex();
         $contentSearchHandler->setCommit( true );
         $contentSearchHandler->bulkIndexContent( $contentObjects );
 
-        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler $locationSearchHandler */
+        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
         $locationSearchHandler = $searchHandler->locationSearchHandler();
         $locationSearchHandler->setCommit( false );
         $locationSearchHandler->purgeIndex();
