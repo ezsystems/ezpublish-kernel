@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Solr;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\FieldRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\FieldRegistryPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -20,7 +20,7 @@ class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->setDefinition( 'ezpublish.persistence.solr.search.field_registry', new Definition() );
+        $this->setDefinition( 'ezpublish.search.solr.field_registry', new Definition() );
     }
 
     /**
@@ -45,7 +45,7 @@ class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.solr.search.field_registry',
+            'ezpublish.search.solr.field_registry',
             'registerType',
             array( $fieldTypeIdentifier, new Reference( $serviceId ) )
         );
@@ -65,7 +65,7 @@ class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.solr.search.field_registry',
+            'ezpublish.search.solr.field_registry',
             'registerType',
             array( $fieldTypeIdentifier, new Reference( $serviceId ) )
         );

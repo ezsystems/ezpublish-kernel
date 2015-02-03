@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Solr;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Solr;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,16 +23,16 @@ class AggregateFieldValueMapperPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.solr.search.content.field_value_mapper.aggregate' ) )
+        if ( !$container->hasDefinition( 'ezpublish.search.solr.content.field_value_mapper.aggregate' ) )
         {
             return;
         }
 
         $aggregateFieldValueMapperDefinition = $container->getDefinition(
-            'ezpublish.persistence.solr.search.content.field_value_mapper.aggregate'
+            'ezpublish.search.solr.content.field_value_mapper.aggregate'
         );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.persistence.solr.search.content.field_value_mapper' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.solr.content.field_value_mapper' ) as $id => $attributes )
         {
             $aggregateFieldValueMapperDefinition->addMethodCall(
                 'addMapper',

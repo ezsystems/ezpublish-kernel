@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Solr;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Solr;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,34 +27,34 @@ class AggregateSortClauseVisitorPass implements CompilerPassInterface
     public function process( ContainerBuilder $container )
     {
         if (
-            !$container->hasDefinition( 'ezpublish.persistence.solr.search.content.sort_clause_visitor.aggregate' ) &&
-            !$container->hasDefinition( 'ezpublish.persistence.solr.search.location.sort_clause_visitor.aggregate' )
+            !$container->hasDefinition( 'ezpublish.search.solr.content.sort_clause_visitor.aggregate' ) &&
+            !$container->hasDefinition( 'ezpublish.search.solr.location.sort_clause_visitor.aggregate' )
         )
         {
             return;
         }
 
-        if ( $container->hasDefinition( 'ezpublish.persistence.solr.search.content.sort_clause_visitor.aggregate' ) )
+        if ( $container->hasDefinition( 'ezpublish.search.solr.content.sort_clause_visitor.aggregate' ) )
         {
             $aggregateContentSortClauseVisitorDefinition = $container->getDefinition(
-                'ezpublish.persistence.solr.search.content.sort_clause_visitor.aggregate'
+                'ezpublish.search.solr.content.sort_clause_visitor.aggregate'
             );
 
             $visitors = $container->findTaggedServiceIds(
-                'ezpublish.persistence.solr.search.content.sort_clause_visitor'
+                'ezpublish.search.solr.content.sort_clause_visitor'
             );
 
             $this->addHandlers( $aggregateContentSortClauseVisitorDefinition, $visitors );
         }
 
-        if ( $container->hasDefinition( 'ezpublish.persistence.solr.search.location.sort_clause_visitor.aggregate' ) )
+        if ( $container->hasDefinition( 'ezpublish.search.solr.location.sort_clause_visitor.aggregate' ) )
         {
             $aggregateLocationSortClauseVisitorDefinition = $container->getDefinition(
-                'ezpublish.persistence.solr.search.location.sort_clause_visitor.aggregate'
+                'ezpublish.search.solr.location.sort_clause_visitor.aggregate'
             );
 
             $visitors = $container->findTaggedServiceIds(
-                'ezpublish.persistence.solr.search.location.sort_clause_visitor'
+                'ezpublish.search.solr.location.sort_clause_visitor'
             );
 
             $this->addHandlers( $aggregateLocationSortClauseVisitorDefinition, $visitors );
