@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This compiler pass will register Elasticsearch Storage criterion visitors for Location Search.
+ * This compiler pass will register Elasticsearch Search Engine criterion visitors for Location Search.
  */
 class CriterionVisitorDispatcherLocationPass implements CompilerPassInterface
 {
@@ -23,16 +23,16 @@ class CriterionVisitorDispatcherLocationPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.persistence.elasticsearch.search.location.criterion_visitor_dispatcher' ) )
+        if ( !$container->hasDefinition( 'ezpublish.search.elasticsearch.location.criterion_visitor_dispatcher' ) )
         {
             return;
         }
 
         $aggregateCriterionVisitorDefinition = $container->getDefinition(
-            'ezpublish.persistence.elasticsearch.search.location.criterion_visitor_dispatcher'
+            'ezpublish.search.elasticsearch.location.criterion_visitor_dispatcher'
         );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.persistence.elasticsearch.search.location.criterion_visitor' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.elasticsearch.location.criterion_visitor' ) as $id => $attributes )
         {
             $aggregateCriterionVisitorDefinition->addMethodCall(
                 'addVisitor',
