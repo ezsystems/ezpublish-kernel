@@ -7,21 +7,37 @@
  */
 namespace EzSystems\PlatformInstallerBundle\Installer;
 
-class DemoCleanInstaller implements Installer
+class DemoCleanInstaller extends DbBasedInstaller implements Installer
 {
-
     public function importSchema()
     {
-        // TODO: Implement importSchema() method.
+        $this->runQueriesFromFile(
+            'vendor/ezsystems/ezpublish-kernel/data/mysql/schema.sql'
+        );
     }
 
     public function importData()
     {
-        // TODO: Implement importData() method.
+        $this->runQueriesFromFile(
+            'vendor/ezsystems/ezpublish-kernel/data/demo_clean_data.sql'
+        );
     }
 
     public function createConfiguration()
     {
-        // TODO: Implement createConfiguration() method.
+        $this->copyConfigurationFile(
+            __DIR__ . '/../Resources/config_templates/demo/ezpublish.yml',
+            'ezpublish/config/ezpublish.yml'
+        );
+
+        $this->copyConfigurationFile(
+            __DIR__ . '/../Resources/config_templates/common/ezpublish_dev.yml',
+            'ezpublish/config/ezpublish_dev.yml'
+        );
+
+        $this->copyConfigurationFile(
+            __DIR__ . '/../Resources/config_templates/common/ezpublish_prod.yml',
+            'ezpublish/config/ezpublish_prod.yml'
+        );
     }
 }

@@ -1,0 +1,70 @@
+ezpublish:
+    repositories:
+        demo_repository:
+            engine: legacy
+            connection: default
+
+    siteaccess:
+        # Available siteaccesses
+        list:
+            - demo_site
+            - eng
+            - ger
+
+        # Siteaccess groups. Use them to group common settings.
+        groups:
+            demo_site_group: [demo_site, eng, ger]
+        default_siteaccess: demo_site
+        match:
+            URIElement: 1
+
+    imagemagick:
+        enabled: false
+
+    # System settings, grouped by siteaccess and/or siteaccess group
+    system:
+        demo_site_group:
+            repository: demo_repository
+            var_dir: var/ezdemo_site
+        eng:
+            languages:
+                - eng-GB
+            session:
+                name: eZSESSID
+        ezdemo_site_clean_admin:
+            languages:
+                - eng-GB
+                - ger-DE
+        ezdemo_site_clean:
+            languages:
+                - eng-GB
+                - ger-DE
+            session:
+                name: eZSESSID
+        ger:
+            languages:
+                - ger-DE
+                - eng-GB
+            session:
+                name: eZSESSID
+        default:
+            content:
+                view_cache: true
+                ttl_cache: true
+                # TTL cache (http) in seconds
+                # Note that Http cache for a given content is always invalidated when publishing that content
+                default_ttl: 300
+
+# Stash is used for persistence cache
+stash:
+    caches:
+        default:
+            drivers:
+                # When using multiple webservers, you must use Memcache or Redis
+                - FileSystem
+            inMemory: true
+            registerDoctrineAdapter: false
+            # On Windows, using FileSystem, to avoid hitting filesystem limitations
+            # you need to change the keyHashFunction used to generate cache directories to "crc32"
+            # FileSystem
+            #    keyHashFunction: crc32

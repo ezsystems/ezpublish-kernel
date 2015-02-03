@@ -10,7 +10,7 @@ services:
         arguments: [@database_connection]
 
     ezplatform.installer.democlean_installer:
-        class: %ezplatform.installer.clean_installer.class%
+        class: %ezplatform.installer.democlean_installer.class%
         parent: ezplatform.installer.db_based_installer
 
     ezplatform.installer.clean_installer:
