@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Solr;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\AggregateSortClauseVisitorPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateSortClauseVisitorPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -21,7 +21,7 @@ class AggregateSortClauseVisitorPassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition(
-            'ezpublish.persistence.solr.search.content.sort_clause_visitor.aggregate',
+            'ezpublish.search.solr.content.sort_clause_visitor.aggregate',
             new Definition()
         );
     }
@@ -41,13 +41,13 @@ class AggregateSortClauseVisitorPassTest extends AbstractCompilerPassTestCase
     {
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag( 'ezpublish.persistence.solr.search.content.sort_clause_visitor' );
+        $def->addTag( 'ezpublish.search.solr.content.sort_clause_visitor' );
         $this->setDefinition( $serviceId, $def );
 
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.persistence.solr.search.content.sort_clause_visitor.aggregate',
+            'ezpublish.search.solr.content.sort_clause_visitor.aggregate',
             'addVisitor',
             array( new Reference( $serviceId ) )
         );

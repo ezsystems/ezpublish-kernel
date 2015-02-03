@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Solr;
 
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\SignalSlotPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\SignalSlotPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -39,7 +39,7 @@ class SignalSlotPassTest extends AbstractCompilerPassTestCase
         $signal = 'signal_identifier';
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag( 'ezpublish.persistence.solr.slot', array( 'signal' => $signal ) );
+        $def->addTag( 'ezpublish.search.solr.slot', array( 'signal' => $signal ) );
         $this->setDefinition( $serviceId, $def );
 
         $this->compile();
@@ -59,7 +59,7 @@ class SignalSlotPassTest extends AbstractCompilerPassTestCase
         $signal = 'signal_identifier';
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag( 'ezpublish.persistence.solr.slot' );
+        $def->addTag( 'ezpublish.search.solr.slot' );
         $this->setDefinition( $serviceId, $def );
 
         $this->compile();
