@@ -25,6 +25,7 @@ class InstallPlatformCommand extends ContainerAwareCommand
     const EXIT_GENERAL_DATABASE_ERROR = 4;
     const EXIT_PARAMETERS_NOT_FOUND = 5;
     const EXIT_UNKNOWN_INSTALL_TYPE = 6;
+    const EXIT_MISSING_PERMISSIONS = 7;
 
     protected function configure()
     {
@@ -35,7 +36,7 @@ class InstallPlatformCommand extends ContainerAwareCommand
     protected function execute( InputInterface $input, OutputInterface $output )
     {
         $this->output = $output;
-
+        $this->checkPermissions();
         $this->checkParameters();
         $this->checkDatabase();
 
@@ -51,10 +52,21 @@ class InstallPlatformCommand extends ContainerAwareCommand
                 $output->writeln( "Unknown install type '$type''" );
                 exit( self::EXIT_UNKNOWN_INSTALL_TYPE );
         }
+
         $installer->setOutput( $output );
+
         $installer->createConfiguration();
         $installer->importSchema();
         $installer->importData();
+    }
+
+    private function checkPermissions()
+    {
+        if ( !is_writable( 'ezpublish/config' ) )
+        {
+            $this->output->writeln( "ezpublish/config is not writable" );
+            exit( self::EXIT_MISSING_PERMISSIONS );
+        }
     }
 
     private function checkParameters()
