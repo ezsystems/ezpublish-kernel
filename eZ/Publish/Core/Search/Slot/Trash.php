@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the Solr\Slot\DeleteVersion class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Slot;
+namespace eZ\Publish\Core\Search\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Search\Solr\Slot;
+use eZ\Publish\Core\Search\Slot;
 
 /**
- * A Solr slot handling DeleteVersionSignal.
+ * A Search Engine slot handling TrashSignal.
  */
-class DeleteVersion extends Slot
+class Trash extends Slot
 {
     /**
      * Receive the given $signal and react on it
@@ -24,9 +24,10 @@ class DeleteVersion extends Slot
      */
     public function receive( Signal $signal )
     {
-        if ( !$signal instanceof Signal\ContentService\DeleteVersionSignal )
+        if ( !$signal instanceof Signal\TrashService\TrashSignal )
             return;
 
-        $this->searchHandler->contentSearchHandler()->deleteContent( $signal->contentId, $signal->versionNo );
+        $this->searchHandler->locationSearchHandler()->deleteLocation( $signal->locationId );
+        $this->searchHandler->contentSearchHandler()->deleteLocation( $signal->locationId, $signal->contentId );
     }
 }
