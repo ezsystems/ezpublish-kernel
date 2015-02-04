@@ -10,13 +10,13 @@ parameters:
     ezpublish.solr_server: http://localhost:8983/
     ezpublish.spi.search.solr.class: eZ\Publish\Core\Search\Solr\Handler
     ezpublish.search.solr.content.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\Native
-    ezpublish.spi.search.solr.handler.content.class: eZ\Publish\Core\Search\Solr\Content\Handler
+    ezpublish.spi.search.solr.content_handler.class: eZ\Publish\Core\Search\Solr\Content\Handler
     ezpublish.search.solr.location.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Location\Gateway\Native
-    ezpublish.spi.search.solr.handler.location.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
+    ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
     ezpublish.search.solr.content.field_map.class: eZ\Publish\Core\Search\Solr\Content\FieldMap
 
 services:
-    ezpublish.search.legacy_solr.content.gateway.native:
+    ezpublish.search.solr.content.gateway.native:
         class: %ezpublish.search.solr.content.gateway.native.class%
         arguments:
             - @ezpublish.search.solr.content.gateway.client.http.stream
@@ -26,58 +26,53 @@ services:
             - @ezpublish.search.solr.content.field_value_mapper.aggregate
             - @ezpublish.search.solr.content.field_name_generator
 
-    ezpublish.search.legacy_solr.content.gateway:
-        alias: ezpublish.search.legacy_solr.content.gateway.native
+    ezpublish.search.solr.content.gateway:
+        alias: ezpublish.search.solr.content.gateway.native
 
-    ezpublish.search.legacy_solr.content.field_map:
+    ezpublish.search.solr.content.field_map:
         class: %ezpublish.search.solr.content.field_map.class%
         arguments:
             - @ezpublish.search.solr.field_registry
-            - @ezpublish.spi.persistence_handler.content_type
+            - @ezpublish.spi.persistence.content_type_handler
             - @ezpublish.search.solr.content.field_name_generator
 
-    # TODO: when Solr storage is enabled and multiple Solr storage engines are used simultaneously
-    # this service will need to be set through factory, see https://jira.ez.no/browse/EZP-22846
-    ezpublish.search.solr.content.field_map:
-        alias: ezpublish.search.legacy_solr.content.field_map
-
-    ezpublish.spi.search.legacy_solr.handler.content:
-        class: %ezpublish.spi.search.solr.handler.content.class%
+    ezpublish.spi.search.solr.content_handler:
+        class: %ezpublish.spi.search.solr.content_handler.class%
         arguments:
-            - @ezpublish.search.legacy_solr.content.gateway
+            - @ezpublish.search.solr.content.gateway
             - @ezpublish.search.solr.field_registry
-            - @ezpublish.spi.persistence_handler.content
-            - @ezpublish.spi.persistence_handler.location
-            - @ezpublish.spi.persistence_handler.content_type
-            - @ezpublish.spi.persistence_handler.object_state
-            - @ezpublish.spi.persistence_handler.section
+            - @ezpublish.spi.persistence.content_handler
+            - @ezpublish.spi.persistence.location_handler
+            - @ezpublish.spi.persistence.content_type_handler
+            - @ezpublish.spi.persistence.object_state_handler
+            - @ezpublish.spi.persistence.section_handler
             - @ezpublish.search.solr.content.field_name_generator
         lazy: true
 
-    ezpublish.search.legacy_solr.location.gateway.native:
+    ezpublish.search.solr.location.gateway.native:
         class: %ezpublish.search.solr.location.gateway.native.class%
         arguments:
             - @ezpublish.search.solr.content.gateway.client.http.stream
             - @ezpublish.search.solr.location.criterion_visitor.aggregate
             - @ezpublish.search.solr.location.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.location.facet_builder_visitor.aggregate
-            - @ezpublish.spi.persistence_handler.location
+            - @ezpublish.spi.persistence.location_handler
 
-    ezpublish.search.legacy_solr.location.gateway:
-        alias: ezpublish.search.legacy_solr.location.gateway.native
+    ezpublish.search.solr.location.gateway:
+        alias: ezpublish.search.solr.location.gateway.native
 
-    ezpublish.spi.search.legacy_solr.handler.location:
-        class: %ezpublish.spi.search.solr.handler.location.class%
+    ezpublish.spi.search.solr.location_handler:
+        class: %ezpublish.spi.search.solr.location_handler.class%
         arguments:
-            - @ezpublish.search.legacy_solr.location.gateway
+            - @ezpublish.search.solr.location.gateway
             - @ezpublish.search.solr.content.field_name_generator
         lazy: true
 
-    ezpublish.spi.search.legacy_solr:
+    ezpublish.spi.search.solr:
         class: %ezpublish.spi.search.solr.class%
         arguments:
-            - @ezpublish.spi.search.legacy_solr.handler.content
-            - @ezpublish.spi.search.legacy_solr.handler.location
+            - @ezpublish.spi.search.solr.content_handler
+            - @ezpublish.spi.search.solr.location_handler
         tags:
-            - {name: ezpublish.searchEngine, alias: legacy_solr}
+            - {name: ezpublish.searchEngine, alias: solr}
         lazy: true
