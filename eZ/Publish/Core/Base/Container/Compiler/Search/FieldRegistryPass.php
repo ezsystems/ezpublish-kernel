@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Search\Solr;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -26,12 +26,12 @@ class FieldRegistryPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.search.solr.field_registry' ) )
+        if ( !$container->hasDefinition( 'ezpublish.search.field_registry' ) )
         {
             return;
         }
 
-        $fieldRegistryDefinition = $container->getDefinition( 'ezpublish.search.solr.field_registry' );
+        $fieldRegistryDefinition = $container->getDefinition( 'ezpublish.search.field_registry' );
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType.indexable' ) as $id => $attributes )
         {

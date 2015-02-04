@@ -1,18 +1,18 @@
 <?php
 /**
- * File containing the Content Search handler class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Content;
+namespace eZ\Publish\Core\Search;
 
 use eZ\Publish\SPI\FieldType\Indexable;
 
 /**
- * Visits the criterion tree into a Solr query
+ * Registry for field type's Indexable interface implementations available to Search Engines.
  */
 class FieldRegistry
 {
