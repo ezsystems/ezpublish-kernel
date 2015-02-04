@@ -39,7 +39,7 @@ services:
             - @ezpublish.spi.persistence_handler.object_state
             - @ezpublish.spi.persistence_handler.section
 
-    ezpublish.search.legacy_elasticsearch.content.gateway.native:
+    ezpublish.search.elasticsearch.content.gateway.native:
         class: %ezpublish.search.elasticsearch.gateway.native.class%
         arguments:
             - @ezpublish.search.elasticsearch.content.gateway.client.http.stream
@@ -48,10 +48,10 @@ services:
             - @ezpublish.search.elasticsearch.content.sort_clause_visitor.aggregate
             - @ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate
 
-    ezpublish.search.legacy_elasticsearch.content.gateway:
-        alias: ezpublish.search.legacy_elasticsearch.content.gateway.native
+    ezpublish.search.elasticsearch.content.gateway:
+        alias: ezpublish.search.elasticsearch.content.gateway.native
 
-    ezpublish.search.legacy_elasticsearch.location.gateway.native:
+    ezpublish.search.elasticsearch.location.gateway.native:
         class: %ezpublish.search.elasticsearch.gateway.native.class%
         arguments:
             - @ezpublish.search.elasticsearch.content.gateway.client.http.stream
@@ -60,10 +60,10 @@ services:
             - @ezpublish.search.elasticsearch.location.sort_clause_visitor.aggregate
             - @ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate
 
-    ezpublish.search.legacy_elasticsearch.location.gateway:
-        alias: ezpublish.search.legacy_elasticsearch.location.gateway.native
+    ezpublish.search.elasticsearch.location.gateway:
+        alias: ezpublish.search.elasticsearch.location.gateway.native
 
-    ezpublish.search.legacy_elasticsearch.content.field_map:
+    ezpublish.search.elasticsearch.content.field_map:
         class: %ezpublish.search.elasticsearch.content.field_map.class%
         arguments:
             - @ezpublish.search.solr.field_registry
@@ -73,7 +73,7 @@ services:
     # TODO: when Elasticsearch storage is enabled and multiple Elasticsearch storage engines are used simultaneously
     # this service will need to be set through factory, see https://jira.ez.no/browse/EZP-22846
     ezpublish.search.elasticsearch.content.field_map:
-        alias: ezpublish.search.legacy_elasticsearch.content.field_map
+        alias: ezpublish.search.elasticsearch.content.field_map
 
     ezpublish.search.elasticsearch.extractor.loading:
         class: %ezpublish.search.elasticsearch.extractor.loading.class%
@@ -85,27 +85,27 @@ services:
     ezpublish.search.elasticsearch.extractor:
         alias: ezpublish.search.elasticsearch.extractor.loading
 
-    ezpublish.spi.search.legacy_elasticsearch.handler.content:
+    ezpublish.spi.search.elasticsearch.handler.content:
         class: %ezpublish.spi.search.elasticsearch.handler.content.class%
         arguments:
-            - @ezpublish.search.legacy_elasticsearch.content.gateway
+            - @ezpublish.search.elasticsearch.content.gateway
             - @ezpublish.search.elasticsearch.mapper
             - @ezpublish.search.elasticsearch.extractor
         lazy: true
 
-    ezpublish.spi.search.legacy_elasticsearch.handler.location:
+    ezpublish.spi.search.elasticsearch.handler.location:
         class: %ezpublish.spi.search.elasticsearch.handler.location.class%
         arguments:
-            - @ezpublish.search.legacy_elasticsearch.location.gateway
+            - @ezpublish.search.elasticsearch.location.gateway
             - @ezpublish.search.elasticsearch.mapper
             - @ezpublish.search.elasticsearch.extractor
         lazy: true
 
-    ezpublish.spi.search.legacy_elasticsearch:
+    ezpublish.spi.search.elasticsearch:
         class: %ezpublish.spi.search.elasticsearch.class%
         arguments:
-            - @ezpublish.spi.search.legacy_elasticsearch.handler.content
-            - @ezpublish.spi.search.legacy_elasticsearch.handler.location
+            - @ezpublish.spi.search.elasticsearch.handler.content
+            - @ezpublish.spi.search.elasticsearch.handler.location
         tags:
-            - {name: ezpublish.searchEngine, alias: legacy_elasticsearch}
+            - {name: ezpublish.searchEngine, alias: elasticsearch}
         lazy: true
