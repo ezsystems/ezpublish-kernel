@@ -1,5 +1,3 @@
-# Depends on some of the 'legacy' storage handlers, see 'ezpublish.spi.search.legacy_elasticsearch'
-# service definition below for details
 imports:
     - {resource: search_engines/elasticsearch/criterion_visitors_common.yml}
     - {resource: search_engines/elasticsearch/criterion_visitors_content.yml}
@@ -35,11 +33,11 @@ services:
         arguments:
             - @ezpublish.search.solr.field_registry
             - @ezpublish.search.elasticsearch.content.field_name_generator
-            - @ezpublish.spi.persistence.legacy.content.handler
-            - @ezpublish.spi.persistence.legacy.location.handler
-            - @ezpublish.spi.persistence.legacy.content_type.handler
-            - @ezpublish.spi.persistence.legacy.object_state.handler
-            - @ezpublish.spi.persistence.legacy.section.handler
+            - @ezpublish.spi.persistence_handler.content
+            - @ezpublish.spi.persistence_handler.location
+            - @ezpublish.spi.persistence_handler.content_type
+            - @ezpublish.spi.persistence_handler.object_state
+            - @ezpublish.spi.persistence_handler.section
 
     ezpublish.search.elasticsearch.mapper:
         alias: ezpublish.search.elasticsearch.mapper.standard
@@ -72,7 +70,7 @@ services:
         class: %ezpublish.search.elasticsearch.content.field_map.class%
         arguments:
             - @ezpublish.search.solr.field_registry
-            - @ezpublish.spi.persistence.legacy.content_type.handler
+            - @ezpublish.spi.persistence_handler.content_type
             - @ezpublish.search.elasticsearch.content.field_name_generator
 
     # TODO: when Elasticsearch storage is enabled and multiple Elasticsearch storage engines are used simultaneously
@@ -83,8 +81,8 @@ services:
     ezpublish.search.elasticsearch.extractor.loading:
         class: %ezpublish.search.elasticsearch.extractor.loading.class%
         arguments:
-            - @ezpublish.spi.persistence.legacy.content.handler
-            - @ezpublish.spi.persistence.legacy.location.handler
+            - @ezpublish.spi.persistence_handler.content
+            - @ezpublish.spi.persistence_handler.location
             - @ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate
 
     ezpublish.search.elasticsearch.extractor:
