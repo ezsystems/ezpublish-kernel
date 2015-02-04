@@ -57,7 +57,7 @@ class LegacySolr extends Legacy
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateFieldValueMapperPass() );
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateSortClauseVisitorPass() );
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\FieldRegistryPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Search\Solr\SignalSlotPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\SignalSlotPass() );
 
             $containerBuilder->setParameter(
                 "legacy_dsn",
