@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the Solr\Slot abstract class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr;
+namespace eZ\Publish\Core\Search;
 
 use eZ\Publish\Core\SignalSlot\Slot as BaseSlot;
 use eZ\Publish\API\Repository\Repository;
@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 
 /**
- * General slot implementation for Solr slots
+ * General slot implementation for Search Engines
  */
 abstract class Slot extends BaseSlot
 {
