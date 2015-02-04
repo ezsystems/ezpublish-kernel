@@ -93,7 +93,7 @@ class LegacyElasticsearch extends Legacy
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
         $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
-        $searchHandler = $this->getServiceContainer()->get( 'ezpublish.spi.search.legacy_elasticsearch' );
+        $searchHandler = $this->getServiceContainer()->get( 'ezpublish.spi.search.elasticsearch' );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getServiceContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
 

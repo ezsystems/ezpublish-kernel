@@ -1,0 +1,62 @@
+parameters:
+    ezpublish.spi.persistence_handler.content.class: eZ\Publish\SPI\Persistence\Content\Handler
+    ezpublish.spi.persistence_handler.content_type.class: eZ\Publish\SPI\Persistence\Content\Type\Handler
+    ezpublish.spi.persistence_handler.language.class: eZ\Publish\SPI\Persistence\Content\Language\Handler
+    ezpublish.spi.persistence_handler.location.class: eZ\Publish\SPI\Persistence\Content\Location\Handler
+    ezpublish.spi.persistence_handler.object_state.class: eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
+    ezpublish.spi.persistence_handler.section.class: eZ\Publish\SPI\Persistence\Content\Section\Handler
+    ezpublish.spi.persistence_handler.trash.class: eZ\Publish\SPI\Persistence\Content\Trash\Handler
+    ezpublish.spi.persistence_handler.url_alias.class: eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
+    ezpublish.spi.persistence_handler.url_wildcard.class: eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
+    ezpublish.spi.persistence_handler.user.class: eZ\Publish\SPI\Persistence\User\Handler
+
+services:
+    ezpublish.spi.persistence_handler.content:
+        class: %ezpublish.spi.persistence_handler.content.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: contentHandler
+
+    ezpublish.spi.persistence_handler.content_type:
+        class: %ezpublish.spi.persistence_handler.content_type.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: contentTypeHandler
+
+    ezpublish.spi.persistence_handler.language:
+        class: %ezpublish.spi.persistence_handler.language.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: contentLanguageHandler
+
+    ezpublish.spi.persistence_handler.location:
+        class: %ezpublish.spi.persistence_handler.location.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: locationHandler
+
+    ezpublish.spi.persistence_handler.object_state:
+        class: %ezpublish.spi.persistence_handler.object_state.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: objectStateHandler
+
+    ezpublish.spi.persistence_handler.section:
+        class: %ezpublish.spi.persistence_handler.section.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: sectionHandler
+
+    ezpublish.spi.persistence_handler.trash:
+        class: %ezpublish.spi.persistence_handler.trash.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: trashHandler
+
+    ezpublish.spi.persistence_handler.url_alias:
+        class: %ezpublish.spi.persistence_handler.url_alias.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: urlAliasHandler
+
+    ezpublish.spi.persistence_handler.url_wildcard:
+        class: %ezpublish.spi.persistence_handler.url_wildcard.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: urlWildcardHandler
+
+    ezpublish.spi.persistence_handler.user:
+        class: %ezpublish.spi.persistence_handler.user.class%
+        factory_service: ezpublish.api.persistence_handler
+        factory_method: userHandler

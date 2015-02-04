@@ -91,7 +91,7 @@ class LegacySolr extends Legacy
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
         $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
-        $searchHandler = $this->getServiceContainer()->get( 'ezpublish.spi.search.legacy_solr' );
+        $searchHandler = $this->getServiceContainer()->get( 'ezpublish.spi.search.solr' );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getServiceContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
 
