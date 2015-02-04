@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Container\Compiler\Search\Solr;
+namespace eZ\Publish\Core\Base\Container\Compiler\Search;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,7 +15,7 @@ use LogicException;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This compiler pass will attach Solr Storage slots to SignalDispatcher
+ * This compiler pass will attach Search Engine slots to SignalDispatcher
  */
 class SignalSlotPass implements CompilerPassInterface
 {
@@ -28,7 +28,7 @@ class SignalSlotPass implements CompilerPassInterface
 
         $signalDispatcherDef = $container->getDefinition( 'ezpublish.signalslot.signal_dispatcher' );
 
-        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.solr.slot' ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.search.slot' ) as $id => $attributes )
         {
             foreach ( $attributes as $attribute )
             {
