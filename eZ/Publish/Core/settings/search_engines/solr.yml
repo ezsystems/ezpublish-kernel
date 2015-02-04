@@ -31,7 +31,7 @@ services:
     ezpublish.search.solr.content.field_map:
         class: %ezpublish.search.solr.content.field_map.class%
         arguments:
-            - @ezpublish.search.solr.field_registry
+            - @ezpublish.search.field_registry
             - @ezpublish.spi.persistence_handler.content_type
             - @ezpublish.search.solr.content.field_name_generator
 
@@ -44,7 +44,7 @@ services:
         class: %ezpublish.spi.search.solr.handler.content.class%
         arguments:
             - @ezpublish.search.solr.content.gateway
-            - @ezpublish.search.solr.field_registry
+            - @ezpublish.search.field_registry
             - @ezpublish.spi.persistence_handler.content
             - @ezpublish.spi.persistence_handler.location
             - @ezpublish.spi.persistence_handler.content_type
