@@ -222,6 +222,7 @@ services:
     # through service tags.
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5:
         class: %ezpublish.fieldType.ezrichtext.converter.aggregate.class%
+        lazy: true
 
     ezpublish.fieldType.ezrichtext.converter.edit.xhtml5:
         class: %ezpublish.fieldType.ezrichtext.converter.edit.html5.class%
