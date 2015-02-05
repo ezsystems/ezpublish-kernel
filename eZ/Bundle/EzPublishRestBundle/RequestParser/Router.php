@@ -25,7 +25,7 @@ class Router implements RequestParser
      */
     private $router;
 
-    public function __construct( $restRoutesPrefix, RouterInterface $router )
+    public function __construct( RouterInterface $router )
     {
         $this->router = $router;
     }
