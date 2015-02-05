@@ -113,7 +113,7 @@ class Selection implements Converter
         {
             foreach ( $simpleXml->options->option as $option )
             {
-                $options[(int)$option["id"]] = (string)$option["name"];
+                $options[(string)$option["id"]] = (string)$option["name"];
             }
         }
 
