@@ -25,13 +25,13 @@ services:
         class: %ezpublish.search.elasticsearch.serializer.class%
         arguments:
             - @ezpublish.search.elasticsearch.content.field_value_mapper.aggregate
-            - @ezpublish.search.elasticsearch.content.field_name_generator
+            - @ezpublish.search.field_name_generator
 
     ezpublish.search.elasticsearch.mapper:
         class: %ezpublish.search.elasticsearch.mapper.class%
         arguments:
             - @ezpublish.search.field_registry
-            - @ezpublish.search.elasticsearch.content.field_name_generator
+            - @ezpublish.search.field_name_generator
             - @ezpublish.spi.persistence_handler.content
             - @ezpublish.spi.persistence_handler.location
             - @ezpublish.spi.persistence_handler.content_type
@@ -67,7 +67,7 @@ services:
         arguments:
             - @ezpublish.search.field_registry
             - @ezpublish.spi.persistence_handler.content_type
-            - @ezpublish.search.elasticsearch.content.field_name_generator
+            - @ezpublish.search.field_name_generator
 
     # TODO: when Elasticsearch storage is enabled and multiple Elasticsearch storage engines are used simultaneously
     # this service will need to be set through factory, see https://jira.ez.no/browse/EZP-22846

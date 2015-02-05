@@ -681,20 +681,21 @@ class FieldMapTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Search\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fieldNameGeneratorMock;
 
     /**
-     * @return \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Search\FieldNameGenerator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFieldNameGeneratorMock()
     {
         if ( !isset( $this->fieldNameGeneratorMock ) )
         {
-            $this->fieldNameGeneratorMock = $this->getMock(
-                "eZ\\Publish\\Core\\Search\\Elasticsearch\\Content\\FieldNameGenerator"
-            );
+            $this->fieldNameGeneratorMock = $this
+                ->getMockBuilder( "eZ\\Publish\\Core\\Search\\FieldNameGenerator" )
+                ->disableOriginalConstructor()
+                ->getMock();
         }
 
         return $this->fieldNameGeneratorMock;

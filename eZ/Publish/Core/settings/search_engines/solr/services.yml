@@ -7,7 +7,6 @@ parameters:
     ezpublish.search.solr.location.sort_clause_visitor.aggregate.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\Aggregate
     ezpublish.search.solr.location.facet_builder_visitor.aggregate.class: eZ\Publish\Core\Search\Solr\Content\Location\FacetBuilderVisitor\Aggregate
     ezpublish.search.solr.content.field_value_mapper.aggregate.class: eZ\Publish\Core\Search\Solr\Content\FieldValueMapper\Aggregate
-    ezpublish.search.solr.content.field_name_generator.class: eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator
 
 services:
     ezpublish.search.solr.content.gateway.client.http.stream:
@@ -49,6 +48,3 @@ services:
     # are registered to this one using compilation pass
     ezpublish.search.solr.location.facet_builder_visitor.aggregate:
         class: %ezpublish.search.solr.location.facet_builder_visitor.aggregate.class%
-
-    ezpublish.search.solr.content.field_name_generator:
-        class: %ezpublish.search.solr.content.field_name_generator.class%
