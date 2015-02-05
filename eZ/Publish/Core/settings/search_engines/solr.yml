@@ -23,7 +23,7 @@ services:
             - @ezpublish.search.solr.content.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.content.facet_builder_visitor.aggregate
             - @ezpublish.search.solr.content.field_value_mapper.aggregate
-            - @ezpublish.search.solr.content.field_name_generator
+            - @ezpublish.search.field_name_generator
 
     ezpublish.search.solr.content.gateway:
         alias: ezpublish.search.solr.content.gateway.native
@@ -33,7 +33,7 @@ services:
         arguments:
             - @ezpublish.search.field_registry
             - @ezpublish.spi.persistence_handler.content_type
-            - @ezpublish.search.solr.content.field_name_generator
+            - @ezpublish.search.field_name_generator
 
     # TODO: when Solr storage is enabled and multiple Solr storage engines are used simultaneously
     # this service will need to be set through factory, see https://jira.ez.no/browse/EZP-22846
@@ -50,7 +50,7 @@ services:
             - @ezpublish.spi.persistence_handler.content_type
             - @ezpublish.spi.persistence_handler.object_state
             - @ezpublish.spi.persistence_handler.section
-            - @ezpublish.search.solr.content.field_name_generator
+            - @ezpublish.search.field_name_generator
         lazy: true
 
     ezpublish.search.solr.location.gateway.native:
@@ -69,7 +69,7 @@ services:
         class: %ezpublish.spi.search.solr.handler.location.class%
         arguments:
             - @ezpublish.search.solr.location.gateway
-            - @ezpublish.search.solr.content.field_name_generator
+            - @ezpublish.search.field_name_generator
         lazy: true
 
     ezpublish.spi.search.solr:
