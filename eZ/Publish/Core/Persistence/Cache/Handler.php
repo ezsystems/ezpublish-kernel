@@ -158,7 +158,7 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * @return \eZ\Publish\SPI\Search\Handler
+     * @return \eZ\Publish\SPI\Search\Content\Handler
      */
     public function searchHandler()
     {

@@ -21,7 +21,7 @@ interface Handler
 
     /**
      * @deprecated In 5.4, moved to own Search SPI
-     * @return \eZ\Publish\SPI\Search\Handler
+     * @return \eZ\Publish\SPI\Search\Content\Handler
      */
     public function searchHandler();
 
@@ -42,7 +42,7 @@ interface Handler
 
     /**
      * @deprecated In 5.4, moved to own Search SPI
-     * @return \eZ\Publish\SPI\Search\Location\Handler
+     * @return \eZ\Publish\SPI\Search\Content\Location\Handler
      */
     public function locationSearchHandler();
 
