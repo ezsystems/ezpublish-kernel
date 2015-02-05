@@ -21,6 +21,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
+use eZ\Publish\Core\Search\FieldNameGenerator;
 
 /**
  * Mapper maps Content and Location objects to a Document object, representing a
@@ -31,7 +32,7 @@ class Mapper
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
@@ -79,7 +80,7 @@ class Mapper
 
     /**
      * @param \eZ\Publish\Core\Search\FieldRegistry $fieldRegistry
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Search\FieldNameGenerator $fieldNameGenerator
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
