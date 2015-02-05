@@ -89,7 +89,9 @@ class LegacySolr extends Legacy
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
-        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy_solr' );
+        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
+        /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
+        $searchHandler = $this->getServiceContainer()->get( 'ezpublish.spi.search.legacy_solr' );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getServiceContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
 
@@ -110,11 +112,11 @@ class LegacySolr extends Legacy
             );
         }
 
-        /** @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Handler $searchHandler */
-        $searchHandler = $persistenceHandler->searchHandler();
-        $searchHandler->setCommit( false );
-        $searchHandler->purgeIndex();
-        $searchHandler->setCommit( true );
-        $searchHandler->bulkIndexContent( $contentObjects );
+        /** @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Handler $contentSearchHandler */
+        $contentSearchHandler = $searchHandler->contentSearchHandler();
+        $contentSearchHandler->setCommit( false );
+        $contentSearchHandler->purgeIndex();
+        $contentSearchHandler->setCommit( true );
+        $contentSearchHandler->bulkIndexContent( $contentObjects );
     }
 }

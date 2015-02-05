@@ -30,14 +30,14 @@ class CreateLocation extends Slot
         }
 
         $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->contentId );
-        $this->persistenceHandler->searchHandler()->indexContent(
+        $this->searchHandler->contentSearchHandler()->indexContent(
             $this->persistenceHandler->contentHandler()->load( $signal->contentId, $contentInfo->currentVersionNo )
         );
 
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $signal->contentId );
         foreach ( $locations as $location )
         {
-            $this->persistenceHandler->locationSearchHandler()->indexLocation( $location );
+            $this->searchHandler->locationSearchHandler()->indexLocation( $location );
         }
     }
 }

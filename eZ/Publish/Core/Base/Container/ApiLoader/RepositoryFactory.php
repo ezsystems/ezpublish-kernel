@@ -10,6 +10,7 @@
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -49,13 +50,15 @@ class RepositoryFactory extends ContainerAware
      * directly to make sure you get an instance wrapped inside Signal / Cache / * functionality.
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
+     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function buildRepository( PersistenceHandler $persistenceHandler )
+    public function buildRepository( PersistenceHandler $persistenceHandler, SearchHandler $searchHandler )
     {
         $repository = new $this->repositoryClass(
             $persistenceHandler,
+            $searchHandler,
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
                 'role' => array(

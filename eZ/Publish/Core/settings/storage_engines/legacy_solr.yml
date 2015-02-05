@@ -10,6 +10,7 @@ imports:
 
 parameters:
     ezpublish.solr_server: http://localhost:8983/
+    ezpublish.spi.search.solr.class: eZ\Publish\Core\Persistence\Solr\Handler
     ezpublish.persistence.solr.search.content.gateway.native.class: eZ\Publish\Core\Persistence\Solr\Content\Search\Gateway\Native
     ezpublish.spi.persistence.solr.search.handler.content.class: eZ\Publish\Core\Persistence\Solr\Content\Search\Handler
     ezpublish.persistence.solr.search.location.gateway.native.class: eZ\Publish\Core\Persistence\Solr\Content\Search\Location\Gateway\Native
@@ -74,22 +75,11 @@ services:
             - @ezpublish.persistence.solr.search.content.field_name_generator
         lazy: true
 
-    ezpublish.spi.persistence.legacy_solr:
-        class: %ezpublish.spi.persistence.legacy.class%
+    ezpublish.spi.search.legacy_solr:
+        class: %ezpublish.spi.search.solr.class%
         arguments:
-            - @ezpublish.spi.persistence.legacy.content.handler
             - @ezpublish.spi.persistence.legacy_solr.search.handler.content
-            - @ezpublish.spi.persistence.legacy.content_type.handler
-            - @ezpublish.spi.persistence.legacy.language.handler
-            - @ezpublish.spi.persistence.legacy.location.handler
             - @ezpublish.spi.persistence.legacy_solr.search.handler.location
-            - @ezpublish.spi.persistence.legacy.object_state.handler
-            - @ezpublish.spi.persistence.legacy.section.handler
-            - @ezpublish.spi.persistence.legacy.transactionhandler
-            - @ezpublish.spi.persistence.legacy.trash.handler
-            - @ezpublish.spi.persistence.legacy.url_alias.handler
-            - @ezpublish.spi.persistence.legacy.url_wildcard.handler
-            - @ezpublish.spi.persistence.legacy.user.handler
         tags:
-            - {name: ezpublish.storageEngine, alias: legacy_solr}
+            - {name: ezpublish.searchEngine, alias: legacy_solr}
         lazy: true

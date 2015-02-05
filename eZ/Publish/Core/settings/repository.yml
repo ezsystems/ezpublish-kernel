@@ -48,6 +48,7 @@ services:
         factory_method: buildRepository
         arguments:
             - @ezpublish.api.persistence_handler
+            - @ezpublish.spi.search_handler
         lazy: true
 
     ezpublish.api.service.content:

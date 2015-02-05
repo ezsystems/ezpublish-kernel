@@ -28,9 +28,9 @@ class DeleteContent extends Slot
             return;
 
         // Delete Content
-        $this->persistenceHandler->searchHandler()->deleteContent( $signal->contentId );
+        $this->searchHandler->contentSearchHandler()->deleteContent( $signal->contentId );
 
         // Delete all Content locations
-        $this->persistenceHandler->locationSearchHandler()->deleteContent( $signal->contentId );
+        $this->searchHandler->locationSearchHandler()->deleteContent( $signal->contentId );
     }
 }

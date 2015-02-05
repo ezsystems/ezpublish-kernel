@@ -91,7 +91,9 @@ class LegacyElasticsearch extends Legacy
         // @todo: Is there a nicer way to get access to all content objects? We
         // require this to run a full index here.
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
-        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy_elasticsearch' );
+        $persistenceHandler = $this->getServiceContainer()->get( 'ezpublish.spi.persistence.legacy' );
+        /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
+        $searchHandler = $this->getServiceContainer()->get( 'ezpublish.spi.search.legacy_elasticsearch' );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getServiceContainer()->get( 'ezpublish.api.storage_engine.legacy.dbhandler' );
 
@@ -117,15 +119,15 @@ class LegacyElasticsearch extends Legacy
             );
         }
 
-        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler $searchHandler */
-        $searchHandler = $persistenceHandler->searchHandler();
-        $searchHandler->setCommit( false );
-        $searchHandler->purgeIndex();
-        $searchHandler->setCommit( true );
-        $searchHandler->bulkIndexContent( $contentObjects );
+        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler $contentSearchHandler */
+        $contentSearchHandler = $searchHandler->contentSearchHandler();
+        $contentSearchHandler->setCommit( false );
+        $contentSearchHandler->purgeIndex();
+        $contentSearchHandler->setCommit( true );
+        $contentSearchHandler->bulkIndexContent( $contentObjects );
 
         /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler $locationSearchHandler */
-        $locationSearchHandler = $persistenceHandler->locationSearchHandler();
+        $locationSearchHandler = $searchHandler->locationSearchHandler();
         $locationSearchHandler->setCommit( false );
         $locationSearchHandler->purgeIndex();
         $locationSearchHandler->setCommit( true );
