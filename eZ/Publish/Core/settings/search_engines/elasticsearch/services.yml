@@ -1,7 +1,6 @@
 parameters:
     ezpublish.search.elasticsearch.content.gateway.client.http.stream.class: eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient\Stream
     ezpublish.search.elasticsearch.content.field_value_mapper.aggregate.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\Aggregate
-    ezpublish.search.elasticsearch.content.field_name_generator.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator
 
 services:
     ezpublish.search.elasticsearch.content.gateway.client.http.stream:
@@ -14,5 +13,25 @@ services:
     ezpublish.search.elasticsearch.content.field_value_mapper.aggregate:
         class: %ezpublish.search.elasticsearch.content.field_value_mapper.aggregate.class%
 
-    ezpublish.search.elasticsearch.content.field_name_generator:
-        class: %ezpublish.search.elasticsearch.content.field_name_generator.class%
+    # Mapping for our internal search field types
+    ezpublish.search.elasticsearch.field_name_generator:
+        class: %ezpublish.search.field_name_generator.class%
+        arguments:
+            -
+                ez_integer: 'i'
+                ez_id: 'id'
+                ez_mid: 'mid'
+                ez_string: 's'
+                ez_mstring: 'ms'
+                ez_long: 'l'
+                ez_text: 't'
+                ez_html: 'h'
+                ez_boolean: 'b'
+                ez_mboolean: 'mb'
+                ez_float: 'f'
+                ez_double: 'd'
+                ez_date: 'dt'
+                ez_point: 'p'
+                ez_currency: 'c'
+                ez_geolocation: 'gl'
+                ez_document: 'doc'
