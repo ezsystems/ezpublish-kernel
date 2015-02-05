@@ -53,6 +53,13 @@ services:
         factory_method: buildStorageEngine
         public: false
 
+    ezpublish.spi.search_handler:
+        alias: ezpublish.spi.search_engine
+
+    ezpublish.spi.search_engine:
+        alias: ezpublish.spi.search.legacy
+        public: false
+
     # Signal Slot API wrapper
     ezpublish.signalslot.event_converter_slot:
         class: %ezpublish.signalslot.event_converter_slot.class%
