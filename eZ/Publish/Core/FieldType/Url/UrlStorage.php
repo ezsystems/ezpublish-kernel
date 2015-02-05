@@ -44,7 +44,12 @@ class UrlStorage extends GatewayBasedStorage
         /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway $gateway */
         $gateway = $this->getGateway( $context );
         $url = $field->value->externalData;
-
+        
+        if ( !$url )
+        {
+            return false;
+        }
+        
         $map = $gateway->getUrlIdMap( array( $url ) );
 
         if ( isset( $map[$url] ) )
