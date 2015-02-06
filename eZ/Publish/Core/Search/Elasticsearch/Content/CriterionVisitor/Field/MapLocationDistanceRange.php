@@ -15,7 +15,7 @@ use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap;
+use eZ\Publish\Core\Search\FieldNameResolver;
 
 /**
  * Visits the MapLocationDistance criterion
@@ -37,18 +37,18 @@ class MapLocationDistanceRange extends Field
     protected $fieldName;
 
     /**
-     * Create from FieldMap, FieldType identifier and field name.
+     * Create from FieldNameResolver, FieldType identifier and field name.
      *
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\FieldNameResolver $fieldNameResolver
      * @param string $fieldTypeIdentifier
      * @param string $fieldName
      */
-    public function __construct( FieldMap $fieldMap, $fieldTypeIdentifier, $fieldName )
+    public function __construct( FieldNameResolver $fieldNameResolver, $fieldTypeIdentifier, $fieldName )
     {
         $this->fieldTypeIdentifier = $fieldTypeIdentifier;
         $this->fieldName = $fieldName;
 
-        parent::__construct( $fieldMap );
+        parent::__construct( $fieldNameResolver );
     }
 
     /**
