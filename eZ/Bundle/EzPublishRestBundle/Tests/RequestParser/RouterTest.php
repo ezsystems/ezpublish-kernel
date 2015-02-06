@@ -142,7 +142,6 @@ class RouterTest extends PHPUnit_Framework_TestCase
     private function getRequestParser()
     {
         return new RouterRequestParser(
-            self::$routePrefix,
             $this->getRouterMock()
         );
     }
