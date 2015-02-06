@@ -1,5 +1,6 @@
 parameters:
     ezpublish.search.field_registry.class: eZ\Publish\Core\Search\Common\FieldRegistry
+    ezpublish.search.field_name_resolver.class: eZ\Publish\Core\Search\Common\FieldNameResolver
     ezpublish.search.field_name_generator.class: eZ\Publish\Core\Search\Common\FieldNameGenerator
     ezpublish.search.field_name_generator.map:
         ez_integer: 'i'
@@ -31,3 +32,10 @@ services:
         class: %ezpublish.search.field_name_generator.class%
         arguments:
             - %ezpublish.search.field_name_generator.map%
+
+    ezpublish.search.field_name_resolver:
+        class: %ezpublish.search.field_name_resolver.class%
+        arguments:
+            - @ezpublish.search.field_registry
+            - @ezpublish.spi.persistence.content_type_handler
+            - @ezpublish.search.field_name_generator
