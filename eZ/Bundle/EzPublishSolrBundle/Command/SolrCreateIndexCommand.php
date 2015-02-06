@@ -36,6 +36,8 @@ EOT
 
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
         $persistenceHandler = $this->getContainer()->get( 'ezpublish.api.persistence_handler' );
+        /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
+        $searchHandler = $this->getContainer()->get( 'ezpublish.spi.search_handler' );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getContainer()->get( 'ezpublish.connection' );
 
@@ -55,11 +57,11 @@ EOT
         $stmt = $query->prepare();
         $stmt->execute();
 
-        /** @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Handler $searchHandler */
-        $searchHandler = $persistenceHandler->searchHandler();
-        $searchHandler->setCommit( false );
-        $searchHandler->purgeIndex();
-        $searchHandler->setCommit( true );
+        /** @var \eZ\Publish\Core\Search\Solr\Content\Handler $contentSearchHandler */
+        $contentSearchHandler = $searchHandler->contentSearchHandler();
+        $contentSearchHandler->setCommit( false );
+        $contentSearchHandler->purgeIndex();
+        $contentSearchHandler->setCommit( true );
 
         /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
         $progress = $this->getHelperSet()->get( 'progress' );
@@ -84,7 +86,7 @@ EOT
 
             if ( !empty( $contentObjects ) )
             {
-                $searchHandler->bulkIndexContent( $contentObjects );
+                $contentSearchHandler->bulkIndexContent( $contentObjects );
             }
 
             $progress->advance( $k );
