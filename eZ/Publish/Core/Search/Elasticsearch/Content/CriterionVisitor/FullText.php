@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitorDispatcher as Dispatcher;
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap;
+use eZ\Publish\Core\Search\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
@@ -23,18 +23,18 @@ class FullText extends FieldFilterBase
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap
+     * @var \eZ\Publish\Core\Search\FieldNameResolver
      */
-    protected $fieldMap;
+    protected $fieldNameResolver;
 
     /**
      * Create from field map
      *
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\FieldNameResolver $fieldNameResolver
      */
-    public function __construct( FieldMap $fieldMap )
+    public function __construct( FieldNameResolver $fieldNameResolver )
     {
-        $this->fieldMap = $fieldMap;
+        $this->fieldNameResolver = $fieldNameResolver;
     }
 
     /**
@@ -47,7 +47,7 @@ class FullText extends FieldFilterBase
      */
     protected function getFieldNames( Criterion $criterion, $fieldDefinitionIdentifier )
     {
-        return $this->fieldMap->getFieldNames( $criterion, $fieldDefinitionIdentifier );
+        return $this->fieldNameResolver->getFieldNames( $criterion, $fieldDefinitionIdentifier );
     }
 
     /**

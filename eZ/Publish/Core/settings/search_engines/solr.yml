@@ -12,7 +12,6 @@ parameters:
     ezpublish.spi.search.solr.handler.content.class: eZ\Publish\Core\Search\Solr\Content\Handler
     ezpublish.search.solr.location.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Location\Gateway\Native
     ezpublish.spi.search.solr.handler.location.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
-    ezpublish.search.solr.content.field_map.class: eZ\Publish\Core\Search\Solr\Content\FieldMap
 
 services:
     ezpublish.search.solr.content.gateway.native:
@@ -27,18 +26,6 @@ services:
 
     ezpublish.search.solr.content.gateway:
         alias: ezpublish.search.solr.content.gateway.native
-
-    ezpublish.search.solr.content.field_map:
-        class: %ezpublish.search.solr.content.field_map.class%
-        arguments:
-            - @ezpublish.search.field_registry
-            - @ezpublish.spi.persistence_handler.content_type
-            - @ezpublish.search.field_name_generator
-
-    # TODO: when Solr storage is enabled and multiple Solr storage engines are used simultaneously
-    # this service will need to be set through factory, see https://jira.ez.no/browse/EZP-22846
-    ezpublish.search.solr.content.field_map:
-        alias: ezpublish.search.solr.content.field_map
 
     ezpublish.spi.search.solr.handler.content:
         class: %ezpublish.spi.search.solr.handler.content.class%

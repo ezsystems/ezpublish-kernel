@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap;
+use eZ\Publish\Core\Search\FieldNameResolver;
 
 /**
  * Base class for Field sort clauses
@@ -21,16 +21,16 @@ abstract class FieldBase extends SortClauseVisitor
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap
+     * @var \eZ\Publish\Core\Search\FieldNameResolver
      */
-    protected $fieldMap;
+    protected $fieldNameResolver;
 
     /**
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\FieldNameResolver $fieldNameResolver
      */
-    public function __construct( FieldMap $fieldMap )
+    public function __construct( FieldNameResolver $fieldNameResolver )
     {
-        $this->fieldMap = $fieldMap;
+        $this->fieldNameResolver = $fieldNameResolver;
     }
 
     /**
@@ -50,7 +50,7 @@ abstract class FieldBase extends SortClauseVisitor
         $name = null
     )
     {
-        return $this->fieldMap->getSortFieldName(
+        return $this->fieldNameResolver->getSortFieldName(
             $sortClause,
             $contentTypeIdentifier,
             $fieldDefinitionIdentifier,
