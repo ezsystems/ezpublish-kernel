@@ -35,7 +35,7 @@ run() {
 download_and_run() {
     url="http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$1.tar.gz"
     dir_name="elasticsearch-$1"
-    resources_dir="eZ/Publish/Core/Persistence/Elasticsearch/Content/Search/Resources"
+    resources_dir="eZ/Publish/Core/Search/Elasticsearch/Content/Resources"
 
     download $url
 
