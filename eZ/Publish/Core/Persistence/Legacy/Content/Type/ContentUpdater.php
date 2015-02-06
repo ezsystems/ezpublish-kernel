@@ -41,7 +41,7 @@ class ContentUpdater
     /**
      * Search handler
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
     protected $searchHandler;
 

@@ -40,7 +40,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     /**
      * Search handler mock
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
     protected $searchHandlerMock;
 
@@ -276,14 +276,14 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a Search Handler mock
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
+     * @return \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
     protected function getSearchHandlerMock()
     {
         if ( !isset( $this->searchHandlerMock ) )
         {
             $this->searchHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\Handler',
+                'eZ\\Publish\\Core\\Search\\Legacy\\Content\\Handler',
                 array(),
                 array(),
                 '',
