@@ -17,7 +17,6 @@ parameters:
     ezpublish.search.elasticsearch.location.gateway.native.class: eZ\Publish\Core\Search\Elasticsearch\Content\Location\Gateway\Native
     ezpublish.spi.search.elasticsearch.handler.content.class: eZ\Publish\Core\Search\Elasticsearch\Content\Handler
     ezpublish.spi.search.elasticsearch.handler.location.class: eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler
-    ezpublish.search.elasticsearch.content.field_map.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap
     ezpublish.search.elasticsearch.extractor.loading.class: eZ\Publish\Core\Search\Elasticsearch\Content\Extractor\Loading
 
 services:
@@ -61,18 +60,6 @@ services:
 
     ezpublish.search.elasticsearch.location.gateway:
         alias: ezpublish.search.elasticsearch.location.gateway.native
-
-    ezpublish.search.elasticsearch.content.field_map:
-        class: %ezpublish.search.elasticsearch.content.field_map.class%
-        arguments:
-            - @ezpublish.search.field_registry
-            - @ezpublish.spi.persistence_handler.content_type
-            - @ezpublish.search.field_name_generator
-
-    # TODO: when Elasticsearch storage is enabled and multiple Elasticsearch storage engines are used simultaneously
-    # this service will need to be set through factory, see https://jira.ez.no/browse/EZP-22846
-    ezpublish.search.elasticsearch.content.field_map:
-        alias: ezpublish.search.elasticsearch.content.field_map
 
     ezpublish.search.elasticsearch.extractor.loading:
         class: %ezpublish.search.elasticsearch.extractor.loading.class%
