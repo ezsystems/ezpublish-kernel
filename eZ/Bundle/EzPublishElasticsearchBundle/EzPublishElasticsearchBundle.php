@@ -11,14 +11,14 @@ namespace eZ\Bundle\EzPublishElasticsearchBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch\AggregateFacetBuilderVisitorPass;
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch\AggregateFieldValueMapperPass;
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch\AggregateSortClauseVisitorContentPass;
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch\AggregateSortClauseVisitorLocationPass;
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch\CriterionVisitorDispatcherContentPass;
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Elasticsearch\CriterionVisitorDispatcherLocationPass;
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\FieldRegistryPass;
-use eZ\Publish\Core\Base\Container\Compiler\Storage\Solr\SignalSlotPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\AggregateFacetBuilderVisitorPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\AggregateFieldValueMapperPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\AggregateSortClauseVisitorContentPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\AggregateSortClauseVisitorLocationPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisitorDispatcherContentPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisitorDispatcherLocationPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\FieldRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\SignalSlotPass;
 
 class EzPublishElasticsearchBundle extends Bundle
 {

@@ -36,6 +36,8 @@ EOT
 
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
         $persistenceHandler = $this->getContainer()->get( 'ezpublish.api.persistence_handler' );
+        /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
+        $searchHandler = $this->getContainer()->get( 'ezpublish.spi.search_handler' );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getContainer()->get( 'ezpublish.connection' );
 
@@ -56,11 +58,11 @@ EOT
         $stmt = $query->prepare();
         $stmt->execute();
 
-        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Handler $searchHandler */
-        $searchHandler = $persistenceHandler->searchHandler();
-        $searchHandler->setCommit( false );
-        $searchHandler->purgeIndex();
-        $searchHandler->setCommit( true );
+        /** @var \eZ\Publish\Core\Search\Solr\Content\Handler $contentSearchHandler */
+        $contentSearchHandler = $searchHandler->contentSearchHandler();
+        $contentSearchHandler->setCommit( false );
+        $contentSearchHandler->purgeIndex();
+        $contentSearchHandler->setCommit( true );
 
         $output->writeln( "Indexing Content..." );
 
@@ -87,7 +89,7 @@ EOT
 
             if ( !empty( $contentObjects ) )
             {
-                $searchHandler->bulkIndexContent( $contentObjects );
+                $contentSearchHandler->bulkIndexContent( $contentObjects );
             }
 
             $progress->advance( $k );
@@ -125,11 +127,11 @@ EOT
         $stmt = $query->prepare();
         $stmt->execute();
 
-        /** @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\Location\Handler $searchHandler */
-        $searchHandler = $persistenceHandler->locationSearchHandler();
-        $searchHandler->setCommit( false );
-        $searchHandler->purgeIndex();
-        $searchHandler->setCommit( true );
+        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
+        $locationSearchHandler = $searchHandler->locationSearchHandler();
+        $locationSearchHandler->setCommit( false );
+        $locationSearchHandler->purgeIndex();
+        $locationSearchHandler->setCommit( true );
 
         $output->writeln( "Indexing Locations..." );
 
@@ -153,7 +155,7 @@ EOT
 
             if ( !empty( $locations ) )
             {
-                $searchHandler->bulkIndexLocations( $locations );
+                $locationSearchHandler->bulkIndexLocations( $locations );
             }
 
             $progress->advance( $k );
