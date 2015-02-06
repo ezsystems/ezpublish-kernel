@@ -86,7 +86,7 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array( KernelEvents::CONTROLLER => 'getController' ),
+            array( KernelEvents::CONTROLLER => array( 'getController', 10 ) ),
             $this->controllerListener->getSubscribedEvents()
         );
     }
