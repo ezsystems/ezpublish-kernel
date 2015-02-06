@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 
 use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
-use eZ\Publish\Core\Search\Solr\Content\FieldMap;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
@@ -22,9 +22,9 @@ abstract class MapLocation extends CriterionVisitor
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Search\Solr\Content\FieldMap
+     * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
-    protected $fieldMap;
+    protected $fieldNameResolver;
 
     /**
      * Identifier of the field type that criterion can handle
@@ -41,18 +41,18 @@ abstract class MapLocation extends CriterionVisitor
     protected $fieldName;
 
     /**
-     * Create from FieldMap, FieldType identifier and field name.
+     * Create from FieldNameResolver, FieldType identifier and field name.
      *
-     * @param \eZ\Publish\Core\Search\Solr\Content\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      * @param string $fieldTypeIdentifier
      * @param string $fieldName
      */
-    public function __construct( FieldMap $fieldMap, $fieldTypeIdentifier, $fieldName )
+    public function __construct( FieldNameResolver $fieldNameResolver, $fieldTypeIdentifier, $fieldName )
     {
         $this->fieldTypeIdentifier = $fieldTypeIdentifier;
         $this->fieldName = $fieldName;
 
-        $this->fieldMap = $fieldMap;
+        $this->fieldNameResolver = $fieldNameResolver;
     }
 
     /**
@@ -72,7 +72,7 @@ abstract class MapLocation extends CriterionVisitor
         $name = null
     )
     {
-        return $this->fieldMap->getFieldNames(
+        return $this->fieldNameResolver->getFieldNames(
             $criterion,
             $fieldDefinitionIdentifier,
             $fieldTypeIdentifier,
