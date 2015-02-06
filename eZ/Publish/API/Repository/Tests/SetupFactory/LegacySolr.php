@@ -52,12 +52,12 @@ class LegacySolr extends Legacy
             /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
             $loader->load( 'tests/integration_legacy_solr.yml' );
 
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateCriterionVisitorPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateFacetBuilderVisitorPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateFieldValueMapperPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\AggregateSortClauseVisitorPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\FieldRegistryPass() );
-            $containerBuilder->addCompilerPass( new Compiler\Storage\Solr\SignalSlotPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateCriterionVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateFacetBuilderVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateFieldValueMapperPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateSortClauseVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Solr\FieldRegistryPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Solr\SignalSlotPass() );
 
             $containerBuilder->setParameter(
                 "legacy_dsn",
@@ -112,7 +112,7 @@ class LegacySolr extends Legacy
             );
         }
 
-        /** @var \eZ\Publish\Core\Persistence\Solr\Content\Search\Handler $contentSearchHandler */
+        /** @var \eZ\Publish\Core\Search\Solr\Content\Handler $contentSearchHandler */
         $contentSearchHandler = $searchHandler->contentSearchHandler();
         $contentSearchHandler->setCommit( false );
         $contentSearchHandler->purgeIndex();

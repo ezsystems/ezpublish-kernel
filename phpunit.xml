@@ -35,8 +35,8 @@
     <testsuite name="eZ\Publish\Core\Persistence\Doctrine">
       <directory>eZ/Publish/Core/Persistence/Doctrine/Tests</directory>
     </testsuite>
-    <testsuite name="eZ\Publish\Core\Persistence\Solr">
-      <directory>eZ/Publish/Core/Persistence/Solr/Tests</directory>
+    <testsuite name="eZ\Publish\Core\Search\Solr">
+      <directory>eZ/Publish/Core/Search/Solr/Tests</directory>
     </testsuite>
     <testsuite name="eZ\Publish\Core\IO">
       <directory>eZ/Publish/Core/IO/Tests</directory>

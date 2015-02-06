@@ -91,7 +91,7 @@ before_script:
   - composer install --dev --prefer-dist
   # Setup Solr / Elastic search if asked for
   - if [ "$TEST_CONFIG" == "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
-  - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl -L https://raw.github.com/andrerom/travis-solr/410/travis-solr.sh | SOLR_CONFS=eZ/Publish/Core/Persistence/Solr/Content/Search/schema.xml bash ; fi"
+  - "if [ \"$TEST_CONFIG\" = \"phpunit-integration-legacy-solr.xml\" ] ; then curl -L https://raw.github.com/andrerom/travis-solr/410/travis-solr.sh | SOLR_CONFS=eZ/Publish/Core/Search/Solr/Content/schema.xml bash ; fi"
   # Detecting timezone issues by testing on random timezone
   - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
   - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
