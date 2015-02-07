@@ -40,7 +40,7 @@ $loader->load( 'storage_engines/cache.yml' );
 $loader->load( 'storage_engines/legacy.yml' );
 $loader->load( 'search_engines/legacy.yml' );
 $loader->load( 'search_engines/solr.yml' );
-$loader->load( 'storage_engines/legacy_elasticsearch.yml' );
+$loader->load( 'search_engines/elasticsearch.yml' );
 $loader->load( 'settings.yml' );
 $loader->load( 'utils.yml' );
 
