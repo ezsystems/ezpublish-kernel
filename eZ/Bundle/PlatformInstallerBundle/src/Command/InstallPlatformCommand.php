@@ -8,6 +8,7 @@
 namespace EzSystems\PlatformInstallerBundle\Command;
 
 use Doctrine\DBAL\Exception\ConnectionException;
+use EzSystems\PlatformInstallerBundle\Installer\Installer;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,7 +31,8 @@ class InstallPlatformCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName( 'ezplatform:install' );
-        $this->addArgument( 'type', InputArgument::REQUIRED, "The type of install, one of: clean, demo-clean or demo" );
+
+        $this->addArgument( 'type', InputArgument::REQUIRED, "The type of install" );
     }
 
     protected function execute( InputInterface $input, OutputInterface $output )
@@ -40,19 +42,11 @@ class InstallPlatformCommand extends ContainerAwareCommand
         $this->checkParameters();
         $this->checkDatabase();
 
-        switch ( $type = $input->getArgument( 'type' ) )
+        $type = $input->getArgument( 'type' );
+        $installer = $this->getInstaller( $type );
+        if ( $installer === false )
         {
-            case 'clean':
-                $installer = $this->getContainer()->get( 'ezplatform.installer.clean_installer' );
-                break;
-            case 'demo':
-                $installer = $this->getContainer()->get( 'ezplatform.installer.demo_installer' );
-                break;
-            case 'demo-clean':
-                $installer = $this->getContainer()->get( 'ezplatform.installer.democlean_installer' );
-                break;
-            default:
-                $output->writeln( "Unknown install type '$type''" );
+                $output->writeln( "Unknown install type '$type'" );
                 exit( self::EXIT_UNKNOWN_INSTALL_TYPE );
         }
 
@@ -127,5 +121,29 @@ class InstallPlatformCommand extends ContainerAwareCommand
             $this->output->writeln( "Please check the database configuration in parameters.yml" );
             exit( self::EXIT_GENERAL_DATABASE_ERROR );
         }
+    }
+
+    /**
+     * @return array
+     */
+    private function getAvailableInstallers()
+    {
+        return array_keys( $this->getContainer()->getParameter( 'ezplatform.installers' ) );
+    }
+
+    /**
+     * @param $type
+     *
+     * @return \EzSystems\PlatformInstallerBundle\Installer\Installer
+     */
+    private function getInstaller( $type )
+    {
+        $installers = $this->getContainer()->getParameter( 'ezplatform.installers' );
+        if ( !isset( $installers[$type] ) )
+        {
+            return false;
+        }
+
+        return $this->getContainer()->get( $installers[$type] );
     }
 }
