@@ -25,7 +25,7 @@ services:
         arguments:
             - @ezpublish.api.inner_repository
             - @ezpublish.api.persistence_handler
-            - @ezpublish.spi.search_handler
+            - @ezpublish.spi.search
 
     ezpublish.search.solr.slot.publish_version:
         parent: ezpublish.search.solr.slot
