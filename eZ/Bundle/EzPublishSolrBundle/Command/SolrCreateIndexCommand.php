@@ -37,7 +37,7 @@ EOT
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */
         $persistenceHandler = $this->getContainer()->get( 'ezpublish.api.persistence_handler' );
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandler */
-        $searchHandler = $this->getContainer()->get( 'ezpublish.spi.search_handler' );
+        $searchHandler = $this->getContainer()->get( 'ezpublish.spi.search' );
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getContainer()->get( 'ezpublish.connection' );
 
