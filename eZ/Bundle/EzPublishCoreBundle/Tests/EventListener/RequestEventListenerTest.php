@@ -101,11 +101,15 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOnKernelRequestIndexOnIndexPage( $requestPath, $configuredIndexPath, $expectedIndexPath )
     {
+        $configMap = array(
+            array( 'legacy_mode', 'ezsettings', null, false ),
+            array( 'index_page', null, null, $configuredIndexPath ),
+        );
         $this->configResolver
-            ->expects( $this->once() )
+            ->expects( $this->any() )
             ->method( 'getParameter' )
-            ->with( 'index_page' )
-            ->will( $this->returnValue( $configuredIndexPath ) );
+            ->will( $this->returnValueMap( $configMap ) );
+
         $this->request->attributes->set( 'semanticPathinfo', $requestPath );
         $this->requestEventListener->onKernelRequestIndex( $this->event );
         $this->assertEquals( $expectedIndexPath, $this->request->attributes->get( 'semanticPathinfo' ) );
