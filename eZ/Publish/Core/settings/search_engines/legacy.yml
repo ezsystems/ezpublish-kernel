@@ -9,8 +9,8 @@ imports:
 
 parameters:
     ezpublish.spi.search.legacy.class: eZ\Publish\Core\Search\Legacy\Handler
-    ezpublish.spi.search.legacy.handler.content.class: eZ\Publish\Core\Search\Legacy\Content\Handler
-    ezpublish.spi.search.legacy.handler.location.class: eZ\Publish\Core\Search\Legacy\Content\Location\Handler
+    ezpublish.spi.search.legacy.content_handler.class: eZ\Publish\Core\Search\Legacy\Content\Handler
+    ezpublish.spi.search.legacy.location_handler.class: eZ\Publish\Core\Search\Legacy\Content\Location\Handler
     ezpublish.search.legacy.gateway.content.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\DoctrineDatabase
     ezpublish.search.legacy.gateway.content.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Gateway\ExceptionConversion
     ezpublish.search.legacy.gateway.location.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\DoctrineDatabase
@@ -51,15 +51,15 @@ services:
     ezpublish.search.legacy.gateway.location:
         alias: ezpublish.search.legacy.gateway.location.exception_conversion
 
-    ezpublish.spi.search.legacy.handler.content:
-        class: %ezpublish.spi.search.legacy.handler.content.class%
+    ezpublish.spi.search.legacy.content_handler:
+        class: %ezpublish.spi.search.legacy.content_handler.class%
         arguments:
             - @ezpublish.search.legacy.gateway.content
             - @ezpublish.persistence.legacy.content.mapper
         lazy: true
 
-    ezpublish.spi.search.legacy.handler.location:
-        class: %ezpublish.spi.search.legacy.handler.location.class%
+    ezpublish.spi.search.legacy.location_handler:
+        class: %ezpublish.spi.search.legacy.location_handler.class%
         arguments:
             - @ezpublish.search.legacy.gateway.location
             - @ezpublish.persistence.legacy.location.mapper
@@ -68,8 +68,8 @@ services:
     ezpublish.spi.search.legacy:
         class: %ezpublish.spi.search.legacy.class%
         arguments:
-            - @ezpublish.spi.search.legacy.handler.content
-            - @ezpublish.spi.search.legacy.handler.location
+            - @ezpublish.spi.search.legacy.content_handler
+            - @ezpublish.spi.search.legacy.location_handler
         tags:
             - {name: ezpublish.searchEngine, alias: legacy}
         lazy: true
