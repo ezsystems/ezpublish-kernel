@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search;
+namespace eZ\Publish\Core\Search\Common;
 
 use eZ\Publish\Core\SignalSlot\Slot as BaseSlot;
 use eZ\Publish\API\Repository\Repository;

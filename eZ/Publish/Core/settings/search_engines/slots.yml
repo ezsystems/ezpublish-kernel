@@ -1,21 +1,21 @@
 parameters:
-    ezpublish.search.slot.class: eZ\Publish\Core\Search\Slot
-    ezpublish.search.slot.publish_version.class: eZ\Publish\Core\Search\Slot\PublishVersion
-    ezpublish.search.slot.copy_content.class: eZ\Publish\Core\Search\Slot\CopyContent
-    ezpublish.search.slot.delete_content.class: eZ\Publish\Core\Search\Slot\DeleteContent
-    ezpublish.search.slot.delete_version.class: eZ\Publish\Core\Search\Slot\DeleteVersion
-    ezpublish.search.slot.create_location.class: eZ\Publish\Core\Search\Slot\CreateLocation
-    ezpublish.search.slot.delete_location.class: eZ\Publish\Core\Search\Slot\DeleteLocation
-    ezpublish.search.slot.create_user.class: eZ\Publish\Core\Search\Slot\CreateUser
-    ezpublish.search.slot.create_user_group.class: eZ\Publish\Core\Search\Slot\CreateUserGroup
-    ezpublish.search.slot.move_user_group.class: eZ\Publish\Core\Search\Slot\MoveUserGroup
-    ezpublish.search.slot.copy_subtree.class: eZ\Publish\Core\Search\Slot\CopySubtree
-    ezpublish.search.slot.move_subtree.class: eZ\Publish\Core\Search\Slot\MoveSubtree
-    ezpublish.search.slot.trash.class: eZ\Publish\Core\Search\Slot\Trash
-    ezpublish.search.slot.recover.class: eZ\Publish\Core\Search\Slot\Recover
-    ezpublish.search.slot.hide_location.class: eZ\Publish\Core\Search\Slot\HideLocation
-    ezpublish.search.slot.unhide_location.class: eZ\Publish\Core\Search\Slot\UnhideLocation
-    ezpublish.search.slot.set_content_state.class: eZ\Publish\Core\Search\Slot\SetContentState
+    ezpublish.search.slot.class: eZ\Publish\Core\Search\Common\Slot
+    ezpublish.search.slot.publish_version.class: eZ\Publish\Core\Search\Common\Slot\PublishVersion
+    ezpublish.search.slot.copy_content.class: eZ\Publish\Core\Search\Common\Slot\CopyContent
+    ezpublish.search.slot.delete_content.class: eZ\Publish\Core\Search\Common\Slot\DeleteContent
+    ezpublish.search.slot.delete_version.class: eZ\Publish\Core\Search\Common\Slot\DeleteVersion
+    ezpublish.search.slot.create_location.class: eZ\Publish\Core\Search\Common\Slot\CreateLocation
+    ezpublish.search.slot.delete_location.class: eZ\Publish\Core\Search\Common\Slot\DeleteLocation
+    ezpublish.search.slot.create_user.class: eZ\Publish\Core\Search\Common\Slot\CreateUser
+    ezpublish.search.slot.create_user_group.class: eZ\Publish\Core\Search\Common\Slot\CreateUserGroup
+    ezpublish.search.slot.move_user_group.class: eZ\Publish\Core\Search\Common\Slot\MoveUserGroup
+    ezpublish.search.slot.copy_subtree.class: eZ\Publish\Core\Search\Common\Slot\CopySubtree
+    ezpublish.search.slot.move_subtree.class: eZ\Publish\Core\Search\Common\Slot\MoveSubtree
+    ezpublish.search.slot.trash.class: eZ\Publish\Core\Search\Common\Slot\Trash
+    ezpublish.search.slot.recover.class: eZ\Publish\Core\Search\Common\Slot\Recover
+    ezpublish.search.slot.hide_location.class: eZ\Publish\Core\Search\Common\Slot\HideLocation
+    ezpublish.search.slot.unhide_location.class: eZ\Publish\Core\Search\Common\Slot\UnhideLocation
+    ezpublish.search.slot.set_content_state.class: eZ\Publish\Core\Search\Common\Slot\SetContentState
 
 services:
     ezpublish.search.slot:

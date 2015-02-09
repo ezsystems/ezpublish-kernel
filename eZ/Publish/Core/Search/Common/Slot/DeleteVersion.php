@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Slot;
+namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Search\Slot;
+use eZ\Publish\Core\Search\Common\Slot;
 
 /**
- * A Search Engine slot handling DeleteLocationSignal.
+ * A Search Engine slot handling DeleteVersionSignal.
  */
-class DeleteLocation extends Slot
+class DeleteVersion extends Slot
 {
     /**
      * Receive the given $signal and react on it
@@ -24,10 +24,9 @@ class DeleteLocation extends Slot
      */
     public function receive( Signal $signal )
     {
-        if ( !$signal instanceof Signal\LocationService\DeleteLocationSignal )
+        if ( !$signal instanceof Signal\ContentService\DeleteVersionSignal )
             return;
 
-        $this->searchHandler->contentSearchHandler()->deleteLocation( $signal->locationId, $signal->contentId );
-        $this->searchHandler->locationSearchHandler()->deleteLocation( $signal->locationId );
+        $this->searchHandler->contentSearchHandler()->deleteContent( $signal->contentId, $signal->versionNo );
     }
 }

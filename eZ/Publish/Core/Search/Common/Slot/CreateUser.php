@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Slot;
+namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Search\Slot;
+use eZ\Publish\Core\Search\Common\Slot;
 
 /**
- * A Search Engine slot handling CopyContentSignal.
+ * A Search Engine slot handling CreateUserSignal.
  */
-class CopyContent extends Slot
+class CreateUser extends Slot
 {
     /**
      * Receive the given $signal and react on it
@@ -24,14 +24,19 @@ class CopyContent extends Slot
      */
     public function receive( Signal $signal )
     {
-        if ( !$signal instanceof Signal\ContentService\CopyContentSignal )
+        if ( !$signal instanceof Signal\UserService\CreateUserSignal )
             return;
 
+        $userContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->userId );
+
         $this->searchHandler->contentSearchHandler()->indexContent(
-            $this->persistenceHandler->contentHandler()->load( $signal->dstContentId, $signal->dstVersionNo )
+            $this->persistenceHandler->contentHandler()->load(
+                $userContentInfo->id,
+                $userContentInfo->currentVersionNo
+            )
         );
 
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $signal->dstContentId );
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $userContentInfo->id );
         foreach ( $locations as $location )
         {
             $this->searchHandler->locationSearchHandler()->indexLocation( $location );

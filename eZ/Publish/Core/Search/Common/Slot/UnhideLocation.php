@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Slot;
+namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Search\Slot;
+use eZ\Publish\Core\Search\Common\Slot;
 
 /**
- * A Search Engine slot handling PublishVersionSignal.
+ * A Search Engine slot handling UnhideLocationSignal.
  */
-class PublishVersion extends Slot
+class UnhideLocation extends Slot
 {
     /**
      * Receive the given $signal and react on it
@@ -24,17 +24,17 @@ class PublishVersion extends Slot
      */
     public function receive( Signal $signal )
     {
-        if ( !$signal instanceof Signal\ContentService\PublishVersionSignal )
+        if ( !$signal instanceof Signal\LocationService\UnhideLocationSignal )
+        {
             return;
+        }
 
         $this->searchHandler->contentSearchHandler()->indexContent(
-            $this->persistenceHandler->contentHandler()->load( $signal->contentId, $signal->versionNo )
+            $this->persistenceHandler->contentHandler()->load( $signal->contentId, $signal->currentVersionNo )
         );
 
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $signal->contentId );
-        foreach ( $locations as $location )
-        {
-            $this->searchHandler->locationSearchHandler()->indexLocation( $location );
-        }
+        $this->searchHandler->locationSearchHandler()->indexLocation(
+            $this->persistenceHandler->locationHandler()->load( $signal->locationId )
+        );
     }
 }

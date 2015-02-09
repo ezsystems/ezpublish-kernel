@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Slot;
+namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Search\Slot;
+use eZ\Publish\Core\Search\Common\Slot;
 
 /**
- * A Search Engine slot handling CreateLocationSignal.
+ * A Search Engine slot handling CreateUserGroupSignal.
  */
-class CreateLocation extends Slot
+class CreateUserGroup extends Slot
 {
     /**
      * Receive the given $signal and react on it
@@ -24,17 +24,19 @@ class CreateLocation extends Slot
      */
     public function receive( Signal $signal )
     {
-        if ( !$signal instanceof Signal\LocationService\CreateLocationSignal )
-        {
+        if ( !$signal instanceof Signal\UserService\CreateUserGroupSignal )
             return;
-        }
 
-        $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->contentId );
+        $userGroupContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->userGroupId );
+
         $this->searchHandler->contentSearchHandler()->indexContent(
-            $this->persistenceHandler->contentHandler()->load( $signal->contentId, $contentInfo->currentVersionNo )
+            $this->persistenceHandler->contentHandler()->load(
+                $userGroupContentInfo->id,
+                $userGroupContentInfo->currentVersionNo
+            )
         );
 
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $signal->contentId );
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $userGroupContentInfo->id );
         foreach ( $locations as $location )
         {
             $this->searchHandler->locationSearchHandler()->indexLocation( $location );
