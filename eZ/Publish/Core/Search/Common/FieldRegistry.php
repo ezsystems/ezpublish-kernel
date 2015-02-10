@@ -1,18 +1,18 @@
 <?php
 /**
- * File containing the Content Search handler class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Content;
+namespace eZ\Publish\Core\Search\Common;
 
 use eZ\Publish\SPI\FieldType\Indexable;
 
 /**
- * Visits the criterion tree into a Solr query
+ * Registry for field type's Indexable interface implementations available to Search Engines.
  */
 class FieldRegistry
 {
@@ -24,11 +24,9 @@ class FieldRegistry
     protected $types = array();
 
     /**
-     * COnstruct from optional Indexable type array
+     * Construct from optional Indexable type array
      *
-     * @param array $types
-     *
-     * @return void
+     * @param \eZ\Publish\SPI\FieldType\Indexable[] $types
      */
     public function __construct( array $types = array() )
     {
@@ -42,7 +40,7 @@ class FieldRegistry
      * Register another indexable type
      *
      * @param string $name
-     * @param Indexable $type
+     * @param \eZ\Publish\SPI\FieldType\Indexable $type
      *
      * @return void
      */
@@ -52,11 +50,11 @@ class FieldRegistry
     }
 
     /**
-     * Get indexable type
+     * Get Indexable type
      *
      * @param string $name
      *
-     * @return Indexable
+     * @return \eZ\Publish\SPI\FieldType\Indexable
      */
     public function getType( $name )
     {
