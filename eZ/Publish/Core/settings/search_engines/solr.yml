@@ -12,7 +12,6 @@ parameters:
     ezpublish.spi.search.solr.content_handler.class: eZ\Publish\Core\Search\Solr\Content\Handler
     ezpublish.search.solr.location.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Location\Gateway\Native
     ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
-    ezpublish.search.solr.content.field_map.class: eZ\Publish\Core\Search\Solr\Content\FieldMap
 
 services:
     ezpublish.search.solr.content.gateway.native:
@@ -27,13 +26,6 @@ services:
 
     ezpublish.search.solr.content.gateway:
         alias: ezpublish.search.solr.content.gateway.native
-
-    ezpublish.search.solr.content.field_map:
-        class: %ezpublish.search.solr.content.field_map.class%
-        arguments:
-            - @ezpublish.search.field_registry
-            - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.search.field_name_generator
 
     ezpublish.spi.search.solr.content_handler:
         class: %ezpublish.spi.search.solr.content_handler.class%
