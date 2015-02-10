@@ -15,7 +15,7 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateCriterionVisito
 use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateFacetBuilderVisitorPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateFieldValueMapperPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateSortClauseVisitorPass;
-use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\FieldRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
 
 class EzPublishSolrBundle extends Bundle
