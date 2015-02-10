@@ -23,6 +23,7 @@ use eZ\Publish\SPI\Search\Document;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -59,7 +60,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Field registry
      *
-     * @var \eZ\Publish\Core\Search\Solr\Content\FieldRegistry
+     * @var \eZ\Publish\Core\Search\Common\FieldRegistry
      */
     protected $fieldRegistry;
 
@@ -109,7 +110,7 @@ class Handler implements SearchHandlerInterface
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway $gateway
-     * @param \eZ\Publish\Core\Search\Solr\Content\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
