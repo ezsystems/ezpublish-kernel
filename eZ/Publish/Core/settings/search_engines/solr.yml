@@ -3,7 +3,6 @@ imports:
     - {resource: search_engines/solr/facet_builder_visitors.yml}
     - {resource: search_engines/solr/field_value_mappers.yml}
     - {resource: search_engines/solr/services.yml}
-    - {resource: search_engines/solr/slots.yml}
     - {resource: search_engines/solr/sort_clause_visitors.yml}
 
 parameters:

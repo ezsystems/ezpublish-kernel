@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the Solr\Slot\HideLocation class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Slot;
+namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Search\Solr\Slot;
+use eZ\Publish\Core\Search\Common\Slot;
 
 /**
- * A Solr slot handling HideLocationSignal.
+ * A Search Engine slot handling UnhideLocationSignal.
  */
-class HideLocation extends Slot
+class UnhideLocation extends Slot
 {
     /**
      * Receive the given $signal and react on it
@@ -24,7 +24,7 @@ class HideLocation extends Slot
      */
     public function receive( Signal $signal )
     {
-        if ( !$signal instanceof Signal\LocationService\HideLocationSignal )
+        if ( !$signal instanceof Signal\LocationService\UnhideLocationSignal )
         {
             return;
         }

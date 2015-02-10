@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the Solr\Slot\CreateUser class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Slot;
+namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Search\Solr\Slot;
+use eZ\Publish\Core\Search\Common\Slot;
 
 /**
- * A Solr slot handling CreateUserSignal.
+ * A Search Engine slot handling PublishVersionSignal.
  */
-class CreateUser extends Slot
+class PublishVersion extends Slot
 {
     /**
      * Receive the given $signal and react on it
@@ -24,19 +24,14 @@ class CreateUser extends Slot
      */
     public function receive( Signal $signal )
     {
-        if ( !$signal instanceof Signal\UserService\CreateUserSignal )
+        if ( !$signal instanceof Signal\ContentService\PublishVersionSignal )
             return;
 
-        $userContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo( $signal->userId );
-
         $this->searchHandler->contentSearchHandler()->indexContent(
-            $this->persistenceHandler->contentHandler()->load(
-                $userContentInfo->id,
-                $userContentInfo->currentVersionNo
-            )
+            $this->persistenceHandler->contentHandler()->load( $signal->contentId, $signal->versionNo )
         );
 
-        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $userContentInfo->id );
+        $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $signal->contentId );
         foreach ( $locations as $location )
         {
             $this->searchHandler->locationSearchHandler()->indexLocation( $location );

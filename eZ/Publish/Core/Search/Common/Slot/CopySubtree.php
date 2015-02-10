@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the Solr\Slot\Recover class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Slot;
+namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Search\Solr\Slot;
+use eZ\Publish\Core\Search\Common\Slot;
 
 /**
- * A Solr slot handling RecoverSignal.
+ * A Search Engine slot handling CopySubtreeSignal.
  */
-class Recover extends Slot
+class CopySubtree extends Slot
 {
     /**
      * Receive the given $signal and react on it
@@ -24,13 +24,13 @@ class Recover extends Slot
      */
     public function receive( Signal $signal )
     {
-        if ( !$signal instanceof Signal\TrashService\RecoverSignal )
+        if ( !$signal instanceof Signal\LocationService\CopySubtreeSignal )
             return;
 
         $contentHandler = $this->persistenceHandler->contentHandler();
 
         foreach (
-            $this->persistenceHandler->locationHandler()->loadSubtreeIds( $signal->newLocationId ) as $contentId
+            $this->persistenceHandler->locationHandler()->loadSubtreeIds( $signal->targetNewSubtreeId ) as $contentId
         )
         {
             $contentInfo = $contentHandler->loadContentInfo( $contentId );
@@ -38,9 +38,11 @@ class Recover extends Slot
                 $contentHandler->load( $contentInfo->id, $contentInfo->currentVersionNo )
             );
 
-            $this->searchHandler->locationSearchHandler()->indexLocation(
-                $this->persistenceHandler->locationHandler()->load( $signal->newLocationId )
-            );
+            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent( $contentInfo->id );
+            foreach ( $locations as $location )
+            {
+                $this->searchHandler->locationSearchHandler()->indexLocation( $location );
+            }
         }
     }
 }
