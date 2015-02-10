@@ -17,7 +17,6 @@ parameters:
     ezpublish.search.elasticsearch.location.gateway.native.class: eZ\Publish\Core\Search\Elasticsearch\Content\Location\Gateway\Native
     ezpublish.spi.search.elasticsearch.content_handler.class: eZ\Publish\Core\Search\Elasticsearch\Content\Handler
     ezpublish.spi.search.elasticsearch.location_handler.class: eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler
-    ezpublish.search.elasticsearch.content.field_map.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap
     ezpublish.search.elasticsearch.extractor.loading.class: eZ\Publish\Core\Search\Elasticsearch\Content\Extractor\Loading
 
 services:
@@ -64,13 +63,6 @@ services:
 
     ezpublish.search.elasticsearch.location.gateway:
         alias: ezpublish.search.elasticsearch.location.gateway.native
-
-    ezpublish.search.elasticsearch.content.field_map:
-        class: %ezpublish.search.elasticsearch.content.field_map.class%
-        arguments:
-            - @ezpublish.search.field_registry
-            - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.search.field_name_generator
 
     ezpublish.search.elasticsearch.extractor.loading:
         class: %ezpublish.search.elasticsearch.extractor.loading.class%
