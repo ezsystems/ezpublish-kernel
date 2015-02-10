@@ -52,10 +52,7 @@ class Selection implements Converter
     {
         if ( $value->dataText !== '' )
         {
-            $fieldValue->data = array_map(
-                'intval',
-                explode( '-', $value->dataText )
-            );
+            $fieldValue->data = explode( '-', $value->dataText );
         }
         else
         {
