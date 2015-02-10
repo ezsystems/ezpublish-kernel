@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use RuntimeException;
 
 /**
@@ -38,7 +39,7 @@ class FieldMap
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Persistence\Elasticsearch\Content\Search\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
      */
     protected $nameGenerator;
 
@@ -54,7 +55,7 @@ class FieldMap
      *
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator $nameGenerator
+     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $nameGenerator
      */
     public function __construct(
         FieldRegistry $fieldRegistry,

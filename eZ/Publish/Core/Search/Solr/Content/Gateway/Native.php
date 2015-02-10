@@ -13,7 +13,7 @@ use eZ\Publish\Core\Search\Solr\Content\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;

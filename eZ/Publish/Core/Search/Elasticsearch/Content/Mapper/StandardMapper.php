@@ -22,7 +22,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
 use eZ\Publish\Core\Search\Elasticsearch\Content\MapperInterface;
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Elasticsearch\Content\Document;
 
 /**
@@ -35,7 +35,7 @@ class StandardMapper implements MapperInterface
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
@@ -83,7 +83,7 @@ class StandardMapper implements MapperInterface
 
     /**
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler

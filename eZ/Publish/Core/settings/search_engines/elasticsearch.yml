@@ -25,13 +25,13 @@ services:
         class: %ezpublish.search.elasticsearch.serializer.class%
         arguments:
             - @ezpublish.search.elasticsearch.content.field_value_mapper.aggregate
-            - @ezpublish.search.elasticsearch.content.field_name_generator
+            - @ezpublish.search.field_name_generator
 
     ezpublish.search.elasticsearch.mapper.standard:
         class: %ezpublish.search.elasticsearch.mapper.standard.class%
         arguments:
             - @ezpublish.search.field_registry
-            - @ezpublish.search.elasticsearch.content.field_name_generator
+            - @ezpublish.search.field_name_generator
             - @ezpublish.spi.persistence.content_handler
             - @ezpublish.spi.persistence.location_handler
             - @ezpublish.spi.persistence.content_type_handler
@@ -70,7 +70,7 @@ services:
         arguments:
             - @ezpublish.search.field_registry
             - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.search.elasticsearch.content.field_name_generator
+            - @ezpublish.search.field_name_generator
 
     ezpublish.search.elasticsearch.extractor.loading:
         class: %ezpublish.search.elasticsearch.extractor.loading.class%
