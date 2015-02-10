@@ -23,7 +23,7 @@ services:
             - @ezpublish.search.solr.content.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.content.facet_builder_visitor.aggregate
             - @ezpublish.search.solr.content.field_value_mapper.aggregate
-            - @ezpublish.search.solr.content.field_name_generator
+            - @ezpublish.search.field_name_generator
 
     ezpublish.search.solr.content.gateway:
         alias: ezpublish.search.solr.content.gateway.native
@@ -33,7 +33,7 @@ services:
         arguments:
             - @ezpublish.search.field_registry
             - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.search.solr.content.field_name_generator
+            - @ezpublish.search.field_name_generator
 
     ezpublish.spi.search.solr.content_handler:
         class: %ezpublish.spi.search.solr.content_handler.class%
@@ -45,7 +45,7 @@ services:
             - @ezpublish.spi.persistence.content_type_handler
             - @ezpublish.spi.persistence.object_state_handler
             - @ezpublish.spi.persistence.section_handler
-            - @ezpublish.search.solr.content.field_name_generator
+            - @ezpublish.search.field_name_generator
         lazy: true
 
     ezpublish.search.solr.location.gateway.native:
@@ -64,7 +64,7 @@ services:
         class: %ezpublish.spi.search.solr.location_handler.class%
         arguments:
             - @ezpublish.search.solr.location.gateway
-            - @ezpublish.search.solr.content.field_name_generator
+            - @ezpublish.search.field_name_generator
         lazy: true
 
     ezpublish.spi.search.solr:
