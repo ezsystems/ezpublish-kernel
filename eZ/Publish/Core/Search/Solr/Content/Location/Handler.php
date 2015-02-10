@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
 /**
  *
@@ -33,7 +33,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
@@ -41,7 +41,7 @@ class Handler implements SearchHandlerInterface
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Solr\Content\Location\Gateway $gateway
-     * @param \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      */
     public function __construct(
         Gateway $gateway,

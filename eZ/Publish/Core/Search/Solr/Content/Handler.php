@@ -24,6 +24,7 @@ use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -102,7 +103,7 @@ class Handler implements SearchHandlerInterface
     /**
      * Field name generator
      *
-     * @var \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator
+     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
      */
     protected $fieldNameGenerator;
 
@@ -116,7 +117,7 @@ class Handler implements SearchHandlerInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
-     * @param \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      */
     public function __construct(
         Gateway $gateway,
