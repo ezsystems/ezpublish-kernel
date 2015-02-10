@@ -13,6 +13,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Search\Common\FieldRegistry;
 use RuntimeException;
 
 /**
@@ -23,7 +24,7 @@ class FieldMap
     /**
      * Field registry
      *
-     * @var \eZ\Publish\Core\Search\Solr\Content\FieldRegistry
+     * @var \eZ\Publish\Core\Search\Common\FieldRegistry
      */
     protected $fieldRegistry;
 
@@ -51,7 +52,7 @@ class FieldMap
     /**
      * Create from content type handler and field registry
      *
-     * @param \eZ\Publish\Core\Search\Solr\Content\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Search\Solr\Content\FieldNameGenerator $nameGenerator
      */

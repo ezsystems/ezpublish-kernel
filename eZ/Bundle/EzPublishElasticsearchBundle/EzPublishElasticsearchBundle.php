@@ -17,7 +17,7 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\AggregateSortCl
 use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\AggregateSortClauseVisitorLocationPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisitorDispatcherContentPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisitorDispatcherLocationPass;
-use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\FieldRegistryPass;
+use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
 
 class EzPublishElasticsearchBundle extends Bundle

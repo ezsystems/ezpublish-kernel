@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Section;
 use eZ\Publish\SPI\Search\FieldType;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use eZ\Publish\Core\Search\Solr\Content\FieldRegistry;
+use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
@@ -77,12 +77,12 @@ class StandardMapper implements MapperInterface
     /**
      * Field registry
      *
-     * @var \eZ\Publish\Core\Search\Solr\Content\FieldRegistry
+     * @var \eZ\Publish\Core\Search\Common\FieldRegistry
      */
     protected $fieldRegistry;
 
     /**
-     * @param \eZ\Publish\Core\Search\Solr\Content\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldNameGenerator $fieldNameGenerator
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler

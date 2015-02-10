@@ -621,19 +621,19 @@ class FieldMapTest extends TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\Search\Solr\Content\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Search\Common\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $fieldRegistryMock;
 
     /**
-     * @return \eZ\Publish\Core\Search\Solr\Content\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Search\Common\FieldRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function getFieldRegistryMock()
     {
         if ( !isset( $this->fieldRegistryMock ) )
         {
             $this->fieldRegistryMock = $this->getMock(
-                "eZ\\Publish\\Core\\Search\\Solr\\Content\\FieldRegistry"
+                "eZ\\Publish\\Core\\Search\\Common\\FieldRegistry"
             );
         }
 
