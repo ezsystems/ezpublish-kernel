@@ -7,14 +7,14 @@
  */
 namespace EzSystems\PlatformInstallerBundle\Command;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception\ConnectionException;
-use EzSystems\PlatformInstallerBundle\Installer\Installer;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class InstallPlatformCommand extends ContainerAwareCommand
+class InstallPlatformCommand extends Command
 {
     /** @var \Doctrine\DBAL\Connection */
     private $db;
@@ -22,17 +22,30 @@ class InstallPlatformCommand extends ContainerAwareCommand
     /** @var \Symfony\Component\Console\Output\OutputInterface */
     private $output;
 
+    /** @var \EzSystems\PlatformInstallerBundle\Installer\Installer[] */
+    private $installers = array();
+
     const EXIT_DATABASE_NOT_FOUND_ERROR = 3;
     const EXIT_GENERAL_DATABASE_ERROR = 4;
     const EXIT_PARAMETERS_NOT_FOUND = 5;
     const EXIT_UNKNOWN_INSTALL_TYPE = 6;
     const EXIT_MISSING_PERMISSIONS = 7;
 
+    public function __construct( Connection $db, array $installers )
+    {
+        $this->db = $db;
+        $this->installers = $installers;
+        parent::__construct();
+    }
+
     protected function configure()
     {
         $this->setName( 'ezplatform:install' );
-
-        $this->addArgument( 'type', InputArgument::REQUIRED, "The type of install" );
+        $this->addArgument(
+            'type',
+            InputArgument::REQUIRED,
+            "The type of install. Available options: " . implode( ', ', array_keys( $this->installers ) )
+        );
     }
 
     protected function execute( InputInterface $input, OutputInterface $output )
@@ -46,8 +59,8 @@ class InstallPlatformCommand extends ContainerAwareCommand
         $installer = $this->getInstaller( $type );
         if ( $installer === false )
         {
-                $output->writeln( "Unknown install type '$type'" );
-                exit( self::EXIT_UNKNOWN_INSTALL_TYPE );
+            $output->writeln( "Unknown install type '$type'" );
+            exit( self::EXIT_UNKNOWN_INSTALL_TYPE );
         }
 
         $installer->setOutput( $output );
@@ -82,7 +95,6 @@ class InstallPlatformCommand extends ContainerAwareCommand
      */
     private function configuredDatabaseExists()
     {
-        $this->db = $this->getContainer()->get( 'database_connection' );
         try
         {
             $this->db->connect();
@@ -124,26 +136,17 @@ class InstallPlatformCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return array
-     */
-    private function getAvailableInstallers()
-    {
-        return array_keys( $this->getContainer()->getParameter( 'ezplatform.installers' ) );
-    }
-
-    /**
      * @param $type
      *
      * @return \EzSystems\PlatformInstallerBundle\Installer\Installer
      */
     private function getInstaller( $type )
     {
-        $installers = $this->getContainer()->getParameter( 'ezplatform.installers' );
-        if ( !isset( $installers[$type] ) )
+        if ( !isset( $this->installers[$type] ) )
         {
             return false;
         }
 
-        return $this->getContainer()->get( $installers[$type] );
+        return $this->installers[$type];
     }
 }

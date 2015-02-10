@@ -19,6 +19,12 @@ class InstallerTagPass implements CompilerPassInterface
 {
     public function process( ContainerBuilder $container )
     {
+        if ( !$container->hasDefinition( 'ezplatform.installer.install_command' ) )
+        {
+            return;
+        }
+
+        $installCommandDef = $container->findDefinition( 'ezplatform.installer.install_command' );
         $installers = [];
 
         foreach ( $container->findTaggedServiceIds( 'ezplatform.installer' ) as $id => $tags )
@@ -26,17 +32,14 @@ class InstallerTagPass implements CompilerPassInterface
             foreach ( $tags as $tag )
             {
                 if ( !isset( $tag['type'] ) )
+                {
                     throw new \LogicException( "ezplatform.installer service tag needs a 'type' attribute to identify the installer. None given for $id." );
+                }
 
-                $installers[$tag['type']] = $id;
+                $installers[$tag['type']] = new Reference( $id );
             }
         }
 
-        if ( count( $installers ) == 0 )
-        {
-            return;
-        }
-
-        $container->setParameter( 'ezplatform.installers', $installers );
+        $installCommandDef->replaceArgument( 1, $installers );
     }
 }
