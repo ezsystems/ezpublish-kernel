@@ -72,9 +72,11 @@ class RequestEventListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' ) ?: '/';
+        $isLegacyMode = $this->configResolver->getParameter( 'legacy_mode', 'ezsettings' );
         if (
             $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST
             && $semanticPathinfo === '/'
+            && !$isLegacyMode
         )
         {
             $indexPage = $this->configResolver->getParameter( 'index_page' );
