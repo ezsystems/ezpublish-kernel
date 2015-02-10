@@ -14,4 +14,6 @@ interface Installer
     public function importData();
 
     public function createConfiguration();
+
+    public function importBinaries();
 }

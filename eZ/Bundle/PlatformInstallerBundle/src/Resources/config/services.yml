@@ -2,6 +2,7 @@ parameters:
     ezplatform.installer.db_based_installer.class: EzSystems\PlatformInstallerBundle\Installer\DbBasedInstaller
     ezplatform.installer.clean_installer.class: EzSystems\PlatformInstallerBundle\Installer\CleanInstaller
     ezplatform.installer.democlean_installer.class: EzSystems\PlatformInstallerBundle\Installer\DemoCleanInstaller
+    ezplatform.installer.demo_installer.class: EzSystems\PlatformInstallerBundle\Installer\DemoInstaller
 
 services:
     ezplatform.installer.db_based_installer:
@@ -15,4 +16,8 @@ services:
 
     ezplatform.installer.clean_installer:
         class: %ezplatform.installer.clean_installer.class%
+        parent: ezplatform.installer.db_based_installer
+
+    ezplatform.installer.demo_installer:
+        class: %ezplatform.installer.demo_installer.class%
         parent: ezplatform.installer.db_based_installer

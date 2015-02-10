@@ -30,7 +30,7 @@ class InstallPlatformCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName( 'ezplatform:install' );
-        $this->addArgument( 'type', InputArgument::REQUIRED, "The type of install, one of: clean, demo-clean" );
+        $this->addArgument( 'type', InputArgument::REQUIRED, "The type of install, one of: clean, demo-clean or demo" );
     }
 
     protected function execute( InputInterface $input, OutputInterface $output )
@@ -45,6 +45,9 @@ class InstallPlatformCommand extends ContainerAwareCommand
             case 'clean':
                 $installer = $this->getContainer()->get( 'ezplatform.installer.clean_installer' );
                 break;
+            case 'demo':
+                $installer = $this->getContainer()->get( 'ezplatform.installer.demo_installer' );
+                break;
             case 'demo-clean':
                 $installer = $this->getContainer()->get( 'ezplatform.installer.democlean_installer' );
                 break;
@@ -58,6 +61,7 @@ class InstallPlatformCommand extends ContainerAwareCommand
         $installer->createConfiguration();
         $installer->importSchema();
         $installer->importData();
+        $installer->importBinaries();
     }
 
     private function checkPermissions()

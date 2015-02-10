@@ -40,4 +40,8 @@ class DemoCleanInstaller extends DbBasedInstaller implements Installer
             'ezpublish/config/ezpublish_prod.yml'
         );
     }
+
+    public function importBinaries()
+    {
+    }
 }

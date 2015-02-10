@@ -9,12 +9,26 @@ namespace EzSystems\PlatformInstallerBundle\Installer;
 
 use Symfony\Component\Filesystem\Filesystem;
 
-class CleanInstaller extends DbBasedInstaller implements Installer
+class DemoInstaller extends DbBasedInstaller implements Installer
 {
+    public function importSchema()
+    {
+        $this->runQueriesFromFile(
+            'vendor/ezsystems/ezpublish-kernel/data/mysql/schema.sql'
+        );
+    }
+
+    public function importData()
+    {
+        $this->runQueriesFromFile(
+            'vendor/ezsystems/ezpublish-kernel/data/demo_data.sql'
+        );
+    }
+
     public function createConfiguration()
     {
         $this->copyConfigurationFile(
-            __DIR__ . '/../Resources/config_templates/clean/ezpublish.yml',
+            __DIR__ . '/../Resources/config_templates/demo/ezpublish.yml',
             'ezpublish/config/ezpublish.yml'
         );
 
@@ -29,21 +43,14 @@ class CleanInstaller extends DbBasedInstaller implements Installer
         );
     }
 
-    public function importSchema()
-    {
-        $this->runQueriesFromFile(
-            'vendor/ezsystems/ezpublish-kernel/data/mysql/schema.sql'
-        );
-    }
-
-    public function importData()
-    {
-        $this->runQueriesFromFile(
-            'vendor/ezsystems/ezpublish-kernel/data/cleandata.sql'
-        );
-    }
-
     public function importBinaries()
     {
+        $this->output->writeln( "Copying storage directory contents..." );
+        $fs = new Filesystem();
+        $fs->mkdir( 'web/var/ezdemo_site' );
+        $fs->mirror(
+            __DIR__ . '/../Resources/var-ezdemo_site-storage',
+            'web/var/ezdemo_site/storage'
+        );
     }
 }
