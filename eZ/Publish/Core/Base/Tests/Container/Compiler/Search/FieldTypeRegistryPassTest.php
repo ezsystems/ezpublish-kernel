@@ -20,7 +20,7 @@ class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->setDefinition( 'ezpublish.search.field_registry', new Definition() );
+        $this->setDefinition( 'ezpublish.search.common.field_registry', new Definition() );
     }
 
     /**
@@ -45,7 +45,7 @@ class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.search.field_registry',
+            'ezpublish.search.common.field_registry',
             'registerType',
             array( $fieldTypeIdentifier, new Reference( $serviceId ) )
         );
@@ -65,7 +65,7 @@ class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
-            'ezpublish.search.field_registry',
+            'ezpublish.search.common.field_registry',
             'registerType',
             array( $fieldTypeIdentifier, new Reference( $serviceId ) )
         );

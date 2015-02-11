@@ -13,7 +13,7 @@ use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor\FieldBase;
 use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
 
 /**
  * Visits the MapLocationDistance sort clause
@@ -28,14 +28,14 @@ class MapLocationDistance extends FieldBase
     protected $fieldName;
 
     /**
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      * @param string $fieldName
      */
-    public function __construct( FieldMap $fieldMap, $fieldName )
+    public function __construct( FieldNameResolver $fieldNameResolver, $fieldName )
     {
         $this->fieldName = $fieldName;
 
-        parent::__construct( $fieldMap );
+        parent::__construct( $fieldNameResolver );
     }
 
     /**

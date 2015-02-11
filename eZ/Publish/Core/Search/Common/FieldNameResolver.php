@@ -1,27 +1,25 @@
 <?php
 /**
- * File containing the Elasticsearch FieldMap class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Elasticsearch\Content;
+namespace eZ\Publish\Core\Search\Common;
 
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
-use eZ\Publish\Core\Search\Common\FieldRegistry;
-use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use RuntimeException;
 
 /**
- * Provides field mapping information for criteria and sort clauses
+ * Provides search backend field name resolving for criteria and sort clauses
  * targeting Content fields.
  */
-class FieldMap
+class FieldNameResolver
 {
     /**
      * Field registry
@@ -45,14 +43,7 @@ class FieldMap
     protected $nameGenerator;
 
     /**
-     * Available field types
-     *
-     * @var array
-     */
-    protected $fieldTypes;
-
-    /**
-     * Create from content type handler and field registry
+     * Create from search field registry, content type handler and field name generator
      *
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
@@ -88,8 +79,7 @@ class FieldMap
      */
     protected function getFieldMap()
     {
-        // @TODO: temp fixed by disabling caching, see https://jira.ez.no/browse/EZP-22834
-        $this->fieldTypes = array();
+        $fieldTypes = [];
 
         foreach ( $this->contentTypeHandler->loadAllGroups() as $group )
         {
@@ -102,17 +92,17 @@ class FieldMap
                         continue;
                     }
 
-                    $this->fieldTypes[$contentType->identifier][$fieldDefinition->identifier] =
+                    $fieldTypes[$contentType->identifier][$fieldDefinition->identifier] =
                         $fieldDefinition->fieldType;
                 }
             }
         }
 
-        return $this->fieldTypes;
+        return $fieldTypes;
     }
 
     /**
-     * For the given parameters returns a set of index storage field names to search on.
+     * For the given parameters returns a set of search backend field names to search on.
      *
      * The method will check for custom fields if given $criterion implements
      * CustomFieldInterface. With optional parameters $fieldTypeIdentifier and
@@ -124,8 +114,8 @@ class FieldMap
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param string $fieldDefinitionIdentifier
-     * @param string $fieldTypeIdentifier
-     * @param string $name
+     * @param null|string $fieldTypeIdentifier
+     * @param null|string $name
      *
      * @return array
      */
@@ -137,7 +127,7 @@ class FieldMap
     )
     {
         $fieldMap = $this->getFieldMap();
-        $fieldNames = array();
+        $fieldNames = [];
 
         foreach ( $fieldMap as $contentTypeIdentifier => $fieldIdentifierMap )
         {
@@ -169,7 +159,7 @@ class FieldMap
     }
 
     /**
-     * For the given parameters returns index storage field name to sort on or
+     * For the given parameters returns search backend field name to sort on or
      * null if the field could not be found.
      *
      * The method will check for custom fields if given $sortClause implements
@@ -184,7 +174,7 @@ class FieldMap
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param string $contentTypeIdentifier
      * @param string $fieldDefinitionIdentifier
-     * @param string $name
+     * @param null|string $name
      *
      * @return null|string
      */
@@ -221,7 +211,7 @@ class FieldMap
      * @param string $fieldTypeIdentifier
      * @param string $name
      *
-     * @return mixed|string
+     * @return string
      */
     public function getIndexFieldName(
         $criterionOrSortClause,

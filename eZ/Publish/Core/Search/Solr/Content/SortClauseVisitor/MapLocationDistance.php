@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 
 use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\Core\Search\Solr\Content\FieldMap;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -30,19 +30,19 @@ class MapLocationDistance extends SortClauseVisitor
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Search\Solr\Content\FieldMap
+     * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
-    protected $fieldMap;
+    protected $fieldNameResolver;
 
     /**
      * Create from field map and field name
      *
-     * @param \eZ\Publish\Core\Search\Solr\Content\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      * @param string $fieldName
      */
-    public function __construct( FieldMap $fieldMap, $fieldName )
+    public function __construct( FieldNameResolver $fieldNameResolver, $fieldName )
     {
-        $this->fieldMap = $fieldMap;
+        $this->fieldNameResolver = $fieldNameResolver;
         $this->fieldName = $fieldName;
     }
 
@@ -63,7 +63,7 @@ class MapLocationDistance extends SortClauseVisitor
         $name = null
     )
     {
-        return $this->fieldMap->getSortFieldName(
+        return $this->fieldNameResolver->getSortFieldName(
             $sortClause,
             $contentTypeIdentifier,
             $fieldDefinitionIdentifier,

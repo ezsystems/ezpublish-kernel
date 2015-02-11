@@ -26,12 +26,12 @@ class FieldRegistryPass implements CompilerPassInterface
      */
     public function process( ContainerBuilder $container )
     {
-        if ( !$container->hasDefinition( 'ezpublish.search.field_registry' ) )
+        if ( !$container->hasDefinition( 'ezpublish.search.common.field_registry' ) )
         {
             return;
         }
 
-        $fieldRegistryDefinition = $container->getDefinition( 'ezpublish.search.field_registry' );
+        $fieldRegistryDefinition = $container->getDefinition( 'ezpublish.search.common.field_registry' );
 
         foreach ( $container->findTaggedServiceIds( 'ezpublish.fieldType.indexable' ) as $id => $attributes )
         {

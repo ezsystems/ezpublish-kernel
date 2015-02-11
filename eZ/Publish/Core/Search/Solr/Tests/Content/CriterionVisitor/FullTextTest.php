@@ -22,15 +22,15 @@ class FullTextTest extends TestCase
 {
     protected function getFullTextCriterionVisitor( array $fieldNames = array() )
     {
-        $fieldMap = $this->getMock(
-            '\\eZ\\Publish\\Core\\Search\\Solr\\Content\\FieldMap',
+        $fieldNameResolver = $this->getMock(
+            '\\eZ\\Publish\\Core\\Search\\Common\\FieldNameResolver',
             array( 'getFieldNames' ),
             array(),
             '',
             false
         );
 
-        $fieldMap
+        $fieldNameResolver
             ->expects( $this->any() )
             ->method( 'getFieldNames' )
             ->with(
@@ -41,7 +41,7 @@ class FullTextTest extends TestCase
                 $this->returnValue( $fieldNames )
             );
 
-        return new CriterionVisitor\FullText( $fieldMap );
+        return new CriterionVisitor\FullText( $fieldNameResolver );
     }
 
     public function testVisitSimple()

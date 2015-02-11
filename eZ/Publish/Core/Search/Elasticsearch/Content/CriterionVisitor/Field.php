@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap;
+use eZ\Publish\Core\Search\Common\FieldNameResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
@@ -21,18 +21,18 @@ abstract class Field extends FieldFilterBase
     /**
      * Field map
      *
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap
+     * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
-    protected $fieldMap;
+    protected $fieldNameResolver;
 
     /**
-     * Create from FieldMap
+     * Create from FieldNameResolver
      *
-     * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FieldMap $fieldMap
+     * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      */
-    public function __construct( FieldMap $fieldMap )
+    public function __construct( FieldNameResolver $fieldNameResolver )
     {
-        $this->fieldMap = $fieldMap;
+        $this->fieldNameResolver = $fieldNameResolver;
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class Field extends FieldFilterBase
         $name = null
     )
     {
-        return $this->fieldMap->getFieldNames(
+        return $this->fieldNameResolver->getFieldNames(
             $criterion,
             $fieldDefinitionIdentifier,
             $fieldTypeIdentifier,
