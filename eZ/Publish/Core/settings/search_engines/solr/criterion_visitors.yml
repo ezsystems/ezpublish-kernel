@@ -177,7 +177,7 @@ services:
     ezpublish.search.solr.content.criterion_visitor.full_text:
         class: %ezpublish.search.solr.content.criterion_visitor.full_text.class%
         arguments:
-            - @ezpublish.search.field_name_resolver
+            - @ezpublish.search.common.field_name_resolver
         tags:
             - {name: ezpublish.search.solr.content.criterion_visitor}
 
@@ -189,7 +189,7 @@ services:
     ezpublish.search.solr.content.criterion_visitor.map_location_distance_in:
         class: %ezpublish.search.solr.content.criterion_visitor.map_location_distance_in.class%
         arguments:
-            - @ezpublish.search.field_name_resolver
+            - @ezpublish.search.common.field_name_resolver
             - 'ezgmaplocation'
             - 'value_location'
         tags:
@@ -198,7 +198,7 @@ services:
     ezpublish.search.solr.content.criterion_visitor.map_location_distance_range:
         class: %ezpublish.search.solr.content.criterion_visitor.map_location_distance_range.class%
         arguments:
-            - @ezpublish.search.field_name_resolver
+            - @ezpublish.search.common.field_name_resolver
             - 'ezgmaplocation'
             - 'value_location'
         tags:
@@ -207,14 +207,14 @@ services:
     ezpublish.search.solr.content.criterion_visitor.field_in:
         class: %ezpublish.search.solr.content.criterion_visitor.field_in.class%
         arguments:
-            - @ezpublish.search.field_name_resolver
+            - @ezpublish.search.common.field_name_resolver
         tags:
             - {name: ezpublish.search.solr.content.criterion_visitor}
 
     ezpublish.search.solr.content.criterion_visitor.field_range:
         class: %ezpublish.search.solr.content.criterion_visitor.field_range.class%
         arguments:
-            - @ezpublish.search.field_name_resolver
+            - @ezpublish.search.common.field_name_resolver
         tags:
             - {name: ezpublish.search.solr.content.criterion_visitor}
 
@@ -376,20 +376,20 @@ services:
     ezpublish.search.solr.location.criterion_visitor.field_in:
         class: %ezpublish.search.solr.location.criterion_visitor.field_in.class%
         arguments:
-            - @ezpublish.search.field_name_resolver
+            - @ezpublish.search.common.field_name_resolver
         tags:
             - {name: ezpublish.search.solr.location.criterion_visitor}
 
     ezpublish.search.solr.location.criterion_visitor.field_range:
         class: %ezpublish.search.solr.location.criterion_visitor.field_range.class%
         arguments:
-            - @ezpublish.search.field_name_resolver
+            - @ezpublish.search.common.field_name_resolver
         tags:
             - {name: ezpublish.search.solr.location.criterion_visitor}
 
     ezpublish.search.solr.location.criterion_visitor.full_text:
         class: %ezpublish.search.solr.location.criterion_visitor.full_text.class%
         arguments:
-            - @ezpublish.search.field_name_resolver
+            - @ezpublish.search.common.field_name_resolver
         tags:
             - {name: ezpublish.search.solr.location.criterion_visitor}
