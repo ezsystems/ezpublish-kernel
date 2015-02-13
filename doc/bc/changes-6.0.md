@@ -43,6 +43,10 @@ Changes affecting version compatibility with former or future versions.
   Move your setting to `ez_publish_legacy` instead.
 
 * Legacy has been moved to its own package
-  Everything about legacy (`eZ/Publish/Core/MVC/Legacy` and `eZ/Bundle/EzPublishLegacyBundle` have been removed from
+  Everything about legacy (`eZ/Publish/Core/MVC`;:/Legacy` and `eZ/Bundle/EzPublishLegacyBundle` have been removed from
   ezpublish-kernel, and moved to their own package, `ezsystems/legacy-bridge`. The namespaces haven't been changed.
   If you rely on classes from those namespaces, please update your composer.json files to include this package as well.
+
+* eZ Publish Legacy isn't included by default anymore
+  The legacy-bridge requirement introduced in this version isn't included by default. The legacy application, as well
+  as the related bundle, libraries and configuration, are no longer shipped by default.
