@@ -92,7 +92,7 @@ ________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\___________
 
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
-<options=underscore>You may now either install legacy-bridge to use eZ Publish and it\'s SetupWizard with eZ Platform, or for staying pure eZ Platform use a install command.</options=underscore>
+<options=underscore>You may now either install legacy-bridge to use eZ Publish and the SetupWizard with eZ Platform, or for staying pure eZ Platform use a install command.</options=underscore>
 
 A. Installing eZ Platform purely using command:
 <comment>    $ php ezpublish/console ezplatform:install clean</comment>
