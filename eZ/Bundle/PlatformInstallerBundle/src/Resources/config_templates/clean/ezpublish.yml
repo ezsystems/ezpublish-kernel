@@ -1,0 +1,52 @@
+# Stash is used for persistence cache
+stash:
+    caches:
+        default:
+            drivers:
+                # When using multiple webservers, you must use Memcache or Redis
+                - FileSystem
+            inMemory: true
+            registerDoctrineAdapter: false
+            # On Windows, using FileSystem, to avoid hitting filesystem limitations
+            # you need to change the keyHashFunction used to generate cache directories to "crc32"
+            # FileSystem
+            #    keyHashFunction: crc32
+
+ezpublish:
+    # Define all your repositories here
+    # If you use multi-site with multiple databases, you shall define multiple repositories
+    repositories:
+        # "main" repository, with default values
+        # Same as:
+        # main: { engine: legacy, connection: default }
+        main: ~
+
+    siteaccess:
+        # Available siteaccesses
+        list:
+            - default
+        # Siteaccess groups. Use them to group common settings.
+        groups:
+            site_group: [site]
+        default_siteaccess: site
+        match:
+            URIElement: 1
+
+    imagemagick:
+        enabled: false
+
+    # System settings, grouped by siteaccess and/or siteaccess group
+    system:
+        site_group:
+            # The repository to use. Here "main", which is defined in "repositories" above.
+            repository: main
+            languages: [eng-GB]
+            session:
+                name: MyFrontendSessionName
+        default:
+            content:
+                view_cache: true
+                ttl_cache: true
+                # TTL cache (http) in seconds
+                # Note that Http cache for a given content is always invalidated when publishing that content
+                default_ttl: 300

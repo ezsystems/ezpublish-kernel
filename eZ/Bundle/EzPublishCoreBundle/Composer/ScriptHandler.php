@@ -68,4 +68,43 @@ class ScriptHandler extends DistributionBundleScriptHandler
         $event->getIO()->write( '    php ezpublish/console assetic:dump --env=prod web' );
         $event->getIO()->write( '' );
     }
+
+    /**
+     * Just dump welcome text on how to install eZ Platform
+     *
+     * @param $event CommandEvent A instance
+     */
+    public static function installWelcomeText( CommandEvent $event )
+    {
+        $event->getIO()->write(
+<<<'EOT'
+
+________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\________________________________________/\\\\\_________________________________________________
+ ________________\////////////\\\____________\/\\\/////////\\\_\////\\\______________________________________/\\\///__________________________________________________
+  __________________________/\\\/_____________\/\\\_______\/\\\____\/\\\_______________________/\\\__________/\\\______________________________________________________
+   _____/\\\\\\\\__________/\\\/_______________\/\\\\\\\\\\\\\/_____\/\\\_____/\\\\\\\\\_____/\\\\\\\\\\\__/\\\\\\\\\_______/\\\\\_____/\\/\\\\\\\_____/\\\\\__/\\\\\___
+    ___/\\\/////\\\_______/\\\/_________________\/\\\/////////_______\/\\\____\////////\\\___\////\\\////__\////\\\//______/\\\///\\\__\/\\\/////\\\__/\\\///\\\\\///\\\_
+     __/\\\\\\\\\\\______/\\\/___________________\/\\\________________\/\\\______/\\\\\\\\\\_____\/\\\_________\/\\\_______/\\\__\//\\\_\/\\\___\///__\/\\\_\//\\\__\/\\\_
+      _\//\\///////_____/\\\/_____________________\/\\\________________\/\\\_____/\\\/////\\\_____\/\\\_/\\_____\/\\\______\//\\\__/\\\__\/\\\_________\/\\\__\/\\\__\/\\\_
+       __\//\\\\\\\\\\__/\\\\\\\\\\\\\\\___________\/\\\______________/\\\\\\\\\_\//\\\\\\\\/\\____\//\\\\\______\/\\\_______\///\\\\\/___\/\\\_________\/\\\__\/\\\__\/\\\_
+        ___\//////////__\///////////////____________\///______________\/////////___\////////\//______\/////_______\///__________\/////_____\///__________\///___\///___\///__
+
+
+<fg=cyan>Welcome to eZ Platform!</fg=cyan>
+
+<options=underscore>You may now either install legacy-bridge to use eZ Publish and it\'s SetupWizard with eZ Platform, or for staying pure eZ Platform use a install command.</options=underscore>
+
+A. Installing eZ Platform purely using command:
+<comment>    $ php ezpublish/console ezplatform:install clean</comment>
+
+B. Installing legacy bridge to use eZ Publish is done in following way:
+<comment>    $ php composer.phar require ezsystems/legacy-bridge:~2015.01</comment>
+
+<options=underscore>After executing one, or both of those. You can launch your browser* and get started on your publishing journey!</options=underscore>
+
+
+* Assuming you have configured your web server (Apache/Nginx) correctly
+EOT
+        );
+    }
 }

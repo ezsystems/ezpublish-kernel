@@ -52,6 +52,9 @@
         "zendframework/zend-stdlib": ">=2.3"
     },
     "autoload": {
+        "psr-4": {
+            "EzSystems\\PlatformInstallerBundle\\": "eZ/Bundle/PlatformInstallerBundle/src"
+        },
         "psr-0": {
             "eZ": ""
         }

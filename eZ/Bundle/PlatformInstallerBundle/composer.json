@@ -1,0 +1,16 @@
+{
+    "name": "ezsystems/platform-installer",
+    "description": "eZ Platform installer",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "eZ Systems dev team",
+            "email": "dev-team@ez.no"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": { "EzSystems\\PlatformInstaller\\": "src/" }
+    }
+}
