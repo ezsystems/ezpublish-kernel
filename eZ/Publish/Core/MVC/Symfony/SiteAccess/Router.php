@@ -15,7 +15,7 @@ use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
 use Psr\Log\LoggerInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\CompoundInterface;
 use InvalidArgumentException;
-use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host as MapURIMatcher;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\URI as MapURIMatcher;
 
 class Router implements SiteAccessRouterInterface, SiteAccessAware
 {
