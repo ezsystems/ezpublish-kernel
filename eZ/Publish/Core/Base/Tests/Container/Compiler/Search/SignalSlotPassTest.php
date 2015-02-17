@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage;
+namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Search;
 
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;

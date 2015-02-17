@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Storage\Legacy;
+namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Search\Legacy;
 
 use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\SortClauseConverterPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
