@@ -376,16 +376,16 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getFieldMap
      */
-    public function getFieldMap()
+    public function getFieldMap( $legacy = false )
     {
-        $cache = $this->cache->getItem( 'fieldMap' );
+        $cache = $this->cache->getItem( 'fieldMap', (int)$legacy );
 
         $fieldMap = $cache->get();
 
         if ( $cache->isMiss() )
         {
             $this->logger->logCall( __METHOD__ );
-            $fieldMap = $this->persistenceHandler->contentTypeHandler()->getFieldMap();
+            $fieldMap = $this->persistenceHandler->contentTypeHandler()->getFieldMap( $legacy );
             $cache->set( $fieldMap );
         }
 

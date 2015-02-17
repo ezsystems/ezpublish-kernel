@@ -623,15 +623,24 @@ class Handler implements BaseContentTypeHandler
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getFieldMap
      */
-    public function getFieldMap()
+    public function getFieldMap( $legacy = false )
     {
         $fieldMap = [];
-        $rows = $this->contentTypeGateway->getFieldMapData();
+        $rows = $this->contentTypeGateway->getFieldMapData( $legacy );
+
+        if ( $legacy )
+        {
+            $fieldKey = "field_definition_id";
+        }
+        else
+        {
+            $fieldKey = "field_type_identifier";
+        }
 
         foreach ( $rows as $row )
         {
             $fieldMap[$row["content_type_identifier"]][$row["field_definition_identifier"]] =
-                $row["field_type_identifier"];
+                $row[$fieldKey];
         }
 
         return $fieldMap;

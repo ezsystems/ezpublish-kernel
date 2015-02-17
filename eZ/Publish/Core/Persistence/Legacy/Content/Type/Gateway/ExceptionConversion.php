@@ -708,11 +708,11 @@ class ExceptionConversion extends Gateway
      *
      * @return array
      */
-    public function getFieldMapData()
+    public function getFieldMapData( $legacy = false )
     {
         try
         {
-            return $this->innerGateway->getFieldMapData();
+            return $this->innerGateway->getFieldMapData( $legacy );
         }
         catch ( DBALException $e )
         {

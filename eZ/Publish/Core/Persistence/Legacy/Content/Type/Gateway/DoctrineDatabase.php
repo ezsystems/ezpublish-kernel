@@ -1378,15 +1378,11 @@ class DoctrineDatabase extends Gateway
      *
      * @return array
      */
-    public function getFieldMapData()
+    public function getFieldMapData( $legacy = false )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query
             ->select(
-                $this->dbHandler->alias(
-                    $this->dbHandler->quoteColumn( "data_type_string", "ezcontentclass_attribute" ),
-                    $this->dbHandler->quoteIdentifier( "field_type_identifier" )
-                ),
                 $this->dbHandler->alias(
                     $this->dbHandler->quoteColumn( "identifier", "ezcontentclass_attribute" ),
                     $this->dbHandler->quoteIdentifier( "field_definition_identifier" )
@@ -1411,6 +1407,25 @@ class DoctrineDatabase extends Gateway
                     $query->bindValue( 1, null, PDO::PARAM_INT )
                 )
             );
+
+        if ( $legacy )
+        {
+            $query->select(
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "id", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteIdentifier( "field_definition_id" )
+                )
+            );
+        }
+        else
+        {
+            $query->select(
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "data_type_string", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteIdentifier( "field_type_identifier" )
+                )
+            );
+        }
 
         $statement = $query->prepare( $query );
         $statement->execute();

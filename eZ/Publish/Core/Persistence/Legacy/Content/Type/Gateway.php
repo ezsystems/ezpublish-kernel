@@ -309,5 +309,5 @@ abstract class Gateway
      *
      * @return array
      */
-    abstract public function getFieldMapData();
+    abstract public function getFieldMapData( $legacy = false );
 }

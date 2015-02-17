@@ -425,14 +425,14 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getFieldMap
      */
-    public function getFieldMap()
+    public function getFieldMap( $legacy = false )
     {
-        if ( $this->fieldMap !== null )
+        if ( isset( $this->fieldMap[(int)$legacy] ) )
         {
-            return $this->fieldMap;
+            return $this->fieldMap[(int)$legacy];
         }
 
-        return $this->fieldMap = $this->innerHandler->getFieldMap();
+        return $this->fieldMap[(int)$legacy] = $this->innerHandler->getFieldMap( $legacy );
     }
 
     /**
@@ -442,7 +442,6 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function clearCache()
     {
-        $this->groups = $this->contentTypes = $this->fieldDefinitions = array();
-        $this->fieldMap = null;
+        $this->groups = $this->contentTypes = $this->fieldDefinitions = $this->fieldMap = array();
     }
 }
