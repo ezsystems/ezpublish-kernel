@@ -86,9 +86,8 @@ class Relation implements Converter
         // Selection root, location ID
 
         $fieldDef->fieldTypeConstraints->fieldSettings['selectionRoot'] =
-            $storageDef->dataInt2 === 0
-            ? ''
-            : $storageDef->dataInt2;
+            $storageDef->dataInt2
+            ?: 0;
     }
 
     /**
