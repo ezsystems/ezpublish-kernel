@@ -73,7 +73,7 @@ class MapLocationDistance extends FieldBase
         if ( $fieldName === null )
         {
             throw new InvalidArgumentException(
-                "\$sortClause->target",
+                "\$sortClause->targetData",
                 "No searchable fields found for the given sort clause target ".
                 "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
             );

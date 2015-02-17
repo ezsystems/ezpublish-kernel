@@ -292,12 +292,9 @@ abstract class Gateway
     abstract public function publishTypeAndFields( $typeId, $sourceStatus, $targetStatus );
 
     /**
-     * Returns field mapping data
-     *
-     * Returns an associative array with ContentType and FieldDefinition identifiers as
-     * first and second level keys respectively, and FieldDefinition ID as value.
+     * Returns searchable fields mapping data
      *
      * @return array
      */
-    abstract public function getFieldMap();
+    abstract public function getSearchableFieldMapData();
 }

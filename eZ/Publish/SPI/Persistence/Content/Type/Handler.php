@@ -280,4 +280,28 @@ interface Handler
      * @return void
      */
     public function publish( $contentTypeId );
+
+    /**
+     * Returns content type, field definition and field type mapping information
+     * for search engine usage. Only searchable field definitions will be included
+     * in the returned data.
+     *
+     * Returns an array in the form:
+     *
+     * <code>
+     *  array(
+     *      "<ContentType identifier>" => array(
+     *          "<FieldDefinition identifier>" => array(
+     *              "field_definition_id" => "<FieldDefinition id>",
+     *              "field_type_identifier" => "<FieldType identifier>",
+     *          ),
+     *          ...
+     *      ),
+     *      ...
+     *  )
+     * </code>
+     *
+     * @return array
+     */
+    public function getSearchableFieldMap();
 }

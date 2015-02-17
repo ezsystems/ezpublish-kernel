@@ -61,44 +61,28 @@ class FieldNameResolver
     }
 
     /**
-     * Get field type information
+     * Get content type, field definition and field type mapping information
      *
      * Returns an array in the form:
      *
      * <code>
      *  array(
-     *      "content-type-identifier" => array(
-     *          "field-definition-identifier" => "field-type-identifier",
-     *          …
+     *      "<ContentType identifier>" => array(
+     *          "<FieldDefinition identifier>" => array(
+     *              "field_definition_id" => "<FieldDefinition id>",
+     *              "field_type_identifier" => "<FieldType identifier>",
+     *          ),
+     *          ...
      *      ),
-     *      …
+     *      ...
      *  )
      * </code>
      *
      * @return array
      */
-    protected function getFieldMap()
+    protected function getSearchableFieldMap()
     {
-        $fieldTypes = [];
-
-        foreach ( $this->contentTypeHandler->loadAllGroups() as $group )
-        {
-            foreach ( $this->contentTypeHandler->loadContentTypes( $group->id ) as $contentType )
-            {
-                foreach ( $contentType->fieldDefinitions as $fieldDefinition )
-                {
-                    if ( !$fieldDefinition->isSearchable )
-                    {
-                        continue;
-                    }
-
-                    $fieldTypes[$contentType->identifier][$fieldDefinition->identifier] =
-                        $fieldDefinition->fieldType;
-                }
-            }
-        }
-
-        return $fieldTypes;
+        return $this->contentTypeHandler->getSearchableFieldMap();
     }
 
     /**
@@ -126,7 +110,7 @@ class FieldNameResolver
         $name = null
     )
     {
-        $fieldMap = $this->getFieldMap();
+        $fieldMap = $this->getSearchableFieldMap();
         $fieldNames = [];
 
         foreach ( $fieldMap as $contentTypeIdentifier => $fieldIdentifierMap )
@@ -140,7 +124,7 @@ class FieldNameResolver
             // If $fieldTypeIdentifier is given it must match current field definition
             if (
                 $fieldTypeIdentifier !== null &&
-                $fieldTypeIdentifier !== $fieldIdentifierMap[$fieldDefinitionIdentifier]
+                $fieldTypeIdentifier !== $fieldIdentifierMap[$fieldDefinitionIdentifier]["field_type_identifier"]
             )
             {
                 continue;
@@ -150,7 +134,7 @@ class FieldNameResolver
                 $criterion,
                 $contentTypeIdentifier,
                 $fieldDefinitionIdentifier,
-                $fieldIdentifierMap[$fieldDefinitionIdentifier],
+                $fieldIdentifierMap[$fieldDefinitionIdentifier]["field_type_identifier"],
                 $name
             );
         }
@@ -185,7 +169,7 @@ class FieldNameResolver
         $name = null
     )
     {
-        $fieldMap = $this->getFieldMap();
+        $fieldMap = $this->getSearchableFieldMap();
 
         // First check if field exists in type, there is nothing to do if it doesn't
         if ( !isset( $fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier] ) )
@@ -197,7 +181,7 @@ class FieldNameResolver
             $sortClause,
             $contentTypeIdentifier,
             $fieldDefinitionIdentifier,
-            $fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier],
+            $fieldMap[$contentTypeIdentifier][$fieldDefinitionIdentifier]["field_type_identifier"],
             $name
         );
     }

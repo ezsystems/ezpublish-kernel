@@ -11,10 +11,12 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use PDO;
 
 /**
@@ -30,14 +32,28 @@ class MapLocationDistance extends SortClauseHandler
     protected $languageHandler;
 
     /**
+     * Content Type handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
      * Creates a new Field sort clause handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      */
-    public function __construct( DatabaseHandler $dbHandler, LanguageHandler $languageHandler )
+    public function __construct(
+        DatabaseHandler $dbHandler,
+        LanguageHandler $languageHandler,
+        ContentTypeHandler $contentTypeHandler
+    )
     {
         $this->languageHandler = $languageHandler;
+        $this->contentTypeHandler = $contentTypeHandler;
+
         parent::__construct( $dbHandler );
     }
 
@@ -115,15 +131,25 @@ class MapLocationDistance extends SortClauseHandler
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
-     * @param array $fieldMap
      *
      * @return void
      */
-    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number, array $fieldMap )
+    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number )
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
         $fieldTarget = $sortClause->targetData;
-        $fieldDefinitionId = $fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier];
+        $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
+
+        if ( !isset( $fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier]["field_definition_id"] ) )
+        {
+            throw new InvalidArgumentException(
+                "\$sortClause->targetData",
+                "No searchable fields found for the given sort clause target ".
+                "'{$fieldTarget->fieldIdentifier}' on '{$fieldTarget->typeIdentifier}'."
+            );
+        }
+
+        $fieldDefinitionId = $fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier]["field_definition_id"];
         $table = $this->getSortTableName( $number );
         $externalTable = $this->getSortTableName( $number, "ezgmaplocation" );
 

@@ -47,6 +47,7 @@ services:
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.spi.persistence.language_handler
+            - @ezpublish.spi.persistence.content_type_handler
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
@@ -56,6 +57,7 @@ services:
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.spi.persistence.language_handler
+            - @ezpublish.spi.persistence.content_type_handler
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
