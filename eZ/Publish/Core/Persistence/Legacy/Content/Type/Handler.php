@@ -619,4 +619,31 @@ class Handler implements BaseContentTypeHandler
 
         $this->updateHandler->publishNewType( $toType, Type::STATUS_DEFINED );
     }
+
+    /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getFieldMap
+     */
+    public function getFieldMap()
+    {
+        $fieldMap = [];
+
+        foreach ( $this->loadAllGroups() as $group )
+        {
+            foreach ( $this->loadContentTypes( $group->id ) as $contentType )
+            {
+                foreach ( $contentType->fieldDefinitions as $fieldDefinition )
+                {
+                    if ( !$fieldDefinition->isSearchable )
+                    {
+                        continue;
+                    }
+
+                    $fieldMap[$contentType->identifier][$fieldDefinition->identifier] =
+                        $fieldDefinition->fieldType;
+                }
+            }
+        }
+
+        return $fieldMap;
+    }
 }

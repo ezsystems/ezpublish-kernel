@@ -51,6 +51,13 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     protected $fieldDefinitions;
 
     /**
+     * Local in-memory cache for field map in one single request
+     *
+     * @var array
+     */
+    protected $fieldMap;
+
+    /**
      * Creates a new content type handler.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $handler
@@ -416,6 +423,19 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     }
 
     /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getFieldMap
+     */
+    public function getFieldMap()
+    {
+        if ( $this->fieldMap !== null )
+        {
+            return $this->fieldMap;
+        }
+
+        return $this->fieldMap = $this->innerHandler->getFieldMap();
+    }
+
+    /**
      * Clear internal caches
      *
      * @return void
@@ -423,5 +443,6 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     public function clearCache()
     {
         $this->groups = $this->contentTypes = $this->fieldDefinitions = array();
+        $this->fieldMap = null;
     }
 }
