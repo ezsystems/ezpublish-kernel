@@ -92,18 +92,13 @@ ________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\___________
 
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
-<options=underscore>You may now either install legacy-bridge to use eZ Publish and the SetupWizard with eZ Platform, or for staying pure eZ Platform use a install command.</options=underscore>
-
-A. Installing eZ Platform purely using command:
+<options=underscore>You may now complete eZ Platform installation with the following command:</options=underscore>
 <comment>    $ php ezpublish/console ezplatform:install clean</comment>
 
-B. Installing legacy bridge to use eZ Publish is done in following way:
-<comment>    $ php composer.phar require ezsystems/legacy-bridge:~2015.01</comment>
-
-<options=underscore>After executing one, or both of those. You can launch your browser* and get started on your publishing journey!</options=underscore>
+<options=underscore>After executing this, you can launch your browser* and get started.</options=underscore>
 
 
-* Assuming you have configured your web server (Apache/Nginx) correctly
+* Assuming you have configured your web server (Apache/Nginx) correctly (see doc/ folder in eZ Platform <root-directory>)
 EOT
         );
     }
