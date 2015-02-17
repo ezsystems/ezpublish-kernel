@@ -48,7 +48,7 @@ services:
     ezpublish.search.elasticsearch.content.criterion_visitor.content_type_identifier_in:
         class: %ezpublish.search.elasticsearch.content.criterion_visitor.content_type_identifier_in.class%
         arguments:
-            - @ezpublish.spi.persistence.legacy.content_type.handler
+            - @ezpublish.spi.persistence.content_type_handler
         tags:
             - {name: ezpublish.search.elasticsearch.content.criterion_visitor}
 
