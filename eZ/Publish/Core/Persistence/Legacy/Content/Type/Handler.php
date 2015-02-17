@@ -626,22 +626,12 @@ class Handler implements BaseContentTypeHandler
     public function getFieldMap()
     {
         $fieldMap = [];
+        $rows = $this->contentTypeGateway->getFieldMapData();
 
-        foreach ( $this->loadAllGroups() as $group )
+        foreach ( $rows as $row )
         {
-            foreach ( $this->loadContentTypes( $group->id ) as $contentType )
-            {
-                foreach ( $contentType->fieldDefinitions as $fieldDefinition )
-                {
-                    if ( !$fieldDefinition->isSearchable )
-                    {
-                        continue;
-                    }
-
-                    $fieldMap[$contentType->identifier][$fieldDefinition->identifier] =
-                        $fieldDefinition->fieldType;
-                }
-            }
+            $fieldMap[$row["content_type_identifier"]][$row["field_definition_identifier"]] =
+                $row["field_type_identifier"];
         }
 
         return $fieldMap;

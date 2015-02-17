@@ -21,6 +21,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\ValueObject;
 use eZ\Publish\Core\Persistence\Database\Query;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use PDO;
 
 /**
  * Doctrine database based content type gateway.
@@ -1367,5 +1368,53 @@ class DoctrineDatabase extends Gateway
         }
 
         return $map;
+    }
+
+    /**
+     * Returns field mapping data
+     *
+     * Returns an associative array with ContentType and searchable FieldDefinition identifiers as
+     * first and second level keys respectively, and FieldType identifier as value.
+     *
+     * @return array
+     */
+    public function getFieldMapData()
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query
+            ->select(
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "data_type_string", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteIdentifier( "field_type_identifier" )
+                ),
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "identifier", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteIdentifier( "field_definition_identifier" )
+                ),
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "identifier", "ezcontentclass" ),
+                    $this->dbHandler->quoteIdentifier( "content_type_identifier" )
+                )
+            )
+            ->from(
+                $this->dbHandler->quoteTable( "ezcontentclass_attribute" )
+            )
+            ->innerJoin(
+                $this->dbHandler->quoteTable( "ezcontentclass" ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "contentclass_id", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteColumn( "id", "ezcontentclass" )
+                )
+            )->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_searchable", "ezcontentclass_attribute" ),
+                    $query->bindValue( 1, null, PDO::PARAM_INT )
+                )
+            );
+
+        $statement = $query->prepare( $query );
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 }
