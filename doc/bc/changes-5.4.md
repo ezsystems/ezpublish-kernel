@@ -87,6 +87,50 @@ Changes affecting version compatibility with former or future versions.
 * `ViewCaching` legacy setting is now enforced and injected in legacy kernel when booted. This is to avoid persistence/Http
   cache clear not working when publishing content.
 
+* 5.4.2: Search implementations have been refactored out of persistence into own namespace
+
+    Implementations have been moved out of `eZ\Publish\Core\Persistence`
+    namespace into their own namespace at `eZ\Publish\Core\Search`. With that, previously
+    deprecated methods of the main storage handler (implementing
+    `eZ\Publish\SPI\Persistence\Handler` interface) have been removed:
+
+    * `searchHandler()`
+    * `locationSearchHandler()`
+
+    These are now available in the main search handler, implementing
+    new `eZ\Publish\SPI\Search\Handler` interface, as:
+
+    * `contentSearchHandler()` (replaces `searchHandler()`)
+    * `locationSearchHandler()`
+
+    Main search handler can now be retrieved from the service container through
+    `ezpublish.spi.search` service identifier. This service may in future return
+    different implementations of the interface, for example one providing caching
+    or emitting signals for slots. At the moment it is aliased
+    to the concrete implementation of the storage engine, available through
+    `ezpublish.spi.search_engine` service identifier. This is in turn aliased
+    to the Legacy Search Engine, available through `ezpublish.spi.search.legacy` service
+    identifier.
+
+    Legacy Search Engine is at the moment of writing the only officially supported Search Engine.
+
+    With the implementation move, service tags for sort clause, criteria and
+    criteria field value handlers have also changed. Previous service tags:
+
+    * `ezpublish.persistence.legacy.search.gateway.criterion_handler.content`
+    * `ezpublish.persistence.legacy.search.gateway.criterion_handler.location`
+    * `ezpublish.persistence.legacy.search.gateway.criterion_field_value_handler`
+    * `ezpublish.persistence.legacy.search.gateway.sort_clause_handler.content`
+    * `ezpublish.persistence.legacy.search.gateway.sort_clause_handler.location`
+
+    are now changed to the following, respectively:
+
+    * `ezpublish.search.legacy.gateway.criterion_handler.content`
+    * `ezpublish.search.legacy.gateway.criterion_handler.location`
+    * `ezpublish.search.legacy.gateway.criterion_field_value_handler`
+    * `ezpublish.search.legacy.gateway.sort_clause_handler.content`
+    * `ezpublish.search.legacy.gateway.sort_clause_handler.location`
+
 ## Deprecations
 
 * `imagemagick` siteaccess settings are now deprecated. It is mandatory to remove them.
