@@ -62,7 +62,9 @@ class SearchResult extends ValueObject
     /**
      * The total number of searchHits
      *
-     * @var int
+     * `null` if Query->performCount was set to false and search engine avoids search lookup.
+     *
+     * @var int|null
      */
     public $totalCount;
 }

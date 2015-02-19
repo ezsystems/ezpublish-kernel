@@ -826,6 +826,110 @@ class SearchServiceTest extends BaseTest
         );
     }
 
+    public function testFindNoPerformCount()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new Query();
+        $query->performCount = false;
+        $query->query = new Criterion\ContentTypeId(
+            array( 4 )
+        );
+
+        $searchHit = $searchService->findContent( $query );
+
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->assertEquals(
+                null,
+                $searchHit->totalCount
+            );
+        }
+        else
+        {
+            $this->assertEquals(
+                2,
+                $searchHit->totalCount
+            );
+        }
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testFindNoPerformCountException()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) !== 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->markTestSkipped( "Only applicable to Legacy/DB based search" );
+        }
+
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new Query();
+        $query->performCount = false;
+        $query->limit = 0;
+        $query->query = new Criterion\ContentTypeId(
+            array( 4 )
+        );
+
+        $searchService->findContent( $query );
+    }
+
+    public function testFindLocationsNoPerformCount()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new LocationQuery();
+        $query->performCount = false;
+        $query->query = new Criterion\ContentTypeId(
+            array( 4 )
+        );
+
+        $searchHit = $searchService->findLocations( $query );
+
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->assertEquals(
+                null,
+                $searchHit->totalCount
+            );
+        }
+        else
+        {
+            $this->assertEquals(
+                2,
+                $searchHit->totalCount
+            );
+        }
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testFindLocationsNoPerformCountException()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) !== 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            $this->markTestSkipped( "Only applicable to Legacy/DB based search" );
+        }
+
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new LocationQuery();
+        $query->performCount = false;
+        $query->limit = 0;
+        $query->query = new Criterion\ContentTypeId(
+            array( 4 )
+        );
+
+        $searchService->findLocations( $query );
+    }
+
     /**
      * Create test Content with ezcountry field having multiple countries selected.
      *

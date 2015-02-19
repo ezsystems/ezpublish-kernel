@@ -98,7 +98,7 @@ class Handler implements SearchHandlerInterface
         // combine the query with the filter
         $filter = new Criterion\LogicalAnd( array( $query->query, $query->filter ) );
 
-        $data = $this->gateway->find( $filter, $query->offset, $query->limit, $query->sortClauses, null );
+        $data = $this->gateway->find( $filter, $query->offset, $query->limit, $query->sortClauses, null, $query->performCount );
 
         $result = new SearchResult();
         $result->time = microtime( true ) - $start;
@@ -135,12 +135,13 @@ class Handler implements SearchHandlerInterface
         $searchQuery->filter = $filter;
         $searchQuery->query  = new Criterion\MatchAll();
         $searchQuery->offset = 0;
-        $searchQuery->limit  = 1;
+        $searchQuery->limit  = 2;// Because we optimize away the count query below
+        $searchQuery->performCount = true;
         $result = $this->findContent( $searchQuery, $fieldFilters );
 
-        if ( !$result->totalCount )
+        if ( empty( $result->searchHits ) )
             throw new NotFoundException( 'Content', "findSingle() found no content for given \$criterion" );
-        else if ( $result->totalCount > 1 )
+        else if ( isset( $result->searchHits[1] ) )
             throw new InvalidArgumentException( "totalCount", "findSingle() found more then one item for given \$criterion" );
 
         $first = reset( $result->searchHits );
