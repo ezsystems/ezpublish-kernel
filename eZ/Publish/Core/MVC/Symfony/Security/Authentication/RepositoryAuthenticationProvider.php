@@ -52,7 +52,7 @@ class RepositoryAuthenticationProvider extends DaoAuthenticationProvider
         {
             try
             {
-                $apiUser = $this->repository->getUserService()->loadUserByCredentials( $token->getUsername(), $token->getCredentials() );
+                $apiUser = $this->repository->getUserService()->loadUserByCredentials( $user->getAPIUser()->login, $token->getCredentials() );
             }
             catch ( NotFoundException $e )
             {
