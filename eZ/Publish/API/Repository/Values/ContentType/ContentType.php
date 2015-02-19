@@ -26,7 +26,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
- * @property-read boolean $isContainer Determines if the type is allowed to have children
+ * @property-read boolean $isContainer This flag hints to UIs if type may have children or not.
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
  * @property-read boolean $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
@@ -171,7 +171,8 @@ abstract class ContentType extends ValueObject
     protected $nameSchema;
 
     /**
-     * Determines if the type is a container
+     * A flag used to hint if content of this type may have children or not. It is highly recommended to respect this flag and not create/move content below non-containers.
+     * But this flag is not considered as part of the content model and the API will not in any way enforce this flag to be respected.
      *
      * @var boolean
      */
