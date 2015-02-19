@@ -142,54 +142,33 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
             '',
             false
         );
-        $actionA->expects( $this->exactly( 2 ) )
+        $actionA->expects( $this->at( 0 ) )
             ->method( 'apply' )
-            ->with(
-                $this->isInstanceOf(
-                    '\\eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'
-                )
-            );
+            ->with( 11 );
+        $actionA->expects( $this->at( 1 ) )
+            ->method( 'apply' )
+            ->with( 22 );
         $actionB = $this->getMockForAbstractClass(
             '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action',
             array(),
             '',
             false
         );
-        $actionB->expects( $this->exactly( 2 ) )
+        $actionB->expects( $this->at( 0 ) )
             ->method( 'apply' )
-            ->with(
-                $this->isInstanceOf(
-                    '\\eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'
-                )
-            );
+            ->with( 11 );
+        $actionB->expects( $this->at( 1 ) )
+            ->method( 'apply' )
+            ->with( 22 );
 
         $actions = array( $actionA, $actionB );
 
-        $contentInfo = new ContentInfo();
-
-        $result = new SearchResult();
-
-        $hit    = new SearchHit();
-        $hit->valueObject = $contentInfo;
-        $result->searchHits[] = $hit;
-
-        $hit    = new SearchHit();
-        $hit->valueObject = clone $contentInfo;
-        $result->searchHits[] = $hit;
-
-        $this->getSearchHandlerMock()
+        $this->getContentGatewayMock()
             ->expects( $this->once() )
-            ->method( 'findContent' )
-            ->with(
-                $this->equalTo(
-                    new Query(
-                        array(
-                            'filter' => new CriterionContentTypeId( 23 )
-                        )
-                    )
-                )
-            )->will(
-                $this->returnValue( $result )
+            ->method( 'getContentIdsByType' )
+            ->with( 23 )
+            ->will(
+                $this->returnValue( array( 11, 22 ) )
             );
 
         $updater->applyUpdates( 23, $actions );
@@ -274,26 +253,6 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a Search Handler mock
-     *
-     * @return \eZ\Publish\Core\Search\Legacy\Content\Handler
-     */
-    protected function getSearchHandlerMock()
-    {
-        if ( !isset( $this->searchHandlerMock ) )
-        {
-            $this->searchHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Search\\Legacy\\Content\\Handler',
-                array(),
-                array(),
-                '',
-                false
-            );
-        }
-        return $this->searchHandlerMock;
-    }
-
-    /**
      * Returns a Content StorageHandler mock
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
@@ -343,7 +302,6 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
         if ( !isset( $this->contentUpdater ) )
         {
             $this->contentUpdater = new ContentUpdater(
-                $this->getSearchHandlerMock(),
                 $this->getContentGatewayMock(),
                 $this->getConverterRegistryMock(),
                 $this->getContentStorageHandlerMock(),
