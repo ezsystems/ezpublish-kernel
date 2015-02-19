@@ -57,34 +57,8 @@ class RequestEventListener implements EventSubscriberInterface
             KernelEvents::REQUEST => array(
                 array( 'onKernelRequestForward', 10 ),
                 array( 'onKernelRequestRedirect', 0 ),
-                // onKernelRequestIndex needs to be before the router (prio 32)
-                array( 'onKernelRequestIndex', 40 ),
             )
         );
-    }
-
-    /**
-     * Checks if the IndexPage is configured and which page must be shown
-     *
-     * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
-     */
-    public function onKernelRequestIndex( GetResponseEvent $event )
-    {
-        $request = $event->getRequest();
-        $semanticPathinfo = $request->attributes->get( 'semanticPathinfo' ) ?: '/';
-        if (
-            $event->getRequestType() === HttpKernelInterface::MASTER_REQUEST
-            && $semanticPathinfo === '/'
-        )
-        {
-            $indexPage = $this->configResolver->getParameter( 'index_page' );
-            if ( $indexPage !== null )
-            {
-                $indexPage = '/' . ltrim( $indexPage, '/' );
-                $request->attributes->set( 'semanticPathinfo', $indexPage );
-                $request->attributes->set( 'needsForward', true );
-            }
-        }
     }
 
     /**
