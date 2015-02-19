@@ -1967,6 +1967,15 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             isset( $contentVersion2Draft->fields["byline"] ),
             "New field was not added to draft version."
         );
+
+        $this->assertEquals(
+            $contentVersion1Archived->getField( "byline" )->id,
+            $contentVersion1Published->getField( "byline" )->id
+        );
+        $this->assertEquals(
+            $contentVersion1Published->getField( "byline" )->id,
+            $contentVersion2Draft->getField( "byline" )->id
+        );
     }
 
     /**
