@@ -886,4 +886,27 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException( 'Database error', 0, $e );
         }
     }
+
+    /**
+     * Returns all Content IDs for a given $contentTypeId.
+     *
+     * @param int $contentTypeId
+     *
+     * @return int[]
+     */
+    public function getContentIdsByContentTypeId( $contentTypeId )
+    {
+        try
+        {
+            return $this->innerGateway->getContentIdsByContentTypeId( $contentTypeId );
+        }
+        catch ( DBALException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+        catch ( PDOException $e )
+        {
+            throw new RuntimeException( 'Database error', 0, $e );
+        }
+    }
 }
