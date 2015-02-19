@@ -12,6 +12,7 @@ parameters:
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
     ezpublish.siteaccess_listener.routing.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RoutingListener
     ezpublish.request_redirect_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener
+    ezpublish.request_index_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\IndexRequestListener
     ezpublish.siteaccess_match_listener.class: eZ\Publish\Core\MVC\Symfony\EventListener\SiteAccessMatchListener
     ezpublish.route_reference.generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator
     ezpublish.route_reference.listener.language_switch.class: eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener
@@ -93,6 +94,13 @@ services:
             - @router
             - %ezpublish.siteaccess.default%
             - @?logger
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.request_index_listener:
+        class: %ezpublish.request_index_listener.class%
+        arguments:
+            - @ezpublish.config.resolver
         tags:
             - { name: kernel.event_subscriber }
 
