@@ -178,6 +178,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
             // Warm cache
             $this->cache->getItem( 'contentType', $type->id )->set( $type );
             $this->cache->getItem( 'contentType', 'identifier', $type->identifier )->set( $type->id );
+            $this->cache->clear( 'fieldMap' );
         }
 
         return $type;
@@ -201,6 +202,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
 
         // Clear identifier cache in case it was changed before warming the new one
         $this->cache->clear( 'contentType', 'identifier' );
+        $this->cache->clear( 'fieldMap' );
         $this->cache->getItem( 'contentType', 'identifier', $type->identifier )->set( $typeId );
 
         return $type;
@@ -219,6 +221,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
             // Clear type cache and all identifier cache (as we don't know the identifier)
             $this->cache->clear( 'contentType', $typeId );
             $this->cache->clear( 'contentType', 'identifier' );
+            $this->cache->clear( 'fieldMap' );
         }
 
         return $return;
@@ -251,7 +254,10 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $return = $this->persistenceHandler->contentTypeHandler()->unlink( $groupId, $typeId, $status );
 
         if ( $status === Type::STATUS_DEFINED )
+        {
             $this->cache->clear( 'contentType', $typeId );
+            $this->cache->clear( 'fieldMap' );
+        }
 
         return $return;
     }
@@ -265,7 +271,10 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $return = $this->persistenceHandler->contentTypeHandler()->link( $groupId, $typeId, $status );
 
         if ( $status === Type::STATUS_DEFINED )
+        {
             $this->cache->clear( 'contentType', $typeId );
+            $this->cache->clear( 'fieldMap' );
+        }
 
         return $return;
     }
@@ -301,7 +310,10 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         );
 
         if ( $status === Type::STATUS_DEFINED )
+        {
             $this->cache->clear( 'contentType', $typeId );
+            $this->cache->clear( 'fieldMap' );
+        }
 
         return $return;
     }
@@ -319,7 +331,10 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         );
 
         if ( $status === Type::STATUS_DEFINED )
+        {
             $this->cache->clear( 'contentType', $typeId );
+            $this->cache->clear( 'fieldMap' );
+        }
     }
 
     /**
@@ -335,7 +350,10 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         );
 
         if ( $status === Type::STATUS_DEFINED )
+        {
             $this->cache->clear( 'contentType', $typeId );
+            $this->cache->clear( 'fieldMap' );
+        }
     }
 
     /**
@@ -349,8 +367,28 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         // Clear type cache and all identifier cache (as we don't know the identifier)
         $this->cache->clear( 'contentType', $typeId );
         $this->cache->clear( 'contentType', 'identifier' );
+        $this->cache->clear( 'fieldMap' );
 
         // clear content cache
         $this->cache->clear( 'content' );//TIMBER! (possible content changes)
+    }
+
+    /**
+     * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler::getFieldMap
+     */
+    public function getFieldMap( $legacy = false )
+    {
+        $cache = $this->cache->getItem( 'fieldMap', (int)$legacy );
+
+        $fieldMap = $cache->get();
+
+        if ( $cache->isMiss() )
+        {
+            $this->logger->logCall( __METHOD__ );
+            $fieldMap = $this->persistenceHandler->contentTypeHandler()->getFieldMap( $legacy );
+            $cache->set( $fieldMap );
+        }
+
+        return $fieldMap;
     }
 }

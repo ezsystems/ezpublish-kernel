@@ -61,7 +61,7 @@ class FieldNameResolver
     }
 
     /**
-     * Get field type information
+     * Get content type, field definition and field type mapping information
      *
      * Returns an array in the form:
      *
@@ -69,9 +69,9 @@ class FieldNameResolver
      *  array(
      *      "content-type-identifier" => array(
      *          "field-definition-identifier" => "field-type-identifier",
-     *          …
+     *          ...
      *      ),
-     *      …
+     *      ...
      *  )
      * </code>
      *
@@ -79,26 +79,7 @@ class FieldNameResolver
      */
     protected function getFieldMap()
     {
-        $fieldTypes = [];
-
-        foreach ( $this->contentTypeHandler->loadAllGroups() as $group )
-        {
-            foreach ( $this->contentTypeHandler->loadContentTypes( $group->id ) as $contentType )
-            {
-                foreach ( $contentType->fieldDefinitions as $fieldDefinition )
-                {
-                    if ( !$fieldDefinition->isSearchable )
-                    {
-                        continue;
-                    }
-
-                    $fieldTypes[$contentType->identifier][$fieldDefinition->identifier] =
-                        $fieldDefinition->fieldType;
-                }
-            }
-        }
-
-        return $fieldTypes;
+        return $this->contentTypeHandler->getFieldMap();
     }
 
     /**

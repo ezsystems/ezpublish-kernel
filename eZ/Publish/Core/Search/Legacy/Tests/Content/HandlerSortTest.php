@@ -18,6 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
 
 /**
  * Test case for ContentSearchHandler
@@ -90,7 +91,11 @@ class HandlerSortTest extends LanguageAwareTestCase
                         new Content\Common\Gateway\SortClauseHandler\SectionIdentifier( $db ),
                         new Content\Common\Gateway\SortClauseHandler\SectionName( $db ),
                         new Content\Common\Gateway\SortClauseHandler\ContentName( $db ),
-                        new Content\Common\Gateway\SortClauseHandler\Field( $db, $this->getLanguageHandler() ),
+                        new Content\Common\Gateway\SortClauseHandler\Field(
+                            $db,
+                            $this->getLanguageHandler(),
+                            $this->getContentTypeHandler()
+                        ),
                     )
                 ),
                 new ContentTypeGateway(
@@ -99,6 +104,34 @@ class HandlerSortTest extends LanguageAwareTestCase
                 )
             ),
             $this->getContentMapperMock()
+        );
+    }
+
+    protected $contentTypeGateway;
+
+    protected function getContentTypeGateway()
+    {
+        if ( !isset( $this->contentTypeGateway ) )
+        {
+            $this->contentTypeGateway = new ContentTypeGateway(
+                $this->getDatabaseHandler(),
+                $this->getLanguageMaskGenerator()
+            );
+        }
+
+        return $this->contentTypeGateway;
+    }
+
+    protected function getContentTypeHandler()
+    {
+        return new ContentTypeHandler(
+            $this->getContentTypeGateway(),
+            $this->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper" )
+                ->disableOriginalConstructor()
+                ->getMock(),
+            $this->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
+                ->disableOriginalConstructor()
+                ->getMock()
         );
     }
 

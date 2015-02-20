@@ -280,4 +280,23 @@ interface Handler
      * @return void
      */
     public function publish( $contentTypeId );
+
+    /**
+     * Get content type, field definition and field type mapping information
+     *
+     * Returns an array in the form:
+     *
+     * <code>
+     *  array(
+     *      "content-type-identifier" => array(
+     *          "field-definition-identifier" => "field-type-identifier",
+     *          ...
+     *      ),
+     *      ...
+     *  )
+     * </code>
+     *
+     * @return array
+     */
+    public function getFieldMap();
 }

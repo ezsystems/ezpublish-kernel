@@ -674,6 +674,12 @@ class ContentTypeHandlerTest extends HandlerTest
             ->with( 'contentType', 'identifier' )
             ->will( $this->returnValue( true ) );
 
+        $this->cacheMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'clear' )
+            ->with( 'fieldMap' )
+            ->will( $this->returnValue( true ) );
+
         $innerHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
         $this->persistenceHandlerMock
             ->expects( $this->once() )
@@ -707,7 +713,7 @@ class ContentTypeHandlerTest extends HandlerTest
 
         $cacheItemMock2 = $this->getMock( 'Stash\Interfaces\ItemInterface' );
         $this->cacheMock
-            ->expects( $this->at( 2 ) )
+            ->expects( $this->at( 3 ) )
             ->method( 'getItem' )
             ->with( 'contentType', 'identifier', 'forum' )
             ->will( $this->returnValue( $cacheItemMock2 ) );
@@ -884,9 +890,15 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'contentType', 44 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'fieldMap' )
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
@@ -942,9 +954,15 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'contentType', 44 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'fieldMap' )
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
@@ -1026,9 +1044,15 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'contentType', 44 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'fieldMap' )
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
@@ -1092,9 +1116,15 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'contentType', 44 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'fieldMap' )
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
@@ -1158,9 +1188,15 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects( $this->once() )->method( 'logCall' );
         $this->cacheMock
-            ->expects( $this->once() )
+            ->expects( $this->at( 0 ) )
             ->method( 'clear' )
             ->with( 'contentType', 44 )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'clear' )
+            ->with( 'fieldMap' )
             ->will( $this->returnValue( true ) );
 
         $innerHandlerMock = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler' );
@@ -1237,6 +1273,12 @@ class ContentTypeHandlerTest extends HandlerTest
 
         $this->cacheMock
             ->expects( $this->at( 2 ) )
+            ->method( 'clear' )
+            ->with( 'fieldMap' )
+            ->will( $this->returnValue( true ) );
+
+        $this->cacheMock
+            ->expects( $this->at( 3 ) )
             ->method( 'clear' )
             ->with( 'content' )
             ->will( $this->returnValue( true ) );

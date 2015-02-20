@@ -23,6 +23,7 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler as CommonSortClauseHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler as LocationSortClauseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
 
 /**
  * Test case for LocationSearchHandler
@@ -112,7 +113,11 @@ class HandlerSortTest extends LanguageAwareTestCase
                         new CommonSortClauseHandler\DatePublished( $this->getDatabaseHandler() ),
                         new CommonSortClauseHandler\SectionIdentifier( $this->getDatabaseHandler() ),
                         new CommonSortClauseHandler\SectionName( $this->getDatabaseHandler() ),
-                        new CommonSortClauseHandler\Field( $this->getDatabaseHandler(), $this->getLanguageHandler() ),
+                        new CommonSortClauseHandler\Field(
+                            $this->getDatabaseHandler(),
+                            $this->getLanguageHandler(),
+                            $this->getContentTypeHandler()
+                        ),
                     )
                 ),
                 new ContentTypeGateway(
@@ -121,6 +126,34 @@ class HandlerSortTest extends LanguageAwareTestCase
                 )
             ),
             $this->getLocationMapperMock()
+        );
+    }
+
+    protected $contentTypeGateway;
+
+    protected function getContentTypeGateway()
+    {
+        if ( !isset( $this->contentTypeGateway ) )
+        {
+            $this->contentTypeGateway = new ContentTypeGateway(
+                $this->getDatabaseHandler(),
+                $this->getLanguageMaskGenerator()
+            );
+        }
+
+        return $this->contentTypeGateway;
+    }
+
+    protected function getContentTypeHandler()
+    {
+        return new ContentTypeHandler(
+            $this->getContentTypeGateway(),
+            $this->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper" )
+                ->disableOriginalConstructor()
+                ->getMock(),
+            $this->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
+                ->disableOriginalConstructor()
+                ->getMock()
         );
     }
 

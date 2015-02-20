@@ -21,6 +21,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\ValueObject;
 use eZ\Publish\Core\Persistence\Database\Query;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use PDO;
 
 /**
  * Doctrine database based content type gateway.
@@ -1321,27 +1322,23 @@ class DoctrineDatabase extends Gateway
     /**
      * Returns field mapping data
      *
-     * Returns an associative array with ContentType and FieldDefinition identifiers as
-     * first and second level keys respectively, and FieldDefinition ID as value.
+     * Returns an associative array with ContentType and searchable FieldDefinition identifiers as
+     * first and second level keys respectively, and FieldType identifier as value.
      *
      * @return array
      */
-    public function getFieldMap()
+    public function getFieldMapData( $legacy = false )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query
             ->select(
                 $this->dbHandler->alias(
-                    $this->dbHandler->quoteColumn( "id", "ezcontentclass_attribute" ),
-                    $this->dbHandler->quoteIdentifier( "field_id" )
-                ),
-                $this->dbHandler->alias(
                     $this->dbHandler->quoteColumn( "identifier", "ezcontentclass_attribute" ),
-                    $this->dbHandler->quoteIdentifier( "field_identifier" )
+                    $this->dbHandler->quoteIdentifier( "field_definition_identifier" )
                 ),
                 $this->dbHandler->alias(
                     $this->dbHandler->quoteColumn( "identifier", "ezcontentclass" ),
-                    $this->dbHandler->quoteIdentifier( "type_identifier" )
+                    $this->dbHandler->quoteIdentifier( "content_type_identifier" )
                 )
             )
             ->from(
@@ -1353,19 +1350,35 @@ class DoctrineDatabase extends Gateway
                     $this->dbHandler->quoteColumn( "contentclass_id", "ezcontentclass_attribute" ),
                     $this->dbHandler->quoteColumn( "id", "ezcontentclass" )
                 )
+            )->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( "is_searchable", "ezcontentclass_attribute" ),
+                    $query->bindValue( 1, null, PDO::PARAM_INT )
+                )
             );
+
+        if ( $legacy )
+        {
+            $query->select(
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "id", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteIdentifier( "field_definition_id" )
+                )
+            );
+        }
+        else
+        {
+            $query->select(
+                $this->dbHandler->alias(
+                    $this->dbHandler->quoteColumn( "data_type_string", "ezcontentclass_attribute" ),
+                    $this->dbHandler->quoteIdentifier( "field_type_identifier" )
+                )
+            );
+        }
 
         $statement = $query->prepare( $query );
         $statement->execute();
 
-        $map = array();
-        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
-
-        foreach ( $rows as $row )
-        {
-            $map[$row["type_identifier"]][$row["field_identifier"]] = $row["field_id"];
-        }
-
-        return $map;
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 }
