@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler
 
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\Type;
@@ -30,14 +31,28 @@ class Field extends SortClauseHandler
     protected $languageHandler;
 
     /**
+     * Content Type handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
      * Creates a new Field sort clause handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      */
-    public function __construct( DatabaseHandler $dbHandler, LanguageHandler $languageHandler )
+    public function __construct(
+        DatabaseHandler $dbHandler,
+        LanguageHandler $languageHandler,
+        ContentTypeHandler $contentTypeHandler
+    )
     {
         $this->languageHandler = $languageHandler;
+        $this->contentTypeHandler = $contentTypeHandler;
+
         parent::__construct( $dbHandler );
     }
 
@@ -124,6 +139,9 @@ class Field extends SortClauseHandler
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
         $fieldTarget = $sortClause->targetData;
+
+        $fieldMap = $this->contentTypeHandler->getFieldMap( true );
+
         $fieldDefinitionId = $fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier];
         $table = $this->getSortTableName( $number );
 
