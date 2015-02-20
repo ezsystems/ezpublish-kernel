@@ -280,6 +280,7 @@ class DoctrineDatabase extends Gateway
      */
     protected function getFieldMap( $sortClauses )
     {
+        return array();
         foreach ( (array)$sortClauses as $sortClause )
         {
             if ( $sortClause instanceof Field || $sortClause instanceof MapLocationDistance )
