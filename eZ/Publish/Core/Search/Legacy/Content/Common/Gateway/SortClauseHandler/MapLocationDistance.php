@@ -130,17 +130,14 @@ class MapLocationDistance extends SortClauseHandler
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
-     * @param array $fieldMap
      *
      * @return void
      */
-    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number, array $fieldMap )
+    public function applyJoin( SelectQuery $query, SortClause $sortClause, $number )
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\FieldTarget $fieldTarget */
         $fieldTarget = $sortClause->targetData;
-
         $fieldMap = $this->contentTypeHandler->getFieldMap( true );
-
         $fieldDefinitionId = $fieldMap[$fieldTarget->typeIdentifier][$fieldTarget->fieldIdentifier];
         $table = $this->getSortTableName( $number );
         $externalTable = $this->getSortTableName( $number, "ezgmaplocation" );

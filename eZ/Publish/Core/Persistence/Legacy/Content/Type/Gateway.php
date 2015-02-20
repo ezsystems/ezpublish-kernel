@@ -294,16 +294,6 @@ abstract class Gateway
     /**
      * Returns field mapping data
      *
-     * Returns an associative array with ContentType and FieldDefinition identifiers as
-     * first and second level keys respectively, and FieldDefinition ID as value.
-     *
-     * @return array
-     */
-    abstract public function getFieldMap();
-
-    /**
-     * Returns field mapping data
-     *
      * Returns an associative array with ContentType and searchable FieldDefinition identifiers as
      * first and second level keys respectively, and FieldType identifier as value.
      *

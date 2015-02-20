@@ -23,7 +23,6 @@ services:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.search.legacy.gateway.criteria_converter.content
             - @ezpublish.search.legacy.gateway.sort_clause_converter.content
-            - @ezpublish.persistence.legacy.content_type.gateway
 
     ezpublish.search.legacy.gateway.content.exception_conversion:
         class: %ezpublish.search.legacy.gateway.content.exception_conversion.class%
@@ -40,7 +39,6 @@ services:
             - @ezpublish.api.storage_engine.legacy.dbhandler
             - @ezpublish.search.legacy.gateway.criteria_converter.location
             - @ezpublish.search.legacy.gateway.sort_clause_converter.location
-            - @ezpublish.persistence.legacy.content_type.gateway
 
     ezpublish.search.legacy.gateway.location.exception_conversion:
         class: %ezpublish.search.legacy.gateway.location.exception_conversion.class%
