@@ -100,7 +100,8 @@ This should produce similar result as [travis](https://travis-ci.org/ezsystems/e
 If you don't double check [.travis.yml](.travis.yml) for up-to-date info on how travis is setup.
 
 ## Issue tracker
-Submitting bugs, improvements and stories is possible on https://jira.ez.no/browse/EZP
+Submitting bugs, improvements and stories is possible on https://jira.ez.no/browse/EZP.
+If you discover a security issue, please see how to responsibly report such issues on https://doc.ez.no/Security.
 
 ## Contributing
 eZ Publish 5.x is a fully open source, community-driven project, and code contributions are simply done via github pull requests.
