@@ -98,7 +98,7 @@ ________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\___________
 <options=underscore>After executing this, you can launch your browser* and get started.</options=underscore>
 
 
-* Assuming you have setup directory permissions and configured your web server (Apache/Nginx) correctly (see Readme.md and doc/ folder in eZ Platform <root-directory>).
+* Assuming you have setup directory permissions and configured your web server (Apache/Nginx) correctly (see Install.md and doc/ folder in eZ Platform <root-directory>).
 EOT
         );
     }
