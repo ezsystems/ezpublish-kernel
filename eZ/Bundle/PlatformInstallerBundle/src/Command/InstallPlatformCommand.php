@@ -13,7 +13,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 
 class InstallPlatformCommand extends Command
 {
@@ -22,12 +21,6 @@ class InstallPlatformCommand extends Command
 
     /** @var \Symfony\Component\Console\Output\OutputInterface */
     private $output;
-
-    /** @var \Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface */
-    private $cacheClearer;
-
-    /** @var string */
-    private $cacheDir;
 
     /** @var \EzSystems\PlatformInstallerBundle\Installer\Installer[] */
     private $installers = array();
@@ -38,12 +31,10 @@ class InstallPlatformCommand extends Command
     const EXIT_UNKNOWN_INSTALL_TYPE = 6;
     const EXIT_MISSING_PERMISSIONS = 7;
 
-    public function __construct( Connection $db, array $installers, CacheClearerInterface $cacheClearer, $cacheDir )
+    public function __construct( Connection $db, array $installers )
     {
         $this->db = $db;
         $this->installers = $installers;
-        $this->cacheClearer = $cacheClearer;
-        $this->cacheDir = $cacheDir;
         parent::__construct();
     }
 
@@ -78,7 +69,6 @@ class InstallPlatformCommand extends Command
         $installer->importSchema();
         $installer->importData();
         $installer->importBinaries();
-        $this->cacheClear( $output );
     }
 
     private function checkPermissions()
@@ -143,17 +133,6 @@ class InstallPlatformCommand extends Command
             $this->output->writeln( "Please check the database configuration in parameters.yml" );
             exit( self::EXIT_GENERAL_DATABASE_ERROR );
         }
-    }
-
-    private function cacheClear( OutputInterface $output )
-    {
-        if ( !is_writable( $this->cacheDir ) )
-        {
-            throw new \RuntimeException( sprintf( 'Unable to write in the "%s" directory', $this->cacheDir ) );
-        }
-
-        $output->writeln( sprintf( 'Clearing cache for directory <info>%s</info>', $this->cacheDir ) );
-        $this->cacheClearer->clear( $this->cacheDir );
     }
 
     /**
