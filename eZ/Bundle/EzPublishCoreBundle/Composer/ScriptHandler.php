@@ -92,10 +92,10 @@ ________________/\\\\\\\\\\\\\\\____________/\\\\\\\\\\\\\____/\\\\\\___________
 
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
-<options=underscore>You may now complete the eZ Platform installation with ezplatform:install command, example of use:</options=underscore>
+<options=bold>You may now complete the eZ Platform installation with ezplatform:install command, example of use:</options=bold>
 <comment>    $ php ezpublish/console ezplatform:install --env prod demo-clean</comment>
 
-<options=underscore>After executing this, you can launch your browser* and get started.</options=underscore>
+<options=bold>After executing this, you can launch your browser* and get started.</options=bold>
 
 
 * Assuming you have setup directory permissions and configured your web server (Apache/Nginx) correctly (see Install.md and doc/ folder in eZ Platform <root-directory>).
