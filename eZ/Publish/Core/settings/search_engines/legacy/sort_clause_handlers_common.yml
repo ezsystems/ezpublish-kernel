@@ -46,7 +46,7 @@ services:
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.field.class%
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.spi.persistence.legacy.language.handler
+            - @ezpublish.spi.persistence.language_handler
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
@@ -55,7 +55,7 @@ services:
         class: %ezpublish.search.legacy.gateway.sort_clause_handler.common.map_location_distance.class%
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
-            - @ezpublish.spi.persistence.legacy.language.handler
+            - @ezpublish.spi.persistence.language_handler
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}

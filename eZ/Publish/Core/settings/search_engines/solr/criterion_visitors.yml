@@ -104,9 +104,6 @@ services:
         tags:
             - {name: ezpublish.search.solr.content.criterion_visitor}
 
-    # TODO: when Solr storage is enabled and multiple Solr storage engines are used simultaneously
-    # 'ezpublish.spi.persistence.legacy.content_type.handler' dependency will need to be set through
-    # alias or factory
     ezpublish.search.solr.content.criterion_visitor.content_type_identifier_in:
         class: %ezpublish.search.solr.content.criterion_visitor.content_type_identifier_in.class%
         arguments:
@@ -266,9 +263,6 @@ services:
         tags:
             - {name: ezpublish.search.solr.location.criterion_visitor}
 
-    # TODO: when Solr storage is enabled and multiple Solr storage engines are used simultaneously
-    # 'ezpublish.spi.persistence.legacy.content_type.handler' dependency will need to be set through
-    # alias or factory
     ezpublish.search.solr.location.criterion_visitor.content_type_identifier_in:
         class: %ezpublish.search.solr.location.criterion_visitor.content_type_identifier_in.class%
         arguments:
