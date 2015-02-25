@@ -17,6 +17,10 @@ services:
 
     ezplatform.installer.install_command:
         class: %ezplatform.installer.install_command.class%
-        arguments: [ @database_connection, [] ]
+        arguments:
+            - @database_connection
+            - []
+            - @cache_clearer
+            - %kernel.cache_dir%
         tags:
             - { name: console.command }
