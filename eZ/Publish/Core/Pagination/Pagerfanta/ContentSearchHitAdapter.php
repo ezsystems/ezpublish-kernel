@@ -70,9 +70,12 @@ class ContentSearchHitAdapter implements AdapterInterface
         $query = clone $this->query;
         $query->offset = $offset;
         $query->limit = $length;
+        $query->performCount = false;
 
         $searchResult = $this->searchService->findContent( $query );
-        if ( !isset( $this->nbResults ) )
+
+        // Set count for further use if returned by search engine despite !performCount (Solr, ES)
+        if ( !isset( $this->nbResults ) && isset( $searchResult->totalCount ) )
         {
             $this->nbResults = $searchResult->totalCount;
         }
