@@ -919,6 +919,7 @@ class UserService implements UserServiceInterface
 
         $searchQuery->offset = 0;
         $searchQuery->limit = null;
+        $searchQuery->performCount = false;
 
         $searchQuery->filter = new CriterionLogicalAnd(
             array(
@@ -971,6 +972,7 @@ class UserService implements UserServiceInterface
 
         $searchQuery->offset = $offset > 0 ? (int)$offset : 0;
         $searchQuery->limit = $limit >= 1 ? (int)$limit : null;
+        $searchQuery->performCount = false;
 
         $searchQuery->sortClauses = array(
             $this->getSortClauseBySortField( $mainGroupLocation->sortField, $mainGroupLocation->sortOrder )
