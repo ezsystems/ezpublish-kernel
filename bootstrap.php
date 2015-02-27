@@ -23,8 +23,4 @@ if ( !( $settings = include ( __DIR__ . '/config.php' ) ) )
     throw new \RuntimeException( 'Could not read config.php, please copy config.php-DEVELOPMENT to config.php & customize to your needs!' );
 }
 
-// Setup class loader, detect ezpublish-community repo context and use vendor files from there if that is the case
-$rootDir = __DIR__;
-if ( ( $vendorPathPos = strrpos( $rootDir, '/vendor/ezsystems/ezpublish' ) ) !== false )
-    $rootDir = substr( $rootDir, 0, $vendorPathPos );
-require_once $rootDir . "/vendor/autoload.php";
+require_once __DIR__ . "/vendor/autoload.php";
