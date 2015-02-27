@@ -1046,6 +1046,7 @@ class SearchServiceTest extends BaseTest
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$criterion->target' is invalid: No searchable fields found for the given criterion target 'some_hopefully_unknown_field'
      */
     public function testInvalidFieldIdentifierRange()
     {
@@ -1068,6 +1069,7 @@ class SearchServiceTest extends BaseTest
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$criterion->target' is invalid: No searchable fields found for the given criterion target 'some_hopefully_unknown_field'
      */
     public function testInvalidFieldIdentifierIn()
     {
@@ -1090,6 +1092,7 @@ class SearchServiceTest extends BaseTest
 
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$criterion->target' is invalid: No searchable fields found for the given criterion target 'tag_cloud_url'
      */
     public function testFindContentWithNonSearchableField()
     {
@@ -1105,6 +1108,55 @@ class SearchServiceTest extends BaseTest
                         'http://nimbus.com'
                     ),
                     'sortClauses' => array( new SortClause\ContentId() )
+                )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$sortClause->targetData' is invalid: No searchable fields found for the given sort clause target 'title' on 'template_look'
+     */
+    public function testSortFieldWithNonSearchableField()
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+        }
+
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findContent(
+            new Query(
+                array(
+                    'sortClauses' => array( new SortClause\Field( "template_look", "title" ) ),
+                )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$sortClause->targetData' is invalid: No searchable fields found for the given sort clause target 'title' on 'template_look'
+     */
+    public function testSortMapLocationDistanceWithNonSearchableField()
+    {
+        $repository    = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findContent(
+            new Query(
+                array(
+                    'sortClauses' => array(
+                        new SortClause\MapLocationDistance(
+                            "template_look",
+                            "title",
+                            1,
+                            2
+                        ),
+                    ),
                 )
             )
         );
@@ -1287,28 +1339,6 @@ class SearchServiceTest extends BaseTest
                     )
                 ),
                 $fixtureDir . 'SortFieldMultipleTypesSliceReverse.php',
-            ),
-        );
-    }
-
-    public function getSortedContentSearchesLegacy()
-    {
-        $fixtureDir = $this->getFixtureDir();
-
-        return array(
-            // template_look/title es ezsetting fieldtype, not indexed in Solr or Elasticsearch
-            // @todo check - ezsetting should not be searchable
-            array(
-                array(
-                    'filter' => new Criterion\SectionId( array( 5 ) ),
-                    'offset' => 0,
-                    'limit' => null,
-                    'sortClauses' => array(
-                        new SortClause\Field( "template_look", "title", Query::SORT_ASC ),
-                        new SortClause\ContentId(),
-                    )
-                ),
-                $fixtureDir . 'SortTemplateTitle.php',
             ),
         );
     }
@@ -2111,46 +2141,6 @@ class SearchServiceTest extends BaseTest
             },
             $result->searchHits
         );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
-     * @todo Only for Legacy Storage Search, tests are missing for Solr and Elasticsearch
-     *
-     * @dataProvider getSortedContentSearchesLegacy
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     */
-    public function testFindAndSortContentLegacy( $queryData, $fixture, $closure = null )
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
-        {
-            $this->markTestSkipped( "ezsetting is not indexable on Solr and Elasticsearch storage" );
-        }
-
-        $query = new Query( $queryData );
-        $this->assertQueryFixture( $query, $fixture, $closure );
-    }
-
-    /**
-     * Test for the findLocations() method.
-     *
-     * @todo Only for Legacy Storage Search, tests are missing for Solr and Elasticsearch
-     *
-     * @dataProvider getSortedContentSearchesLegacy
-     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
-     */
-    public function testFindAndSortContentLocationsLegacy( $queryData, $fixture, $closure = null )
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
-        {
-            $this->markTestSkipped( "ezsetting is not indexable on Solr and Elasticsearch storage" );
-        }
-
-        $query = new LocationQuery( $queryData );
-        $this->assertQueryFixture( $query, $fixture, $closure );
     }
 
     /**

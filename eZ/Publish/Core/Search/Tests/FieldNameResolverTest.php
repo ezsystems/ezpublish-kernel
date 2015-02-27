@@ -21,20 +21,26 @@ class FieldNameResolverTest extends TestCase
 {
     public function testGetFieldNamesReturnsEmptyArray()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap", "getIndexFieldName" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap", "getIndexFieldName" ) );
         $criterionMock = $this->getCriterionMock();
 
         $mockedFieldNameResolver
             ->expects( $this->once() )
-            ->method( "getFieldMap" )
+            ->method( "getSearchableFieldMap" )
             ->will(
                 $this->returnValue(
                     array(
                         "content_type_identifier_1" => array(
-                            "field_definition_identifier_1" => "field_type_identifier_1",
+                            "field_definition_identifier_1" => array(
+                                "field_definition_id" => "field_definition_id_1",
+                                "field_type_identifier" => "field_type_identifier_1",
+                            ),
                         ),
                         "content_type_identifier_2" => array(
-                            "field_definition_identifier_2" => "field_type_identifier_2",
+                            "field_definition_identifier_2" => array(
+                                "field_definition_id" => "field_definition_id_2",
+                                "field_type_identifier" => "field_type_identifier_2",
+                            ),
                         ),
                     )
                 )
@@ -53,21 +59,30 @@ class FieldNameResolverTest extends TestCase
 
     public function testGetFieldNames()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap", "getIndexFieldName" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap", "getIndexFieldName" ) );
         $criterionMock = $this->getCriterionMock();
 
         $mockedFieldNameResolver
             ->expects( $this->once() )
-            ->method( "getFieldMap" )
+            ->method( "getSearchableFieldMap" )
             ->will(
                 $this->returnValue(
                     array(
                         "content_type_identifier_1" => array(
-                            "field_definition_identifier_1" => "field_type_identifier_1",
+                            "field_definition_identifier_1" => array(
+                                "field_definition_id" => "field_definition_id_1",
+                                "field_type_identifier" => "field_type_identifier_1",
+                            ),
                         ),
                         "content_type_identifier_2" => array(
-                            "field_definition_identifier_1" => "field_type_identifier_2",
-                            "field_definition_identifier_2" => "field_type_identifier_3",
+                            "field_definition_identifier_1" => array(
+                                "field_definition_id" => "field_definition_id_2",
+                                "field_type_identifier" => "field_type_identifier_2",
+                            ),
+                            "field_definition_identifier_2" => array(
+                                "field_definition_id" => "field_definition_id_3",
+                                "field_type_identifier" => "field_type_identifier_3",
+                            ),
                         ),
                     )
                 )
@@ -118,21 +133,30 @@ class FieldNameResolverTest extends TestCase
 
     public function testGetFieldNamesWithNamedField()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap", "getIndexFieldName" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap", "getIndexFieldName" ) );
         $criterionMock = $this->getCriterionMock();
 
         $mockedFieldNameResolver
             ->expects( $this->once() )
-            ->method( "getFieldMap" )
+            ->method( "getSearchableFieldMap" )
             ->will(
                 $this->returnValue(
                     array(
                         "content_type_identifier_1" => array(
-                            "field_definition_identifier_1" => "field_type_identifier_1",
+                            "field_definition_identifier_1" => array(
+                                "field_definition_id" => "field_definition_id_1",
+                                "field_type_identifier" => "field_type_identifier_1",
+                            ),
                         ),
                         "content_type_identifier_2" => array(
-                            "field_definition_identifier_1" => "field_type_identifier_2",
-                            "field_definition_identifier_2" => "field_type_identifier_3",
+                            "field_definition_identifier_1" => array(
+                                "field_definition_id" => "field_definition_id_2",
+                                "field_type_identifier" => "field_type_identifier_2",
+                            ),
+                            "field_definition_identifier_2" => array(
+                                "field_definition_id" => "field_definition_id_3",
+                                "field_type_identifier" => "field_type_identifier_3",
+                            ),
                         ),
                     )
                 )
@@ -185,21 +209,30 @@ class FieldNameResolverTest extends TestCase
 
     public function testGetFieldNamesWithTypedField()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap", "getIndexFieldName" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap", "getIndexFieldName" ) );
         $criterionMock = $this->getCriterionMock();
 
         $mockedFieldNameResolver
             ->expects( $this->once() )
-            ->method( "getFieldMap" )
+            ->method( "getSearchableFieldMap" )
             ->will(
                 $this->returnValue(
                     array(
                         "content_type_identifier_1" => array(
-                            "field_definition_identifier_1" => "field_type_identifier_1",
+                            "field_definition_identifier_1" => array(
+                                "field_definition_id" => "field_definition_id_1",
+                                "field_type_identifier" => "field_type_identifier_1",
+                            ),
                         ),
                         "content_type_identifier_2" => array(
-                            "field_definition_identifier_1" => "field_type_identifier_2",
-                            "field_definition_identifier_2" => "field_type_identifier_3",
+                            "field_definition_identifier_1" => array(
+                                "field_definition_id" => "field_definition_id_2",
+                                "field_type_identifier" => "field_type_identifier_2",
+                            ),
+                            "field_definition_identifier_2" => array(
+                                "field_definition_id" => "field_definition_id_3",
+                                "field_type_identifier" => "field_type_identifier_3",
+                            ),
                         ),
                     )
                 )
@@ -237,21 +270,30 @@ class FieldNameResolverTest extends TestCase
 
     public function testGetFieldNamesWithTypedAndNamedField()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap", "getIndexFieldName" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap", "getIndexFieldName" ) );
         $criterionMock = $this->getCriterionMock();
 
         $mockedFieldNameResolver
             ->expects( $this->once() )
-            ->method( "getFieldMap" )
+            ->method( "getSearchableFieldMap" )
             ->will(
                 $this->returnValue(
                     array(
                         "content_type_identifier_1" => array(
-                            "field_definition_identifier_1" => "field_type_identifier_1",
+                            "field_definition_identifier_1" => array(
+                                "field_definition_id" => "field_definition_id_1",
+                                "field_type_identifier" => "field_type_identifier_1",
+                            ),
                         ),
                         "content_type_identifier_2" => array(
-                            "field_definition_identifier_1" => "field_type_identifier_2",
-                            "field_definition_identifier_2" => "field_type_identifier_3",
+                            "field_definition_identifier_1" => array(
+                                "field_definition_id" => "field_definition_id_2",
+                                "field_type_identifier" => "field_type_identifier_2",
+                            ),
+                            "field_definition_identifier_2" => array(
+                                "field_definition_id" => "field_definition_id_3",
+                                "field_type_identifier" => "field_type_identifier_3",
+                            ),
                         ),
                     )
                 )
@@ -289,17 +331,20 @@ class FieldNameResolverTest extends TestCase
 
     public function testGetSortFieldName()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap", "getIndexFieldName" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap", "getIndexFieldName" ) );
         $sortClauseMock = $this->getSortClauseMock();
 
         $mockedFieldNameResolver
             ->expects( $this->once() )
-            ->method( "getFieldMap" )
+            ->method( "getSearchableFieldMap" )
             ->will(
                 $this->returnValue(
                     array(
                         "content_type_identifier" => array(
-                            "field_definition_identifier" => "field_type_identifier",
+                            "field_definition_identifier" => array(
+                                "field_definition_id" => "field_definition_id",
+                                "field_type_identifier" => "field_type_identifier",
+                            ),
                         ),
                     )
                 )
@@ -331,17 +376,20 @@ class FieldNameResolverTest extends TestCase
 
     public function testGetSortFieldNameReturnsNull()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap", "getIndexFieldName" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap", "getIndexFieldName" ) );
         $sortClauseMock = $this->getSortClauseMock();
 
         $mockedFieldNameResolver
             ->expects( $this->once() )
-            ->method( "getFieldMap" )
+            ->method( "getSearchableFieldMap" )
             ->will(
                 $this->returnValue(
                     array(
                         "content_type_identifier" => array(
-                            "field_definition_identifier" => "field_type_identifier",
+                            "field_definition_identifier" => array(
+                                "field_definition_id" => "field_definition_id",
+                                "field_type_identifier" => "field_type_identifier",
+                            ),
                         ),
                     )
                 )
@@ -359,7 +407,7 @@ class FieldNameResolverTest extends TestCase
 
     public function testGetIndexFieldNameCustomField()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap" ) );
 
         $customFieldMock = $this->getMock(
             "eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\CustomFieldInterface"
@@ -388,7 +436,7 @@ class FieldNameResolverTest extends TestCase
 
     public function testGetIndexFieldNameNamedField()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap" ) );
         $indexFieldType = $this->getIndexFieldTypeMock();
         $searchFieldTypeMock = $this->getSearchFieldTypeMock();
 
@@ -449,7 +497,7 @@ class FieldNameResolverTest extends TestCase
 
     public function testGetIndexFieldNameDefaultField()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap" ) );
         $indexFieldType = $this->getIndexFieldTypeMock();
         $searchFieldTypeMock = $this->getSearchFieldTypeMock();
 
@@ -518,7 +566,7 @@ class FieldNameResolverTest extends TestCase
      */
     public function testGetIndexFieldNameDefaultFieldThrowsRuntimeException()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap" ) );
         $indexFieldType = $this->getIndexFieldTypeMock();
         $searchFieldTypeMock = $this->getSearchFieldTypeMock();
 
@@ -562,7 +610,7 @@ class FieldNameResolverTest extends TestCase
      */
     public function testGetIndexFieldNameNamedFieldThrowsRuntimeException()
     {
-        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getFieldMap" ) );
+        $mockedFieldNameResolver = $this->getMockedFieldNameResolver( array( "getSearchableFieldMap" ) );
         $indexFieldType = $this->getIndexFieldTypeMock();
         $searchFieldTypeMock = $this->getSearchFieldTypeMock();
 
