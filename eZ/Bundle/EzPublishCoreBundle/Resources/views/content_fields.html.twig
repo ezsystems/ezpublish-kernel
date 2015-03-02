@@ -445,7 +445,9 @@
 {# You can define a field_value variable before rendering this one if you need special operation for rendering content (i.e. nl2br) #}
 {% block simple_block_field %}
 {% spaceless %}
-    {% set field_value = field_value|default( field.value ) %}
+    {% if field_value is not defined %}
+        {% set field_value = field.value %}
+    {% endif %}
     <div {{ block( 'field_attributes' ) }}>
         {{ field_value|raw }}
     </div>
@@ -454,7 +456,9 @@
 
 {% block simple_inline_field %}
 {% spaceless %}
-    {% set field_value = field_value|default( field.value ) %}
+    {% if field_value is not defined %}
+        {% set field_value = field.value %}
+    {% endif %}
     <span {{ block( 'field_attributes' ) }}>{{ field_value }}</span>
 {% endspaceless %}
 {% endblock %}
