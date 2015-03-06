@@ -78,19 +78,16 @@ class ImageStorage extends GatewayBasedStorage
             {
                 $binaryFile = $this->IOService->loadBinaryFile( $targetPath );
             }
+            else if ( isset( $field->value->externalData['id'] ) )
+            {
+                $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] );
+            }
             else
             {
                 if ( isset( $field->value->externalData['inputUri'] ) )
                 {
                     $localFilePath = $field->value->externalData['inputUri'];
                     unset( $field->value->externalData['inputUri'] );
-                }
-                else
-                {
-                    $this->deprecationWarner->log(
-                        "Using the Image\\Value::\$id property to create images is deprecated. Use 'inputUri'"
-                    );
-                    $localFilePath = $field->value->externalData['id'];
                 }
                 $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $localFilePath );
                 $binaryFileCreateStruct->id = $targetPath;

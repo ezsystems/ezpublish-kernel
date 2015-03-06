@@ -562,4 +562,45 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             "Asserting image file $originalFileUri has been removed."
         );
     }
+
+    public function testUpdateImageAltTextOnly()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier( 'image' );
+        $createStruct = $contentService->newContentCreateStruct( $contentType, 'eng-GB' );
+
+        $createStruct->setField( 'name', __METHOD__ );
+        $createStruct->setField(
+            'image',
+            new ImageValue(
+                [
+                    'inputUri' => __DIR__ . '/_fixtures/image.jpg',
+                    'fileName' => 'image.jpg',
+                    'fileSize' => filesize( __DIR__ . '/_fixtures/image.jpg' ),
+                    'alternativeText' => 'Initial alternative text'
+                ]
+            )
+        );
+
+        $content = $contentService->createContent(
+            $createStruct,
+            [$locationService->newLocationCreateStruct( 2 )]
+        );
+
+        $imageField = $content->getFieldValue( 'image' );
+        $imageField->alternativeText = 'Updated alternative text';
+
+        $contentService->publishVersion( $content->getVersionInfo() );
+
+        $updateStruct = $contentService->newContentUpdateStruct();
+        $updateStruct->setField( 'image', $imageField );
+
+        $newVersion = $contentService->createContentDraft( $content->contentInfo );
+        $contentService->updateContent( $newVersion->versionInfo, $updateStruct );
+    }
 }
