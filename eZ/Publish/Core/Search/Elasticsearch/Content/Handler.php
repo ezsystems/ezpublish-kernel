@@ -39,15 +39,24 @@ class Handler implements SearchHandlerInterface
      */
     protected $extractor;
 
+    /**
+     * Name of Content document type in the search backend
+     *
+     * @var string
+     */
+    protected $documentTypeName;
+
     public function __construct(
         Gateway $gateway,
         MapperInterface $mapper,
-        Extractor $extractor
+        Extractor $extractor,
+        $documentTypeName
     )
     {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
         $this->extractor = $extractor;
+        $this->documentTypeName = $documentTypeName;
     }
 
     /**
@@ -68,7 +77,7 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        $data = $this->gateway->find( $query, "content", $fieldFilters );
+        $data = $this->gateway->find( $query, $this->documentTypeName, $fieldFilters );
 
         return $this->extractor->extract( $data );
     }
@@ -180,7 +189,7 @@ class Handler implements SearchHandlerInterface
                             "and" => array(
                                 array(
                                     "ids" => array(
-                                        "type" => "content",
+                                        "type" => $this->documentTypeName,
                                         "values" => array(
                                             $contentId,
                                         ),
@@ -239,7 +248,7 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $response = $this->gateway->findRaw( json_encode( $ast ), "content" );
+        $response = $this->gateway->findRaw( json_encode( $ast ), $this->documentTypeName );
         $result = json_decode( $response->body );
 
         $documents = array();
@@ -260,7 +269,7 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $this->gateway->deleteByQuery( json_encode( $ast ), "content" );
+        $this->gateway->deleteByQuery( json_encode( $ast ), $this->documentTypeName );
     }
 
     /**
@@ -272,7 +281,7 @@ class Handler implements SearchHandlerInterface
      */
     public function purgeIndex()
     {
-        $this->gateway->purgeIndex( "content" );
+        $this->gateway->purgeIndex( $this->documentTypeName );
     }
 
     /**

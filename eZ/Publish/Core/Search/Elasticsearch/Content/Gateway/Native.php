@@ -59,6 +59,11 @@ class Native extends Gateway
      */
     protected $facetBuilderVisitor;
 
+    /**
+     * Name of the index in the search backend
+     *
+     * @var string
+     */
     protected $indexName;
 
     /**
@@ -75,7 +80,7 @@ class Native extends Gateway
         CriterionVisitorDispatcher $criterionVisitorDispatcher,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
-        $indexName = "ezpublish"
+        $indexName
     )
     {
         $this->client = $client;

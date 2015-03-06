@@ -73,25 +73,95 @@ class Configuration extends SiteAccessConfiguration
                     ->useAttributeAsKey( 'alias' )
                     ->prototype( 'array' )
                         ->beforeNormalization()
-                            // If set to null, use default values.
-                            // %ezpublish.api.storage_engine.default% as engine, and default connection (if applicable).
-                            ->ifNull()
-                            ->then(
-                                function ()
+                            ->always(
+                                // Handling deprecated structure by mapping it to new one
+                                function ( $v )
                                 {
-                                    return array( 'engine' => '%ezpublish.api.storage_engine.default%', 'connection' => null );
+                                    if ( isset( $v['storage'] ) )
+                                    {
+                                        return $v;
+                                    }
+
+                                    if ( isset( $v['engine'] ) )
+                                    {
+                                        $v['storage']['engine'] = $v['engine'];
+                                        unset( $v['engine'] );
+                                    }
+
+                                    if ( isset( $v['connection'] ) )
+                                    {
+                                        $v['storage']['connection'] = $v['connection'];
+                                        unset( $v['connection'] );
+                                    }
+
+                                    if ( isset( $v['config'] ) )
+                                    {
+                                        $v['storage']['config'] = $v['config'];
+                                        unset( $v['config'] );
+                                    }
+
+                                    return $v;
+                                }
+                            )
+                        ->end()
+                        ->beforeNormalization()
+                            ->always(
+                                // Setting default values
+                                function ( $v )
+                                {
+                                    if ( $v === null )
+                                    {
+                                        $v = array();
+                                    }
+
+                                    if ( !isset( $v['storage'] ) )
+                                    {
+                                        $v['storage'] = array();
+                                    }
+
+                                    if ( !isset( $v['search'] ) )
+                                    {
+                                        $v['search'] = array();
+                                    }
+
+                                    return $v;
                                 }
                             )
                         ->end()
                         ->children()
-                            ->scalarNode( 'engine' )->isRequired()->info( 'The storage engine to use' )->end()
-                            ->scalarNode( 'connection' )
-                                ->info( 'The connection name, if applicable (e.g. Doctrine connection name). If not set, the default connection will be used.' )
+                            ->arrayNode( 'storage' )
+                                ->children()
+                                    ->scalarNode( 'engine' )
+                                        ->defaultValue( '%ezpublish.api.storage_engine.default%' )
+                                        ->info( 'The storage engine to use' )
+                                    ->end()
+                                    ->scalarNode( 'connection' )
+                                        ->defaultNull()
+                                        ->info( 'The connection name, if applicable (e.g. Doctrine connection name). If not set, the default connection will be used.' )
+                                    ->end()
+                                    ->arrayNode( 'config' )
+                                        ->info( 'Arbitrary configuration options, supported by your storage engine' )
+                                        ->useAttributeAsKey( 'key' )
+                                        ->prototype( 'variable' )->end()
+                                    ->end()
+                                ->end()
                             ->end()
-                            ->arrayNode( 'config' )
-                                ->info( 'Arbitrary configuration options, supported by your storage engine' )
-                                ->useAttributeAsKey( 'key' )
-                                ->prototype( 'variable' )->end()
+                            ->arrayNode( 'search' )
+                                ->children()
+                                    ->scalarNode( 'engine' )
+                                        ->defaultValue( '%ezpublish.api.search_engine.default%' )
+                                        ->info( 'The search engine to use' )
+                                    ->end()
+                                    ->scalarNode( 'connection' )
+                                        ->defaultNull()
+                                        ->info( 'The connection name, if applicable (e.g. Doctrine connection name). If not set, the default connection will be used.' )
+                                    ->end()
+                                    ->arrayNode( 'config' )
+                                        ->info( 'Arbitrary configuration options, supported by your search engine' )
+                                        ->useAttributeAsKey( 'key' )
+                                        ->prototype( 'variable' )->end()
+                                    ->end()
+                                ->end()
                             ->end()
                         ->end()
                     ->end()

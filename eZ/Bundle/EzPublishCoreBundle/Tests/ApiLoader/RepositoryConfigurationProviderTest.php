@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the StorageRepositoryProviderTest class.
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,10 +9,10 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use PHPUnit_Framework_TestCase;
 
-class StorageRepositoryProviderTest extends PHPUnit_Framework_TestCase
+class RepositoryConfigurationProviderTest extends PHPUnit_Framework_TestCase
 {
     public function testGetRepositoryConfigSpecifiedRepository()
     {
@@ -28,7 +28,7 @@ class StorageRepositoryProviderTest extends PHPUnit_Framework_TestCase
                 'engine' => 'bar'
             )
         );
-        $provider = new StorageRepositoryProvider( $configResolver, $repositories );
+        $provider = new RepositoryConfigurationProvider( $configResolver, $repositories );
 
         $configResolver
             ->expects( $this->once() )
@@ -56,7 +56,7 @@ class StorageRepositoryProviderTest extends PHPUnit_Framework_TestCase
                 'engine' => 'bar'
             )
         );
-        $provider = new StorageRepositoryProvider( $configResolver, $repositories );
+        $provider = new RepositoryConfigurationProvider( $configResolver, $repositories );
 
         $configResolver
             ->expects( $this->once() )
@@ -91,7 +91,7 @@ class StorageRepositoryProviderTest extends PHPUnit_Framework_TestCase
             ->with( 'repository' )
             ->will( $this->returnValue( 'undefined_repository' ) );
 
-        $provider = new StorageRepositoryProvider( $configResolver, $repositories );
+        $provider = new RepositoryConfigurationProvider( $configResolver, $repositories );
         $provider->getRepositoryConfig();
     }
 

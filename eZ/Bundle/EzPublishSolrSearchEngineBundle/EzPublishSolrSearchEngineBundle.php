@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the EzPublishSolrBundle class.
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishSolrBundle;
+namespace eZ\Bundle\EzPublishSolrSearchEngineBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,8 +17,9 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateFieldValueMappe
 use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateSortClauseVisitorPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
+use eZ\Bundle\EzPublishSolrSearchEngineBundle\DependencyInjection\Compiler;
 
-class EzPublishSolrBundle extends Bundle
+class EzPublishSolrSearchEngineBundle extends Bundle
 {
     public function build( ContainerBuilder $container )
     {
@@ -29,5 +30,17 @@ class EzPublishSolrBundle extends Bundle
         $container->addCompilerPass( new AggregateSortClauseVisitorPass );
         $container->addCompilerPass( new FieldRegistryPass );
         $container->addCompilerPass( new SignalSlotPass );
+
+        $container->addCompilerPass( new Compiler\HttpClientPass );
+    }
+
+    public function getContainerExtension()
+    {
+        if ( !isset( $this->extension ) )
+        {
+            $this->extension = new DependencyInjection\EzPublishSolrSearchEngineExtension();
+        }
+
+        return $this->extension;
     }
 }

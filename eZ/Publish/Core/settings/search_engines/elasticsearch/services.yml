@@ -7,7 +7,7 @@ services:
     ezpublish.search.elasticsearch.content.gateway.client.http.stream:
         class: %ezpublish.search.elasticsearch.content.gateway.client.http.stream.class%
         arguments:
-            - %ezpublish.elasticsearch_server%
+            - %ezpublish.search.elasticsearch.connection.server%
 
     # Note: services tagged with 'ezpublish.search.elasticsearch.content.field_value_mapper'
     # are registered to this one using compilation pass
