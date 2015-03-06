@@ -47,21 +47,31 @@ class Handler implements SearchHandlerInterface
     protected $extractor;
 
     /**
+     * Name of Location document type in the search backend
+     *
+     * @var string
+     */
+    protected $documentTypeName;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway $gateway
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\MapperInterface $mapper
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\Extractor $extractor
+     * @param string
      */
     public function __construct(
         Gateway $gateway,
         MapperInterface $mapper,
-        Extractor $extractor
+        Extractor $extractor,
+        $documentTypeName
     )
     {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
         $this->extractor = $extractor;
+        $this->documentTypeName = $documentTypeName;
     }
 
     /**
@@ -76,7 +86,7 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        $data = $this->gateway->find( $query, "location" );
+        $data = $this->gateway->find( $query, $this->documentTypeName );
 
         return $this->extractor->extract( $data );
     }
@@ -120,7 +130,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation( $locationId )
     {
-        $this->gateway->delete( $locationId, "location" );
+        $this->gateway->delete( $locationId, $this->documentTypeName );
     }
 
     /**
@@ -142,7 +152,7 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $this->gateway->deleteByQuery( json_encode( $ast ), "location" );
+        $this->gateway->deleteByQuery( json_encode( $ast ), $this->documentTypeName );
     }
 
     /**
@@ -154,7 +164,7 @@ class Handler implements SearchHandlerInterface
      */
     public function purgeIndex()
     {
-        $this->gateway->purgeIndex( "location" );
+        $this->gateway->purgeIndex( $this->documentTypeName );
     }
 
     /**
