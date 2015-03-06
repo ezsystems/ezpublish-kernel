@@ -14,6 +14,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 
 class Configuration extends SiteAccessConfiguration
 {
@@ -79,6 +80,7 @@ class Configuration extends SiteAccessConfiguration
                             ->then(
                                 function ()
                                 {
+                                    // TODO add legacy search engine + connection
                                     return array( 'engine' => '%ezpublish.api.storage_engine.default%', 'connection' => null );
                                 }
                             )
@@ -92,6 +94,26 @@ class Configuration extends SiteAccessConfiguration
                                 ->info( 'Arbitrary configuration options, supported by your storage engine' )
                                 ->useAttributeAsKey( 'key' )
                                 ->prototype( 'variable' )->end()
+                            ->end()
+                            ->arrayNode( 'search' )
+                                ->children()
+                                    ->scalarNode( 'engine' )
+                                        ->isRequired()
+                                        ->cannotBeEmpty()
+                                        ->validate()
+                                        ->ifNotInArray( array( 'elasticsearch', 'legacy', 'solr' ) )
+                                            ->thenInvalid( 'Invalid Search Engine "%s"' )
+                                        ->end()
+                                    ->end()
+                                    ->scalarNode( 'connection' )
+                                        ->info( 'The connection name, if applicable (e.g. Doctrine connection name). If not set, the default connection will be used.' )
+                                    ->end()
+                                    ->arrayNode( 'config' )
+                                        ->info( 'Arbitrary configuration options, supported by your search engine' )
+                                        ->useAttributeAsKey( 'key' )
+                                        ->prototype( 'variable' )->end()
+                                    ->end()
+                                ->end()
                             ->end()
                         ->end()
                     ->end()
