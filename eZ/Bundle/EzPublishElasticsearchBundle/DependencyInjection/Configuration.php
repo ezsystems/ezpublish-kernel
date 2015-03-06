@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
         $node->children()
             ->arrayNode( "connections" )
                 ->info( "Elasticsearch Search Engine connections configuration" )
+                ->useAttributeAsKey( "key" )
                 ->performNoDeepMerging()
                 ->prototype( "array" )
                     ->children()
