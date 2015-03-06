@@ -9,7 +9,7 @@ imports:
     - {resource: search_engines/elasticsearch/sort_clause_visitors_location.yml}
 
 parameters:
-    ezpublish.elasticsearch_server: http://localhost:9200/
+    ezpublish.search.elasticsearch.index.server: http://localhost:9200/
     ezpublish.spi.search.elasticsearch.class: eZ\Publish\Core\Search\Elasticsearch\Handler
     ezpublish.search.elasticsearch.serializer.class: eZ\Publish\Core\Search\Elasticsearch\Content\Serializer
     ezpublish.search.elasticsearch.mapper.standard.class: eZ\Publish\Core\Search\Elasticsearch\Content\Mapper\StandardMapper
