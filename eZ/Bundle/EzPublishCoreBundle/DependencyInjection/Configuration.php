@@ -14,7 +14,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 
 class Configuration extends SiteAccessConfiguration
 {
