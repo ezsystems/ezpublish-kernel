@@ -21,16 +21,6 @@ class EzPublishElasticsearchExtension extends Extension
         return "ez_elasticsearch";
     }
 
-    /**
-     * Loads a specific configuration.
-     *
-     * @param array $configs An array of configuration values
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     *
-     * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     *
-     * @api
-     */
     public function load( array $configs, ContainerBuilder $container )
     {
         $configuration = $this->getConfiguration( $configs, $container );
@@ -50,16 +40,17 @@ class EzPublishElasticsearchExtension extends Extension
         );
         $loader->load( 'services.yml' );
 
-        $this->processSearchConfiguration( $container, $config );
+        $this->processConnectionConfiguration( $container, $config );
     }
 
     /**
-     *
+     * Processes connection configuration by flattening connection parameters
+     * and setting them to the container as parameters.
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function processSearchConfiguration( ContainerBuilder $container, $config )
+    protected function processConnectionConfiguration( ContainerBuilder $container, $config )
     {
         foreach ( $config["connections"] as $name => $params )
         {
@@ -76,7 +67,8 @@ class EzPublishElasticsearchExtension extends Extension
     }
 
     /**
-     *
+     * Flattens nested array structure into a single level key-value array, concatenating
+     * keys through levels and keeping values.
      *
      * @param array $nestedParams
      * @param string $prefix
@@ -102,14 +94,6 @@ class EzPublishElasticsearchExtension extends Extension
         return $params;
     }
 
-    /**
-     *
-     *
-     * @param array $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @return \eZ\Bundle\EzPublishElasticsearchBundle\DependencyInjection\Configuration
-     */
     public function getConfiguration( array $config, ContainerBuilder $container )
     {
         return new Configuration( $this->getAlias() );

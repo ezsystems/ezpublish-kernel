@@ -14,17 +14,20 @@ use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
- *
+ * ConnectionParameterFactory will return connection parameters resolved for a current siteaccess.
  */
-class ConnectionParamFactory extends ContainerAware
+class ConnectionParameterFactory extends ContainerAware
 {
     /**
+     * Holds StorageRepositoryProvider, used to get repository configuration
+     * resolved for current siteaccess.
+     *
      * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
      */
     protected $repositoryProvider;
 
     /**
-     *
+     * Construct from StorageRepositoryProvider
      *
      * @param \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider $repositoryProvider
      */
@@ -34,7 +37,8 @@ class ConnectionParamFactory extends ContainerAware
     }
 
     /**
-     *
+     * Returns search engine connection parameter with given $name,
+     * resolved for a current siteaccess.
      *
      * @param string $name
      *

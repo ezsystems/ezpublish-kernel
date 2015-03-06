@@ -10,7 +10,10 @@
 namespace eZ\Bundle\EzPublishElasticsearchBundle\DependencyInjection\Compiler;
 
 /**
+ * ContentHandlerPass replaces $documentTypeName argument of a Elasticsearch's Content Handler
+ * constructor, with a search engine's connection parameter resolved for current siteaccess.
  *
+ * @see \eZ\Publish\Core\Search\Elasticsearch\Content\Handler
  */
 class ContentHandlerPass extends ConnectionParameterPass
 {

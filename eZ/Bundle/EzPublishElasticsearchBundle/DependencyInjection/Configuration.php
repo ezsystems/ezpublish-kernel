@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     *
+     * Adds semantic configuration definition.
      *
      * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $node
      */
@@ -40,31 +40,29 @@ class Configuration implements ConfigurationInterface
     {
         $node->children()
             ->arrayNode( "connections" )
-                ->info( "bla bla bla" )
-                //->useAttributeAsKey( "name" )
+                ->info( "Elasticsearch Search Engine connections configuration" )
                 ->performNoDeepMerging()
                 ->prototype( "array" )
                     ->children()
                         ->scalarNode( "server" )
                             ->isRequired()
-                            ->info( "todo server address" )
+                            ->info( "Address of the Elasticsearch server" )
                             ->example( "https://username:password@hostname.com/path:1234" )
                         ->end()
                         ->scalarNode( "index_name" )
                             ->defaultValue( "ezpublish" )
-                            ->info( "" )
+                            ->info( "Name of Elasticsearch index" )
                         ->end()
                         ->arrayNode( "type_name" )
-                            ->info( "todo todo" )
-                            ->example( array( "ezdemo_group" => array( "ezdemo_site", "ezdemo_site_admin" ) ) )
+                            ->info( "Document type names" )
                             ->children()
                                 ->scalarNode( "content" )
                                     ->defaultValue( "content" )
-                                    ->info( "" )
+                                    ->info( "Name of the Content document type" )
                                 ->end()
                                 ->scalarNode( "location" )
                                     ->defaultValue( "location" )
-                                    ->info( "" )
+                                    ->info( "Name of the Location document type" )
                                 ->end()
                             ->end()
                         ->end()

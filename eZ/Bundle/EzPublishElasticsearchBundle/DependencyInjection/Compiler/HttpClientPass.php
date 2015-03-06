@@ -10,7 +10,11 @@
 namespace eZ\Bundle\EzPublishElasticsearchBundle\DependencyInjection\Compiler;
 
 /**
+ * HttpClientPass replaces $server argument of a Elasticsearch's HTTP Client
+ * constructor, with a search engine's connection parameter resolved for current
+ * siteaccess.
  *
+ * @see \eZ\Publish\Core\Search\Elasticsearch\Content\Handler
  */
 class HttpClientPass extends ConnectionParameterPass
 {

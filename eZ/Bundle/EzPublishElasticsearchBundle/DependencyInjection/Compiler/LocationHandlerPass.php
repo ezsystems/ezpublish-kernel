@@ -10,7 +10,10 @@
 namespace eZ\Bundle\EzPublishElasticsearchBundle\DependencyInjection\Compiler;
 
 /**
+ * LocationHandlerPass replaces $documentTypeName argument of a Elasticsearch's Location Handler
+ * constructor, with a search engine's connection parameter resolved for current siteaccess.
  *
+ * @see \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler
  */
 class LocationHandlerPass extends ConnectionParameterPass
 {

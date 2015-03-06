@@ -15,31 +15,40 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
+ * Base class for Compiler passes using ConnectionParamFactory.
  *
+ * Compiler passes extending this one will usually replace single argument of
+ * a specific service with a parameter of a search engine connection, resolved for a
+ * current siteaccess.
  */
 abstract class ConnectionParameterPass implements CompilerPassInterface
 {
     /**
+     * ConnectionParameterFactory service container id.
+     *
+     * @see \eZ\Bundle\EzPublishElasticsearchBundle\ApiLoader\ConnectionParameterFactory
+     *
      * @var string
      */
-    protected $factoryId = "ezpublish.elasticsearch.connection_param_factory";
+    protected $factoryId = "ezpublish.elasticsearch.connection_parameter_factory";
 
     /**
-     *
+     * Returns container id of the service that gets its argument replaced.
      *
      * @return string
      */
     abstract protected function getServiceId();
 
     /**
-     *
+     * Returns name of the search engine connection parameter that will replace the
+     * argument of the service.
      *
      * @return string
      */
     abstract protected function getParameterName();
 
     /**
-     *
+     * Returns index of the service's argument to be replaced.
      *
      * @return int
      */
@@ -54,20 +63,24 @@ abstract class ConnectionParameterPass implements CompilerPassInterface
             return;
         }
 
-        $httpClientServiceDefinition = $container->getDefinition( $serviceId );
-        $httpClientServiceDefinition->replaceArgument(
+        $service = $container->getDefinition( $serviceId );
+        $service->replaceArgument(
             $this->getReplacedArgumentIndex(),
             new Reference( $this->injectParameterService( $container, $this->getParameterName() ) )
         );
     }
 
     /**
+     * For given search engine connection parameter with name $parameterName, injects
+     * a service resolved through a factory. Service will return parameter's value, resolved
+     * for a current siteaccess.
      *
+     * @see \eZ\Bundle\EzPublishElasticsearchBundle\ApiLoader\ConnectionParameterFactory
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $parameterName
      *
-     * @return string
+     * @return string Container id of the injected service.
      */
     protected function injectParameterService( ContainerBuilder $container, $parameterName )
     {
