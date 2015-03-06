@@ -75,13 +75,13 @@ class ImageStorage extends GatewayBasedStorage
                 $field->value->externalData['fileName']
             );
 
-            if ( $this->IOService->exists( $targetPath ) )
-            {
-                $binaryFile = $this->IOService->loadBinaryFile( $targetPath );
-            }
-            else if ( isset( $field->value->externalData['id'] ) )
+            if ( isset( $field->value->externalData['id'] ) )
             {
                 $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] );
+            }
+            else if ( $this->IOService->exists( $targetPath ) )
+            {
+                $binaryFile = $this->IOService->loadBinaryFile( $targetPath );
             }
             else if ( isset( $field->value->externalData['inputUri'] ) )
             {
