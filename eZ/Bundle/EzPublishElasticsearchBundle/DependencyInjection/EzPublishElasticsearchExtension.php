@@ -16,6 +16,11 @@ use Symfony\Component\Config\FileLocator;
 
 class EzPublishElasticsearchExtension extends Extension
 {
+    public function getAlias()
+    {
+        return "ez_elasticsearch";
+    }
+
     /**
      * Loads a specific configuration.
      *
@@ -28,6 +33,9 @@ class EzPublishElasticsearchExtension extends Extension
      */
     public function load( array $configs, ContainerBuilder $container )
     {
+        $configuration = $this->getConfiguration( $configs, $container );
+        $config = $this->processConfiguration( $configuration, $configs );
+
         // Loading configuration from Core/settings
         $loader = new YamlFileLoader(
             $container,
@@ -35,5 +43,75 @@ class EzPublishElasticsearchExtension extends Extension
         );
         $loader->load( 'indexable_fieldtypes.yml' );
         $loader->load( "search_engines/elasticsearch.yml" );
+
+        $loader = new YamlFileLoader(
+            $container,
+            new FileLocator( __DIR__ . '/../Resources/config' )
+        );
+        $loader->load( 'services.yml' );
+
+        $this->processSearchConfiguration( $container, $config );
+    }
+
+    /**
+     *
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param array $config
+     */
+    protected function processSearchConfiguration( ContainerBuilder $container, $config )
+    {
+        foreach ( $config["connections"] as $name => $params )
+        {
+            $flattenedParams = $this->flattenParams(
+                $params,
+                $this->getAlias() . ".connection." . $name
+            );
+
+            foreach ( $flattenedParams as $key => $value )
+            {
+                $container->setParameter( $key, $value );
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param array $nestedParams
+     * @param string $prefix
+     *
+     * @return array
+     */
+    protected function flattenParams( $nestedParams, $prefix )
+    {
+        $params = array();
+
+        foreach ( $nestedParams as $key => $value )
+        {
+            if ( is_array( $value ) )
+            {
+                $params = $params + $this->flattenParams( $value, $prefix . "." . $key );
+            }
+            else
+            {
+                $params[$prefix . "." . $key] = $value;
+            }
+        }
+
+        return $params;
+    }
+
+    /**
+     *
+     *
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @return \eZ\Bundle\EzPublishElasticsearchBundle\DependencyInjection\Configuration
+     */
+    public function getConfiguration( array $config, ContainerBuilder $container )
+    {
+        return new Configuration( $this->getAlias() );
     }
 }

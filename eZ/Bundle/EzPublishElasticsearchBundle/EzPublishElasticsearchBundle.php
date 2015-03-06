@@ -19,6 +19,7 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisito
 use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisitorDispatcherLocationPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
+use eZ\Bundle\EzPublishElasticsearchBundle\DependencyInjection\Compiler;
 
 class EzPublishElasticsearchBundle extends Bundle
 {
@@ -31,8 +32,25 @@ class EzPublishElasticsearchBundle extends Bundle
         $container->addCompilerPass( new AggregateSortClauseVisitorLocationPass );
         $container->addCompilerPass( new CriterionVisitorDispatcherContentPass );
         $container->addCompilerPass( new CriterionVisitorDispatcherLocationPass );
+
         // @todo two passes below should be common for search implementations, so maybe separate or Core bundle
         $container->addCompilerPass( new FieldRegistryPass );
         $container->addCompilerPass( new SignalSlotPass );
+
+        $container->addCompilerPass( new Compiler\ContentGatewayPass );
+        $container->addCompilerPass( new Compiler\ContentHandlerPass );
+        $container->addCompilerPass( new Compiler\HttpClientPass );
+        $container->addCompilerPass( new Compiler\LocationGatewayPass );
+        $container->addCompilerPass( new Compiler\LocationHandlerPass );
+    }
+
+    public function getContainerExtension()
+    {
+        if ( !isset( $this->extension ) )
+        {
+            $this->extension = new DependencyInjection\EzPublishElasticsearchExtension();
+        }
+
+        return $this->extension;
     }
 }
