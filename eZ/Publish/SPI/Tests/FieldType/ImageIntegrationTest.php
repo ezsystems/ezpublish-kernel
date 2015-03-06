@@ -280,14 +280,16 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         }*/
     }
 
-    public function testCreateContentUsingIdPropertyWorksAndThrowsWarning()
+    /**
+     * @expectedException \eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException
+     */
+    public function testCreateContentUsingIdPropertyThrowsWarning()
     {
         $this->testCreateContentType();
         $contentType = $this->testLoadContentTypeField();
         $this->getDeprecationWarnerMock()
-            ->expects( $this->once() )
-            ->method( 'log' )
-            ->with( $this->stringContains( 'id property' ) );
+            ->expects( $this->never() )
+            ->method( 'log' );
 
         $this->createContent( $contentType, $this->getDeprecatedIdPropertyValue() );
     }
