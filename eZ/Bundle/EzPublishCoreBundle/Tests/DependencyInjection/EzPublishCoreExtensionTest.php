@@ -488,6 +488,37 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         );
     }
 
+    public function testRepositoriesConfigurationCompatibility2()
+    {
+        $repositories = array(
+            'main' => array(
+                'engine' => 'legacy',
+                'connection' => 'default',
+            ),
+        );
+        $expectedRepositories = array(
+            'main' => array(
+                'storage' => array(
+                    'engine' => 'legacy',
+                    'connection' => 'default',
+                    'config' => array(),
+                ),
+                'search' => array(
+                    'engine' => '%ezpublish.api.search_engine.default%',
+                    'connection' => null,
+                    'config' => array(),
+                ),
+            ),
+        );
+        $this->load( array( 'repositories' => $repositories ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezpublish.repositories' ) );
+
+        $this->assertSame(
+            $expectedRepositories,
+            $this->container->getParameter( 'ezpublish.repositories' )
+        );
+    }
+
     public function testRelatedSiteAccesses()
     {
         $mainRepo = 'main';
