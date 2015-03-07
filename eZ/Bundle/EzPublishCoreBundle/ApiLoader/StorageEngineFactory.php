@@ -69,16 +69,18 @@ class StorageEngineFactory
 
         if (
         !(
-            isset( $repositoryConfig['engine'] )
-            && isset( $this->storageEngines[$repositoryConfig['engine']] )
+            isset( $repositoryConfig['storage']['engine'] )
+            && isset( $this->storageEngines[$repositoryConfig['storage']['engine']] )
         )
         )
         {
             throw new InvalidStorageEngine(
-                "Invalid storage engine '{$repositoryConfig['engine']}'. Could not find any service tagged as ezpublish.storageEngine with alias {$repositoryConfig['engine']}."
+                "Invalid storage engine '{$repositoryConfig['storage']['engine']}'. " .
+                "Could not find any service tagged as ezpublish.storageEngine " .
+                "with alias {$repositoryConfig['storage']['engine']}."
             );
         }
 
-        return $this->storageEngines[$repositoryConfig['engine']];
+        return $this->storageEngines[$repositoryConfig['storage']['engine']];
     }
 }
