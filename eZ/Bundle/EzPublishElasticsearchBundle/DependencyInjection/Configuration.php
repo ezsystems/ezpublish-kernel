@@ -39,6 +39,9 @@ class Configuration implements ConfigurationInterface
     protected function addConnectionsSection( ArrayNodeDefinition $node )
     {
         $node->children()
+            ->scalarNode( "default_connection" )
+                ->info( "Name of the default connection" )
+            ->end()
             ->arrayNode( "connections" )
                 ->info( "Elasticsearch Search Engine connections configuration" )
                 ->useAttributeAsKey( "key" )

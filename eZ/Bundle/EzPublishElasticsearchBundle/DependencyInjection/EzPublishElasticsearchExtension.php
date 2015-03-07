@@ -52,11 +52,21 @@ class EzPublishElasticsearchExtension extends Extension
      */
     protected function processConnectionConfiguration( ContainerBuilder $container, $config )
     {
+        $alias = $this->getAlias();
+
+        if ( isset( $config["default_connection"] ) )
+        {
+            $container->setParameter(
+                "{$alias}.default_connection",
+                $config["default_connection"]
+            );
+        }
+
         foreach ( $config["connections"] as $name => $params )
         {
             $flattenedParams = $this->flattenParams(
                 $params,
-                $this->getAlias() . ".connection." . $name
+                "{$alias}.connection.{$name}"
             );
 
             foreach ( $flattenedParams as $key => $value )

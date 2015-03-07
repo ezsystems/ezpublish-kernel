@@ -46,8 +46,21 @@ class ConnectionParameterFactory extends ContainerAware
      */
     public function getParameter( $name )
     {
+        $defaultConnectionId = "ez_elasticsearch.default_connection";
         $repositoryConfig = $this->repositoryProvider->getRepositoryConfig();
         $connectionName = $repositoryConfig["search"]["connection"];
+
+        if ( empty( $connectionName ) )
+        {
+            if ( !$this->container->hasParameter( $defaultConnectionId ) )
+            {
+                throw new InvalidConfigurationException(
+                    "Default connection is used by not defined"
+                );
+            }
+
+            $connectionName = $this->container->getParameter( $defaultConnectionId );
+        }
 
         $parameterId = "ez_elasticsearch.connection.{$connectionName}.{$name}";
 
