@@ -104,21 +104,9 @@ class Configuration extends SiteAccessConfiguration
                             )
                         ->end()
                         ->beforeNormalization()
-                            // If not set, use default values.
-                            // %ezpublish.api.storage_engine.default% as engine, and default connection (if applicable).
-                            // %ezpublish.api.search_engine.default% as engine, and default connection (if applicable).
                             ->always(
                                 function ( $v )
                                 {
-                                    $storageDefaults = array(
-                                        'engine' => '%ezpublish.api.storage_engine.default%',
-                                        'connection' => null,
-                                    );
-                                    $searchDefaults = array(
-                                        'engine' => '%ezpublish.api.search_engine.default%',
-                                        'connection' => null,
-                                    );
-
                                     if ( $v === null )
                                     {
                                         $v = array();
@@ -126,12 +114,12 @@ class Configuration extends SiteAccessConfiguration
 
                                     if ( !isset( $v['storage'] ) )
                                     {
-                                        $v['storage'] = $storageDefaults;
+                                        $v['storage'] = array();
                                     }
 
                                     if ( !isset( $v['search'] ) )
                                     {
-                                        $v['search'] = $searchDefaults;
+                                        $v['search'] = array();
                                     }
 
                                     return $v;
@@ -141,8 +129,12 @@ class Configuration extends SiteAccessConfiguration
                         ->children()
                             ->arrayNode( 'storage' )
                                 ->children()
-                                    ->scalarNode( 'engine' )->isRequired()->info( 'The storage engine to use' )->end()
+                                    ->scalarNode( 'engine' )
+                                        ->defaultValue( '%ezpublish.api.storage_engine.default%' )
+                                        ->info( 'The storage engine to use' )
+                                    ->end()
                                     ->scalarNode( 'connection' )
+                                        ->defaultNull()
                                         ->info( 'The connection name, if applicable (e.g. Doctrine connection name). If not set, the default connection will be used.' )
                                     ->end()
                                     ->arrayNode( 'config' )
