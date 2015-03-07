@@ -73,36 +73,91 @@ class Configuration extends SiteAccessConfiguration
                     ->useAttributeAsKey( 'alias' )
                     ->prototype( 'array' )
                         ->beforeNormalization()
-                            // If set to null, use default values.
-                            // %ezpublish.api.storage_engine.default% as engine, and default connection (if applicable).
-                            ->ifNull()
-                            ->then(
-                                function ()
+                            ->always(
+                                function ( $v )
                                 {
-                                    // TODO add legacy search engine + connection
-                                    return array( 'engine' => '%ezpublish.api.storage_engine.default%', 'connection' => null );
+                                    if ( isset( $v['storage'] ) )
+                                    {
+                                        return $v;
+                                    }
+
+                                    if ( isset( $v['engine'] ) )
+                                    {
+                                        $v['storage']['engine'] = $v['engine'];
+                                        unset( $v['engine'] );
+                                    }
+
+                                    if ( isset( $v['connection'] ) )
+                                    {
+                                        $v['storage']['connection'] = $v['connection'];
+                                        unset( $v['connection'] );
+                                    }
+
+                                    if ( isset( $v['config'] ) )
+                                    {
+                                        $v['storage']['config'] = $v['config'];
+                                        unset( $v['config'] );
+                                    }
+
+                                    return $v;
+                                }
+                            )
+                        ->end()
+                        ->beforeNormalization()
+                            // If not set, use default values.
+                            // %ezpublish.api.storage_engine.default% as engine, and default connection (if applicable).
+                            // %ezpublish.api.search_engine.default% as engine, and default connection (if applicable).
+                            ->always(
+                                function ( $v )
+                                {
+                                    $storageDefaults = array(
+                                        'engine' => '%ezpublish.api.storage_engine.default%',
+                                        'connection' => null,
+                                    );
+                                    $searchDefaults = array(
+                                        'engine' => '%ezpublish.api.search_engine.default%',
+                                        'connection' => null,
+                                    );
+
+                                    if ( $v === null )
+                                    {
+                                        $v = array();
+                                    }
+
+                                    if ( !isset( $v['storage'] ) )
+                                    {
+                                        $v['storage'] = $storageDefaults;
+                                    }
+
+                                    if ( !isset( $v['search'] ) )
+                                    {
+                                        $v['search'] = $searchDefaults;
+                                    }
+
+                                    return $v;
                                 }
                             )
                         ->end()
                         ->children()
-                            ->scalarNode( 'engine' )->isRequired()->info( 'The storage engine to use' )->end()
-                            ->scalarNode( 'connection' )
-                                ->info( 'The connection name, if applicable (e.g. Doctrine connection name). If not set, the default connection will be used.' )
-                            ->end()
-                            ->arrayNode( 'config' )
-                                ->info( 'Arbitrary configuration options, supported by your storage engine' )
-                                ->useAttributeAsKey( 'key' )
-                                ->prototype( 'variable' )->end()
+                            ->arrayNode( 'storage' )
+                                ->children()
+                                    ->scalarNode( 'engine' )->isRequired()->info( 'The storage engine to use' )->end()
+                                    ->scalarNode( 'connection' )
+                                        ->info( 'The connection name, if applicable (e.g. Doctrine connection name). If not set, the default connection will be used.' )
+                                    ->end()
+                                    ->arrayNode( 'config' )
+                                        ->info( 'Arbitrary configuration options, supported by your storage engine' )
+                                        ->useAttributeAsKey( 'key' )
+                                        ->prototype( 'variable' )->end()
+                                    ->end()
+                                ->end()
                             ->end()
                             ->arrayNode( 'search' )
                                 ->children()
                                     ->scalarNode( 'engine' )
                                         ->isRequired()
                                         ->cannotBeEmpty()
-                                        ->validate()
-                                        ->ifNotInArray( array( 'elasticsearch', 'legacy', 'solr' ) )
-                                            ->thenInvalid( 'Invalid Search Engine "%s"' )
-                                        ->end()
+                                        ->info( 'The search engine to use' )
                                     ->end()
                                     ->scalarNode( 'connection' )
                                         ->info( 'The connection name, if applicable (e.g. Doctrine connection name). If not set, the default connection will be used.' )
