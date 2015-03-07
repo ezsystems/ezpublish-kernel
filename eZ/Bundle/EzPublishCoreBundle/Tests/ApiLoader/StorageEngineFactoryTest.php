@@ -44,10 +44,14 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
         $repositoryAlias = 'main';
         $repositories = array(
             $repositoryAlias => array(
-                'engine' => 'foo'
+                'storage' => array(
+                    'engine' => 'foo',
+                ),
             ),
             'another' => array(
-                'engine' => 'bar'
+                'storage' => array(
+                    'engine' => 'bar',
+                ),
             )
         );
         $expectedStorageEngine = $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' );
@@ -81,10 +85,14 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
         $repositoryAlias = 'main';
         $repositories = array(
             $repositoryAlias => array(
-                'engine' => 'undefined_storage_engine'
+                'storage' => array(
+                    'engine' => 'undefined_storage_engine',
+                ),
             ),
             'another' => array(
-                'engine' => 'bar'
+                'storage' => array(
+                    'engine' => 'bar',
+                ),
             )
         );
 
