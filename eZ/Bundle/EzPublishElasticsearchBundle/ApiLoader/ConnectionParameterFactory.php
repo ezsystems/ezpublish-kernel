@@ -48,15 +48,25 @@ class ConnectionParameterFactory extends ContainerAware
     {
         $defaultConnectionId = "ez_elasticsearch.default_connection";
         $repositoryConfig = $this->repositoryProvider->getRepositoryConfig();
+        $repositoryAlias = $repositoryConfig["alias"];
         $connectionName = $repositoryConfig["search"]["connection"];
 
-        if ( empty( $connectionName ) )
+        if ( $connectionName === null )
         {
             if ( !$this->container->hasParameter( $defaultConnectionId ) )
             {
-                throw new InvalidConfigurationException(
-                    "Default connection is used by not defined"
+                $exception = new InvalidConfigurationException(
+                    "Default Elasticsearch Search Engine connection is not defined."
                 );
+
+                $exception->setPath( "ezpublish.repositories.{$repositoryAlias}.storage" );
+                $exception->addHint(
+                    "You can define it under 'ez_elasticsearch' extension, using " .
+                    "'default_connection' key. Alternatively, explicitly configure search " .
+                    "engine with existing connection name."
+                );
+
+                throw $exception;
             }
 
             $connectionName = $this->container->getParameter( $defaultConnectionId );
