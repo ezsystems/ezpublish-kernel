@@ -17,6 +17,7 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateFieldValueMappe
 use eZ\Publish\Core\Base\Container\Compiler\Search\Solr\AggregateSortClauseVisitorPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
+use eZ\Bundle\EzPublishSolrBundle\DependencyInjection\Compiler;
 
 class EzPublishSolrBundle extends Bundle
 {
@@ -29,5 +30,17 @@ class EzPublishSolrBundle extends Bundle
         $container->addCompilerPass( new AggregateSortClauseVisitorPass );
         $container->addCompilerPass( new FieldRegistryPass );
         $container->addCompilerPass( new SignalSlotPass );
+
+        $container->addCompilerPass( new Compiler\HttpClientPass );
+    }
+
+    public function getContainerExtension()
+    {
+        if ( !isset( $this->extension ) )
+        {
+            $this->extension = new DependencyInjection\EzPublishSolrExtension();
+        }
+
+        return $this->extension;
     }
 }
