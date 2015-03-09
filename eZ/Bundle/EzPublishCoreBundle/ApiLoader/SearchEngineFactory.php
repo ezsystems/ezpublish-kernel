@@ -71,8 +71,10 @@ class SearchEngineFactory
         $repositoryConfig = $this->storageRepositoryProvider->getRepositoryConfig();
 
         if (
-            !isset( $repositoryConfig['search']['engine'] )
-            || !isset( $this->searchEngines[$repositoryConfig['search']['engine']] )
+            !(
+                isset( $repositoryConfig['search']['engine'] )
+                && isset( $this->searchEngines[$repositoryConfig['search']['engine']] )
+            )
         )
         {
             throw new InvalidSearchEngine(
