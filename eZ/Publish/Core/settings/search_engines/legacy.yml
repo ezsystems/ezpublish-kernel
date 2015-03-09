@@ -16,11 +16,29 @@ parameters:
     ezpublish.search.legacy.gateway.location.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\DoctrineDatabase
     ezpublish.search.legacy.gateway.location.exception_conversion.class: eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\ExceptionConversion
 
+    ezpublish.search.legacy.dbhandler.class: eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
+    ezpublish.search.connection.class: Doctrine\DBAL\Driver\Connection
+
 services:
+    # Legacy Search Engine semantic configuration will override connection service to the one
+    # resolved for the current siteaccess
+    ezpublish.api.search_engine.legacy.dbhandler:
+        class: %ezpublish.search.legacy.dbhandler.class%
+        factory_class: %ezpublish.search.legacy.dbhandler.class%
+        factory_method: createFromConnection
+        arguments:
+            - @ezpublish.api.search_engine.legacy.connection
+        lazy: true
+
+    # Aliasing storage connection in order to support sqlite://:memory:
+    # Otherwise it should be possible to use a separate database and/or database connection
+    ezpublish.api.search_engine.legacy.connection:
+        alias: ezpublish.api.storage_engine.legacy.connection
+
     ezpublish.search.legacy.gateway.content.inner:
         class: %ezpublish.search.legacy.gateway.content.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.api.search_engine.legacy.dbhandler
             - @ezpublish.search.legacy.gateway.criteria_converter.content
             - @ezpublish.search.legacy.gateway.sort_clause_converter.content
 
@@ -36,7 +54,7 @@ services:
     ezpublish.search.legacy.gateway.location.inner:
         class: %ezpublish.search.legacy.gateway.location.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.api.search_engine.legacy.dbhandler
             - @ezpublish.search.legacy.gateway.criteria_converter.location
             - @ezpublish.search.legacy.gateway.sort_clause_converter.location
 
