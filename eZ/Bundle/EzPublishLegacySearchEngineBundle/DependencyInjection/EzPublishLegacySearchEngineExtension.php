@@ -29,5 +29,11 @@ class EzPublishLegacySearchEngineExtension extends Extension
             new FileLocator( __DIR__ . "/../../../Publish/Core/settings" )
         );
         $loader->load( "search_engines/legacy.yml" );
+
+        $loader = new YamlFileLoader(
+            $container,
+            new FileLocator( __DIR__ . '/../Resources/config' )
+        );
+        $loader->load( 'services.yml' );
     }
 }
