@@ -46,7 +46,7 @@ class ConnectionParameterFactory extends ContainerAware
      */
     public function getParameter( $name )
     {
-        $defaultConnectionId = "ez_solr.default_connection";
+        $defaultConnectionId = "ez_search_engine_solr.default_connection";
         $repositoryConfig = $this->repositoryProvider->getRepositoryConfig();
         $repositoryAlias = $repositoryConfig["alias"];
         $connectionName = $repositoryConfig["search"]["connection"];
@@ -61,7 +61,7 @@ class ConnectionParameterFactory extends ContainerAware
 
                 $exception->setPath( "ezpublish.repositories.{$repositoryAlias}.storage" );
                 $exception->addHint(
-                    "You can define it under 'ez_solr' extension, using " .
+                    "You can define it under 'ez_search_engine_solr' extension, using " .
                     "'default_connection' key. Alternatively, explicitly configure search " .
                     "engine with existing connection name."
                 );
@@ -72,7 +72,7 @@ class ConnectionParameterFactory extends ContainerAware
             $connectionName = $this->container->getParameter( $defaultConnectionId );
         }
 
-        $parameterId = "ez_solr.connection.{$connectionName}.{$name}";
+        $parameterId = "ez_search_engine_solr.connection.{$connectionName}.{$name}";
 
         if ( !$this->container->hasParameter( $parameterId ) )
         {

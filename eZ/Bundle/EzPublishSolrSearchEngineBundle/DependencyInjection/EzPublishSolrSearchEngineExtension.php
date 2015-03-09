@@ -18,7 +18,7 @@ class EzPublishSolrSearchEngineExtension extends Extension
 {
     public function getAlias()
     {
-        return "ez_solr";
+        return "ez_search_engine_solr";
     }
 
     /**

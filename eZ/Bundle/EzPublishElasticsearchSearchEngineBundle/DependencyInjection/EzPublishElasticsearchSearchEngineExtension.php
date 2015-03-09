@@ -18,7 +18,7 @@ class EzPublishElasticsearchSearchEngineExtension extends Extension
 {
     public function getAlias()
     {
-        return "ez_elasticsearch";
+        return "ez_search_engine_elasticsearch";
     }
 
     public function load( array $configs, ContainerBuilder $container )
