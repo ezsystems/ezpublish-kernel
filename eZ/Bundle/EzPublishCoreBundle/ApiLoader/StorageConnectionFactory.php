@@ -50,7 +50,7 @@ class StorageConnectionFactory extends ContainerAware
         if ( !$this->container->has( $doctrineConnectionId ) )
         {
             throw new InvalidArgumentException(
-                "Invalid Doctrine connection '{$repositoryConfig['storage']['connection']}' for repository '{$repositoryConfig['storage']['alias']}'." .
+                "Invalid Doctrine connection '{$repositoryConfig['storage']['connection']}' for repository '{$repositoryConfig['alias']}'." .
                 "Valid connections are " . implode( ', ', array_keys( $this->container->getParameter( 'doctrine.connections' ) ) )
             );
         }
