@@ -36,9 +36,10 @@ class StorageConnectionFactory extends ContainerAware
         $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
         // Taking provided connection name if any.
         // Otherwise, just fallback to the default connection.
-        if ( isset( $repositoryConfig['connection'] ) )
+
+        if ( isset( $repositoryConfig['storage']['connection'] ) )
         {
-            $doctrineConnectionId = sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['connection'] );
+            $doctrineConnectionId = sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['storage']['connection'] );
         }
         else
         {
@@ -49,7 +50,7 @@ class StorageConnectionFactory extends ContainerAware
         if ( !$this->container->has( $doctrineConnectionId ) )
         {
             throw new InvalidArgumentException(
-                "Invalid Doctrine connection '{$repositoryConfig['connection']}' for repository '{$repositoryConfig['alias']}'." .
+                "Invalid Doctrine connection '{$repositoryConfig['storage']['connection']}' for repository '{$repositoryConfig['storage']['alias']}'." .
                 "Valid connections are " . implode( ', ', array_keys( $this->container->getParameter( 'doctrine.connections' ) ) )
             );
         }
