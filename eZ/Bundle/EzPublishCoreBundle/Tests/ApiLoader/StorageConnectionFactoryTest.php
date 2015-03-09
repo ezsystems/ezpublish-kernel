@@ -21,8 +21,10 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $repositories = array(
             $repositoryAlias => array(
-                'engine' => 'legacy',
-                'connection' => $doctrineConnection
+                'storage' => array(
+                    'engine' => 'legacy',
+                    'connection' => $doctrineConnection,
+                ),
             )
         );
 
@@ -71,8 +73,10 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $repositories = array(
             'foo' => array(
-                'engine' => 'legacy',
-                'connection' => 'my_doctrine_connection'
+                'storage' => array(
+                    'engine' => 'legacy',
+                    'connection' => 'my_doctrine_connection',
+                ),
             )
         );
 
@@ -99,8 +103,10 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $repositoryConfig = array(
             'alias' => 'foo',
-            'engine' => 'legacy',
-            'connection' => 'my_doctrine_connection'
+            'storage' => array(
+                'engine' => 'legacy',
+                'connection' => 'my_doctrine_connection',
+            ),
         );
         $repositoryConfigurationProviderMock
             ->expects( $this->once() )
