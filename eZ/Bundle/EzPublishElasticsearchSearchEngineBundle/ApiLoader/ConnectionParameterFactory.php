@@ -74,6 +74,11 @@ class ConnectionParameterFactory extends ContainerAware
 
         $parameterId = "ez_search_engine_elasticsearch.connection.{$connectionName}.{$name}";
 
+        if ( $repositoryConfig["search"]["engine"] !== "elasticsearch" )
+        {
+            $parameterId = "ezpublish.search.elasticsearch.index.{$name}";
+        }
+
         if ( !$this->container->hasParameter( $parameterId ) )
         {
             throw new InvalidConfigurationException(
