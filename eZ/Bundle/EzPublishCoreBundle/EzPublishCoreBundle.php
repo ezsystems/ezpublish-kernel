@@ -36,11 +36,8 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAw
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageRegistryPass;
-use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriteriaConverterPass;
-use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\RoleLimitationConverterPass;
-use eZ\Publish\Core\Base\Container\Compiler\Search\Legacy\SortClauseConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser as ConfigParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\HttpBasicFactory;
@@ -90,11 +87,8 @@ class EzPublishCoreBundle extends Bundle
         // Storage passes
         $container->addCompilerPass( new ExternalStorageRegistryPass );
         // Legacy Storage passes
-        $container->addCompilerPass( new CriteriaConverterPass );
-        $container->addCompilerPass( new CriterionFieldValueHandlerRegistryPass );
         $container->addCompilerPass( new FieldValueConverterRegistryPass );
         $container->addCompilerPass( new RoleLimitationConverterPass );
-        $container->addCompilerPass( new SortClauseConverterPass );
 
         $securityExtension = $container->getExtension( 'security' );
         $securityExtension->addSecurityListenerFactory( new HttpBasicFactory );
