@@ -14,7 +14,7 @@ namespace eZ\Bundle\EzPublishElasticsearchBundle\DependencyInjection\Compiler;
  * constructor, with a search engine's connection parameter resolved for current
  * siteaccess.
  *
- * @see \eZ\Publish\Core\Search\Elasticsearch\Content\Handler
+ * @see \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient\Stream
  */
 class HttpClientPass extends ConnectionParameterPass
 {
