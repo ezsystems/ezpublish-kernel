@@ -20,7 +20,7 @@ services:
     ezpublish.persistence.connection.factory:
         class: %ezpublish.persistence.connection.factory.class%
         arguments:
-            - @ezpublish.api.storage_repository_provider
+            - @ezpublish.api.repository_configuration_provider
         calls:
             - [setContainer, [@service_container]]
 
