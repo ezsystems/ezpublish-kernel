@@ -10,7 +10,7 @@
 namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\ApiLoader;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
@@ -19,19 +19,19 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 class ConnectionParameterFactory extends ContainerAware
 {
     /**
-     * Holds StorageRepositoryProvider, used to get repository configuration
+     * Holds RepositoryConfigurationProvider, used to get repository configuration
      * resolved for current siteaccess.
      *
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
      */
     protected $repositoryProvider;
 
     /**
-     * Construct from StorageRepositoryProvider
+     * Construct from RepositoryConfigurationProvider
      *
-     * @param \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider $repositoryProvider
+     * @param \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider $repositoryProvider
      */
-    public function __construct( StorageRepositoryProvider $repositoryProvider )
+    public function __construct( RepositoryConfigurationProvider $repositoryProvider )
     {
         $this->repositoryProvider = $repositoryProvider;
     }

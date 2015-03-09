@@ -10,19 +10,19 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory;
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use PHPUnit_Framework_TestCase;
 
 class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testRegisterStorageEngine()
     {
-        /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider $storageRepositoryProvider */
-        $storageRepositoryProvider = $this
-            ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\ApiLoader\\StorageRepositoryProvider' )
+        /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider $repositoryConfigurationProvider */
+        $repositoryConfigurationProvider = $this
+            ->getMockBuilder( 'eZ\\Bundle\\EzPublishCoreBundle\\ApiLoader\\RepositoryConfigurationProvider' )
             ->disableOriginalConstructor()
             ->getMock();
-        $factory = new StorageEngineFactory( $storageRepositoryProvider );
+        $factory = new StorageEngineFactory( $repositoryConfigurationProvider );
 
         $storageEngines = array(
             'foo' => $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' ),
@@ -60,8 +60,8 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
             'bar' => $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' ),
             'baz' => $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' )
         );
-        $storageRepositoryProvider = new StorageRepositoryProvider( $configResolver, $repositories );
-        $factory = new StorageEngineFactory( $storageRepositoryProvider );
+        $repositoryConfigurationProvider = new RepositoryConfigurationProvider( $configResolver, $repositories );
+        $factory = new StorageEngineFactory( $repositoryConfigurationProvider );
         foreach ( $storageEngines as $identifier => $persistenceHandler )
         {
             $factory->registerStorageEngine( $persistenceHandler, $identifier );
@@ -102,8 +102,8 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
             'baz' => $this->getMock( 'eZ\Publish\SPI\Persistence\Handler' )
         );
 
-        $storageRepositoryProvider = new StorageRepositoryProvider( $configResolver, $repositories );
-        $factory = new StorageEngineFactory( $storageRepositoryProvider );
+        $repositoryConfigurationProvider = new RepositoryConfigurationProvider( $configResolver, $repositories );
+        $factory = new StorageEngineFactory( $repositoryConfigurationProvider );
         foreach ( $storageEngines as $identifier => $persistenceHandler )
         {
             $factory->registerStorageEngine( $persistenceHandler, $identifier );

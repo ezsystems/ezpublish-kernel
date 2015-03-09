@@ -15,13 +15,13 @@ use InvalidArgumentException;
 class StorageConnectionFactory extends ContainerAware
 {
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
      */
-    protected $storageRepositoryProvider;
+    protected $repositoryConfigurationProvider;
 
-    public function __construct( StorageRepositoryProvider $storageRepositoryProvider )
+    public function __construct( RepositoryConfigurationProvider $repositoryConfigurationProvider )
     {
-        $this->storageRepositoryProvider = $storageRepositoryProvider;
+        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
     }
 
     /**
@@ -33,7 +33,7 @@ class StorageConnectionFactory extends ContainerAware
      */
     public function getConnection()
     {
-        $repositoryConfig = $this->storageRepositoryProvider->getRepositoryConfig();
+        $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
         // Taking provided connection name if any.
         // Otherwise, just fallback to the default connection.
         if ( isset( $repositoryConfig['connection'] ) )

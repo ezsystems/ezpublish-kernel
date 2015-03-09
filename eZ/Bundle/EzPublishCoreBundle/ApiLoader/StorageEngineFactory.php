@@ -18,9 +18,9 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 class StorageEngineFactory
 {
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
      */
-    private $storageRepositoryProvider;
+    private $repositoryConfigurationProvider;
 
     /**
      * Hash of registered storage engines.
@@ -30,9 +30,9 @@ class StorageEngineFactory
      */
     protected $storageEngines = array();
 
-    public function __construct( StorageRepositoryProvider $storageRepositoryProvider )
+    public function __construct( RepositoryConfigurationProvider $repositoryConfigurationProvider )
     {
-        $this->storageRepositoryProvider = $storageRepositoryProvider;
+        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
     }
 
     /**
@@ -65,7 +65,7 @@ class StorageEngineFactory
      */
     public function buildStorageEngine()
     {
-        $repositoryConfig = $this->storageRepositoryProvider->getRepositoryConfig();
+        $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
 
         if (
         !(

@@ -18,9 +18,9 @@ use eZ\Publish\SPI\Search\Handler as SearchHandler;
 class SearchEngineFactory
 {
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
      */
-    private $storageRepositoryProvider;
+    private $repositoryConfigurationProvider;
 
     /**
      * Hash of registered search engines.
@@ -30,9 +30,9 @@ class SearchEngineFactory
      */
     protected $searchEngines = array();
 
-    public function __construct( StorageRepositoryProvider $storageRepositoryProvider )
+    public function __construct( RepositoryConfigurationProvider $repositoryConfigurationProvider )
     {
-        $this->storageRepositoryProvider = $storageRepositoryProvider;
+        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
     }
 
     /**
@@ -68,7 +68,7 @@ class SearchEngineFactory
      */
     public function buildSearchEngine()
     {
-        $repositoryConfig = $this->storageRepositoryProvider->getRepositoryConfig();
+        $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
 
         if (
             !(
