@@ -59,7 +59,7 @@ class ConnectionParameterFactory extends ContainerAware
                     "Default Solr Search Engine connection is not defined."
                 );
 
-                $exception->setPath( "ezpublish.repositories.{$repositoryAlias}.storage" );
+                $exception->setPath( "ezpublish.repositories.{$repositoryAlias}.search" );
                 $exception->addHint(
                     "You can define it under 'ez_search_engine_solr' extension, using " .
                     "'default_connection' key. Alternatively, explicitly configure search " .
