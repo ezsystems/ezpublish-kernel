@@ -68,10 +68,10 @@ class StorageEngineFactory
         $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
 
         if (
-        !(
-            isset( $repositoryConfig['storage']['engine'] )
-            && isset( $this->storageEngines[$repositoryConfig['storage']['engine']] )
-        )
+            !(
+                isset( $repositoryConfig['storage']['engine'] )
+                && isset( $this->storageEngines[$repositoryConfig['storage']['engine']] )
+            )
         )
         {
             throw new InvalidStorageEngine(
