@@ -11,8 +11,8 @@ imports:
 parameters:
     ezpublish.search.elasticsearch.connection.server: http://localhost:9200/
     ezpublish.search.elasticsearch.connection.index_name: 'ezpublish'
-    ezpublish.search.elasticsearch.connection.type_name.content: 'content'
-    ezpublish.search.elasticsearch.connection.type_name.location: 'location'
+    ezpublish.search.elasticsearch.connection.document_type_name.content: 'content'
+    ezpublish.search.elasticsearch.connection.document_type_name.location: 'location'
     ezpublish.spi.search.elasticsearch.class: eZ\Publish\Core\Search\Elasticsearch\Handler
     ezpublish.search.elasticsearch.serializer.class: eZ\Publish\Core\Search\Elasticsearch\Content\Serializer
     ezpublish.search.elasticsearch.mapper.standard.class: eZ\Publish\Core\Search\Elasticsearch\Content\Mapper\StandardMapper
@@ -85,7 +85,7 @@ services:
             - @ezpublish.search.elasticsearch.content.gateway
             - @ezpublish.search.elasticsearch.mapper
             - @ezpublish.search.elasticsearch.extractor
-            - %ezpublish.search.elasticsearch.connection.type_name.content%
+            - %ezpublish.search.elasticsearch.connection.document_type_name.content%
         lazy: true
 
     ezpublish.spi.search.elasticsearch.location_handler:
@@ -94,7 +94,7 @@ services:
             - @ezpublish.search.elasticsearch.location.gateway
             - @ezpublish.search.elasticsearch.mapper
             - @ezpublish.search.elasticsearch.extractor
-            - %ezpublish.search.elasticsearch.connection.type_name.location%
+            - %ezpublish.search.elasticsearch.connection.document_type_name.location%
         lazy: true
 
     ezpublish.spi.search.elasticsearch:

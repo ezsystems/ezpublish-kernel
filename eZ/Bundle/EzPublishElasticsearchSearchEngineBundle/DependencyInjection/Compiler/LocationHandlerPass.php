@@ -24,7 +24,7 @@ class LocationHandlerPass extends ConnectionParameterPass
 
     protected function getParameterName()
     {
-        return "type_name.location";
+        return "document_type_name.location";
     }
 
     protected function getReplacedArgumentIndex()

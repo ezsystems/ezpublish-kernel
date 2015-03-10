@@ -57,7 +57,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue( "ezpublish" )
                             ->info( "Name of Elasticsearch index" )
                         ->end()
-                        ->arrayNode( "type_name" )
+                        ->arrayNode( "document_type_name" )
                             ->info( "Document type names" )
                             ->children()
                                 ->scalarNode( "content" )

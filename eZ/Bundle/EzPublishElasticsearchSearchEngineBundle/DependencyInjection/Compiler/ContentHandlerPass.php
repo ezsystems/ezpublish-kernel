@@ -24,7 +24,7 @@ class ContentHandlerPass extends ConnectionParameterPass
 
     protected function getParameterName()
     {
-        return "type_name.content";
+        return "document_type_name.content";
     }
 
     protected function getReplacedArgumentIndex()
