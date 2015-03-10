@@ -54,6 +54,45 @@ Changes affecting version compatibility with former or future versions.
     * `ezpublish.search.legacy.gateway.sort_clause_handler.content`
     * `ezpublish.search.legacy.gateway.sort_clause_handler.location`
 
+* Semantic configuration for search engines has been implemented. At the moment of writing, only
+  Legacy Search Engine is supported.
+
+  With semantic configuration for search engines, repository configuration has changed. Previous
+  structure:
+
+  ```yml
+  ezpublish:
+      repositories:
+          main:
+              engine: legacy
+              connection: default
+  ```
+
+  has been updated with search engine configuration. With it, storage settings are now moved under
+  `storage` key. New structure looks like this:
+
+  ```yml
+  ezpublish:
+      repositories:
+          main:
+              storage:
+                  engine: legacy
+                  connection: my_connection
+              search:
+                  engine: legacy
+                  connection: my_connection
+  ```
+
+  The same as was previously the case with storage configuration, it is not mandatory to provide
+  search configuration. In that case the system will try to use default search engine and default
+  connection. Old structure is still supported, but is deprecated. The support will be removed in
+  one of the future releases.
+
+* `eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageRepositoryProvider` is has been renamed to
+  `eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider`, as it now provides
+  repository configuration for both storage and search engines. Class signature has remained the
+  same.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.
