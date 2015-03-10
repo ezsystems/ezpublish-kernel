@@ -57,7 +57,12 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass( new ChainConfigResolverPass );
         $container->addCompilerPass( new RegisterLimitationTypePass );
         $container->addCompilerPass( new RegisterStorageEnginePass );
-        $container->addCompilerPass( new RegisterSearchEnginePass );
+        $container->addCompilerPass(
+            new RegisterSearchEnginePass(
+                "ezpublish.api.search_engine.factory",
+                "ezpublish.searchEngine"
+            )
+        );
         $container->addCompilerPass( new LegacyStorageEnginePass );
         $container->addCompilerPass( new LocalePass );
         $container->addCompilerPass( new ContentViewPass );

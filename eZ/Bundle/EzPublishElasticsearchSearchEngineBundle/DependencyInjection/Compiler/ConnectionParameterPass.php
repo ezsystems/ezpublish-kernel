@@ -24,13 +24,23 @@ use Symfony\Component\DependencyInjection\Reference;
 abstract class ConnectionParameterPass implements CompilerPassInterface
 {
     /**
-     * ConnectionParameterFactory service container id.
+     * Container service id of the ConnectionParameterFactory
      *
      * @see \eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\ApiLoader\ConnectionParameterFactory
      *
      * @var string
      */
-    protected $factoryId = "ezpublish.elasticsearch.connection_parameter_factory";
+    protected $factoryId;
+
+    /**
+     * Construct from SearchEngineFactory container service id
+     *
+     * @param string $factoryId
+     */
+    public function __construct( $factoryId )
+    {
+        $this->factoryId = $factoryId;
+    }
 
     /**
      * Returns container id of the service that gets its argument replaced.

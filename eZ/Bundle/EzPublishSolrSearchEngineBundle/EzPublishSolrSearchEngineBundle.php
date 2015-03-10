@@ -31,7 +31,8 @@ class EzPublishSolrSearchEngineBundle extends Bundle
         $container->addCompilerPass( new FieldRegistryPass );
         $container->addCompilerPass( new SignalSlotPass );
 
-        $container->addCompilerPass( new Compiler\HttpClientPass );
+        $connectionParameterFactoryId = "ezpublish.solr.connection_parameter_factory";
+        $container->addCompilerPass( new Compiler\HttpClientPass( $connectionParameterFactoryId ) );
     }
 
     public function getContainerExtension()
