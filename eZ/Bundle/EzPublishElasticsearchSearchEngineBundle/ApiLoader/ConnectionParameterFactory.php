@@ -27,13 +27,45 @@ class ConnectionParameterFactory extends ContainerAware
     protected $repositoryProvider;
 
     /**
-     * Construct from RepositoryConfigurationProvider
+     * Alias of the bundle's extension, used as a root key for semantic configuration
+     *
+     * @var string
+     */
+    protected $extensionAlias;
+
+    /**
+     * Name of the key used for the name of the default connection
+     *
+     * @var string
+     */
+    protected $defaultConnectionKey;
+
+    /**
+     * Prefix of the default parameters, defined in Core/settings
+     *
+     * @var string
+     */
+    protected $defaultParameterPrefix;
+
+    /**
+     * Construct from RepositoryConfigurationProvider and container parameters
      *
      * @param \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider $repositoryProvider
+     * @param string $extensionAlias
+     * @param string $defaultConnectionKey
+     * @param string $defaultParameterPrefix
      */
-    public function __construct( RepositoryConfigurationProvider $repositoryProvider )
+    public function __construct(
+        RepositoryConfigurationProvider $repositoryProvider,
+        $extensionAlias,
+        $defaultConnectionKey,
+        $defaultParameterPrefix
+    )
     {
         $this->repositoryProvider = $repositoryProvider;
+        $this->extensionAlias = $extensionAlias;
+        $this->defaultConnectionKey = $defaultConnectionKey;
+        $this->defaultParameterPrefix = $defaultParameterPrefix;
     }
 
     /**
@@ -46,7 +78,7 @@ class ConnectionParameterFactory extends ContainerAware
      */
     public function getParameter( $name )
     {
-        $defaultConnectionId = "ez_search_engine_elasticsearch.default_connection";
+        $defaultConnectionId = "{$this->extensionAlias}.{$this->defaultConnectionKey}";
         $repositoryConfig = $this->repositoryProvider->getRepositoryConfig();
         $repositoryAlias = $repositoryConfig["alias"];
         $connectionName = $repositoryConfig["search"]["connection"];
@@ -61,9 +93,9 @@ class ConnectionParameterFactory extends ContainerAware
 
                 $exception->setPath( "ezpublish.repositories.{$repositoryAlias}.search" );
                 $exception->addHint(
-                    "You can define it under 'ez_search_engine_elasticsearch' extension, using " .
-                    "'default_connection' key. Alternatively, explicitly configure search " .
-                    "engine with existing connection name."
+                    "You can define it under '{$this->extensionAlias}' extension, using " .
+                    "'{$this->defaultConnectionKey}' key. Alternatively, explicitly configure " .
+                    "search engine with existing connection name."
                 );
 
                 throw $exception;
@@ -72,12 +104,18 @@ class ConnectionParameterFactory extends ContainerAware
             $connectionName = $this->container->getParameter( $defaultConnectionId );
         }
 
-        $parameterId = "ez_search_engine_elasticsearch.connection.{$connectionName}.{$name}";
-
-        if ( $repositoryConfig["search"]["engine"] !== "elasticsearch" )
+        if ( $repositoryConfig["search"]["engine"] === "elasticsearch" )
         {
-            $parameterId = "ezpublish.search.elasticsearch.connection.{$name}";
+            $parameterPrefix = "{$this->extensionAlias}.connection.{$connectionName}";
         }
+        else
+        {
+            // When this engine is not configured for an access, use parameters
+            // defined in Core/settings
+            $parameterPrefix = $this->defaultParameterPrefix;
+        }
+
+        $parameterId = "{$parameterPrefix}.{$name}";
 
         if ( !$this->container->hasParameter( $parameterId ) )
         {

@@ -6,5 +6,8 @@ services:
         class: %ezpublish.solr.connection_parameter_factory.class%
         arguments:
             - @ezpublish.api.repository_configuration_provider
+            - 'ez_search_engine_solr'
+            - 'default_connection'
+            - 'ezpublish.search.solr.connection'
         calls:
             - [setContainer, [@service_container]]
