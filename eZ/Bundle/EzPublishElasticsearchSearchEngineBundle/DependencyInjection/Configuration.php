@@ -44,7 +44,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->arrayNode( "connections" )
                 ->info( "Elasticsearch Search Engine connections configuration" )
-                ->useAttributeAsKey( "key" )
+                ->useAttributeAsKey( "connection_name" )
                 ->performNoDeepMerging()
                 ->prototype( "array" )
                     ->children()

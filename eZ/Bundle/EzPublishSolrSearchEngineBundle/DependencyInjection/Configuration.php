@@ -44,7 +44,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->arrayNode( "connections" )
                 ->info( "Solr Search Engine connections configuration" )
-                ->useAttributeAsKey( "key" )
+                ->useAttributeAsKey( "connection_name" )
                 ->performNoDeepMerging()
                 ->prototype( "array" )
                     ->children()
