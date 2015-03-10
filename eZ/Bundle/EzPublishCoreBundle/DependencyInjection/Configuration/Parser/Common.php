@@ -250,7 +250,16 @@ EOT
                 ),
                 'ezpublish' => array(
                     'repositories' => array(
-                        'my_repository' => array( 'engine' => 'legacy', 'connection' => 'default' )
+                        'my_repository' => array(
+                            'storage' => array(
+                                'engine' => 'legacy',
+                                'connection' => 'default',
+                            ),
+                            'search' => array(
+                                'engine' => 'legacy',
+                                'connection' => 'default',
+                            ),
+                        ),
                     ),
                     'system' => array(
                         $sa => array(
