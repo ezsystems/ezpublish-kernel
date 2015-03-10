@@ -74,6 +74,7 @@ class Configuration extends SiteAccessConfiguration
                     ->prototype( 'array' )
                         ->beforeNormalization()
                             ->always(
+                                // Handling deprecated structure by mapping it to new one
                                 function ( $v )
                                 {
                                     if ( isset( $v['storage'] ) )
@@ -105,6 +106,7 @@ class Configuration extends SiteAccessConfiguration
                         ->end()
                         ->beforeNormalization()
                             ->always(
+                                // Setting default values
                                 function ( $v )
                                 {
                                     if ( $v === null )
