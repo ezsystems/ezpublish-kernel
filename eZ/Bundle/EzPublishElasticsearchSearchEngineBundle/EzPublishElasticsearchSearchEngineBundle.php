@@ -37,12 +37,11 @@ class EzPublishElasticsearchSearchEngineBundle extends Bundle
         $container->addCompilerPass( new FieldRegistryPass );
         $container->addCompilerPass( new SignalSlotPass );
 
-        $connectionParameterFactoryId = "ezpublish.elasticsearch.connection_parameter_factory";
-        $container->addCompilerPass( new Compiler\ContentGatewayPass( $connectionParameterFactoryId ) );
-        $container->addCompilerPass( new Compiler\ContentHandlerPass( $connectionParameterFactoryId ) );
-        $container->addCompilerPass( new Compiler\HttpClientPass( $connectionParameterFactoryId ) );
-        $container->addCompilerPass( new Compiler\LocationGatewayPass( $connectionParameterFactoryId ) );
-        $container->addCompilerPass( new Compiler\LocationHandlerPass( $connectionParameterFactoryId ) );
+        $container->addCompilerPass( new Compiler\ContentGatewayPass );
+        $container->addCompilerPass( new Compiler\ContentHandlerPass );
+        $container->addCompilerPass( new Compiler\HttpClientPass );
+        $container->addCompilerPass( new Compiler\LocationGatewayPass );
+        $container->addCompilerPass( new Compiler\LocationHandlerPass );
     }
 
     public function getContainerExtension()

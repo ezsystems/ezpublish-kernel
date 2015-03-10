@@ -26,28 +26,7 @@ class RegisterSearchEnginePass implements CompilerPassInterface
      *
      * @var string
      */
-    protected $factoryId;
-
-    /**
-     * Container tag used to mark a service as a search engine
-     *
-     * @var string
-     */
-    protected $searchEngineTag;
-
-    /**
-     * Construct from SearchEngineFactory service id and search engine services tag
-     *
-     * @see \eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineFactory
-     *
-     * @param string $factoryId
-     * @param string $searchEngineTag
-     */
-    public function __construct( $factoryId, $searchEngineTag )
-    {
-        $this->factoryId = $factoryId;
-        $this->searchEngineTag = $searchEngineTag;
-    }
+    protected $factoryId = 'ezpublish.api.search_engine.factory';
 
     /**
      * Registers all found search engines to the SearchEngineFactory
@@ -65,15 +44,15 @@ class RegisterSearchEnginePass implements CompilerPassInterface
 
         $searchEngineFactoryDefinition = $container->getDefinition( $this->factoryId );
 
-        foreach ( $container->findTaggedServiceIds( $this->searchEngineTag ) as $id => $attributes )
+        foreach ( $container->findTaggedServiceIds( 'ezpublish.searchEngine' ) as $id => $attributes )
         {
             foreach ( $attributes as $attribute )
             {
                 if ( !isset( $attribute['alias'] ) )
                 {
                     throw new LogicException(
-                        "'{$this->searchEngineTag}' service tag needs an 'alias' attribute to " .
-                        "identify the search engine. None given."
+                        'ezpublish.searchEngine service tag needs an "alias" attribute to ' .
+                        'identify the search engine. None given.'
                     );
                 }
 

@@ -24,23 +24,13 @@ use Symfony\Component\DependencyInjection\Reference;
 abstract class ConnectionParameterPass implements CompilerPassInterface
 {
     /**
-     * Container service id of the ConnectionParameterFactory
+     * ConnectionParameterFactory service container id.
      *
      * @see \eZ\Bundle\EzPublishSolrSearchEngineBundle\ApiLoader\ConnectionParameterFactory
      *
      * @var string
      */
-    protected $factoryId;
-
-    /**
-     * Construct from SearchEngineFactory container service id
-     *
-     * @param string $factoryId
-     */
-    public function __construct( $factoryId )
-    {
-        $this->factoryId = $factoryId;
-    }
+    protected $factoryId = "ezpublish.solr.connection_parameter_factory";
 
     /**
      * Returns container id of the service that gets its argument replaced.
