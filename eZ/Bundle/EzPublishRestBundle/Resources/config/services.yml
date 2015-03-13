@@ -289,6 +289,8 @@ services:
 
     ezpublish_rest.field_type_processor.ezrichtext:
         class: %ezpublish_rest.field_type_processor.ezrichtext.class%
+        arguments:
+            - @ezpublish.fieldType.ezrichtext.converter.edit.xhtml5
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezrichtext }
 
