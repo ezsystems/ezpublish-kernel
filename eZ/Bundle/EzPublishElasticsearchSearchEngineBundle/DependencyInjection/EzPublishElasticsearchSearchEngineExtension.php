@@ -16,6 +16,11 @@ use Symfony\Component\Config\FileLocator;
 
 class EzPublishElasticsearchSearchEngineExtension extends Extension
 {
+    /**
+     * @var \eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\FactoryInterface[]
+     */
+    protected $factories = array();
+
     public function getAlias()
     {
         return "ez_search_engine_elasticsearch";
@@ -41,6 +46,28 @@ class EzPublishElasticsearchSearchEngineExtension extends Extension
         $loader->load( 'services.yml' );
 
         $this->processConnectionConfiguration( $container, $config );
+
+        $this->workInTheFactories( $container, "context" );
+    }
+
+    /**
+     * @param \eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\FactoryInterface $factory
+     */
+    public function addFactory( FactoryInterface $factory )
+    {
+        $this->factories[] = $factory;
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $context
+     */
+    protected function workInTheFactories( ContainerBuilder $container, $context )
+    {
+        foreach ( $this->factories as $factory )
+        {
+            $factory->create( $container, $context );
+        }
     }
 
     /**

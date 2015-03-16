@@ -21,6 +21,8 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
 use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\Compiler;
 
+use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\Factory;
+
 class EzPublishElasticsearchSearchEngineBundle extends Bundle
 {
     public function build( ContainerBuilder $container )
@@ -49,6 +51,8 @@ class EzPublishElasticsearchSearchEngineBundle extends Bundle
         if ( !isset( $this->extension ) )
         {
             $this->extension = new DependencyInjection\EzPublishElasticsearchSearchEngineExtension();
+
+            $this->extension->addFactory( new Factory\MainHandlerFactory() );
         }
 
         return $this->extension;
