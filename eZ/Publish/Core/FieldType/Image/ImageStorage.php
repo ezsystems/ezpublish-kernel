@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Image;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface as DeprecationWarner;
 use eZ\Publish\Core\FieldType\GatewayBasedStorage;
 use eZ\Publish\Core\IO\IOServiceInterface;
@@ -74,24 +75,19 @@ class ImageStorage extends GatewayBasedStorage
                 $field->value->externalData['fileName']
             );
 
-            if ( $this->IOService->exists( $targetPath ) )
+            if ( isset( $field->value->externalData['id'] ) )
+            {
+                $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] );
+            }
+            else if ( $this->IOService->exists( $targetPath ) )
             {
                 $binaryFile = $this->IOService->loadBinaryFile( $targetPath );
             }
-            else
+            else if ( isset( $field->value->externalData['inputUri'] ) )
             {
-                if ( isset( $field->value->externalData['inputUri'] ) )
-                {
-                    $localFilePath = $field->value->externalData['inputUri'];
-                    unset( $field->value->externalData['inputUri'] );
-                }
-                else
-                {
-                    $this->deprecationWarner->log(
-                        "Using the Image\\Value::\$id property to create images is deprecated. Use 'inputUri'"
-                    );
-                    $localFilePath = $field->value->externalData['id'];
-                }
+                $localFilePath = $field->value->externalData['inputUri'];
+                unset( $field->value->externalData['inputUri'] );
+
                 $binaryFileCreateStruct = $this->IOService->newBinaryCreateStructFromLocalFile( $localFilePath );
                 $binaryFileCreateStruct->id = $targetPath;
                 $binaryFile = $this->IOService->createBinaryFile( $binaryFileCreateStruct );
@@ -100,6 +96,14 @@ class ImageStorage extends GatewayBasedStorage
                 $field->value->externalData['width'] = $imageSize[0];
                 $field->value->externalData['height'] = $imageSize[1];
             }
+            else
+            {
+                throw new InvalidArgumentException(
+                    "inputUri",
+                    "No source image could be obtained from the given external data"
+                );
+            }
+
             $field->value->externalData['imageId'] = $versionInfo->contentInfo->id . '-' . $field->id;
             $field->value->externalData['uri'] = $binaryFile->uri;
             $field->value->externalData['id'] = $binaryFile->id;

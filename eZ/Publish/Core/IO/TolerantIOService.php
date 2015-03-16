@@ -8,6 +8,7 @@
 namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
 use eZ\Publish\Core\IO\MetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
@@ -79,9 +80,10 @@ class TolerantIOService extends IOService
     {
         $this->checkBinaryFileId( $binaryFileId );
 
-        // @todo An absolute path can in no case be loaded, but throwing an exception is too much (why ?)
         if ( $binaryFileId[0] === '/' )
-            return false;
+        {
+            throw new InvalidBinaryFileIdException( $binaryFileId, "Binary file ids can not begin with a /" );
+        }
 
         try
         {
