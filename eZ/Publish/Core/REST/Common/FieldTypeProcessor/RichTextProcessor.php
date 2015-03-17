@@ -11,9 +11,36 @@ namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\FieldType\RichText\Type;
+use eZ\Publish\Core\FieldType\RichText\Converter;
+use DOMDocument;
 
 class RichTextProcessor extends FieldTypeProcessor
 {
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\Converter
+     */
+    protected $docbookToXhtml5EditConverter;
+
+    public function __construct( Converter $docbookToXhtml5EditConverter )
+    {
+        $this->docbookToXhtml5EditConverter = $docbookToXhtml5EditConverter;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function postProcessValueHash( $outgoingValueHash )
+    {
+        $document = new DOMDocument();
+        $document->loadXML( $outgoingValueHash["xml"] );
+
+        $outgoingValueHash["xhtml5edit"] = $this->docbookToXhtml5EditConverter
+            ->convert( $document )
+            ->saveXML();
+
+        return $outgoingValueHash;
+    }
+
     /**
      * {@inheritDoc}
      */
