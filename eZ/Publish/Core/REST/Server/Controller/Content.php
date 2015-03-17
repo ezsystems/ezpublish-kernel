@@ -130,8 +130,8 @@ class Content extends RestController
         // update section
         if ( $updateStruct->sectionId !== null )
         {
-            $section = $this->repository->getSectionService->loadSection( $updateStruct->sectionId );
-            $this->repository->getSectionService->assignSection( $contentInfo, $section );
+            $section = $this->repository->getSectionService()->loadSection( $updateStruct->sectionId );
+            $this->repository->getSectionService()->assignSection( $contentInfo, $section );
             $updateStruct->sectionId = null;
         }
 
