@@ -54,7 +54,7 @@ class FieldRange extends Field
     protected function getCondition( Criterion $criterion )
     {
         $fieldNames = $this->getFieldNames( $criterion, $criterion->target );
-        $criterion->value = (array)$criterion->value;
+        $value = (array)$criterion->value;
 
         if ( empty( $fieldNames ) )
         {
@@ -64,8 +64,8 @@ class FieldRange extends Field
             );
         }
 
-        $start = $criterion->value[0];
-        $end = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
+        $start = $value[0];
+        $end = isset( $value[1] ) ? $value[1] : null;
         $range = $this->getRange( $criterion->operator, $start, $end );
 
         $ranges = array();
