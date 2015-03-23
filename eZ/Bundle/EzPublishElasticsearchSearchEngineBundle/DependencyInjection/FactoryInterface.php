@@ -19,6 +19,7 @@ interface FactoryInterface
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $context
+     * @param array $params
      */
-    public function create( ContainerBuilder $container, $context );
+    public function create( ContainerBuilder $container, $context, array $params );
 }

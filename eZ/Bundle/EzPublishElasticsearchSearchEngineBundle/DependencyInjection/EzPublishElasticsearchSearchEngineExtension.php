@@ -84,7 +84,7 @@ class EzPublishElasticsearchSearchEngineExtension extends Extension
                 $container->setParameter( $key, $value );
             }
 
-            $this->connectionServicesFactory->create( $container, $name );
+            $this->connectionServicesFactory->create( $container, $name, $params );
         }
     }
 

@@ -15,138 +15,53 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- *
- */
 class MainHandlerFactory implements FactoryInterface
 {
-    protected function getMainSearchEngineId()
+    const MAIN_SEARCH_ENGINE_ID = "ezpublish.spi.search.elasticsearch";
+    const HTTP_CLIENT_ID = "ezpublish.search.elasticsearch.content.gateway.client.http.stream";
+    const CONTENT_SEARCH_HANDLER_ID = "ezpublish.spi.search.elasticsearch.content_handler";
+    const CONTENT_SEARCH_GATEWAY_ID = "ezpublish.search.elasticsearch.content.gateway.native";
+    const LOCATION_SEARCH_HANDLER_ID = "ezpublish.spi.search.elasticsearch.location_handler";
+    const LOCATION_SEARCH_GATEWAY_ID = "ezpublish.search.elasticsearch.location.gateway.native";
+
+    public function create( ContainerBuilder $container, $context, array $params )
     {
-        return "ezpublish.spi.search.elasticsearch";
-    }
+        $searchEngineDef = new DefinitionDecorator( static::MAIN_SEARCH_ENGINE_ID );
 
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $context
-     */
-    public function create( ContainerBuilder $container, $context )
-    {
-        $mainSearchHandlerId = $this->createMainSearchHandler( $container, $context );
-
-        $container
-            ->getDefinition( $mainSearchHandlerId )
-            ->addTag(
-                'ezpublish.searchEngine',
-                array(
-                    "alias" => "elasticsearch",
-                )
-            );
-    }
-
-    /**
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $context
-     *
-     * @return string
-     */
-    protected function createMainSearchHandler( ContainerBuilder $container, $context )
-    {
-        $mainSearchEngineId = $this->getMainSearchEngineId();
-        $mainSearchEngineDefinition = new DefinitionDecorator( $mainSearchEngineId );
-
-        $mainSearchEngineDefinition->replaceArgument(
+        // Create contextualized content search handler
+        $searchEngineDef->replaceArgument(
             0,
-            new Reference( $this->createContentSearchHandler( $container, $context ) )
+            new Reference( $this->createContentSearchHandler( $container, $context, $params ) )
         );
-
-        $mainSearchEngineDefinition->replaceArgument(
+        // Create contextualized location search handler
+        $searchEngineDef->replaceArgument(
             1,
-            new Reference( $this->createLocationSearchHandler( $container, $context ) )
+            new Reference( $this->createLocationSearchHandler( $container, $context, $params ) )
         );
+        $searchEngineDef
+            ->addTag( 'ezpublish.searchEngine', ["alias" => "elasticsearch.$context"] )
+            ->setLazy( true );
 
-        $mainSearchEngineId .= "." . $context;
-
-        $container->setDefinition( $mainSearchEngineId, $mainSearchEngineDefinition );
-
-        return $mainSearchEngineId;
-    }
-
-    protected function getContentSearchHandlerId()
-    {
-        return "ezpublish.spi.search.elasticsearch.content_handler";
+        $contextualizedSearchEngineId = static::MAIN_SEARCH_ENGINE_ID . ".$context";
+        $container->setDefinition( $contextualizedSearchEngineId, $searchEngineDef );
     }
 
     /**
-     *
-     *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $context
      *
      * @return string
      */
-    protected function createContentSearchHandler( ContainerBuilder $container, $context )
+    private function createContentSearchHandler( ContainerBuilder $container, $context, array $params )
     {
-        $contentSearchHandlerId = $this->getContentSearchHandlerId();
-        $contentSearchHandlerDefinition = new DefinitionDecorator( $contentSearchHandlerId );
-
+        $contentSearchHandlerDefinition = new DefinitionDecorator( static::CONTENT_SEARCH_HANDLER_ID );
         $contentSearchHandlerDefinition->replaceArgument(
             0,
-            new Reference( $this->createContentSearchGateway( $container, $context ) )
+            new Reference( $this->createContentSearchGateway( $container, $context, $params ) )
         );
+        $contentSearchHandlerDefinition->replaceArgument( 3, $params['document_type_name']['content'] );
 
-        $contentSearchHandlerDefinition->replaceArgument(
-            3,
-            new Reference( $this->createContentTypeDocumentName( $container, $context ) )
-        );
-
-        $contentSearchHandlerId .= "." . $context;
-
-        $container->setDefinition( $contentSearchHandlerId, $contentSearchHandlerDefinition );
-
-        return $contentSearchHandlerId;
-    }
-
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @return string
-     */
-    protected function createContentTypeDocumentName( ContainerBuilder $container )
-    {
-        return $this->injectParameterService( $container, "document_type_name.content" );
-    }
-
-    protected function getLocationSearchHandlerId()
-    {
-        return "ezpublish.spi.search.elasticsearch.location_handler";
-    }
-
-    /**
-     *
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $context
-     *
-     * @return string
-     */
-    protected function createLocationSearchHandler( ContainerBuilder $container, $context )
-    {
-        $contentSearchHandlerId = $this->getContentSearchHandlerId();
-        $contentSearchHandlerDefinition = new DefinitionDecorator( $contentSearchHandlerId );
-
-        $contentSearchHandlerDefinition->replaceArgument(
-            0,
-            new Reference( $this->createLocationSearchGateway( $container, $context ) )
-        );
-
-        $contentSearchHandlerDefinition->replaceArgument(
-            3,
-            new Reference( $this->createLocationTypeDocumentName( $container, $context ) )
-        );
-
-        $contentSearchHandlerId .= "." . $context;
-
+        $contentSearchHandlerId = static::CONTENT_SEARCH_HANDLER_ID . ".$context";
         $container->setDefinition( $contentSearchHandlerId, $contentSearchHandlerDefinition );
 
         return $contentSearchHandlerId;
@@ -154,18 +69,25 @@ class MainHandlerFactory implements FactoryInterface
 
     /**
      *
+     *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $context
      *
      * @return string
      */
-    protected function createLocationTypeDocumentName( ContainerBuilder $container )
+    private function createLocationSearchHandler( ContainerBuilder $container, $context, array $params )
     {
-        return $this->injectParameterService( $container, "document_type_name.location" );
-    }
+        $contentSearchHandlerDefinition = new DefinitionDecorator( static::LOCATION_SEARCH_HANDLER_ID );
+        $contentSearchHandlerDefinition->replaceArgument(
+            0,
+            new Reference( $this->createLocationSearchGateway( $container, $context, $params ) )
+        );
+        $contentSearchHandlerDefinition->replaceArgument( 3, $params['document_type_name']['location'] );
 
-    protected function getContentSearchGatewayId()
-    {
-        return "ezpublish.search.elasticsearch.content.gateway";
+        $locationSearchHandlerId = static::LOCATION_SEARCH_HANDLER_ID . ".$context";
+        $container->setDefinition( $locationSearchHandlerId, $contentSearchHandlerDefinition );
+
+        return $locationSearchHandlerId;
     }
 
     /**
@@ -176,58 +98,16 @@ class MainHandlerFactory implements FactoryInterface
      *
      * @return string
      */
-    protected function createContentSearchGateway( ContainerBuilder $container, $context )
+    private function createContentSearchGateway( ContainerBuilder $container, $context, array $params )
     {
-        $contentSearchGatewayId = $this->getContentSearchGatewayId();
-        $contentSearchGatewayDefinition = new DefinitionDecorator( $contentSearchGatewayId );
-
+        $contentSearchGatewayDefinition = new DefinitionDecorator( static::CONTENT_SEARCH_GATEWAY_ID );
         $contentSearchGatewayDefinition->replaceArgument(
             0,
-            new Reference( $this->createHttpClient( $container, $context ) )
+            new Reference( $this->createHttpClient( $container, $context, $params ) )
         );
+        $contentSearchGatewayDefinition->replaceArgument( 5, $params['index_name'] );
 
-        $contentSearchGatewayDefinition->replaceArgument(
-            5,
-            new Reference( $this->createIndexName( $container, $context ) )
-        );
-
-        $contentSearchGatewayId .= "." . $context;
-
-        $container->setDefinition( $contentSearchGatewayId, $contentSearchGatewayDefinition );
-
-        return $contentSearchGatewayId;
-    }
-
-    protected function getLocationSearchGatewayId()
-    {
-        return "ezpublish.search.elasticsearch.location.gateway";
-    }
-
-    /**
-     *
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $context
-     *
-     * @return string
-     */
-    protected function createLocationSearchGateway( ContainerBuilder $container, $context )
-    {
-        $contentSearchGatewayId = $this->getContentSearchGatewayId();
-        $contentSearchGatewayDefinition = new DefinitionDecorator( $contentSearchGatewayId );
-
-        $contentSearchGatewayDefinition->replaceArgument(
-            0,
-            new Reference( $this->createHttpClient( $container, $context ) )
-        );
-
-        $contentSearchGatewayDefinition->replaceArgument(
-            5,
-            new Reference( $this->createIndexName( $container, $context ) )
-        );
-
-        $contentSearchGatewayId .= "." . $context;
-
+        $contentSearchGatewayId = static::CONTENT_SEARCH_GATEWAY_ID . ".$context";
         $container->setDefinition( $contentSearchGatewayId, $contentSearchGatewayDefinition );
 
         return $contentSearchGatewayId;
@@ -235,99 +115,44 @@ class MainHandlerFactory implements FactoryInterface
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $context
      *
      * @return string
      */
-    protected function createIndexName( ContainerBuilder $container )
+    private function createLocationSearchGateway( ContainerBuilder $container, $context, array $params )
     {
-        return $this->injectParameterService( $container, "index_name" );
-    }
+        $contentSearchGatewayDefinition = new DefinitionDecorator( static::LOCATION_SEARCH_GATEWAY_ID );
+        $contentSearchGatewayDefinition->replaceArgument(
+            0,
+            new Reference( $this->createHttpClient( $container, $context, $params ) )
+        );
+        $contentSearchGatewayDefinition->replaceArgument( 5, $params['index_name'] );
 
-    protected function getHttpClientId()
-    {
-        return "ezpublish.search.elasticsearch.content.gateway.client.http.stream";
+        $contentSearchGatewayId = static::LOCATION_SEARCH_GATEWAY_ID . ".$context";
+        $container->setDefinition( $contentSearchGatewayId, $contentSearchGatewayDefinition );
+
+        return $contentSearchGatewayId;
     }
 
     /**
-     *
-     *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $context
      *
      * @return string
      */
-    protected function createHttpClient( ContainerBuilder $container, $context )
+    private function createHttpClient( ContainerBuilder $container, $context, array $params )
     {
-        $httpClientId = $this->getHttpClientId();
-        $newHttpClientId = $httpClientId . "." . $context;
+        $newHttpClientId = static::HTTP_CLIENT_ID . ".$context";
 
         if ( $container->hasDefinition( $newHttpClientId ) )
         {
             return $newHttpClientId;
         }
 
-        $httpClientDefinition = new DefinitionDecorator( $httpClientId );
-
-        $httpClientDefinition->replaceArgument(
-            0,
-            new Reference( $this->createServerAddress( $container, $context ) )
-        );
-
+        $httpClientDefinition = new DefinitionDecorator( static::HTTP_CLIENT_ID );
+        $httpClientDefinition->replaceArgument( 0, $params['server'] );
         $container->setDefinition( $newHttpClientId, $httpClientDefinition );
 
         return $newHttpClientId;
-    }
-
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     *
-     * @return string
-     */
-    protected function createServerAddress( ContainerBuilder $container )
-    {
-        return $this->injectParameterService( $container, "server" );
-    }
-
-    /**
-     * ConnectionParameterFactory service container id.
-     *
-     * @see \eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\ApiLoader\ConnectionParameterFactory
-     *
-     * @var string
-     */
-    protected $factoryId = "ezpublish.elasticsearch.connection_parameter_factory";
-
-    /**
-     * For given search engine connection parameter with name $parameterName, injects
-     * a service resolved through a factory. Service will return parameter's value, resolved
-     * for a current siteaccess.
-     *
-     * @see \eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\ApiLoader\ConnectionParameterFactory
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $parameterName
-     *
-     * @return string Container id of the injected service.
-     */
-    protected function injectParameterService( ContainerBuilder $container, $parameterName )
-    {
-        $paramConverter = new Definition( "stdClass" );
-        $paramConverter
-            ->setFactory(
-                array(
-                    new Reference( $this->factoryId ),
-                    "getParameter",
-                )
-            )
-            ->setArguments( array( $parameterName ) );
-
-        $serviceId = "{$this->factoryId}.{$parameterName}";
-
-        if ( !$container->hasDefinition( $serviceId ) )
-        {
-            $container->setDefinition( $serviceId, $paramConverter );
-        }
-
-        return $serviceId;
     }
 }
