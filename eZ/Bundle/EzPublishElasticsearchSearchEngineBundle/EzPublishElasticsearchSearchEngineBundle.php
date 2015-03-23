@@ -50,7 +50,7 @@ class EzPublishElasticsearchSearchEngineBundle extends Bundle
     {
         if ( !isset( $this->extension ) )
         {
-            $this->extension = new EzPublishElasticsearchSearchEngineExtension( new MainHandlerFactory() );
+            $this->extension = new EzPublishElasticsearchSearchEngineExtension();
         }
 
         return $this->extension;
