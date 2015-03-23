@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishElasticsearchSearchEngineBundle;
 
+use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\EzPublishElasticsearchSearchEngineExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\AggregateFacetBuilderVisitorPass;
@@ -20,8 +21,7 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisito
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
 use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\Compiler;
-
-use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\Factory;
+use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\Factory\MainHandlerFactory;
 
 class EzPublishElasticsearchSearchEngineBundle extends Bundle
 {
@@ -50,9 +50,7 @@ class EzPublishElasticsearchSearchEngineBundle extends Bundle
     {
         if ( !isset( $this->extension ) )
         {
-            $this->extension = new DependencyInjection\EzPublishElasticsearchSearchEngineExtension();
-
-            $this->extension->addFactory( new Factory\MainHandlerFactory() );
+            $this->extension = new EzPublishElasticsearchSearchEngineExtension( new MainHandlerFactory() );
         }
 
         return $this->extension;
