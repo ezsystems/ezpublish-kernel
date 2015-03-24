@@ -70,6 +70,14 @@ class EzPublishElasticsearchSearchEngineExtension extends Extension
                 $config["default_connection"]
             );
         }
+        else if ( !empty( $config["connections"] ) )
+        {
+            reset( $config["connections"] );
+            $container->setParameter(
+                "{$alias}.default_connection",
+                key( $config["connections"] )
+            );
+        }
 
         foreach ( $config["connections"] as $name => $params )
         {
