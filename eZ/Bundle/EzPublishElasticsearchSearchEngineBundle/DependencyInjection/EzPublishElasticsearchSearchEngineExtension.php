@@ -109,21 +109,21 @@ class EzPublishElasticsearchSearchEngineExtension extends Extension
         $container->setDefinition( $contentSearchGatewayId, $contentSearchGatewayDef );
 
         // Content search handler
-        $contentSearchHandlerDefinition = new DefinitionDecorator( static::CONTENT_SEARCH_HANDLER_ID );
+        $contentSearchHandlerDefinition = new DefinitionDecorator( self::CONTENT_SEARCH_HANDLER_ID );
         $contentSearchHandlerDefinition->replaceArgument( 0, new Reference( $contentSearchGatewayId ) );
         $contentSearchHandlerDefinition->replaceArgument( 3, $connectionParams['document_type_name']['content'] );
         $contentSearchHandlerId = self::CONTENT_SEARCH_HANDLER_ID . ".$connectionName";
         $container->setDefinition( $contentSearchHandlerId, $contentSearchHandlerDefinition );
 
         // Location search gateway
-        $locationSearchGatewayDef = new DefinitionDecorator( static::LOCATION_SEARCH_GATEWAY_ID );
+        $locationSearchGatewayDef = new DefinitionDecorator( self::LOCATION_SEARCH_GATEWAY_ID );
         $locationSearchGatewayDef->replaceArgument( 0, new Reference( $httpClientId ) );
         $locationSearchGatewayDef->replaceArgument( 5, $connectionParams['index_name'] );
         $locationSearchGatewayId = self::LOCATION_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition( $locationSearchGatewayId, $locationSearchGatewayDef );
 
         // Content search handler
-        $contentSearchHandlerDefinition = new DefinitionDecorator( static::LOCATION_SEARCH_HANDLER_ID );
+        $contentSearchHandlerDefinition = new DefinitionDecorator( self::LOCATION_SEARCH_HANDLER_ID );
         $contentSearchHandlerDefinition->replaceArgument( 0, new Reference( $locationSearchGatewayId ) );
         $contentSearchHandlerDefinition->replaceArgument( 3, $connectionParams['document_type_name']['location'] );
         $locationSearchHandlerId = self::LOCATION_SEARCH_HANDLER_ID . ".$connectionName";
