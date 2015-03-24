@@ -1982,7 +1982,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadTranslationInfos( ContentInfo $contentInfo, array $filter = array() )
     {
-
+        throw new NotImplementedException( __METHOD__ );
     }
 
     /**
