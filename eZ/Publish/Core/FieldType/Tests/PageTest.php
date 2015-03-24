@@ -274,7 +274,7 @@ class PageTest extends FieldTypeTest
             ),
             array(
                 new PageValue( new Page() ),
-                new PageValue( new Page() )
+                new PageValue()
             )
         );
     }
