@@ -956,7 +956,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 "sortClauses" => array(
                     $sortClause,
                 ),
-
             )
         );
 
