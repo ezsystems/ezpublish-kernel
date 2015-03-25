@@ -274,7 +274,7 @@ class PageTest extends FieldTypeTest
             ),
             array(
                 new PageValue( new Page() ),
-                new PageValue( new Page() )
+                new PageValue()
             )
         );
     }
@@ -464,6 +464,54 @@ class PageTest extends FieldTypeTest
         return array(
             array( $this->getEmptyValueExpectation(), "" ),
             array( new PageValue( $this->getPageReference() ), "" )
+        );
+    }
+
+    /**
+     * Data provider for valid input to isEmptyValue().
+     *
+     * Returns an array of data provider sets with 2 arguments:
+     *
+     * 1. The valid input to isEmptyValue()
+     * 2. The expected return value from isEmptyValue()
+     *
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          new PageValue(),
+     *          true
+     *      ),
+     *      array(
+     *          new PageValue( $this->getPageReference() ),
+     *          false
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function providerForTestIsEmptyValue()
+    {
+        return array(
+            array( new PageValue(), true ),
+            array( new PageValue( $this->getPageReference() ), false ),
+        );
+    }
+
+    /**
+     * @dataProvider providerForTestIsEmptyValue
+     */
+    public function testIsEmptyValue( $value, $state )
+    {
+        $fieldType = $this->getFieldTypeUnderTest();
+
+        $this->assertEquals(
+            $state,
+            $fieldType->isEmptyValue( $value ),
+            "Value did not evaluate as " . ( $state ? "" : "non-" ) . "empty"
         );
     }
 }

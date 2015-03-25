@@ -119,6 +119,31 @@ class Type extends FieldType
     }
 
     /**
+     * Returns if the given $value is considered empty by the field type
+     *
+     * @param \eZ\Publish\Core\FieldType\Page\Value $value
+     *
+     * @return boolean
+     */
+    public function isEmptyValue( SPIValue $value )
+    {
+        if ( $value === null || $value == $this->getEmptyValue() )
+        {
+            return true;
+        }
+
+        foreach ( $value->page->zones as $zone )
+        {
+            if ( !empty( $zone->blocks ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Converts an $hash to the Value defined by the field type
      *
      * @param mixed $hash
