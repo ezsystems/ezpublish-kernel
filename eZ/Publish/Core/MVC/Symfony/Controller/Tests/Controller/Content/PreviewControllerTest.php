@@ -166,6 +166,25 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
 
         // PreviewHelper expectations
         $this->previewHelper
+            ->expects( $this->exactly( 2 ) )
+            ->method( 'setPreviewActive' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( true, null ),
+                        array( false, null ),
+                    )
+                )
+            );
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'setPreviewedContent' )
+            ->with( $content );
+        $this->previewHelper
+            ->expects( $this->once() )
+            ->method( 'setPreviewedLocation' )
+            ->with( $location );
+        $this->previewHelper
             ->expects( $this->once() )
             ->method( 'getOriginalSiteAccess' )
             ->will( $this->returnValue( $previousSiteAccess ) );

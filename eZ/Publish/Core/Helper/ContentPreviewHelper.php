@@ -9,6 +9,8 @@
 
 namespace eZ\Publish\Core\Helper;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
@@ -26,6 +28,21 @@ class ContentPreviewHelper implements SiteAccessAware
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
     protected $originalSiteAccess;
+
+    /**
+     * @var bool
+     */
+    private $previewActive = false;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private $previewedContent;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    private $previewedLocation;
 
     public function __construct( EventDispatcherInterface $eventDispatcher )
     {
@@ -73,5 +90,53 @@ class ContentPreviewHelper implements SiteAccessAware
         $this->eventDispatcher->dispatch( MVCEvents::CONFIG_SCOPE_RESTORE, $event );
 
         return $event->getSiteAccess();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPreviewActive()
+    {
+        return $this->previewActive;
+    }
+
+    /**
+     * @param boolean $previewActive
+     */
+    public function setPreviewActive( $previewActive )
+    {
+        $this->previewActive = (bool)$previewActive;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     */
+    public function getPreviewedContent()
+    {
+        return $this->previewedContent;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $previewedContent
+     */
+    public function setPreviewedContent( Content $previewedContent)
+    {
+        $this->previewedContent = $previewedContent;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     */
+    public function getPreviewedLocation()
+    {
+        return $this->previewedLocation;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $previewedLocation
+     */
+    public function setPreviewedLocation( Location $previewedLocation )
+    {
+        $this->previewedLocation = $previewedLocation;
     }
 }

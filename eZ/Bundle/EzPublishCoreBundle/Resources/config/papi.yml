@@ -14,6 +14,7 @@ parameters:
 
     ezpublish.api.content.class: eZ\Publish\Core\Repository\Values\Content\Content
     ezpublish.api.location.class: eZ\Publish\Core\Repository\Values\Content\Location
+    ezpublish.api.version.class: eZ\Publish\Core\Repository\Values\Content\VersionInfo
 
 services:
     # API
