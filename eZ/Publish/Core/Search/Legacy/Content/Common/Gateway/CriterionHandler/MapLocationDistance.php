@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use RuntimeException;
 
 /**
@@ -34,21 +35,23 @@ class MapLocationDistance extends CriterionHandler
     const EARTH_RADIUS = 6371.01;
 
     /**
-     * DB handler to fetch additional field information
+     * ContentType handler
      *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
-    protected $dbHandler;
+    protected $contentTypeHandler;
 
     /**
      * Construct from handler handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      */
-    public function __construct( DatabaseHandler $dbHandler )
+    public function __construct( DatabaseHandler $dbHandler, ContentTypeHandler $contentTypeHandler )
     {
-        $this->dbHandler = $dbHandler;
+        parent::__construct( $dbHandler );
+
+        $this->contentTypeHandler = $contentTypeHandler;
     }
 
     /**
@@ -75,32 +78,26 @@ class MapLocationDistance extends CriterionHandler
      */
     protected function checkSearchableFields( $fieldIdentifier )
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query
-            ->select( $this->dbHandler->quoteColumn( 'id', 'ezcontentclass_attribute' ) )
-            ->from( $this->dbHandler->quoteTable( 'ezcontentclass_attribute' ) )
-            ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'is_searchable', 'ezcontentclass_attribute' ),
-                        $query->bindValue( 1, null, \PDO::PARAM_INT )
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'data_type_string', 'ezcontentclass_attribute' ),
-                        $query->bindValue( "ezgmaplocation" )
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass_attribute' ),
-                        $query->bindValue( $fieldIdentifier )
-                    )
+        $fieldDefinitionIdList = array();
+        $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
+
+        foreach ( $fieldMap as $contentTypeIdentifier => $fieldIdentifierMap )
+        {
+            // First check if field exists in the current ContentType, there is nothing to do if it doesn't
+            if (
+                !(
+                    isset( $fieldIdentifierMap[$fieldIdentifier] )
+                    && $fieldIdentifierMap[$fieldIdentifier]["field_type_identifier"] === "ezgmaplocation"
                 )
-            );
+            )
+            {
+                continue;
+            }
 
-        $statement = $query->prepare();
-        $statement->execute();
-        $fieldDefinitionIds = $statement->fetchAll( \PDO::FETCH_COLUMN );
+            $fieldDefinitionIdList[] = $fieldIdentifierMap[$fieldIdentifier]["field_definition_id"];
+        }
 
-        if ( empty( $fieldDefinitionIds ) )
+        if ( empty( $fieldDefinitionIdList ) )
         {
             throw new InvalidArgumentException(
                 "\$criterion->target",

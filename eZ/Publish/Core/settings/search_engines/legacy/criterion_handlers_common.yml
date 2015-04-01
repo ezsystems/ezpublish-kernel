@@ -130,8 +130,10 @@ services:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
 
     ezpublish.search.legacy.gateway.criterion_handler.common.map_location_distance:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
         class: %ezpublish.search.legacy.gateway.criterion_handler.common.map_location_distance.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.spi.persistence.content_type_handler
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
