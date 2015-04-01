@@ -13,12 +13,34 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
 /**
  * Content type criterion handler
  */
 class ContentTypeIdentifier extends CriterionHandler
 {
+    /**
+     * ContentType handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
+     * Create from content type handler
+     *
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     */
+    public function __construct( DatabaseHandler $dbHandler, ContentTypeHandler $contentTypeHandler )
+    {
+        parent::__construct( $dbHandler );
+
+        $this->contentTypeHandler = $contentTypeHandler;
+    }
+
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
@@ -44,21 +66,16 @@ class ContentTypeIdentifier extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
-        $subSelect = $query->subSelect();
-        $subSelect
-            ->select(
-                $this->dbHandler->quoteColumn( 'id' )
-            )->from(
-                $this->dbHandler->quoteTable( 'ezcontentclass' )
-            )->where(
-                $query->expr->in(
-                    $this->dbHandler->quoteColumn( 'identifier' ),
-                    $criterion->value
-                )
-            );
+        $idList = array();
+
+        foreach ( $criterion->value  as $identifier )
+        {
+            $idList[] = $this->contentTypeHandler->loadByIdentifier( $identifier )->id;
+        }
+
         return $query->expr->in(
             $this->dbHandler->quoteColumn( 'contentclass_id', 'ezcontentobject' ),
-            $subSelect
+            $idList
         );
     }
 }
