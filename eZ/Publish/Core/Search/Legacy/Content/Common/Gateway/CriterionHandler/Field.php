@@ -20,6 +20,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use RuntimeException;
 
 /**
@@ -56,24 +57,34 @@ class Field extends CriterionHandler
     protected $transformationProcessor;
 
     /**
+     * Content Type handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
      * Construct from handler handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter $fieldValueConverter
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      */
     public function __construct(
         DatabaseHandler $dbHandler,
         Registry $fieldConverterRegistry,
         FieldValueConverter $fieldValueConverter,
-        TransformationProcessor $transformationProcessor
+        TransformationProcessor $transformationProcessor,
+        ContentTypeHandler $contentTypeHandler
     )
     {
         $this->dbHandler = $dbHandler;
         $this->fieldConverterRegistry = $fieldConverterRegistry;
         $this->fieldValueConverter = $fieldValueConverter;
         $this->transformationProcessor = $transformationProcessor;
+        $this->contentTypeHandler = $contentTypeHandler;
     }
 
     /**
@@ -104,60 +115,31 @@ class Field extends CriterionHandler
      */
     protected function getFieldsInformation( $fieldIdentifier )
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query
-            ->select(
-                $this->dbHandler->quoteColumn( 'id', 'ezcontentclass_attribute' ),
-                $this->dbHandler->quoteColumn( 'data_type_string', 'ezcontentclass_attribute' )
-            )
-            ->from(
-                $this->dbHandler->quoteTable( 'ezcontentclass_attribute' )
-            )
-            ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass_attribute' ),
-                        $query->bindValue( $fieldIdentifier )
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'is_searchable', 'ezcontentclass_attribute' ),
-                        $query->bindValue( 1, null, \PDO::PARAM_INT )
-                    )
-                )
-            );
+        $fieldMapArray = array();
+        $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
 
-        $statement = $query->prepare();
-        $statement->execute();
-        if ( !( $rows = $statement->fetchAll( \PDO::FETCH_ASSOC ) ) )
+        foreach ( $fieldMap as $contentTypeIdentifier => $fieldIdentifierMap )
+        {
+            // First check if field exists in the current ContentType, there is nothing to do if it doesn't
+            if ( !isset( $fieldIdentifierMap[$fieldIdentifier] ) )
+            {
+                continue;
+            }
+
+            $fieldTypeIdentifier = $fieldIdentifierMap[$fieldIdentifier]["field_type_identifier"];
+            $fieldMapArray[$fieldTypeIdentifier]['ids'][] = $fieldIdentifierMap[$fieldIdentifier]["field_definition_id"];
+            if ( !isset( $fieldMapArray[$fieldTypeIdentifier]['column'] ) )
+            {
+                $fieldMapArray[$fieldTypeIdentifier]['column'] = $this->fieldConverterRegistry->getConverter( $fieldTypeIdentifier )->getIndexColumn();
+            }
+        }
+
+        if ( empty( $fieldMapArray ) )
         {
             throw new InvalidArgumentException(
                 "\$criterion->target",
                 "No searchable fields found for the given criterion target '{$fieldIdentifier}'."
             );
-        }
-
-        $fieldMapArray = array();
-        foreach ( $rows as $row )
-        {
-            if ( !isset( $fieldMapArray[ $row['data_type_string'] ] ) )
-            {
-                $converter = $this->fieldConverterRegistry->getConverter( $row['data_type_string'] );
-
-                if ( !$converter instanceof Converter )
-                {
-                    throw new RuntimeException(
-                        "getConverter({$row['data_type_string']}) did not return a converter, got: " .
-                        gettype( $converter )
-                    );
-                }
-
-                $fieldMapArray[ $row['data_type_string'] ] = array(
-                    'ids' => array(),
-                    'column' => $converter->getIndexColumn(),
-                );
-            }
-
-            $fieldMapArray[ $row['data_type_string'] ]['ids'][] = $row['id'];
         }
 
         return $fieldMapArray;
