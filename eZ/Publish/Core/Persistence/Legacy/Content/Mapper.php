@@ -252,7 +252,7 @@ class Mapper
         $contentInfo->alwaysAvailable = (int)$row["{$prefix}language_mask"] & 1;
         $contentInfo->mainLanguageCode = $this->languageHandler->load( $row["{$prefix}initial_language_id"] )->languageCode;
         $contentInfo->remoteId = $row["{$prefix}remote_id"];
-        $contentInfo->mainLocationId = (int)$row["{$treePrefix}main_node_id"];
+        $contentInfo->mainLocationId = ( $row["{$treePrefix}main_node_id"] !== null ? (int)$row["{$treePrefix}main_node_id"] : null );
 
         return $contentInfo;
     }
