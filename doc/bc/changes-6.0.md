@@ -54,6 +54,17 @@ Changes affecting version compatibility with former or future versions.
     * `ezpublish.search.legacy.gateway.sort_clause_handler.content`
     * `ezpublish.search.legacy.gateway.sort_clause_handler.location`
 
+* Legacy Search Engine FullText searchThresholdValue -> stopWordThresholdFactor
+
+    EZP-24213: the "Stop Word Threshold" configuration, `searchThresholdValue`, was hardcoded
+    to 20 items. It is now changed to `stopWordThresholdFactor`, a factor (between 0 and 1)
+    for the percentage of content objects to set the Stop Word Threshold to. Default value
+    is set to 0.66, meaning if you search for a common word like "the", it will be ignored
+    from the search expression if more then 66% of your content contains the word.
+
+    Note: Does not affect future Solr/ElasticSearch search engines which has far more
+          advanced search options built in.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.

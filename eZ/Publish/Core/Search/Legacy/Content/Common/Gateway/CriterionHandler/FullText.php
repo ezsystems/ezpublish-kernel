@@ -9,11 +9,12 @@
 
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 
 /**
@@ -27,7 +28,8 @@ class FullText extends CriterionHandler
      * @var array
      */
     protected $configuration = array(
-        'searchThresholdValue' => 20,
+        // @see getStopWordThresholdValue()
+        'stopWordThresholdFactor' => 0.66,
         'enableWildcards' => true,
         'commands' => array(
             'apostrophe_normalize',
@@ -66,6 +68,12 @@ class FullText extends CriterionHandler
     );
 
     /**
+     * @var int|null
+     * @see getStopWordThresholdValue()
+     */
+    private $stopWordThresholdValue;
+
+    /**
      * Transformation processor to normalize search strings
      *
      * @var \eZ\Publish\Core\Persistence\TransformationProcessor
@@ -78,6 +86,8 @@ class FullText extends CriterionHandler
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $processor
      * @param array $configuration
+     *
+     * @throws InvalidArgumentException On invalid $configuration values
      */
     public function __construct(
         DatabaseHandler $dbHandler,
@@ -89,6 +99,17 @@ class FullText extends CriterionHandler
 
         $this->configuration = $configuration + $this->configuration;
         $this->processor = $processor;
+
+        if (
+            $this->configuration['stopWordThresholdFactor'] < 0 ||
+            $this->configuration['stopWordThresholdFactor'] > 1
+        )
+        {
+            throw new InvalidArgumentException(
+                "\$configuration['stopWordThresholdFactor']",
+                "Stop Word Threshold Factor needs to be between 0 and 1, got: " . $this->configuration['stopWordThresholdFactor']
+            );
+        }
     }
 
     /**
@@ -161,6 +182,8 @@ class FullText extends CriterionHandler
     /**
      * Get subquery to select relevant word IDs
      *
+     * @uses getStopWordThresholdValue() To get threshold for words we would like to ignore in query.
+     *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $string
      *
@@ -178,18 +201,24 @@ class FullText extends CriterionHandler
             $wordExpressions[] = $this->getWordExpression( $subQuery, $token );
         }
 
+        $whereCondition = $subQuery->expr->lOr( $wordExpressions );
+
+        // If stop word threshold is below 100%, make it part of $whereCondition
+        if ( $this->configuration['stopWordThresholdFactor'] < 1 )
+        {
+            $whereCondition = $subQuery->expr->lAnd(
+                $whereCondition,
+                $subQuery->expr->lt(
+                    $this->dbHandler->quoteColumn( 'object_count' ),
+                    $subQuery->bindValue( $this->getStopWordThresholdValue() )
+                )
+            );
+        }
+
         $subQuery
             ->select( $this->dbHandler->quoteColumn( 'id' ) )
             ->from( $this->dbHandler->quoteTable( 'ezsearch_word' ) )
-            ->where(
-                $subQuery->expr->lAnd(
-                    $subQuery->expr->lOr( $wordExpressions ),
-                    $subQuery->expr->lt(
-                        $this->dbHandler->quoteColumn( 'object_count' ),
-                        $subQuery->bindValue( $this->configuration['searchThresholdValue'] )
-                    )
-                )
-            );
+            ->where( $whereCondition );
         return $subQuery;
     }
 
@@ -223,5 +252,41 @@ class FullText extends CriterionHandler
             $subSelect
         );
     }
+
+    /**
+     * Returns an exact content object count threshold to ignore common terms on.
+     *
+     * Common terms will be skipped if used in more then a given percentage of the total amount of content
+     * objects in the database. Percentage is defined by stopWordThresholdFactor configuration.
+     *
+     * Example: If stopWordThresholdFactor is 0.66 (66%), and a term like "the" exists in more then 66% of the content, it
+     *          will ignore the phrase as it is assumed to not add any value ot the search.
+     *
+     * Caches the result for the instance used as we don't need this to be super accurate as it is based on percentage,
+     * set by stopWordThresholdFactor.
+     *
+     * @return int
+     */
+    protected function getStopWordThresholdValue()
+    {
+        if ( $this->stopWordThresholdValue !== null )
+            return $this->stopWordThresholdValue;
+
+        // Cached value does not exists, do a simple count query on ezcontentobject table
+        $query = $this->dbHandler->createSelectQuery();
+        $query
+            ->select(
+                $query->alias( $query->expr->count( '*' ), 'count' )
+            )
+            ->from( $this->dbHandler->quoteTable( "ezcontentobject" ) );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        // Calculate the int stopWordThresholdValue based on count (first column) * factor
+        return $this->stopWordThresholdValue =
+            (int)( $statement->fetchColumn() * $this->configuration['stopWordThresholdFactor'] );
+    }
+
 }
 
