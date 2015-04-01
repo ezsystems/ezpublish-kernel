@@ -67,16 +67,16 @@ class MapLocationDistance extends CriterionHandler
     }
 
     /**
-     * Checks if there are searchable fields for the Criterion
+     * Returns a list of IDs of searchable FieldDefinitions for the given criterion target.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      *
      * @caching
      * @param string $fieldIdentifier
      *
-     * @return void
+     * @return array
      */
-    protected function checkSearchableFields( $fieldIdentifier )
+    protected function getFieldDefinitionIds( $fieldIdentifier )
     {
         $fieldDefinitionIdList = array();
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
@@ -104,6 +104,8 @@ class MapLocationDistance extends CriterionHandler
                 "No searchable fields found for the given criterion target '{$fieldIdentifier}'."
             );
         }
+
+        return $fieldDefinitionIdList;
     }
 
     protected function kilometersToDegrees( $kilometers )
@@ -127,7 +129,7 @@ class MapLocationDistance extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
-        $this->checkSearchableFields( $criterion->target );
+        $fieldDefinitionIds = $this->getFieldDefinitionIds( $criterion->target );
         $subSelect = $query->subSelect();
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue $location */
@@ -246,6 +248,10 @@ class MapLocationDistance extends CriterionHandler
                     $subSelect->expr->eq(
                         $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
                         $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
+                    ),
+                    $subSelect->expr->in(
+                        $this->dbHandler->quoteColumn( 'contentclassattribute_id', 'ezcontentobject_attribute' ),
+                        $fieldDefinitionIds
                     ),
                     $distanceFilter
                 )
