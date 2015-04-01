@@ -1,0 +1,13 @@
+parameters:
+    ezpublish.elasticsearch.connection_parameter_factory.class: eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\ApiLoader\ConnectionParameterFactory
+
+services:
+    ezpublish.elasticsearch.connection_parameter_factory:
+        class: %ezpublish.elasticsearch.connection_parameter_factory.class%
+        arguments:
+            - @ezpublish.api.repository_configuration_provider
+            - 'ez_search_engine_elasticsearch'
+            - 'default_connection'
+            - 'ezpublish.search.elasticsearch.connection'
+        calls:
+            - [setContainer, [@service_container]]

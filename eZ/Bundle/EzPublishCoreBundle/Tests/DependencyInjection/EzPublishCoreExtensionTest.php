@@ -307,17 +307,216 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
     public function testRepositoriesConfiguration()
     {
         $repositories = array(
-            'main' => array( 'engine' => 'legacy', 'connection' => 'default' ),
-            'foo' => array( 'engine' => 'bar', 'connection' => 'blabla' ),
+            'main' => array(
+                'storage' => array(
+                    'engine' => 'legacy',
+                    'connection' => 'default',
+                ),
+                'search' => array(
+                    'engine' => 'elasticsearch',
+                    'connection' => 'blabla',
+                ),
+            ),
+            'foo' => array(
+                'storage' => array(
+                    'engine' => 'sqlng',
+                    'connection' => 'default',
+                ),
+                'search' => array(
+                    'engine' => 'solr',
+                    'connection' => 'lalala',
+                ),
+            ),
         );
         $this->load( array( 'repositories' => $repositories ) );
         $this->assertTrue( $this->container->hasParameter( 'ezpublish.repositories' ) );
 
         foreach ( $repositories as &$repositoryConfig )
         {
-            $repositoryConfig['config'] = array();
+            $repositoryConfig['storage']['config'] = array();
+            $repositoryConfig['search']['config'] = array();
         }
         $this->assertSame( $repositories, $this->container->getParameter( 'ezpublish.repositories' ) );
+    }
+
+    public function testRepositoriesConfigurationEmpty()
+    {
+        $repositories = array(
+            'main' => null,
+        );
+        $expectedRepositories = array(
+            'main' => array(
+                'storage' => array(
+                    'engine' => '%ezpublish.api.storage_engine.default%',
+                    'connection' => null,
+                    'config' => array(),
+                ),
+                'search' => array(
+                    'engine' => '%ezpublish.api.search_engine.default%',
+                    'connection' => null,
+                    'config' => array(),
+                ),
+            ),
+        );
+        $this->load( array( 'repositories' => $repositories ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezpublish.repositories' ) );
+
+        $this->assertSame(
+            $expectedRepositories,
+            $this->container->getParameter( 'ezpublish.repositories' )
+        );
+    }
+
+    public function testRepositoriesConfigurationStorageEmpty()
+    {
+        $repositories = array(
+            'main' => array(
+                'search' => array(
+                    'engine' => 'fantasticfind',
+                    'connection' => 'french',
+                ),
+            ),
+        );
+        $expectedRepositories = array(
+            'main' => array(
+                'search' => array(
+                    'engine' => 'fantasticfind',
+                    'connection' => 'french',
+                    'config' => array(),
+                ),
+                'storage' => array(
+                    'engine' => '%ezpublish.api.storage_engine.default%',
+                    'connection' => null,
+                    'config' => array(),
+                ),
+            ),
+        );
+        $this->load( array( 'repositories' => $repositories ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezpublish.repositories' ) );
+
+        $this->assertSame(
+            $expectedRepositories,
+            $this->container->getParameter( 'ezpublish.repositories' )
+        );
+    }
+
+    public function testRepositoriesConfigurationSearchEmpty()
+    {
+        $repositories = array(
+            'main' => array(
+                'storage' => array(
+                    'engine' => 'persistentprudence',
+                    'connection' => 'yes',
+                ),
+            ),
+        );
+        $expectedRepositories = array(
+            'main' => array(
+                'storage' => array(
+                    'engine' => 'persistentprudence',
+                    'connection' => 'yes',
+                    'config' => array(),
+                ),
+                'search' => array(
+                    'engine' => '%ezpublish.api.search_engine.default%',
+                    'connection' => null,
+                    'config' => array(),
+                ),
+            ),
+        );
+        $this->load( array( 'repositories' => $repositories ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezpublish.repositories' ) );
+
+        $this->assertSame(
+            $expectedRepositories,
+            $this->container->getParameter( 'ezpublish.repositories' )
+        );
+    }
+
+    public function testRepositoriesConfigurationCompatibility()
+    {
+        $repositories = array(
+            'main' => array(
+                'engine' => 'legacy',
+                'connection' => 'default',
+                'search' => array(
+                    'engine' => 'elasticsearch',
+                    'connection' => 'blabla',
+                ),
+            ),
+            'foo' => array(
+                'engine' => 'sqlng',
+                'connection' => 'default',
+                'search' => array(
+                    'engine' => 'solr',
+                    'connection' => 'lalala',
+                ),
+            ),
+        );
+        $expectedRepositories = array(
+            'main' => array(
+                'search' => array(
+                    'engine' => 'elasticsearch',
+                    'connection' => 'blabla',
+                    'config' => array(),
+                ),
+                'storage' => array(
+                    'engine' => 'legacy',
+                    'connection' => 'default',
+                    'config' => array(),
+                ),
+            ),
+            'foo' => array(
+                'search' => array(
+                    'engine' => 'solr',
+                    'connection' => 'lalala',
+                    'config' => array(),
+                ),
+                'storage' => array(
+                    'engine' => 'sqlng',
+                    'connection' => 'default',
+                    'config' => array(),
+                ),
+            ),
+        );
+        $this->load( array( 'repositories' => $repositories ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezpublish.repositories' ) );
+
+        $this->assertSame(
+            $expectedRepositories,
+            $this->container->getParameter( 'ezpublish.repositories' )
+        );
+    }
+
+    public function testRepositoriesConfigurationCompatibility2()
+    {
+        $repositories = array(
+            'main' => array(
+                'engine' => 'legacy',
+                'connection' => 'default',
+            ),
+        );
+        $expectedRepositories = array(
+            'main' => array(
+                'storage' => array(
+                    'engine' => 'legacy',
+                    'connection' => 'default',
+                    'config' => array(),
+                ),
+                'search' => array(
+                    'engine' => '%ezpublish.api.search_engine.default%',
+                    'connection' => null,
+                    'config' => array(),
+                ),
+            ),
+        );
+        $this->load( array( 'repositories' => $repositories ) );
+        $this->assertTrue( $this->container->hasParameter( 'ezpublish.repositories' ) );
+
+        $this->assertSame(
+            $expectedRepositories,
+            $this->container->getParameter( 'ezpublish.repositories' )
+        );
     }
 
     public function testRelatedSiteAccesses()

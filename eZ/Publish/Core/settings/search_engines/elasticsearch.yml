@@ -9,7 +9,10 @@ imports:
     - {resource: search_engines/elasticsearch/sort_clause_visitors_location.yml}
 
 parameters:
-    ezpublish.elasticsearch_server: http://localhost:9200/
+    ezpublish.search.elasticsearch.connection.server: http://localhost:9200/
+    ezpublish.search.elasticsearch.connection.index_name: 'ezpublish'
+    ezpublish.search.elasticsearch.connection.document_type_name.content: 'content'
+    ezpublish.search.elasticsearch.connection.document_type_name.location: 'location'
     ezpublish.spi.search.elasticsearch.class: eZ\Publish\Core\Search\Elasticsearch\Handler
     ezpublish.search.elasticsearch.serializer.class: eZ\Publish\Core\Search\Elasticsearch\Content\Serializer
     ezpublish.search.elasticsearch.mapper.standard.class: eZ\Publish\Core\Search\Elasticsearch\Content\Mapper\StandardMapper
@@ -48,6 +51,7 @@ services:
             - @ezpublish.search.elasticsearch.content.criterion_visitor_dispatcher
             - @ezpublish.search.elasticsearch.content.sort_clause_visitor.aggregate
             - @ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate
+            - %ezpublish.search.elasticsearch.connection.index_name%
 
     ezpublish.search.elasticsearch.content.gateway:
         alias: ezpublish.search.elasticsearch.content.gateway.native
@@ -60,6 +64,7 @@ services:
             - @ezpublish.search.elasticsearch.location.criterion_visitor_dispatcher
             - @ezpublish.search.elasticsearch.location.sort_clause_visitor.aggregate
             - @ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate
+            - %ezpublish.search.elasticsearch.connection.index_name%
 
     ezpublish.search.elasticsearch.location.gateway:
         alias: ezpublish.search.elasticsearch.location.gateway.native
@@ -80,6 +85,7 @@ services:
             - @ezpublish.search.elasticsearch.content.gateway
             - @ezpublish.search.elasticsearch.mapper
             - @ezpublish.search.elasticsearch.extractor
+            - %ezpublish.search.elasticsearch.connection.document_type_name.content%
         lazy: true
 
     ezpublish.spi.search.elasticsearch.location_handler:
@@ -88,6 +94,7 @@ services:
             - @ezpublish.search.elasticsearch.location.gateway
             - @ezpublish.search.elasticsearch.mapper
             - @ezpublish.search.elasticsearch.extractor
+            - %ezpublish.search.elasticsearch.connection.document_type_name.location%
         lazy: true
 
     ezpublish.spi.search.elasticsearch:

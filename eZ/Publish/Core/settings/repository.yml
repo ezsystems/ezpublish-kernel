@@ -4,6 +4,7 @@ parameters:
     ezpublish.api.inner_repository.class: eZ\Publish\Core\Repository\Repository
     ezpublish.field_type_collection.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
     ezpublish.api.storage_engine.class: eZ\Publish\SPI\Persistence\Handler
+    ezpublish.api.search_engine.class: eZ\Publish\SPI\Search\Handler
 
     # API services
     ezpublish.api.service.content.class: eZ\Publish\Core\Repository\ContentService

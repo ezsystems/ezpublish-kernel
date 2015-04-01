@@ -1,18 +1,19 @@
 <?php
 /**
- * File containing the StorageConnectionFactory class.
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
+namespace eZ\Bundle\EzPublishLegacySearchEngineBundle\ApiLoader;
 
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use InvalidArgumentException;
 
-class StorageConnectionFactory extends ContainerAware
+class ConnectionFactory extends ContainerAware
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
@@ -37,9 +38,9 @@ class StorageConnectionFactory extends ContainerAware
         // Taking provided connection name if any.
         // Otherwise, just fallback to the default connection.
 
-        if ( isset( $repositoryConfig['storage']['connection'] ) )
+        if ( isset( $repositoryConfig['search']['connection'] ) )
         {
-            $doctrineConnectionId = sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['storage']['connection'] );
+            $doctrineConnectionId = sprintf( 'doctrine.dbal.%s_connection', $repositoryConfig['search']['connection'] );
         }
         else
         {
@@ -50,7 +51,7 @@ class StorageConnectionFactory extends ContainerAware
         if ( !$this->container->has( $doctrineConnectionId ) )
         {
             throw new InvalidArgumentException(
-                "Invalid Doctrine connection '{$repositoryConfig['storage']['connection']}' for repository '{$repositoryConfig['alias']}'." .
+                "Invalid Doctrine connection '{$repositoryConfig['search']['connection']}' for repository '{$repositoryConfig['alias']}'." .
                 "Valid connections are " . implode( ', ', array_keys( $this->container->getParameter( 'doctrine.connections' ) ) )
             );
         }

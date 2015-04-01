@@ -9,7 +9,7 @@ export TRAVIS_BUILD_DIR="$HOME/build/ezpublish-community"
 cd "$HOME/build"
 
 # Checkout meta repo, change the branch and/or remote to use a different ezpublish branch/distro
-git clone --depth 1 --single-branch --branch master https://github.com/ezsystems/ezpublish-community.git
+git clone --depth 1 --single-branch --branch impl-EZP-23471-search-semantic-config https://github.com/ezsystems/ezpublish-community.git
 cd ezpublish-community
 
 # Install everything needed for behat testing, using our local branch of this repo

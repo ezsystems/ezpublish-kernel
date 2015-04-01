@@ -269,7 +269,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $coreLoader->load( 'storage_engines/legacy.yml' );
         $coreLoader->load( 'storage_engines/shortcuts.yml' );
         $coreLoader->load( 'search_engines/common.yml' );
-        $coreLoader->load( 'search_engines/legacy.yml' );
         $coreLoader->load( 'utils.yml' );
         $coreLoader->load( 'io.yml' );
 
