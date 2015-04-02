@@ -13,6 +13,9 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use RuntimeException;
 
 /**
@@ -20,6 +23,26 @@ use RuntimeException;
  */
 class FieldRelation extends CriterionHandler
 {
+    /**
+     * ContentType handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
+     */
+    protected $contentTypeHandler;
+
+    /**
+     * Construct from handler handler
+     *
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     */
+    public function __construct( DatabaseHandler $dbHandler, ContentTypeHandler $contentTypeHandler )
+    {
+        parent::__construct( $dbHandler );
+
+        $this->contentTypeHandler = $contentTypeHandler;
+    }
+
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
@@ -30,6 +53,42 @@ class FieldRelation extends CriterionHandler
     public function accept( Criterion $criterion )
     {
         return $criterion instanceof Criterion\FieldRelation;
+    }
+
+    /**
+     * Returns a list of IDs of searchable FieldDefinitions for the given criterion target.
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
+     *
+     * @param string $fieldDefinitionIdentifier
+     *
+     * @return array
+     */
+    protected function getFieldDefinitionsIds( $fieldDefinitionIdentifier )
+    {
+        $fieldDefinitionIdList = array();
+        $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
+
+        foreach ( $fieldMap as $contentTypeIdentifier => $fieldIdentifierMap )
+        {
+            // First check if field exists in the current ContentType, there is nothing to do if it doesn't
+            if ( !isset( $fieldIdentifierMap[$fieldDefinitionIdentifier] ) )
+            {
+                continue;
+            }
+
+            $fieldDefinitionIdList[] = $fieldIdentifierMap[$fieldDefinitionIdentifier]["field_definition_id"];
+        }
+
+        if ( empty( $fieldDefinitionIdList ) )
+        {
+            throw new InvalidArgumentException(
+                "\$criterion->target",
+                "No searchable fields found for the given criterion target '{$fieldDefinitionIdentifier}'."
+            );
+        }
+
+        return $fieldDefinitionIdList;
     }
 
     /**
@@ -47,6 +106,7 @@ class FieldRelation extends CriterionHandler
     public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
         $column = $this->dbHandler->quoteColumn( 'to_contentobject_id', 'ezcontentobject_link' );
+        $fieldDefinitionIds = $this->getFieldDefinitionsIds( $criterion->target );
 
         switch ( $criterion->operator )
         {
@@ -65,24 +125,15 @@ class FieldRelation extends CriterionHandler
                             $this->dbHandler->quoteTable( 'ezcontentobject_link' )
                         );
 
-                        $subSelect->innerJoin(
-                            'ezcontentclass_attribute',
-                            $subSelect->expr->eq( 'ezcontentclass_attribute.id', 'ezcontentobject_link.contentclassattribute_id' )
-                        );
-
                         $subSelect->where(
                             $subSelect->expr->lAnd(
                                 $subSelect->expr->eq(
                                     $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' ),
                                     $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
                                 ),
-                                $subSelect->expr->eq(
-                                    $this->dbHandler->quoteColumn( 'contentclass_id', 'ezcontentclass_attribute' ),
-                                    $this->dbHandler->quoteColumn( 'contentclass_id', 'ezcontentobject' )
-                                ),
-                                $subSelect->expr->eq(
-                                    $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass_attribute' ),
-                                    $subSelect->bindValue( $criterion->target )
+                                $subSelect->expr->in(
+                                    $this->dbHandler->quoteColumn( 'contentclassattribute_id', 'ezcontentobject_link' ),
+                                    $fieldDefinitionIds
                                 ),
                                 $subSelect->expr->eq(
                                     $column,
@@ -111,11 +162,6 @@ class FieldRelation extends CriterionHandler
                     $this->dbHandler->quoteTable( 'ezcontentobject_link' )
                 );
 
-                $subSelect->innerJoin(
-                    'ezcontentclass_attribute',
-                    $subSelect->expr->eq( 'ezcontentclass_attribute.id', 'ezcontentobject_link.contentclassattribute_id' )
-                );
-
                 return $query->expr->in(
                     $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
                     $subSelect->where(
@@ -124,13 +170,9 @@ class FieldRelation extends CriterionHandler
                                 $this->dbHandler->quoteColumn( 'from_contentobject_version', 'ezcontentobject_link' ),
                                 $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
                             ),
-                            $subSelect->expr->eq(
-                                $this->dbHandler->quoteColumn( 'contentclass_id', 'ezcontentclass_attribute' ),
-                                $this->dbHandler->quoteColumn( 'contentclass_id', 'ezcontentobject' )
-                            ),
-                            $subSelect->expr->eq(
-                                $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass_attribute' ),
-                                $subSelect->bindValue( $criterion->target )
+                            $subSelect->expr->in(
+                                $this->dbHandler->quoteColumn( 'contentclassattribute_id', 'ezcontentobject_link' ),
+                                $fieldDefinitionIds
                             ),
                             $subSelect->expr->in(
                                 $column,

@@ -170,10 +170,16 @@ class HandlerTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\LogicalAnd( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\LogicalNot( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\LogicalOr( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\MapLocationDistance( $this->getDatabaseHandler() ),
+                        new CommonCriterionHandler\MapLocationDistance(
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
+                        ),
                         new CommonCriterionHandler\MatchAll( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ObjectStateId( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\FieldRelation( $this->getDatabaseHandler() ),
+                        new CommonCriterionHandler\FieldRelation(
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
+                        ),
                         new CommonCriterionHandler\RemoteId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\SectionId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\UserMetadata( $this->getDatabaseHandler() ),

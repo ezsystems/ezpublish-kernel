@@ -212,7 +212,8 @@ class HandlerTest extends LanguageAwareTestCase
                             $this->getDatabaseHandler()
                         ),
                         new Content\Common\Gateway\CriterionHandler\FieldRelation(
-                            $this->getDatabaseHandler()
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
                         ),
                         new Content\Gateway\CriterionHandler\Depth(
                             $this->getDatabaseHandler()
