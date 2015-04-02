@@ -98,7 +98,14 @@ class Handler implements SearchHandlerInterface
         // combine the query with the filter
         $filter = new Criterion\LogicalAnd( array( $query->query, $query->filter ) );
 
-        $data = $this->gateway->find( $filter, $query->offset, $query->limit, $query->sortClauses, null, $query->performCount );
+        $data = $this->gateway->find(
+            $filter,
+            $query->offset,
+            $query->limit,
+            $query->sortClauses,
+            $fieldFilters,
+            $query->performCount
+        );
 
         $result = new SearchResult();
         $result->time = microtime( true ) - $start;

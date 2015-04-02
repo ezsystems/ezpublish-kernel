@@ -141,10 +141,16 @@ class Field extends FieldBase
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $fieldFilters
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
+    public function handle(
+        CriteriaConverter $converter,
+        SelectQuery $query,
+        Criterion $criterion,
+        array $fieldFilters
+    )
     {
         $fieldsInformation = $this->getFieldsInformation( $criterion->target );
 
