@@ -129,30 +129,7 @@ class DoctrineDatabase extends Gateway
             )
         );
 
-        if ( $translations === null )
-        {
-            return $condition;
-        }
-
-        $translationQuery = $query->subSelect();
-        $translationQuery->select(
-            $this->handler->quoteColumn( 'contentobject_id' )
-        )->from(
-            $this->handler->quoteTable( 'ezcontentobject_attribute' )
-        )->where(
-            $translationQuery->expr->in(
-                $this->handler->quoteColumn( 'language_code' ),
-                $translations
-            )
-        );
-
-        return $query->expr->lAnd(
-            $condition,
-            $query->expr->in(
-                $this->handler->quoteColumn( 'id', 'ezcontentobject' ),
-                $translationQuery
-            )
-        );
+        return $condition;
     }
 
     /**
