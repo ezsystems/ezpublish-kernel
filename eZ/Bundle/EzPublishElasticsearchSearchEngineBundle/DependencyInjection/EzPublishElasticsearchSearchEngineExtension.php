@@ -125,7 +125,7 @@ class EzPublishElasticsearchSearchEngineExtension extends Extension
         $locationSearchGatewayId = self::LOCATION_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition( $locationSearchGatewayId, $locationSearchGatewayDef );
 
-        // Content search handler
+        // Location search handler
         $contentSearchHandlerDefinition = new DefinitionDecorator( self::LOCATION_SEARCH_HANDLER_ID );
         $contentSearchHandlerDefinition->replaceArgument( 0, new Reference( $locationSearchGatewayId ) );
         $contentSearchHandlerDefinition->replaceArgument( 3, $connectionParams['document_type_name']['location'] );
