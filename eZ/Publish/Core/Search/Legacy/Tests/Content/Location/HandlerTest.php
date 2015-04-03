@@ -23,12 +23,11 @@ use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\CriterionHandler as L
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler as CommonCriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler as LocationSortClauseHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler as CommonSortClauseHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
 
 /**
  * Test case for LocationSearchHandler
@@ -131,19 +130,15 @@ class HandlerTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\ContentId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ContentTypeGroupId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ContentTypeId( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\ContentTypeIdentifier( $this->getDatabaseHandler() ),
+                        new CommonCriterionHandler\ContentTypeIdentifier(
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
+                        ),
                         new CommonCriterionHandler\DateMetadata( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\Field(
                             $this->getDatabaseHandler(),
-                            new ConverterRegistry(
-                                array(
-                                    'ezdatetime' => new DateAndTime(),
-                                    'ezinteger' => new Integer(),
-                                    'ezstring' => new TextLine(),
-                                    'ezprice' => new Integer(),
-                                    'ezurl' => new Url()
-                                )
-                            ),
+                            $this->getContentTypeHandler(),
+                            $this->getConverterRegistry(),
                             new CommonCriterionHandler\FieldValue\Converter(
                                 new CommonCriterionHandler\FieldValue\HandlerRegistry(
                                     array(
@@ -175,10 +170,16 @@ class HandlerTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\LogicalAnd( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\LogicalNot( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\LogicalOr( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\MapLocationDistance( $this->getDatabaseHandler() ),
+                        new CommonCriterionHandler\MapLocationDistance(
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
+                        ),
                         new CommonCriterionHandler\MatchAll( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ObjectStateId( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\FieldRelation( $this->getDatabaseHandler() ),
+                        new CommonCriterionHandler\FieldRelation(
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
+                        ),
                         new CommonCriterionHandler\RemoteId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\SectionId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\UserMetadata( $this->getDatabaseHandler() ),
@@ -189,14 +190,52 @@ class HandlerTest extends LanguageAwareTestCase
                         new LocationSortClauseHandler\Location\Id( $this->getDatabaseHandler() ),
                         new CommonSortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                     )
-                ),
-                new ContentTypeGateway(
-                    $this->getDatabaseHandler(),
-                    $this->getLanguageMaskGenerator()
                 )
             ),
             $this->getLocationMapperMock()
         );
+    }
+
+    protected $contentTypeHandler;
+
+    protected function getContentTypeHandler()
+    {
+        if ( !isset( $this->contentTypeHandler ) )
+        {
+            $this->contentTypeHandler = new ContentTypeHandler(
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
+                ),
+                new ContentTypeMapper( $this->getConverterRegistry() ),
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
+            );
+        }
+
+        return $this->contentTypeHandler;
+    }
+
+    protected $fieldRegistry;
+
+    protected function getConverterRegistry()
+    {
+        if ( !isset( $this->fieldRegistry ) )
+        {
+            $this->fieldRegistry = new ConverterRegistry(
+                array(
+                    'ezdatetime' => new Converter\DateAndTime(),
+                    'ezinteger' => new Converter\Integer(),
+                    'ezstring' => new Converter\TextLine(),
+                    'ezprice' => new Converter\Integer(),
+                    'ezurl' => new Converter\Url(),
+                    'ezxmltext' => new Converter\XmlText(),
+                    'ezboolean' => new Converter\Checkbox(),
+                    'ezkeyword' => new Converter\Keyword(),
+                )
+            );
+        }
+
+        return $this->fieldRegistry;
     }
 
     /**

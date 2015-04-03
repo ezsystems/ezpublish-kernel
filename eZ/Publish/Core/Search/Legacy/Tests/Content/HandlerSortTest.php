@@ -17,8 +17,11 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
 
 /**
  * Test case for ContentSearchHandler
@@ -78,7 +81,10 @@ class HandlerSortTest extends LanguageAwareTestCase
                         new Content\Common\Gateway\CriterionHandler\MatchAll( $db ),
                         new Content\Common\Gateway\CriterionHandler\LogicalAnd( $db ),
                         new Content\Common\Gateway\CriterionHandler\SectionId( $db ),
-                        new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier( $db ),
+                        new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
+                            $db,
+                            $this->getContentTypeHandler()
+                        ),
                     )
                 ),
                 new Content\Common\Gateway\SortClauseConverter(
@@ -97,42 +103,46 @@ class HandlerSortTest extends LanguageAwareTestCase
                             $this->getContentTypeHandler()
                         ),
                     )
-                ),
-                new ContentTypeGateway(
-                    $this->getDatabaseHandler(),
-                    $this->getLanguageMaskGenerator()
                 )
             ),
             $this->getContentMapperMock()
         );
     }
 
-    protected $contentTypeGateway;
-
-    protected function getContentTypeGateway()
-    {
-        if ( !isset( $this->contentTypeGateway ) )
-        {
-            $this->contentTypeGateway = new ContentTypeGateway(
-                $this->getDatabaseHandler(),
-                $this->getLanguageMaskGenerator()
-            );
-        }
-
-        return $this->contentTypeGateway;
-    }
+    protected $contentTypeHandler;
 
     protected function getContentTypeHandler()
     {
-        return new ContentTypeHandler(
-            $this->getContentTypeGateway(),
-            $this->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper" )
-                ->disableOriginalConstructor()
-                ->getMock(),
-            $this->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
-                ->disableOriginalConstructor()
-                ->getMock()
-        );
+        if ( !isset( $this->contentTypeHandler ) )
+        {
+            $this->contentTypeHandler = new ContentTypeHandler(
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
+                ),
+                new ContentTypeMapper(
+                    new ConverterRegistry(
+                        array(
+                            'ezdatetime' => new Converter\DateAndTime(),
+                            'ezinteger' => new Converter\Integer(),
+                            'ezstring' => new Converter\TextLine(),
+                            'ezprice' => new Converter\Integer(),
+                            'ezurl' => new Converter\Url(),
+                            'ezxmltext' => new Converter\XmlText(),
+                            'ezboolean' => new Converter\Checkbox(),
+                            'ezkeyword' => new Converter\Keyword(),
+                            'ezauthor' => new Converter\Author(),
+                            'ezimage' => new Converter\Null(),
+                            'ezsrrating' => new Converter\Null(),
+                            'ezmultioption' => new Converter\Null(),
+                        )
+                    )
+                ),
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
+            );
+        }
+
+        return $this->contentTypeHandler;
     }
 
     /**

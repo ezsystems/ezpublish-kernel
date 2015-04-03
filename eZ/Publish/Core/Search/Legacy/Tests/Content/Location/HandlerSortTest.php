@@ -24,6 +24,9 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler as Co
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler as LocationSortClauseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 
 /**
  * Test case for LocationSearchHandler
@@ -96,7 +99,10 @@ class HandlerSortTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\LogicalAnd( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\MatchAll( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\SectionId( $this->getDatabaseHandler() ),
-                        new CommonCriterionHandler\ContentTypeIdentifier( $this->getDatabaseHandler() ),
+                        new CommonCriterionHandler\ContentTypeIdentifier(
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
+                        ),
                     )
                 ),
                 new SortClauseConverter(
@@ -119,42 +125,56 @@ class HandlerSortTest extends LanguageAwareTestCase
                             $this->getContentTypeHandler()
                         ),
                     )
-                ),
-                new ContentTypeGateway(
-                    $this->getDatabaseHandler(),
-                    $this->getLanguageMaskGenerator()
                 )
             ),
             $this->getLocationMapperMock()
         );
     }
 
-    protected $contentTypeGateway;
-
-    protected function getContentTypeGateway()
-    {
-        if ( !isset( $this->contentTypeGateway ) )
-        {
-            $this->contentTypeGateway = new ContentTypeGateway(
-                $this->getDatabaseHandler(),
-                $this->getLanguageMaskGenerator()
-            );
-        }
-
-        return $this->contentTypeGateway;
-    }
+    protected $contentTypeHandler;
 
     protected function getContentTypeHandler()
     {
-        return new ContentTypeHandler(
-            $this->getContentTypeGateway(),
-            $this->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper" )
-                ->disableOriginalConstructor()
-                ->getMock(),
-            $this->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
-                ->disableOriginalConstructor()
-                ->getMock()
-        );
+        if ( !isset( $this->contentTypeHandler ) )
+        {
+            $this->contentTypeHandler = new ContentTypeHandler(
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
+                ),
+                new ContentTypeMapper( $this->getConverterRegistry() ),
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
+            );
+        }
+
+        return $this->contentTypeHandler;
+    }
+
+    protected $fieldRegistry;
+
+    protected function getConverterRegistry()
+    {
+        if ( !isset( $this->fieldRegistry ) )
+        {
+            $this->fieldRegistry = new ConverterRegistry(
+                array(
+                    'ezdatetime' => new Converter\DateAndTime(),
+                    'ezinteger' => new Converter\Integer(),
+                    'ezstring' => new Converter\TextLine(),
+                    'ezprice' => new Converter\Integer(),
+                    'ezurl' => new Converter\Url(),
+                    'ezxmltext' => new Converter\XmlText(),
+                    'ezboolean' => new Converter\Checkbox(),
+                    'ezkeyword' => new Converter\Keyword(),
+                    'ezauthor' => new Converter\Author(),
+                    'ezimage' => new Converter\Null(),
+                    'ezsrrating' => new Converter\Null(),
+                    'ezmultioption' => new Converter\Null(),
+                )
+            );
+        }
+
+        return $this->fieldRegistry;
     }
 
     /**

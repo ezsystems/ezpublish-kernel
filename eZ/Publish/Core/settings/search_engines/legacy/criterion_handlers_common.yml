@@ -33,6 +33,12 @@ services:
         abstract: true
         arguments: [@ezpublish.api.storage_engine.legacy.dbhandler]
 
+    ezpublish.search.legacy.gateway.criterion_handler.field_base:
+        abstract: true
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.spi.persistence.content_type_handler
+
     ezpublish.search.legacy.gateway.criterion_field_value_handler.base:
         abstract: true
         arguments:
@@ -63,7 +69,7 @@ services:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
 
     ezpublish.search.legacy.gateway.criterion_handler.common.content_type_identifier:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: ezpublish.search.legacy.gateway.criterion_handler.field_base
         class: %ezpublish.search.legacy.gateway.criterion_handler.common.content_type_identifier.class%
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
@@ -80,6 +86,7 @@ services:
         class: %ezpublish.search.legacy.gateway.criterion_handler.common.field.class%
         arguments:
             - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.spi.persistence.content_type_handler
             - @ezpublish.persistence.legacy.field_value_converter.registry
             - @ezpublish.search.legacy.gateway.criterion_field_value_converter
             - @ezpublish.api.storage_engine.transformation_processor
@@ -127,7 +134,7 @@ services:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
 
     ezpublish.search.legacy.gateway.criterion_handler.common.map_location_distance:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: ezpublish.search.legacy.gateway.criterion_handler.field_base
         class: %ezpublish.search.legacy.gateway.criterion_handler.common.map_location_distance.class%
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
@@ -155,7 +162,7 @@ services:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.location}
 
     ezpublish.search.legacy.gateway.criterion_handler.common.field_relation:
-        parent: ezpublish.search.legacy.gateway.criterion_handler.base
+        parent: ezpublish.search.legacy.gateway.criterion_handler.field_base
         class: %ezpublish.search.legacy.gateway.criterion_handler.common.field_relation.class%
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}

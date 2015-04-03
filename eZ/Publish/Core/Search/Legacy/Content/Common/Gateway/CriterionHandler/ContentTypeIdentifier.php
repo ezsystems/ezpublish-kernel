@@ -17,7 +17,7 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
 /**
  * Content type criterion handler
  */
-class ContentTypeIdentifier extends CriterionHandler
+class ContentTypeIdentifier extends FieldBase
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -44,21 +44,16 @@ class ContentTypeIdentifier extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
-        $subSelect = $query->subSelect();
-        $subSelect
-            ->select(
-                $this->dbHandler->quoteColumn( 'id' )
-            )->from(
-                $this->dbHandler->quoteTable( 'ezcontentclass' )
-            )->where(
-                $query->expr->in(
-                    $this->dbHandler->quoteColumn( 'identifier' ),
-                    $criterion->value
-                )
-            );
+        $idList = array();
+
+        foreach ( $criterion->value  as $identifier )
+        {
+            $idList[] = $this->contentTypeHandler->loadByIdentifier( $identifier )->id;
+        }
+
         return $query->expr->in(
             $this->dbHandler->quoteColumn( 'contentclass_id', 'ezcontentobject' ),
-            $subSelect
+            $idList
         );
     }
 }

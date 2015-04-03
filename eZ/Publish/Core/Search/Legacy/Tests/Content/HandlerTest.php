@@ -12,17 +12,15 @@ namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Search\Legacy\Content;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
 use eZ\Publish\SPI\Persistence\Content as ContentObject;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 
 /**
@@ -142,7 +140,8 @@ class HandlerTest extends LanguageAwareTestCase
                             $this->getDatabaseHandler()
                         ),
                         new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
-                            $this->getDatabaseHandler()
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
                         ),
                         new Content\Common\Gateway\CriterionHandler\ContentTypeGroupId(
                             $this->getDatabaseHandler()
@@ -175,15 +174,8 @@ class HandlerTest extends LanguageAwareTestCase
                         ),
                         new Content\Common\Gateway\CriterionHandler\Field(
                             $this->getDatabaseHandler(),
-                            $this->fieldRegistry = new ConverterRegistry(
-                                array(
-                                    'ezdatetime' => new DateAndTime(),
-                                    'ezinteger' => new Integer(),
-                                    'ezstring' => new TextLine(),
-                                    'ezprice' => new Integer(),
-                                    'ezurl' => new Url()
-                                )
-                            ),
+                            $this->getContentTypeHandler(),
+                            $this->getConverterRegistry(),
                             new Content\Common\Gateway\CriterionHandler\FieldValue\Converter(
                                 new Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
                                     array(
@@ -220,7 +212,8 @@ class HandlerTest extends LanguageAwareTestCase
                             $this->getDatabaseHandler()
                         ),
                         new Content\Common\Gateway\CriterionHandler\FieldRelation(
-                            $this->getDatabaseHandler()
+                            $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler()
                         ),
                         new Content\Gateway\CriterionHandler\Depth(
                             $this->getDatabaseHandler()
@@ -231,14 +224,50 @@ class HandlerTest extends LanguageAwareTestCase
                     array(
                         new Content\Common\Gateway\SortClauseHandler\ContentId( $this->getDatabaseHandler() ),
                     )
-                ),
-                new ContentTypeGateway(
-                    $this->getDatabaseHandler(),
-                    $this->getLanguageMaskGenerator()
                 )
             ),
             $this->getContentMapperMock()
         );
+    }
+
+    protected $contentTypeHandler;
+
+    protected function getContentTypeHandler()
+    {
+        if ( !isset( $this->contentTypeHandler ) )
+        {
+            $this->contentTypeHandler = new ContentTypeHandler(
+                new ContentTypeGateway(
+                    $this->getDatabaseHandler(),
+                    $this->getLanguageMaskGenerator()
+                ),
+                new ContentTypeMapper( $this->getConverterRegistry() ),
+                $this->getMock( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler" )
+            );
+        }
+
+        return $this->contentTypeHandler;
+    }
+
+    protected function getConverterRegistry()
+    {
+        if ( !isset( $this->fieldRegistry ) )
+        {
+            $this->fieldRegistry = new ConverterRegistry(
+                array(
+                    'ezdatetime' => new Converter\DateAndTime(),
+                    'ezinteger' => new Converter\Integer(),
+                    'ezstring' => new Converter\TextLine(),
+                    'ezprice' => new Converter\Integer(),
+                    'ezurl' => new Converter\Url(),
+                    'ezxmltext' => new Converter\XmlText(),
+                    'ezboolean' => new Converter\Checkbox(),
+                    'ezkeyword' => new Converter\Keyword(),
+                )
+            );
+        }
+
+        return $this->fieldRegistry;
     }
 
     /**
