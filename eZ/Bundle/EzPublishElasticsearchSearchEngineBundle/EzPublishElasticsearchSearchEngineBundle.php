@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishElasticsearchSearchEngineBundle;
 
+use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\EzPublishElasticsearchSearchEngineExtension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\AggregateFacetBuilderVisitorPass;
@@ -19,7 +20,6 @@ use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisito
 use eZ\Publish\Core\Base\Container\Compiler\Search\Elasticsearch\CriterionVisitorDispatcherLocationPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\FieldRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Search\SignalSlotPass;
-use eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection\Compiler;
 
 class EzPublishElasticsearchSearchEngineBundle extends Bundle
 {
@@ -36,19 +36,13 @@ class EzPublishElasticsearchSearchEngineBundle extends Bundle
         // @todo two passes below should be common for search implementations, so maybe separate or Core bundle
         $container->addCompilerPass( new FieldRegistryPass );
         $container->addCompilerPass( new SignalSlotPass );
-
-        $container->addCompilerPass( new Compiler\ContentGatewayPass );
-        $container->addCompilerPass( new Compiler\ContentHandlerPass );
-        $container->addCompilerPass( new Compiler\HttpClientPass );
-        $container->addCompilerPass( new Compiler\LocationGatewayPass );
-        $container->addCompilerPass( new Compiler\LocationHandlerPass );
     }
 
     public function getContainerExtension()
     {
         if ( !isset( $this->extension ) )
         {
-            $this->extension = new DependencyInjection\EzPublishElasticsearchSearchEngineExtension();
+            $this->extension = new EzPublishElasticsearchSearchEngineExtension();
         }
 
         return $this->extension;

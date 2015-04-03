@@ -9,6 +9,8 @@
 
 namespace eZ\Bundle\EzPublishElasticsearchSearchEngineBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -16,6 +18,13 @@ use Symfony\Component\Config\FileLocator;
 
 class EzPublishElasticsearchSearchEngineExtension extends Extension
 {
+    const MAIN_SEARCH_ENGINE_ID = "ezpublish.spi.search.elasticsearch";
+    const HTTP_CLIENT_ID = "ezpublish.search.elasticsearch.content.gateway.client.http.stream";
+    const CONTENT_SEARCH_HANDLER_ID = "ezpublish.spi.search.elasticsearch.content_handler";
+    const CONTENT_SEARCH_GATEWAY_ID = "ezpublish.search.elasticsearch.content.gateway.native";
+    const LOCATION_SEARCH_HANDLER_ID = "ezpublish.spi.search.elasticsearch.location_handler";
+    const LOCATION_SEARCH_GATEWAY_ID = "ezpublish.search.elasticsearch.location.gateway.native";
+
     public function getAlias()
     {
         return "ez_search_engine_elasticsearch";
@@ -50,7 +59,7 @@ class EzPublishElasticsearchSearchEngineExtension extends Extension
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param array $config
      */
-    protected function processConnectionConfiguration( ContainerBuilder $container, $config )
+    private function processConnectionConfiguration( ContainerBuilder $container, $config )
     {
         $alias = $this->getAlias();
 
@@ -61,47 +70,72 @@ class EzPublishElasticsearchSearchEngineExtension extends Extension
                 $config["default_connection"]
             );
         }
+        else if ( !empty( $config["connections"] ) )
+        {
+            reset( $config["connections"] );
+            $container->setParameter(
+                "{$alias}.default_connection",
+                key( $config["connections"] )
+            );
+        }
 
         foreach ( $config["connections"] as $name => $params )
         {
-            $flattenedParams = $this->flattenParams(
-                $params,
-                "{$alias}.connection.{$name}"
-            );
-
-            foreach ( $flattenedParams as $key => $value )
-            {
-                $container->setParameter( $key, $value );
-            }
+            $this->configureSearchServices( $container, $name, $params );
+            $container->setParameter( "$alias.connection.$name", $params );
         }
     }
 
     /**
-     * Flattens nested array structure into a single level key-value array, concatenating
-     * keys through levels and keeping values.
+     * Creates needed search services for given connection name and parameters.
      *
-     * @param array $nestedParams
-     * @param string $prefix
-     *
-     * @return array
+     * @param ContainerBuilder $container
+     * @param string $connectionName
+     * @param array $connectionParams
      */
-    protected function flattenParams( $nestedParams, $prefix )
+    private function configureSearchServices( ContainerBuilder $container, $connectionName, $connectionParams )
     {
-        $params = array();
+        $alias = $this->getAlias();
 
-        foreach ( $nestedParams as $key => $value )
-        {
-            if ( is_array( $value ) )
-            {
-                $params = $params + $this->flattenParams( $value, $prefix . "." . $key );
-            }
-            else
-            {
-                $params[$prefix . "." . $key] = $value;
-            }
-        }
+        // Http client
+        $httpClientId = static::HTTP_CLIENT_ID . ".$connectionName";
+        $httpClientDef = new DefinitionDecorator( self::HTTP_CLIENT_ID );
+        $httpClientDef->replaceArgument( 0, $connectionParams['server'] );
+        $container->setDefinition( $httpClientId, $httpClientDef );
 
-        return $params;
+        // Content search gateway
+        $contentSearchGatewayDef = new DefinitionDecorator( self::CONTENT_SEARCH_GATEWAY_ID );
+        $contentSearchGatewayDef->replaceArgument( 0, new Reference( $httpClientId ) );
+        $contentSearchGatewayDef->replaceArgument( 5, $connectionParams['index_name'] );
+        $contentSearchGatewayId = self::CONTENT_SEARCH_GATEWAY_ID . ".$connectionName";
+        $container->setDefinition( $contentSearchGatewayId, $contentSearchGatewayDef );
+
+        // Content search handler
+        $contentSearchHandlerDefinition = new DefinitionDecorator( self::CONTENT_SEARCH_HANDLER_ID );
+        $contentSearchHandlerDefinition->replaceArgument( 0, new Reference( $contentSearchGatewayId ) );
+        $contentSearchHandlerDefinition->replaceArgument( 3, $connectionParams['document_type_name']['content'] );
+        $contentSearchHandlerId = self::CONTENT_SEARCH_HANDLER_ID . ".$connectionName";
+        $container->setDefinition( $contentSearchHandlerId, $contentSearchHandlerDefinition );
+        $container->setParameter( "$alias.connection.$connectionName.content_handler_id", $contentSearchHandlerId );
+
+        // Location search gateway
+        $locationSearchGatewayDef = new DefinitionDecorator( self::LOCATION_SEARCH_GATEWAY_ID );
+        $locationSearchGatewayDef->replaceArgument( 0, new Reference( $httpClientId ) );
+        $locationSearchGatewayDef->replaceArgument( 5, $connectionParams['index_name'] );
+        $locationSearchGatewayId = self::LOCATION_SEARCH_GATEWAY_ID . ".$connectionName";
+        $container->setDefinition( $locationSearchGatewayId, $locationSearchGatewayDef );
+
+        // Location search handler
+        $contentSearchHandlerDefinition = new DefinitionDecorator( self::LOCATION_SEARCH_HANDLER_ID );
+        $contentSearchHandlerDefinition->replaceArgument( 0, new Reference( $locationSearchGatewayId ) );
+        $contentSearchHandlerDefinition->replaceArgument( 3, $connectionParams['document_type_name']['location'] );
+        $locationSearchHandlerId = self::LOCATION_SEARCH_HANDLER_ID . ".$connectionName";
+        $container->setDefinition( $locationSearchHandlerId, $contentSearchHandlerDefinition );
+        $container->setParameter( "$alias.connection.$connectionName.location_handler_id", $locationSearchHandlerId );
+
+        // Search engine itself, for given connection name
+        $searchEngineDef = $container->findDefinition( self::MAIN_SEARCH_ENGINE_ID );
+        $searchEngineDef->setFactory( [new Reference( 'ezpublish.elasticsearch.engine_factory' ), 'buildEngine'] );
     }
 
     public function getConfiguration( array $config, ContainerBuilder $container )
