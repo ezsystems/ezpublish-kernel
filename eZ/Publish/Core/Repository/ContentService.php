@@ -1735,7 +1735,7 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $content;
+        return $this->internalLoadContent( $content->id );
     }
 
     /**
