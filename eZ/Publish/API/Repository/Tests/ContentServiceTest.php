@@ -2698,6 +2698,11 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertAllFieldsEquals( $contentCopied->getFields() );
 
         $this->assertDefaultContentStates( $contentCopied->contentInfo );
+
+        $this->assertNotNull(
+            $contentCopied->contentInfo->mainLocationId,
+            'Expected main location to be set given we provided a LocationCreateStruct'
+        );
     }
 
     /**
@@ -2758,6 +2763,11 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertEquals( 1, $contentCopied->getVersionInfo()->versionNo );
+
+        $this->assertNotNull(
+            $contentCopied->contentInfo->mainLocationId,
+            'Expected main location to be set given we provided a LocationCreateStruct'
+        );
     }
 
     /**
