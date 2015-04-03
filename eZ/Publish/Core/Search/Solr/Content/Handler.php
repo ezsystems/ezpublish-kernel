@@ -633,7 +633,7 @@ class Handler implements SearchHandlerInterface
             ),
             new Field(
                 'is_main_location',
-                ( $location->id === $content->versionInfo->contentInfo->mainLocationId ),
+                ( $location->id == $content->versionInfo->contentInfo->mainLocationId ),
                 new FieldType\BooleanField()
             ),
             // Note: denormalized Content data is prefixed with 'content_' to avoid
