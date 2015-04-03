@@ -174,6 +174,7 @@ class HandlerTest extends LanguageAwareTestCase
                         ),
                         new Content\Common\Gateway\CriterionHandler\Field(
                             $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler(),
                             $this->getConverterRegistry(),
                             new Content\Common\Gateway\CriterionHandler\FieldValue\Converter(
                                 new Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
@@ -192,8 +193,7 @@ class HandlerTest extends LanguageAwareTestCase
                                 ),
                                 $compositeValueHandler
                             ),
-                            $transformationProcessor,
-                            $this->getContentTypeHandler()
+                            $transformationProcessor
                         ),
                         new Content\Common\Gateway\CriterionHandler\ObjectStateId(
                             $this->getDatabaseHandler()

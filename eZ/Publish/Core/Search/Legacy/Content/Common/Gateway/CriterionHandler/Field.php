@@ -26,15 +26,8 @@ use RuntimeException;
 /**
  * Field criterion handler
  */
-class Field extends CriterionHandler
+class Field extends FieldBase
 {
-    /**
-     * DB handler to fetch additional field information
-     *
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
-    protected $dbHandler;
-
     /**
      * Field converter registry
      *
@@ -57,34 +50,27 @@ class Field extends CriterionHandler
     protected $transformationProcessor;
 
     /**
-     * Content Type handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
      * Construct from handler handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter $fieldValueConverter
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      */
     public function __construct(
         DatabaseHandler $dbHandler,
+        ContentTypeHandler $contentTypeHandler,
         Registry $fieldConverterRegistry,
         FieldValueConverter $fieldValueConverter,
-        TransformationProcessor $transformationProcessor,
-        ContentTypeHandler $contentTypeHandler
+        TransformationProcessor $transformationProcessor
     )
     {
-        $this->dbHandler = $dbHandler;
+        parent::__construct( $dbHandler, $contentTypeHandler );
+
         $this->fieldConverterRegistry = $fieldConverterRegistry;
         $this->fieldValueConverter = $fieldValueConverter;
         $this->transformationProcessor = $transformationProcessor;
-        $this->contentTypeHandler = $contentTypeHandler;
     }
 
     /**

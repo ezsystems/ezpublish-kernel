@@ -11,18 +11,16 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Value\MapLocationValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use RuntimeException;
 
 /**
  * MapLocationDistance criterion handler
  */
-class MapLocationDistance extends CriterionHandler
+class MapLocationDistance extends FieldBase
 {
     /**
      * Distance in kilometers of one degree longitude at the Equator
@@ -33,26 +31,6 @@ class MapLocationDistance extends CriterionHandler
      * Radius of the planet in kilometers
      */
     const EARTH_RADIUS = 6371.01;
-
-    /**
-     * ContentType handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * Construct from handler handler
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     */
-    public function __construct( DatabaseHandler $dbHandler, ContentTypeHandler $contentTypeHandler )
-    {
-        parent::__construct( $dbHandler );
-
-        $this->contentTypeHandler = $contentTypeHandler;
-    }
 
     /**
      * Check if this criterion handler accepts to handle the given criterion.

@@ -13,34 +13,12 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
 /**
  * Content type criterion handler
  */
-class ContentTypeIdentifier extends CriterionHandler
+class ContentTypeIdentifier extends FieldBase
 {
-    /**
-     * ContentType handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
-    protected $contentTypeHandler;
-
-    /**
-     * Create from content type handler
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     */
-    public function __construct( DatabaseHandler $dbHandler, ContentTypeHandler $contentTypeHandler )
-    {
-        parent::__construct( $dbHandler );
-
-        $this->contentTypeHandler = $contentTypeHandler;
-    }
-
     /**
      * Check if this criterion handler accepts to handle the given criterion.
      *

@@ -137,6 +137,7 @@ class HandlerTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\DateMetadata( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\Field(
                             $this->getDatabaseHandler(),
+                            $this->getContentTypeHandler(),
                             $this->getConverterRegistry(),
                             new CommonCriterionHandler\FieldValue\Converter(
                                 new CommonCriterionHandler\FieldValue\HandlerRegistry(
@@ -155,8 +156,7 @@ class HandlerTest extends LanguageAwareTestCase
                                 ),
                                 $compositeValueHandler
                             ),
-                            $transformationProcessor,
-                            $this->getContentTypeHandler()
+                            $transformationProcessor
                         ),
                         new CommonCriterionHandler\FullText(
                             $this->getDatabaseHandler(),
