@@ -1215,9 +1215,15 @@ class HandlerTest extends LanguageAwareTestCase
 
     public function testFullTextFilterStopwordRemoval()
     {
+        $handler = $this->getContentSearchHandler(
+            array(
+                'stopWordThresholdFactor' => 0.1
+            )
+        );
+
         $this->assertSearchResults(
             array(),
-            $this->getContentSearchHandler()->findContent(
+            $handler->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\FullText( 'the' ),
@@ -1230,13 +1236,13 @@ class HandlerTest extends LanguageAwareTestCase
 
     public function testFullTextFilterNoStopwordRemoval()
     {
-        $locator = $this->getContentSearchHandler(
+        $handler = $this->getContentSearchHandler(
             array(
-                'searchThresholdValue' => PHP_INT_MAX
+                'stopWordThresholdFactor' => 1
             )
         );
 
-        $result = $locator->findContent(
+        $result = $handler->findContent(
             new Query(
                 array(
                     'filter' => new Criterion\FullText(
@@ -1257,6 +1263,18 @@ class HandlerTest extends LanguageAwareTestCase
                     },
                     $result->searchHits
                 )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFullTextFilterInvalidStopwordThreshold()
+    {
+        $this->getContentSearchHandler(
+            array(
+                'stopWordThresholdFactor' => 2
             )
         );
     }

@@ -1142,9 +1142,14 @@ class HandlerTest extends LanguageAwareTestCase
 
     public function testFullTextFilterStopwordRemoval()
     {
+        $handler = $this->getLocationSearchHandler(
+            array(
+                'stopWordThresholdFactor' => 0.1
+            )
+        );
         $this->assertSearchResults(
             array(),
-            $this->getLocationSearchHandler()->findLocations(
+            $handler->findLocations(
                 new LocationQuery(
                     array(
                         'filter' => new Criterion\FullText( 'the' ),
@@ -1159,7 +1164,7 @@ class HandlerTest extends LanguageAwareTestCase
     {
         $handler = $this->getLocationSearchHandler(
             array(
-                'searchThresholdValue' => PHP_INT_MAX
+                'stopWordThresholdFactor' => 1
             )
         );
 
@@ -1186,6 +1191,18 @@ class HandlerTest extends LanguageAwareTestCase
                     },
                     $result->searchHits
                 )
+            )
+        );
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testFullTextFilterInvalidStopwordThreshold()
+    {
+        $this->getLocationSearchHandler(
+            array(
+                'stopWordThresholdFactor' => 2
             )
         );
     }
