@@ -50,8 +50,9 @@ class FieldRange extends Field
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $start = $criterion->value[0];
-        $end   = isset( $criterion->value[1] ) ? $criterion->value[1] : null;
+        $value = (array)$criterion->value;
+        $start = $value[0];
+        $end = isset( $value[1] ) ? $value[1] : null;
 
         if ( ( $criterion->operator === Operator::LT ) ||
              ( $criterion->operator === Operator::LTE ) )
@@ -61,7 +62,6 @@ class FieldRange extends Field
         }
 
         $fieldNames = $this->getFieldNames( $criterion, $criterion->target );
-        $criterion->value = (array)$criterion->value;
 
         if ( empty( $fieldNames ) )
         {

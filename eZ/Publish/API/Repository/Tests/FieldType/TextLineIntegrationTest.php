@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class TextLineIntegrationTest extends BaseIntegrationTest
+class TextLineIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -335,5 +335,15 @@ class TextLineIntegrationTest extends BaseIntegrationTest
             array( new TextLineValue( 0 ) ),
             array( new TextLineValue( "0" ) ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return "a";
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return "b";
     }
 }
