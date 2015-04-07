@@ -337,12 +337,12 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
         );
     }
 
-    protected function getSearchValueA()
+    protected function getValidSearchValueOne()
     {
         return "a";
     }
 
-    protected function getSearchValueB()
+    protected function getValidSearchValueTwo()
     {
         return "b";
     }

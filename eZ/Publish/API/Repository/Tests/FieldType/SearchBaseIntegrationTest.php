@@ -43,12 +43,12 @@ use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
  * To get the test working extend it in a concrete field type test and implement
  * methods:
  *
- * - getSearchValueA()
- * - getSearchValueB()
+ * - getValidSearchValueOne()
+ * - getValidSearchValueTwo()
  *
- * In the test descriptions Content object created with values A and B are referred to as
- * Content A, and Content B. See the descriptions of the abstract declarations of these
- * methods for more details on how to choose proper values.
+ * In the test descriptions Content object created with values One and Two are referred to
+ * as Content One, and Content Two. See the descriptions of the abstract declarations of
+ * these methods for more details on how to choose proper values.
  *
  * Note: this test case does not concern itself with testing field filters, behaviour
  * of multiple sort clauses or combination with other criteria. These are tested
@@ -58,34 +58,34 @@ use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 {
     /**
-     * Get field value A.
+     * Get search field value One.
      *
      * The value must be valid for Content creation.
      *
      * When Field sort clause with ascending order is used on the tested field,
      * Content containing the field with this value must come before the Content
-     * with value B.
+     * with value One.
      *
      * Opposite should be the case when using descending order.
      *
      * @return mixed
      */
-    abstract protected function getSearchValueA();
+    abstract protected function getValidSearchValueOne();
 
     /**
-     * Get field value B.
+     * Get search field value Two.
      *
      * The value must be valid for Content creation.
      *
      * When Field sort clause with ascending order is used on the tested field,
      * Content containing the field with this value must come after the Content
-     * with value A.
+     * with value One.
      *
      * Opposite should be the case when using descending order.
      *
      * @return mixed
      */
-    abstract protected function getSearchValueB();
+    abstract protected function getValidSearchValueTwo();
 
     /**
      * Creates and returns content with given $fieldData
@@ -128,10 +128,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value EQ A
+                //     value EQ One
                 //
-                // The result should contain Content A.
-                new Field( "data", Operator::EQ, $this->getSearchValueA() ),
+                // The result should contain Content One.
+                new Field( "data", Operator::EQ, $this->getValidSearchValueOne() ),
                 true,
                 false,
             ),
@@ -140,10 +140,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value EQ A )
+                //     NOT( value EQ One )
                 //
-                // The result should contain Content B.
-                new LogicalNot( new Field( "data", Operator::EQ, $this->getSearchValueA() ) ),
+                // The result should contain Content Two.
+                new LogicalNot( new Field( "data", Operator::EQ, $this->getValidSearchValueOne() ) ),
                 false,
                 true,
             ),
@@ -152,10 +152,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value EQ B
+                //     value EQ Two
                 //
-                // The result should contain Content B.
-                new Field( "data", Operator::EQ, $this->getSearchValueB() ),
+                // The result should contain Content Two.
+                new Field( "data", Operator::EQ, $this->getValidSearchValueTwo() ),
                 false,
                 true,
             ),
@@ -164,10 +164,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value EQ B )
+                //     NOT( value EQ Two )
                 //
-                // The result should contain Content A.
-                new LogicalNot( new Field( "data", Operator::EQ, $this->getSearchValueB() ) ),
+                // The result should contain Content One.
+                new LogicalNot( new Field( "data", Operator::EQ, $this->getValidSearchValueTwo() ) ),
                 true,
                 false,
             ),
@@ -176,10 +176,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value IN [A]
+                //     value IN [One]
                 //
-                // The result should contain Content A.
-                new Field( "data", Operator::IN, array( $this->getSearchValueA() ) ),
+                // The result should contain Content One.
+                new Field( "data", Operator::IN, array( $this->getValidSearchValueOne() ) ),
                 true,
                 false,
             ),
@@ -188,11 +188,11 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value IN [A] )
+                //     NOT( value IN [One] )
                 //
-                // The result should contain Content B.
+                // The result should contain Content Two.
                 new LogicalNot(
-                    new Field( "data", Operator::IN, array( $this->getSearchValueA() ) )
+                    new Field( "data", Operator::IN, array( $this->getValidSearchValueOne() ) )
                 ),
                 false,
                 true,
@@ -202,10 +202,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value IN [B]
+                //     value IN [Two]
                 //
-                // The result should contain Content B.
-                new Field( "data", Operator::IN, array( $this->getSearchValueB() ) ),
+                // The result should contain Content Two.
+                new Field( "data", Operator::IN, array( $this->getValidSearchValueTwo() ) ),
                 false,
                 true,
             ),
@@ -214,11 +214,11 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value IN [B] )
+                //     NOT( value IN [Two] )
                 //
-                // The result should contain Content A.
+                // The result should contain Content One.
                 new LogicalNot(
-                    new Field( "data", Operator::IN, array( $this->getSearchValueB() ) )
+                    new Field( "data", Operator::IN, array( $this->getValidSearchValueTwo() ) )
                 ),
                 true,
                 false,
@@ -228,15 +228,15 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value IN [A,B]
+                //     value IN [One,Two]
                 //
-                // The result should contain both Content A and Content B.
+                // The result should contain both Content One and Content Two.
                 new Field(
                     "data",
                     Operator::IN,
                     array(
-                        $this->getSearchValueA(),
-                        $this->getSearchValueB(),
+                        $this->getValidSearchValueOne(),
+                        $this->getValidSearchValueTwo(),
                     )
                 ),
                 true,
@@ -247,7 +247,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value IN [A,B] )
+                //     NOT( value IN [One,Two] )
                 //
                 // The result should be empty.
                 new LogicalNot(
@@ -255,8 +255,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                         "data",
                         Operator::IN,
                         array(
-                            $this->getSearchValueA(),
-                            $this->getSearchValueB(),
+                            $this->getValidSearchValueOne(),
+                            $this->getValidSearchValueTwo(),
                         )
                     )
                 ),
@@ -268,10 +268,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value GT A
+                //     value GT One
                 //
-                // The result should contain Content B.
-                new Field( "data", Operator::GT, $this->getSearchValueA() ),
+                // The result should contain Content Two.
+                new Field( "data", Operator::GT, $this->getValidSearchValueOne() ),
                 false,
                 true,
             ),
@@ -280,10 +280,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value GT A )
+                //     NOT( value GT One )
                 //
-                // The result should contain Content A.
-                new LogicalNot( new Field( "data", Operator::GT, $this->getSearchValueA() ) ),
+                // The result should contain Content One.
+                new LogicalNot( new Field( "data", Operator::GT, $this->getValidSearchValueOne() ) ),
                 true,
                 false,
             ),
@@ -292,10 +292,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value GT B
+                //     value GT Two
                 //
                 // The result should be empty.
-                new Field( "data", Operator::GT, $this->getSearchValueB() ),
+                new Field( "data", Operator::GT, $this->getValidSearchValueTwo() ),
                 false,
                 false,
             ),
@@ -304,10 +304,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value GT B )
+                //     NOT( value GT Two )
                 //
-                // The result should contain both Content A and Content B.
-                new LogicalNot( new Field( "data", Operator::GT, $this->getSearchValueB() ) ),
+                // The result should contain both Content One and Content Two.
+                new LogicalNot( new Field( "data", Operator::GT, $this->getValidSearchValueTwo() ) ),
                 true,
                 true,
             ),
@@ -316,10 +316,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value GTE A
+                //     value GTE One
                 //
-                // The result should contain both Content A and Content B.
-                new Field( "data", Operator::GTE, $this->getSearchValueA() ),
+                // The result should contain both Content One and Content Two.
+                new Field( "data", Operator::GTE, $this->getValidSearchValueOne() ),
                 true,
                 true,
             ),
@@ -328,10 +328,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value GTE A )
+                //     NOT( value GTE One )
                 //
                 // The result should be empty.
-                new LogicalNot( new Field( "data", Operator::GTE, $this->getSearchValueA() ) ),
+                new LogicalNot( new Field( "data", Operator::GTE, $this->getValidSearchValueOne() ) ),
                 false,
                 false,
             ),
@@ -340,10 +340,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value GTE B
+                //     value GTE Two
                 //
-                // The result should contain Content B.
-                new Field( "data", Operator::GTE, $this->getSearchValueB() ),
+                // The result should contain Content Two.
+                new Field( "data", Operator::GTE, $this->getValidSearchValueTwo() ),
                 false,
                 true,
             ),
@@ -352,10 +352,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value GTE B )
+                //     NOT( value GTE Two )
                 //
-                // The result should contain Content A.
-                new LogicalNot( new Field( "data", Operator::GTE, $this->getSearchValueB() ) ),
+                // The result should contain Content One.
+                new LogicalNot( new Field( "data", Operator::GTE, $this->getValidSearchValueTwo() ) ),
                 true,
                 false,
             ),
@@ -364,10 +364,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value LT A
+                //     value LT One
                 //
                 // The result should be empty.
-                new Field( "data", Operator::LT, $this->getSearchValueA() ),
+                new Field( "data", Operator::LT, $this->getValidSearchValueOne() ),
                 false,
                 false,
             ),
@@ -376,10 +376,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value LT A )
+                //     NOT( value LT One )
                 //
-                // The result should contain both Content A and Content B.
-                new LogicalNot( new Field( "data", Operator::LT, $this->getSearchValueA() ) ),
+                // The result should contain both Content One and Content Two.
+                new LogicalNot( new Field( "data", Operator::LT, $this->getValidSearchValueOne() ) ),
                 true,
                 true,
             ),
@@ -388,10 +388,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value LT B
+                //     value LT Two
                 //
-                // The result should contain Content A.
-                new Field( "data", Operator::LT, $this->getSearchValueB() ),
+                // The result should contain Content One.
+                new Field( "data", Operator::LT, $this->getValidSearchValueTwo() ),
                 true,
                 false,
             ),
@@ -400,10 +400,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value LT B )
+                //     NOT( value LT Two )
                 //
-                // The result should contain Content B.
-                new LogicalNot( new Field( "data", Operator::LT, $this->getSearchValueB() ) ),
+                // The result should contain Content Two.
+                new LogicalNot( new Field( "data", Operator::LT, $this->getValidSearchValueTwo() ) ),
                 false,
                 true,
             ),
@@ -412,10 +412,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value LTE A
+                //     value LTE One
                 //
-                // The result should contain Content A.
-                new Field( "data", Operator::LTE, $this->getSearchValueA() ),
+                // The result should contain Content One.
+                new Field( "data", Operator::LTE, $this->getValidSearchValueOne() ),
                 true,
                 false,
             ),
@@ -424,10 +424,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value LTE A )
+                //     NOT( value LTE One )
                 //
-                // The result should contain Content B.
-                new LogicalNot( new Field( "data", Operator::LTE, $this->getSearchValueA() ) ),
+                // The result should contain Content Two.
+                new LogicalNot( new Field( "data", Operator::LTE, $this->getValidSearchValueOne() ) ),
                 false,
                 true,
             ),
@@ -436,10 +436,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value LTE B
+                //     value LTE Two
                 //
-                // The result should contain both Content A and Content B.
-                new Field( "data", Operator::LTE, $this->getSearchValueB() ),
+                // The result should contain both Content One and Content Two.
+                new Field( "data", Operator::LTE, $this->getValidSearchValueTwo() ),
                 true,
                 true,
             ),
@@ -448,10 +448,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value LTE B )
+                //     NOT( value LTE Two )
                 //
                 // The result should be empty.
-                new LogicalNot( new Field( "data", Operator::LTE, $this->getSearchValueB() ) ),
+                new LogicalNot( new Field( "data", Operator::LTE, $this->getValidSearchValueTwo() ) ),
                 false,
                 false,
             ),
@@ -460,15 +460,15 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value BETWEEN [A,B]
+                //     value BETWEEN [One,Two]
                 //
-                // The result should contain both Content A and Content B.
+                // The result should contain both Content One and Content Two.
                 new Field(
                     "data",
                     Operator::BETWEEN,
                     array(
-                        $this->getSearchValueA(),
-                        $this->getSearchValueB(),
+                        $this->getValidSearchValueOne(),
+                        $this->getValidSearchValueTwo(),
                     )
                 ),
                 true,
@@ -479,16 +479,16 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value BETWEEN [A,B] )
+                //     NOT( value BETWEEN [One,Two] )
                 //
-                // The result should contain both Content A and Content B.
+                // The result should contain both Content One and Content Two.
                 new LogicalNot(
                     new Field(
                         "data",
                         Operator::BETWEEN,
                         array(
-                            $this->getSearchValueA(),
-                            $this->getSearchValueB(),
+                            $this->getValidSearchValueOne(),
+                            $this->getValidSearchValueTwo(),
                         )
                     )
                 ),
@@ -500,15 +500,15 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value BETWEEN [B,A]
+                //     value BETWEEN [Two,One]
                 //
                 // The result should be empty.
                 new Field(
                     "data",
                     Operator::BETWEEN,
                     array(
-                        $this->getSearchValueB(),
-                        $this->getSearchValueA(),
+                        $this->getValidSearchValueTwo(),
+                        $this->getValidSearchValueOne(),
                     )
                 ),
                 false,
@@ -519,16 +519,16 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value BETWEEN [B,A] )
+                //     NOT( value BETWEEN [Two,One] )
                 //
-                // The result should contain both Content A and Content B.
+                // The result should contain both Content One and Content Two.
                 new LogicalNot(
                     new Field(
                         "data",
                         Operator::BETWEEN,
                         array(
-                            $this->getSearchValueB(),
-                            $this->getSearchValueA(),
+                            $this->getValidSearchValueTwo(),
+                            $this->getValidSearchValueOne(),
                         )
                     )
                 ),
@@ -540,10 +540,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value CONTAINS A
+                //     value CONTAINS One
                 //
-                // The result should contain Content A.
-                new Field( "data", Operator::CONTAINS, $this->getSearchValueA() ),
+                // The result should contain Content One.
+                new Field( "data", Operator::CONTAINS, $this->getValidSearchValueOne() ),
                 true,
                 false,
             ),
@@ -552,10 +552,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value CONTAINS A )
+                //     NOT( value CONTAINS One )
                 //
-                // The result should contain Content B.
-                new LogicalNot( new Field( "data", Operator::CONTAINS, $this->getSearchValueA() ) ),
+                // The result should contain Content Two.
+                new LogicalNot( new Field( "data", Operator::CONTAINS, $this->getValidSearchValueOne() ) ),
                 false,
                 true,
             ),
@@ -564,10 +564,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     value CONTAINS B
+                //     value CONTAINS Two
                 //
-                // The result should contain Content B.
-                new Field( "data", Operator::CONTAINS, $this->getSearchValueB() ),
+                // The result should contain Content Two.
+                new Field( "data", Operator::CONTAINS, $this->getValidSearchValueTwo() ),
                 false,
                 true,
             ),
@@ -576,11 +576,11 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // Simplified representation:
                 //
-                //     NOT( value CONTAINS B )
+                //     NOT( value CONTAINS Two )
                 //
-                // The result should contain Content A.
+                // The result should contain Content One.
                 new LogicalNot(
-                    new Field( "data", Operator::CONTAINS, $this->getSearchValueB() )
+                    new Field( "data", Operator::CONTAINS, $this->getValidSearchValueTwo() )
                 ),
                 true,
                 false,
@@ -633,12 +633,12 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         return array(
             $repository,
             $this->createTestSearchContent(
-                $this->getSearchValueA(),
+                $this->getValidSearchValueOne(),
                 $repository,
                 $contentType
             )->id,
             $this->createTestSearchContent(
-                $this->getSearchValueB(),
+                $this->getValidSearchValueTwo(),
                 $repository,
                 $contentType
             )->id,
@@ -652,21 +652,21 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * @depends testCreateTestContent
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param boolean $includesA
-     * @param boolean $includesB
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
      * @param array $context
      */
     public function testFilterContent(
         Criterion $criterion,
-        $includesA,
-        $includesB,
+        $includesOne,
+        $includesTwo,
         array $context
     )
     {
-        list( $repository, $contentAId, $contentBId ) = $context;
+        list( $repository, $contentOneId, $contentTwoId ) = $context;
         $searchResult = $this->findContent( $repository, $criterion, true );
 
-        $this->assertFindResult( $searchResult, $includesA, $includesB, $contentAId, $contentBId );
+        $this->assertFindResult( $searchResult, $includesOne, $includesTwo, $contentOneId, $contentTwoId );
     }
 
     /**
@@ -676,21 +676,21 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * @depends testCreateTestContent
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param boolean $includesA
-     * @param boolean $includesB
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
      * @param array $context
      */
     public function testQueryContent(
         Criterion $criterion,
-        $includesA,
-        $includesB,
+        $includesOne,
+        $includesTwo,
         array $context
     )
     {
-        list( $repository, $contentAId, $contentBId ) = $context;
+        list( $repository, $contentOneId, $contentTwoId ) = $context;
         $searchResult = $this->findContent( $repository, $criterion, false );
 
-        $this->assertFindResult( $searchResult, $includesA, $includesB, $contentAId, $contentBId );
+        $this->assertFindResult( $searchResult, $includesOne, $includesTwo, $contentOneId, $contentTwoId );
     }
 
     /**
@@ -714,10 +714,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             );
         }
 
-        list( $repository, $contentAId, $contentBId ) = $context;
+        list( $repository, $contentOneId, $contentTwoId ) = $context;
         $searchResult = $this->sortContent( $repository, $sortClause );
 
-        $this->assertSortResult( $searchResult, $ascending, $contentAId, $contentBId );
+        $this->assertSortResult( $searchResult, $ascending, $contentOneId, $contentTwoId );
     }
 
     /**
@@ -727,14 +727,14 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * @depends testCreateTestContent
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param boolean $includesA
-     * @param boolean $includesB
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
      * @param array $context
      */
     public function testFilterLocations(
         Criterion $criterion,
-        $includesA,
-        $includesB,
+        $includesOne,
+        $includesTwo,
         array $context
     )
     {
@@ -754,10 +754,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             );
         }
 
-        list( $repository, $contentAId, $contentBId ) = $context;
+        list( $repository, $contentOneId, $contentTwoId ) = $context;
         $searchResult = $this->findLocations( $repository, $criterion, true );
 
-        $this->assertFindResult( $searchResult, $includesA, $includesB, $contentAId, $contentBId );
+        $this->assertFindResult( $searchResult, $includesOne, $includesTwo, $contentOneId, $contentTwoId );
     }
 
     /**
@@ -767,14 +767,14 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * @depends testCreateTestContent
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param boolean $includesA
-     * @param boolean $includesB
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
      * @param array $context
      */
     public function testQueryLocations(
         Criterion $criterion,
-        $includesA,
-        $includesB,
+        $includesOne,
+        $includesTwo,
         array $context
     )
     {
@@ -794,10 +794,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             );
         }
 
-        list( $repository, $contentAId, $contentBId ) = $context;
+        list( $repository, $contentOneId, $contentTwoId ) = $context;
         $searchResult = $this->findLocations( $repository, $criterion, false );
 
-        $this->assertFindResult( $searchResult, $includesA, $includesB, $contentAId, $contentBId );
+        $this->assertFindResult( $searchResult, $includesOne, $includesTwo, $contentOneId, $contentTwoId );
     }
 
     /**
@@ -828,10 +828,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             );
         }
 
-        list( $repository, $contentAId, $contentBId ) = $context;
+        list( $repository, $contentOneId, $contentTwoId ) = $context;
         $searchResult = $this->sortLocations( $repository, $sortClause );
 
-        $this->assertSortResult( $searchResult, $ascending, $contentAId, $contentBId );
+        $this->assertSortResult( $searchResult, $ascending, $contentOneId, $contentTwoId );
     }
 
     /**
@@ -992,40 +992,40 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     /**
      * Asserts expected result, deliberately ignoring order.
      *
-     * Search result can be empty, contain both Content A and Content B or only one of them.
+     * Search result can be empty, contain both Content One and Content Two or only one of them.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $searchResult
-     * @param boolean $includesA
-     * @param boolean $includesB
-     * @param string|int $contentAId
-     * @param string|int $contentBId
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
+     * @param string|int $contentOneId
+     * @param string|int $contentTwoId
      */
     protected function assertFindResult(
         SearchResult $searchResult,
-        $includesA,
-        $includesB,
-        $contentAId,
-        $contentBId
+        $includesOne,
+        $includesTwo,
+        $contentOneId,
+        $contentTwoId
     )
     {
         $contentIdList = $this->getResultContentIdList( $searchResult );
 
-        if ( $includesA && $includesB )
+        if ( $includesOne && $includesTwo )
         {
             $this->assertEquals( 2, $searchResult->totalCount );
             $this->assertNotEquals( $contentIdList[0], $contentIdList[1] );
 
             $this->assertThat(
                 $contentIdList[0],
-                $this->logicalOr( $this->equalTo( $contentAId ), $this->equalTo( $contentBId ) )
+                $this->logicalOr( $this->equalTo( $contentOneId ), $this->equalTo( $contentTwoId ) )
             );
 
             $this->assertThat(
                 $contentIdList[1],
-                $this->logicalOr( $this->equalTo( $contentAId ), $this->equalTo( $contentBId ) )
+                $this->logicalOr( $this->equalTo( $contentOneId ), $this->equalTo( $contentTwoId ) )
             );
         }
-        else if ( !$includesA && !$includesB )
+        else if ( !$includesOne && !$includesTwo )
         {
             $this->assertEquals( 0, $searchResult->totalCount );
         }
@@ -1033,45 +1033,45 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         {
             $this->assertEquals( 1, $searchResult->totalCount );
 
-            if ( $includesA )
+            if ( $includesOne )
             {
-                $this->assertEquals( $contentAId, $contentIdList[0] );
+                $this->assertEquals( $contentOneId, $contentIdList[0] );
             }
 
-            if ( $includesB )
+            if ( $includesTwo )
             {
-                $this->assertEquals( $contentBId, $contentIdList[0] );
+                $this->assertEquals( $contentTwoId, $contentIdList[0] );
             }
         }
     }
 
     /**
-     * Asserts order of the given $searchResult, both Content A and B are always expected.
+     * Asserts order of the given $searchResult, both Content One and Two are always expected.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $searchResult
      * @param boolean $ascending Denotes ascending order if true, descending order if false
-     * @param string|int $contentAId
-     * @param string|int $contentBId
+     * @param string|int $contentOneId
+     * @param string|int $contentTwoId
      */
     protected function assertSortResult(
         SearchResult $searchResult,
         $ascending,
-        $contentAId,
-        $contentBId
+        $contentOneId,
+        $contentTwoId
     )
     {
         $contentIdList = $this->getResultContentIdList( $searchResult );
 
-        $indexA = 0;
-        $indexB = 1;
+        $indexOne = 0;
+        $indexTwo = 1;
 
         if ( !$ascending )
         {
-            $indexA = 1;
-            $indexB = 0;
+            $indexOne = 1;
+            $indexTwo = 0;
         }
 
-        $this->assertEquals( $contentAId, $contentIdList[$indexA] );
-        $this->assertEquals( $contentBId, $contentIdList[$indexB] );
+        $this->assertEquals( $contentOneId, $contentIdList[$indexOne] );
+        $this->assertEquals( $contentTwoId, $contentIdList[$indexTwo] );
     }
 }

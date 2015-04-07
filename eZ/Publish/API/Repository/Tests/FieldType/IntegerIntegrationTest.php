@@ -335,12 +335,12 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
         );
     }
 
-    protected function getSearchValueA()
+    protected function getValidSearchValueOne()
     {
         return 25;
     }
 
-    protected function getSearchValueB()
+    protected function getValidSearchValueTwo()
     {
         return 26;
     }
