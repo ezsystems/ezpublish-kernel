@@ -124,85 +124,73 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     {
         return array(
             0 => array(
-                /**
-                 * Tests search with EQ operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value EQ A
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with EQ operator.
+                //
+                // Simplified representation:
+                //
+                //     value EQ A
+                //
+                // The result should contain Content A.
                 new Field( "data", Operator::EQ, $this->getSearchValueA() ),
                 true,
                 false,
             ),
             1 => array(
-                /**
-                 * Tests search with EQ operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value EQ A )
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with EQ operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value EQ A )
+                //
+                // The result should contain Content B.
                 new LogicalNot( new Field( "data", Operator::EQ, $this->getSearchValueA() ) ),
                 false,
                 true,
             ),
             2 => array(
-                /**
-                 * Tests search with EQ operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value EQ B
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with EQ operator.
+                //
+                // Simplified representation:
+                //
+                //     value EQ B
+                //
+                // The result should contain Content B.
                 new Field( "data", Operator::EQ, $this->getSearchValueB() ),
                 false,
                 true,
             ),
             3 => array(
-                /**
-                 * Tests search with EQ operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value EQ B )
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with EQ operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value EQ B )
+                //
+                // The result should contain Content A.
                 new LogicalNot( new Field( "data", Operator::EQ, $this->getSearchValueB() ) ),
                 true,
                 false,
             ),
             4 => array(
-                /**
-                 * Tests search with IN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value IN [A]
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with IN operator.
+                //
+                // Simplified representation:
+                //
+                //     value IN [A]
+                //
+                // The result should contain Content A.
                 new Field( "data", Operator::IN, array( $this->getSearchValueA() ) ),
                 true,
                 false,
             ),
             5 => array(
-                /**
-                 * Tests search with IN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value IN [A] )
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with IN operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value IN [A] )
+                //
+                // The result should contain Content B.
                 new LogicalNot(
                     new Field( "data", Operator::IN, array( $this->getSearchValueA() ) )
                 ),
@@ -210,29 +198,25 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 true,
             ),
             6 => array(
-                /**
-                 * Tests search with IN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value IN [B]
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with IN operator.
+                //
+                // Simplified representation:
+                //
+                //     value IN [B]
+                //
+                // The result should contain Content B.
                 new Field( "data", Operator::IN, array( $this->getSearchValueB() ) ),
                 false,
                 true,
             ),
             7 => array(
-                /**
-                 * Tests search with IN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value IN [B] )
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with IN operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value IN [B] )
+                //
+                // The result should contain Content A.
                 new LogicalNot(
                     new Field( "data", Operator::IN, array( $this->getSearchValueB() ) )
                 ),
@@ -240,15 +224,13 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 false,
             ),
             8 => array(
-                /**
-                 * Tests search with IN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value IN [A,B]
-                 *
-                 * The result should contain both Content A and Content B.
-                 */
+                // Tests search with IN operator.
+                //
+                // Simplified representation:
+                //
+                //     value IN [A,B]
+                //
+                // The result should contain both Content A and Content B.
                 new Field(
                     "data",
                     Operator::IN,
@@ -261,15 +243,13 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 true,
             ),
             9 => array(
-                /**
-                 * Tests search with IN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value IN [A,B] )
-                 *
-                 * The result should be empty.
-                 */
+                // Tests search with IN operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value IN [A,B] )
+                //
+                // The result should be empty.
                 new LogicalNot(
                     new Field(
                         "data",
@@ -284,239 +264,205 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 false,
             ),
             10 => array(
-                /**
-                 * Tests search with GT operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value GT A
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with GT operator.
+                //
+                // Simplified representation:
+                //
+                //     value GT A
+                //
+                // The result should contain Content B.
                 new Field( "data", Operator::GT, $this->getSearchValueA() ),
                 false,
                 true,
             ),
             11 => array(
-                /**
-                 * Tests search with GT operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value GT A )
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with GT operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value GT A )
+                //
+                // The result should contain Content A.
                 new LogicalNot( new Field( "data", Operator::GT, $this->getSearchValueA() ) ),
                 true,
                 false,
             ),
             12 => array(
-                /**
-                 * Tests search with GT operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value GT B
-                 *
-                 * The result should be empty.
-                 */
+                // Tests search with GT operator.
+                //
+                // Simplified representation:
+                //
+                //     value GT B
+                //
+                // The result should be empty.
                 new Field( "data", Operator::GT, $this->getSearchValueB() ),
                 false,
                 false,
             ),
             13 => array(
-                /**
-                 * Tests search with GT operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value GT B )
-                 *
-                 * The result should contain both Content A and Content B.
-                 */
+                // Tests search with GT operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value GT B )
+                //
+                // The result should contain both Content A and Content B.
                 new LogicalNot( new Field( "data", Operator::GT, $this->getSearchValueB() ) ),
                 true,
                 true,
             ),
             14 => array(
-                /**
-                 * Tests search with GTE operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value GTE A
-                 *
-                 * The result should contain both Content A and Content B.
-                 */
+                // Tests search with GTE operator.
+                //
+                // Simplified representation:
+                //
+                //     value GTE A
+                //
+                // The result should contain both Content A and Content B.
                 new Field( "data", Operator::GTE, $this->getSearchValueA() ),
                 true,
                 true,
             ),
             15 => array(
-                /**
-                 * Tests search with GTE operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value GTE A )
-                 *
-                 * The result should be empty.
-                 */
+                // Tests search with GTE operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value GTE A )
+                //
+                // The result should be empty.
                 new LogicalNot( new Field( "data", Operator::GTE, $this->getSearchValueA() ) ),
                 false,
                 false,
             ),
             16 => array(
-                /**
-                 * Tests search with GTE operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value GTE B
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with GTE operator.
+                //
+                // Simplified representation:
+                //
+                //     value GTE B
+                //
+                // The result should contain Content B.
                 new Field( "data", Operator::GTE, $this->getSearchValueB() ),
                 false,
                 true,
             ),
             17 => array(
-                /**
-                 * Tests search with GTE operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value GTE B )
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with GTE operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value GTE B )
+                //
+                // The result should contain Content A.
                 new LogicalNot( new Field( "data", Operator::GTE, $this->getSearchValueB() ) ),
                 true,
                 false,
             ),
             18 => array(
-                /**
-                 * Tests search with LT operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value LT A
-                 *
-                 * The result should be empty.
-                 */
+                // Tests search with LT operator.
+                //
+                // Simplified representation:
+                //
+                //     value LT A
+                //
+                // The result should be empty.
                 new Field( "data", Operator::LT, $this->getSearchValueA() ),
                 false,
                 false,
             ),
             19 => array(
-                /**
-                 * Tests search with LT operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value LT A )
-                 *
-                 * The result should contain both Content A and Content B.
-                 */
+                // Tests search with LT operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value LT A )
+                //
+                // The result should contain both Content A and Content B.
                 new LogicalNot( new Field( "data", Operator::LT, $this->getSearchValueA() ) ),
                 true,
                 true,
             ),
             20 => array(
-                /**
-                 * Tests search with LT operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value LT B
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with LT operator.
+                //
+                // Simplified representation:
+                //
+                //     value LT B
+                //
+                // The result should contain Content A.
                 new Field( "data", Operator::LT, $this->getSearchValueB() ),
                 true,
                 false,
             ),
             21 => array(
-                /**
-                 * Tests search with LT operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value LT B )
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with LT operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value LT B )
+                //
+                // The result should contain Content B.
                 new LogicalNot( new Field( "data", Operator::LT, $this->getSearchValueB() ) ),
                 false,
                 true,
             ),
             22 => array(
-                /**
-                 * Tests search with LTE operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value LTE A
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with LTE operator.
+                //
+                // Simplified representation:
+                //
+                //     value LTE A
+                //
+                // The result should contain Content A.
                 new Field( "data", Operator::LTE, $this->getSearchValueA() ),
                 true,
                 false,
             ),
             23 => array(
-                /**
-                 * Tests search with LTE operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value LTE A )
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with LTE operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value LTE A )
+                //
+                // The result should contain Content B.
                 new LogicalNot( new Field( "data", Operator::LTE, $this->getSearchValueA() ) ),
                 false,
                 true,
             ),
             24 => array(
-                /**
-                 * Tests search with LTE operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value LTE B
-                 *
-                 * The result should contain both Content A and Content B.
-                 */
+                // Tests search with LTE operator.
+                //
+                // Simplified representation:
+                //
+                //     value LTE B
+                //
+                // The result should contain both Content A and Content B.
                 new Field( "data", Operator::LTE, $this->getSearchValueB() ),
                 true,
                 true,
             ),
             25 => array(
-                /**
-                 * Tests search with LTE operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value LTE B )
-                 *
-                 * The result should be empty.
-                 */
+                // Tests search with LTE operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value LTE B )
+                //
+                // The result should be empty.
                 new LogicalNot( new Field( "data", Operator::LTE, $this->getSearchValueB() ) ),
                 false,
                 false,
             ),
             26 => array(
-                /**
-                 * Tests search with BETWEEN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value BETWEEN [A,B]
-                 *
-                 * The result should contain both Content A and Content B.
-                 */
+                // Tests search with BETWEEN operator.
+                //
+                // Simplified representation:
+                //
+                //     value BETWEEN [A,B]
+                //
+                // The result should contain both Content A and Content B.
                 new Field(
                     "data",
                     Operator::BETWEEN,
@@ -529,15 +475,13 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 true,
             ),
             27 => array(
-                /**
-                 * Tests search with BETWEEN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value BETWEEN [A,B] )
-                 *
-                 * The result should contain both Content A and Content B.
-                 */
+                // Tests search with BETWEEN operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value BETWEEN [A,B] )
+                //
+                // The result should contain both Content A and Content B.
                 new LogicalNot(
                     new Field(
                         "data",
@@ -552,15 +496,13 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 false,
             ),
             28 => array(
-                /**
-                 * Tests search with BETWEEN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value BETWEEN [B,A]
-                 *
-                 * The result should be empty.
-                 */
+                // Tests search with BETWEEN operator.
+                //
+                // Simplified representation:
+                //
+                //     value BETWEEN [B,A]
+                //
+                // The result should be empty.
                 new Field(
                     "data",
                     Operator::BETWEEN,
@@ -573,15 +515,13 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 false,
             ),
             29 => array(
-                /**
-                 * Tests search with BETWEEN operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value BETWEEN [B,A] )
-                 *
-                 * The result should contain both Content A and Content B.
-                 */
+                // Tests search with BETWEEN operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value BETWEEN [B,A] )
+                //
+                // The result should contain both Content A and Content B.
                 new LogicalNot(
                     new Field(
                         "data",
@@ -596,57 +536,49 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 true,
             ),
             30 => array(
-                /**
-                 * Tests search with CONTAINS operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value CONTAINS A
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with CONTAINS operator.
+                //
+                // Simplified representation:
+                //
+                //     value CONTAINS A
+                //
+                // The result should contain Content A.
                 new Field( "data", Operator::CONTAINS, $this->getSearchValueA() ),
                 true,
                 false,
             ),
             31 => array(
-                /**
-                 * Tests search with CONTAINS operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value CONTAINS A )
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with CONTAINS operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value CONTAINS A )
+                //
+                // The result should contain Content B.
                 new LogicalNot( new Field( "data", Operator::CONTAINS, $this->getSearchValueA() ) ),
                 false,
                 true,
             ),
             32 => array(
-                /**
-                 * Tests search with CONTAINS operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     value CONTAINS B
-                 *
-                 * The result should contain Content B.
-                 */
+                // Tests search with CONTAINS operator.
+                //
+                // Simplified representation:
+                //
+                //     value CONTAINS B
+                //
+                // The result should contain Content B.
                 new Field( "data", Operator::CONTAINS, $this->getSearchValueB() ),
                 false,
                 true,
             ),
             33 => array(
-                /**
-                 * Tests search with CONTAINS operator.
-                 *
-                 * Simplified representation:
-                 *
-                 *     NOT( value CONTAINS B )
-                 *
-                 * The result should contain Content A.
-                 */
+                // Tests search with CONTAINS operator.
+                //
+                // Simplified representation:
+                //
+                //     NOT( value CONTAINS B )
+                //
+                // The result should contain Content A.
                 new LogicalNot(
                     new Field( "data", Operator::CONTAINS, $this->getSearchValueB() )
                 ),
