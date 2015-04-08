@@ -17,8 +17,7 @@ services:
     # in Core configuration, see eZ/Publish/Core/settings/storage_engines/cache.yml for details
     ezpublish.cache_pool:
         class: %ezpublish.cache_pool.class%
-        factory_service: ezpublish.cache_pool.factory
-        factory_method: getCachePool
+        factory: ["@ezpublish.cache_pool.factory", getCachePool]
         arguments: [@ezpublish.config.resolver]
 
     ezpublish.cache_pool.factory:

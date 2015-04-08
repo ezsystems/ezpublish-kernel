@@ -159,8 +159,7 @@ class ConfigResolverParameterPass implements CompilerPassInterface
     {
         $paramConverter = new Definition( 'stdClass', $configResolverArgs );
         $paramConverter
-            ->setFactoryService( 'ezpublish.config.resolver' )
-            ->setFactoryMethod( 'getParameter' )
+            ->setFactory( [ new Reference( 'ezpublish.config.resolver' ), 'getParameter' ] )
             ->setSynchronized( true );
 
         $serviceId = 'ezpublish.config_resolver.fake.' . implode( '_', $configResolverArgs );

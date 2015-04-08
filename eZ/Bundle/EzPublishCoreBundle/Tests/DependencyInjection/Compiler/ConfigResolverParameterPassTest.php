@@ -82,8 +82,10 @@ class ConfigResolverParameterPassTest extends PHPUnit_Framework_TestCase
         $this->assertSame( (string)$def2arg1, $expectedServiceHelperId1 );
         $this->assertTrue( $container->has( $expectedServiceHelperId1 ) );
         $defHelper1 = $container->getDefinition( $expectedServiceHelperId1 );
-        $this->assertSame( 'ezpublish.config.resolver', $defHelper1->getFactoryService() );
-        $this->assertSame( 'getParameter', $defHelper1->getFactoryMethod() );
+        $factoryArray = $defHelper1->getFactory();
+        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
+        $this->assertEquals( 'getParameter', $factoryArray[1] );
+        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
         $this->assertSame(
             array( 'bar', 'some_namespace', null ),
             $defHelper1->getArguments()
@@ -99,8 +101,10 @@ class ConfigResolverParameterPassTest extends PHPUnit_Framework_TestCase
         $this->assertSame( (string)$def3arg1, $expectedServiceHelperId2 );
         $this->assertTrue( $container->has( $expectedServiceHelperId2 ) );
         $defHelper2 = $container->getDefinition( $expectedServiceHelperId2 );
-        $this->assertSame( 'ezpublish.config.resolver', $defHelper2->getFactoryService() );
-        $this->assertSame( 'getParameter', $defHelper2->getFactoryMethod() );
+        $factoryArray = $defHelper2->getFactory();
+        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
+        $this->assertEquals( 'getParameter', $factoryArray[1] );
+        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
         $this->assertSame(
             array( 'content.default_ttl', 'ezsettings', 'ezdemo_site_admin' ),
             $defHelper2->getArguments()
@@ -114,8 +118,10 @@ class ConfigResolverParameterPassTest extends PHPUnit_Framework_TestCase
         $this->assertSame( (string)$def4arg1, $expectedServiceHelperId3 );
         $this->assertTrue( $container->has( $expectedServiceHelperId3 ) );
         $defHelper3 = $container->getDefinition( $expectedServiceHelperId3 );
-        $this->assertSame( 'ezpublish.config.resolver', $defHelper3->getFactoryService() );
-        $this->assertSame( 'getParameter', $defHelper3->getFactoryMethod() );
+        $factoryArray = $defHelper3->getFactory();
+        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
+        $this->assertEquals( 'getParameter', $factoryArray[1] );
+        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
         $this->assertSame(
             array( 'languages', null, null ),
             $defHelper3->getArguments()
@@ -131,8 +137,10 @@ class ConfigResolverParameterPassTest extends PHPUnit_Framework_TestCase
         $this->assertSame( (string)$def8Calls[0][1][0], $expectedServiceHelperId4 );
         $this->assertTrue( $container->has( $expectedServiceHelperId4 ) );
         $defHelper4 = $container->getDefinition( $expectedServiceHelperId4 );
-        $this->assertSame( 'ezpublish.config.resolver', $defHelper4->getFactoryService() );
-        $this->assertSame( 'getParameter', $defHelper4->getFactoryMethod() );
+        $factoryArray = $defHelper4->getFactory();
+        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
+        $this->assertEquals( 'getParameter', $factoryArray[1] );
+        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
         $this->assertSame(
             array( 'foo', null, null ),
             $defHelper4->getArguments()
@@ -144,8 +152,10 @@ class ConfigResolverParameterPassTest extends PHPUnit_Framework_TestCase
         $this->assertSame( (string)$def8Calls[1][1][0], $expectedServiceHelperId5 );
         $this->assertTrue( $container->has( $expectedServiceHelperId5 ) );
         $defHelper5 = $container->getDefinition( $expectedServiceHelperId5 );
-        $this->assertSame( 'ezpublish.config.resolver', $defHelper5->getFactoryService() );
-        $this->assertSame( 'getParameter', $defHelper5->getFactoryMethod() );
+        $factoryArray = $defHelper5->getFactory();
+        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
+        $this->assertEquals( 'getParameter', $factoryArray[1] );
+        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
         $this->assertSame(
             array( 'bar', 'baz', null ),
             $defHelper5->getArguments()

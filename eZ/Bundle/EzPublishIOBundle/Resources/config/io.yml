@@ -6,15 +6,13 @@ services:
     # Builds the binarydata and metadata handler based on the siteaccess config
     ezpublish.core.io.metadata_handler:
         class: eZ\Publish\Core\IO\IOMetadataHandler
-        factory_service: ezpublish.core.io.metadata_handler.factory
-        factory_method: getConfiguredHandler
+        factory: ["@ezpublish.core.io.metadata_handler.factory", getConfiguredHandler]
         arguments:
             - "$io.metadata_handler$"
 
     ezpublish.core.io.binarydata_handler:
         class: eZ\Publish\Core\IO\IOBinarydataHandler
-        factory_service: ezpublish.core.io.binarydata_handler.factory
-        factory_method: getConfiguredHandler
+        factory: ["@ezpublish.core.io.binarydata_handler.factory", getConfiguredHandler]
         arguments:
             - "$io.binarydata_handler$"
 

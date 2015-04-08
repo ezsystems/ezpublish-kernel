@@ -24,8 +24,7 @@ services:
     # resolved for the current siteaccess
     ezpublish.api.search_engine.legacy.dbhandler:
         class: %ezpublish.search.legacy.dbhandler.class%
-        factory_class: %ezpublish.search.legacy.dbhandler.class%
-        factory_method: createFromConnection
+        factory: [%ezpublish.search.legacy.dbhandler.class%, createFromConnection]
         arguments:
             - @ezpublish.api.search_engine.legacy.connection
         lazy: true

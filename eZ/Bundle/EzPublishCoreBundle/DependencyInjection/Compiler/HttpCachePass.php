@@ -34,9 +34,12 @@ class HttpCachePass implements CompilerPassInterface
         }
 
         $varnishClientDef = $container->findDefinition( 'fos_http_cache.proxy_client.varnish' );
-        $varnishClientDef
-            ->setFactoryService( 'ezpublish.http_cache.proxy_client.varnish.factory' )
-            ->setFactoryMethod( 'buildProxyClient' );
+        $varnishClientDef->setFactory(
+            [
+                new Reference( 'ezpublish.http_cache.proxy_client.varnish.factory' ),
+                'buildProxyClient'
+            ]
+        );
 
         // Forcing cache manager to use Varnish proxy client, for BAN support.
         $cacheManagerDef = $container->findDefinition( 'ezpublish.http_cache.cache_manager' );

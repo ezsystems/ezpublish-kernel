@@ -248,8 +248,7 @@ services:
 
     ezpublish_rest.field_type_processor.ezimage:
         class: %ezpublish_rest.field_type_processor.ezimage.class%
-        factory_service: ezpublish_rest.factory
-        factory_method: getImageFieldTypeProcessor
+        factory: ["@ezpublish_rest.factory", getImageFieldTypeProcessor]
         arguments:
             - @router
         tags:
@@ -267,8 +266,7 @@ services:
 
     ezpublish_rest.field_type_processor.ezmedia:
         class: %ezpublish_rest.field_type_processor.ezmedia.class%
-        factory_service: ezpublish_rest.factory
-        factory_method: getMediaFieldTypeProcessor
+        factory: ["@ezpublish_rest.factory", getMediaFieldTypeProcessor]
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezmedia }
 
@@ -301,8 +299,7 @@ services:
 
     ezpublish_rest.field_type_processor.ezbinaryfile:
         class: %ezpublish_rest.field_type_processor.ezbinaryfile.class%
-        factory_service: ezpublish_rest.factory
-        factory_method: getBinaryFileFieldTypeProcessor
+        factory: ["@ezpublish_rest.factory", getBinaryFileFieldTypeProcessor]
         arguments:
             - @ezpublish.core.io.default_url_decorator
         tags:
@@ -369,7 +366,6 @@ services:
 
     ezpublish_rest.input.dispatcher:
         class: %ezpublish_rest.input.dispatcher.class%
-        factory_service: ezpublish_rest.factory
         arguments:
             - @ezpublish_rest.input.parsing_dispatcher
             - []

@@ -19,8 +19,7 @@ services:
 
     ezpublish.persistence.connection:
         class: %ezpublish.persistence.connection.class%
-        factory_service: ezpublish.persistence.connection.factory
-        factory_method: getConnection
+        factory: ["@ezpublish.persistence.connection.factory", getConnection]
         lazy: true
 
     # Legacy storage engine
