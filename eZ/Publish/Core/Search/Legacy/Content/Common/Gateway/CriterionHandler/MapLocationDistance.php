@@ -241,6 +241,8 @@ class MapLocationDistance extends FieldBase
                 )
             );
 
+        $this->addFieldFiltersConditions( $subSelect, $fieldFilters );
+
         return $query->expr->in(
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
             $subSelect
@@ -328,5 +330,4 @@ class MapLocationDistance extends FieldBase
 
         return $boundingCoordinates;
     }
-
 }
