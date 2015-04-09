@@ -314,8 +314,8 @@
     {% set defaultDraggable = 'true' %}
 
     {% set hasContent = field.value is not null %}
-    {% set latitude = field.value.latitude|default( 0 ) %}
-    {% set longitude = field.value.longitude|default( 0 ) %}
+    {% set latitude = field.value.latitude|default( 0 )|number_format( 6, '.', '' ) %}
+    {% set longitude = field.value.longitude|default( 0 )|number_format( 6, '.', '' ) %}
     {% set address = field.value.address|default( "" ) %}
     {% set mapId = "maplocation-map-" ~ field.id %}
 
