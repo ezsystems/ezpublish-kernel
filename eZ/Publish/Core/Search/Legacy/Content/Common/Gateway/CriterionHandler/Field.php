@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
-use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter as FieldValueConverter;
@@ -21,6 +20,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use RuntimeException;
 
 /**
@@ -54,6 +54,7 @@ class Field extends FieldBase
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $fieldConverterRegistry
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Converter $fieldValueConverter
      * @param \eZ\Publish\Core\Persistence\TransformationProcessor $transformationProcessor
@@ -61,12 +62,13 @@ class Field extends FieldBase
     public function __construct(
         DatabaseHandler $dbHandler,
         ContentTypeHandler $contentTypeHandler,
+        LanguageHandler $languageHandler,
         Registry $fieldConverterRegistry,
         FieldValueConverter $fieldValueConverter,
         TransformationProcessor $transformationProcessor
     )
     {
-        parent::__construct( $dbHandler, $contentTypeHandler );
+        parent::__construct( $dbHandler, $contentTypeHandler, $languageHandler );
 
         $this->fieldConverterRegistry = $fieldConverterRegistry;
         $this->fieldValueConverter = $fieldValueConverter;
@@ -197,6 +199,8 @@ class Field extends FieldBase
                 count( $whereExpressions ) > 1 ? $subSelect->expr->lOr( $whereExpressions ) : $whereExpressions[0]
             )
         );
+
+        $this->addFieldFiltersConditions( $subSelect, $fieldFilters );
 
         return $query->expr->in(
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
