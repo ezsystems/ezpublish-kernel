@@ -83,7 +83,8 @@ class HandlerSortTest extends LanguageAwareTestCase
                         new Content\Common\Gateway\CriterionHandler\SectionId( $db ),
                         new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
                             $db,
-                            $this->getContentTypeHandler()
+                            $this->getContentTypeHandler(),
+                            $this->getLanguageHandler()
                         ),
                     )
                 ),

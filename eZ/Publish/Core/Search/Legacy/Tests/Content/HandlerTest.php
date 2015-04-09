@@ -141,7 +141,8 @@ class HandlerTest extends LanguageAwareTestCase
                         ),
                         new Content\Common\Gateway\CriterionHandler\ContentTypeIdentifier(
                             $this->getDatabaseHandler(),
-                            $this->getContentTypeHandler()
+                            $this->getContentTypeHandler(),
+                            $this->getLanguageHandler()
                         ),
                         new Content\Common\Gateway\CriterionHandler\ContentTypeGroupId(
                             $this->getDatabaseHandler()
@@ -175,6 +176,7 @@ class HandlerTest extends LanguageAwareTestCase
                         new Content\Common\Gateway\CriterionHandler\Field(
                             $this->getDatabaseHandler(),
                             $this->getContentTypeHandler(),
+                            $this->getLanguageHandler(),
                             $this->getConverterRegistry(),
                             new Content\Common\Gateway\CriterionHandler\FieldValue\Converter(
                                 new Content\Common\Gateway\CriterionHandler\FieldValue\HandlerRegistry(
@@ -213,7 +215,8 @@ class HandlerTest extends LanguageAwareTestCase
                         ),
                         new Content\Common\Gateway\CriterionHandler\FieldRelation(
                             $this->getDatabaseHandler(),
-                            $this->getContentTypeHandler()
+                            $this->getContentTypeHandler(),
+                            $this->getLanguageHandler()
                         ),
                         new Content\Gateway\CriterionHandler\Depth(
                             $this->getDatabaseHandler()
