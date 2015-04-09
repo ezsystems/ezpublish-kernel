@@ -172,4 +172,3 @@ class FieldRelation extends FieldBase
         }
     }
 }
-
