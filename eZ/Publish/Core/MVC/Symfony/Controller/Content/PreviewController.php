@@ -22,7 +22,7 @@ use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class PreviewController
 {
@@ -42,9 +42,9 @@ class PreviewController
     private $previewHelper;
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
      */
-    private $securityContext;
+    private $authorizationChecker;
 
     /**
      * @var \Symfony\Component\HttpFoundation\Request
@@ -60,14 +60,14 @@ class PreviewController
         ContentService $contentService,
         HttpKernelInterface $kernel,
         ContentPreviewHelper $previewHelper,
-        SecurityContextInterface $securityContext,
+        AuthorizationCheckerInterface $authorizationChecker,
         PreviewLocationProvider $locationProvider
     )
     {
         $this->contentService = $contentService;
         $this->kernel = $kernel;
         $this->previewHelper = $previewHelper;
-        $this->securityContext = $securityContext;
+        $this->authorizationChecker = $authorizationChecker;
         $this->locationProvider = $locationProvider;
     }
 
@@ -92,7 +92,7 @@ class PreviewController
             throw new AccessDeniedException();
         }
 
-        if ( !$this->securityContext->isGranted( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
+        if ( !$this->authorizationChecker->isGranted( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
         {
             throw new AccessDeniedException();
         }

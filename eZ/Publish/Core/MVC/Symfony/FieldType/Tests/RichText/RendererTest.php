@@ -21,7 +21,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->repositoryMock = $this->getRepositoryMock();
-        $this->securityContextMock = $this->getSecurityContextMock();
+        $this->authorizationCheckerMock = $this->getAuthorizationCheckerMock();
         $this->configResolverMock = $this->getConfigResolverMock();
         $this->templateEngineMock = $this->getTemplateEngineMock();
         $this->loggerMock = $this->getLoggerMock();
@@ -1354,7 +1354,7 @@ class RendererTest extends PHPUnit_Framework_TestCase
             $methods,
             array(
                 $this->repositoryMock,
-                $this->securityContextMock,
+                $this->authorizationCheckerMock,
                 $this->configResolverMock,
                 $this->templateEngineMock,
                 "test.name.space.tag",
@@ -1380,17 +1380,17 @@ class RendererTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $securityContextMock;
+    protected $authorizationCheckerMock;
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getSecurityContextMock()
+    protected function getAuthorizationCheckerMock()
     {
         return $this->getMock(
-            "Symfony\\Component\\Security\\Core\\SecurityContextInterface"
+            'Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface'
         );
     }
 
