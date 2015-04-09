@@ -132,8 +132,7 @@ class HandlerTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\ContentTypeId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ContentTypeIdentifier(
                             $this->getDatabaseHandler(),
-                            $this->getContentTypeHandler(),
-                            $this->getLanguageHandler()
+                            $this->getContentTypeHandler()
                         ),
                         new CommonCriterionHandler\DateMetadata( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\Field(

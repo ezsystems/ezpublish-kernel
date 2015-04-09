@@ -101,8 +101,7 @@ class HandlerSortTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\SectionId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ContentTypeIdentifier(
                             $this->getDatabaseHandler(),
-                            $this->getContentTypeHandler(),
-                            $this->getLanguageHandler()
+                            $this->getContentTypeHandler()
                         ),
                     )
                 ),
