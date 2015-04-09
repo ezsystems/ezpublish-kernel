@@ -136,6 +136,7 @@ class FieldRelation extends FieldBase
                         $subRequest
                     );
                 }
+                // Intentionally omitting break
 
             case Criterion\Operator::IN:
                 $subSelect = $query->subSelect();
