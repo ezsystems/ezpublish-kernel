@@ -30,7 +30,7 @@ services:
     # Siteaccess is injected in the container at runtime
     ezpublish.siteaccess:
         class: %ezpublish.siteaccess.class%
-        arguments: [%ezpublish.siteaccess.default.name%]
+        arguments: [%ezpublish.siteaccess.default.name%, 'uninitialized']
 
     ezpublish.config.resolver.core:
         class: %ezpublish.config.resolver.dynamic.class%

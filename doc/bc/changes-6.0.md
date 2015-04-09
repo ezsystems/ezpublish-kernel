@@ -138,6 +138,9 @@ Changes affecting version compatibility with former or future versions.
   and `$limit = 10` are added. No way is provided to return all user groups, pagination should be used if full
   result set is desired.
 
+* SiteAccess service (`ezpublish.siteaccess`) is not synchronized any more.
+  Synchronized services are deprecated as of Symfony 2.7.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.

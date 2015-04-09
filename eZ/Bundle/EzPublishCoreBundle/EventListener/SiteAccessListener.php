@@ -55,10 +55,12 @@ class SiteAccessListener extends ContainerAware implements EventSubscriberInterf
     public function onSiteAccessMatch( PostSiteAccessMatchEvent $event )
     {
         $request = $event->getRequest();
-        $siteAccess = $event->getSiteAccess();
-        // Injecting matched SiteAccess in the ServiceContainer.
-        // All services depending on it will be "synchronized" with it.
-        $this->container->set( 'ezpublish.siteaccess', $siteAccess );
+        $matchedSiteAccess = $event->getSiteAccess();
+
+        $siteAccess = $this->container->get( 'ezpublish.siteaccess' );
+        $siteAccess->name = $matchedSiteAccess->name;
+        $siteAccess->matchingType = $matchedSiteAccess->matchingType;
+        $siteAccess->matcher = $matchedSiteAccess->matcher;
 
         // We already have semanticPathinfo (sub-request)
         if ( $request->attributes->has( 'semanticPathinfo' ) )

@@ -171,10 +171,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
         $container->setParameter( 'ezpublish.siteaccess.groups_by_siteaccess', $groupsBySiteaccess );
         ConfigurationProcessor::setGroupsBySiteAccess( $groupsBySiteaccess );
-
-        // Manually setting ezpublish.siteaccess synchronized
-        // as it's not possible to silent the deprecation warning in YAML.
-        $container->findDefinition( 'ezpublish.siteaccess' )->setSynchronized( true, false );
     }
 
     private function registerImageMagickConfiguration( array $config, ContainerBuilder $container )
