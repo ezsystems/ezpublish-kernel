@@ -133,10 +133,10 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $container->setDefinition( $locationSearchGatewayId, $locationSearchGatewayDef );
 
         // Location search handler
-        $contentSearchHandlerDefinition = new DefinitionDecorator( self::LOCATION_SEARCH_HANDLER_ID );
-        $contentSearchHandlerDefinition->replaceArgument( 0, new Reference( $locationSearchGatewayId ) );
+        $locationSearchHandlerDefinition = new DefinitionDecorator( self::LOCATION_SEARCH_HANDLER_ID );
+        $locationSearchHandlerDefinition->replaceArgument( 0, new Reference( $locationSearchGatewayId ) );
         $locationSearchHandlerId = self::LOCATION_SEARCH_HANDLER_ID . ".$connectionName";
-        $container->setDefinition( $locationSearchHandlerId, $contentSearchHandlerDefinition );
+        $container->setDefinition( $locationSearchHandlerId, $locationSearchHandlerDefinition );
         $container->setParameter( "$alias.connection.$connectionName.location_handler_id", $locationSearchHandlerId );
 
         // Search engine itself, for given connection name
