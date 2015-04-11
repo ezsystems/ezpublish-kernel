@@ -18,7 +18,7 @@ and not the *Full Stack* with bundles, user interfaces and installers all config
 eZ Platform is a bottom up rewrite of eZ Publish, so a conservative approach where taken on backwards compatibility
 by first introducing it in 2012 in *eZ Publish Platform 5.0* by bundling both *Legacy* ("4.x") Stack & *Platform* (formerly 5.x, or "new")
 Stack together. Starting 2015 with *eZ Platform* this is no longer the case, the *Platform* has matured to become it's own
-fully modern CMS/CMF of it's own and can be used to solve your needs without having to also learn *Legacy*.
+fully modern CMS/CMF, and can be used to solve your needs without having to also learn *Legacy*.
 
 ### Getting a full install (*Full Stack*)
 
