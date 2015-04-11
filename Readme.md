@@ -22,16 +22,11 @@ fully modern CMS/CMF, and can be used to solve your needs without having to also
 
 ### Getting a full install (*Full Stack*)
 
-Reflecting what is said above there is several ways to get a full install of this Kernel:
+Reflecting what is said above there is several options to get a full install of this Kernel, see:
 
-- eZ Platform
-  For the new eZ Platform install, without *Legacy* being bundled, head over to [ezplatform](https://github.com/ezsystems/ezplatform).
-- eZ Studio
-  *Coming soon* A commercial product extending eZ Platform to provide features and services aimed as Editors, Editorial
-  teams and larger organizations.
-- eZ Publish 5.x
-  If you are upgrading from eZ Publish 4.x or 5.x and still require *legacy* functionality, go to [ezpublish-community](https://github.com/ezsystems/ezpublish-community).
-
+- [eZ Platform](https://github.com/ezsystems/ezplatform): For the new eZ Platform install.
+- eZ Studio: *Coming soon* A commercial product extending eZ Platform to provide features and services aimed as Editors, Editorial teams and larger organizations.
+- [eZ Publish 5.x](https://github.com/ezsystems/ezpublish-community): If you are upgrading from eZ Publish 4.x or 5.x and still require *legacy* functionality.
 
 ## Overview of the Kernel
 
