@@ -1,4 +1,7 @@
 parameters:
+    # Redefining default ezfloat field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Solr engine.
+    ezpublish.fieldType.ezfloat.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableFloat
     languages:
         - eng-US
         - eng-GB
