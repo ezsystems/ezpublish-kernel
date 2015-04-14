@@ -3,6 +3,7 @@ parameters:
     ezpublish.search.elasticsearch.content.field_value_mapper.date.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\DateMapper
     ezpublish.search.elasticsearch.content.field_value_mapper.document.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\DocumentMapper
     ezpublish.search.elasticsearch.content.field_value_mapper.geo_location.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\GeoLocationMapper
+    ezpublish.search.elasticsearch.content.field_value_mapper.float.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\FloatMapper
     ezpublish.search.elasticsearch.content.field_value_mapper.identifier.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\IdentifierMapper
     ezpublish.search.elasticsearch.content.field_value_mapper.integer.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\IntegerMapper
     ezpublish.search.elasticsearch.content.field_value_mapper.multiple_boolean.class: eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper\MultipleBooleanMapper
@@ -29,6 +30,11 @@ services:
 
     ezpublish.search.elasticsearch.content.field_value_mapper.geo_location:
         class: %ezpublish.search.elasticsearch.content.field_value_mapper.geo_location.class%
+        tags:
+            - {name: ezpublish.search.elasticsearch.content.field_value_mapper}
+
+    ezpublish.search.elasticsearch.content.field_value_mapper.float:
+        class: %ezpublish.search.elasticsearch.content.field_value_mapper.float.class%
         tags:
             - {name: ezpublish.search.elasticsearch.content.field_value_mapper}
 
