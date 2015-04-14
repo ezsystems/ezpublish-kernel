@@ -4,6 +4,7 @@ parameters:
     ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
     ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
     ezpublish.fieldType.indexable.ezinteger.class: eZ\Publish\Core\FieldType\Integer\SearchField
+    ezpublish.fieldType.indexable.ezfloat.class: eZ\Publish\Core\FieldType\Float\SearchField
     ezpublish.fieldType.indexable.unindexed.class: eZ\Publish\Core\FieldType\Unindexed
 
 services:
@@ -32,6 +33,11 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezinteger}
 
+    ezpublish.fieldType.indexable.ezfloat:
+        class: %ezpublish.fieldType.indexable.ezfloat.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezfloat}
+
     # TODO: define proper type
     ezpublish.fieldType.indexable.eztext:
         class: %ezpublish.fieldType.indexable.ezstring.class%
@@ -59,7 +65,6 @@ services:
     ezpublish.fieldType.indexable.unindexed:
         class: %ezpublish.fieldType.indexable.unindexed.class%
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezfloat}
             - {name: ezpublish.fieldType.indexable, alias: ezuser}
             - {name: ezpublish.fieldType.indexable, alias: ezimage}
             - {name: ezpublish.fieldType.indexable, alias: ezboolean}
