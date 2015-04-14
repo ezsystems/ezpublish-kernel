@@ -6,6 +6,7 @@ parameters:
     ezpublish.fieldType.indexable.ezemail.class: eZ\Publish\Core\FieldType\EmailAddress\SearchField
     ezpublish.fieldType.indexable.ezimage.class: eZ\Publish\Core\FieldType\Image\SearchField
     ezpublish.fieldType.indexable.ezmedia.class: eZ\Publish\Core\FieldType\Media\SearchField
+    ezpublish.fieldType.indexable.ezobjectrelation.class: eZ\Publish\Core\FieldType\Relation\SearchField
     ezpublish.fieldType.indexable.ezprice.class: eZ\Publish\Core\FieldType\Price\SearchField
     ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
     ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
@@ -92,6 +93,11 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezisbn}
 
+    ezpublish.fieldType.indexable.ezobjectrelation:
+        class: %ezpublish.fieldType.indexable.ezobjectrelation.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezobjectrelation}
+
     ezpublish.fieldType.indexable.unindexed:
         class: %ezpublish.fieldType.indexable.unindexed.class%
         tags:
@@ -102,7 +108,6 @@ services:
             - {name: ezpublish.fieldType.indexable, alias: ezinisetting}
             - {name: ezpublish.fieldType.indexable, alias: ezpackage}
             - {name: ezpublish.fieldType.indexable, alias: ezurl}
-            - {name: ezpublish.fieldType.indexable, alias: ezobjectrelation}
             - {name: ezpublish.fieldType.indexable, alias: ezmultioption}
             - {name: ezpublish.fieldType.indexable, alias: ezauthor}
             - {name: ezpublish.fieldType.indexable, alias: ezsrrating}

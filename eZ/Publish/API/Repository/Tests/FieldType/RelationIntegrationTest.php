@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group integration
  * @group field-type
  */
-class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
+class RelationFieldTypeIntegrationTest extends RelationSearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -362,5 +362,31 @@ class RelationFieldTypeIntegrationTest extends RelationBaseIntegrationTest
                 $this->getValidCreationFieldData()
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        // Using different values for Legacy Search Engine, in order to demonstrate that sort will
+        // depend on how search engine stores field type's value. Legacy stores it as integer, while
+        // other engines (Solr and Elasticsearch) store it as string.
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            return 4;
+        }
+
+        return 10;
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        // Using different values for Legacy Search Engine, in order to demonstrate that sort will
+        // depend on how search engine stores field type's value. Legacy stores it as integer, while
+        // other engines (Solr and Elasticsearch) store it as string.
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            return 49;
+        }
+
+        return 4;
     }
 }
