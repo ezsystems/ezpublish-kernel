@@ -1,6 +1,7 @@
 parameters:
     ezpublish.fieldType.indexable.ezstring.class: eZ\Publish\Core\FieldType\TextLine\SearchField
     ezpublish.fieldType.indexable.eztext.class: eZ\Publish\Core\FieldType\TextBlock\SearchField
+    ezpublish.fieldType.indexable.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\SearchField
     ezpublish.fieldType.indexable.ezprice.class: eZ\Publish\Core\FieldType\Price\SearchField
     ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
     ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
@@ -44,6 +45,11 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: eztext}
 
+    ezpublish.fieldType.indexable.ezboolean:
+        class: %ezpublish.fieldType.indexable.ezboolean.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezboolean}
+
     # TODO: define proper type
     ezpublish.fieldType.indexable.ezxmltext:
         class: %ezpublish.fieldType.indexable.ezstring.class%
@@ -67,7 +73,6 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezuser}
             - {name: ezpublish.fieldType.indexable, alias: ezimage}
-            - {name: ezpublish.fieldType.indexable, alias: ezboolean}
             - {name: ezpublish.fieldType.indexable, alias: ezkeyword}
             - {name: ezpublish.fieldType.indexable, alias: ezdate}
             - {name: ezpublish.fieldType.indexable, alias: eztime}
