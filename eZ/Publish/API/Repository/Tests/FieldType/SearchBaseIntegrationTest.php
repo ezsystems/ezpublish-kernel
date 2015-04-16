@@ -50,6 +50,12 @@ use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
  * as Content One, and Content Two. See the descriptions of the abstract declarations of
  * these methods for more details on how to choose proper values.
  *
+ * If needed you can override the methods that provide Field criterion target value and
+ * which by default fall back to the methods mentioned above:
+ *
+ * - getSearchTargetValueOne()
+ * - getValidSearchValueTwo()
+ *
  * Note: this test case does not concern itself with testing field filters, behaviour
  * of multiple sort clauses or combination with other criteria. These are tested
  * elsewhere as a general field search cases, which enables keeping this test case
@@ -73,6 +79,19 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     abstract protected function getValidSearchValueOne();
 
     /**
+     * Get search target field value One.
+     *
+     * Returns the Field criterion target value for the field value One.
+     * Default implementation falls back on {@link getValidSearchValueOne}.
+     *
+     * @return mixed
+     */
+    protected function getSearchTargetValueOne()
+    {
+        return $this->getValidSearchValueOne();
+    }
+
+    /**
      * Get search field value Two.
      *
      * The value must be valid for Content creation.
@@ -86,6 +105,19 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      * @return mixed
      */
     abstract protected function getValidSearchValueTwo();
+
+    /**
+     * Get search target field value Two.
+     *
+     * Returns the Field criterion target value for the field value Two.
+     * Default implementation falls back on {@link getValidSearchValueTwo}.
+     *
+     * @return mixed
+     */
+    protected function getSearchTargetValueTwo()
+    {
+        return $this->getValidSearchValueTwo();
+    }
 
     /**
      * Creates and returns content with given $fieldData
@@ -131,7 +163,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value EQ One
                 //
                 // The result should contain Content One.
-                new Field( "data", Operator::EQ, $this->getValidSearchValueOne() ),
+                new Field( "data", Operator::EQ, $this->getSearchTargetValueOne() ),
                 true,
                 false,
             ),
@@ -143,7 +175,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value EQ One )
                 //
                 // The result should contain Content Two.
-                new LogicalNot( new Field( "data", Operator::EQ, $this->getValidSearchValueOne() ) ),
+                new LogicalNot( new Field( "data", Operator::EQ, $this->getSearchTargetValueOne() ) ),
                 false,
                 true,
             ),
@@ -155,7 +187,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value EQ Two
                 //
                 // The result should contain Content Two.
-                new Field( "data", Operator::EQ, $this->getValidSearchValueTwo() ),
+                new Field( "data", Operator::EQ, $this->getSearchTargetValueTwo() ),
                 false,
                 true,
             ),
@@ -167,7 +199,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value EQ Two )
                 //
                 // The result should contain Content One.
-                new LogicalNot( new Field( "data", Operator::EQ, $this->getValidSearchValueTwo() ) ),
+                new LogicalNot( new Field( "data", Operator::EQ, $this->getSearchTargetValueTwo() ) ),
                 true,
                 false,
             ),
@@ -179,7 +211,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value IN [One]
                 //
                 // The result should contain Content One.
-                new Field( "data", Operator::IN, array( $this->getValidSearchValueOne() ) ),
+                new Field( "data", Operator::IN, array( $this->getSearchTargetValueOne() ) ),
                 true,
                 false,
             ),
@@ -192,7 +224,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // The result should contain Content Two.
                 new LogicalNot(
-                    new Field( "data", Operator::IN, array( $this->getValidSearchValueOne() ) )
+                    new Field( "data", Operator::IN, array( $this->getSearchTargetValueOne() ) )
                 ),
                 false,
                 true,
@@ -205,7 +237,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value IN [Two]
                 //
                 // The result should contain Content Two.
-                new Field( "data", Operator::IN, array( $this->getValidSearchValueTwo() ) ),
+                new Field( "data", Operator::IN, array( $this->getSearchTargetValueTwo() ) ),
                 false,
                 true,
             ),
@@ -218,7 +250,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // The result should contain Content One.
                 new LogicalNot(
-                    new Field( "data", Operator::IN, array( $this->getValidSearchValueTwo() ) )
+                    new Field( "data", Operator::IN, array( $this->getSearchTargetValueTwo() ) )
                 ),
                 true,
                 false,
@@ -235,8 +267,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                     "data",
                     Operator::IN,
                     array(
-                        $this->getValidSearchValueOne(),
-                        $this->getValidSearchValueTwo(),
+                        $this->getSearchTargetValueOne(),
+                        $this->getSearchTargetValueTwo(),
                     )
                 ),
                 true,
@@ -255,8 +287,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                         "data",
                         Operator::IN,
                         array(
-                            $this->getValidSearchValueOne(),
-                            $this->getValidSearchValueTwo(),
+                            $this->getSearchTargetValueOne(),
+                            $this->getSearchTargetValueTwo(),
                         )
                     )
                 ),
@@ -271,7 +303,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value GT One
                 //
                 // The result should contain Content Two.
-                new Field( "data", Operator::GT, $this->getValidSearchValueOne() ),
+                new Field( "data", Operator::GT, $this->getSearchTargetValueOne() ),
                 false,
                 true,
             ),
@@ -283,7 +315,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value GT One )
                 //
                 // The result should contain Content One.
-                new LogicalNot( new Field( "data", Operator::GT, $this->getValidSearchValueOne() ) ),
+                new LogicalNot( new Field( "data", Operator::GT, $this->getSearchTargetValueOne() ) ),
                 true,
                 false,
             ),
@@ -295,7 +327,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value GT Two
                 //
                 // The result should be empty.
-                new Field( "data", Operator::GT, $this->getValidSearchValueTwo() ),
+                new Field( "data", Operator::GT, $this->getSearchTargetValueTwo() ),
                 false,
                 false,
             ),
@@ -307,7 +339,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value GT Two )
                 //
                 // The result should contain both Content One and Content Two.
-                new LogicalNot( new Field( "data", Operator::GT, $this->getValidSearchValueTwo() ) ),
+                new LogicalNot( new Field( "data", Operator::GT, $this->getSearchTargetValueTwo() ) ),
                 true,
                 true,
             ),
@@ -319,7 +351,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value GTE One
                 //
                 // The result should contain both Content One and Content Two.
-                new Field( "data", Operator::GTE, $this->getValidSearchValueOne() ),
+                new Field( "data", Operator::GTE, $this->getSearchTargetValueOne() ),
                 true,
                 true,
             ),
@@ -331,7 +363,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value GTE One )
                 //
                 // The result should be empty.
-                new LogicalNot( new Field( "data", Operator::GTE, $this->getValidSearchValueOne() ) ),
+                new LogicalNot( new Field( "data", Operator::GTE, $this->getSearchTargetValueOne() ) ),
                 false,
                 false,
             ),
@@ -343,7 +375,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value GTE Two
                 //
                 // The result should contain Content Two.
-                new Field( "data", Operator::GTE, $this->getValidSearchValueTwo() ),
+                new Field( "data", Operator::GTE, $this->getSearchTargetValueTwo() ),
                 false,
                 true,
             ),
@@ -355,7 +387,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value GTE Two )
                 //
                 // The result should contain Content One.
-                new LogicalNot( new Field( "data", Operator::GTE, $this->getValidSearchValueTwo() ) ),
+                new LogicalNot( new Field( "data", Operator::GTE, $this->getSearchTargetValueTwo() ) ),
                 true,
                 false,
             ),
@@ -367,7 +399,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value LT One
                 //
                 // The result should be empty.
-                new Field( "data", Operator::LT, $this->getValidSearchValueOne() ),
+                new Field( "data", Operator::LT, $this->getSearchTargetValueOne() ),
                 false,
                 false,
             ),
@@ -379,7 +411,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value LT One )
                 //
                 // The result should contain both Content One and Content Two.
-                new LogicalNot( new Field( "data", Operator::LT, $this->getValidSearchValueOne() ) ),
+                new LogicalNot( new Field( "data", Operator::LT, $this->getSearchTargetValueOne() ) ),
                 true,
                 true,
             ),
@@ -391,7 +423,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value LT Two
                 //
                 // The result should contain Content One.
-                new Field( "data", Operator::LT, $this->getValidSearchValueTwo() ),
+                new Field( "data", Operator::LT, $this->getSearchTargetValueTwo() ),
                 true,
                 false,
             ),
@@ -403,7 +435,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value LT Two )
                 //
                 // The result should contain Content Two.
-                new LogicalNot( new Field( "data", Operator::LT, $this->getValidSearchValueTwo() ) ),
+                new LogicalNot( new Field( "data", Operator::LT, $this->getSearchTargetValueTwo() ) ),
                 false,
                 true,
             ),
@@ -415,7 +447,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value LTE One
                 //
                 // The result should contain Content One.
-                new Field( "data", Operator::LTE, $this->getValidSearchValueOne() ),
+                new Field( "data", Operator::LTE, $this->getSearchTargetValueOne() ),
                 true,
                 false,
             ),
@@ -427,7 +459,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value LTE One )
                 //
                 // The result should contain Content Two.
-                new LogicalNot( new Field( "data", Operator::LTE, $this->getValidSearchValueOne() ) ),
+                new LogicalNot( new Field( "data", Operator::LTE, $this->getSearchTargetValueOne() ) ),
                 false,
                 true,
             ),
@@ -439,7 +471,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value LTE Two
                 //
                 // The result should contain both Content One and Content Two.
-                new Field( "data", Operator::LTE, $this->getValidSearchValueTwo() ),
+                new Field( "data", Operator::LTE, $this->getSearchTargetValueTwo() ),
                 true,
                 true,
             ),
@@ -451,7 +483,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value LTE Two )
                 //
                 // The result should be empty.
-                new LogicalNot( new Field( "data", Operator::LTE, $this->getValidSearchValueTwo() ) ),
+                new LogicalNot( new Field( "data", Operator::LTE, $this->getSearchTargetValueTwo() ) ),
                 false,
                 false,
             ),
@@ -467,8 +499,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                     "data",
                     Operator::BETWEEN,
                     array(
-                        $this->getValidSearchValueOne(),
-                        $this->getValidSearchValueTwo(),
+                        $this->getSearchTargetValueOne(),
+                        $this->getSearchTargetValueTwo(),
                     )
                 ),
                 true,
@@ -487,8 +519,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                         "data",
                         Operator::BETWEEN,
                         array(
-                            $this->getValidSearchValueOne(),
-                            $this->getValidSearchValueTwo(),
+                            $this->getSearchTargetValueOne(),
+                            $this->getSearchTargetValueTwo(),
                         )
                     )
                 ),
@@ -507,8 +539,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                     "data",
                     Operator::BETWEEN,
                     array(
-                        $this->getValidSearchValueTwo(),
-                        $this->getValidSearchValueOne(),
+                        $this->getSearchTargetValueTwo(),
+                        $this->getSearchTargetValueOne(),
                     )
                 ),
                 false,
@@ -527,8 +559,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                         "data",
                         Operator::BETWEEN,
                         array(
-                            $this->getValidSearchValueTwo(),
-                            $this->getValidSearchValueOne(),
+                            $this->getSearchTargetValueTwo(),
+                            $this->getSearchTargetValueOne(),
                         )
                     )
                 ),
@@ -543,7 +575,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value CONTAINS One
                 //
                 // The result should contain Content One.
-                new Field( "data", Operator::CONTAINS, $this->getValidSearchValueOne() ),
+                new Field( "data", Operator::CONTAINS, $this->getSearchTargetValueOne() ),
                 true,
                 false,
             ),
@@ -555,7 +587,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     NOT( value CONTAINS One )
                 //
                 // The result should contain Content Two.
-                new LogicalNot( new Field( "data", Operator::CONTAINS, $this->getValidSearchValueOne() ) ),
+                new LogicalNot( new Field( "data", Operator::CONTAINS, $this->getSearchTargetValueOne() ) ),
                 false,
                 true,
             ),
@@ -567,7 +599,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //     value CONTAINS Two
                 //
                 // The result should contain Content Two.
-                new Field( "data", Operator::CONTAINS, $this->getValidSearchValueTwo() ),
+                new Field( "data", Operator::CONTAINS, $this->getSearchTargetValueTwo() ),
                 false,
                 true,
             ),
@@ -580,7 +612,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 //
                 // The result should contain Content One.
                 new LogicalNot(
-                    new Field( "data", Operator::CONTAINS, $this->getValidSearchValueTwo() )
+                    new Field( "data", Operator::CONTAINS, $this->getSearchTargetValueTwo() )
                 ),
                 true,
                 false,
