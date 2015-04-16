@@ -1050,7 +1050,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = false;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->isSearchable = true;
+        $bodyFieldCreate->isSearchable = false;
         $bodyFieldCreate->defaultValue = "";
         //$bodyFieldCreate->validatorConfiguration
         $bodyFieldCreate->fieldSettings = array(
@@ -1168,7 +1168,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isTranslatable = true;
         $bodyFieldCreate->isRequired = false;
         $bodyFieldCreate->isInfoCollector = false;
-        $bodyFieldCreate->isSearchable = true;
+        $bodyFieldCreate->isSearchable = false;
         $bodyFieldCreate->defaultValue = "";
         //$bodyFieldCreate->validatorConfiguration
         $bodyFieldCreate->fieldSettings = array(
@@ -3356,7 +3356,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefinitionUpdateStruct->fieldSettings = array(
             "textRows" => $fieldDefinition->fieldSettings["textRows"] + 1
         );
-        $fieldDefinitionUpdateStruct->isSearchable = !$fieldDefinition->isSearchable;
+        $fieldDefinitionUpdateStruct->isSearchable = $fieldDefinition->isSearchable;
 
         $contentTypeService->updateFieldDefinition(
             $contentTypeDraft,
