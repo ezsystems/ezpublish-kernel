@@ -5325,7 +5325,7 @@ class ContentTest extends BaseServiceMockTest
     public function testCopyContent()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo" ) );
+        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo", "internalLoadContent" ) );
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
         $locationCreateStruct = new LocationCreateStruct();
@@ -5400,6 +5400,13 @@ class ContentTest extends BaseServiceMockTest
                 $locationCreateStruct
             );
 
+        $contentService->expects( $this->once() )
+            ->method( "internalLoadContent" )
+            ->with(
+                $content->id
+            )
+            ->will( $this->returnValue( $content ) );
+
         /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
         $contentService->copyContent( $contentInfoMock, $locationCreateStruct, null );
     }
@@ -5414,7 +5421,7 @@ class ContentTest extends BaseServiceMockTest
     public function testCopyContentWithVersionInfo()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo" ) );
+        $contentService = $this->getPartlyMockedContentService( array( "internalLoadContentInfo", "internalLoadContent" ) );
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
         $locationCreateStruct = new LocationCreateStruct();
@@ -5488,6 +5495,13 @@ class ContentTest extends BaseServiceMockTest
                 $content->getVersionInfo()->getContentInfo(),
                 $locationCreateStruct
             );
+
+        $contentService->expects( $this->once() )
+            ->method( "internalLoadContent" )
+            ->with(
+                $content->id
+            )
+            ->will( $this->returnValue( $content ) );
 
         /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
         $contentService->copyContent( $contentInfoMock, $locationCreateStruct, $versionInfoMock );
@@ -5623,8 +5637,14 @@ class ContentTest extends BaseServiceMockTest
 
         $contentMock->expects( $this->any() )
             ->method( "__get" )
-            ->with( "contentInfo" )
-            ->will( $this->returnValue( $contentInfoMock ) );
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( "id", 42 ),
+                        array( "contentInfo", $contentInfoMock ),
+                    )
+                )
+            );
         $contentMock->expects( $this->any() )
             ->method( "getVersionInfo" )
             ->will( $this->returnValue( $versionInfoMock ) );

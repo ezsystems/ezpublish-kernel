@@ -223,6 +223,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->cache->getItem( 'location', $location->id )->set( $location );
         $this->cache->clear( 'location', 'subtree' );
         $this->cache->clear( 'content', 'locations', $location->contentId );
+        $this->cache->clear( 'content', $location->contentId );
+        $this->cache->clear( 'content', 'info', $location->contentId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', $location->contentId );
         $this->cache->clear( 'user', 'role', 'assignments', 'byGroup', 'inherited', $location->contentId );
 
