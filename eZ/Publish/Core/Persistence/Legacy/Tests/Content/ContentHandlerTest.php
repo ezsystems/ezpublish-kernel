@@ -1105,8 +1105,91 @@ class ContentHandlerTest extends TestCase
                 $this->equalTo( 225 ),
                 $this->equalTo( 2 )
             );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'listVersionNumbers' )
+            ->with(
+                $this->equalTo( 225 )
+            )
+            ->will(
+                $this->returnValue( array( 1 ) )
+            );
+        $gatewayMock->expects( $this->never() )
+            ->method( 'deleteContent' )
+            ->with(
+                $this->equalTo( 225 )
+            );
 
         $handler->deleteVersion( 225, 2 );
+    }
+
+    /**
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::deleteVersion
+     *
+     * @return void
+     */
+    public function testDeleteOnlyVersion()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+        $locationHandlerMock = $this->getLocationGatewayMock();
+        $fieldHandlerMock = $this->getFieldHandlerMock();
+
+        // Load VersionInfo to delete fields
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractVersionInfoListFromRows' )
+            ->will( $this->returnValue( array( new VersionInfo() ) ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadVersionInfo' )
+            ->will( $this->returnValue( array( 42 ) ) );
+
+        $locationHandlerMock->expects( $this->once() )
+            ->method( 'deleteNodeAssignment' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->equalTo( 1 )
+            );
+
+        $fieldHandlerMock->expects( $this->once() )
+            ->method( 'deleteFields' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\VersionInfo' )
+            );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteRelations' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->equalTo( 1 )
+            );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteVersions' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->equalTo( 1 )
+            );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteNames' )
+            ->with(
+                $this->equalTo( 225 ),
+                $this->equalTo( 1 )
+            );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'listVersionNumbers' )
+            ->with(
+                $this->equalTo( 225 )
+            )
+            ->will(
+                $this->returnValue( array() )
+            );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteContent' )
+            ->with(
+                $this->equalTo( 225 )
+            );
+
+        $handler->deleteVersion( 225, 1 );
     }
 
     /**

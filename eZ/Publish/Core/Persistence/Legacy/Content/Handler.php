@@ -537,6 +537,7 @@ class Handler implements BaseContentHandler
      * Deletes given version, its fields, node assignment, relations and names.
      *
      * Removes the relations, but not the related objects.
+     * If the version is the only version of a content, the content is also deleted.
      *
      * @param int $contentId
      * @param int $versionNo
@@ -554,6 +555,12 @@ class Handler implements BaseContentHandler
         $this->contentGateway->deleteRelations( $contentId, $versionNo );
         $this->contentGateway->deleteVersions( $contentId, $versionNo );
         $this->contentGateway->deleteNames( $contentId, $versionNo );
+
+        $versions = $this->contentGateway->listVersionNumbers( $contentId );
+        if ( empty( $versions ) )
+        {
+            $this->contentGateway->deleteContent( $contentId );
+        }
     }
 
     /**
