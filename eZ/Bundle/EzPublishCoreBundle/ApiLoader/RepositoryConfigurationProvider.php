@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the StorageRepositoryProvider class.
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -13,9 +13,9 @@ use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 /**
- * The storage repository provider.
+ * The repository configuration provider.
  */
-class StorageRepositoryProvider
+class RepositoryConfigurationProvider
 {
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface

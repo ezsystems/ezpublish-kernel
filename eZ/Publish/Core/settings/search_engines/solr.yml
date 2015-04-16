@@ -6,7 +6,7 @@ imports:
     - {resource: search_engines/solr/sort_clause_visitors.yml}
 
 parameters:
-    ezpublish.solr_server: http://localhost:8983/
+    ezpublish.search.solr.connection.server: http://localhost:8983/
     ezpublish.spi.search.solr.class: eZ\Publish\Core\Search\Solr\Handler
     ezpublish.search.solr.content.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\Native
     ezpublish.spi.search.solr.content_handler.class: eZ\Publish\Core\Search\Solr\Content\Handler

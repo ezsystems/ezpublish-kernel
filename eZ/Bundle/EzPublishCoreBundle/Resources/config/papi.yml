@@ -5,12 +5,14 @@ parameters:
     ezpublish.api.repository.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryFactory
     ezpublish.api.repository.lazy_factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\LazyRepositoryFactory
     ezpublish.api.storage_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory
+    ezpublish.api.search_engine.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\SearchEngineFactory
 
     # Symfony event converter Slot
     ezpublish.signalslot.event_converter_slot.class: eZ\Bundle\EzPublishCoreBundle\SignalSlot\Slot\SymfonyEventConverterSlot
 
     # Using legacy storage engine for data compatibility with 4.x
     ezpublish.api.storage_engine.default: legacy
+    ezpublish.api.search_engine.default: legacy
 
     ezpublish.api.content.class: eZ\Publish\Core\Repository\Values\Content\Content
     ezpublish.api.location.class: eZ\Publish\Core\Repository\Values\Content\Location
@@ -42,7 +44,7 @@ services:
     ezpublish.api.storage_engine.factory:
         class: %ezpublish.api.storage_engine.factory.class%
         arguments:
-            - @ezpublish.api.storage_repository_provider
+            - @ezpublish.api.repository_configuration_provider
 
     ezpublish.api.persistence_handler:
         #To disable cache, switch alias to ezpublish.api.storage_engine
@@ -54,11 +56,17 @@ services:
         factory_method: buildStorageEngine
         public: false
 
+    ezpublish.api.search_engine.factory:
+        class: %ezpublish.api.search_engine.factory.class%
+        arguments:
+            - @ezpublish.api.repository_configuration_provider
+
     ezpublish.spi.search:
         alias: ezpublish.spi.search_engine
 
     ezpublish.spi.search_engine:
-        alias: ezpublish.spi.search.legacy
+        class: %ezpublish.api.search_engine.class%
+        factory: ["@ezpublish.api.search_engine.factory", buildSearchEngine]
         public: false
 
     # Signal Slot API wrapper

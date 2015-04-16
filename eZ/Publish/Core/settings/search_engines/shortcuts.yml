@@ -1,0 +1,12 @@
+parameters:
+    ezpublish.spi.search.content_handler.class: eZ\Publish\SPI\Search\Content\Handler
+    ezpublish.spi.search.location_handler.class: eZ\Publish\SPI\Search\Content\Location\Handler
+
+services:
+    ezpublish.spi.search.content_handler:
+        class: %ezpublish.spi.search.content_handler.class%
+        factory: ["@ezpublish.spi.search", contentSearchHandler]
+
+    ezpublish.spi.search.location_handler:
+        class: %ezpublish.spi.search.location_handler.class%
+        factory: ["@ezpublish.spi.search", locationSearchHandler]
