@@ -14,7 +14,7 @@ use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for TextLine field type
+ * Indexable definition for Integer field type
  */
 class SearchField implements Indexable
 {
