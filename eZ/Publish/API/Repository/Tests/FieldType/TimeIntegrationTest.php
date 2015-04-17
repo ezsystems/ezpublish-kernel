@@ -19,7 +19,7 @@ use DateTime;
  * @group integration
  * @group field-type
  */
-class TimeIntegrationTest extends BaseIntegrationTest
+class TimeIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -340,5 +340,25 @@ class TimeIntegrationTest extends BaseIntegrationTest
                 $this->getValidCreationFieldData()
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return new TimeValue( $this->getSearchTargetValueOne() );
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return new TimeValue( $this->getSearchTargetValueTwo() );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        return 9600;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        return 14400;
     }
 }
