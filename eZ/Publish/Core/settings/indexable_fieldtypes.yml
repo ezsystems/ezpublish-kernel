@@ -3,6 +3,7 @@ parameters:
     ezpublish.fieldType.indexable.eztext.class: eZ\Publish\Core\FieldType\TextBlock\SearchField
     ezpublish.fieldType.indexable.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\SearchField
     ezpublish.fieldType.indexable.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\SearchField
+    ezpublish.fieldType.indexable.ezemail.class: eZ\Publish\Core\FieldType\EmailAddress\SearchField
     ezpublish.fieldType.indexable.ezprice.class: eZ\Publish\Core\FieldType\Price\SearchField
     ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
     ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
@@ -40,6 +41,11 @@ services:
         class: %ezpublish.fieldType.indexable.ezfloat.class%
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezfloat}
+
+    ezpublish.fieldType.indexable.ezemail:
+        class: %ezpublish.fieldType.indexable.ezemail.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezemail}
 
     ezpublish.fieldType.indexable.eztext:
         class: %ezpublish.fieldType.indexable.eztext.class%
@@ -92,7 +98,6 @@ services:
             - {name: ezpublish.fieldType.indexable, alias: ezselection}
             - {name: ezpublish.fieldType.indexable, alias: ezsubtreesubscription}
             - {name: ezpublish.fieldType.indexable, alias: ezobjectrelationlist}
-            - {name: ezpublish.fieldType.indexable, alias: ezemail}
             - {name: ezpublish.fieldType.indexable, alias: ezoption}
             - {name: ezpublish.fieldType.indexable, alias: ezbinaryfile}
             - {name: ezpublish.fieldType.indexable, alias: ezmedia}
