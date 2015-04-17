@@ -14,6 +14,7 @@ parameters:
     ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
     ezpublish.fieldType.indexable.ezinteger.class: eZ\Publish\Core\FieldType\Integer\SearchField
     ezpublish.fieldType.indexable.ezfloat.class: eZ\Publish\Core\FieldType\Float\SearchField
+    ezpublish.fieldType.indexable.eztime.class: eZ\Publish\Core\FieldType\Time\SearchField
     ezpublish.fieldType.indexable.unindexed.class: eZ\Publish\Core\FieldType\Unindexed
 
 services:
@@ -67,6 +68,11 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezbinaryfile}
 
+    ezpublish.fieldType.indexable.eztime:
+        class: %ezpublish.fieldType.indexable.eztime.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: eztime}
+
     ezpublish.fieldType.indexable.eztext:
         class: %ezpublish.fieldType.indexable.eztext.class%
         tags:
@@ -110,7 +116,6 @@ services:
             - {name: ezpublish.fieldType.indexable, alias: ezuser}
             - {name: ezpublish.fieldType.indexable, alias: ezkeyword}
             - {name: ezpublish.fieldType.indexable, alias: ezdate}
-            - {name: ezpublish.fieldType.indexable, alias: eztime}
             - {name: ezpublish.fieldType.indexable, alias: ezinisetting}
             - {name: ezpublish.fieldType.indexable, alias: ezpackage}
             - {name: ezpublish.fieldType.indexable, alias: ezurl}
