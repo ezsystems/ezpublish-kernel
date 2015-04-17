@@ -17,6 +17,14 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
  * Sets sort direction on a field value for a content query
+ *
+ * Note: for fields of some field types order will vary per search engine. This comes from the
+ * different way of storing IDs in the search backend, and therefore relates to the field types
+ * that store ID value for sorting (Relation field type). For Legacy search engine IDs are stored as
+ * integers, while with Solr and Elasticsearch engines they are stored as strings. In that case the
+ * difference will be basically the one between numerical and alphabetical order of sorting.
+ *
+ * This reflects API definition of IDs as mixed type (integer or string).
  */
 class Field extends SortClause implements CustomFieldInterface
 {
