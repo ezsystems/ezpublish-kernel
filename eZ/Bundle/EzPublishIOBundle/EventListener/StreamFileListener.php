@@ -26,10 +26,13 @@ class StreamFileListener implements EventSubscriberInterface
     /** @var ConfigResolverInterface */
     private $configResolver;
 
-    public function __construct( IOServiceInterface $ioService, ConfigResolverInterface $configResolver )
+    /** @var \eZ\Bundle\EzPublishIOBundle\EventListener\IoUriMatcher */
+    private $uriMatcher;
+
+    public function __construct( IOServiceInterface $ioService, IoUriMatcher $uriMatcher )
     {
         $this->ioService = $ioService;
-        $this->configResolver = $configResolver;
+        $this->uriMatcher = $uriMatcher;
     }
 
     public static function getSubscribedEvents()
@@ -51,7 +54,7 @@ class StreamFileListener implements EventSubscriberInterface
 
         $uri = $event->getRequest()->attributes->get( 'semanticPathinfo' );
 
-        if ( !$this->isIoUri( $uri ) )
+        if ( !$this->uriMatcher->matches( $uri ) )
         {
             return;
         }
@@ -63,15 +66,5 @@ class StreamFileListener implements EventSubscriberInterface
                 $this->ioService
             )
         );
-    }
-
-    /**
-     * Tests if $uri is an IO file uri root
-     * @param string $uri
-     * @return bool
-     */
-    private function isIoUri( $uri )
-    {
-        return ( strpos( ltrim( $uri, '/' ), $this->configResolver->getParameter( 'io.url_prefix' ) ) === 0 );
     }
 }
