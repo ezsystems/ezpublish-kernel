@@ -12,6 +12,9 @@ if [ "$DB" = "postgresql" ] ; then psql -c "CREATE DATABASE $DB_NAME;" -U postgr
 # Setup github key to avoid api rate limit
 ./bin/.travis/install_composer_github_key.sh
 
+# Update composer to newest version
+composer self-update
+
 # Switch to another Symfony version if asked for
 if [ "$SYMFONY_VERSION" != "" ] ; then composer require --no-update symfony/symfony=$SYMFONY_VERSION ; fi;
 
