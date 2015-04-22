@@ -113,6 +113,10 @@ Changes affecting version compatibility with former or future versions.
 * `eZ\Publish\API\Repository\ContentTypeService::createContentType` can now accept a `ContentTypeCreateStruct` without
   any `FieldDefinitionCreateStruct`
 
+* `eZ\Publish\Core\Repository\ContentService::deleteVersion()` now throws `BadStateException` when
+  deleting last version of the Content. Since Content without a version does not make sense, in this
+  case `eZ\Publish\Core\Repository\ContentService::deleteContent()` should be used instead.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.
