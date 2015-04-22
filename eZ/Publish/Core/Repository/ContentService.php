@@ -1595,9 +1595,10 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * removes the given version
+     * Removes the given version
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is in state published
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is in
+     *         published state or is the last version of the Content
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -1618,6 +1619,18 @@ class ContentService implements ContentServiceInterface
                 'versionremove',
                 array( 'contentId' => $versionInfo->contentInfo->id, 'versionNo' => $versionInfo->versionNo )
             );
+
+        $versionList = $this->persistenceHandler->contentHandler()->listVersions(
+            $versionInfo->contentInfo->id
+        );
+
+        if ( count( $versionList ) === 1 )
+        {
+            throw new BadStateException(
+                "\$versionInfo",
+                "Version is the last version of the Content and can not be removed"
+            );
+        }
 
         $this->repository->beginTransaction();
         try
