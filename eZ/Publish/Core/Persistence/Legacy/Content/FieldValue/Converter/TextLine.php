@@ -99,14 +99,14 @@ class TextLine implements Converter
             $validatorConstraints[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]["maxStringLength"] =
                 $storageDef->dataInt1 != 0 ?
                     (int)$storageDef->dataInt1 :
-                    false;
+                    null;
         }
         if ( isset( $storageDef->dataInt2 ) )
         {
             $validatorConstraints[self::STRING_LENGTH_VALIDATOR_IDENTIFIER]["minStringLength"] =
                 $storageDef->dataInt2 != 0 ?
                     (int)$storageDef->dataInt2 :
-                    false;
+                    null;
         }
 
         $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
