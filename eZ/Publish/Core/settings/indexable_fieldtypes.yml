@@ -4,6 +4,7 @@ parameters:
     ezpublish.fieldType.indexable.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\SearchField
     ezpublish.fieldType.indexable.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\SearchField
     ezpublish.fieldType.indexable.ezemail.class: eZ\Publish\Core\FieldType\EmailAddress\SearchField
+    ezpublish.fieldType.indexable.ezimage.class: eZ\Publish\Core\FieldType\Image\SearchField
     ezpublish.fieldType.indexable.ezprice.class: eZ\Publish\Core\FieldType\Price\SearchField
     ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
     ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
@@ -47,6 +48,11 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezemail}
 
+    ezpublish.fieldType.indexable.ezimage:
+        class: %ezpublish.fieldType.indexable.ezimage.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezimage}
+
     ezpublish.fieldType.indexable.eztext:
         class: %ezpublish.fieldType.indexable.eztext.class%
         tags:
@@ -84,7 +90,6 @@ services:
         class: %ezpublish.fieldType.indexable.unindexed.class%
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezuser}
-            - {name: ezpublish.fieldType.indexable, alias: ezimage}
             - {name: ezpublish.fieldType.indexable, alias: ezkeyword}
             - {name: ezpublish.fieldType.indexable, alias: ezdate}
             - {name: ezpublish.fieldType.indexable, alias: eztime}
