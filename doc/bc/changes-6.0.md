@@ -105,6 +105,9 @@ Changes affecting version compatibility with former or future versions.
   `eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider`, as it now provides
   repository configuration for both storage and search engines. Class signature has remained the
   same.
+  
+* `eZ\Publish\API\Repository\ContentTypeService::createContentType` can now accept a `ContentTypeCreateStruct` without
+  any `FieldDefinitionCreateStruct`
 
 ## Deprecations
 
