@@ -552,14 +552,6 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        if ( empty( $contentTypeCreateStruct->fieldDefinitions ) )
-        {
-            throw new InvalidArgumentException(
-                "\$contentTypeCreateStruct",
-                "Argument must contain at least one FieldDefinitionCreateStruct"
-            );
-        }
-
         foreach ( $contentTypeCreateStruct->fieldDefinitions as $key => $fieldDefinitionCreateStruct )
         {
             if ( !$fieldDefinitionCreateStruct instanceof FieldDefinitionCreateStruct )

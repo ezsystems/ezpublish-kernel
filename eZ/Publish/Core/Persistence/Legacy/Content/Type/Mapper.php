@@ -115,7 +115,7 @@ class Mapper
             }
 
             $fieldId = (int)$row['ezcontentclass_attribute_id'];
-            if ( !isset( $fields[$fieldId] ) )
+            if ( $fieldId && !isset( $fields[$fieldId] ) )
             {
                 $types[$typeId]->fieldDefinitions[] = $fields[$fieldId] = $this->extractFieldFromRow( $row );
             }
