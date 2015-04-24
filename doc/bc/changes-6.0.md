@@ -105,6 +105,13 @@ Changes affecting version compatibility with former or future versions.
   `eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider`, as it now provides
   repository configuration for both storage and search engines. Class signature has remained the
   same.
+  
+* TextLine field type `StringLengthValidator` has changed. `false` isn't considered as valid value any more for
+  `minStringLength` and `maxStringLength`. Use `null` instead of `false` if you want to deactivate these validators.
+  Default validator value has been changed accordingly.
+  
+* `eZ\Publish\API\Repository\ContentTypeService::createContentType` can now accept a `ContentTypeCreateStruct` without
+  any `FieldDefinitionCreateStruct`
 
 ## Deprecations
 
