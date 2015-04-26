@@ -11,6 +11,8 @@ namespace eZ\Publish\Core\Persistence\Database;
 
 /**
  * @property-read \eZ\Publish\Core\Persistence\Database\Expression $expr
+ * @property string[<string>] $joinTables For internal use to check if a table has already been joined,
+ *                            has to be exact same value as provided as first param to join functions.
  */
 interface SelectQuery extends Query
 {

@@ -52,15 +52,16 @@ class Converter
      * @param string $fieldTypeIdentifier
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param string $column
+     * @param string $columnName
+     * @param string $tableName Optional table name
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function convertCriteria( $fieldTypeIdentifier, SelectQuery $query, Criterion $criterion, $column )
+    public function convertCriteria( $fieldTypeIdentifier, SelectQuery $query, Criterion $criterion, $columnName, $tableName = null )
     {
         if ( $this->registry->has( $fieldTypeIdentifier ) )
         {
-            return $this->registry->get( $fieldTypeIdentifier )->handle( $query, $criterion, $column );
+            return $this->registry->get( $fieldTypeIdentifier )->handle( $query, $criterion, $columnName, $tableName );
         }
 
         if ( $this->defaultHandler === null )
@@ -68,6 +69,6 @@ class Converter
             throw new RuntimeException( "No conversion for a field type '$fieldTypeIdentifier' found." );
         }
 
-        return $this->defaultHandler->handle( $query, $criterion, $column );
+        return $this->defaultHandler->handle( $query, $criterion, $columnName, $tableName );
     }
 }

@@ -50,16 +50,17 @@ class Collection extends Handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param string $column
+     * @param string $columnName
+     * @param string $tableName Optional table name
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( SelectQuery $query, Criterion $criterion, $column )
+    public function handle( SelectQuery $query, Criterion $criterion, $columnName, $tableName = null )
     {
         switch ( $criterion->operator )
         {
             case Criterion\Operator::CONTAINS:
-                $quotedColumn = $this->dbHandler->quoteColumn( $column );
+                $quotedColumn = $this->dbHandler->quoteColumn( $columnName, $tableName );
                 $value = $this->lowerCase( $criterion->value );
                 $filter = $query->expr->lOr(
                     array(
@@ -96,7 +97,7 @@ class Collection extends Handler
                 break;
 
             default:
-                $filter = parent::handle( $query, $criterion, $column );
+                $filter = parent::handle( $query, $criterion, $columnName, $tableName );
         }
 
         return $filter;

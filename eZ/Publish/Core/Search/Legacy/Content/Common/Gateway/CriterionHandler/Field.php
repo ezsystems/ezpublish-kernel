@@ -147,13 +147,27 @@ class Field extends FieldBase
     public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion )
     {
         $fieldsInformation = $this->getFieldsInformation( $criterion->target );
+        $quotedTableName = $this->dbHandler->quoteTable( 'ezcontentobject_attribute');
 
-        $subSelect = $query->subSelect();
-        $subSelect->select(
-            $this->dbHandler->quoteColumn( 'contentobject_id' )
-        )->from(
-            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
-        );
+        if ( !isset( $query->joinTables[$quotedTableName] ) )
+        {
+            $query->innerJoin(
+                $quotedTableName,
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn(
+                            'contentobject_id',
+                            'ezcontentobject_attribute'
+                        ),
+                        $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+                        $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
+                    )
+                )
+            );
+        }
 
         $whereExpressions = array();
         foreach ( $fieldsInformation as $fieldTypeIdentifier => $fieldsInfo )
@@ -164,37 +178,27 @@ class Field extends FieldBase
                     "A field of type '{$fieldTypeIdentifier}' is not searchable in the legacy search engine."
                 );
             }
-
             $filter = $this->fieldValueConverter->convertCriteria(
                 $fieldTypeIdentifier,
-                $subSelect,
+                $query,
                 $criterion,
-                $fieldsInfo['column']
+                $fieldsInfo['column'],
+                'ezcontentobject_attribute'
             );
-
-            $whereExpressions[] = $subSelect->expr->lAnd(
-                $subSelect->expr->in(
-                    $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
+            $whereExpressions[] = $query->expr->lAnd(
+                $query->expr->in(
+                    $this->dbHandler->quoteColumn(
+                        'contentclassattribute_id',
+                        'ezcontentobject_attribute'
+                    ),
                     $fieldsInfo['ids']
                 ),
                 $filter
             );
         }
 
-        $subSelect->where(
-            $subSelect->expr->lAnd(
-                $subSelect->expr->eq(
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
-                    $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
-                ),
-                // Join conditions with a logical OR if several conditions exist
-                count( $whereExpressions ) > 1 ? $subSelect->expr->lOr( $whereExpressions ) : $whereExpressions[0]
-            )
-        );
-
-        return $query->expr->in(
-            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
-            $subSelect
-        );
+        return count( $whereExpressions ) > 1 ? $query->expr->lOr(
+            $whereExpressions
+        ) : $whereExpressions[0];
     }
 }
