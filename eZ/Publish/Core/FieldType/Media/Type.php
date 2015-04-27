@@ -287,4 +287,14 @@ class Type extends BaseType
 
         return $result;
     }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return boolean
+     */
+    public function isSearchable()
+    {
+        return false;
+    }
 }
