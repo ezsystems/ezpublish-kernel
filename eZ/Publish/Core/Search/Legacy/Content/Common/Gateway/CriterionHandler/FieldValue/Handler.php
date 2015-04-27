@@ -69,13 +69,14 @@ abstract class Handler
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param string $column
+     * @param string $columnName
+     * @param string $tableName Optional table name
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
      */
-    public function handle( SelectQuery $query, Criterion $criterion, $column )
+    public function handle( SelectQuery $query, Criterion $criterion, $columnName, $tableName = null )
     {
-        $column = $this->dbHandler->quoteColumn( $column );
+        $column = $this->dbHandler->quoteColumn( $columnName, $tableName );
 
         switch ( $criterion->operator )
         {

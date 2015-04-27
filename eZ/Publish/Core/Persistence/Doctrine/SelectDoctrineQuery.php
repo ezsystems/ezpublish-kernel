@@ -39,6 +39,11 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
     private $offset;
 
     /**
+     * @var string[<string>]
+     */
+    public $joinTables = array();
+
+    /**
      * Holds the state of permission subtree join, which is LEFT JOIN on 'ezcontentobject_tree' table
      * with alias 'permission_subtree'.
      *
@@ -274,6 +279,7 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
             $condition = $args[1] . ' = ' . $args[2];
         }
 
+        $this->joinTables[$tableName] = true;
         $this->parts['from'][] = array(
             'table'     => $tableName,
             'type'      => $type,
