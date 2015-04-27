@@ -177,6 +177,39 @@ class FilterConfigurationTest extends PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetEzVariationImagineOptions()
+    {
+        $imagineConfig = array(
+            'foo_option' => 'foo',
+            'bar_option' => 'bar'
+        );
+        $this->filterConfiguration->set( 'some_variation', $imagineConfig );
+
+        $filters = array( 'some_filter' => array() );
+        $reference = 'another_variation';
+        $variations = array(
+            'some_variation' => array( 'reference' => $reference, 'filters' => $filters )
+        );
+        $this->configResolver
+            ->expects( $this->once() )
+            ->method( 'getParameter' )
+            ->with( 'image_variations' )
+            ->will( $this->returnValue( $variations ) );
+
+        $this->assertSame(
+            array(
+                'cache' => 'ezpublish',
+                'data_loader' => 'ezpublish',
+                'reference' => $reference,
+                'filters' => $filters,
+                'post_processors' => array(),
+                'foo_option' => 'foo',
+                'bar_option' => 'bar'
+            ),
+            $this->filterConfiguration->get( 'some_variation' )
+        );
+    }
+
     public function testAll()
     {
         $fooConfig = array( 'fooconfig' );

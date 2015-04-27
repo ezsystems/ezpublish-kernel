@@ -36,15 +36,14 @@ class FilterConfiguration extends BaseFilterConfiguration
             return parent::get( $filter );
         }
 
-        $filterConfig = array(
+        $filterConfig = isset( $this->filters[$filter] ) ? parent::get( $filter ) : array();
+        return array(
             'cache' => 'ezpublish',
             'data_loader' => 'ezpublish',
             'reference' => isset( $configuredVariations[$filter]['reference'] ) ? $configuredVariations[$filter]['reference'] : null,
             'filters' => $this->getVariationFilters( $filter, $configuredVariations ),
             'post_processors' => $this->getVariationPostProcessors( $filter, $configuredVariations )
-        );
-
-        return $filterConfig;
+        ) + $filterConfig;
     }
 
     public function all()
