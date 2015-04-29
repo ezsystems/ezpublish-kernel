@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
-
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -760,10 +760,20 @@ class Content extends RestController
                 $this->request->getContent()
             )
         );
+
+        if ( $viewInput->query instanceof LocationQuery )
+        {
+            $method = 'findLocations';
+        }
+        else
+        {
+            $method = 'findContent';
+        }
+
         return new Values\RestExecutedView(
             array(
                 'identifier'    => $viewInput->identifier,
-                'searchResults' => $this->repository->getSearchService()->findContent( $viewInput->query ),
+                'searchResults' => $this->repository->getSearchService()->$method( $viewInput->query ),
             )
         );
     }
