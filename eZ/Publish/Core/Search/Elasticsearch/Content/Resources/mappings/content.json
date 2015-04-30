@@ -170,7 +170,7 @@
                 }
             },
             {
-                "field_integer": {
+                "field_float": {
                     "path_match": "fields_doc.*_f",
                     "match_mapping_type": "float",
                     "mapping": {
@@ -180,7 +180,7 @@
                 }
             },
             {
-                "field_integer": {
+                "field_long": {
                     "path_match": "fields_doc.*_l",
                     "match_mapping_type": "long",
                     "mapping": {
@@ -190,7 +190,7 @@
                 }
             },
             {
-                "field_integer": {
+                "field_double": {
                     "path_match": "fields_doc.*_d",
                     "match_mapping_type": "double",
                     "mapping": {
@@ -200,7 +200,7 @@
                 }
             },
             {
-                "field_integer": {
+                "field_boolean": {
                     "path_match": "fields_doc.*_b",
                     "match_mapping_type": "boolean",
                     "mapping": {

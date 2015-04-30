@@ -1069,13 +1069,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $typeCreate->names = array( "eng-GB" => "Blog post" );
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'temperature', 'ezfloat'
+            'temperature', 'ezinteger'
         );
         $fieldCreate->isSearchable = true;
         $fieldCreate->validatorConfiguration = array(
-            'FloatValueValidator' => array(
-                'minFloatValue' => "forty two point one",
-                'maxFloatValue' => "75.3",
+            'IntegerValueValidator' => array(
+                'minIntegerValue' => "forty two point one",
+                'maxIntegerValue' => 75,
             )
         );
         $typeCreate->addFieldDefinition( $fieldCreate );
@@ -1087,7 +1087,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         try
         {
-            // Throws validation exception, because field can't be created as searchable and it's validator configuration is invalid
+            // Throws validation exception, because field's validator configuration is invalid
             $contentType = $contentTypeService->createContentType( $typeCreate, $groups );
         }
         catch ( ContentTypeFieldDefinitionValidationException $e )
@@ -1102,20 +1102,15 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $this->assertCount( 1, $validationErrors );
         $this->assertArrayHasKey( "temperature", $validationErrors );
         $this->assertInternalType( "array", $validationErrors["temperature"] );
-        $this->assertCount( 2, $validationErrors["temperature"] );
+        $this->assertCount( 1, $validationErrors["temperature"] );
         $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["temperature"][0] );
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["temperature"][1] );
 
         $this->assertEquals(
-            new Message( "FieldType 'ezfloat' is not searchable" ),
-            $validationErrors["temperature"][0]->getTranslatableMessage()
-        );
-        $this->assertEquals(
             new Message(
-                "Validator parameter '%parameter%' value must be of numeric type",
-                array( "parameter" => "minFloatValue" )
+                "Validator parameter '%parameter%' value must be of integer type",
+                array( "parameter" => "minIntegerValue" )
             ),
-            $validationErrors["temperature"][1]->getTranslatableMessage()
+            $validationErrors["temperature"][0]->getTranslatableMessage()
         );
     }
 
@@ -1475,13 +1470,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $userContentTypeDraft = $contentTypeService->createContentTypeDraft( $userContentType );
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct(
-            'temperature', 'ezfloat'
+            'temperature', 'ezinteger'
         );
         $fieldDefCreate->isSearchable = true;
         $fieldDefCreate->validatorConfiguration = array(
-            'FloatValueValidator' => array(
-                'minFloatValue' => "42.1",
-                'maxFloatValue' => "seventy five point three",
+            'IntegerValueValidator' => array(
+                'minIntegerValue' => 42,
+                'maxIntegerValue' => 75.3,
             )
         );
         $fieldDefCreate->fieldGroup = 'blog-meta';
@@ -1493,7 +1488,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         try
         {
-            // Throws an exception because 'ezfloat' field type can't be created as searchable
+            // Throws an exception because field's validator configuration is invalid
             $contentTypeService->addFieldDefinition( $userContentTypeDraft, $fieldDefCreate );
         }
         catch ( ContentTypeFieldDefinitionValidationException $e )
@@ -1508,20 +1503,15 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $this->assertCount( 1, $validationErrors );
         $this->assertArrayHasKey( "temperature", $validationErrors );
         $this->assertInternalType( "array", $validationErrors["temperature"] );
-        $this->assertCount( 2, $validationErrors["temperature"] );
+        $this->assertCount( 1, $validationErrors["temperature"] );
         $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["temperature"][0] );
-        $this->assertInstanceOf( "eZ\\Publish\\Core\\FieldType\\ValidationError", $validationErrors["temperature"][1] );
 
         $this->assertEquals(
-            new Message( "FieldType 'ezfloat' is not searchable" ),
-            $validationErrors["temperature"][0]->getTranslatableMessage()
-        );
-        $this->assertEquals(
             new Message(
-                "Validator parameter '%parameter%' value must be of numeric type",
-                array( "parameter" => "maxFloatValue" )
+                "Validator parameter '%parameter%' value must be of integer type",
+                array( "parameter" => "maxIntegerValue" )
             ),
-            $validationErrors["temperature"][1]->getTranslatableMessage()
+            $validationErrors["temperature"][0]->getTranslatableMessage()
         );
     }
 

@@ -4,6 +4,7 @@ parameters:
     ezpublish.search.solr.content.field_value_mapper.string.class: eZ\Publish\Core\Search\Solr\Content\FieldValueMapper\StringMapper
     ezpublish.search.solr.content.field_value_mapper.multiple_string.class: eZ\Publish\Core\Search\Solr\Content\FieldValueMapper\MultipleStringMapper
     ezpublish.search.solr.content.field_value_mapper.integer.class: eZ\Publish\Core\Search\Solr\Content\FieldValueMapper\IntegerMapper
+    ezpublish.search.solr.content.field_value_mapper.float.class: eZ\Publish\Core\Search\Solr\Content\FieldValueMapper\FloatMapper
     ezpublish.search.solr.content.field_value_mapper.date.class: eZ\Publish\Core\Search\Solr\Content\FieldValueMapper\DateMapper
     ezpublish.search.solr.content.field_value_mapper.price.class: eZ\Publish\Core\Search\Solr\Content\FieldValueMapper\PriceMapper
     ezpublish.search.solr.content.field_value_mapper.boolean.class: eZ\Publish\Core\Search\Solr\Content\FieldValueMapper\BooleanMapper
@@ -33,6 +34,11 @@ services:
 
     ezpublish.search.solr.content.field_value_mapper.integer:
         class: %ezpublish.search.solr.content.field_value_mapper.integer.class%
+        tags:
+            - {name: ezpublish.search.solr.content.field_value_mapper}
+
+    ezpublish.search.solr.content.field_value_mapper.float:
+        class: %ezpublish.search.solr.content.field_value_mapper.float.class%
         tags:
             - {name: ezpublish.search.solr.content.field_value_mapper}
 
