@@ -814,6 +814,59 @@ class ContentTest extends BaseServiceMockTest
     }
 
     /**
+     * Test for the deleteVersion() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteVersion
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function testDeleteVersionThrowsBadStateExceptionLastVersion()
+    {
+        $repository = $this->getRepositoryMock();
+        $repository
+            ->expects( $this->once() )
+            ->method( "canUser" )
+            ->with( "content", "versionremove" )
+            ->will( $this->returnValue( true ) );
+        $repository
+            ->expects( $this->never() )
+            ->method( "beginTransaction" );
+
+        $contentService = $this->getPartlyMockedContentService();
+        /** @var \PHPUnit_Framework_MockObject_MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+        $contentInfo = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo" );
+        $versionInfo = $this->getMock( "eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo" );
+
+        $contentInfo
+            ->expects( $this->any() )
+            ->method( "__get" )
+            ->with( "id" )
+            ->will( $this->returnValue( 42 ) );
+
+        $versionInfo
+            ->expects( $this->any() )
+            ->method( "__get" )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( "versionNo", 123 ),
+                        array( "status", VersionInfo::STATUS_DRAFT ),
+                        array( "contentInfo", $contentInfo ),
+                    )
+                )
+            );
+
+        $contentHandler
+            ->expects( $this->once() )
+            ->method( "listVersions" )
+            ->with( 42 )
+            ->will( $this->returnValue( array( "version" ) ) );
+
+        /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo */
+        $contentService->deleteVersion( $versionInfo );
+    }
+
+    /**
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
