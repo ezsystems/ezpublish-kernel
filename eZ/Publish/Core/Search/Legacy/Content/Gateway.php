@@ -26,11 +26,18 @@ abstract class Gateway
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
-     * @param string[] $translations
+     * @param array $fieldFilters
      * @param bool $doCount
      *
      * @return mixed[][]
      */
-    abstract public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null, $doCount = true );
+    abstract public function find(
+        Criterion $criterion,
+        $offset = 0,
+        $limit = null,
+        array $sort = null,
+        array $fieldFilters = array(),
+        $doCount = true
+    );
 }
 

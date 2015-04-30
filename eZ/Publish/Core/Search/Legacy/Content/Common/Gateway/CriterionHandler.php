@@ -65,8 +65,14 @@ abstract class CriterionHandler
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param array $fieldFilters
      */
-    abstract public function handle( CriteriaConverter $converter, SelectQuery $query, Criterion $criterion );
+    abstract public function handle(
+        CriteriaConverter $converter,
+        SelectQuery $query,
+        Criterion $criterion,
+        array $fieldFilters
+    );
 
     /**
      * Returns a unique table name

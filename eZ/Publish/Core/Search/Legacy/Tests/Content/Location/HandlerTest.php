@@ -138,6 +138,7 @@ class HandlerTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\Field(
                             $this->getDatabaseHandler(),
                             $this->getContentTypeHandler(),
+                            $this->getLanguageHandler(),
                             $this->getConverterRegistry(),
                             new CommonCriterionHandler\FieldValue\Converter(
                                 new CommonCriterionHandler\FieldValue\HandlerRegistry(
@@ -172,13 +173,15 @@ class HandlerTest extends LanguageAwareTestCase
                         new CommonCriterionHandler\LogicalOr( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\MapLocationDistance(
                             $this->getDatabaseHandler(),
-                            $this->getContentTypeHandler()
+                            $this->getContentTypeHandler(),
+                            $this->getLanguageHandler()
                         ),
                         new CommonCriterionHandler\MatchAll( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\ObjectStateId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\FieldRelation(
                             $this->getDatabaseHandler(),
-                            $this->getContentTypeHandler()
+                            $this->getContentTypeHandler(),
+                            $this->getLanguageHandler()
                         ),
                         new CommonCriterionHandler\RemoteId( $this->getDatabaseHandler() ),
                         new CommonCriterionHandler\SectionId( $this->getDatabaseHandler() ),

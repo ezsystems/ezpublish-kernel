@@ -77,16 +77,23 @@ class DoctrineDatabase extends Gateway
      * @param int $offset
      * @param int|null $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
-     * @param string[] $translations
+     * @param array $fieldFilters
      * @param bool $doCount
      *
      * @return mixed[][]
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null, $doCount = true )
+    public function find(
+        Criterion $criterion,
+        $offset = 0,
+        $limit = null,
+        array $sort = null,
+        array $fieldFilters = array(),
+        $doCount = true
+    )
     {
         $limit = $limit !== null ? $limit : self::MAX_LIMIT;
 
-        $count = $doCount ? $this->getResultCount( $criterion, $sort, $translations ) : null;
+        $count = $doCount ? $this->getResultCount( $criterion, $sort, $fieldFilters ) : null;
 
         if ( !$doCount && $limit === 0 )
         {
@@ -98,7 +105,7 @@ class DoctrineDatabase extends Gateway
             return array( 'count' => $count, 'rows' => array() );
         }
 
-        $contentInfoList = $this->getContentInfoList( $criterion, $sort, $offset, $limit, $translations );
+        $contentInfoList = $this->getContentInfoList( $criterion, $sort, $offset, $limit, $fieldFilters );
 
         return array(
             'count' => $count,
@@ -111,14 +118,14 @@ class DoctrineDatabase extends Gateway
      *
      * @param Criterion $filter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param mixed $translations
+     * @param array $fieldFilters
      *
      * @return string
      */
-    protected function getQueryCondition( Criterion $filter, SelectQuery $query, $translations )
+    protected function getQueryCondition( Criterion $filter, SelectQuery $query, $fieldFilters )
     {
         $condition = $query->expr->lAnd(
-            $this->criteriaConverter->convertCriteria( $query, $filter ),
+            $this->criteriaConverter->convertCriteria( $query, $filter, $fieldFilters ),
             $query->expr->eq(
                 'ezcontentobject.status',
                 ContentInfo::STATUS_PUBLISHED
@@ -129,30 +136,7 @@ class DoctrineDatabase extends Gateway
             )
         );
 
-        if ( $translations === null )
-        {
-            return $condition;
-        }
-
-        $translationQuery = $query->subSelect();
-        $translationQuery->select(
-            $this->handler->quoteColumn( 'contentobject_id' )
-        )->from(
-            $this->handler->quoteTable( 'ezcontentobject_attribute' )
-        )->where(
-            $translationQuery->expr->in(
-                $this->handler->quoteColumn( 'language_code' ),
-                $translations
-            )
-        );
-
-        return $query->expr->lAnd(
-            $condition,
-            $query->expr->in(
-                $this->handler->quoteColumn( 'id', 'ezcontentobject' ),
-                $translationQuery
-            )
-        );
+        return $condition;
     }
 
     /**
@@ -160,10 +144,10 @@ class DoctrineDatabase extends Gateway
      *
      * @param Criterion $filter
      * @param array $sort
-     * @param mixed $translations
+     * @param array $fieldFilters
      * @return int
      */
-    protected function getResultCount( Criterion $filter, $sort, $translations )
+    protected function getResultCount( Criterion $filter, $sort, $fieldFilters )
     {
         $query = $this->handler->createSelectQuery();
 
@@ -184,7 +168,7 @@ class DoctrineDatabase extends Gateway
         }
 
         $query->where(
-            $this->getQueryCondition( $filter, $query, $translations )
+            $this->getQueryCondition( $filter, $query, $fieldFilters )
         );
 
         $statement = $query->prepare();
@@ -200,11 +184,11 @@ class DoctrineDatabase extends Gateway
      * @param array $sort
      * @param mixed $offset
      * @param mixed $limit
-     * @param mixed $translations
+     * @param array $fieldFilters
      *
      * @return int[]
      */
-    protected function getContentInfoList( Criterion $filter, $sort, $offset, $limit, $translations )
+    protected function getContentInfoList( Criterion $filter, $sort, $offset, $limit, $fieldFilters )
     {
         $query = $this->handler->createSelectQuery();
         $query->selectDistinct(
@@ -246,7 +230,7 @@ class DoctrineDatabase extends Gateway
         }
 
         $query->where(
-            $this->getQueryCondition( $filter, $query, $translations )
+            $this->getQueryCondition( $filter, $query, $fieldFilters )
         );
 
         if ( $sort !== null )
