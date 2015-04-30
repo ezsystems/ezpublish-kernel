@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Integration test for use field type
@@ -18,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class ImageIntegrationTest extends FileBaseIntegrationTest
+class ImageIntegrationTest extends FileSearchBaseIntegrationTest
 {
     /**
      * Stores the loaded image path for copy test.
@@ -602,5 +604,226 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
 
         $newVersion = $contentService->createContentDraft( $content->contentInfo );
         $contentService->updateContent( $newVersion->versionInfo, $updateStruct );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return new ImageValue(
+            array(
+                'fileName' => 'cafe-terrace-at-night.png',
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'alternativeText' => 'café terrace at night, also known as the cafe terrace on the place du forum',
+                'fileSize' => filesize( $path ),
+            )
+        );
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return new ImageValue(
+            array(
+                'fileName' => 'thatched-cottages-at-cordeville.jpg',
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'alternativeText' => 'chaumes de cordeville à auvers-sur-oise',
+                'fileSize' => filesize( $path ),
+            )
+        );
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        $value = $this->getValidSearchValueOne();
+        return $value->fileName;
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        $value = $this->getValidSearchValueTwo();
+        return $value->fileName;
+    }
+
+    /**
+     * Redefined here in order to execute before tests with modified fields below,
+     * which depend on it for the returned value.
+     */
+    public function testCreateTestContent()
+    {
+        return parent::testCreateTestContent();
+    }
+
+    public function criteriaProviderModifiedFieldAlternativeText()
+    {
+        $valueOne = $this->getValidSearchValueOne();
+        $valueTwo = $this->getValidSearchValueTwo();
+
+        return $this->provideCriteria( $valueOne->alternativeText, $valueTwo->alternativeText );
+    }
+
+    /**
+     * Tests Content Search filtering with Field criterion on the alternative text modified field
+     *
+     * @dataProvider criteriaProviderModifiedFieldAlternativeText
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
+     * @param array $context
+     */
+    public function testFilterContentModifiedFieldAlternativeText(
+        Criterion $criterion,
+        $includesOne,
+        $includesTwo,
+        array $context
+    )
+    {
+        $this->assertFilterContentModifiedField(
+            $criterion,
+            $includesOne,
+            $includesTwo,
+            $context,
+            true,
+            "alternative_text"
+        );
+    }
+
+    /**
+     * Tests Content Search querying with Field criterion on the alternative text modified field
+     *
+     * @dataProvider criteriaProviderModifiedFieldAlternativeText
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
+     * @param array $context
+     */
+    public function testQueryContentModifiedFieldAlternativeText(
+        Criterion $criterion,
+        $includesOne,
+        $includesTwo,
+        array $context
+    )
+    {
+        $this->assertFilterContentModifiedField(
+            $criterion,
+            $includesOne,
+            $includesTwo,
+            $context,
+            false,
+            "alternative_text"
+        );
+    }
+
+    public function criteriaProviderModifiedFieldFileSize()
+    {
+        $valueOne = $this->getValidSearchValueOne();
+        $valueTwo = $this->getValidSearchValueTwo();
+
+        return $this->provideCriteria( $valueOne->fileSize, $valueTwo->fileSize );
+    }
+
+    /**
+     * Tests Content Search filtering with Field criterion on the file size modified field
+     *
+     * @dataProvider criteriaProviderModifiedFieldFileSize
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
+     * @param array $context
+     */
+    public function testFilterContentModifiedFieldFileSize(
+        Criterion $criterion,
+        $includesOne,
+        $includesTwo,
+        array $context
+    )
+    {
+        $this->assertFilterContentModifiedField(
+            $criterion,
+            $includesOne,
+            $includesTwo,
+            $context,
+            true,
+            "file_size"
+        );
+    }
+
+    /**
+     * Tests Content Search querying with Field criterion on the file size modified field
+     *
+     * @dataProvider criteriaProviderModifiedFieldFileSize
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
+     * @param array $context
+     */
+    public function testQueryContentModifiedFieldFileSize(
+        Criterion $criterion,
+        $includesOne,
+        $includesTwo,
+        array $context
+    )
+    {
+        $this->assertFilterContentModifiedField(
+            $criterion,
+            $includesOne,
+            $includesTwo,
+            $context,
+            false,
+            "file_size"
+        );
+    }
+
+    /**
+     * Tests Content Search sort with Field sort clause on the alternative text modified field
+     *
+     * @dataProvider sortClauseProvider
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     * @param boolean $ascending
+     * @param array $context
+     */
+    public function testSortContentModifiedFieldAlternativeText(
+        SortClause $sortClause,
+        $ascending,
+        array $context
+    )
+    {
+        $this->assertSortContentModifiedField(
+            $sortClause,
+            $ascending,
+            $context,
+            "alternative_text"
+        );
+    }
+
+    /**
+     * Tests Content Search sort with Field sort clause on the file size modified field
+     *
+     * @dataProvider sortClauseProvider
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     * @param boolean $ascending
+     * @param array $context
+     */
+    public function testSortContentModifiedFieldFieldSize(
+        SortClause $sortClause,
+        $ascending,
+        array $context
+    )
+    {
+        $this->assertSortContentModifiedField(
+            $sortClause,
+            $ascending,
+            $context,
+            "file_size"
+        );
     }
 }

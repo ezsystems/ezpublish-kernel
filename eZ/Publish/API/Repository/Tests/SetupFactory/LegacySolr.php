@@ -39,7 +39,7 @@ class LegacySolr extends Legacy
         return $repository;
     }
 
-    protected function getServiceContainer()
+    public function getServiceContainer()
     {
         if ( !isset( self::$serviceContainer ) )
         {

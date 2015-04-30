@@ -105,7 +105,7 @@ class FieldRange extends Field
 
         $fieldFilter = $this->getFieldFilter( $fieldFilters );
 
-        if ( $fieldFilters !== null )
+        if ( $fieldFilter !== null )
         {
             $filter["nested"]["filter"] = array(
                 "and" => array(
