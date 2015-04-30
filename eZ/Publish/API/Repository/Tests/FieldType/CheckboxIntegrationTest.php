@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class CheckboxIntegrationTest extends BaseIntegrationTest
+class CheckboxIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -310,5 +310,37 @@ class CheckboxIntegrationTest extends BaseIntegrationTest
                 new CheckboxValue( true )
             ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return false;
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return true;
+    }
+
+    protected function getSearchTargetValueOne()
+    {
+        // Handling Legacy Search Engine, which stores Checkbox value as integer
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            return (int)$this->getValidSearchValueOne();
+        }
+
+        return parent::getSearchTargetValueOne();
+    }
+
+    protected function getSearchTargetValueTwo()
+    {
+        // Handling Legacy Search Engine, which stores Checkbox value as integer
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
+        {
+            return (int)$this->getValidSearchValueTwo();
+        }
+
+        return parent::getSearchTargetValueTwo();
     }
 }
