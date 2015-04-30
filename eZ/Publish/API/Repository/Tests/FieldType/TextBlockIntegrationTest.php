@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  * @group integration
  * @group field-type
  */
-class TextBlockIntegrationTest extends BaseIntegrationTest
+class TextBlockIntegrationTest extends SearchBaseIntegrationTest
 {
     /**
      * Get name of tested field type
@@ -319,5 +319,15 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
             array( new TextBlockValue( 0 ) ),
             array( new TextBlockValue( "0" ) ),
         );
+    }
+
+    protected function getValidSearchValueOne()
+    {
+        return 'caution is the " path to \\mediocrity';
+    }
+
+    protected function getValidSearchValueTwo()
+    {
+        return "truth suffers from ' \\too much analysis";
     }
 }

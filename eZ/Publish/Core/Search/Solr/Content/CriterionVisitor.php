@@ -61,6 +61,9 @@ abstract class CriterionVisitor
         $endValue   = '*';
         $endBrace   = ']';
 
+        $start = $this->prepareValue( $start );
+        $end = $this->prepareValue( $end );
+
         switch ( $operator )
         {
             case Operator::GT:
@@ -91,6 +94,30 @@ abstract class CriterionVisitor
         }
 
         return "$startBrace$startValue TO $endValue$endBrace";
+    }
+
+    /**
+     * Converts given $value to the appropriate Solr representation.
+     *
+     * The value will be converted to string representation and escaped if needed.
+     *
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function prepareValue( $value )
+    {
+        switch ( gettype( $value ) )
+        {
+            case "boolean":
+                return ( $value ? "true" : "false" );
+
+            case "string":
+                return '"' . preg_replace( '/("|\\\)/', '\\\$1', $value ) . '"';
+
+            default:
+                return (string)$value;
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 parameters:
     ezpublish.fieldType.indexable.ezstring.class: eZ\Publish\Core\FieldType\TextLine\SearchField
+    ezpublish.fieldType.indexable.eztext.class: eZ\Publish\Core\FieldType\TextBlock\SearchField
     ezpublish.fieldType.indexable.ezprice.class: eZ\Publish\Core\FieldType\Price\SearchField
     ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
     ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
@@ -38,9 +39,8 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezfloat}
 
-    # TODO: define proper type
     ezpublish.fieldType.indexable.eztext:
-        class: %ezpublish.fieldType.indexable.ezstring.class%
+        class: %ezpublish.fieldType.indexable.eztext.class%
         tags:
             - {name: ezpublish.fieldType.indexable, alias: eztext}
 

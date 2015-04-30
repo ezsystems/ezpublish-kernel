@@ -63,9 +63,11 @@ class FieldIn extends Field
         $queries = array();
         foreach ( $criterion->value as $value )
         {
+            $preparedValue = $this->prepareValue( $value );
+
             foreach ( $fieldNames as $name )
             {
-                $queries[] = $name . ':"' . $value . '"';
+                $queries[] = $name . ':' . $preparedValue;
             }
         }
 

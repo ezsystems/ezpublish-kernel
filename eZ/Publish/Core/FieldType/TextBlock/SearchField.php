@@ -1,20 +1,20 @@
 <?php
 /**
- * File containing the Integer SearchField class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Integer;
+namespace eZ\Publish\Core\FieldType\TextBlock;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for Integer field type
+ * Indexable definition for TextBlock field type
  */
 class SearchField implements Indexable
 {
@@ -31,7 +31,7 @@ class SearchField implements Indexable
             new Search\Field(
                 'value',
                 $field->value->data,
-                new Search\FieldType\IntegerField()
+                new Search\FieldType\MultipleStringField()
             ),
         );
     }
@@ -44,7 +44,7 @@ class SearchField implements Indexable
     public function getIndexDefinition()
     {
         return array(
-            'value' => new Search\FieldType\IntegerField(),
+            'value' => new Search\FieldType\MultipleStringField(),
         );
     }
 
