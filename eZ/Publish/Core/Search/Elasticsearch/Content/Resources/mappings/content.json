@@ -216,6 +216,16 @@
                         "type": "geo_point"
                     }
                 }
+            },
+            {
+                "field_datetime": {
+                    "path_match": "fields_doc.*_dt",
+                    "match_mapping_type": "date",
+                    "mapping": {
+                        "type": "date",
+                        "index": "not_analyzed"
+                    }
+                }
             }
         ]
     }
