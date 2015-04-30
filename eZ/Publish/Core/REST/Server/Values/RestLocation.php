@@ -32,19 +32,12 @@ class RestLocation extends RestValue
     public $childCount;
 
     /**
-     * @var bool
-     */
-    private $includeContentInfo;
-
-    /**
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $childCount
-     * @param bool $includeContentInfo
      */
-    public function __construct( Location $location, $childCount, $includeContentInfo )
+    public function __construct( Location $location, $childCount )
     {
         $this->location = $location;
         $this->childCount = $childCount;
-        $this->includeContentInfo = $includeContentInfo;
     }
 }

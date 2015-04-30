@@ -37,28 +37,27 @@ class ViewInput extends CriterionParser
         $restViewInput = new RestViewInput();
 
         // identifier
-        if (!array_key_exists( 'identifier', $data )) {
+        if ( !array_key_exists( 'identifier', $data ) )
+        {
             throw new Exceptions\Parser( "Missing <identifier> attribute for <ViewInput>." );
         }
         $restViewInput->identifier = $data['identifier'];
 
         // query
-        if (!array_key_exists( 'Query', $data ) || !is_array( $data['Query'] )) {
+        if ( !array_key_exists( 'Query', $data ) || !is_array( $data['Query'] ) )
+        {
             throw new Exceptions\Parser( "Missing <Query> attribute for <ViewInput>." );
         }
 
-        if ( !isset( $data['Query']['_type'] ) || $data['Query']['_type'] == 'content' )
-        {
-            $query = new Query();
-        }
-        else if ( isset( $data['Query']['_type'] ) || $data['Query']['_type'] == 'location' )
+        if ( isset( $data['Query']['_type'] ) && $data['Query']['_type'] == 'location' )
         {
             $query = new LocationQuery();
         }
         else
         {
-            throw new Exceptions\Parser( "Unknown query type '{$data['Query']['_type']}'" );
+            $query = new Query();
         }
+
         $queryData = $data['Query'];
 
         // Criteria

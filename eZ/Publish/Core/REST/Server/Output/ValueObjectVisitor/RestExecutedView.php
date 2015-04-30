@@ -135,7 +135,8 @@ class RestExecutedView extends ValueObjectVisitor
         {
             return $this->mapContentSearchHit( $searchHit->valueObject );
         }
-        else if ( $searchHit->valueObject instanceof Location )
+
+        if ( $searchHit->valueObject instanceof Location )
         {
             return $this->mapLocationSearchHit( $searchHit->valueObject );
         }
