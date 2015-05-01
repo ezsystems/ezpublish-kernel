@@ -779,6 +779,67 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         );
     }
 
+    public function criteriaProviderModifiedFieldMimeType()
+    {
+        return $this->provideCriteria( "image/jpeg", "image/png" );
+    }
+
+    /**
+     * Tests Content Search filtering with Field criterion on the MIME type modified field
+     *
+     * @dataProvider criteriaProviderModifiedFieldMimeType
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
+     * @param array $context
+     */
+    public function testFilterContentModifiedFieldMimeType(
+        Criterion $criterion,
+        $includesOne,
+        $includesTwo,
+        array $context
+    )
+    {
+        $this->assertFilterContentModifiedField(
+            $criterion,
+            $includesOne,
+            $includesTwo,
+            $context,
+            true,
+            "mime_type"
+        );
+    }
+
+    /**
+     * Tests Content Search querying with Field criterion on the MIME type modified field
+     *
+     * @dataProvider criteriaProviderModifiedFieldMimeType
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
+     * @param array $context
+     */
+    public function testQueryContentModifiedFieldMimeType(
+        Criterion $criterion,
+        $includesOne,
+        $includesTwo,
+        array $context
+    )
+    {
+        $this->assertFilterContentModifiedField(
+            $criterion,
+            $includesOne,
+            $includesTwo,
+            $context,
+            false,
+            "mime_type"
+        );
+    }
+
     /**
      * Tests Content Search sort with Field sort clause on the alternative text modified field
      *
@@ -824,6 +885,30 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
             $ascending,
             $context,
             "file_size"
+        );
+    }
+
+    /**
+     * Tests Content Search sort with Field sort clause on the MIME type modified field
+     *
+     * @dataProvider sortClauseProvider
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     * @param boolean $ascending
+     * @param array $context
+     */
+    public function testSortContentModifiedFieldMimeType(
+        SortClause $sortClause,
+        $ascending,
+        array $context
+    )
+    {
+        $this->assertSortContentModifiedField(
+            $sortClause,
+            $ascending,
+            $context,
+            "mime_type"
         );
     }
 }

@@ -43,6 +43,11 @@ class SearchField implements Indexable
                 $field->value->data["fileSize"],
                 new Search\FieldType\IntegerField()
             ),
+            new Search\Field(
+                'mime_type',
+                $field->value->data["mime"],
+                new Search\FieldType\StringField()
+            ),
         );
     }
 
@@ -57,6 +62,7 @@ class SearchField implements Indexable
             "filename" => new Search\FieldType\StringField(),
             "alternative_text" => new Search\FieldType\StringField(),
             "file_size" => new Search\FieldType\IntegerField(),
+            'mime_type' => new Search\FieldType\StringField(),
         );
     }
 
