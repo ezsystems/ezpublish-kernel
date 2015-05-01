@@ -21,6 +21,7 @@ services:
             - @database_connection
             - []
             - @cache_clearer
+            - @filesystem
             - %kernel.cache_dir%
         tags:
             - { name: console.command }

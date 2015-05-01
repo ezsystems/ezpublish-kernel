@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 
 class InstallPlatformCommand extends Command
@@ -26,6 +27,9 @@ class InstallPlatformCommand extends Command
     /** @var \Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface */
     private $cacheClearer;
 
+    /** @var \Symfony\Component\Filesystem\Filesystem */
+    private $filesystem;
+
     /** @var string */
     private $cacheDir;
 
@@ -38,11 +42,12 @@ class InstallPlatformCommand extends Command
     const EXIT_UNKNOWN_INSTALL_TYPE = 6;
     const EXIT_MISSING_PERMISSIONS = 7;
 
-    public function __construct( Connection $db, array $installers, CacheClearerInterface $cacheClearer, $cacheDir )
+    public function __construct( Connection $db, array $installers, CacheClearerInterface $cacheClearer, Filesystem $filesystem, $cacheDir )
     {
         $this->db = $db;
         $this->installers = $installers;
         $this->cacheClearer = $cacheClearer;
+        $this->filesystem = $filesystem;
         $this->cacheDir = $cacheDir;
         parent::__construct();
     }
@@ -153,7 +158,17 @@ class InstallPlatformCommand extends Command
         }
 
         $output->writeln( sprintf( 'Clearing cache for directory <info>%s</info>', $this->cacheDir ) );
+        $oldCacheDir = $this->cacheDir . '_old';
+
+        if ( $this->filesystem->exists( $oldCacheDir ) )
+        {
+            $this->filesystem->remove( $oldCacheDir );
+        }
+
         $this->cacheClearer->clear( $this->cacheDir );
+
+        $this->filesystem->rename( $this->cacheDir, $oldCacheDir );
+        $this->filesystem->remove( $oldCacheDir );
     }
 
     /**
