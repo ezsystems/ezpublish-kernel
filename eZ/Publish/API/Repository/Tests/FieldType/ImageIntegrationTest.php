@@ -610,8 +610,8 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
     {
         return new ImageValue(
             array(
-                'fileName' => 'cafe-terrace-at-night.png',
-                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
+                'fileName' => 'cafe-terrace-at-night.jpg',
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
                 'alternativeText' => 'café terrace at night, also known as the cafe terrace on the place du forum',
                 'fileSize' => filesize( $path ),
             )
@@ -622,8 +622,8 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
     {
         return new ImageValue(
             array(
-                'fileName' => 'thatched-cottages-at-cordeville.jpg',
-                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.jpg' ),
+                'fileName' => 'thatched-cottages-at-cordeville.png',
+                'inputUri' => ( $path = __DIR__ . '/_fixtures/image.png' ),
                 'alternativeText' => 'chaumes de cordeville à auvers-sur-oise',
                 'fileSize' => filesize( $path ),
             )
@@ -779,6 +779,67 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         );
     }
 
+    public function criteriaProviderModifiedFieldMimeType()
+    {
+        return $this->provideCriteria( "image/jpeg", "image/png" );
+    }
+
+    /**
+     * Tests Content Search filtering with Field criterion on the MIME type modified field
+     *
+     * @dataProvider criteriaProviderModifiedFieldMimeType
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
+     * @param array $context
+     */
+    public function testFilterContentModifiedFieldMimeType(
+        Criterion $criterion,
+        $includesOne,
+        $includesTwo,
+        array $context
+    )
+    {
+        $this->assertFilterContentModifiedField(
+            $criterion,
+            $includesOne,
+            $includesTwo,
+            $context,
+            true,
+            "mime_type"
+        );
+    }
+
+    /**
+     * Tests Content Search querying with Field criterion on the MIME type modified field
+     *
+     * @dataProvider criteriaProviderModifiedFieldMimeType
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
+     * @param boolean $includesOne
+     * @param boolean $includesTwo
+     * @param array $context
+     */
+    public function testQueryContentModifiedFieldMimeType(
+        Criterion $criterion,
+        $includesOne,
+        $includesTwo,
+        array $context
+    )
+    {
+        $this->assertFilterContentModifiedField(
+            $criterion,
+            $includesOne,
+            $includesTwo,
+            $context,
+            false,
+            "mime_type"
+        );
+    }
+
     /**
      * Tests Content Search sort with Field sort clause on the alternative text modified field
      *
@@ -824,6 +885,30 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
             $ascending,
             $context,
             "file_size"
+        );
+    }
+
+    /**
+     * Tests Content Search sort with Field sort clause on the MIME type modified field
+     *
+     * @dataProvider sortClauseProvider
+     * @depends testCreateTestContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     * @param boolean $ascending
+     * @param array $context
+     */
+    public function testSortContentModifiedFieldMimeType(
+        SortClause $sortClause,
+        $ascending,
+        array $context
+    )
+    {
+        $this->assertSortContentModifiedField(
+            $sortClause,
+            $ascending,
+            $context,
+            "mime_type"
         );
     }
 }

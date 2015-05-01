@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\FieldType\Image;
+namespace eZ\Publish\Core\FieldType\Media;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\FieldType\Indexable;
 use eZ\Publish\SPI\Search;
 
 /**
- * Indexable definition for TextLine field type
+ * Indexable definition for Media field type
  */
 class SearchField implements Indexable
 {
@@ -29,23 +29,18 @@ class SearchField implements Indexable
     {
         return array(
             new Search\Field(
-                "filename",
-                $field->value->data["fileName"],
+                'file_name',
+                $field->value->externalData["fileName"],
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
-                "alternative_text",
-                $field->value->data["alternativeText"],
-                new Search\FieldType\StringField()
-            ),
-            new Search\Field(
-                "file_size",
-                $field->value->data["fileSize"],
+                'file_size',
+                $field->value->externalData["fileSize"],
                 new Search\FieldType\IntegerField()
             ),
             new Search\Field(
                 'mime_type',
-                $field->value->data["mime"],
+                $field->value->externalData["mimeType"],
                 new Search\FieldType\StringField()
             ),
         );
@@ -59,9 +54,8 @@ class SearchField implements Indexable
     public function getIndexDefinition()
     {
         return array(
-            "filename" => new Search\FieldType\StringField(),
-            "alternative_text" => new Search\FieldType\StringField(),
-            "file_size" => new Search\FieldType\IntegerField(),
+            'file_name' => new Search\FieldType\StringField(),
+            'file_size' => new Search\FieldType\IntegerField(),
             'mime_type' => new Search\FieldType\StringField(),
         );
     }
@@ -78,6 +72,6 @@ class SearchField implements Indexable
      */
     public function getDefaultField()
     {
-        return "filename";
+        return "file_name";
     }
 }
