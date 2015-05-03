@@ -1,6 +1,7 @@
 parameters:
     ezpublish.fieldType.indexable.ezstring.class: eZ\Publish\Core\FieldType\TextLine\SearchField
     ezpublish.fieldType.indexable.eztext.class: eZ\Publish\Core\FieldType\TextBlock\SearchField
+    ezpublish.fieldType.indexable.ezisbn.class: eZ\Publish\Core\FieldType\ISBN\SearchField
     ezpublish.fieldType.indexable.ezboolean.class: eZ\Publish\Core\FieldType\Checkbox\SearchField
     ezpublish.fieldType.indexable.ezdatetime.class: eZ\Publish\Core\FieldType\DateAndTime\SearchField
     ezpublish.fieldType.indexable.ezemail.class: eZ\Publish\Core\FieldType\EmailAddress\SearchField
@@ -93,9 +94,8 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezrichtext}
 
-    # TODO: define proper type
     ezpublish.fieldType.indexable.ezisbn:
-        class: %ezpublish.fieldType.indexable.ezstring.class%
+        class: %ezpublish.fieldType.indexable.ezisbn.class%
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezisbn}
 
