@@ -121,6 +121,16 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         return $this->getValidSearchValueTwo();
     }
 
+    protected function checkCustomFieldsSupport()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
+        {
+            $this->markTestSkipped(
+                "Legacy Search Engine does not support custom fields"
+            );
+        }
+    }
+
     /**
      * Creates and returns content with given $fieldData
      *
@@ -730,6 +740,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         $fieldName
     )
     {
+        $this->checkCustomFieldsSupport();
+
         $this->modifyFieldCriterion( $criterion, $fieldName );
 
         list( $repository, $contentOneId, $contentTwoId ) = $context;
@@ -757,6 +769,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     )
     {
         $setupFactory = $this->getSetupFactory();
+
+        $this->checkCustomFieldsSupport();
 
         if ( $setupFactory instanceof LegacySolr )
         {
