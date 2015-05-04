@@ -2120,6 +2120,8 @@ Create View
 :Method:  POST
 :Description: executes a query and returns view including the results
               The View_ input reflects the criteria model of the public API.
+              The "type" attribute of the Query element in the ViewInput can be used to choose between a
+              Location ("location") or a Content ("content", the default) Query.
 :Headers:
     :Accept:
         :application/vnd.ez.api.View+xml: the view in xml format (see View_)
@@ -2159,7 +2161,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
     <?xml version="1.0" encoding="UTF-8"?>
     <ViewInput>
       <identifier>TitleView</identifier>
-      <Query>
+      <Query type="content">
         <Criteria>
           <ContentTypeIdentifierCriterion>image</ContentTypeIdentifierCriterion>
           <SectionIdentifierCriterion>media</SectionIdentifierCriterion>
@@ -7150,6 +7152,7 @@ View XML Schema
       </xsd:complexType>
 
       <xsd:complexType name="queryType">
+        <xsd:attribute name="type" type="xsd:string" default="content"/>
         <xsd:all>
           <xsd:element name="Criterion" type="criterionType" />
           <xsd:element name="limit" type="xsd:int" />
