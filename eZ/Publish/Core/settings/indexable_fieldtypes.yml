@@ -9,6 +9,7 @@ parameters:
     ezpublish.fieldType.indexable.ezmedia.class: eZ\Publish\Core\FieldType\Media\SearchField
     ezpublish.fieldType.indexable.ezobjectrelation.class: eZ\Publish\Core\FieldType\Relation\SearchField
     ezpublish.fieldType.indexable.ezbinaryfile.class: eZ\Publish\Core\FieldType\BinaryFile\SearchField
+    ezpublish.fieldType.indexable.ezdate.class: eZ\Publish\Core\FieldType\Date\SearchField
     ezpublish.fieldType.indexable.ezprice.class: eZ\Publish\Core\FieldType\Price\SearchField
     ezpublish.fieldType.indexable.ezgmaplocation.class: eZ\Publish\Core\FieldType\MapLocation\SearchField
     ezpublish.fieldType.indexable.ezcountry.class: eZ\Publish\Core\FieldType\Country\SearchField
@@ -37,6 +38,11 @@ services:
         class: %ezpublish.fieldType.indexable.ezcountry.class%
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezcountry}
+
+    ezpublish.fieldType.indexable.ezdate:
+        class: %ezpublish.fieldType.indexable.ezdate.class%
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezdate}
 
     ezpublish.fieldType.indexable.ezinteger:
         class: %ezpublish.fieldType.indexable.ezinteger.class%
@@ -115,7 +121,6 @@ services:
         tags:
             - {name: ezpublish.fieldType.indexable, alias: ezuser}
             - {name: ezpublish.fieldType.indexable, alias: ezkeyword}
-            - {name: ezpublish.fieldType.indexable, alias: ezdate}
             - {name: ezpublish.fieldType.indexable, alias: ezinisetting}
             - {name: ezpublish.fieldType.indexable, alias: ezpackage}
             - {name: ezpublish.fieldType.indexable, alias: ezurl}
