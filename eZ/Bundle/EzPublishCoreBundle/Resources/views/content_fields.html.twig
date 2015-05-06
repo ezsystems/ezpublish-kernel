@@ -201,14 +201,11 @@
 {% endspaceless %}
 {% endblock %}
 
-{# @todo: handle the unit of the fileSize (si operator in legacy template engine) #}
 {% block ezbinaryfile_field %}
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
-        {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
-                        ~ '/version/' ~ contentInfo.currentVersionNo ~  "/file/"
-                        ~ field.value.fileName|escape( 'url' ) %}
-        <a href="{{ path( 'ez_legacy', {'module_uri': uri} ) }}"
+        {% set route_reference = ez_route( 'ez_content_download', { 'content': content, 'fieldIdentifier': field.fieldDefIdentifier } ) %}
+        <a href="{{ path( route_reference ) }}"
             {{ block( 'field_attributes' ) }}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize|ez_file_size( 1 ) }})
     {% endif %}
 {% endspaceless %}
@@ -219,9 +216,8 @@
 {% spaceless %}
     {% set type = fieldSettings.mediaType %}
     {% set value = field.value %}
-    {% set uri = 'content/download/' ~ contentInfo.id ~ '/' ~ field.id
-                    ~ '/' ~ value.fileName|escape( 'url' ) %}
-    {% set download = path( 'ez_legacy', {'module_uri': uri } ) %}
+    {% set route_reference = ez_route( 'ez_content_download', {'content': content, 'fieldIdentifier': field.fieldDefIdentifier} ) %}
+    {% set download = path( route_reference ) %}
     {% set width = value.width > 0 ? 'width="' ~ value.width ~ '"' : "" %}
     {% set height = value.height > 0 ? 'height="' ~ value.height ~ '"' : "" %}
     <div {{ block( 'field_attributes' ) }}>
