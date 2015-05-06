@@ -6,7 +6,7 @@
 Welcome to the *eZ Platform Kernel* (also known as *eZ Publish 5.x Platform Kernel*), the hearth of eZ Platform, a modern
 CMS built on top of Symfony (Full Stack) Framework. Containing an advance Content Model it allows you to structure any
 kind of content, or content like data in a future proof Content Repository. It furthermore aims to provide additional
-features for the MVC layer (Symfony), to increased  your productivity.
+features for the MVC layer (Symfony), to increase  your productivity.
 
 This code repository contains several layers of API's and implementation of them. *Kernel* refers to this being the core,
 and not the *Full Stack* with bundles, user interfaces and installers all configured to make the full application.
@@ -17,7 +17,7 @@ and not the *Full Stack* with bundles, user interfaces and installers all config
 
 eZ Platform is a bottom up rewrite of eZ Publish, so a conservative approach where taken on backwards compatibility
 by first introducing it in 2012 in *eZ Publish Platform 5.0* by bundling both *Legacy* ("4.x") Stack & *Platform* (formerly 5.x, or "new")
-Stack together. Starting 2015 with *eZ Platform* this is no longer the case, the *Platform* has matured to become it's own
+Stack together. Starting 2015 with *eZ Platform* this is no longer the case, the *Platform* has matured to become its own
 fully modern CMS/CMF, and can be used to solve your needs without having to also learn *Legacy*.
 
 ### Getting a full install (*Full Stack*)
@@ -96,7 +96,7 @@ Short:
   * Run unit tests and integration test before commits
   * Make sure you follow our [coding standards](https://github.com/ezsystems/ezcs)
 
-For further information please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here : ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
+For further information please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here: ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
 
 ## Discussing/Exchanging
 A dedicated forum has been set-up to discuss all PHP API-related topics : http://share.ez.no/forums/new-php-api
