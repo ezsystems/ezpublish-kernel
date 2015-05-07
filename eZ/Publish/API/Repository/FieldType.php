@@ -10,6 +10,9 @@
 
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\SPI\FieldType\Value;
+
 /**
  * Interface that FieldTypes expose to the public API
  *
@@ -197,4 +200,38 @@ interface FieldType
      * @return mixed
      */
     public function validatorConfigurationFromHash( $validatorConfigurationHash );
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * This methods determines if the given $validatorConfiguration is
+     * structurally correct and complies to the validator configuration schema as defined in FieldType.
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration );
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * This methods determines if the given $fieldSettings are structurally
+     * correct and comply to the settings schema as defined in FieldType.
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings );
+
+    /**
+     * Validates a field value based on the validator configuration in the field definition
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
+     * @param \eZ\Publish\SPI\FieldType\Value $value The field value for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValue( FieldDefinition $fieldDef, Value $value );
 }

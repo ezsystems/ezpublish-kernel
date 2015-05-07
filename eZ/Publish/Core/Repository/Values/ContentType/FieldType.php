@@ -10,7 +10,9 @@
 namespace eZ\Publish\Core\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\FieldType as FieldTypeInterface;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldTypeInterface;
+use eZ\Publish\SPI\FieldType\Value;
 
 /**
  * This class represents a FieldType available to Public API users
@@ -250,5 +252,48 @@ class FieldType implements FieldTypeInterface
     public function validatorConfigurationFromHash( $validatorConfigurationHash )
     {
         return $this->internalFieldType->validatorConfigurationFromHash( $validatorConfigurationHash );
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * This methods determines if the given $validatorConfiguration is
+     * structurally correct and complies to the validator configuration schema as defined in FieldType.
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration( $validatorConfiguration )
+    {
+        return $this->internalFieldType->validateValidatorConfiguration( $validatorConfiguration );
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct
+     *
+     * This methods determines if the given $fieldSettings are structurally
+     * correct and comply to the settings schema as defined in FieldType.
+     *
+     * @param mixed $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings( $fieldSettings )
+    {
+        return $this->internalFieldType->validateFieldSettings( $fieldSettings );
+    }
+
+    /**
+     * Validates a field value based on the validator configuration in the field definition
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDef The field definition of the field
+     * @param \eZ\Publish\SPI\FieldType\Value $value The field value for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValue( APIFieldDefinition $fieldDef, Value $value )
+    {
+        return $this->internalFieldType->validate( $fieldDef, $value );
     }
 }
