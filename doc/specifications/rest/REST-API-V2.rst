@@ -2120,8 +2120,6 @@ Create View
 :Method:  POST
 :Description: executes a query and returns view including the results
               The View_ input reflects the criteria model of the public API.
-              The "type" attribute of the Query element in the ViewInput can be used to choose between a
-              Location ("location") or a Content ("content", the default) Query.
 :Headers:
     :Accept:
         :application/vnd.ez.api.View+xml: the view in xml format (see View_)
@@ -2129,6 +2127,10 @@ Create View
     :Content-Type:
         :application/vnd.ez.api.ViewInput+xml: the view input in xml format (see View_)
         :application/vnd.ez.api.ViewInput+json: the view input in json format (see View_)
+:Experimental:
+    :Query Type:
+        By default, the Query_ referenced in the ViewInput_ is considered as a Content Query. A Location Query
+        can be used by setting the Query's node "type" attribute to "location".
 :Response: 200 OK
            Note : when persistence will be implemented, it will change to 201 Created
 
