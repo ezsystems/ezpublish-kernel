@@ -59,7 +59,7 @@ class Field extends Criterion implements CriterionInterface, CustomFieldInterfac
     }
 
     /**
-     * Retun custom field
+     * Return custom field
      *
      * If no custom field is set, return null
      *
