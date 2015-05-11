@@ -152,7 +152,8 @@ class Type extends FieldType
             $validationErrors[] = new ValidationError(
                 "ISBN-10 must be 10 character length",
                 null,
-                array()
+                array(),
+                'isbn'
             );
         }
         // ISBN-10 check
@@ -163,7 +164,8 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     "ISBN value must be in a valid ISBN-10 format",
                     null,
-                    array()
+                    array(),
+                    'isbn'
                 );
             }
         }
@@ -175,7 +177,8 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     $error,
                     null,
-                    array()
+                    array(),
+                    'isbn'
                 );
             }
         }
@@ -257,7 +260,8 @@ class Type extends FieldType
                     null,
                     array(
                         "setting" => $name
-                    )
+                    ),
+                    "[$name]"
                 );
                 continue;
             }
@@ -272,7 +276,8 @@ class Type extends FieldType
                             null,
                             array(
                                 "setting" => $name
-                            )
+                            ),
+                            "[$name]"
                         );
                     }
                     break;

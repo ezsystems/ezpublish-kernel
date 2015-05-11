@@ -235,7 +235,8 @@ class Type extends FieldType
                                 null,
                                 array(
                                     "setting" => $name
-                                )
+                                ),
+                                "[$name]"
                             );
                         }
                         break;
@@ -252,7 +253,8 @@ class Type extends FieldType
                                 null,
                                 array(
                                     "setting" => $name
-                                )
+                                ),
+                                "[$name]"
                             );
                         }
                         break;
@@ -269,7 +271,8 @@ class Type extends FieldType
                                         "setting" => $name,
                                         "defaultType" => "defaultType",
                                         "DEFAULT_CURRENT_DATE_ADJUSTED" => "DEFAULT_CURRENT_DATE_ADJUSTED"
-                                    )
+                                    ),
+                                    "[$name]"
                                 );
                             }
                             else if ( !( $value instanceof \DateInterval ) )
@@ -279,7 +282,8 @@ class Type extends FieldType
                                     null,
                                     array(
                                         "setting" => $name
-                                    )
+                                    ),
+                                    "[$name]"
                                 );
                             }
                         }
@@ -293,7 +297,8 @@ class Type extends FieldType
                     null,
                     array(
                         "setting" => $name
-                    )
+                    ),
+                    "[$name]"
                 );
             }
         }

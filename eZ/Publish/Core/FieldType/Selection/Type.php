@@ -67,7 +67,8 @@ class Type extends FieldType
                                 "fieldType" => $this->getFieldTypeIdentifier(),
                                 "setting"   => $settingKey,
                                 "type"      => "bool",
-                            )
+                            ),
+                            "[$settingKey]"
                         );
                     }
                     break;
@@ -81,7 +82,8 @@ class Type extends FieldType
                                 "fieldType" => $this->getFieldTypeIdentifier(),
                                 "setting"   => $settingKey,
                                 "type"      => "hash",
-                            )
+                            ),
+                            "[$settingKey]"
                         );
                     }
                     break;
@@ -91,7 +93,8 @@ class Type extends FieldType
                         null,
                         array(
                             "setting" => $settingKey
-                        )
+                        ),
+                        "[$settingKey]"
                     );
             }
         }
@@ -202,7 +205,8 @@ class Type extends FieldType
             $validationErrors[] = new ValidationError(
                 "Field definition does not allow multiple options to be selected.",
                 null,
-                array()
+                array(),
+                'selection'
             );
         }
 
@@ -215,7 +219,8 @@ class Type extends FieldType
                     null,
                     array(
                         "index" => $optionIndex
-                    )
+                    ),
+                    'selection'
                 );
             }
         }

@@ -169,13 +169,13 @@ class Type extends FieldType
 
         if ( isset( $fieldValue->inputUri ) && !getimagesize( $fieldValue->inputUri ) )
         {
-            $errors[] = new ValidationError( "A valid image file is required." );
+            $errors[] = new ValidationError( "A valid image file is required.", null, array(), 'inputUri' );
         }
 
         // BC: Check if file is a valid image if the value of 'id' matches a local file
         if ( isset( $fieldValue->id ) && file_exists( $fieldValue->id ) && !getimagesize( $fieldValue->id ) )
         {
-            $errors[] = new ValidationError( "A valid image file is required." );
+            $errors[] = new ValidationError( "A valid image file is required.", null, array(), 'id' );
         }
 
         foreach ( (array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters )
@@ -197,7 +197,8 @@ class Type extends FieldType
                             "The file size cannot exceed %size% bytes.",
                             array(
                                 "size" => $parameters['maxFileSize'],
-                            )
+                            ),
+                            'fileSize'
                         );
                     }
                     break;
@@ -230,7 +231,8 @@ class Type extends FieldType
                             array(
                                 "validator" => $validatorIdentifier,
                                 "parameter" => 'maxFileSize',
-                            )
+                            ),
+                            "[$validatorIdentifier]"
                         );
                         break;
                     }
@@ -243,7 +245,8 @@ class Type extends FieldType
                                 "validator" => $validatorIdentifier,
                                 "parameter" => 'maxFileSize',
                                 "type" => 'integer',
-                            )
+                            ),
+                            "[$validatorIdentifier][maxFileSize]"
                         );
                     }
                     break;
@@ -253,7 +256,8 @@ class Type extends FieldType
                         null,
                         array(
                             "validator" => $validatorIdentifier
-                        )
+                        ),
+                        "[$validatorIdentifier]"
                     );
             }
         }

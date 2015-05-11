@@ -331,8 +331,9 @@ class ISBNTest extends FieldTypeTest
                 new ISBNValue( "9789722514095" ),
                 array(
                     new ValidationError(
-                        "ISBN-10 must be 10 character length"
-                    ),
+                        "ISBN-10 must be 10 character length",
+                        null, array(), 'isbn'
+                    )
                 ),
             ),
         );

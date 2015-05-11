@@ -321,7 +321,8 @@ abstract class Type extends FieldType
                             "The file size cannot exceed %size% bytes.",
                             array(
                                 "size" => $parameters['maxFileSize'],
-                            )
+                            ),
+                            'fileSize'
                         );
                     }
                     break;
@@ -354,7 +355,8 @@ abstract class Type extends FieldType
                             array(
                                 "validator" => $validatorIdentifier,
                                 "parameter" => 'maxFileSize',
-                            )
+                            ),
+                            "[$validatorIdentifier][maxFileSize]"
                         );
                         break;
                     }
@@ -367,6 +369,7 @@ abstract class Type extends FieldType
                                 "validator" => $validatorIdentifier,
                                 "parameter" => 'maxFileSize',
                                 "type" => 'integer',
+                                "[$validatorIdentifier][maxFileSize]"
                             )
                         );
                     }
@@ -377,7 +380,8 @@ abstract class Type extends FieldType
                         null,
                         array(
                             "validator" => $validatorIdentifier
-                        )
+                        ),
+                        "[$validatorIdentifier]"
                     );
             }
         }

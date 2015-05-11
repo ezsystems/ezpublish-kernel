@@ -147,7 +147,8 @@ class Type extends FieldType
             $validationErrors[] = new ValidationError(
                 "Field definition does not allow multiple countries to be selected.",
                 null,
-                array()
+                array(),
+                'countries'
             );
         }
 
@@ -160,7 +161,8 @@ class Type extends FieldType
                     null,
                     array(
                         "alpha2" => $alpha2
-                    )
+                    ),
+                    'countries'
                 );
             }
         }
@@ -270,7 +272,8 @@ class Type extends FieldType
                     null,
                     array(
                         "setting" => $name
-                    )
+                    ),
+                    "[$name]"
                 );
                 continue;
             }
@@ -285,7 +288,8 @@ class Type extends FieldType
                             null,
                             array(
                                 "setting" => $name
-                            )
+                            ),
+                            "[$name]"
                         );
                     }
                     break;

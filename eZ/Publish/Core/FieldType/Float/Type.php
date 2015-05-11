@@ -56,7 +56,8 @@ class Type extends FieldType
                     null,
                     array(
                         "validator" => $validatorIdentifier
-                    )
+                    ),
+                    "[$validatorIdentifier]"
                 );
 
                 continue;
@@ -75,7 +76,8 @@ class Type extends FieldType
                                 null,
                                 array(
                                     "parameter" => $name
-                                )
+                                ),
+                                "[$validatorIdentifier][$name]"
                             );
                         }
                         break;
@@ -85,7 +87,8 @@ class Type extends FieldType
                             null,
                             array(
                                 "parameter" => $name
-                            )
+                            ),
+                            "[$validatorIdentifier][$name]"
                         );
                 }
             }
@@ -128,7 +131,8 @@ class Type extends FieldType
                 null,
                 array(
                     "size" => $constraints['maxFloatValue']
-                )
+                ),
+                'value'
             );
         }
 
@@ -140,7 +144,8 @@ class Type extends FieldType
                 null,
                 array(
                     "size" => $constraints['minFloatValue']
-                )
+                ),
+                'value'
             );
         }
 

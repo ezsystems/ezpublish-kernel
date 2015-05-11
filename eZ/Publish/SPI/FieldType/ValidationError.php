@@ -22,5 +22,25 @@ use eZ\Publish\API\Repository\Translatable;
  */
 interface ValidationError extends Translatable
 {
+    /**
+     * Sets the target element on which the error occurred.
+     *
+     * E.g. Property of a Field value which didn't validate against validation.
+     * Can be a property path compatible with Symfony PropertyAccess component.
+     *
+     * Examples:
+     * - "[StringLengthValidator][minStringLength]" => Target is "minStringLength" key under "StringLengthValidator" key (fieldtype validator configuration)
+     * - "my_field_definition_identifier"
+     *
+     * @param string $target
+     */
+    public function setTarget( $target );
+
+    /**
+     * Returns the target element on which the error occurred.
+     *
+     * @return string
+     */
+    public function getTarget();
 }
 

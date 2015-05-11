@@ -49,7 +49,8 @@ class Type extends FieldType
                     null,
                     array(
                         "validator" => $validatorIdentifier
-                    )
+                    ),
+                    "[$validatorIdentifier]"
                 );
                 continue;
             }

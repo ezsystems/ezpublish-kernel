@@ -103,7 +103,8 @@ class Type extends BaseType
                                 null,
                                 array(
                                     "setting" => $name
-                                )
+                                ),
+                                "[$name]"
                             );
                         }
                         break;
@@ -116,7 +117,8 @@ class Type extends BaseType
                     null,
                     array(
                         "setting" => $name
-                    )
+                    ),
+                    "[$name]"
                 );
             }
         }

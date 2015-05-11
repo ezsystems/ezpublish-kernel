@@ -524,7 +524,8 @@ class SelectionTest extends FieldTypeTest
                 new SelectionValue( array( 0, 1 ) ),
                 array(
                     new ValidationError(
-                        "Field definition does not allow multiple options to be selected."
+                        "Field definition does not allow multiple options to be selected.",
+                        null, array(), 'selection'
                     ),
                 ),
             ),
@@ -542,7 +543,8 @@ class SelectionTest extends FieldTypeTest
                         null,
                         array(
                             "index" => 3
-                        )
+                        ),
+                        'selection'
                     ),
                 ),
             ),

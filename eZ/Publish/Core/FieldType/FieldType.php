@@ -162,7 +162,8 @@ abstract class FieldType implements FieldTypeInterface
                 null,
                 array(
                     "validator" => $validatorIdentifier
-                )
+                ),
+                "[$validatorIdentifier]"
             );
         }
 
@@ -225,7 +226,8 @@ abstract class FieldType implements FieldTypeInterface
                     null,
                     array(
                         "fieldType" => $this->getFieldTypeIdentifier()
-                    )
+                    ),
+                    'fieldType'
                 )
             );
         }
