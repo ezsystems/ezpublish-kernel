@@ -19,6 +19,7 @@ parameters:
     ezpublish.twig.extension.filesize.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FileSizeExtension
     ezpublish.twig.extension.filesize.suffixes: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB']
     ezpublish.templating.extension.routing.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension
+    ezpublish.twig.extension.field_rendering.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension
 
     assetic.asset_factory.class: eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory
 
@@ -37,8 +38,6 @@ services:
         class: %ezpublish.twig.extension.content.class%
         arguments:
             - @ezpublish.api.repository
-            - @ezpublish.config.resolver
-            - @ezpublish.fieldtype.parameterproviderregistry
             - @ezpublish.fieldtype.ezxmltext.converter.html5
             - @ezpublish.fieldType.ezrichtext.converter.output.xhtml5
             - @ezpublish.fieldType.ezrichtext.converter.edit.xhtml5
@@ -121,4 +120,14 @@ services:
         arguments: [@ezpublish.route_reference.generator]
         tags:
             - {name: twig.extension}
+
+    ezpublish.twig.extension.field_rendering:
+        class: %ezpublish.twig.extension.field_rendering.class%
+        arguments:
+            - @ezpublish.config.resolver
+            - @ezpublish.api.service.content_type
+            - @ezpublish.fieldType.parameterProviderRegistry
+            - @ezpublish.translation_helper
+        tags:
+            - { name: twig.extension }
 

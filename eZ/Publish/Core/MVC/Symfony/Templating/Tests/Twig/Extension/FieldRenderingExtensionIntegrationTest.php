@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentExtensionIntegrationTest class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,58 +9,52 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
-use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension;
-use eZ\Publish\Core\Helper\TranslationHelper;
-use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\Repository\Values\Content\Content;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension;
+use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 
-/**
- * Integration tests for ContentExtension templates
- *
- * Tests ContentExtension in context of site with "fre-FR, eng-US" configured as languages.
- *
- * @package eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension
- */
-class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
+class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
 {
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $fieldHelperMock;
-
     private $fieldDefinitions = array();
 
     public function getExtensions()
     {
-        $this->fieldHelperMock = $this->getMockBuilder( 'eZ\\Publish\\Core\\Helper\\FieldHelper' )
-            ->disableOriginalConstructor()->getMock();
         $configResolver = $this->getConfigResolverMock();
 
         return array(
-            new ContentExtension(
-                $this->getRepositoryMock(),
-                $this->getMockBuilder( 'eZ\Publish\Core\FieldType\XmlText\Converter\Html5' )->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\RichText\\Converter' )->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\RichText\\Converter' )->disableOriginalConstructor()->getMock(),
-                $this->getMock( 'eZ\Publish\SPI\Variation\VariationHandler' ),
+            new FieldRenderingExtension(
+                $configResolver,
+                $this->getContentTypeServiceMock(),
+                $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface' ),
                 new TranslationHelper(
                     $configResolver,
                     $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
                     array(),
                     $this->getMock( 'Psr\Log\LoggerInterface' )
-                ),
-                $this->fieldHelperMock
+                )
             )
         );
     }
 
     public function getFixturesDir()
     {
-        return dirname( __FILE__ ) . '/_fixtures/content_functions/';
+        return dirname( __FILE__ ) . '/_fixtures/field_rendering_functions/';
+    }
+
+    public function getFieldDefinition( $typeIdentifier, $id = null, $settings = array() )
+    {
+        return new FieldDefinition(
+            array(
+                'id' => $id,
+                'fieldSettings' => $settings,
+                'fieldTypeIdentifier' => $typeIdentifier
+            )
+        );
     }
 
     /**
@@ -119,6 +113,11 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
 
     }
 
+    private function getTemplatePath( $tpl )
+    {
+        return 'templates/' . $tpl;
+    }
+
     private function getConfigResolverMock()
     {
         $mock = $this->getMock(
@@ -136,35 +135,47 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
                             null,
                             array( 'fre-FR', 'eng-US' )
                         ),
+                        array(
+                            'field_templates',
+                            null,
+                            null,
+                            array(
+                                array(
+                                    'template' => $this->getTemplatePath( 'fields_override1.html.twig' ),
+                                    'priority' => 10
+                                ),
+                                array(
+                                    'template' => $this->getTemplatePath( 'fields_default.html.twig' ),
+                                    'priority' => 0
+                                ),
+                                array(
+                                    'template' => $this->getTemplatePath( 'fields_override2.html.twig' ),
+                                    'priority' => 20
+                                ),
+                            )
+                        ),
+                        array(
+                            'fielddefinition_settings_templates',
+                            null,
+                            null,
+                            array(
+                                array(
+                                    'template' => $this->getTemplatePath( 'settings_override1.html.twig' ),
+                                    'priority' => 10
+                                ),
+                                array(
+                                    'template' => $this->getTemplatePath( 'settings_default.html.twig' ),
+                                    'priority' => 0
+                                ),
+                                array(
+                                    'template' => $this->getTemplatePath( 'settings_override2.html.twig' ),
+                                    'priority' => 20
+                                ),
+                            )
+                        )
                     )
                 )
             );
-        return $mock;
-    }
-
-    protected function getField( $isEmpty )
-    {
-        $field = new Field( array( 'fieldDefIdentifier' => 'testfield', 'value' => null ) );
-
-        $this->fieldHelperMock
-            ->expects( $this->once() )
-            ->method( 'isFieldEmpty' )
-            ->will( $this->returnValue( $isEmpty ) );
-
-        return $field;
-    }
-
-    /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getRepositoryMock()
-    {
-        $mock = $this->getMock( "eZ\\Publish\\API\\Repository\\Repository" );
-
-        $mock->expects( $this->any() )
-            ->method( "getContentTypeService" )
-            ->will( $this->returnValue( $this->getContentTypeServiceMock() ) );
-
         return $mock;
     }
 
