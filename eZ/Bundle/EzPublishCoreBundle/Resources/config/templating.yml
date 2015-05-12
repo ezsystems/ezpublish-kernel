@@ -117,8 +117,8 @@ services:
             - {name: twig.extension}
 
     ezpublish.templating.extension.routing:
-      class: %ezpublish.templating.extension.routing.class%
-      arguments: [@ezpublish.route_reference.generator]
-      tags:
-        - {name: twig.extension}
+        class: %ezpublish.templating.extension.routing.class%
+        arguments: [@ezpublish.route_reference.generator]
+        tags:
+            - {name: twig.extension}
 
