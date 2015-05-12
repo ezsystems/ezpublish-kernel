@@ -17,6 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Section;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;
 use eZ\Publish\SPI\Search\FieldType;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
@@ -35,6 +36,13 @@ class TranslationDocumentMapper implements DocumentMapper
      * @var \eZ\Publish\Core\Search\Common\FieldRegistry
      */
     protected $fieldRegistry;
+
+    /**
+     * Content handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Handler
+     */
+    protected $contentHandler;
 
     /**
      * Location handler
@@ -75,6 +83,7 @@ class TranslationDocumentMapper implements DocumentMapper
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Common\FieldRegistry $fieldRegistry
+     * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
@@ -83,6 +92,7 @@ class TranslationDocumentMapper implements DocumentMapper
      */
     public function __construct(
         FieldRegistry $fieldRegistry,
+        ContentHandler $contentHandler,
         LocationHandler $locationHandler,
         ContentTypeHandler $contentTypeHandler,
         ObjectStateHandler $objectStateHandler,
@@ -91,6 +101,7 @@ class TranslationDocumentMapper implements DocumentMapper
     )
     {
         $this->fieldRegistry = $fieldRegistry;
+        $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
@@ -111,10 +122,15 @@ class TranslationDocumentMapper implements DocumentMapper
         $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
         $mainLocation = null;
         $isSomeLocationVisible = false;
-        $locationDocuments = array();
+        $locationData = array();
+
         foreach ( $locations as $location )
         {
-            $locationDocuments[] = $this->mapLocation( $location, $content, $section );
+            $locationData["ids"][] = $location->id;
+            $locationData["parent_ids"][] = $location->parentId;
+            $locationData["remote_ids"][] = $location->remoteId;
+            $locationData["path_strings"][] = $location->pathString;
+            $locationData["depths"][] = $location->depth;
 
             if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
             {
@@ -228,11 +244,40 @@ class TranslationDocumentMapper implements DocumentMapper
                 new FieldType\BooleanField()
             ),
             new Field(
-                'some_location_visible',
+                'location_visible',
                 $isSomeLocationVisible,
                 new FieldType\BooleanField()
             ),
         );
+
+        if ( !empty( $locationData ) )
+        {
+            $fields[] = new Field(
+                'location_id',
+                $locationData["ids"],
+                new FieldType\MultipleIdentifierField()
+            );
+            $fields[] = new Field(
+                'location_parent_id',
+                $locationData["parent_ids"],
+                new FieldType\MultipleIdentifierField()
+            );
+            $fields[] = new Field(
+                'location_remote_id',
+                $locationData["remote_ids"],
+                new FieldType\MultipleIdentifierField()
+            );
+            $fields[] = new Field(
+                'location_path_string',
+                $locationData["path_strings"],
+                new FieldType\MultipleIdentifierField()
+            );
+            $fields[] = new Field(
+                'location_depth',
+                $locationData["depths"],
+                new FieldType\MultipleIntegerField()
+            );
+        }
 
         if ( $mainLocation !== null )
         {
@@ -273,15 +318,6 @@ class TranslationDocumentMapper implements DocumentMapper
             );
         }
 
-        $objectStateIds = array();
-        foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
-        {
-            $objectStateIds[] = $this->objectStateHandler->getContentState(
-                $content->versionInfo->contentInfo->id,
-                $objectStateGroup->id
-            )->id;
-        }
-
         $contentType = $this->contentTypeHandler->load( $content->versionInfo->contentInfo->contentTypeId );
         $fields[] = new Field(
             'group',
@@ -291,12 +327,11 @@ class TranslationDocumentMapper implements DocumentMapper
 
         $fields[] = new Field(
             'object_state',
-            $objectStateIds,
+            $this->getObjectStateIds( $content->versionInfo->contentInfo->id ),
             new FieldType\MultipleIdentifierField()
         );
 
         $fieldSets = $this->mapContentFields( $content, $contentType );
-
         $documents = array();
 
         foreach ( $fieldSets as $languageCode => $translationFields )
@@ -324,7 +359,6 @@ class TranslationDocumentMapper implements DocumentMapper
                 array(
                     "languageCode" => $languageCode,
                     "fields" => array_merge( $fields, $translationFields ),
-                    "documents" => $locationDocuments,
                 )
             );
         }
@@ -377,19 +411,12 @@ class TranslationDocumentMapper implements DocumentMapper
         return $fieldSets;
     }
 
-    /**
-     * Maps given Location to a Document.
-     *
-     * Returned Document represents a "parent" Location document searchable with Location Search.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param \eZ\Publish\SPI\Persistence\Content\Section $section
-     *
-     * @return \eZ\Publish\SPI\Search\Document
-     */
-    protected function mapLocation( Location $location, Content $content, Section $section )
+    public function mapLocation( Location $location )
     {
+        $contentInfo = $this->contentHandler->loadContentInfo( $location->contentId );
+        $content = $this->contentHandler->load( $location->contentId, $contentInfo->currentVersionNo );
+        $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
+
         $fields = array(
             new Field(
                 'id',
@@ -422,11 +449,6 @@ class TranslationDocumentMapper implements DocumentMapper
                 new FieldType\IdentifierField()
             ),
             new Field(
-                'content_id',
-                $location->contentId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
                 'parent_id',
                 $location->parentId,
                 new FieldType\IdentifierField()
@@ -456,40 +478,144 @@ class TranslationDocumentMapper implements DocumentMapper
                 ( $location->id == $content->versionInfo->contentInfo->mainLocationId ),
                 new FieldType\BooleanField()
             ),
-            // Note: denormalized Content data is prefixed with 'content_' to avoid
-            // conflicts when using parent filter
-            new Field(
-                'content_name',
-                $content->versionInfo->contentInfo->name,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'content_section_identifier',
-                $section->identifier,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'content_section_name',
-                $section->name,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'content_modified',
-                $content->versionInfo->contentInfo->modificationDate,
-                new FieldType\DateField()
-            ),
-            new Field(
-                'content_published',
-                $content->versionInfo->contentInfo->publicationDate,
-                new FieldType\DateField()
-            ),
         );
 
-        return new Document(
-            array(
-                "fields" => $fields
-            )
+        // UserGroups and Users are Content, but permissions cascade is achieved through
+        // Locations hierarchy. We index all ancestor Location Content ids of all
+        // Locations of an owner.
+        $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds( $contentInfo->ownerId );
+        // Add owner user id as it can also be considered as user group.
+        $ancestorLocationsContentIds[] = $contentInfo->ownerId;
+        $fields[] = new Field(
+            'content_owner_user_group',
+            $ancestorLocationsContentIds,
+            new FieldType\MultipleIdentifierField()
         );
+
+        $fields[] = new Field(
+            'content_id',
+            $content->versionInfo->contentInfo->id,
+            new FieldType\IdentifierField()
+        );
+        $fields[] = new Field(
+            'content_type',
+            $content->versionInfo->contentInfo->contentTypeId,
+            new FieldType\IdentifierField()
+        );
+        $fields[] = new Field(
+            'content_version',
+            $content->versionInfo->versionNo,
+            new FieldType\IdentifierField()
+        );
+        $fields[] = new Field(
+            'content_status',
+            $content->versionInfo->status,
+            new FieldType\IdentifierField()
+        );
+        $fields[] = new Field(
+            'content_name',
+            $content->versionInfo->contentInfo->name,
+            new FieldType\StringField()
+        );
+        $fields[] = new Field(
+            'content_creator',
+            $content->versionInfo->creatorId,
+            new FieldType\IdentifierField()
+        );
+        $fields[] = new Field(
+            'content_owner',
+            $content->versionInfo->contentInfo->ownerId,
+            new FieldType\IdentifierField()
+        );
+        $fields[] = new Field(
+            'content_section',
+            $content->versionInfo->contentInfo->sectionId,
+            new FieldType\IdentifierField()
+        );
+        $fields[] = new Field(
+            'content_section_identifier',
+            $section->identifier,
+            new FieldType\IdentifierField()
+        );
+        $fields[] = new Field(
+            'content_section_name',
+            $section->name,
+            new FieldType\StringField()
+        );
+        $fields[] = new Field(
+            'content_remote_id',
+            $content->versionInfo->contentInfo->remoteId,
+            new FieldType\IdentifierField()
+        );
+        $fields[] = new Field(
+            'content_modified',
+            $content->versionInfo->contentInfo->modificationDate,
+            new FieldType\DateField()
+        );
+        $fields[] = new Field(
+            'content_published',
+            $content->versionInfo->contentInfo->publicationDate,
+            new FieldType\DateField()
+        );
+        $fields[] = new Field(
+            'content_language_code',
+            array_keys( $content->versionInfo->names ),
+            new FieldType\MultipleStringField()
+        );
+        $fields[] = new Field(
+            'content_always_available',
+            $content->versionInfo->contentInfo->alwaysAvailable,
+            new FieldType\BooleanField()
+        );
+        $fields[] = new Field(
+            'content_group',
+            $this->contentTypeHandler->load(
+                $content->versionInfo->contentInfo->contentTypeId
+            )->groupIds,
+            new FieldType\MultipleIdentifierField()
+        );
+        $fields[] = new Field(
+            'content_object_state',
+            $this->getObjectStateIds( $content->versionInfo->contentInfo->id ),
+            new FieldType\MultipleIdentifierField()
+        );
+
+        $contentType = $this->contentTypeHandler->load(
+            $content->versionInfo->contentInfo->contentTypeId
+        );
+        $fieldSets = $this->mapContentFields( $content, $contentType );
+        $documents = array();
+
+        foreach ( $fieldSets as $languageCode => $translationFields )
+        {
+            $translationFields[] = new Field(
+                'meta_indexed_language_code',
+                $languageCode,
+                new FieldType\StringField()
+            );
+            $translationFields[] = new Field(
+                'meta_indexed_is_main_translation',
+                ( $languageCode === $content->versionInfo->contentInfo->mainLanguageCode ),
+                new FieldType\BooleanField()
+            );
+            $translationFields[] = new Field(
+                'meta_indexed_is_main_translation_and_always_available',
+                (
+                    ( $languageCode === $content->versionInfo->contentInfo->mainLanguageCode ) &&
+                    $content->versionInfo->contentInfo->alwaysAvailable
+                ),
+                new FieldType\BooleanField()
+            );
+
+            $documents[] = new Document(
+                array(
+                    "languageCode" => $languageCode,
+                    "fields" => array_merge( $fields, $translationFields ),
+                )
+            );
+        }
+
+        return $documents;
     }
 
     /**
@@ -527,5 +653,27 @@ class TranslationDocumentMapper implements DocumentMapper
         }
 
         return array_keys( $ancestorLocationContentIds );
+    }
+
+    /**
+     * Returns an array of object state ids of a Content with given $contentId.
+     *
+     * @param int|string $contentId
+     *
+     * @return array
+     */
+    protected function getObjectStateIds( $contentId )
+    {
+        $objectStateIds = array();
+
+        foreach ( $this->objectStateHandler->loadAllGroups() as $objectStateGroup )
+        {
+            $objectStateIds[] = $this->objectStateHandler->getContentState(
+                $contentId,
+                $objectStateGroup->id
+            )->id;
+        }
+
+        return $objectStateIds;
     }
 }

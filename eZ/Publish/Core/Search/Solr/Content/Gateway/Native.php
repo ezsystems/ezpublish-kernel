@@ -10,15 +10,12 @@
 namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 
 use eZ\Publish\Core\Search\Solr\Content\Gateway;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
 use eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use RuntimeException;
 use XmlWriter;
 use eZ\Publish\SPI\Search\Field;
@@ -83,6 +80,8 @@ class Native extends Gateway
      */
     protected $commit = true;
 
+    protected $documentType;
+
     /**
      * Construct from HTTP client
      *
@@ -93,6 +92,7 @@ class Native extends Gateway
      * @param FacetBuilderVisitor $facetBuilderVisitor
      * @param FieldValueMapper $fieldValueMapper
      * @param FieldNameGenerator $nameGenerator
+     * @param string $documentType
      */
     public function __construct(
         HttpClient $client,
@@ -101,7 +101,8 @@ class Native extends Gateway
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
         FieldValueMapper $fieldValueMapper,
-        FieldNameGenerator $nameGenerator
+        FieldNameGenerator $nameGenerator,
+        $documentType
     )
     {
         $this->client              = $client;
@@ -111,6 +112,7 @@ class Native extends Gateway
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->fieldValueMapper    = $fieldValueMapper;
         $this->nameGenerator       = $nameGenerator;
+        $this->documentType = $documentType;
     }
 
     /**
@@ -122,15 +124,15 @@ class Native extends Gateway
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return mixed
      */
-    public function findContent( Query $query, array $fieldFilters = array() )
+    public function find( Query $query, array $fieldFilters = array() )
     {
         $coreFilter = $this->getCoreFilter( $fieldFilters );
 
         $parameters = array(
             "q" => $this->criterionVisitor->visit( $query->query ),
-            "fq" => 'document_type_id:"content" AND ' . ( !empty( $coreFilter ) ? "({$coreFilter}) AND " : "" ) . $this->criterionVisitor->visit( $query->filter ),
+            "fq" => ( !empty( $coreFilter ) ? "({$coreFilter}) AND " : "" ) . $this->criterionVisitor->visit( $query->filter ),
             "sort" => implode(
                 ", ",
                 array_map(
@@ -144,7 +146,10 @@ class Native extends Gateway
             "wt" => "json",
         );
 
-        $endpoints = $this->endpointProvider->getSearchTargets( $fieldFilters );
+        $endpoints = $this->endpointProvider->getSearchTargets(
+            $this->documentType,
+            $fieldFilters
+        );
         if ( !empty( $endpoints ) )
         {
             $parameters["shards"] = implode( ",", $endpoints );
@@ -153,7 +158,7 @@ class Native extends Gateway
         // @todo: Extract method
         $response = $this->client->request(
             'GET',
-            $this->endpointProvider->getEntryPoint(),
+            $this->endpointProvider->getEntryPoint( $this->documentType ),
             '/select?' .
             http_build_query( $parameters ) .
             ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
@@ -167,55 +172,13 @@ class Native extends Gateway
         );
 
         // @todo: Error handling?
-        $data = json_decode( $response->body );
+        $result = json_decode( $response->body );
 
-        if ( !isset( $data->response ) )
+        if ( !isset( $result->response ) )
         {
-            throw new \Exception( '->response not set: ' . var_export( array( $data, $parameters ), true ) );
-        }
-
-        // @todo: Extract method
-        $result = new SearchResult(
-            array(
-                'time'       => $data->responseHeader->QTime / 1000,
-                'maxScore'   => $data->response->maxScore,
-                'totalCount' => $data->response->numFound,
-            )
-        );
-
-        foreach ( $data->response->docs as $doc )
-        {
-            $searchHit = new SearchHit(
-                array(
-                    'score'       => $doc->score,
-                    'valueObject' => new SPIContentInfo(
-                        array(
-                            'id' => substr( $doc->id, 7 ),
-                            'name' => $doc->name_s,
-                            'contentTypeId' => $doc->type_id,
-                            'sectionId' => $doc->section_id,
-                            'currentVersionNo' => $doc->version_id,
-                            'isPublished' => $doc->status_id === SPIContentInfo::STATUS_PUBLISHED,
-                            'ownerId' => $doc->owner_id,
-                            'modificationDate' => $doc->modified_dt,
-                            'publicationDate' => $doc->published_dt,
-                            'alwaysAvailable' => $doc->always_available_b,
-                            'remoteId' => $doc->remote_id_id,
-                            'mainLanguageCode' => $doc->main_language_code_s,
-                            'mainLocationId' => ( isset( $doc->main_location_id ) ? $doc->main_location_id : null )
-                        )
-                    )
-                )
+            throw new \Exception(
+                '->response not set: ' . var_export( array( $result, $parameters ), true )
             );
-            $result->searchHits[] = $searchHit;
-        }
-
-        if ( isset( $data->facet_counts ) )
-        {
-            foreach ( $data->facet_counts->facet_fields as $field => $facet )
-            {
-                $result->facets[] = $this->facetBuilderVisitor->map( $field, $facet );
-            }
         }
 
         return $result;
@@ -305,7 +268,10 @@ class Native extends Gateway
 
     protected function bulkIndexTranslationDocuments( array $documents, $languageCode )
     {
-        $server = $this->endpointProvider->getIndexingTarget( $languageCode );
+        $server = $this->endpointProvider->getIndexingTarget(
+            $this->documentType,
+            $languageCode
+        );
 
         $updates = $this->createUpdates( $documents );
         $result = $this->client->request(
@@ -330,16 +296,12 @@ class Native extends Gateway
     }
 
     /**
-     * Deletes a block of documents, which in our case is a Content preceded by its Locations.
-     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
      *
-     * @todo to be removed
-     *
-     * @param string $blockId
+     * @param string $query
      */
-    public function deleteBlock( $blockId )
+    public function deleteByQuery( $query )
     {
-        $endpoints = $this->endpointProvider->getAllEndpoints();
+        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
 
         foreach ( $endpoints as $endpoint )
         {
@@ -352,7 +314,7 @@ class Native extends Gateway
                     array(
                         'Content-Type' => 'text/xml',
                     ),
-                    "<delete><query>_root_:" . $blockId . "</query></delete>"
+                    "<delete><query>{$query}</query></delete>"
                 )
             );
         }
@@ -365,7 +327,7 @@ class Native extends Gateway
      */
     public function purgeIndex()
     {
-        $endpoints = $this->endpointProvider->getAllEndpoints();
+        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
 
         foreach ( $endpoints as $endpoint )
         {

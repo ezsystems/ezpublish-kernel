@@ -93,7 +93,7 @@ class Field extends SortClauseVisitor
         if ( $fieldName === null )
         {
             throw new InvalidArgumentException(
-                "\\$sortClause->targetData",
+                "\$sortClause->targetData",
                 "No searchable fields found for the given sort clause target " .
                 "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
             );

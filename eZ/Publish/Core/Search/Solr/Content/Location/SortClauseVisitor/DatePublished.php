@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 class DatePublished extends SortClauseVisitor
 {
     /**
-     * CHeck if visitor is applicable to current sortClause
+     * Check if visitor is applicable to current sortClause
      *
      * @param SortClause $sortClause
      *
@@ -41,4 +41,3 @@ class DatePublished extends SortClauseVisitor
         return 'content_published_dt' . $this->getDirection( $sortClause );
     }
 }
-

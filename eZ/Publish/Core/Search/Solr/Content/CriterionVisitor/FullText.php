@@ -86,6 +86,7 @@ class FullText extends CriterionVisitor
             }
         }
 
+        // @todo somethings fishy
         return "(" . implode(
             ') OR (',
             array_map(

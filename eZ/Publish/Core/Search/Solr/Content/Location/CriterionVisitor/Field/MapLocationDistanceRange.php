@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing a Field criterion visitor class for Location Search
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,11 +9,11 @@
 
 namespace eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\Field;
 
-use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\Field\FieldRange as ContentFieldRange;
+use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor\MapLocation\MapLocationDistanceRange as ContentMapLocationDistanceRange;
 
 /**
  * Visits the Field criterion
  */
-class FieldRange extends ContentFieldRange
+class MapLocationDistanceRange extends ContentMapLocationDistanceRange
 {
 }

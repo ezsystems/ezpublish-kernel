@@ -50,11 +50,10 @@ class ModifiedIn extends DateMetadata
         $values = array();
         foreach ( $criterion->value as $value )
         {
-            $values[] = 'modified_dt:"' . $this->getSolrTime( $value ) . '"';
+            $values[] = 'content_modified_dt:"' . $this->getSolrTime( $value ) . '"';
         }
 
-        $condition = '(' . implode( ' OR ', $values ) . ')';
-        return "{!child of='document_type_id:content' v='{$condition}'}";
+        return '(' . implode( ' OR ', $values ) . ')';
     }
 }
 
