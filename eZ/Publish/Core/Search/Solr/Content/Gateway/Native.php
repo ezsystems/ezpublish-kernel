@@ -129,7 +129,7 @@ class Native extends Gateway
         $coreFilter = $this->getCoreFilter( $fieldFilters );
 
         $parameters = array(
-            "q" => 'document_type_id:"content" AND ' . $this->criterionVisitor->visit( $query->query ),
+            "q" => $this->criterionVisitor->visit( $query->query ),
             "fq" => 'document_type_id:"content" AND ' . ( !empty( $coreFilter ) ? "({$coreFilter}) AND " : "" ) .
                 $this->criterionVisitor->visit( $query->filter ),
             "sort" => implode(

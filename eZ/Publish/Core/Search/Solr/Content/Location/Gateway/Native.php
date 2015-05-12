@@ -107,7 +107,7 @@ class Native extends Gateway
     public function findLocations( LocationQuery $query )
     {
         $parameters = array(
-            "q" => 'document_type_id:"location" AND ' . $this->criterionVisitor->visit( $query->query ),
+            "q" => $this->criterionVisitor->visit( $query->query ),
             "fq" => 'document_type_id:"location" AND ' . $this->criterionVisitor->visit( $query->filter ),
             "sort" => implode(
                 ", ",
