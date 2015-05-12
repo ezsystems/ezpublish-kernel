@@ -9,7 +9,6 @@
 
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
-use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -19,11 +18,8 @@ use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\XmlText\Converter\Html5 as Html5Converter;
 use eZ\Publish\Core\FieldType\RichText\Converter as RichTextConverterInterface;
-use eZ\Publish\SPI\Variation\VariationHandler;
-use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 use Psr\Log\LoggerInterface;
 use Twig_Extension;
 use Twig_Environment;
@@ -65,11 +61,6 @@ class ContentExtension extends Twig_Extension
     protected $richTextEditConverter;
 
     /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
-     */
-    protected $imageVariationService;
-
-    /**
      * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
@@ -94,7 +85,6 @@ class ContentExtension extends Twig_Extension
         Html5Converter $xmlTextConverter,
         RichTextConverterInterface $richTextConverter,
         RichTextConverterInterface $richTextEditConverter,
-        VariationHandler $imageVariationService,
         TranslationHelper $translationHelper,
         FieldHelper $fieldHelper,
         LoggerInterface $logger = null
@@ -104,7 +94,6 @@ class ContentExtension extends Twig_Extension
         $this->xmlTextConverter = $xmlTextConverter;
         $this->richTextConverter = $richTextConverter;
         $this->richTextEditConverter = $richTextEditConverter;
-        $this->imageVariationService = $imageVariationService;
         $this->translationHelper = $translationHelper;
         $this->fieldHelper = $fieldHelper;
         $this->logger = $logger;
@@ -128,11 +117,6 @@ class ContentExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction(
-                'ez_image_alias',
-                array( $this, 'getImageVariation' ),
-                array( 'is_safe' => array( 'html' ) )
-            ),
             new Twig_SimpleFunction(
                 'ez_content_name',
                 array( $this, 'getTranslatedContentName' )
@@ -230,39 +214,6 @@ class ContentExtension extends Twig_Extension
     public function richTextToHtml5Edit( $xmlData )
     {
         return $this->richTextEditConverter->convert( $xmlData )->saveHTML();
-    }
-
-    /**
-     * Returns the image variation object for $field/$versionInfo
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param string $variationName
-     *
-     * @return \eZ\Publish\SPI\Variation\Values\Variation
-     */
-    public function getImageVariation( Field $field, VersionInfo $versionInfo, $variationName )
-    {
-        try
-        {
-            return $this->imageVariationService->getVariation( $field, $versionInfo, $variationName );
-        }
-        catch ( InvalidVariationException $e )
-        {
-            if ( isset( $this->logger ) )
-            {
-                $this->logger->error( "Couldn't get variation '{$variationName}' for image with id {$field->value->id}" );
-            }
-        }
-        catch ( SourceImageNotFoundException $e )
-        {
-            if ( isset( $this->logger ) )
-            {
-                $this->logger->error(
-                    "Couldn't create variation '{$variationName}' for image with id {$field->value->id} because source image can't be found"
-                );
-            }
-        }
     }
 
     /**
