@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension;
+use eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
@@ -26,19 +27,50 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
     {
         $configResolver = $this->getConfigResolverMock();
 
-        return array(
-            new FieldRenderingExtension(
+        $fieldBlockRenderer = new FieldBlockRenderer(
+            $this->getContentTypeServiceMock(),
+            $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface' ),
+            new TranslationHelper(
                 $configResolver,
-                $this->getContentTypeServiceMock(),
-                $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface' ),
-                new TranslationHelper(
-                    $configResolver,
-                    $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
-                    array(),
-                    $this->getMock( 'Psr\Log\LoggerInterface' )
-                )
+                $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
+                array(),
+                $this->getMock( 'Psr\Log\LoggerInterface' )
             )
         );
+        $fieldBlockRenderer->setFieldViewResources(
+            array(
+                array(
+                    'template' => $this->getTemplatePath( 'fields_override1.html.twig' ),
+                    'priority' => 10
+                ),
+                array(
+                    'template' => $this->getTemplatePath( 'fields_default.html.twig' ),
+                    'priority' => 0
+                ),
+                array(
+                    'template' => $this->getTemplatePath( 'fields_override2.html.twig' ),
+                    'priority' => 20
+                ),
+            )
+        );
+        $fieldBlockRenderer->setFieldDefinitionViewResources(
+            array(
+                array(
+                    'template' => $this->getTemplatePath( 'settings_override1.html.twig' ),
+                    'priority' => 10
+                ),
+                array(
+                    'template' => $this->getTemplatePath( 'settings_default.html.twig' ),
+                    'priority' => 0
+                ),
+                array(
+                    'template' => $this->getTemplatePath( 'settings_override2.html.twig' ),
+                    'priority' => 20
+                ),
+            )
+        );
+
+        return array( new FieldRenderingExtension( $fieldBlockRenderer ) );
     }
 
     public function getFixturesDir()
@@ -135,44 +167,6 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
                             null,
                             array( 'fre-FR', 'eng-US' )
                         ),
-                        array(
-                            'field_templates',
-                            null,
-                            null,
-                            array(
-                                array(
-                                    'template' => $this->getTemplatePath( 'fields_override1.html.twig' ),
-                                    'priority' => 10
-                                ),
-                                array(
-                                    'template' => $this->getTemplatePath( 'fields_default.html.twig' ),
-                                    'priority' => 0
-                                ),
-                                array(
-                                    'template' => $this->getTemplatePath( 'fields_override2.html.twig' ),
-                                    'priority' => 20
-                                ),
-                            )
-                        ),
-                        array(
-                            'fielddefinition_settings_templates',
-                            null,
-                            null,
-                            array(
-                                array(
-                                    'template' => $this->getTemplatePath( 'settings_override1.html.twig' ),
-                                    'priority' => 10
-                                ),
-                                array(
-                                    'template' => $this->getTemplatePath( 'settings_default.html.twig' ),
-                                    'priority' => 0
-                                ),
-                                array(
-                                    'template' => $this->getTemplatePath( 'settings_override2.html.twig' ),
-                                    'priority' => 20
-                                ),
-                            )
-                        )
                     )
                 )
             );

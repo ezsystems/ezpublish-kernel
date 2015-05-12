@@ -19,6 +19,7 @@ parameters:
     ezpublish.twig.extension.filesize.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FileSizeExtension
     ezpublish.twig.extension.filesize.suffixes: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB']
     ezpublish.templating.extension.routing.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension
+    ezpublish.templating.field_block_renderer.twig.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer
     ezpublish.twig.extension.field_rendering.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension
     ezpublish.twig.extension.image.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
     ezpublish.twig.extension.xml_text.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\XmlTextExtension
@@ -120,13 +121,23 @@ services:
         tags:
             - {name: twig.extension}
 
-    ezpublish.twig.extension.field_rendering:
-        class: %ezpublish.twig.extension.field_rendering.class%
+    ezpublish.templating.field_block_renderer.twig:
+        class: %ezpublish.templating.field_block_renderer.twig.class%
         arguments:
-            - @ezpublish.config.resolver
             - @ezpublish.api.service.content_type
             - @ezpublish.fieldType.parameterProviderRegistry
             - @ezpublish.translation_helper
+        calls:
+            - [setTwig, [@twig]]
+            - [setFieldViewResources, ["$field_templates$"]]
+            - [setFieldDefinitionViewResources, ["$fielddefinition_settings_templates$"]]
+
+    ezpublish.templating.field_block_renderer:
+        alias: ezpublish.templating.field_block_renderer.twig
+
+    ezpublish.twig.extension.field_rendering:
+        class: %ezpublish.twig.extension.field_rendering.class%
+        arguments: [@ezpublish.templating.field_block_renderer]
         tags:
             - { name: twig.extension }
 
