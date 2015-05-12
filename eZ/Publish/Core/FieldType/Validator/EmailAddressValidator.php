@@ -55,7 +55,8 @@ class EmailAddressValidator extends Validator
                             null,
                             array(
                                 "parameter" => $name
-                            )
+                            ),
+                            "[EmailAddressValidator][$name]"
                         );
                     }
                     break;
@@ -65,7 +66,8 @@ class EmailAddressValidator extends Validator
                         null,
                         array(
                             "parameter" => $name
-                        )
+                        ),
+                        "[EmailAddressValidator][$name]"
                     );
             }
         }
@@ -100,7 +102,8 @@ class EmailAddressValidator extends Validator
         $this->errors[] = new ValidationError(
             "The value must be a valid email address.",
             null,
-            array()
+            array(),
+            'email'
         );
         return false;
     }

@@ -543,7 +543,8 @@ class EmailAddressTest extends FieldTypeTest
                 new EmailAddressValue( "jane.doe.example.com" ),
                 array(
                     new ValidationError(
-                        "The value must be a valid email address."
+                        "The value must be a valid email address.",
+                        null, array(), 'email'
                     ),
                 ),
             ),

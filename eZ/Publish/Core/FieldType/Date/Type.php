@@ -221,7 +221,8 @@ class Type extends FieldType
                     null,
                     array(
                         "setting" => $name
-                    )
+                    ),
+                    "[$name]"
                 );
                 continue;
             }
@@ -240,7 +241,8 @@ class Type extends FieldType
                             null,
                             array(
                                 "setting" => $name
-                            )
+                            ),
+                            "[$name]"
                         );
                     }
                     break;

@@ -84,7 +84,8 @@ class Type extends FieldType
                                 null,
                                 array(
                                     'setting' => $name
-                                )
+                                ),
+                                "[$name]"
                             );
                         }
                         break;
@@ -97,7 +98,8 @@ class Type extends FieldType
                     null,
                     array(
                         'setting' => $name
-                    )
+                    ),
+                    "[$name]"
                 );
             }
         }
