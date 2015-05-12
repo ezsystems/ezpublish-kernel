@@ -18,12 +18,10 @@ use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\FieldType\RichText\Converter as RichTextConverterInterface;
 use Psr\Log\LoggerInterface;
 use Twig_Extension;
 use Twig_Environment;
 use Twig_SimpleFunction;
-use Twig_SimpleFilter;
 
 /**
  * Twig content extension for eZ Publish specific usage.
@@ -37,20 +35,6 @@ class ContentExtension extends Twig_Extension
      * @var \Twig_Environment
      */
     protected $environment;
-
-    /**
-     * Converter used to transform RichText content to HTML5 for rendering purposes
-     *
-     * @var \eZ\Publish\Core\FieldType\RichText\Converter
-     */
-    protected $richTextConverter;
-
-    /**
-     * Converter used to transform RichText content to HTML5 for editing purposes
-     *
-     * @var \eZ\Publish\Core\FieldType\RichText\Converter
-     */
-    protected $richTextEditConverter;
 
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -74,16 +58,12 @@ class ContentExtension extends Twig_Extension
 
     public function __construct(
         Repository $repository,
-        RichTextConverterInterface $richTextConverter,
-        RichTextConverterInterface $richTextEditConverter,
         TranslationHelper $translationHelper,
         FieldHelper $fieldHelper,
         LoggerInterface $logger = null
     )
     {
         $this->repository = $repository;
-        $this->richTextConverter = $richTextConverter;
-        $this->richTextEditConverter = $richTextEditConverter;
         $this->translationHelper = $translationHelper;
         $this->fieldHelper = $fieldHelper;
         $this->logger = $logger;
@@ -135,27 +115,6 @@ class ContentExtension extends Twig_Extension
     }
 
     /**
-     * Returns a list of filters to add to the existing list
-     *
-     * @return array
-     */
-    public function getFilters()
-    {
-        return array(
-            new Twig_SimpleFilter(
-                'richtext_to_html5',
-                array( $this, 'richTextToHtml5' ),
-                array( 'is_safe' => array( 'html' ) )
-            ),
-            new Twig_SimpleFilter(
-                'richtext_to_html5_edit',
-                array( $this, 'richTextToHtml5Edit' ),
-                array( 'is_safe' => array( 'html' ) )
-            )
-        );
-    }
-
-    /**
      * Returns the name of the extension.
      *
      * @return string The extension name
@@ -163,30 +122,6 @@ class ContentExtension extends Twig_Extension
     public function getName()
     {
         return 'ezpublish.content';
-    }
-
-    /**
-     * Implements the "richtext_to_html5" filter
-     *
-     * @param \DOMDocument $xmlData
-     *
-     * @return string
-     */
-    public function richTextToHtml5( $xmlData )
-    {
-        return $this->richTextConverter->convert( $xmlData )->saveHTML();
-    }
-
-    /**
-     * Implements the "richtext_to_html5_edit" filter
-     *
-     * @param \DOMDocument $xmlData
-     *
-     * @return string
-     */
-    public function richTextToHtml5Edit( $xmlData )
-    {
-        return $this->richTextEditConverter->convert( $xmlData )->saveHTML();
     }
 
     /**

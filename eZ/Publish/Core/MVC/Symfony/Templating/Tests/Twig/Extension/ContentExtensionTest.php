@@ -43,8 +43,6 @@ class ContentExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
         return array(
             new ContentExtension(
                 $this->getRepositoryMock(),
-                $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\RichText\\Converter' )->disableOriginalConstructor()->getMock(),
-                $this->getMockBuilder( 'eZ\\Publish\\Core\\FieldType\\RichText\\Converter' )->disableOriginalConstructor()->getMock(),
                 new TranslationHelper(
                     $configResolver,
                     $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
