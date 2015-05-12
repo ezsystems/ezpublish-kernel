@@ -19,6 +19,7 @@ parameters:
     ezpublish.api.service.section.class: eZ\Publish\Core\Repository\SectionService
     ezpublish.api.service.trash.class: eZ\Publish\Core\Repository\TrashService
     ezpublish.api.service.location.class: eZ\Publish\Core\Repository\LocationService
+    ezpublish.api.service.language.class: eZ\Publish\Core\Repository\LanguageService
 
     # Signal Slot API wrapper
     ezpublish.signalslot.repository.class: eZ\Publish\Core\SignalSlot\Repository
@@ -134,6 +135,13 @@ services:
         factory_service: ezpublish.api.repository.factory
         factory_method: buildService
         arguments: [@ezpublish.api.repository, Location]
+        lazy: true
+
+    ezpublish.api.service.language:
+        class: %ezpublish.api.service.language.class%
+        factory_service: ezpublish.api.repository.factory
+        factory_method: buildService
+        arguments: [@ezpublish.api.repository, ContentLanguage]
         lazy: true
 
     # Signal Slot API wrapper
