@@ -18,7 +18,6 @@ use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\FieldType\XmlText\Converter\Html5 as Html5Converter;
 use eZ\Publish\Core\FieldType\RichText\Converter as RichTextConverterInterface;
 use Psr\Log\LoggerInterface;
 use Twig_Extension;
@@ -38,13 +37,6 @@ class ContentExtension extends Twig_Extension
      * @var \Twig_Environment
      */
     protected $environment;
-
-    /**
-     * Converter used to transform XmlText content in HTML5
-     *
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Html5
-     */
-    protected $xmlTextConverter;
 
     /**
      * Converter used to transform RichText content to HTML5 for rendering purposes
@@ -82,7 +74,6 @@ class ContentExtension extends Twig_Extension
 
     public function __construct(
         Repository $repository,
-        Html5Converter $xmlTextConverter,
         RichTextConverterInterface $richTextConverter,
         RichTextConverterInterface $richTextEditConverter,
         TranslationHelper $translationHelper,
@@ -91,7 +82,6 @@ class ContentExtension extends Twig_Extension
     )
     {
         $this->repository = $repository;
-        $this->xmlTextConverter = $xmlTextConverter;
         $this->richTextConverter = $richTextConverter;
         $this->richTextEditConverter = $richTextEditConverter;
         $this->translationHelper = $translationHelper;
@@ -153,11 +143,6 @@ class ContentExtension extends Twig_Extension
     {
         return array(
             new Twig_SimpleFilter(
-                'xmltext_to_html5',
-                array( $this, 'xmlTextToHtml5' ),
-                array( 'is_safe' => array( 'html' ) )
-            ),
-            new Twig_SimpleFilter(
                 'richtext_to_html5',
                 array( $this, 'richTextToHtml5' ),
                 array( 'is_safe' => array( 'html' ) )
@@ -178,18 +163,6 @@ class ContentExtension extends Twig_Extension
     public function getName()
     {
         return 'ezpublish.content';
-    }
-
-    /**
-     * Implements the "xmltext_to_html5" filter
-     *
-     * @param string $xmlData
-     *
-     * @return string
-     */
-    public function xmltextToHtml5( $xmlData )
-    {
-        return $this->xmlTextConverter->convert( $xmlData );
     }
 
     /**

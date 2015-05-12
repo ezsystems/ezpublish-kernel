@@ -21,6 +21,7 @@ parameters:
     ezpublish.templating.extension.routing.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension
     ezpublish.twig.extension.field_rendering.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension
     ezpublish.twig.extension.image.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
+    ezpublish.twig.extension.xml_text.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\XmlTextExtension
 
     assetic.asset_factory.class: eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory
 
@@ -39,7 +40,6 @@ services:
         class: %ezpublish.twig.extension.content.class%
         arguments:
             - @ezpublish.api.repository
-            - @ezpublish.fieldtype.ezxmltext.converter.html5
             - @ezpublish.fieldType.ezrichtext.converter.output.xhtml5
             - @ezpublish.fieldType.ezrichtext.converter.edit.xhtml5
             - @ezpublish.translation_helper
@@ -134,6 +134,12 @@ services:
     ezpublish.twig.extension.image:
         class: %ezpublish.twig.extension.image.class%
         arguments: [@ezpublish.fieldtype.ezimage.variation_service]
+        tags:
+            - { name: twig.extension }
+
+    ezpublish.twig.extension.xml_text:
+        class: %ezpublish.twig.extension.xml_text.class%
+        arguments: [@ezpublish.fieldtype.ezxmltext.converter.html5]
         tags:
             - { name: twig.extension }
 
