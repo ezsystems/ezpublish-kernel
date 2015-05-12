@@ -20,7 +20,6 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use Psr\Log\LoggerInterface;
 use Twig_Extension;
-use Twig_Environment;
 use Twig_SimpleFunction;
 
 /**
@@ -29,13 +28,6 @@ use Twig_SimpleFunction;
  */
 class ContentExtension extends Twig_Extension
 {
-    /**
-     * The Twig environment
-     *
-     * @var \Twig_Environment
-     */
-    protected $environment;
-
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
@@ -67,16 +59,6 @@ class ContentExtension extends Twig_Extension
         $this->translationHelper = $translationHelper;
         $this->fieldHelper = $fieldHelper;
         $this->logger = $logger;
-    }
-
-    /**
-     * Initializes the template runtime (aka Twig environment).
-     *
-     * @param \Twig_Environment $environment
-     */
-    public function initRuntime( Twig_Environment $environment )
-    {
-        $this->environment = $environment;
     }
 
     /**
