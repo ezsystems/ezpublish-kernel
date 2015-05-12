@@ -18,6 +18,7 @@ use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
 use eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
+use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider;
 
 /**
  *
@@ -30,6 +31,11 @@ class Native extends Gateway
      * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient
      */
     protected $client;
+
+    /**
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider
+     */
+    protected $endpointProvider;
 
     /**
      * Query visitor
@@ -68,6 +74,7 @@ class Native extends Gateway
      * Construct from HTTP client
      *
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient $client
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider $endpointProvider
      * @param \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor $criterionVisitor
      * @param \eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor $sortClauseVisitor
      * @param \eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor $facetBuilderVisitor
@@ -75,6 +82,7 @@ class Native extends Gateway
      */
     public function __construct(
         HttpClient $client,
+        EndpointProvider $endpointProvider,
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
@@ -82,6 +90,7 @@ class Native extends Gateway
     )
     {
         $this->client = $client;
+        $this->endpointProvider = $endpointProvider;
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
@@ -98,7 +107,7 @@ class Native extends Gateway
     public function findLocations( LocationQuery $query )
     {
         $parameters = array(
-            "q" => 'document_type_id:"location" AND ' . $this->criterionVisitor->visit( $query->query ),
+            "q" => $this->criterionVisitor->visit( $query->query ),
             "fq" => 'document_type_id:"location" AND ' . $this->criterionVisitor->visit( $query->filter ),
             "sort" => implode(
                 ", ",
@@ -113,10 +122,17 @@ class Native extends Gateway
             "wt" => "json",
         );
 
+        $endpoints = $this->endpointProvider->getAllEndpoints();
+        if ( !empty( $endpoints ) )
+        {
+            $parameters["shards"] = implode( ",", $endpoints );
+        }
+
         // @todo: Extract method
         $response = $this->client->request(
             'GET',
-            '/solr/select?' .
+            $this->endpointProvider->getEntryPoint(),
+            '/select?' .
             http_build_query( $parameters ) .
             ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
             implode(

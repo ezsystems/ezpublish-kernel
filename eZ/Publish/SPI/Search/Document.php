@@ -24,6 +24,13 @@ class Document extends ValueObject
     public $fields = array();
 
     /**
+     * Translation language code that the documents represents
+     *
+     * @var string
+     */
+    public $languageCode;
+
+    /**
      * An array of sub-documents
      *
      * @var \eZ\Publish\SPI\Search\Document[]

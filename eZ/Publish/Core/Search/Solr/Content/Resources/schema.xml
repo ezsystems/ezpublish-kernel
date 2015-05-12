@@ -89,7 +89,6 @@ should not remove or drastically change the existing definitions.
     <field name="_root_" type="string" indexed="true" stored="true" required="false"/>
 
     <field name="document_type_id" type="string" indexed="true" stored="true" required="true"/>
-
     <!--
       Dynamic field definitions.  If a field name is not found, dynamicFields
       will be used if the name matches any of the patterns.  RESTRICTION: the
@@ -132,7 +131,7 @@ should not remove or drastically change the existing definitions.
 
     <!--
       This is additional custom example fields. You can come up with similar
-      fields on your own, if you require custome indexing / query rules.
+      fields on your own, if you require custom indexing / query rules.
 
       Instead of using the type "text" you might even want to define a custom
       type. In the custom type you can define your dedicated index and query
@@ -142,8 +141,8 @@ should not remove or drastically change the existing definitions.
       In this case we copy the full user name and index it as a text field.
     -->
     <field name="custom_field" type="text" indexed="true" stored="false" required="false" multiValued="true" />
-    <copyField source="user_first_name_value_ms" dest="custom_field" />
-    <copyField source="user_last_name_value_ms" dest="custom_field" />
+    <copyField source="user_first_name_value_s" dest="custom_field" />
+    <copyField source="user_last_name_value_s" dest="custom_field" />
 
     <field name="custom_geolocation_field" type="location" indexed="true" stored="false" required="false" />
     <field name="custom_geolocation_field_0_coordinate" type="double" indexed="true" stored="false"/>

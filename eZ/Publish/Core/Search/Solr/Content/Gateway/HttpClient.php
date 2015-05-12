@@ -20,10 +20,11 @@ interface HttpClient
      * Returns the result from the remote server.
      *
      * @param string $method
+     * @param string $server
      * @param string $path
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Message $message
      *
      * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Message
      */
-    public function request( $method, $path, Message $message = null );
+    public function request( $method, $server, $path, Message $message = null );
 }

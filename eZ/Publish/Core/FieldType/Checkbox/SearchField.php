@@ -31,7 +31,7 @@ class SearchField implements Indexable
             new Search\Field(
                 'value',
                 $field->value->data,
-                new Search\FieldType\MultipleBooleanField()
+                new Search\FieldType\BooleanField()
             ),
         );
     }
@@ -44,7 +44,7 @@ class SearchField implements Indexable
     public function getIndexDefinition()
     {
         return array(
-            'value' => new Search\FieldType\MultipleBooleanField(),
+            'value' => new Search\FieldType\BooleanField(),
         );
     }
 

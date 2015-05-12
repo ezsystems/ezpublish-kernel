@@ -2534,14 +2534,17 @@ class SearchServiceTest extends BaseTest
      */
     public function testSortModifiedField()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( !$setupFactory instanceof LegacyElasticsearch )
+        // Check using get_class since the others extend SetupFactory\Legacy
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy' )
         {
-            $this->markTestIncomplete( "Field sort clause is not yet implemented for Solr Storage Engine" );
+            $this->markTestIncomplete(
+                "Custom field sort not supported by LegacySE " .
+                "(@todo: Legacy should fallback to just querying normal field so this should be tested here)"
+            );
         }
 
         $sortClause = new SortClause\Field( "folder", "short_name", Query::SORT_ASC, "eng-US" );
-        $sortClause->setCustomField( "folder", "short_name", "folder_name_value_ms" );
+        $sortClause->setCustomField( "folder", "short_name", "folder_name_value_s" );
 
         $query = new Query(
             array(

@@ -31,7 +31,7 @@ class SearchField implements Indexable
             new Search\Field(
                 'value',
                 $field->value->data,
-                new Search\FieldType\MultipleStringField()
+                new Search\FieldType\StringField()
             ),
         );
     }
@@ -44,7 +44,7 @@ class SearchField implements Indexable
     public function getIndexDefinition()
     {
         return array(
-            'value' => new Search\FieldType\MultipleStringField(),
+            'value' => new Search\FieldType\StringField(),
         );
     }
 

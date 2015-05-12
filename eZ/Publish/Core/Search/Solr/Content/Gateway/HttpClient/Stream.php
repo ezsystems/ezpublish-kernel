@@ -18,25 +18,18 @@ use eZ\Publish\Core\Search\Solr\Content\Gateway\Message;
 class Stream implements HttpClient
 {
     /**
-     * Optional default headers for each request.
+     * Execute a HTTP request to the remote server
      *
-     * @var array
-     */
-    private $headers = array();
-
-    /**
-     * The remote REST server location.
+     * Returns the result from the remote server.
      *
-     * @var string
-     */
-    private $server;
-
-    /**
-     * Constructs a new REST client instance for the given <b>$server</b>.
+     * @param string $method
+     * @param string $server
+     * @param string $path
+     * @param Message $message
      *
-     * @param string $server Remote server location. Must include the used protocol.
+     * @return Message
      */
-    public function __construct( $server )
+    public function request( $method, $server, $path, Message $message = null )
     {
         $url = parse_url( rtrim( $server, '/' ) );
         $url += array(
@@ -48,37 +41,24 @@ class Stream implements HttpClient
             'path'   => null,
         );
 
+        $headers = array();
         if ( $url['user'] || $url['pass'] )
         {
-            $this->headers['Authorization'] = 'Basic ' . base64_encode( "{$url['user']}:{$url['pass']}" );
+            $headers['Authorization'] = 'Basic ' . base64_encode( "{$url['user']}:{$url['pass']}" );
         }
 
-        $this->server = $url['scheme'] . '://' . $url['host'];
+        $server = $url['scheme'] . '://' . $url['host'];
         if ( $url['port'] )
         {
-            $this->server .= ':' . $url['port'];
+            $server .= ':' . $url['port'];
         }
-        $this->server .= $url['path'];
-    }
+        $server .= $url['path'];
 
-    /**
-     * Execute a HTTP request to the remote server
-     *
-     * Returns the result from the remote server.
-     *
-     * @param string $method
-     * @param string $path
-     * @param Message $message
-     *
-     * @return Message
-     */
-    public function request( $method, $path, Message $message = null )
-    {
         $message = $message ?: new Message();
 
-        $requestHeaders = $this->getRequestHeaders( $message->headers );
+        $requestHeaders = $this->getRequestHeaders( $message->headers, $headers );
 
-        $url = $this->server . $path;
+        $url = $server . $path;
 
         $contextOptions = array(
             'http' => array(
@@ -99,7 +79,7 @@ class Stream implements HttpClient
         // Check if connection has been established successfully
         if ( $httpFilePointer === false )
         {
-            throw new ConnectionException( $this->server, $path, $method );
+            throw new ConnectionException( $server, $path, $method );
         }
 
         // Read request body
@@ -142,23 +122,24 @@ class Stream implements HttpClient
      *
      * Merged with the default values.
      *
-     * @param array $headers
+     * @param array $headers1
+     * @param array $headers2
      *
      * @return string
      */
-    protected function getRequestHeaders( array $headers )
+    protected function getRequestHeaders( array $headers1, array $headers2 )
     {
         $requestHeaders = '';
 
-        foreach ( $this->headers as $name => $value )
+        foreach ( $headers2 as $name => $value )
         {
-            if ( !isset( $headers[$name] ) )
+            if ( !isset( $headers1[$name] ) )
             {
                 $requestHeaders .= "$name: $value\r\n";
             }
         }
 
-        foreach ( $headers as $name => $value )
+        foreach ( $headers1 as $name => $value )
         {
             if ( is_numeric( $name ) )
             {

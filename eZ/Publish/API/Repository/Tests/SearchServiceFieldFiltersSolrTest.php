@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the SearchServiceFieldFiltersTest class
+ * This file is part of the eZ Publish Kernel package
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -23,7 +23,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
  * @group search
  * @group field_filter
  */
-class SearchServiceFieldFiltersTest extends BaseTest
+class SearchServiceFieldFiltersSolrTest extends BaseTest
 {
     public function setUp()
     {
@@ -31,7 +31,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestIncomplete( "Not implemented for Solr Search Engine" );
+            //$this->markTestIncomplete( "Not implemented for Solr Search Engine" );
         }
 
         parent::setUp();
@@ -105,6 +105,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
 
+        $this->modifyFolderContentType();
+
         $contentCreateStruct = $contentService->newContentCreateStruct(
             $contentTypeService->loadContentTypeByIdentifier( 'folder' ),
             $mainLanguageCode
@@ -122,6 +124,21 @@ class SearchServiceFieldFiltersTest extends BaseTest
         );
 
         return $content;
+    }
+
+    protected function modifyFolderContentType()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $folder = $contentTypeService->loadContentTypeByIdentifier( "folder" );
+        $folderDraft = $contentTypeService->createContentTypeDraft( $folder );
+
+        $updateStruct = $contentTypeService->newContentTypeUpdateStruct();
+        $updateStruct->nameSchema = "lemma not lemonade";
+
+        $contentTypeService->updateContentTypeDraft( $folderDraft, $updateStruct );
+        $contentTypeService->publishContentTypeDraft( $folderDraft );
     }
 
     /**
@@ -186,38 +203,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
-     * Demonstrating how mismatch between field filters and language filtering criteria
-     * when using non-field filtering criteria can cause NotFound exception.
-     *
-     * @see \eZ\Publish\API\Repository\SearchService::findContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function testFieldFiltersCauseNotFoundException()
-    {
-        // Content with id=54 exists only in eng-US language!
-        $query = new Query(
-            array(
-                "filter" => new Criterion\ContentId( 54 ),
-            )
-        );
-
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-
-        // The content will be found, but field filtering in the service will cause the exception.
-        $fieldFilters = array(
-            "languages" => array(
-                "eng-GB",
-            ),
-        );
-
-        $searchService->findContent( $query, $fieldFilters );
-    }
-
-    /**
-     * Test for the findContent() method.
-     *
      * @param string $type
+     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -230,14 +217,14 @@ class SearchServiceFieldFiltersTest extends BaseTest
             $type = "query";
         }
 
-        $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content1 = $this->createTestFolderWithName( "eng-GB", "one 1", "eng-US", "two", "eng-GB" );
+        $content2 = $this->createTestFolderWithName( "eng-GB", "one 2", "eng-US", "two", "eng-GB" );
 
         $query = new Query(
             array(
                 $type => new Criterion\FullText( "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
                 ),
             )
         );
@@ -255,14 +242,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
         $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        $this->assertEquals( $content1->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -303,6 +291,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -343,6 +332,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -382,6 +372,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -427,6 +418,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -472,6 +464,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -517,6 +510,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -558,6 +552,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -687,6 +682,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
+     * @group aaa
+     *
      * @param string $type
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
@@ -699,7 +696,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         }
 
         $content1 = $this->createTestFolderWithName( "eng-GB", "one", "eng-US", "two", "eng-GB" );
-        $content2 = $this->createTestFolderWithName( "eng-GB", "two", "eng-US", "one", "eng-GB" );
+        $content2 = $this->createTestFolderWithName( "eng-US", "two", "ger-DE", "one", "ger-DE" );
 
         $query = new Query(
             array(
@@ -722,9 +719,9 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
+        //$this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -1084,9 +1081,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -1592,6 +1588,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group bbb
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -1634,15 +1631,15 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group bbb
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -1689,6 +1686,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group bbb
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -2005,6 +2003,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group bbb
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -2043,9 +2042,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -2583,6 +2581,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group ppp
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -2644,9 +2643,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
+        $this->assertEquals( 1, $searchResult->totalCount );
         $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -2826,6 +2824,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
+     * @group xxx
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -3293,9 +3292,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -3705,9 +3703,8 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**

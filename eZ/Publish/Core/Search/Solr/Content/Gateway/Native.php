@@ -23,6 +23,7 @@ use RuntimeException;
 use XmlWriter;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;
+use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -36,6 +37,11 @@ class Native extends Gateway
      * @var HttpClient
      */
     protected $client;
+
+    /**
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider
+     */
+    protected $endpointProvider;
 
     /**
      * Query visitor
@@ -81,15 +87,25 @@ class Native extends Gateway
      * Construct from HTTP client
      *
      * @param HttpClient $client
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider $endpointProvider
      * @param CriterionVisitor $criterionVisitor
      * @param SortClauseVisitor $sortClauseVisitor
      * @param FacetBuilderVisitor $facetBuilderVisitor
      * @param FieldValueMapper $fieldValueMapper
      * @param FieldNameGenerator $nameGenerator
      */
-    public function __construct( HttpClient $client, CriterionVisitor $criterionVisitor, SortClauseVisitor $sortClauseVisitor, FacetBuilderVisitor $facetBuilderVisitor, FieldValueMapper $fieldValueMapper, FieldNameGenerator $nameGenerator )
+    public function __construct(
+        HttpClient $client,
+        EndpointProvider $endpointProvider,
+        CriterionVisitor $criterionVisitor,
+        SortClauseVisitor $sortClauseVisitor,
+        FacetBuilderVisitor $facetBuilderVisitor,
+        FieldValueMapper $fieldValueMapper,
+        FieldNameGenerator $nameGenerator
+    )
     {
         $this->client              = $client;
+        $this->endpointProvider = $endpointProvider;
         $this->criterionVisitor    = $criterionVisitor;
         $this->sortClauseVisitor   = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
@@ -110,9 +126,11 @@ class Native extends Gateway
      */
     public function findContent( Query $query, array $fieldFilters = array() )
     {
+        $coreFilter = $this->getCoreFilter( $fieldFilters );
+
         $parameters = array(
-            "q" => 'document_type_id:"content" AND ' . $this->criterionVisitor->visit( $query->query ),
-            "fq" => 'document_type_id:"content" AND ' . $this->criterionVisitor->visit( $query->filter ),
+            "q" => $this->criterionVisitor->visit( $query->query ),
+            "fq" => 'document_type_id:"content" AND ' . ( !empty( $coreFilter ) ? "({$coreFilter}) AND " : "" ) . $this->criterionVisitor->visit( $query->filter ),
             "sort" => implode(
                 ", ",
                 array_map(
@@ -126,10 +144,17 @@ class Native extends Gateway
             "wt" => "json",
         );
 
+        $endpoints = $this->endpointProvider->getSearchTargets( $fieldFilters );
+        if ( !empty( $endpoints ) )
+        {
+            $parameters["shards"] = implode( ",", $endpoints );
+        }
+
         // @todo: Extract method
         $response = $this->client->request(
             'GET',
-            '/solr/select?' .
+            $this->endpointProvider->getEntryPoint(),
+            '/select?' .
             http_build_query( $parameters ) .
             ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
             implode(
@@ -197,6 +222,62 @@ class Native extends Gateway
     }
 
     /**
+     *
+     *
+     * @param array $languageSettings
+     *
+     * @return string
+     */
+    protected function getCoreFilter( array $languageSettings )
+    {
+        if ( empty( $languageSettings ) )
+        {
+            return "";
+        }
+
+        $filters = array();
+        $languageCodes = $languageSettings["languages"];
+
+        foreach ( $languageCodes as $languageCode )
+        {
+            $filters[] = "(" . $this->getCoreLanguageFilter( $languageCodes, $languageCode ) . ")";
+        }
+
+        if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true )
+        {
+            $filters[] = "meta_indexed_is_main_translation_and_always_available_b:true";
+        }
+
+        return implode( " OR ", $filters );
+    }
+
+    /**
+     *
+     *
+     * @param array $languageCodes
+     * @param string $selectedLanguageCode
+     *
+     * @return string
+     */
+    protected function getCoreLanguageFilter( array $languageCodes, $selectedLanguageCode )
+    {
+        $filters = array();
+        $filters[] = 'meta_indexed_language_code_s:"' . $selectedLanguageCode . '"';
+
+        foreach ( $languageCodes as $languageCode )
+        {
+            if ( $languageCode === $selectedLanguageCode )
+            {
+                break;
+            }
+
+            $filters[] = 'NOT language_code_ms:"' . $languageCode . '"';
+        }
+
+        return implode( " AND ", $filters );
+    }
+
+    /**
      * Indexes a block of documents, which in our case is a Content preceded by its Locations.
      * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
      *
@@ -206,10 +287,32 @@ class Native extends Gateway
      */
     public function bulkIndexDocuments( array $documents )
     {
-        $updates   = $this->createUpdates( $documents );
-        $result   = $this->client->request(
+        $map = array();
+
+        foreach ( $documents as $documents2 )
+        {
+            foreach ( $documents2 as $document )
+            {
+                $map[$document->languageCode][] = $document;
+            }
+        }
+
+        foreach ( $map as $languageCode => $translationDocuments )
+        {
+            $this->bulkIndexTranslationDocuments( $translationDocuments, $languageCode );
+        }
+    }
+
+    protected function bulkIndexTranslationDocuments( array $documents, $languageCode )
+    {
+        $server = $this->endpointProvider->getIndexingTarget( $languageCode );
+
+        $updates = $this->createUpdates( $documents );
+        $result = $this->client->request(
             'POST',
-            '/solr/update?' . ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
+            $server,
+            '/update?' .
+            ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',
@@ -230,20 +333,29 @@ class Native extends Gateway
      * Deletes a block of documents, which in our case is a Content preceded by its Locations.
      * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
      *
+     * @todo to be removed
+     *
      * @param string $blockId
      */
     public function deleteBlock( $blockId )
     {
-        $this->client->request(
-            'POST',
-            '/solr/update?' . ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
-            new Message(
-                array(
-                    'Content-Type' => 'text/xml',
-                ),
-                "<delete><query>_root_:" . $blockId . "</query></delete>"
-            )
-        );
+        $endpoints = $this->endpointProvider->getAllEndpoints();
+
+        foreach ( $endpoints as $endpoint )
+        {
+            $this->client->request(
+                'POST',
+                $endpoint,
+                '/update?' .
+                ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
+                new Message(
+                    array(
+                        'Content-Type' => 'text/xml',
+                    ),
+                    "<delete><query>_root_:" . $blockId . "</query></delete>"
+                )
+            );
+        }
     }
 
     /**
@@ -253,9 +365,26 @@ class Native extends Gateway
      */
     public function purgeIndex()
     {
+        $endpoints = $this->endpointProvider->getAllEndpoints();
+
+        foreach ( $endpoints as $endpoint )
+        {
+            $this->purgeEndpoint( $endpoint );
+        }
+    }
+
+    /**
+     * @todo error handling
+     *
+     * @param $endpoint
+     */
+    protected function purgeEndpoint( $endpoint )
+    {
         $this->client->request(
             'POST',
-            '/solr/update?' . ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
+            $endpoint,
+            '/update?' .
+            ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
                 array(
                     'Content-Type' => 'text/xml',

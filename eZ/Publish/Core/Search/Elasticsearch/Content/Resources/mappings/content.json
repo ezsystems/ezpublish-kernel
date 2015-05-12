@@ -89,8 +89,8 @@
                     "meta_language_code_s": { "type": "string", "index": "not_analyzed" },
                     "meta_is_main_translation_b": { "type": "boolean", "index": "not_analyzed" },
                     "meta_is_always_available_b": { "type": "boolean", "index": "not_analyzed" },
-                    "user_first_name_value_ms": { "type": "string", "analyzer": "string_lowercase", "copy_to": "fields_doc.custom_field" },
-                    "user_last_name_value_ms": { "type": "string", "analyzer": "string_lowercase", "copy_to": "fields_doc.custom_field" },
+                    "user_first_name_value_s": { "type": "string", "analyzer": "string_lowercase", "copy_to": "fields_doc.custom_field" },
+                    "user_last_name_value_s": { "type": "string", "analyzer": "string_lowercase", "copy_to": "fields_doc.custom_field" },
                     "custom_field": { "type": "string", "analyzer": "string_lowercase" }
                 }
             }

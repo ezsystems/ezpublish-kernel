@@ -90,8 +90,7 @@ class MapLocationDistanceRange extends MapLocation
                 $query = "{!frange l={$start}}{$query}";
             }
 
-            // @todo: fix for SOLR version < 4.1.0, see https://issues.apache.org/jira/browse/SOLR-4093
-            $queries[] = '_query_:"' . $query . '"';
+            $queries[] = "{$query} AND {$name}_0_coordinate:[* TO *]";
         }
 
         return '(' . implode( ' OR ', $queries ) . ')';

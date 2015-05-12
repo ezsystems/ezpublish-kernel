@@ -6,18 +6,40 @@ imports:
     - {resource: search_engines/solr/sort_clause_visitors.yml}
 
 parameters:
-    ezpublish.search.solr.connection.server: http://localhost:8983/
+    ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
     ezpublish.spi.search.solr.class: eZ\Publish\Core\Search\Solr\Handler
     ezpublish.search.solr.content.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\Native
+    ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider.class: eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider\TranslationEndpointProvider
     ezpublish.spi.search.solr.content_handler.class: eZ\Publish\Core\Search\Solr\Content\Handler
+    ezpublish.search.solr.content.document_mapper.translation_document_mapper.class: eZ\Publish\Core\Search\Solr\Content\DocumentMapper\TranslationDocumentMapper
     ezpublish.search.solr.location.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Location\Gateway\Native
     ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
 
 services:
+    ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider:
+        class: %ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider.class%
+
+    ezpublish.search.solr.content.gateway.endpoint_provider:
+        alias: ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider
+
+    ezpublish.search.solr.content.document_mapper.translation_document_mapper:
+        class: %ezpublish.search.solr.content.document_mapper.translation_document_mapper.class%
+        arguments:
+            - @ezpublish.search.common.field_registry
+            - @ezpublish.spi.persistence.location_handler
+            - @ezpublish.spi.persistence.content_type_handler
+            - @ezpublish.spi.persistence.object_state_handler
+            - @ezpublish.spi.persistence.section_handler
+            - @ezpublish.search.common.field_name_generator
+
+    ezpublish.search.solr.content.document_mapper:
+        alias: ezpublish.search.solr.content.document_mapper.translation_document_mapper
+
     ezpublish.search.solr.content.gateway.native:
         class: %ezpublish.search.solr.content.gateway.native.class%
         arguments:
             - @ezpublish.search.solr.content.gateway.client.http.stream
+            - @ezpublish.search.solr.content.gateway.endpoint_provider
             - @ezpublish.search.solr.content.criterion_visitor.aggregate
             - @ezpublish.search.solr.content.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.content.facet_builder_visitor.aggregate
@@ -31,19 +53,15 @@ services:
         class: %ezpublish.spi.search.solr.content_handler.class%
         arguments:
             - @ezpublish.search.solr.content.gateway
-            - @ezpublish.search.common.field_registry
             - @ezpublish.spi.persistence.content_handler
-            - @ezpublish.spi.persistence.location_handler
-            - @ezpublish.spi.persistence.content_type_handler
-            - @ezpublish.spi.persistence.object_state_handler
-            - @ezpublish.spi.persistence.section_handler
-            - @ezpublish.search.common.field_name_generator
+            - @ezpublish.search.solr.content.document_mapper
         lazy: true
 
     ezpublish.search.solr.location.gateway.native:
         class: %ezpublish.search.solr.location.gateway.native.class%
         arguments:
             - @ezpublish.search.solr.content.gateway.client.http.stream
+            - @ezpublish.search.solr.content.gateway.endpoint_provider
             - @ezpublish.search.solr.location.criterion_visitor.aggregate
             - @ezpublish.search.solr.location.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.location.facet_builder_visitor.aggregate
