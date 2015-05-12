@@ -1,6 +1,8 @@
 parameters:
+    # Content search
     ezpublish.search.solr.content.sort_clause_visitor.content_id.class: eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor\ContentId
     ezpublish.search.solr.content.sort_clause_visitor.content_name.class: eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor\ContentName
+    ezpublish.search.solr.content.sort_clause_visitor.field.class: eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor\Field
     ezpublish.search.solr.content.sort_clause_visitor.location_path_string.class: eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor\LocationPathString
     ezpublish.search.solr.content.sort_clause_visitor.location_depth.class: eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor\LocationDepth
     ezpublish.search.solr.content.sort_clause_visitor.location_priority.class: eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor\LocationPriority
@@ -8,7 +10,7 @@ parameters:
     ezpublish.search.solr.content.sort_clause_visitor.section_name.class: eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor\SectionName
     ezpublish.search.solr.content.sort_clause_visitor.date_published.class: eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor\DatePublished
     ezpublish.search.solr.content.sort_clause_visitor.map_location_distance.class: eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor\MapLocationDistance
-
+    # Location search
     ezpublish.search.solr.location.sort_clause_visitor.content_id.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\ContentId
     ezpublish.search.solr.location.sort_clause_visitor.content_name.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\ContentName
     ezpublish.search.solr.location.sort_clause_visitor.date_published.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\DatePublished
@@ -23,6 +25,7 @@ parameters:
     ezpublish.search.solr.location.sort_clause_visitor.visibility.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\Location\Visibility
 
 services:
+    # Content search
     ezpublish.search.solr.content.sort_clause_visitor.content_id:
         class: %ezpublish.search.solr.content.sort_clause_visitor.content_id.class%
         tags:
@@ -30,6 +33,13 @@ services:
 
     ezpublish.search.solr.content.sort_clause_visitor.content_name:
         class: %ezpublish.search.solr.content.sort_clause_visitor.content_name.class%
+        tags:
+            - {name: ezpublish.search.solr.content.sort_clause_visitor}
+
+    ezpublish.search.solr.content.sort_clause_visitor.field:
+        class: %ezpublish.search.solr.content.sort_clause_visitor.field.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
         tags:
             - {name: ezpublish.search.solr.content.sort_clause_visitor}
 
@@ -72,7 +82,6 @@ services:
             - {name: ezpublish.search.solr.content.sort_clause_visitor}
 
     # Location search
-
     ezpublish.search.solr.location.sort_clause_visitor.content_id:
         class: %ezpublish.search.solr.location.sort_clause_visitor.content_id.class%
         tags:
