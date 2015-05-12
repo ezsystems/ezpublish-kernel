@@ -128,6 +128,12 @@ class Native extends Gateway
             $parameters["shards"] = implode( ",", $endpoints );
         }
 
+        $endpoints = $this->endpointProvider->getAllEndpoints();
+        if ( !empty( $endpoints ) )
+        {
+            $parameters["shards"] = implode( ",", $endpoints );
+        }
+
         // @todo: Extract method
         $response = $this->client->request(
             'GET',
