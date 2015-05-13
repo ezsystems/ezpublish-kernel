@@ -51,6 +51,7 @@ class EZP20018VisibilityTest extends BaseTest
     {
         $query = new Query();
         $query->filter = new Visibility( Visibility::VISIBLE );
+        $query->limit = 50;
         $results1 = $this->getRepository()->getSearchService()->findContent( $query );
 
         $this->assertEquals( 18, $results1->totalCount );
