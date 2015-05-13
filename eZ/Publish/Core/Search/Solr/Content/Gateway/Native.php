@@ -83,6 +83,8 @@ class Native extends Gateway
      */
     protected $commit = true;
 
+    protected $documentType;
+
     /**
      * Construct from HTTP client
      *
@@ -111,6 +113,7 @@ class Native extends Gateway
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->fieldValueMapper    = $fieldValueMapper;
         $this->nameGenerator       = $nameGenerator;
+        $this->documentType = EndpointProvider::DOCUMENT_TYPE_CONTENT;
     }
 
     /**
@@ -150,7 +153,10 @@ class Native extends Gateway
             $parameters["shards"] = implode( ",", $endpoints );
         }
 
-        $endpoints = $this->endpointProvider->getSearchTargets( $fieldFilters );
+        $endpoints = $this->endpointProvider->getSearchTargets(
+            $this->documentType,
+            $fieldFilters
+        );
         if ( !empty( $endpoints ) )
         {
             $parameters["shards"] = implode( ",", $endpoints );
@@ -159,7 +165,7 @@ class Native extends Gateway
         // @todo: Extract method
         $response = $this->client->request(
             'GET',
-            $this->endpointProvider->getEntryPoint(),
+            $this->endpointProvider->getEntryPoint( $this->documentType ),
             '/select?' .
             http_build_query( $parameters ) .
             ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
@@ -311,7 +317,10 @@ class Native extends Gateway
 
     protected function bulkIndexTranslationDocuments( array $documents, $languageCode )
     {
-        $server = $this->endpointProvider->getIndexingTarget( $languageCode );
+        $server = $this->endpointProvider->getIndexingTarget(
+            $this->documentType,
+            $languageCode
+        );
 
         $updates = $this->createUpdates( $documents );
         $result = $this->client->request(
@@ -345,7 +354,7 @@ class Native extends Gateway
      */
     public function deleteBlock( $blockId )
     {
-        $endpoints = $this->endpointProvider->getAllEndpoints();
+        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
 
         foreach ( $endpoints as $endpoint )
         {
@@ -371,7 +380,7 @@ class Native extends Gateway
      */
     public function purgeIndex()
     {
-        $endpoints = $this->endpointProvider->getAllEndpoints();
+        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
 
         foreach ( $endpoints as $endpoint )
         {

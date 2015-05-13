@@ -70,6 +70,8 @@ class Native extends Gateway
      */
     protected $commit = true;
 
+    protected $documentType;
+
     /**
      * Construct from HTTP client
      *
@@ -95,6 +97,8 @@ class Native extends Gateway
         $this->sortClauseVisitor = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->locationHandler = $locationHandler;
+        // @todo use Content endpoints for now
+        $this->documentType = EndpointProvider::DOCUMENT_TYPE_CONTENT;
     }
 
     /**
@@ -128,7 +132,7 @@ class Native extends Gateway
             $parameters["shards"] = implode( ",", $endpoints );
         }
 
-        $endpoints = $this->endpointProvider->getAllEndpoints();
+        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
         if ( !empty( $endpoints ) )
         {
             $parameters["shards"] = implode( ",", $endpoints );
@@ -137,7 +141,7 @@ class Native extends Gateway
         // @todo: Extract method
         $response = $this->client->request(
             'GET',
-            $this->endpointProvider->getEntryPoint(),
+            $this->endpointProvider->getEntryPoint( $this->documentType ),
             '/select?' .
             http_build_query( $parameters ) .
             ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
