@@ -159,7 +159,7 @@ class Handler implements SearchHandlerInterface
         $blockId = "content{$content->versionInfo->contentInfo->id}";
         $this->gateway->deleteBlock( $blockId );
 
-        $this->gateway->bulkIndexDocuments( $this->mapper->mapContent( $content ) );
+        $this->gateway->bulkIndexDocuments( array( $this->mapper->mapContent( $content ) ) );
     }
 
     /**
