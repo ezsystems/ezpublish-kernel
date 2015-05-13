@@ -208,22 +208,9 @@ class Native extends Gateway
                 $query->sortClauses
             ),
             "track_scores" => true,
+            "from" => $query->offset,
+            "size" => $query->limit,
         );
-
-        if ( $query->offset !== null )
-        {
-            $ast["from"] = $query->offset;
-        }
-
-        // TODO: for some reason 1073741824 causes out of memory...
-        if ( $query->limit !== null && $query->limit !== 1073741824 )
-        {
-            $ast["size"] = $query->limit;
-        }
-        if ( $query->limit == 1073741824 )
-        {
-            $ast["size"] = 1000;
-        }
 
         $response = $this->findRaw( json_encode( $ast ), $type );
 

@@ -236,13 +236,12 @@ class LocationService implements APILocationService, Sessionable
      * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     *
      * @param int $offset the start offset for paging
-     * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
+     * @param int $limit the number of locations returned
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 )
+    public function loadLocationChildren( Location $location, $offset = 0, $limit = 10 )
     {
         $values = $this->requestParser->parse( 'location', $location->id );
         $response = $this->client->request(

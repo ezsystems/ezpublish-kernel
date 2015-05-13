@@ -120,19 +120,11 @@ class Native extends Gateway
                     $query->sortClauses
                 )
             ),
+            "start" => $query->offset,
+            "rows" => $query->limit,
             "fl" => "*,score",
             "wt" => "json",
         );
-
-        if ( $query->offset !== null )
-        {
-            $parameters["start"] = $query->offset;
-        }
-
-        if ( $query->limit !== null )
-        {
-            $parameters["rows"] = $query->limit;
-        }
 
         // @todo: Extract method
         $response = $this->client->request(
