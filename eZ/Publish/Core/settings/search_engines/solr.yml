@@ -26,6 +26,7 @@ services:
         class: %ezpublish.search.solr.content.document_mapper.translation_document_mapper.class%
         arguments:
             - @ezpublish.search.common.field_registry
+            - @ezpublish.spi.persistence.content_handler
             - @ezpublish.spi.persistence.location_handler
             - @ezpublish.spi.persistence.content_type_handler
             - @ezpublish.spi.persistence.object_state_handler
