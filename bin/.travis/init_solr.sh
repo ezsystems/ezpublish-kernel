@@ -207,6 +207,10 @@ add_core() {
     [[ -d "${dir_name}/example/multicore/${solr_core}" ]] || mkdir $dir_name/example/multicore/$solr_core
     [[ -d "${dir_name}/example/multicore/${solr_core}/conf" ]] || mkdir $dir_name/example/multicore/$solr_core/conf
 
+    cp $dir_name/example/solr/collection1/conf/currency.xml $dir_name/example/multicore/$solr_core/conf/
+    cp $dir_name/example/solr/collection1/conf/stopwords.txt $dir_name/example/multicore/$solr_core/conf/
+    cp $dir_name/example/solr/collection1/conf/synonyms.txt $dir_name/example/multicore/$solr_core/conf/
+
     # copies custom configurations
     if [ -d "${solr_confs}" ] ; then
       cp -R $solr_confs/* $dir_name/example/multicore/$solr_core/conf/
