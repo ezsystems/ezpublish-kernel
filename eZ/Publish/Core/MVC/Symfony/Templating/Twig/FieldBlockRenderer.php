@@ -10,10 +10,8 @@
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig;
 
 use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistryInterface;
 use eZ\Publish\Core\MVC\Symfony\Templating\FieldBlockRendererInterface;
@@ -30,21 +28,6 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     const FIELD_EDIT_SUFFIX = '_field_edit';
     const FIELD_DEFINITION_VIEW_SUFFIX = '_settings';
     const FIELD_DEFINITION_EDIT_SUFFIX = '_field_definition_edit';
-
-    /**
-     * @var ContentTypeService
-     */
-    private $contentTypeService;
-
-    /**
-     * @var ParameterProviderRegistryInterface
-     */
-    private $parameterProviderRegistry;
-
-    /**
-     * @var TranslationHelper
-     */
-    private $translationHelper;
 
     /**
      * @var Twig_Environment
@@ -102,24 +85,6 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     private $blocks = [];
 
     /**
-     * Hash of field type identifiers (i.e. "ezstring"), indexed by field definition identifier
-     *
-     * @var array
-     */
-    private $fieldTypeIdentifiers = [];
-
-    public function __construct(
-        ContentTypeService $contentTypeService,
-        ParameterProviderRegistryInterface $parameterProviderRegistry,
-        TranslationHelper $translationHelper
-    )
-    {
-        $this->contentTypeService = $contentTypeService;
-        $this->parameterProviderRegistry = $parameterProviderRegistry;
-        $this->translationHelper = $translationHelper;
-    }
-
-    /**
      * @param Twig_Environment $twig
      */
     public function setTwig( Twig_Environment $twig )
@@ -168,37 +133,26 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         return $b['priority'] - $a['priority'];
     }
 
-    public function renderContentFieldView( Content $content, $fieldIdentifier, array $params = [] )
+    public function renderContentFieldView( Field $field, $fieldTypeIdentifier, array $params = [] )
     {
-        return $this->renderContentField( $content, $fieldIdentifier, $params, self::VIEW );
+        return $this->renderContentField( $field, $fieldTypeIdentifier, $params, self::VIEW );
     }
 
-    public function renderContentFieldEdit( Content $content, $fieldIdentifier, array $params = [] )
+    public function renderContentFieldEdit( Field $field, $fieldTypeIdentifier, array $params = [] )
     {
-        return $this->renderContentField( $content, $fieldIdentifier, $params, self::EDIT );
+        return $this->renderContentField( $field, $fieldTypeIdentifier, $params, self::EDIT );
     }
 
     /**
-     * @param Content $content
-     * @param string $fieldIdentifier
+     * @param Field $content
+     * @param string $fieldTypeIdentifier
      * @param array $params
      * @param int $type Either self::VIEW or self::EDIT
      *
      * @return string
-     * @throws InvalidArgumentException
      */
-    private function renderContentField( Content $content, $fieldIdentifier, array $params, $type )
+    private function renderContentField( Field $field, $fieldTypeIdentifier, array $params, $type )
     {
-        $field = $this->translationHelper->getTranslatedField( $content, $fieldIdentifier, isset( $params['lang'] ) ? $params['lang'] : null );
-
-        if ( !$field instanceof Field )
-        {
-            throw new InvalidArgumentException(
-                '$fieldIdentifier',
-                "'{$fieldIdentifier}' field not present on content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
-            );
-        }
-
         $localTemplate = null;
         if ( isset( $params['template'] ) )
         {
@@ -208,7 +162,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
             unset( $params['template'] );
         }
 
-        $params = $this->getRenderFieldBlockParameters( $content, $field, $params );
+        $params += ['field' => $field];
 
         // Getting instance of Twig_Template that will be used to render blocks
         if ( !$this->template instanceof Twig_Template )
@@ -218,9 +172,9 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         }
 
         return $this->template->renderBlock(
-            $this->getRenderFieldBlockName( $content, $field, $type ),
+            $this->getRenderFieldBlockName( $fieldTypeIdentifier, $type ),
             $params,
-            $this->getBlocksByField( $content, $field, $type, $localTemplate )
+            $this->getBlocksByField( $fieldTypeIdentifier, $type, $localTemplate )
         );
     }
 
@@ -255,63 +209,10 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         ];
 
         return $this->template->renderBlock(
-            $this->getRenderFieldDefinitionBlockName( $fieldDefinition, $type ),
+            $this->getRenderFieldDefinitionBlockName( $fieldDefinition->fieldTypeIdentifier, $type ),
             $params,
             $this->getBlocksByFieldDefinition( $fieldDefinition, $type )
         );
-    }
-
-    /**
-     * Generates the array of parameter to pass to the field template.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field the Field to display
-     * @param array $params An array of parameters to pass to the field view
-     *
-     * @return array
-     */
-    private function getRenderFieldBlockParameters( Content $content, Field $field, array $params = [] )
-    {
-        // Merging passed parameters to default ones
-        $params += [
-            'parameters' => [], // parameters dedicated to template processing
-            'attr' => [] // attributes to add on the enclosing HTML tags
-        ];
-
-        $versionInfo = $content->getVersionInfo();
-        $contentInfo = $versionInfo->getContentInfo();
-        $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
-        $fieldDefinition = $contentType->getFieldDefinition( $field->fieldDefIdentifier );
-        // Adding Field, FieldSettings and ContentInfo objects to
-        // parameters to be passed to the template
-        $params += [
-            'field' => $field,
-            'content' => $content,
-            'contentInfo' => $contentInfo,
-            'versionInfo' => $versionInfo,
-            'fieldSettings' => $fieldDefinition->getFieldSettings()
-        ];
-
-        // Adding field type specific parameters if any.
-        if ( $this->parameterProviderRegistry->hasParameterProvider( $fieldDefinition->fieldTypeIdentifier ) )
-        {
-            $params['parameters'] += $this->parameterProviderRegistry
-                ->getParameterProvider( $fieldDefinition->fieldTypeIdentifier )
-                ->getViewParameters( $field );
-        }
-
-        // make sure we can easily add class="<fieldtypeidentifier>-field" to the
-        // generated HTML
-        if ( isset( $params['attr']['class'] ) )
-        {
-            $params['attr']['class'] .= ' ' . $this->getFieldTypeIdentifier( $content, $field ) . '-field';
-        }
-        else
-        {
-            $params['attr']['class'] = $this->getFieldTypeIdentifier( $content, $field ) . '-field';
-        }
-
-        return $params;
     }
 
     /**
@@ -343,21 +244,19 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     }
 
     /**
-     * Returns template blocks for $field. First check in the $localTemplate if
-     * it's provided.
+     * Returns template blocks for $fieldTypeIdentifier. First check in the $localTemplate if it's provided.
      * Template block convention name is <fieldTypeIdentifier>_field
      * Example: 'ezstring_field' will be relevant for a full view of ezstring field type
      *
-     * @param Content $content
-     * @param Field $field
+     * @param string $fieldTypeIdentifier
      * @param int $type Either self::VIEW or self::EDIT
      * @param null|string|Twig_Template $localTemplate a file where to look for the block first
      *
      * @return array
      */
-    private function getBlocksByField( Content $content, Field $field, $type, $localTemplate = null )
+    private function getBlocksByField( $fieldTypeIdentifier, $type, $localTemplate = null )
     {
-        $fieldBlockName = $this->getRenderFieldBlockName( $content, $field, $type );
+        $fieldBlockName = $this->getRenderFieldBlockName( $fieldTypeIdentifier, $type );
         if ( $localTemplate !== null )
         {
             // $localTemplate might be a Twig_Template instance already (e.g. using _self Twig keyword)
@@ -386,7 +285,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     private function getBlocksByFieldDefinition( FieldDefinition $definition, $type )
     {
         return $this->getBlockByName(
-            $this->getRenderFieldDefinitionBlockName( $definition, $type ),
+            $this->getRenderFieldDefinitionBlockName( $definition->fieldTypeIdentifier, $type ),
             $type === self::EDIT ? 'fieldDefinitionEditResources' : 'fieldDefinitionViewResources'
         );
     }
@@ -427,56 +326,31 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     }
 
     /**
-     * Returns expected block name for $field, attached in $content.
+     * Returns expected block name for $fieldTypeIdentifier, attached in $content.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
+     * @param string $fieldTypeIdentifier
      * @param int $type Either self::VIEW or self::EDIT
      *
      * @return string
      */
-    private function getRenderFieldBlockName( Content $content, Field $field, $type )
+    private function getRenderFieldBlockName( $fieldTypeIdentifier, $type )
     {
         $suffix = $type === self::EDIT ? self::FIELD_EDIT_SUFFIX : self::FIELD_VIEW_SUFFIX;
-        return $this->getFieldTypeIdentifier( $content, $field ) . $suffix;
+        return $fieldTypeIdentifier . $suffix;
     }
 
     /**
      * Returns the name of the block to render the settings of the field
      * definition $definition
      *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $definition
+     * @param string $fieldTypeIdentifier
      * @param int $type Either self::VIEW or self::EDIT
      *
      * @return string
      */
-    private function getRenderFieldDefinitionBlockName( FieldDefinition $definition, $type )
+    private function getRenderFieldDefinitionBlockName( $fieldTypeIdentifier, $type )
     {
         $suffix = $type === self::EDIT ? self::FIELD_DEFINITION_EDIT_SUFFIX : self::FIELD_DEFINITION_VIEW_SUFFIX;
-        return $definition->fieldTypeIdentifier . $suffix;
-    }
-
-    /**
-     * Returns the field type identifier for $field
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     * @param \eZ\Publish\API\Repository\Values\Content\Field $field
-     *
-     * @return string
-     */
-    private function getFieldTypeIdentifier( Content $content, Field $field )
-    {
-        $contentInfo = $content->getVersionInfo()->getContentInfo();
-        $key = $contentInfo->contentTypeId . '  ' . $field->fieldDefIdentifier;
-
-        if ( !isset( $this->fieldTypeIdentifiers[$key] ) )
-        {
-            $contentType = $this->contentTypeService->loadContentType( $contentInfo->contentTypeId );
-            $this->fieldTypeIdentifiers[$key] = $contentType
-                ->getFieldDefinition( $field->fieldDefIdentifier )
-                ->fieldTypeIdentifier;
-        }
-
-        return $this->fieldTypeIdentifiers[$key];
+        return $fieldTypeIdentifier . $suffix;
     }
 }

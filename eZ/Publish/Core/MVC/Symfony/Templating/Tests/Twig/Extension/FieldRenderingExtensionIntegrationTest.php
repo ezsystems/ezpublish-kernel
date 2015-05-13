@@ -27,16 +27,7 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
     {
         $configResolver = $this->getConfigResolverMock();
 
-        $fieldBlockRenderer = new FieldBlockRenderer(
-            $this->getContentTypeServiceMock(),
-            $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface' ),
-            new TranslationHelper(
-                $configResolver,
-                $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
-                array(),
-                $this->getMock( 'Psr\Log\LoggerInterface' )
-            )
-        );
+        $fieldBlockRenderer = new FieldBlockRenderer();
         $fieldBlockRenderer->setFieldViewResources(
             array(
                 array(
@@ -70,7 +61,19 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
             )
         );
 
-        return array( new FieldRenderingExtension( $fieldBlockRenderer ) );
+        return array(
+            new FieldRenderingExtension(
+                $fieldBlockRenderer,
+                $this->getContentTypeServiceMock(),
+                $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface' ),
+                new TranslationHelper(
+                    $configResolver,
+                    $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' ),
+                    array(),
+                    $this->getMock( 'Psr\Log\LoggerInterface' )
+                )
+            )
+        );
     }
 
     public function getFixturesDir()
