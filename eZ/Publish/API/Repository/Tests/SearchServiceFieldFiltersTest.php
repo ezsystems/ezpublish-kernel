@@ -1620,7 +1620,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1668,7 +1668,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1714,7 +1714,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1760,7 +1760,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1804,7 +1804,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1851,7 +1851,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1898,7 +1898,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1941,7 +1941,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -1984,7 +1984,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2029,7 +2029,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2073,7 +2073,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2115,7 +2115,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2157,7 +2157,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2201,7 +2201,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2248,7 +2248,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2295,7 +2295,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2339,7 +2339,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -2382,7 +2382,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
             )
         );
 
-        $criterion->setCustomField( "folder", "short_description", "folder_name_value_ms" );
+        $criterion->setCustomField( "folder", "short_description", "folder_name_value_s" );
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
@@ -3271,7 +3271,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "two"
                 ),
@@ -3320,7 +3320,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "two"
                 ),
@@ -3364,7 +3364,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "two"
                 ),
@@ -3408,7 +3408,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "two"
                 ),
@@ -3451,7 +3451,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3500,7 +3500,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3549,7 +3549,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3598,7 +3598,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3643,7 +3643,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
         $query = new Query(
             array(
                 $type => new Criterion\CustomField(
-                    "folder_name_value_ms",
+                    "folder_name_value_s",
                     Operator::EQ,
                     "one"
                 ),
@@ -3686,7 +3686,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
                     new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
                 ),
@@ -3731,7 +3731,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 
@@ -3771,7 +3771,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 
@@ -3811,7 +3811,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 
@@ -3850,7 +3850,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
                     new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
                 ),
@@ -3895,7 +3895,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
                     new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
                 ),
@@ -3940,7 +3940,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
                     new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
                 ),
@@ -3985,7 +3985,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 
@@ -4026,7 +4026,7 @@ class SearchServiceFieldFiltersTest extends BaseTest
 
         $query = new Query(
             array(
-                $type => new Criterion\CustomField( "folder_name_value_ms", Operator::GTE, "z" ),
+                $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
             )
         );
 
