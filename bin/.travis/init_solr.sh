@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 SOLR_PORT=${SOLR_PORT:-8983}
-SOLR_VERSION=${SOLR_VERSION:-4.9.1}
+SOLR_VERSION=${SOLR_VERSION:-4.10.3}
 DEBUG=${DEBUG:-false}
 SOLR_CORE=${SOLR_CORE:-core0}
+SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 
 download() {
     FILE="$2.tgz"
@@ -184,6 +185,7 @@ download_and_run() {
     esac
 
     download $url $dir_name
+    sed -i.bak 's/<shardHandlerFactory/<core name="core2" instanceDir="core2" \/><core name="core3" instanceDir="core3" \/><shardHandlerFactory/g' $dir_name/example/multicore/solr.xml
     add_core $dir_name $dir_conf core0 $SOLR_CONFS
     add_core $dir_name $dir_conf core1 $SOLR_CONFS
     add_core $dir_name $dir_conf core2 $SOLR_CONFS
@@ -210,6 +212,11 @@ add_core() {
     cp $dir_name/example/solr/collection1/conf/currency.xml $dir_name/example/multicore/$solr_core/conf/
     cp $dir_name/example/solr/collection1/conf/stopwords.txt $dir_name/example/multicore/$solr_core/conf/
     cp $dir_name/example/solr/collection1/conf/synonyms.txt $dir_name/example/multicore/$solr_core/conf/
+
+    if [ ! -f $dir_name/example/multicore/$solr_core/conf/solrconfig.xml ]; then
+        cp $dir_name/example/multicore/core0/conf/solrconfig.xml $dir_name/example/multicore/$solr_core/conf/
+        sed -i.bak s/core0/"$solr_core"/g $dir_name/example/multicore/$solr_core/conf/solrconfig.xml
+    fi
 
     # copies custom configurations
     if [ -d "${solr_confs}" ] ; then
