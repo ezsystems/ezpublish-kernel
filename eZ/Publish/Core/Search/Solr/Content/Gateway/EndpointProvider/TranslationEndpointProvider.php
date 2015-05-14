@@ -44,13 +44,21 @@ class TranslationEndpointProvider implements EndpointProvider
     }
 
     /**
+     *
+     *
      * @param mixed $documentType
      *
      * @return string
      */
     public function getEntryPoint( $documentType )
     {
-        return $this->endpointMap[$documentType]["eng-GB"];
+        // @todo implement real entry point selection
+        if ( is_array( $this->endpointMap[$documentType] ) )
+        {
+            return $this->endpointMap[$documentType]["eng-GB"];
+        }
+
+        return $this->endpointMap[$documentType];
     }
 
     public function getIndexingTarget( $documentType, $languageCode )
