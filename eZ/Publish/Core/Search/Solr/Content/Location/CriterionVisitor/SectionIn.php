@@ -45,18 +45,16 @@ class SectionIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $condition = implode(
+        return implode(
             ' OR ',
             array_map(
                 function ( $value )
                 {
-                    return 'section_id:"' . $value . '"';
+                    return 'content_section_id:"' . $value . '"';
                 },
                 $criterion->value
             )
         );
-
-        return "{!child of='document_type_id:content' v='{$condition}'}";
     }
 }
 

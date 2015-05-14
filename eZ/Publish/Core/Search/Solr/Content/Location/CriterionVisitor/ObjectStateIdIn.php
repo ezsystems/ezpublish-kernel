@@ -45,19 +45,17 @@ class ObjectStateIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $condition = implode(
+        return implode(
             ' OR ',
             array_map(
                 function ( $value )
                 {
                     // TODO this should not be multiple???
-                    return 'object_state_mid:"' . $value . '"';
+                    return 'content_object_state_mid:"' . $value . '"';
                 },
                 $criterion->value
             )
         );
-
-        return "{!child of='document_type_id:content' v='{$condition}'}";
     }
 }
 

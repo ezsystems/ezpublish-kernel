@@ -47,18 +47,16 @@ class PublishedIn extends DateMetadata
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $condition = implode(
+        return implode(
             ' OR ',
             array_map(
                 function ( $value )
                 {
-                    return 'published_dt:"' . $this->getSolrTime( $value ) . '"';
+                    return 'content_published_dt:"' . $this->getSolrTime( $value ) . '"';
                 },
                 $criterion->value
             )
         );
-
-        return "{!child of='document_type_id:content' v='{$condition}'}";
     }
 }
 

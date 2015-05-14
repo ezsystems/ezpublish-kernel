@@ -49,13 +49,13 @@ class UserMetadataIn extends CriterionVisitor
         switch ( $criterion->target )
         {
             case Criterion\UserMetadata::MODIFIER:
-                $solrField = 'creator_id';
+                $solrField = 'content_creator_id';
                 break;
             case Criterion\UserMetadata::OWNER:
-                $solrField = 'owner_id';
+                $solrField = 'content_owner_id';
                 break;
             case Criterion\UserMetadata::GROUP:
-                $solrField = 'owner_user_group_mid';
+                $solrField = 'content_owner_user_group_mid';
                 break;
 
             default:
@@ -64,7 +64,7 @@ class UserMetadataIn extends CriterionVisitor
                 );
         }
 
-        $condition = implode(
+        return implode(
             ' OR ',
             array_map(
                 function ( $value ) use ( $solrField )
@@ -74,8 +74,6 @@ class UserMetadataIn extends CriterionVisitor
                 $criterion->value
             )
         );
-
-        return "{!child of='document_type_id:content' v='{$condition}'}";
     }
 }
 

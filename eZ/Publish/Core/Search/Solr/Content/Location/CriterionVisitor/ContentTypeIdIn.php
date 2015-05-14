@@ -45,7 +45,7 @@ class ContentTypeIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $condition = implode(
+        return implode(
             ' OR ',
             array_map(
                 function ( $value )
@@ -55,8 +55,6 @@ class ContentTypeIdIn extends CriterionVisitor
                 $criterion->value
             )
         );
-
-        return "{!child of='document_type_id:content' v='{$condition}'}";
     }
 }
 
