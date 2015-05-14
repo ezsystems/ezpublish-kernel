@@ -47,6 +47,12 @@ abstract class Gateway
     abstract public function deleteBlock( $blockId );
 
     /**
+     *
+     * @param string $query
+     */
+    abstract public function deleteByQuery( $query );
+
+    /**
      * Purges all contents from the index
      *
      * @return void

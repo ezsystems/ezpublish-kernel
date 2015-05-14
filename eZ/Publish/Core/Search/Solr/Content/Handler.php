@@ -194,8 +194,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteContent( $contentId, $versionId = null )
     {
-        $blockId = "content{$contentId}";
-        $this->gateway->deleteBlock( $blockId );
+        $this->gateway->deleteByQuery( "id:$contentId" );
     }
 
     /**
@@ -206,8 +205,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation( $locationId, $contentId )
     {
-        $blockId = "content{$contentId}";
-        $this->gateway->deleteBlock( $blockId );
+        $this->gateway->deleteByQuery( "id:$contentId" );
 
         // TODO it seems this part of location deletion (not last location) misses integration tests
         try
