@@ -33,6 +33,12 @@ abstract class Gateway
     abstract public function bulkIndexDocuments( array $documents );
 
     /**
+     *
+     * @param string $query
+     */
+    abstract public function deleteByQuery( $query );
+
+    /**
      * Purges all contents from the index
      *
      * @return void

@@ -275,6 +275,31 @@ class Native extends Gateway
     }
 
     /**
+     *
+     * @param string $query
+     */
+    public function deleteByQuery( $query )
+    {
+        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
+
+        foreach ( $endpoints as $endpoint )
+        {
+            $this->client->request(
+                'POST',
+                $endpoint,
+                '/update?' .
+                ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
+                new Message(
+                    array(
+                        'Content-Type' => 'text/xml',
+                    ),
+                    "<delete><query>" . $query . "</query></delete>"
+                )
+            );
+        }
+    }
+
+    /**
      * Purges all contents from the index
      *
      * @return void
