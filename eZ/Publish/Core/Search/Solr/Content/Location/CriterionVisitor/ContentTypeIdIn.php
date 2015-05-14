@@ -50,7 +50,7 @@ class ContentTypeIdIn extends CriterionVisitor
             array_map(
                 function ( $value )
                 {
-                    return 'type_id:"' . $value . '"';
+                    return 'content_type_id:"' . $value . '"';
                 },
                 $criterion->value
             )
