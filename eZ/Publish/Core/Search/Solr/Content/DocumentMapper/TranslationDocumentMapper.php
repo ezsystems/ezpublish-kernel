@@ -267,6 +267,11 @@ class TranslationDocumentMapper implements DocumentMapper
                 $locationData["path_strings"],
                 new FieldType\MultipleIdentifierField()
             );
+            $fields[] = new Field(
+                'location_depth',
+                $locationData["depths"],
+                new FieldType\MultipleIntegerField()
+            );
         }
 
         if ( $mainLocation !== null )
