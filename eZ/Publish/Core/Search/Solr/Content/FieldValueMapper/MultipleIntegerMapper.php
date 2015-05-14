@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the IntegerMapper class
+ * File containing the MultipleStringMapper class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,25 +9,24 @@
 
 namespace eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
 use eZ\Publish\SPI\Search\Field;
-use eZ\Publish\SPI\Search\FieldType;
+use eZ\Publish\SPI\Search\FieldType\MultipleIntegerField;
 
 /**
  * Maps raw document field values to something Solr can index.
  */
-class IntegerMapper extends FieldValueMapper
+class MultipleIntegerMapper extends IntegerMapper
 {
     /**
      * Check if field can be mapped
      *
      * @param Field $field
      *
-     * @return boolean
+     * @return bool
      */
     public function canMap( Field $field )
     {
-        return $field->type instanceof FieldType\IntegerField;
+        return $field->type instanceof MultipleIntegerField;
     }
 
     /**
@@ -35,23 +34,18 @@ class IntegerMapper extends FieldValueMapper
      *
      * @param Field $field
      *
-     * @return mixed
+     * @return array
      */
     public function map( Field $field )
     {
-        return $this->convert( $field->value );
-    }
+        $values = array();
 
-    /**
-     * Convert to a proper Solr representation
-     *
-     * @param mixed $value
-     *
-     * @return string
-     */
-    protected function convert( $value )
-    {
-        return (int)$value;
+        foreach ( (array)$field->value as $value )
+        {
+            $values[] = $this->convert( $value );
+        }
+
+        return $values;
     }
 }
 
