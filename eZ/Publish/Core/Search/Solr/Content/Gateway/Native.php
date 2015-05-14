@@ -300,35 +300,6 @@ class Native extends Gateway
     }
 
     /**
-     * Deletes a block of documents, which in our case is a Content preceded by its Locations.
-     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
-     *
-     * @todo to be removed
-     *
-     * @param string $blockId
-     */
-    public function deleteBlock( $blockId )
-    {
-        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
-
-        foreach ( $endpoints as $endpoint )
-        {
-            $this->client->request(
-                'POST',
-                $endpoint,
-                '/update?' .
-                ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
-                new Message(
-                    array(
-                        'Content-Type' => 'text/xml',
-                    ),
-                    "<delete><query>_root_:" . $blockId . "</query></delete>"
-                )
-            );
-        }
-    }
-
-    /**
      *
      * @param string $query
      */

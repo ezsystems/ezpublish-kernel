@@ -39,14 +39,6 @@ abstract class Gateway
     abstract public function bulkIndexDocuments( array $documents );
 
     /**
-     * Deletes a block of documents, which in our case is a Content preceded by its Locations.
-     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
-     *
-     * @param string $blockId
-     */
-    abstract public function deleteBlock( $blockId );
-
-    /**
      *
      * @param string $query
      */
