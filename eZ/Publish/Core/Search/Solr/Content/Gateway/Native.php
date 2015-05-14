@@ -186,7 +186,7 @@ class Native extends Gateway
             throw new \Exception( '->response not set: ' . var_export( array( $data, $parameters ), true ) );
         }
 
-        // @todo: Extract method
+        // @todo: Extract service, use SPI cached handler
         $result = new SearchResult(
             array(
                 'time'       => $data->responseHeader->QTime / 1000,
