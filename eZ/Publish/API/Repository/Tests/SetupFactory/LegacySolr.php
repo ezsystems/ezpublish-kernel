@@ -119,16 +119,14 @@ class LegacySolr extends Legacy
 
         /** @var \eZ\Publish\Core\Search\Solr\Content\Handler $contentSearchHandler */
         $contentSearchHandler = $searchHandler->contentSearchHandler();
-        $contentSearchHandler->setCommit( false );
-        $contentSearchHandler->purgeIndex();
         $contentSearchHandler->setCommit( true );
+        $contentSearchHandler->purgeIndex();
         $contentSearchHandler->bulkIndexContent( $contentObjects );
 
         /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
         $locationSearchHandler = $searchHandler->locationSearchHandler();
-        $locationSearchHandler->setCommit( false );
-        $locationSearchHandler->purgeIndex();
         $locationSearchHandler->setCommit( true );
+        $locationSearchHandler->purgeIndex();
         $locationSearchHandler->bulkIndexLocations( $locations );
     }
 }
