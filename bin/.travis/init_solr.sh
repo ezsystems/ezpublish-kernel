@@ -190,6 +190,7 @@ download_and_run() {
     add_core $dir_name $dir_conf core1 $SOLR_CONFS
     add_core $dir_name $dir_conf core2 $SOLR_CONFS
     add_core $dir_name $dir_conf core3 $SOLR_CONFS
+    add_core $dir_name $dir_conf core4 $SOLR_CONFS
     run $dir_name $SOLR_PORT $SOLR_CORE
 
     if [ -z "${SOLR_DOCS}" ]
