@@ -191,13 +191,12 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
 
         $location = new Location( array( 'id' => 123 ) );
         $this->urlAliasService
-            ->expects( $this->exactly( 2 ) )
+            ->expects( $this->exactly( 1 ) )
             ->method( 'listLocationAliases' )
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( $location, false, 'esl-ES', null, $languages, array() ),
-                        array( $location, false, 'fre-FR', null, $languages, array( $urlAlias ) ),
+                        array( $location, false, null, null, $languages, array( $urlAlias ) ),
                     )
                 )
             );
