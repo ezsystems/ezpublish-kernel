@@ -155,10 +155,6 @@ class Handler implements SearchHandlerInterface
      */
     public function indexContent( Content $content )
     {
-        // TODO: maybe not really necessary
-        $blockId = "content{$content->versionInfo->contentInfo->id}";
-        $this->gateway->deleteBlock( $blockId );
-
         $this->gateway->bulkIndexDocuments( array( $this->mapper->mapContent( $content ) ) );
     }
 
