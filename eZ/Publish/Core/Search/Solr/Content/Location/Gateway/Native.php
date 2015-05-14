@@ -138,7 +138,7 @@ class Native extends Gateway
     {
         $parameters = array(
             "q" => $this->criterionVisitor->visit( $query->query ),
-            "fq" => 'document_type_id:"location" AND ' . $this->criterionVisitor->visit( $query->filter ),
+            "fq" => $this->criterionVisitor->visit( $query->filter ),
             "sort" => implode(
                 ", ",
                 array_map(
