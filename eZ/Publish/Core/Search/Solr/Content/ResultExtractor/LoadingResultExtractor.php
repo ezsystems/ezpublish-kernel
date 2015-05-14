@@ -48,7 +48,7 @@ class LoadingResultExtractor extends ResultExtractor
     }
 
     /**
-     *
+     * Extracts value object from $hit returned by Solr backend.
      *
      * @throws \RuntimeException If search $hit could not be handled
      *

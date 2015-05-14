@@ -63,8 +63,8 @@ abstract class ResultExtractor
         {
             $searchHit = new SearchHit(
                 array(
-                    'score'       => $doc->score,
-                    'valueObject' => $this->extractHit( $doc ),
+                    "score" => $doc->score,
+                    "valueObject" => $this->extractHit( $doc ),
                 )
             );
             $result->searchHits[] = $searchHit;
