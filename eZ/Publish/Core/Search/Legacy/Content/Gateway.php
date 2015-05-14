@@ -24,7 +24,7 @@ abstract class Gateway
      *
      * @param Criterion $criterion
      * @param int $offset
-     * @param int|null $limit
+     * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sort
      * @param array $fieldFilters
      * @param bool $doCount
@@ -33,8 +33,8 @@ abstract class Gateway
      */
     abstract public function find(
         Criterion $criterion,
-        $offset = 0,
-        $limit = null,
+        $offset,
+        $limit,
         array $sort = null,
         array $fieldFilters = array(),
         $doCount = true

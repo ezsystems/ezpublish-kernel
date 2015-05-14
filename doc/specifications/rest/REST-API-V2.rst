@@ -4715,6 +4715,9 @@ Load Subgroups
 :Resource: /user/groups/<ID>/subgroups
 :Method: GET
 :Description: Returns a list of the sub groups
+:Parameters:
+    :offset: the offset of the result set
+    :limit: the number of locations returned
 :Headers:
     :Accept:
          :application/vnd.ez.api.UserGroupList+xml:  if set the user group list returned in xml format (see UserGroup_)
@@ -5061,6 +5064,9 @@ Load Groups Of User
 :Resource: /user/users/<ID>/groups
 :Method: GET
 :Description: Returns a list of user groups the user belongs to. The returned list includes the resources for unassigning a user group if the user is in multiple groups.
+:Parameters:
+    :offset: the offset of the result set
+    :limit: the number of locations returned
 :Headers:
     :Accept:
          :application/vnd.ez.api.UserGroupRefList+xml:  if set the link list of user groups is returned in xml format (see UserGroup_)

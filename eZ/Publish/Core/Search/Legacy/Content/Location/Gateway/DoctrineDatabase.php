@@ -68,13 +68,13 @@ class DoctrineDatabase extends Gateway
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param int $offset
-     * @param int|null $limit
+     * @param int $limit
      * @param null|\eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      * @param bool $doCount
      *
      * @return mixed[][]
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null, $doCount = true )
+    public function find( Criterion $criterion, $offset, $limit, array $sortClauses = null, $doCount = true )
     {
         $count = $doCount ? $this->getTotalCount( $criterion, $sortClauses ) : null;
 
@@ -137,10 +137,7 @@ class DoctrineDatabase extends Gateway
             $this->sortClauseConverter->applyOrderBy( $selectQuery );
         }
 
-        $selectQuery->limit(
-            $limit > 0 ? $limit : self::MAX_LIMIT,
-            $offset
-        );
+        $selectQuery->limit( $limit, $offset );
 
         $statement = $selectQuery->prepare();
         $statement->execute();

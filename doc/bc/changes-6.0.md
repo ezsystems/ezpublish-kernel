@@ -117,6 +117,27 @@ Changes affecting version compatibility with former or future versions.
   deleting last version of the Content. Since Content without a version does not make sense, in this
   case `eZ\Publish\Core\Repository\ContentService::deleteContent()` should be used instead.
 
+* `eZ\Publish\API\Repository\Values\Content\Query` and `eZ\Publish\API\Repository\Values\Content\LocationQuery`
+  property `$limit` is now defined as `integer` (instead of `integer|null`), which means its value must always be
+  set. By default, it's value will be `10`. No way is provided to return all search hits, pagination should be used
+  if full result set is desired.
+
+* `eZ\Publish\API\Repository\LocationService::loadLocationChildren()` signature has changed, default value of
+  parameter `$limit` is now `10`. No way is provided to return all children, pagination should be used if full
+  result set is desired.
+
+* `eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup()` signature has changed, default value of
+  parameter `$limit` is now `10`. No way is provided to return all users, pagination should be used if full
+  result set is desired.
+
+* `eZ\Publish\API\Repository\UserService::loadSubUserGroups()` signature has changed, parameters `$offset = 0`
+  and `$limit = 10` are added. No way is provided to return all user groups, pagination should be used if full
+  result set is desired.
+
+* `eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()` signature has changed, parameters `$offset = 0`
+  and `$limit = 10` are added. No way is provided to return all user groups, pagination should be used if full
+  result set is desired.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.

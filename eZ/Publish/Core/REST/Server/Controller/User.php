@@ -701,6 +701,9 @@ class User extends RestController
      */
     public function loadSubUserGroups( $groupPath )
     {
+        $offset = $this->request->query->has( 'offset' ) ? (int)$this->request->query->get( 'offset' ) : 0;
+        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : 10;
+
         $userGroupLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $groupPath )
         );
@@ -709,7 +712,11 @@ class User extends RestController
             $userGroupLocation->contentId
         );
 
-        $subGroups = $this->userService->loadSubUserGroups( $userGroup );
+        $subGroups = $this->userService->loadSubUserGroups(
+            $userGroup,
+            $offset >= 0 ? $offset : 0,
+            $limit >= 0 ? $limit : 10
+        );
 
         $restUserGroups = array();
         foreach ( $subGroups as $subGroup )
@@ -752,8 +759,15 @@ class User extends RestController
      */
     public function loadUserGroupsOfUser( $userId )
     {
+        $offset = $this->request->query->has( 'offset' ) ? (int)$this->request->query->get( 'offset' ) : 0;
+        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : 10;
+
         $user = $this->userService->loadUser( $userId );
-        $userGroups = $this->userService->loadUserGroupsOfUser( $user );
+        $userGroups = $this->userService->loadUserGroupsOfUser(
+            $user,
+            $offset >= 0 ? $offset : 0,
+            $limit >= 0 ? $limit : 10
+        );
 
         $restUserGroups = array();
         foreach ( $userGroups as $userGroup )
@@ -796,12 +810,12 @@ class User extends RestController
         );
 
         $offset = $this->request->query->has( 'offset' ) ? (int)$this->request->query->get( 'offset' ) : 0;
-        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : -1;
+        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : 10;
 
         $users = $this->userService->loadUsersOfUserGroup(
             $userGroup,
             $offset >= 0 ? $offset : 0,
-            $limit >= 0 ? $limit : -1
+            $limit >= 0 ? $limit : 10
         );
 
         $restUsers = array();

@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\Search\Content\Handler;
 use eZ\Publish\SPI\Search\Content\Location\Handler as LocationSearchHandler;
 
@@ -31,12 +32,6 @@ use eZ\Publish\SPI\Search\Content\Location\Handler as LocationSearchHandler;
  */
 class SearchService implements SearchServiceInterface
 {
-    /**
-     * 2^30, since PHP_INT_MAX can cause overflows in DB systems, if PHP is run
-     * on 64 bit systems
-     */
-    const MAX_LIMIT = 1073741824;
-
     /**
      * @var \eZ\Publish\Core\Repository\Repository
      */
@@ -114,6 +109,24 @@ class SearchService implements SearchServiceInterface
      */
     public function findContent( Query $query, array $fieldFilters = array(), $filterOnUserPermissions = true )
     {
+        if ( !is_int( $query->offset ) )
+        {
+            throw new InvalidArgumentType(
+                "\$query->offset",
+                "integer",
+                $query->offset
+            );
+        }
+
+        if ( !is_int( $query->limit ) )
+        {
+            throw new InvalidArgumentType(
+                "\$query->limit",
+                "integer",
+                $query->limit
+            );
+        }
+
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
@@ -125,11 +138,6 @@ class SearchService implements SearchServiceInterface
         if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $query->filter ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
-        }
-
-        if ( $query->limit === null )
-        {
-            $query->limit = self::MAX_LIMIT;
         }
 
         $result = $this->searchHandler->findContent( $query, $fieldFilters );
@@ -300,6 +308,24 @@ class SearchService implements SearchServiceInterface
      */
     public function findLocations( LocationQuery $query, $filterOnUserPermissions = true )
     {
+        if ( !is_int( $query->offset ) )
+        {
+            throw new InvalidArgumentType(
+                "\$query->offset",
+                "integer",
+                $query->offset
+            );
+        }
+
+        if ( !is_int( $query->limit ) )
+        {
+            throw new InvalidArgumentType(
+                "\$query->limit",
+                "integer",
+                $query->limit
+            );
+        }
+
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
@@ -308,11 +334,6 @@ class SearchService implements SearchServiceInterface
         if ( $filterOnUserPermissions && !$this->permissionsCriterionHandler->addPermissionsCriterion( $query->filter ) )
         {
             return new SearchResult( array( 'time' => 0, 'totalCount' => 0 ) );
-        }
-
-        if ( $query->limit === null )
-        {
-            $query->limit = self::MAX_LIMIT;
         }
 
         $result = $this->locationSearchHandler->findLocations( $query );

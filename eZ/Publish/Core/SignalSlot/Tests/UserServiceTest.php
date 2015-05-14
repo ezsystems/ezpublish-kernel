@@ -98,7 +98,7 @@ class UserServiceTest extends ServiceTest
             ),
             array(
                 'loadSubUserGroups',
-                array( $parentGroup ),
+                array( $parentGroup, 1, 1 ),
                 array( $userGroup ),
                 0
             ),
@@ -207,7 +207,7 @@ class UserServiceTest extends ServiceTest
             ),
             array(
                 'loadUserGroupsOfUser',
-                array( $user ),
+                array( $user, 1, 1 ),
                 array( $userGroup ),
                 0
             ),

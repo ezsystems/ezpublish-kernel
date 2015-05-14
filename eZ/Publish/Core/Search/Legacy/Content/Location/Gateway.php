@@ -22,11 +22,11 @@ abstract class Gateway
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
      * @param int $offset
-     * @param int|null $limit
+     * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      * @param bool $doCount
      *
      * @return mixed[][]
      */
-    abstract public function find( Criterion $criterion, $offset = 0, $limit = null, array $sortClauses = null, $doCount = true );
+    abstract public function find( Criterion $criterion, $offset, $limit, array $sortClauses = null, $doCount = true );
 }
