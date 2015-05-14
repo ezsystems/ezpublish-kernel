@@ -67,6 +67,8 @@ services:
             - @ezpublish.search.solr.location.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.location.facet_builder_visitor.aggregate
             - @ezpublish.spi.persistence.location_handler
+            - @ezpublish.search.solr.content.field_value_mapper.aggregate
+            - @ezpublish.search.common.field_name_generator
 
     ezpublish.search.solr.location.gateway:
         alias: ezpublish.search.solr.location.gateway.native
@@ -76,6 +78,7 @@ services:
         arguments:
             - @ezpublish.search.solr.location.gateway
             - @ezpublish.search.common.field_name_generator
+            - @ezpublish.search.solr.content.document_mapper
         lazy: true
 
     ezpublish.spi.search.solr:
