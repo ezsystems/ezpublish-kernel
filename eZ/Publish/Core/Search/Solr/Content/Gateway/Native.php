@@ -10,15 +10,12 @@
 namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 
 use eZ\Publish\Core\Search\Solr\Content\Gateway;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
 use eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
-use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use RuntimeException;
 use XmlWriter;
 use eZ\Publish\SPI\Search\Field;
@@ -125,7 +122,7 @@ class Native extends Gateway
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return mixed
      */
     public function findContent( Query $query, array $fieldFilters = array() )
     {
@@ -179,55 +176,13 @@ class Native extends Gateway
         );
 
         // @todo: Error handling?
-        $data = json_decode( $response->body );
+        $result = json_decode( $response->body );
 
-        if ( !isset( $data->response ) )
+        if ( !isset( $result->response ) )
         {
-            throw new \Exception( '->response not set: ' . var_export( array( $data, $parameters ), true ) );
-        }
-
-        // @todo: Extract service, use SPI cached handler
-        $result = new SearchResult(
-            array(
-                'time'       => $data->responseHeader->QTime / 1000,
-                'maxScore'   => $data->response->maxScore,
-                'totalCount' => $data->response->numFound,
-            )
-        );
-
-        foreach ( $data->response->docs as $doc )
-        {
-            $searchHit = new SearchHit(
-                array(
-                    'score'       => $doc->score,
-                    'valueObject' => new SPIContentInfo(
-                        array(
-                            'id' => $doc->id,
-                            'name' => $doc->name_s,
-                            'contentTypeId' => $doc->type_id,
-                            'sectionId' => $doc->section_id,
-                            'currentVersionNo' => $doc->version_id,
-                            'isPublished' => $doc->status_id === SPIContentInfo::STATUS_PUBLISHED,
-                            'ownerId' => $doc->owner_id,
-                            'modificationDate' => $doc->modified_dt,
-                            'publicationDate' => $doc->published_dt,
-                            'alwaysAvailable' => $doc->always_available_b,
-                            'remoteId' => $doc->remote_id_id,
-                            'mainLanguageCode' => $doc->main_language_code_s,
-                            'mainLocationId' => ( isset( $doc->main_location_id ) ? $doc->main_location_id : null )
-                        )
-                    )
-                )
+            throw new \Exception(
+                '->response not set: ' . var_export( array( $result, $parameters ), true )
             );
-            $result->searchHits[] = $searchHit;
-        }
-
-        if ( isset( $data->facet_counts ) )
-        {
-            foreach ( $data->facet_counts->facet_fields as $field => $facet )
-            {
-                $result->facets[] = $this->facetBuilderVisitor->map( $field, $facet );
-            }
         }
 
         return $result;

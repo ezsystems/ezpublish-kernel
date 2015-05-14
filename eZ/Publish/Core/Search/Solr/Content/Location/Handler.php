@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 use eZ\Publish\Core\Search\Solr\Content\DocumentMapper;
+use eZ\Publish\Core\Search\Solr\Content\ResultExtractor;
 
 /**
  *
@@ -46,21 +47,31 @@ class Handler implements SearchHandlerInterface
     protected $mapper;
 
     /**
+     * Result extractor
+     *
+     * @var \eZ\Publish\Core\Search\Solr\Content\ResultExtractor
+     */
+    protected $resultExtractor;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Solr\Content\Location\Gateway $gateway
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      * @param \eZ\Publish\Core\Search\Solr\Content\DocumentMapper
+     * @param \eZ\Publish\Core\Search\Solr\Content\ResultExtractor $resultExtractor
      */
     public function __construct(
         Gateway $gateway,
         FieldNameGenerator $fieldNameGenerator,
-        DocumentMapper $mapper
+        DocumentMapper $mapper,
+        ResultExtractor $resultExtractor
     )
     {
         $this->gateway = $gateway;
         $this->fieldNameGenerator = $fieldNameGenerator;
         $this->mapper = $mapper;
+        $this->resultExtractor = $resultExtractor;
     }
 
     /**
@@ -75,7 +86,9 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        return $this->gateway->findLocations( $query );
+        return $this->resultExtractor->extract(
+            $this->gateway->findLocations( $query )
+        );
     }
 
     /**

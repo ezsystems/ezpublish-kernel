@@ -11,13 +11,10 @@ namespace eZ\Publish\Core\Search\Solr\Content\Location\Gateway;
 
 use eZ\Publish\Core\Search\Solr\Content\Location\Gateway;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\Core\Search\Solr\Content\CriterionVisitor;
 use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
 use eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient;
-use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider;
 use RuntimeException;
 use XmlWriter;
@@ -66,13 +63,6 @@ class Native extends Gateway
     protected $facetBuilderVisitor;
 
     /**
-     * Content Handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
-     */
-    protected $locationHandler;
-
-    /**
      * Field value mapper
      *
      * @var FieldValueMapper
@@ -101,7 +91,6 @@ class Native extends Gateway
      * @param \eZ\Publish\Core\Search\Solr\Content\CriterionVisitor $criterionVisitor
      * @param \eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor $sortClauseVisitor
      * @param \eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor $facetBuilderVisitor
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param FieldValueMapper $fieldValueMapper
      * @param FieldNameGenerator $nameGenerator
      */
@@ -111,7 +100,6 @@ class Native extends Gateway
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
-        LocationHandler $locationHandler,
         FieldValueMapper $fieldValueMapper,
         FieldNameGenerator $nameGenerator
     )
@@ -121,7 +109,6 @@ class Native extends Gateway
         $this->criterionVisitor = $criterionVisitor;
         $this->sortClauseVisitor = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
-        $this->locationHandler = $locationHandler;
         $this->fieldValueMapper = $fieldValueMapper;
         $this->nameGenerator = $nameGenerator;
         $this->documentType = EndpointProvider::DOCUMENT_TYPE_LOCATION;
@@ -132,7 +119,7 @@ class Native extends Gateway
      *
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return mixed
      */
     public function findLocations( LocationQuery $query )
     {
@@ -181,39 +168,13 @@ class Native extends Gateway
         );
 
         // @todo: Error handling?
-        $data = json_decode( $response->body );
+        $result = json_decode( $response->body );
 
-        if ( !isset( $data->response ) )
+        if ( !isset( $result->response ) )
         {
-            throw new \Exception( '->response not set: ' . var_export( array( $data, $parameters ), true ) );
-        }
-
-        // @todo: Extract service, use SPI cached handler
-        $result = new SearchResult(
-            array(
-                'time' => $data->responseHeader->QTime / 1000,
-                'maxScore' => $data->response->maxScore,
-                'totalCount' => $data->response->numFound,
-            )
-        );
-
-        foreach ( $data->response->docs as $doc )
-        {
-            $searchHit = new SearchHit(
-                array(
-                    'score' => $doc->score,
-                    'valueObject' => $this->locationHandler->load( $doc->id )
-                )
+            throw new \Exception(
+                '->response not set: ' . var_export( array( $result, $parameters ), true )
             );
-            $result->searchHits[] = $searchHit;
-        }
-
-        if ( isset( $data->facet_counts ) )
-        {
-            foreach ( $data->facet_counts->facet_fields as $field => $facet )
-            {
-                $result->facets[] = $this->facetBuilderVisitor->map( $field, $facet );
-            }
         }
 
         return $result;

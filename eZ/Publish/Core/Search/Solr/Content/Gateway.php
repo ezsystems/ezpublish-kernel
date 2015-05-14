@@ -26,7 +26,7 @@ abstract class Gateway
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return mixed
      */
     abstract public function findContent( Query $query, array $fieldFilters = array() );
 

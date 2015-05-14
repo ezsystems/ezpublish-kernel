@@ -65,21 +65,31 @@ class Handler implements SearchHandlerInterface
     protected $mapper;
 
     /**
+     * Result extractor
+     *
+     * @var \eZ\Publish\Core\Search\Solr\Content\ResultExtractor
+     */
+    protected $resultExtractor;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway $gateway
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\Core\Search\Solr\Content\DocumentMapper $mapper
+     * @param \eZ\Publish\Core\Search\Solr\Content\ResultExtractor $resultExtractor
      */
     public function __construct(
         Gateway $gateway,
         ContentHandler $contentHandler,
-        DocumentMapper $mapper
+        DocumentMapper $mapper,
+        ResultExtractor $resultExtractor
     )
     {
         $this->gateway = $gateway;
         $this->contentHandler = $contentHandler;
         $this->mapper = $mapper;
+        $this->resultExtractor = $resultExtractor;
     }
 
     /**
@@ -100,7 +110,9 @@ class Handler implements SearchHandlerInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
 
-        return $this->gateway->findContent( $query, $fieldFilters );
+        return $this->resultExtractor->extract(
+            $this->gateway->findContent( $query, $fieldFilters )
+        );
     }
 
     /**
@@ -239,4 +251,3 @@ class Handler implements SearchHandlerInterface
         $this->gateway->setCommit( $commit );
     }
 }
-

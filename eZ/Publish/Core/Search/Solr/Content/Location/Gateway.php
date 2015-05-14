@@ -20,7 +20,7 @@ abstract class Gateway
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\LocationQuery $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return mixed
      */
     abstract public function findLocations( LocationQuery $query );
 
