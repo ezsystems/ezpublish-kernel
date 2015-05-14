@@ -202,7 +202,7 @@ class Native extends Gateway
                     'score'       => $doc->score,
                     'valueObject' => new SPIContentInfo(
                         array(
-                            'id' => substr( $doc->id, 7 ),
+                            'id' => $doc->id,
                             'name' => $doc->name_s,
                             'contentTypeId' => $doc->type_id,
                             'sectionId' => $doc->section_id,
