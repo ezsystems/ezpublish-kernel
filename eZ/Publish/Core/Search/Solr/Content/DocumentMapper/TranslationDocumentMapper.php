@@ -122,10 +122,15 @@ class TranslationDocumentMapper implements DocumentMapper
         $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
         $mainLocation = null;
         $isSomeLocationVisible = false;
-        $locationDocuments = array();
+        $locationData = array();
+
         foreach ( $locations as $location )
         {
-            $locationDocuments[] = $this->internalMapLocation( $location, $content, $section );
+            $locationData["ids"][] = $location->id;
+            $locationData["parent_ids"][] = $location->parentId;
+            $locationData["remote_ids"][] = $location->remoteId;
+            $locationData["path_strings"][] = $location->pathString;
+            $locationData["depths"][] = $location->depth;
 
             if ( $location->id == $content->versionInfo->contentInfo->mainLocationId )
             {
@@ -150,12 +155,7 @@ class TranslationDocumentMapper implements DocumentMapper
         $fields = array(
             new Field(
                 'id',
-                'content' . $content->versionInfo->contentInfo->id,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'document_type',
-                'content',
+                $content->versionInfo->contentInfo->id,
                 new FieldType\IdentifierField()
             ),
             new Field(
@@ -239,11 +239,35 @@ class TranslationDocumentMapper implements DocumentMapper
                 new FieldType\BooleanField()
             ),
             new Field(
-                'some_location_visible',
+                'location_visible',
                 $isSomeLocationVisible,
                 new FieldType\BooleanField()
             ),
         );
+
+        if ( !empty( $locationData ) )
+        {
+            $fields[] = new Field(
+                'location_id',
+                $locationData["ids"],
+                new FieldType\MultipleIdentifierField()
+            );
+            $fields[] = new Field(
+                'location_parent_id',
+                $locationData["parent_ids"],
+                new FieldType\MultipleIdentifierField()
+            );
+            $fields[] = new Field(
+                'location_remote_id',
+                $locationData["remote_ids"],
+                new FieldType\MultipleIdentifierField()
+            );
+            $fields[] = new Field(
+                'location_path_string',
+                $locationData["path_strings"],
+                new FieldType\MultipleIdentifierField()
+            );
+        }
 
         if ( $mainLocation !== null )
         {
@@ -326,7 +350,6 @@ class TranslationDocumentMapper implements DocumentMapper
                 array(
                     "languageCode" => $languageCode,
                     "fields" => array_merge( $fields, $translationFields ),
-                    "documents" => $locationDocuments,
                 )
             );
         }
@@ -379,121 +402,6 @@ class TranslationDocumentMapper implements DocumentMapper
         return $fieldSets;
     }
 
-    /**
-     * Maps given Location to a Document.
-     *
-     * Returned Document represents a "parent" Location document searchable with Location Search.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
-     * @param \eZ\Publish\SPI\Persistence\Content $content
-     * @param \eZ\Publish\SPI\Persistence\Content\Section $section
-     *
-     * @return \eZ\Publish\SPI\Search\Document
-     */
-    protected function internalMapLocation( Location $location, Content $content, Section $section )
-    {
-        $fields = array(
-            new Field(
-                'id',
-                'location' . $location->id,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'document_type',
-                'location',
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'priority',
-                $location->priority,
-                new FieldType\IntegerField()
-            ),
-            new Field(
-                'hidden',
-                $location->hidden,
-                new FieldType\BooleanField()
-            ),
-            new Field(
-                'invisible',
-                $location->invisible,
-                new FieldType\BooleanField()
-            ),
-            new Field(
-                'remote_id',
-                $location->remoteId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'parent_id',
-                $location->parentId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'path_string',
-                $location->pathString,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'depth',
-                $location->depth,
-                new FieldType\IntegerField()
-            ),
-            new Field(
-                'sort_field',
-                $location->sortField,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'sort_order',
-                $location->sortOrder,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'is_main_location',
-                ( $location->id == $content->versionInfo->contentInfo->mainLocationId ),
-                new FieldType\BooleanField()
-            ),
-            // Note: denormalized Content data is prefixed with 'content_' to
-            // make clear it relates to Location's Content
-            new Field(
-                'content_id',
-                $location->contentId,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'content_name',
-                $content->versionInfo->contentInfo->name,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'content_section_identifier',
-                $section->identifier,
-                new FieldType\IdentifierField()
-            ),
-            new Field(
-                'content_section_name',
-                $section->name,
-                new FieldType\StringField()
-            ),
-            new Field(
-                'content_modified',
-                $content->versionInfo->contentInfo->modificationDate,
-                new FieldType\DateField()
-            ),
-            new Field(
-                'content_published',
-                $content->versionInfo->contentInfo->publicationDate,
-                new FieldType\DateField()
-            ),
-        );
-
-        return new Document(
-            array(
-                "fields" => $fields
-            )
-        );
-    }
-
     public function mapLocation( Location $location )
     {
         $contentInfo = $this->contentHandler->loadContentInfo( $location->contentId );
@@ -506,11 +414,6 @@ class TranslationDocumentMapper implements DocumentMapper
                     new Field(
                         'id',
                         $location->id,
-                        new FieldType\IdentifierField()
-                    ),
-                    new Field(
-                        'document_type',
-                        'location',
                         new FieldType\IdentifierField()
                     ),
                     new Field(
