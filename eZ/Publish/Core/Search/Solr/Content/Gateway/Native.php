@@ -92,6 +92,7 @@ class Native extends Gateway
      * @param FacetBuilderVisitor $facetBuilderVisitor
      * @param FieldValueMapper $fieldValueMapper
      * @param FieldNameGenerator $nameGenerator
+     * @param string $documentType
      */
     public function __construct(
         HttpClient $client,
@@ -100,7 +101,8 @@ class Native extends Gateway
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
         FieldValueMapper $fieldValueMapper,
-        FieldNameGenerator $nameGenerator
+        FieldNameGenerator $nameGenerator,
+        $documentType
     )
     {
         $this->client              = $client;
@@ -110,7 +112,7 @@ class Native extends Gateway
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->fieldValueMapper    = $fieldValueMapper;
         $this->nameGenerator       = $nameGenerator;
-        $this->documentType = EndpointProvider::DOCUMENT_TYPE_CONTENT;
+        $this->documentType = $documentType;
     }
 
     /**
@@ -124,7 +126,7 @@ class Native extends Gateway
      *
      * @return mixed
      */
-    public function findContent( Query $query, array $fieldFilters = array() )
+    public function find( Query $query, array $fieldFilters = array() )
     {
         $coreFilter = $this->getCoreFilter( $fieldFilters );
 

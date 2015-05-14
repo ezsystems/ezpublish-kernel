@@ -28,7 +28,7 @@ abstract class Gateway
      *
      * @return mixed
      */
-    abstract public function findContent( Query $query, array $fieldFilters = array() );
+    abstract public function find( Query $query, array $fieldFilters = array() );
 
     /**
      * Indexes a block of documents, which in our case is a Content preceded by its Locations.

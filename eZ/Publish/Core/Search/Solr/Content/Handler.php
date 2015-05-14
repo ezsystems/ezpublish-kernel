@@ -111,7 +111,7 @@ class Handler implements SearchHandlerInterface
         $query->query = $query->query ?: new Criterion\MatchAll();
 
         return $this->resultExtractor->extract(
-            $this->gateway->findContent( $query, $fieldFilters )
+            $this->gateway->find( $query, $fieldFilters )
         );
     }
 
