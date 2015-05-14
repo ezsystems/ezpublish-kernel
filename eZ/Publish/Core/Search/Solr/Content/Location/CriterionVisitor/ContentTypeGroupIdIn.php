@@ -45,17 +45,19 @@ class ContentTypeGroupIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        return implode(
-            ' OR ',
-            array_map(
-                function ( $value )
-                {
-                    return 'content_group_mid:"' . $value . '"';
-                },
-                // TODO this should have been casted by criterion???
-                (array)$criterion->value
-            )
-        );
+        return '(' .
+            implode(
+                ' OR ',
+                array_map(
+                    function ( $value )
+                    {
+                        return 'content_group_mid:"' . $value . '"';
+                    },
+                    // TODO this should have been casted by criterion???
+                    (array)$criterion->value
+                )
+            ) .
+            ')';
     }
 }
 

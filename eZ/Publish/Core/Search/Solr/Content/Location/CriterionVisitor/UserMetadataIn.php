@@ -64,16 +64,18 @@ class UserMetadataIn extends CriterionVisitor
                 );
         }
 
-        return implode(
-            ' OR ',
-            array_map(
-                function ( $value ) use ( $solrField )
-                {
-                    return "{$solrField}:\"{$value}\"";
-                },
-                $criterion->value
-            )
-        );
+        return '(' .
+            implode(
+                ' OR ',
+                array_map(
+                    function ( $value ) use ( $solrField )
+                    {
+                        return "{$solrField}:\"{$value}\"";
+                    },
+                    $criterion->value
+                )
+            ) .
+            ')';
     }
 }
 
