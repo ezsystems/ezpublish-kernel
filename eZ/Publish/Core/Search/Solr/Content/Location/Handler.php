@@ -125,11 +125,11 @@ class Handler implements SearchHandlerInterface
     /**
      * Deletes a Content from the index storage
      *
-     * @param $contentId
+     * @param int|string $contentId
      */
     public function deleteContent( $contentId )
     {
-
+        $this->gateway->deleteByQuery( "content_id_id:{$contentId}" );
     }
 
     /**
