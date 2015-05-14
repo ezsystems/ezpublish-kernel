@@ -85,7 +85,7 @@ class Handler implements SearchHandlerInterface
      */
     public function indexLocation( Location $location )
     {
-
+        $this->bulkIndexLocations( array( $location) );
     }
 
     /**
