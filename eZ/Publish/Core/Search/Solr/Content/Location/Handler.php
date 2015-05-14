@@ -17,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
+use eZ\Publish\Core\Search\Solr\Content\DocumentMapper;
 
 /**
  *
@@ -38,18 +39,28 @@ class Handler implements SearchHandlerInterface
     protected $fieldNameGenerator;
 
     /**
+     * Document mapper
+     *
+     * @var \eZ\Publish\Core\Search\Solr\Content\DocumentMapper
+     */
+    protected $mapper;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Search\Solr\Content\Location\Gateway $gateway
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
+     * @param \eZ\Publish\Core\Search\Solr\Content\DocumentMapper
      */
     public function __construct(
         Gateway $gateway,
-        FieldNameGenerator $fieldNameGenerator
+        FieldNameGenerator $fieldNameGenerator,
+        DocumentMapper $mapper
     )
     {
         $this->gateway = $gateway;
         $this->fieldNameGenerator = $fieldNameGenerator;
+        $this->mapper = $mapper;
     }
 
     /**
@@ -78,6 +89,30 @@ class Handler implements SearchHandlerInterface
     }
 
     /**
+     * Indexes several content objects
+     *
+     * @todo: This function and setCommit() is needed for Persistence\Solr for test speed but not part
+     *       of interface for the reason described in Solr\Content\Search\Gateway\Native::bulkIndexContent
+     *       Short: Bulk handling should be properly designed before added to the interface.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location[] $locations
+     */
+    public function bulkIndexLocations( array $locations )
+    {
+        $documents = array();
+
+        foreach ( $locations as $location )
+        {
+            $documents[] = $this->mapper->mapLocation( $location );
+        }
+
+        if ( !empty( $documents ) )
+        {
+            $this->gateway->bulkIndexDocuments( $documents );
+        }
+    }
+
+    /**
      * Deletes a Location from the index storage
      *
      * @param int|string $locationId
@@ -95,5 +130,27 @@ class Handler implements SearchHandlerInterface
     public function deleteContent( $contentId )
     {
 
+    }
+
+    /**
+     * Purges all contents from the index
+     *
+     * @todo: Make this public API?
+     */
+    public function purgeIndex()
+    {
+        $this->gateway->purgeIndex();
+    }
+
+    /**
+     * Set if index/delete actions should commit or if several actions is to be expected
+     *
+     * This should be set to false before group of actions and true before the last one
+     *
+     * @param bool $commit
+     */
+    public function setCommit( $commit )
+    {
+        $this->gateway->setCommit( $commit );
     }
 }

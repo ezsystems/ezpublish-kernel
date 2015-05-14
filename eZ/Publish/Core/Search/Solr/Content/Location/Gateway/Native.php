@@ -19,9 +19,16 @@ use eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor;
 use eZ\Publish\Core\Search\Solr\Content\Gateway\HttpClient;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider;
+use RuntimeException;
+use XmlWriter;
+use eZ\Publish\SPI\Search\Field;
+use eZ\Publish\SPI\Search\Document;
+use eZ\Publish\Core\Search\Solr\Content\Gateway\Message;
+use eZ\Publish\Core\Search\Common\FieldNameGenerator;
+use eZ\Publish\Core\Search\Solr\Content\FieldValueMapper;
 
 /**
- *
+ * @todo merge with Content gateway
  */
 class Native extends Gateway
 {
@@ -66,6 +73,20 @@ class Native extends Gateway
     protected $locationHandler;
 
     /**
+     * Field value mapper
+     *
+     * @var FieldValueMapper
+     */
+    protected $fieldValueMapper;
+
+    /**
+     * Field name generator
+     *
+     * @var FieldNameGenerator
+     */
+    protected $nameGenerator;
+
+    /**
      * @var bool
      */
     protected $commit = true;
@@ -81,6 +102,8 @@ class Native extends Gateway
      * @param \eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor $sortClauseVisitor
      * @param \eZ\Publish\Core\Search\Solr\Content\FacetBuilderVisitor $facetBuilderVisitor
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
+     * @param FieldValueMapper $fieldValueMapper
+     * @param FieldNameGenerator $nameGenerator
      */
     public function __construct(
         HttpClient $client,
@@ -88,7 +111,9 @@ class Native extends Gateway
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
-        LocationHandler $locationHandler
+        LocationHandler $locationHandler,
+        FieldValueMapper $fieldValueMapper,
+        FieldNameGenerator $nameGenerator
     )
     {
         $this->client = $client;
@@ -97,8 +122,9 @@ class Native extends Gateway
         $this->sortClauseVisitor = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->locationHandler = $locationHandler;
-        // @todo use Content endpoints for now
-        $this->documentType = EndpointProvider::DOCUMENT_TYPE_CONTENT;
+        $this->fieldValueMapper = $fieldValueMapper;
+        $this->nameGenerator = $nameGenerator;
+        $this->documentType = EndpointProvider::DOCUMENT_TYPE_LOCATION;
     }
 
     /**
@@ -162,7 +188,7 @@ class Native extends Gateway
             throw new \Exception( '->response not set: ' . var_export( array( $data, $parameters ), true ) );
         }
 
-        // @todo: Extract method
+        // @todo: Extract service, use SPI cached handler
         $result = new SearchResult(
             array(
                 'time' => $data->responseHeader->QTime / 1000,
@@ -176,7 +202,7 @@ class Native extends Gateway
             $searchHit = new SearchHit(
                 array(
                     'score' => $doc->score,
-                    'valueObject' => $this->locationHandler->load( substr( $doc->id, 8 ) )
+                    'valueObject' => $this->locationHandler->load( $doc->id )
                 )
             );
             $result->searchHits[] = $searchHit;
@@ -191,5 +217,158 @@ class Native extends Gateway
         }
 
         return $result;
+    }
+
+    /**
+     * Indexes a block of documents, which in our case is a Content preceded by its Locations.
+     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
+     *
+     * @param \eZ\Publish\SPI\Search\Document[] $documents
+     *
+     * @todo $documents should be generated more on demand then this and sent to Solr in chunks before final commit
+     */
+    public function bulkIndexDocuments( array $documents )
+    {
+        $map = array();
+
+        foreach ( $documents as $documents2 )
+        {
+            foreach ( $documents2 as $document )
+            {
+                $map[$document->languageCode][] = $document;
+            }
+        }
+
+        foreach ( $map as $languageCode => $translationDocuments )
+        {
+            $this->bulkIndexTranslationDocuments( $translationDocuments, $languageCode );
+        }
+    }
+
+    protected function bulkIndexTranslationDocuments( array $documents, $languageCode )
+    {
+        $server = $this->endpointProvider->getIndexingTarget(
+            $this->documentType,
+            $languageCode
+        );
+
+        $updates = $this->createUpdates( $documents );
+        $result = $this->client->request(
+            'POST',
+            $server,
+            '/update?' .
+            ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
+            new Message(
+                array(
+                    'Content-Type' => 'text/xml',
+                ),
+                $updates
+            )
+        );
+
+        if ( $result->headers["status"] !== 200 )
+        {
+            throw new RuntimeException(
+                "Wrong HTTP status received from Solr: " . $result->headers["status"] . var_export( array( $result, $updates ), true )
+            );
+        }
+    }
+
+    /**
+     * Purges all contents from the index
+     *
+     * @return void
+     */
+    public function purgeIndex()
+    {
+        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
+
+        foreach ( $endpoints as $endpoint )
+        {
+            $this->purgeEndpoint( $endpoint );
+        }
+    }
+
+    /**
+     * @todo error handling
+     *
+     * @param $endpoint
+     */
+    protected function purgeEndpoint( $endpoint )
+    {
+        $this->client->request(
+            'POST',
+            $endpoint,
+            '/update?' .
+            ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
+            new Message(
+                array(
+                    'Content-Type' => 'text/xml',
+                ),
+                '<delete><query>*:*</query></delete>'
+            )
+        );
+    }
+
+    /**
+     * @param bool $commit
+     */
+    public function setCommit( $commit )
+    {
+        $this->commit = !!$commit;
+    }
+
+    /**
+     * Create document(s) update XML
+     *
+     * @param \eZ\Publish\SPI\Search\Document[] $documents
+     *
+     * @return string
+     */
+    protected function createUpdates( array $documents )
+    {
+        $xmlWriter = new XmlWriter();
+        $xmlWriter->openMemory();
+        $xmlWriter->startElement( 'add' );
+
+        foreach ( $documents as $document )
+        {
+            $this->writeDocument( $xmlWriter, $document );
+        }
+
+        $xmlWriter->endElement();
+
+        return $xmlWriter->outputMemory( true );
+    }
+
+    protected function writeDocument( XmlWriter $xmlWriter, Document $document )
+    {
+        $xmlWriter->startElement( 'doc' );
+
+        foreach ( $document->fields as $field )
+        {
+            $this->writeField( $xmlWriter, $field );
+        }
+
+        foreach ( $document->documents as $document )
+        {
+            $this->writeDocument( $xmlWriter, $document );
+        }
+
+        $xmlWriter->endElement();
+    }
+
+    protected function writeField( XmlWriter $xmlWriter, Field $field )
+    {
+        foreach ( (array)$this->fieldValueMapper->map( $field ) as $value )
+        {
+            $xmlWriter->startElement( 'field' );
+            $xmlWriter->writeAttribute(
+                'name',
+                $this->nameGenerator->getTypedName( $field->name, $field->type )
+            );
+            $xmlWriter->text( $value );
+            $xmlWriter->endElement();
+        }
     }
 }

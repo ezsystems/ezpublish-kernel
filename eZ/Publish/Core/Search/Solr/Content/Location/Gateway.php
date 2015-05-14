@@ -23,4 +23,28 @@ abstract class Gateway
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
     abstract public function findLocations( LocationQuery $query );
+
+    /**
+     * Indexes a block of documents, which in our case is a Content preceded by its Locations.
+     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
+     *
+     * @param \eZ\Publish\SPI\Search\Document[] $documents
+     */
+    abstract public function bulkIndexDocuments( array $documents );
+
+    /**
+     * Purges all contents from the index
+     *
+     * @return void
+     */
+    abstract public function purgeIndex();
+
+    /**
+     * Set if index/delete actions should commit or if several actions is to be expected
+     *
+     * This should be set to false before group of actions and true before the last one
+     *
+     * @param bool $commit
+     */
+    abstract public function setCommit( $commit );
 }
