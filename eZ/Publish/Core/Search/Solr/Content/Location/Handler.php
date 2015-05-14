@@ -119,7 +119,7 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation( $locationId )
     {
-
+        $this->gateway->deleteByQuery( "id:{$locationId}" );
     }
 
     /**
