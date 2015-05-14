@@ -509,6 +509,11 @@ class TranslationDocumentMapper implements DocumentMapper
                         new FieldType\IdentifierField()
                     ),
                     new Field(
+                        'document_type',
+                        'location',
+                        new FieldType\IdentifierField()
+                    ),
+                    new Field(
                         'priority',
                         $location->priority,
                         new FieldType\IntegerField()
@@ -662,7 +667,7 @@ class TranslationDocumentMapper implements DocumentMapper
             new FieldType\MultipleIdentifierField()
         );
 
-        return $document;
+        return array( $document );
     }
 
     /**
