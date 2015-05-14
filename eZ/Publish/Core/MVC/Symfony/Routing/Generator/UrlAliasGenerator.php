@@ -74,10 +74,11 @@ class UrlAliasGenerator extends Generator
     public function doGenerate( $location, array $parameters )
     {
         $urlAliasService = $this->repository->getURLAliasService();
-        if ( isset( $parameters['siteaccess'] ) )
+        $siteaccess = isset( $parameters['siteaccess'] ) ? $parameters['siteaccess'] : null;
+        if ( $siteaccess )
         {
             // We generate for a different SiteAccess, so potentially in a different language.
-            $languages = $this->configResolver->getParameter( 'languages', null, $parameters['siteaccess'] );
+            $languages = $this->configResolver->getParameter( 'languages', null, $siteaccess );
             $urlAliases = $urlAliasService->listLocationAliases( $location, false, null, null, $languages );
 
             unset( $parameters['siteaccess'] );
@@ -112,6 +113,13 @@ class UrlAliasGenerator extends Generator
                     $this->logger->warning( "Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$this->rootLocationId" );
                 }
             }
+        }
+        // Fallback to root location in language switcher
+        else if ( $siteaccess !== null && $this->rootLocationId !== null && $this->rootLocationId !== $location->id )
+        {
+            $locationService = $this->repository->getLocationService();
+            $location = $locationService->loadLocation( $this->rootLocationId );
+            return $this->doGenerate( $location, array( 'siteaccess' => $siteaccess ) );
         }
         else
         {
