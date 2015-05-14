@@ -159,6 +159,11 @@ class TranslationDocumentMapper implements DocumentMapper
                 new FieldType\IdentifierField()
             ),
             new Field(
+                'document_type',
+                'content',
+                new FieldType\IdentifierField()
+            ),
+            new Field(
                 'type',
                 $content->versionInfo->contentInfo->contentTypeId,
                 new FieldType\IdentifierField()
@@ -419,6 +424,11 @@ class TranslationDocumentMapper implements DocumentMapper
                     new Field(
                         'id',
                         $location->id,
+                        new FieldType\IdentifierField()
+                    ),
+                    new Field(
+                        'document_type',
+                        'location',
                         new FieldType\IdentifierField()
                     ),
                     new Field(
