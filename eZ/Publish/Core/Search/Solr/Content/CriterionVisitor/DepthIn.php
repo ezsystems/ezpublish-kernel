@@ -45,13 +45,18 @@ class DepthIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $values = array();
-        foreach ( $criterion->value as $value )
-        {
-            $values[] = 'depth_i:"' . $value . '"';
-        }
-
-        return "{!parent which='document_type_id:content' v='(" . implode( ' OR ', $values ) . ")'}";
+        return '(' .
+            implode(
+                ' OR ',
+                array_map(
+                    function ( $depth )
+                    {
+                        return 'location_depth_mi:"' . $depth . '"';
+                    },
+                    $criterion->value
+                )
+            ) .
+            ')';
     }
 }
 

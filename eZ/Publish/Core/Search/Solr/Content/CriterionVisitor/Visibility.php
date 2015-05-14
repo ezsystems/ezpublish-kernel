@@ -40,9 +40,7 @@ class Visibility extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $condition = "invisible_b:" . ( $criterion->value[0] === Criterion\Visibility::HIDDEN ? "true" : "false" );
-
-        return "{!parent which='document_type_id:content' v='{$condition}'}";
+        return "location_visible_b:" . ( $criterion->value[0] === Criterion\Visibility::VISIBLE ? "true" : "false" );
     }
 }
 

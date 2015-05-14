@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 class LocationIdIn extends CriterionVisitor
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion
      *
      * @param Criterion $criterion
      *
@@ -43,17 +43,17 @@ class LocationIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $condition = implode(
-            ' OR ',
-            array_map(
-                function ( $id )
-                {
-                    return 'id:"location' . $id . '"';
-                },
-                $criterion->value
-            )
-        );
-
-        return "{!parent which='document_type_id:content' v='{$condition}'}";
+        return '(' .
+            implode(
+                ' OR ',
+                array_map(
+                    function ( $id )
+                    {
+                        return 'location_id_mid:"' . $id . '"';
+                    },
+                    $criterion->value
+                )
+            ) .
+            ')';
     }
 }
