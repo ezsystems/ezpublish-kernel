@@ -15,6 +15,7 @@ parameters:
     ezpublish.search.solr.location.sort_clause_visitor.content_name.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\ContentName
     ezpublish.search.solr.location.sort_clause_visitor.date_published.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\DatePublished
     ezpublish.search.solr.location.sort_clause_visitor.date_modified.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\DateModified
+    ezpublish.search.solr.location.sort_clause_visitor.field.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\Field
     ezpublish.search.solr.location.sort_clause_visitor.section_identifier.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\SectionIdentifier
     ezpublish.search.solr.location.sort_clause_visitor.section_name.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\SectionName
     ezpublish.search.solr.location.sort_clause_visitor.depth.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\Location\Depth
@@ -99,6 +100,13 @@ services:
 
     ezpublish.search.solr.location.sort_clause_visitor.date_modified:
         class: %ezpublish.search.solr.location.sort_clause_visitor.date_modified.class%
+        tags:
+            - {name: ezpublish.search.solr.location.sort_clause_visitor}
+
+    ezpublish.search.solr.location.sort_clause_visitor.field:
+        class: %ezpublish.search.solr.location.sort_clause_visitor.field.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
         tags:
             - {name: ezpublish.search.solr.location.sort_clause_visitor}
 
