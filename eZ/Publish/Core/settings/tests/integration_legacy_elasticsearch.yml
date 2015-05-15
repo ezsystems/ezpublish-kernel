@@ -5,6 +5,9 @@ parameters:
     # Redefining default ezimage field type class with the implementation that defines the type
     # as searchable. Needed in order to test searching wiht Elasticsearch engine.
     ezpublish.fieldType.ezimage.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableImage
+    # Redefining default eztext field type class with the implementation that defines the type
+    # as searchable. Needed in order to test searching wiht Elasticsearch engine.
+    ezpublish.fieldType.eztext.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableTextBlock
     languages:
         - eng-US
         - eng-GB
