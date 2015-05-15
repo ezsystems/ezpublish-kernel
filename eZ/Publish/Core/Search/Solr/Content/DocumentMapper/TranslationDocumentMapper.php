@@ -22,6 +22,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
@@ -73,6 +74,13 @@ class TranslationDocumentMapper implements DocumentMapper
     protected $sectionHandler;
 
     /**
+     * Language handler
+     *
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     */
+    protected $languageHandler;
+
+    /**
      * Field name generator
      *
      * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
@@ -88,6 +96,7 @@ class TranslationDocumentMapper implements DocumentMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      */
     public function __construct(
@@ -97,6 +106,7 @@ class TranslationDocumentMapper implements DocumentMapper
         ContentTypeHandler $contentTypeHandler,
         ObjectStateHandler $objectStateHandler,
         SectionHandler $sectionHandler,
+        LanguageHandler $languageHandler,
         FieldNameGenerator $fieldNameGenerator
     )
     {
@@ -106,6 +116,7 @@ class TranslationDocumentMapper implements DocumentMapper
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
         $this->sectionHandler = $sectionHandler;
+        $this->languageHandler = $languageHandler;
         $this->fieldNameGenerator = $fieldNameGenerator;
     }
 
@@ -585,7 +596,15 @@ class TranslationDocumentMapper implements DocumentMapper
             new FieldType\MultipleIdentifierField()
         );
 
-        return array( $document );
+        $documents = array();
+
+        foreach ( $content->versionInfo->languageIds as $languageId )
+        {
+            $document->languageCode = $this->languageHandler->load( $languageId )->languageCode;
+            $documents[] = $document;
+        }
+
+        return $documents;
     }
 
     /**

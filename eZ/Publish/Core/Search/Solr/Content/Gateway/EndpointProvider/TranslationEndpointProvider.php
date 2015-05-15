@@ -38,8 +38,12 @@ class TranslationEndpointProvider implements EndpointProvider
                 "por-PT" => "http://localhost:8983/solr/core2",
                 "ger-DE" => "http://localhost:8983/solr/core3",
             ),
-            // First implement single separate core for Location search
-            self::DOCUMENT_TYPE_LOCATION => "http://localhost:8983/solr/core4",
+            self::DOCUMENT_TYPE_LOCATION => array(
+                "eng-GB" => "http://localhost:8983/solr/core4",
+                "eng-US" => "http://localhost:8983/solr/core5",
+                "por-PT" => "http://localhost:8983/solr/core6",
+                "ger-DE" => "http://localhost:8983/solr/core7",
+            ),
         );
     }
 
