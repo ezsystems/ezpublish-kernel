@@ -23,7 +23,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Field as FieldSortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacySolr;
 use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 
 /**
@@ -768,16 +767,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         $fieldName
     )
     {
-        $setupFactory = $this->getSetupFactory();
-
         $this->checkCustomFieldsSupport();
-
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped(
-                "For Solr engine Field sort clause is not yet implemented"
-            );
-        }
 
         $this->modifyFieldSortClause( $sortClause, $fieldName );
 
@@ -907,15 +897,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testSortContent( SortClause $sortClause, $ascending, array $context )
     {
-        $setupFactory = $this->getSetupFactory();
-
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped(
-                "For Solr engine Field sort clause is not yet implemented"
-            );
-        }
-
         list( $repository, $contentOneId, $contentTwoId ) = $context;
         $searchResult = $this->sortContent( $repository, $sortClause );
 
@@ -941,13 +922,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     )
     {
         $setupFactory = $this->getSetupFactory();
-
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped(
-                "For Solr engine fields are not searchable with Location Search"
-            );
-        }
 
         if ( $setupFactory instanceof LegacyElasticsearch )
         {
@@ -982,13 +956,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     {
         $setupFactory = $this->getSetupFactory();
 
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped(
-                "For Solr engine fields are not searchable with Location Search"
-            );
-        }
-
         if ( $setupFactory instanceof LegacyElasticsearch )
         {
             $this->markTestSkipped(
@@ -1015,13 +982,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     public function testSortLocations( SortClause $sortClause, $ascending, array $context )
     {
         $setupFactory = $this->getSetupFactory();
-
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped(
-                "For Solr engine fields are not searchable with Location Search"
-            );
-        }
 
         if ( $setupFactory instanceof LegacyElasticsearch )
         {
