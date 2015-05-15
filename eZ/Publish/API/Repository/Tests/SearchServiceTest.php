@@ -1135,12 +1135,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testSortFieldWithNonSearchableField()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
-        }
-
         $repository    = $this->getRepository();
         $searchService = $repository->getSearchService();
 
@@ -1799,12 +1793,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionTranslatableField()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
-        }
-
         $contentType = $this->createTestContentType();
         $this->createMultilingualContent( $contentType, 1, 2 );
 
@@ -1830,12 +1818,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testSearchWithFieldSortThrowsInvalidArgumentExceptionNonTranslatableField()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ( $setupFactory instanceof LegacySolr )
-        {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
-        }
-
         $contentType = $this->createTestContentType();
         $this->createMultilingualContent( $contentType, 1, 2, 3, "eng-GB" );
 
