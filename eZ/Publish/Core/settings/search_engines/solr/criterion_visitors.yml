@@ -59,6 +59,7 @@ parameters:
     ezpublish.search.solr.location.criterion_visitor.field_in.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\Field\FieldIn
     ezpublish.search.solr.location.criterion_visitor.field_range.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\Field\FieldRange
     ezpublish.search.solr.location.criterion_visitor.full_text.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\FullText
+    ezpublish.search.solr.location.criterion_visitor.map_location_distance_range.class: eZ\Publish\Core\Search\Solr\Content\Location\CriterionVisitor\Field\MapLocationDistanceRange
 
 services:
     ezpublish.search.solr.content.criterion_visitor.match_all:
@@ -385,5 +386,14 @@ services:
         class: %ezpublish.search.solr.location.criterion_visitor.full_text.class%
         arguments:
             - @ezpublish.search.common.field_name_resolver
+        tags:
+            - {name: ezpublish.search.solr.location.criterion_visitor}
+
+    ezpublish.search.solr.location.criterion_visitor.map_location_distance_range:
+        class: %ezpublish.search.solr.location.criterion_visitor.map_location_distance_range.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
+            - 'ezgmaplocation'
+            - 'value_location'
         tags:
             - {name: ezpublish.search.solr.location.criterion_visitor}

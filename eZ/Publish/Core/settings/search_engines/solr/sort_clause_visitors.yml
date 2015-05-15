@@ -24,6 +24,7 @@ parameters:
     ezpublish.search.solr.location.sort_clause_visitor.path.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\Location\Path
     ezpublish.search.solr.location.sort_clause_visitor.priority.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\Location\Priority
     ezpublish.search.solr.location.sort_clause_visitor.visibility.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\Location\Visibility
+    ezpublish.search.solr.location.sort_clause_visitor.map_location_distance.class: eZ\Publish\Core\Search\Solr\Content\Location\SortClauseVisitor\MapLocationDistance
 
 services:
     # Content search
@@ -147,5 +148,13 @@ services:
 
     ezpublish.search.solr.location.sort_clause_visitor.visibility:
         class: %ezpublish.search.solr.location.sort_clause_visitor.visibility.class%
+        tags:
+            - {name: ezpublish.search.solr.location.sort_clause_visitor}
+
+    ezpublish.search.solr.location.sort_clause_visitor.map_location_distance:
+        class: %ezpublish.search.solr.location.sort_clause_visitor.map_location_distance.class%
+        arguments:
+            - @ezpublish.search.common.field_name_resolver
+            - 'value_location'
         tags:
             - {name: ezpublish.search.solr.location.sort_clause_visitor}
