@@ -1610,7 +1610,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1671,7 +1671,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1734,7 +1734,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1846,7 +1846,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1907,7 +1907,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -1968,7 +1968,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -2029,7 +2029,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -2072,7 +2072,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3564,7 +3564,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3629,7 +3629,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3694,7 +3694,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3759,7 +3759,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
@@ -3826,7 +3826,7 @@ class SearchServiceTest extends BaseTest
         $setupFactory = $this->getSetupFactory();
         if ( $setupFactory instanceof LegacySolr )
         {
-            $this->markTestSkipped( "Field SortClause is not yet implemented for Solr storage" );
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
         }
 
         $contentType = $this->createTestContentType();
