@@ -31,7 +31,6 @@ services:
             - @ezpublish.spi.persistence.content_type_handler
             - @ezpublish.spi.persistence.object_state_handler
             - @ezpublish.spi.persistence.section_handler
-            - @ezpublish.spi.persistence.language_handler
             - @ezpublish.search.common.field_name_generator
 
     ezpublish.search.solr.content.document_mapper:

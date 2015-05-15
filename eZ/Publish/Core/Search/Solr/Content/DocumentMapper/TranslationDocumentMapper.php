@@ -22,7 +22,6 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
-use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
@@ -74,13 +73,6 @@ class TranslationDocumentMapper implements DocumentMapper
     protected $sectionHandler;
 
     /**
-     * Language handler
-     *
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
-     */
-    protected $languageHandler;
-
-    /**
      * Field name generator
      *
      * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator
@@ -96,7 +88,6 @@ class TranslationDocumentMapper implements DocumentMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
-     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Search\Common\FieldNameGenerator $fieldNameGenerator
      */
     public function __construct(
@@ -106,7 +97,6 @@ class TranslationDocumentMapper implements DocumentMapper
         ContentTypeHandler $contentTypeHandler,
         ObjectStateHandler $objectStateHandler,
         SectionHandler $sectionHandler,
-        LanguageHandler $languageHandler,
         FieldNameGenerator $fieldNameGenerator
     )
     {
@@ -116,7 +106,6 @@ class TranslationDocumentMapper implements DocumentMapper
         $this->contentTypeHandler = $contentTypeHandler;
         $this->objectStateHandler = $objectStateHandler;
         $this->sectionHandler = $sectionHandler;
-        $this->languageHandler = $languageHandler;
         $this->fieldNameGenerator = $fieldNameGenerator;
     }
 
@@ -343,7 +332,6 @@ class TranslationDocumentMapper implements DocumentMapper
         );
 
         $fieldSets = $this->mapContentFields( $content, $contentType );
-
         $documents = array();
 
         foreach ( $fieldSets as $languageCode => $translationFields )
@@ -429,71 +417,67 @@ class TranslationDocumentMapper implements DocumentMapper
         $content = $this->contentHandler->load( $location->contentId, $contentInfo->currentVersionNo );
         $section = $this->sectionHandler->load( $content->versionInfo->contentInfo->sectionId );
 
-        $document = new Document(
-            array(
-                "fields" => array(
-                    new Field(
-                        'id',
-                        $location->id,
-                        new FieldType\IdentifierField()
-                    ),
-                    new Field(
-                        'document_type',
-                        'location',
-                        new FieldType\IdentifierField()
-                    ),
-                    new Field(
-                        'priority',
-                        $location->priority,
-                        new FieldType\IntegerField()
-                    ),
-                    new Field(
-                        'hidden',
-                        $location->hidden,
-                        new FieldType\BooleanField()
-                    ),
-                    new Field(
-                        'invisible',
-                        $location->invisible,
-                        new FieldType\BooleanField()
-                    ),
-                    new Field(
-                        'remote_id',
-                        $location->remoteId,
-                        new FieldType\IdentifierField()
-                    ),
-                    new Field(
-                        'parent_id',
-                        $location->parentId,
-                        new FieldType\IdentifierField()
-                    ),
-                    new Field(
-                        'path_string',
-                        $location->pathString,
-                        new FieldType\IdentifierField()
-                    ),
-                    new Field(
-                        'depth',
-                        $location->depth,
-                        new FieldType\IntegerField()
-                    ),
-                    new Field(
-                        'sort_field',
-                        $location->sortField,
-                        new FieldType\IdentifierField()
-                    ),
-                    new Field(
-                        'sort_order',
-                        $location->sortOrder,
-                        new FieldType\IdentifierField()
-                    ),
-                    new Field(
-                        'is_main_location',
-                        ( $location->id == $content->versionInfo->contentInfo->mainLocationId ),
-                        new FieldType\BooleanField()
-                    ),
-                )
-            )
+        $fields = array(
+            new Field(
+                'id',
+                $location->id,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'document_type',
+                'location',
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'priority',
+                $location->priority,
+                new FieldType\IntegerField()
+            ),
+            new Field(
+                'hidden',
+                $location->hidden,
+                new FieldType\BooleanField()
+            ),
+            new Field(
+                'invisible',
+                $location->invisible,
+                new FieldType\BooleanField()
+            ),
+            new Field(
+                'remote_id',
+                $location->remoteId,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'parent_id',
+                $location->parentId,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'path_string',
+                $location->pathString,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'depth',
+                $location->depth,
+                new FieldType\IntegerField()
+            ),
+            new Field(
+                'sort_field',
+                $location->sortField,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'sort_order',
+                $location->sortOrder,
+                new FieldType\IdentifierField()
+            ),
+            new Field(
+                'is_main_location',
+                ( $location->id == $content->versionInfo->contentInfo->mainLocationId ),
+                new FieldType\BooleanField()
+            ),
         );
 
         // UserGroups and Users are Content, but permissions cascade is achieved through
@@ -502,106 +486,133 @@ class TranslationDocumentMapper implements DocumentMapper
         $ancestorLocationsContentIds = $this->getAncestorLocationsContentIds( $contentInfo->ownerId );
         // Add owner user id as it can also be considered as user group.
         $ancestorLocationsContentIds[] = $contentInfo->ownerId;
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_owner_user_group',
             $ancestorLocationsContentIds,
             new FieldType\MultipleIdentifierField()
         );
 
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_id',
             $content->versionInfo->contentInfo->id,
             new FieldType\IdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_type',
             $content->versionInfo->contentInfo->contentTypeId,
             new FieldType\IdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_version',
             $content->versionInfo->versionNo,
             new FieldType\IdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_status',
             $content->versionInfo->status,
             new FieldType\IdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_name',
             $content->versionInfo->contentInfo->name,
             new FieldType\StringField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_creator',
             $content->versionInfo->creatorId,
             new FieldType\IdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_owner',
             $content->versionInfo->contentInfo->ownerId,
             new FieldType\IdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_section',
             $content->versionInfo->contentInfo->sectionId,
             new FieldType\IdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_section_identifier',
             $section->identifier,
             new FieldType\IdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_section_name',
             $section->name,
             new FieldType\StringField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_remote_id',
             $content->versionInfo->contentInfo->remoteId,
             new FieldType\IdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_modified',
             $content->versionInfo->contentInfo->modificationDate,
             new FieldType\DateField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_published',
             $content->versionInfo->contentInfo->publicationDate,
             new FieldType\DateField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_language_code',
             array_keys( $content->versionInfo->names ),
             new FieldType\MultipleStringField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_always_available',
             $content->versionInfo->contentInfo->alwaysAvailable,
             new FieldType\BooleanField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_group',
             $this->contentTypeHandler->load(
                 $content->versionInfo->contentInfo->contentTypeId
             )->groupIds,
             new FieldType\MultipleIdentifierField()
         );
-        $document->fields[] = new Field(
+        $fields[] = new Field(
             'content_object_state',
             $this->getObjectStateIds( $content->versionInfo->contentInfo->id ),
             new FieldType\MultipleIdentifierField()
         );
 
+        $contentType = $this->contentTypeHandler->load(
+            $content->versionInfo->contentInfo->contentTypeId
+        );
+        $fieldSets = $this->mapContentFields( $content, $contentType );
         $documents = array();
 
-        foreach ( $content->versionInfo->languageIds as $languageId )
+        foreach ( $fieldSets as $languageCode => $translationFields )
         {
-            $document->languageCode = $this->languageHandler->load( $languageId )->languageCode;
-            $documents[] = $document;
+            $translationFields[] = new Field(
+                'meta_indexed_language_code',
+                $languageCode,
+                new FieldType\StringField()
+            );
+            $translationFields[] = new Field(
+                'meta_indexed_is_main_translation',
+                ( $languageCode === $content->versionInfo->contentInfo->mainLanguageCode ),
+                new FieldType\BooleanField()
+            );
+            $translationFields[] = new Field(
+                'meta_indexed_is_main_translation_and_always_available',
+                (
+                    ( $languageCode === $content->versionInfo->contentInfo->mainLanguageCode ) &&
+                    $content->versionInfo->contentInfo->alwaysAvailable
+                ),
+                new FieldType\BooleanField()
+            );
+
+            $documents[] = new Document(
+                array(
+                    "languageCode" => $languageCode,
+                    "fields" => array_merge( $fields, $translationFields ),
+                )
+            );
         }
 
         return $documents;
