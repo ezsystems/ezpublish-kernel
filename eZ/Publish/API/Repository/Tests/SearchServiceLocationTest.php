@@ -97,12 +97,23 @@ class SearchServiceLocationTest extends BaseTest
     {
         $testContent = $this->createMultipleCountriesContent();
 
+        $setupFactory = $this->getSetupFactory();
+        // @todo index full contries data
+        if ( $setupFactory instanceof LegacySolr || $setupFactory instanceof LegacyElasticsearch )
+        {
+            $country = "BE";
+        }
+        else
+        {
+            $country = "Belgium";
+        }
+
         $query = new LocationQuery(
             array(
                 'criterion' => new Criterion\Field(
                     "countries",
                     Criterion\Operator::CONTAINS,
-                    "Belgium"
+                    $country
                 )
             )
         );
