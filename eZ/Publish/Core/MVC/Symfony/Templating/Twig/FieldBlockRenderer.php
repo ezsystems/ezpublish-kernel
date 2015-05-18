@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig;
 
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\MVC\Symfony\Templating\Exception\MissingFieldBlockException;
 use eZ\Publish\Core\MVC\Symfony\Templating\FieldBlockRendererInterface;
-use LogicException;
 use Twig_Environment;
 use Twig_Template;
 
@@ -294,7 +294,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * @param string $name
      * @param string $resourcesName
      *
-     * @throws LogicException If no template block can be found for $field
+     * @throws MissingFieldBlockException If no template block can be found for $field
      *
      * @return array
      */
@@ -319,7 +319,8 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
                 return [$name => $block];
             }
         }
-        throw new LogicException( "Cannot find '$name' template block." );
+
+        throw new MissingFieldBlockException( "Cannot find '$name' template block." );
     }
 
     /**
