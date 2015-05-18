@@ -155,7 +155,7 @@ class TranslationDocumentMapper implements DocumentMapper
         $fields = array(
             new Field(
                 'id',
-                $content->versionInfo->contentInfo->id,
+                'content' . $content->versionInfo->contentInfo->id,
                 new FieldType\IdentifierField()
             ),
             new Field(
@@ -420,7 +420,7 @@ class TranslationDocumentMapper implements DocumentMapper
         $fields = array(
             new Field(
                 'id',
-                $location->id,
+                'location' . $location->id,
                 new FieldType\IdentifierField()
             ),
             new Field(

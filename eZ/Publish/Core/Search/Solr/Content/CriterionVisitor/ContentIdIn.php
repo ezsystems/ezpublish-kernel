@@ -49,7 +49,7 @@ class ContentIdIn extends CriterionVisitor
                 array_map(
                     function ( $value )
                     {
-                        return 'id:"' . $value . '"';
+                        return 'id:"content' . $value . '"';
                     },
                     $criterion->value
                 )

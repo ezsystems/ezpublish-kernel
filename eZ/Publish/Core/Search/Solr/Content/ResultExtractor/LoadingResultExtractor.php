@@ -60,12 +60,12 @@ class LoadingResultExtractor extends ResultExtractor
     {
         if ( $hit->document_type_id === "content" )
         {
-            return $this->contentHandler->loadContentInfo( $hit->id );
+            return $this->contentHandler->loadContentInfo( substr( $hit->id, 7 ) );
         }
 
         if ( $hit->document_type_id === "location" )
         {
-            return $this->locationHandler->load( $hit->id );
+            return $this->locationHandler->load( substr( $hit->id, 8 ) );
         }
 
         throw new RuntimeException(
