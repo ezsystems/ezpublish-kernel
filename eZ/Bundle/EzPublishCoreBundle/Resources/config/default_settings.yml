@@ -106,9 +106,15 @@ parameters:
     ezsettings.default.field_templates:
         - {template: EzPublishCoreBundle::content_fields.html.twig, priority: 0}
 
+    # Templates for Field edition. Follows the same structure than for field_templates
+    ezsettings.default.field_edit_templates: []
+
     # Templates to use while rendering field definition settings
     ezsettings.default.fielddefinition_settings_templates:
         - {template: EzPublishCoreBundle::fielddefinition_settings.html.twig, priority: 0}
+
+    # Templates for FieldDefinition edition. Follows the same structure than for field_templates
+    ezsettings.default.fielddefinition_edit_templates: []
 
     # Security settings
     ezsettings.default.security.login_template: "EzPublishCoreBundle:Security:login.html.twig"

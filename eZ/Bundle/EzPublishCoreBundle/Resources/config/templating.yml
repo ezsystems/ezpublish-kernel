@@ -130,7 +130,9 @@ services:
         calls:
             - [setTwig, [@twig]]
             - [setFieldViewResources, ["$field_templates$"]]
+            - [setFieldEditResources, ["$field_edit_templates$"]]
             - [setFieldDefinitionViewResources, ["$fielddefinition_settings_templates$"]]
+            - [setFieldDefinitionEditResources, ["$fielddefinition_edit_templates$"]]
 
     ezpublish.templating.field_block_renderer:
         alias: ezpublish.templating.field_block_renderer.twig
