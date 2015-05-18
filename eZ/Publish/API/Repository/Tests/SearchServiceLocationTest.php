@@ -302,6 +302,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSort()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -357,6 +363,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortVariant2()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -412,6 +424,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortVariant3()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -518,6 +536,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortWithNonTranslatableField()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -573,6 +597,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortWithDefaultLanguage()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -628,6 +658,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortWithDefaultLanguageVariant2()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -683,6 +719,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotFilterResultSet()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -720,6 +762,12 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testMultilingualFieldSortUnusedLanguageDoesNotChangeSort()
     {
+        $setupFactory = $this->getSetupFactory();
+        if ( $setupFactory instanceof LegacySolr )
+        {
+            $this->markTestIncomplete( "Multicore Solr search engine can't target language with Field sort clause" );
+        }
+
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
