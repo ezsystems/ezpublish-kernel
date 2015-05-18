@@ -185,12 +185,15 @@ download_and_run() {
     esac
 
     download $url $dir_name
-    sed -i.bak 's/<shardHandlerFactory/<core name="core2" instanceDir="core2" \/><core name="core3" instanceDir="core3" \/><shardHandlerFactory/g' $dir_name/example/multicore/solr.xml
+    sed -i.bak 's/<shardHandlerFactory/<core name="core2" instanceDir="core2" \/><core name="core3" instanceDir="core3" \/><core name="core4" instanceDir="core4" \/><core name="core5" instanceDir="core5" \/><core name="core6" instanceDir="core6" \/><core name="core7" instanceDir="core7" \/><shardHandlerFactory/g' $dir_name/example/multicore/solr.xml
     add_core $dir_name $dir_conf core0 $SOLR_CONFS
     add_core $dir_name $dir_conf core1 $SOLR_CONFS
     add_core $dir_name $dir_conf core2 $SOLR_CONFS
     add_core $dir_name $dir_conf core3 $SOLR_CONFS
     add_core $dir_name $dir_conf core4 $SOLR_CONFS
+    add_core $dir_name $dir_conf core5 $SOLR_CONFS
+    add_core $dir_name $dir_conf core6 $SOLR_CONFS
+    add_core $dir_name $dir_conf core7 $SOLR_CONFS
     run $dir_name $SOLR_PORT $SOLR_CORE
 
     if [ -z "${SOLR_DOCS}" ]
