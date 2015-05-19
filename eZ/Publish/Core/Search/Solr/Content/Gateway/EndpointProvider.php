@@ -12,19 +12,19 @@ namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
- *
+ * Endpoint provider provides Solr backend endpoints
  */
 interface EndpointProvider
 {
     /**
-     *
+     * Returns the endpoint used for distributed search
      *
      * @return string
      */
     public function getEntryPoint();
 
     /**
-     *
+     * Returns endpoint that indexes Content translations in the given $languageCode
      *
      * @param string $languageCode
      *
@@ -33,7 +33,7 @@ interface EndpointProvider
     public function getIndexingTarget( $languageCode );
 
     /**
-     *
+     * Returns an array of endpoints for the given $languageSettings
      *
      * @param array $languageSettings
      *
@@ -42,7 +42,7 @@ interface EndpointProvider
     public function getSearchTargets( array $languageSettings );
 
     /**
-     *
+     * Returns all endpoints
      *
      * @return string[]
      */

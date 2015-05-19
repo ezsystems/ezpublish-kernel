@@ -13,7 +13,7 @@ use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider;
 use RuntimeException;
 
 /**
- *
+ * TranslationEndpointProvider provides Solr endpoints for a Content translations
  */
 class TranslationEndpointProvider implements EndpointProvider
 {
@@ -37,13 +37,6 @@ class TranslationEndpointProvider implements EndpointProvider
         return $this->endpointMap["eng-GB"];
     }
 
-    /**
-     *
-     *
-     * @param string $languageCode
-     *
-     * @return string
-     */
     public function getIndexingTarget( $languageCode )
     {
         if ( !isset( $this->endpointMap[$languageCode] ) )
@@ -56,12 +49,6 @@ class TranslationEndpointProvider implements EndpointProvider
         return $this->endpointMap[$languageCode];
     }
 
-    /**
-     * @todo maybe configure request something factory to fire at all cores by default?
-     *
-     * @param array $languageSettings
-     * @return array
-     */
     public function getSearchTargets( array $languageSettings )
     {
         if ( empty( $languageSettings ) )
