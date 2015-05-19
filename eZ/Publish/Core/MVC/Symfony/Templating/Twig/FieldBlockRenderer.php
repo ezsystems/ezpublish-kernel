@@ -92,7 +92,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     /**
      * @param string|Twig_Template $baseTemplate
      */
-    public function setBaseTemplate($baseTemplate)
+    public function setBaseTemplate( $baseTemplate )
     {
         $this->baseTemplate = $baseTemplate;
     }
