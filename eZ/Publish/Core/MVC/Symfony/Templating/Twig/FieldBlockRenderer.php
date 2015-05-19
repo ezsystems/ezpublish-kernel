@@ -68,11 +68,11 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     private $fieldDefinitionEditResources = [];
 
     /**
-     * A \Twig_Template instance used to render template blocks.
+     * A \Twig_Template instance used to render template blocks, or path to the template to use.
      *
-     * @var Twig_Template
+     * @var Twig_Template|string
      */
-    private $template;
+    private $baseTemplate;
 
     /**
      * Template blocks
@@ -87,6 +87,14 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     public function setTwig( Twig_Environment $twig )
     {
         $this->twig = $twig;
+    }
+
+    /**
+     * @param string|Twig_Template $baseTemplate
+     */
+    public function setBaseTemplate($baseTemplate)
+    {
+        $this->baseTemplate = $baseTemplate;
     }
 
     /**
@@ -162,13 +170,12 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
         $params += ['field' => $field];
 
         // Getting instance of Twig_Template that will be used to render blocks
-        if ( !$this->template instanceof Twig_Template )
+        if ( is_string( $this->baseTemplate ) )
         {
-            $tpl = reset( $this->fieldViewResources );
-            $this->template = $this->twig->loadTemplate( $tpl['template'] );
+            $this->baseTemplate = $this->twig->loadTemplate( $this->baseTemplate );
         }
 
-        return $this->template->renderBlock(
+        return $this->baseTemplate->renderBlock(
             $this->getRenderFieldBlockName( $fieldTypeIdentifier, $type ),
             $params,
             $this->getBlocksByField( $fieldTypeIdentifier, $type, $localTemplate )
@@ -194,10 +201,9 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      */
     private function renderFieldDefinition( FieldDefinition $fieldDefinition, array $params, $type )
     {
-        if ( !$this->template instanceof Twig_Template )
+        if ( is_string( $this->baseTemplate ) )
         {
-            $tpl = reset( $this->fieldDefinitionViewResources );
-            $this->template = $this->twig->loadTemplate( $tpl['template'] );
+            $this->baseTemplate = $this->twig->loadTemplate( $this->baseTemplate );
         }
 
         $params += [
@@ -205,7 +211,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
             'settings' => $fieldDefinition->getFieldSettings(),
         ];
 
-        return $this->template->renderBlock(
+        return $this->baseTemplate->renderBlock(
             $this->getRenderFieldDefinitionBlockName( $fieldDefinition->fieldTypeIdentifier, $type ),
             $params,
             $this->getBlocksByFieldDefinition( $fieldDefinition, $type )

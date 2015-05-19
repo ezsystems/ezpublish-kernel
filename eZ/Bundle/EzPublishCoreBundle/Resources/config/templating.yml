@@ -123,12 +123,9 @@ services:
 
     ezpublish.templating.field_block_renderer.twig:
         class: %ezpublish.templating.field_block_renderer.twig.class%
-        arguments:
-            - @ezpublish.api.service.content_type
-            - @ezpublish.fieldType.parameterProviderRegistry
-            - @ezpublish.translation_helper
         calls:
             - [setTwig, [@twig]]
+            - [setBaseTemplate, [%ezpublish.content_view.viewbase_layout%]]
             - [setFieldViewResources, ["$field_templates$"]]
             - [setFieldEditResources, ["$field_edit_templates$"]]
             - [setFieldDefinitionViewResources, ["$fielddefinition_settings_templates$"]]

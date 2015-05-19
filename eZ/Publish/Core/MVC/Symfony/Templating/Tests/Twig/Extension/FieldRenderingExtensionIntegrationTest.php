@@ -28,6 +28,7 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
         $configResolver = $this->getConfigResolverMock();
 
         $fieldBlockRenderer = new FieldBlockRenderer();
+        $fieldBlockRenderer->setBaseTemplate($this->getTemplatePath('base.html.twig'));
         $fieldBlockRenderer->setFieldViewResources(
             array(
                 array(
