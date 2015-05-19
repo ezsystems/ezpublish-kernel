@@ -45,18 +45,18 @@ class RemoteIdIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $condition = implode(
-            ' OR ',
-            array_map(
-                function ( $value )
-                {
-                    return 'remote_id_id:"' . $value . '"';
-                },
-                $criterion->value
-            )
-        );
-
-        return "{!child of='document_type_id:content' v='{$condition}'}";
+        return '(' .
+            implode(
+                ' OR ',
+                array_map(
+                    function ( $value )
+                    {
+                        return 'content_remote_id_id:"' . $value . '"';
+                    },
+                    $criterion->value
+                )
+            ) .
+            ')';
     }
 }
 

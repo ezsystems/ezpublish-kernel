@@ -46,7 +46,7 @@ class LanguageCodeIn extends CriterionVisitor
         $languageCodeExpressions = array_map(
             function ( $value )
             {
-                return 'language_code_ms:"' . $value . '"';
+                return 'content_language_code_ms:"' . $value . '"';
             },
             $criterion->value
         );
@@ -54,12 +54,10 @@ class LanguageCodeIn extends CriterionVisitor
         /** @var Criterion\LanguageCode $criterion */
         if ( $criterion->matchAlwaysAvailable )
         {
-            $languageCodeExpressions[] = "always_available_b:true";
+            $languageCodeExpressions[] = "content_always_available_b:true";
         }
 
-        $condition = '(' . implode( ' OR ', $languageCodeExpressions ) . ')';
-
-        return "{!child of='document_type_id:content' v='{$condition}'}";
+        return '(' . implode( ' OR ', $languageCodeExpressions ) . ')';
     }
 }
 

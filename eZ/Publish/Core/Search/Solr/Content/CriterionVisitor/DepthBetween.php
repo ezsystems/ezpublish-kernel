@@ -60,8 +60,7 @@ class DepthBetween extends CriterionVisitor
             $start = null;
         }
 
-        return "{!parent which='document_type_id:content' v='depth_i:" .
-            $this->getRange( $criterion->operator, $start, $end ) . "'}";
+        return "location_depth_mi:" . $this->getRange( $criterion->operator, $start, $end );
     }
 }
 

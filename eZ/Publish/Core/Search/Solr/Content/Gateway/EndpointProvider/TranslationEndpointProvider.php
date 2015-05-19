@@ -14,70 +14,128 @@ use RuntimeException;
 
 /**
  * TranslationEndpointProvider provides Solr endpoints for a Content translations
+ *
+ * @todo create Endpoint class
  */
 class TranslationEndpointProvider implements EndpointProvider
 {
     /**
+     * Holds a map of Solr endpoints
+     *
      * @var array
      */
     protected $endpointMap;
 
+    /**
+     * Create from configuration
+     */
     public function __construct()
     {
         $this->endpointMap = array(
-            "eng-GB" => "http://localhost:8983/solr/core0",
-            "eng-US" => "http://localhost:8983/solr/core1",
-            "por-PT" => "http://localhost:8983/solr/core2",
-            "ger-DE" => "http://localhost:8983/solr/core3",
+            self::DOCUMENT_TYPE_CONTENT => array(
+                "eng-GB" => "http://localhost:8983/solr/core0",
+                "eng-US" => "http://localhost:8983/solr/core1",
+                "por-PT" => "http://localhost:8983/solr/core2",
+                "ger-DE" => "http://localhost:8983/solr/core3",
+            ),
+            self::DOCUMENT_TYPE_LOCATION => array(
+                "eng-GB" => "http://localhost:8983/solr/core4",
+                "eng-US" => "http://localhost:8983/solr/core5",
+                "por-PT" => "http://localhost:8983/solr/core6",
+                "ger-DE" => "http://localhost:8983/solr/core7",
+            ),
         );
     }
 
-    public function getEntryPoint()
+    /**
+     *
+     *
+     * @param mixed $documentType
+     *
+     * @return string
+     */
+    public function getEntryPoint( $documentType )
     {
-        return $this->endpointMap["eng-GB"];
+        // @todo implement real entry point selection
+        if ( is_array( $this->endpointMap[$documentType] ) )
+        {
+            return $this->endpointMap[$documentType]["eng-GB"];
+        }
+
+        return $this->endpointMap[$documentType];
     }
 
-    public function getIndexingTarget( $languageCode )
+    public function getIndexingTarget( $documentType, $languageCode )
     {
-        if ( !isset( $this->endpointMap[$languageCode] ) )
+        if ( is_array( $this->endpointMap[$documentType] ) )
+        {
+            if ( !isset( $this->endpointMap[$documentType][$languageCode] ) )
+            {
+                throw new RuntimeException(
+                    "Language '{$languageCode}' is not mapped to Solr core endpoint"
+                );
+            }
+
+            return $this->endpointMap[$documentType][$languageCode];
+        }
+
+        return $this->endpointMap[$documentType];
+    }
+
+    public function getSearchTargets( $documentType, array $languageSettings )
+    {
+        if (
+            empty( $languageSettings ) ||
+            ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true ) ||
+            ( !isset( $languageSettings["languages"] ) || empty( $languageSettings["languages"] ) )
+        )
+        {
+            return $this->getAllEndpoints( $documentType );
+        }
+
+        if ( !isset( $this->endpointMap[$documentType] ) )
         {
             throw new RuntimeException(
-                "Language '{$languageCode}' is not mapped to Solr core endpoint"
+                "Document type '{$documentType}' is not mapped to Solr core endpoint(s)"
             );
         }
 
-        return $this->endpointMap[$languageCode];
+        if ( is_array( $this->endpointMap[$documentType] ) )
+        {
+            $targets = array();
+
+            foreach ( $languageSettings["languages"] as $languageCode )
+            {
+                if ( !isset( $this->endpointMap[$documentType][$languageCode] ) )
+                {
+                    throw new RuntimeException(
+                        "Language '{$languageCode}' is not mapped to Solr core endpoint"
+                    );
+                }
+
+                $targets[] = $this->endpointMap[$documentType][$languageCode];
+            }
+
+            return $targets;
+        }
+
+        return array( $this->endpointMap[$documentType] );
     }
 
-    public function getSearchTargets( array $languageSettings )
+    public function getAllEndpoints( $documentType )
     {
-        if ( empty( $languageSettings ) )
+        if ( !isset( $this->endpointMap[$documentType] ) )
         {
-            return $this->getAllEndpoints();
+            throw new RuntimeException(
+                "Document type '{$documentType}' is not mapped to Solr core endpoint(s)"
+            );
         }
 
-        if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true )
+        if ( is_array( $this->endpointMap[$documentType] ) )
         {
-            return $this->getAllEndpoints();
+            return array_values( $this->endpointMap[$documentType] );
         }
 
-        if ( !isset( $languageSettings["languages"] ) || empty( $languageSettings["languages"] ) )
-        {
-            return $this->getAllEndpoints();
-        }
-
-        $targets = array();
-
-        foreach ( $languageSettings["languages"] as $languageCode )
-        {
-            $targets[] = $this->endpointMap[$languageCode];
-        }
-
-        return $targets;
-    }
-
-    public function getAllEndpoints()
-    {
-        return array_values( $this->endpointMap );
+        return array( $this->endpointMap[$documentType] );
     }
 }

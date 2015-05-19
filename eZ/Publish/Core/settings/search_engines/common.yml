@@ -4,6 +4,7 @@ parameters:
     ezpublish.search.common.field_name_generator.class: eZ\Publish\Core\Search\Common\FieldNameGenerator
     ezpublish.search.common.field_name_generator.map:
         ez_integer: 'i'
+        ez_minteger: 'mi'
         ez_id: 'id'
         ez_mid: 'mid'
         ez_string: 's'

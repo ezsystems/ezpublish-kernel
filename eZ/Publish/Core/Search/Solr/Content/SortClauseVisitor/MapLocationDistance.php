@@ -12,7 +12,6 @@ namespace eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\Core\Search\Solr\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
-use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
@@ -28,14 +27,14 @@ class MapLocationDistance extends SortClauseVisitor
     protected $fieldName;
 
     /**
-     * Field map
+     * Field name resolver
      *
      * @var \eZ\Publish\Core\Search\Common\FieldNameResolver
      */
     protected $fieldNameResolver;
 
     /**
-     * Create from field map and field name
+     * Create from field name resolver and field name
      *
      * @param \eZ\Publish\Core\Search\Common\FieldNameResolver $fieldNameResolver
      * @param string $fieldName
@@ -107,7 +106,7 @@ class MapLocationDistance extends SortClauseVisitor
         {
             throw new InvalidArgumentException(
                 "\$sortClause->targetData",
-                "No searchable fields found for the given sort clause target ".
+                "No searchable fields found for the given sort clause target " .
                 "'{$target->fieldIdentifier}' on '{$target->typeIdentifier}'."
             );
         }

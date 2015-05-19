@@ -65,17 +65,17 @@ class ContentTypeIdentifierIn extends CriterionVisitor
     {
         $contentTypeHandler = $this->contentTypeHandler;
 
-        $condition = implode(
-            ' OR ',
-            array_map(
-                function ( $value ) use ( $contentTypeHandler )
-                {
-                    return 'type_id:"' . $contentTypeHandler->loadByIdentifier( $value )->id . '"';
-                },
-                $criterion->value
-            )
-        );
-
-        return "{!child of='document_type_id:content' v='{$condition}'}";
+        return '(' .
+            implode(
+                ' OR ',
+                array_map(
+                    function ( $value ) use ( $contentTypeHandler )
+                    {
+                        return 'content_type_id:"' . $contentTypeHandler->loadByIdentifier( $value )->id . '"';
+                    },
+                    $criterion->value
+                )
+            ) .
+            ')';
     }
 }

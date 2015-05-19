@@ -83,12 +83,8 @@ should not remove or drastically change the existing definitions.
     -->
     <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
 
-    <!--
-      Points to the root document of a block of nested documents. Required for nested document support.
-    -->
-    <field name="_root_" type="string" indexed="true" stored="true" required="false"/>
-
     <field name="document_type_id" type="string" indexed="true" stored="true" required="true"/>
+
     <!--
       Dynamic field definitions.  If a field name is not found, dynamicFields
       will be used if the name matches any of the patterns.  RESTRICTION: the
@@ -98,6 +94,7 @@ should not remove or drastically change the existing definitions.
       patterns both match, the first appearing in the schema will be used.
     -->
     <dynamicField name="*_i" type="int" indexed="true" stored="true"/>
+    <dynamicField name="*_mi" type="int" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="*_id" type="identifier" indexed="true" stored="true"/>
     <dynamicField name="*_mid" type="identifier" indexed="true" stored="true" multiValued="true"/>
     <dynamicField name="*_s" type="string" indexed="true" stored="true"/>

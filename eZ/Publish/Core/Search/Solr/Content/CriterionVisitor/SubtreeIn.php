@@ -44,18 +44,18 @@ class SubtreeIn extends CriterionVisitor
      */
     public function visit( Criterion $criterion, CriterionVisitor $subVisitor = null )
     {
-        $condition = implode(
-            ' OR ',
-            array_map(
-                function ( $value )
-                {
-                    return 'path_string_id:' . str_replace( '/', '\\\\/', $value ) . '*';
-                },
-                $criterion->value
-            )
-        );
-
-        return "{!parent which='document_type_id:content' v='{$condition}'}";
+        return '(' .
+            implode(
+                ' OR ',
+                array_map(
+                    function ( $value )
+                    {
+                        return 'location_path_string_mid:' . str_replace( '/', '\\/', $value ) . '*';
+                    },
+                    $criterion->value
+                )
+            ) .
+            ')';
     }
 }
 

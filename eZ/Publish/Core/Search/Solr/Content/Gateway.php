@@ -26,9 +26,9 @@ abstract class Gateway
      * @param array $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
+     * @return mixed
      */
-    abstract public function findContent( Query $query, array $fieldFilters = array() );
+    abstract public function find( Query $query, array $fieldFilters = array() );
 
     /**
      * Indexes a block of documents, which in our case is a Content preceded by its Locations.
@@ -39,12 +39,10 @@ abstract class Gateway
     abstract public function bulkIndexDocuments( array $documents );
 
     /**
-     * Deletes a block of documents, which in our case is a Content preceded by its Locations.
-     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
      *
-     * @param string $blockId
+     * @param string $query
      */
-    abstract public function deleteBlock( $blockId );
+    abstract public function deleteByQuery( $query );
 
     /**
      * Purges all contents from the index

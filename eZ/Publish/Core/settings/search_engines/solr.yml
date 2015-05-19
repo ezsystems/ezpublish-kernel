@@ -12,7 +12,7 @@ parameters:
     ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider.class: eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider\TranslationEndpointProvider
     ezpublish.spi.search.solr.content_handler.class: eZ\Publish\Core\Search\Solr\Content\Handler
     ezpublish.search.solr.content.document_mapper.translation_document_mapper.class: eZ\Publish\Core\Search\Solr\Content\DocumentMapper\TranslationDocumentMapper
-    ezpublish.search.solr.location.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Location\Gateway\Native
+    ezpublish.search.solr.result_extractor.loading.class: eZ\Publish\Core\Search\Solr\Content\ResultExtractor\LoadingResultExtractor
     ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
 
 services:
@@ -26,6 +26,7 @@ services:
         class: %ezpublish.search.solr.content.document_mapper.translation_document_mapper.class%
         arguments:
             - @ezpublish.search.common.field_registry
+            - @ezpublish.spi.persistence.content_handler
             - @ezpublish.spi.persistence.location_handler
             - @ezpublish.spi.persistence.content_type_handler
             - @ezpublish.spi.persistence.object_state_handler
@@ -34,6 +35,16 @@ services:
 
     ezpublish.search.solr.content.document_mapper:
         alias: ezpublish.search.solr.content.document_mapper.translation_document_mapper
+
+    ezpublish.search.solr.result_extractor.loading:
+        class: %ezpublish.search.solr.result_extractor.loading.class%
+        arguments:
+            - @ezpublish.spi.persistence.content_handler
+            - @ezpublish.spi.persistence.location_handler
+            - @ezpublish.search.solr.content.facet_builder_visitor.aggregate
+
+    ezpublish.search.solr.result_extractor:
+        alias: ezpublish.search.solr.result_extractor.loading
 
     ezpublish.search.solr.content.gateway.native:
         class: %ezpublish.search.solr.content.gateway.native.class%
@@ -45,6 +56,7 @@ services:
             - @ezpublish.search.solr.content.facet_builder_visitor.aggregate
             - @ezpublish.search.solr.content.field_value_mapper.aggregate
             - @ezpublish.search.common.field_name_generator
+            - 'content'
 
     ezpublish.search.solr.content.gateway:
         alias: ezpublish.search.solr.content.gateway.native
@@ -55,17 +67,20 @@ services:
             - @ezpublish.search.solr.content.gateway
             - @ezpublish.spi.persistence.content_handler
             - @ezpublish.search.solr.content.document_mapper
+            - @ezpublish.search.solr.result_extractor
         lazy: true
 
     ezpublish.search.solr.location.gateway.native:
-        class: %ezpublish.search.solr.location.gateway.native.class%
+        class: %ezpublish.search.solr.content.gateway.native.class%
         arguments:
             - @ezpublish.search.solr.content.gateway.client.http.stream
             - @ezpublish.search.solr.content.gateway.endpoint_provider
             - @ezpublish.search.solr.location.criterion_visitor.aggregate
             - @ezpublish.search.solr.location.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.location.facet_builder_visitor.aggregate
-            - @ezpublish.spi.persistence.location_handler
+            - @ezpublish.search.solr.content.field_value_mapper.aggregate
+            - @ezpublish.search.common.field_name_generator
+            - 'location'
 
     ezpublish.search.solr.location.gateway:
         alias: ezpublish.search.solr.location.gateway.native
@@ -75,6 +90,8 @@ services:
         arguments:
             - @ezpublish.search.solr.location.gateway
             - @ezpublish.search.common.field_name_generator
+            - @ezpublish.search.solr.content.document_mapper
+            - @ezpublish.search.solr.result_extractor
         lazy: true
 
     ezpublish.spi.search.solr:
