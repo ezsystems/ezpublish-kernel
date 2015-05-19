@@ -146,12 +146,6 @@ class Native extends Gateway
             "wt" => "json",
         );
 
-        $endpoints = $this->endpointProvider->getSearchTargets( $fieldFilters );
-        if ( !empty( $endpoints ) )
-        {
-            $parameters["shards"] = implode( ",", $endpoints );
-        }
-
         $endpoints = $this->endpointProvider->getSearchTargets(
             $this->documentType,
             $fieldFilters
