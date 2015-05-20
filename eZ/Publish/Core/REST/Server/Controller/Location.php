@@ -238,7 +238,7 @@ class Location extends RestController
                 $this->router->generate(
                     'ezpublish_rest_loadLocation',
                     array(
-                        'locationPath' => rtrim( $locationToMove->pathString, '/' ),
+                        'locationPath' => trim( $locationToMove->pathString, '/' ),
                     )
                 )
             );

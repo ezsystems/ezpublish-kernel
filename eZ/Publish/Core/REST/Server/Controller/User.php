@@ -686,7 +686,7 @@ class User extends RestController
             $this->router->generate(
                 'ezpublish_rest_loadUserGroup',
                 array(
-                    'groupPath' => $destinationGroupLocation->pathString . $userGroupLocation->id
+                    'groupPath' => trim( $destinationGroupLocation->pathString, '/' ) . '/' . $userGroupLocation->id
                 )
             )
         );
