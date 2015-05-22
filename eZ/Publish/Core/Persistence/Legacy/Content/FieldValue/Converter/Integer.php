@@ -89,7 +89,7 @@ class Integer implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $validatorParameters = array( 'minIntegerValue' => false, 'maxIntegerValue' => false );
+        $validatorParameters = array( 'minIntegerValue' => null, 'maxIntegerValue' => null );
         if ( $storageDef->dataInt4 & self::HAS_MIN_VALUE )
         {
             $validatorParameters['minIntegerValue'] = $storageDef->dataInt1;

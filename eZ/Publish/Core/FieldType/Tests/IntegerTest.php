@@ -306,7 +306,7 @@ class IntegerTest extends FieldTypeTest
             array(
                 array(
                     'IntegerValueValidator' => array(
-                        'minIntegerValue' => false,
+                        'minIntegerValue' => null,
                     )
                 )
             ),
@@ -320,7 +320,7 @@ class IntegerTest extends FieldTypeTest
             array(
                 array(
                     'IntegerValueValidator' => array(
-                        'maxIntegerValue' => false,
+                        'maxIntegerValue' => null,
                     )
                 )
             ),
