@@ -27,11 +27,11 @@ class Type extends FieldType
         'FloatValueValidator' => array(
             'minFloatValue' => array(
                 'type' => 'float',
-                'default' => false
+                'default' => null
             ),
             'maxFloatValue' => array(
                 'type' => 'float',
-                'default' => false
+                'default' => null
             )
         )
     );
