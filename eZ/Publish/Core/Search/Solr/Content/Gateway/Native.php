@@ -20,7 +20,6 @@ use RuntimeException;
 use XmlWriter;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;
-use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -36,9 +35,16 @@ class Native extends Gateway
     protected $client;
 
     /**
-     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver
      */
-    protected $endpointProvider;
+    protected $endpointResolver;
+
+    /**
+     * Endpoint registry service
+     *
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry
+     */
+    protected $endpointRegistry;
 
     /**
      * Query visitor
@@ -80,39 +86,37 @@ class Native extends Gateway
      */
     protected $commit = true;
 
-    protected $documentType;
-
     /**
      * Construct from HTTP client
      *
      * @param HttpClient $client
-     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider $endpointProvider
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver $endpointResolver
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry $endpointRegistry
      * @param CriterionVisitor $criterionVisitor
      * @param SortClauseVisitor $sortClauseVisitor
      * @param FacetBuilderVisitor $facetBuilderVisitor
      * @param FieldValueMapper $fieldValueMapper
      * @param FieldNameGenerator $nameGenerator
-     * @param string $documentType
      */
     public function __construct(
         HttpClient $client,
-        EndpointProvider $endpointProvider,
+        EndpointResolver $endpointResolver,
+        EndpointRegistry $endpointRegistry,
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
         FieldValueMapper $fieldValueMapper,
-        FieldNameGenerator $nameGenerator,
-        $documentType
+        FieldNameGenerator $nameGenerator
     )
     {
         $this->client              = $client;
-        $this->endpointProvider = $endpointProvider;
+        $this->endpointResolver = $endpointResolver;
+        $this->endpointRegistry = $endpointRegistry;
         $this->criterionVisitor    = $criterionVisitor;
         $this->sortClauseVisitor   = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->fieldValueMapper    = $fieldValueMapper;
         $this->nameGenerator       = $nameGenerator;
-        $this->documentType = $documentType;
     }
 
     /**
@@ -128,47 +132,42 @@ class Native extends Gateway
      */
     public function find( Query $query, array $fieldFilters = array() )
     {
-        $coreFilter = $this->getCoreFilter( $fieldFilters );
-
         $parameters = array(
             "q" => $this->criterionVisitor->visit( $query->query ),
-            "fq" => ( !empty( $coreFilter ) ? "({$coreFilter}) AND " : "" ) . $this->criterionVisitor->visit( $query->filter ),
-            "sort" => implode(
-                ", ",
-                array_map(
-                    array( $this->sortClauseVisitor, "visit" ),
-                    $query->sortClauses
-                )
-            ),
+            "fq" => $this->criterionVisitor->visit( $query->filter ),
+            "sort" => $this->getSortClauses( $query->sortClauses ),
             "start" => $query->offset,
             "rows" => $query->limit,
             "fl" => "*,score",
             "wt" => "json",
         );
 
-        $endpoints = $this->endpointProvider->getSearchTargets(
-            $this->documentType,
-            $fieldFilters
-        );
-        if ( !empty( $endpoints ) )
+        $coreFilter = $this->getCoreFilter( $fieldFilters );
+        if ( !empty( $coreFilter ) )
         {
-            $parameters["shards"] = implode( ",", $endpoints );
+            $parameters["fq"] = "({$coreFilter}) AND " . $parameters["fq"];
         }
 
-        // @todo: Extract method
+        $searchTargets = $this->getSearchTargets( $fieldFilters );
+        if ( !empty( $searchTargets ) )
+        {
+            $parameters["shards"] = $searchTargets;
+        }
+
+        $queryString = http_build_query( $parameters );
+
+        $facets = $this->getFacets( $query->facetBuilders );
+        if ( !empty( $facets ) )
+        {
+            $queryString .= "&facet=true&facet.sort=count&{$facets}";
+        }
+
         $response = $this->client->request(
             'GET',
-            $this->endpointProvider->getEntryPoint( $this->documentType ),
-            '/select?' .
-            http_build_query( $parameters ) .
-            ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
-            implode(
-                '&',
-                array_map(
-                    array( $this->facetBuilderVisitor, 'visit' ),
-                    $query->facetBuilders
-                )
-            )
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getEntryEndpoint()
+            ),
+            "/select?{$queryString}"
         );
 
         // @todo: Error handling?
@@ -185,7 +184,69 @@ class Native extends Gateway
     }
 
     /**
+     * Converts an array of sort clause objects to a proper Solr representation
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     *
+     * @return string
+     */
+    protected function getSortClauses( array $sortClauses )
+    {
+        return implode(
+            ", ",
+            array_map(
+                array( $this->sortClauseVisitor, "visit" ),
+                $sortClauses
+            )
+        );
+    }
+
+    /**
+     * Converts an array of facet builder objects to a proper Solr representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
+     *
+     * @return string
+     */
+    protected function getFacets( array $facetBuilders )
+    {
+        return implode(
+            '&',
+            array_map(
+                array( $this->facetBuilderVisitor, 'visit' ),
+                $facetBuilders
+            )
+        );
+    }
+
+    /**
+     * Returns search targets for given language settings
+     *
+     * @param array $languageSettings
+     *
+     * @return string
+     */
+    protected function getSearchTargets( $languageSettings )
+    {
+        $shards = array();
+        $endpoints = $this->endpointResolver->getSearchTargets( $languageSettings );
+
+        if ( !empty( $endpoints ) )
+        {
+            foreach ( $endpoints as $endpoint )
+            {
+                $shards[] = $this->endpointRegistry->getEndpoint( $endpoint )->getIdentifier();
+            }
+        }
+
+        return implode( ",", $shards );
+    }
+
+    /**
+     * Returns a filtering condition for the given language settings.
+     *
+     * The condition ensures the same Content will be matched only once across all
+     * targeted translation endpoints.
      *
      * @param array $languageSettings
      *
@@ -215,7 +276,11 @@ class Native extends Gateway
     }
 
     /**
+     * Returns a filtering condition for the given list of language codes and
+     * a selected language code among them.
      *
+     * Note that the list of language codes is assumed to be prioritized, that is sorted by
+     * priority, descending.
      *
      * @param array $languageCodes
      * @param string $selectedLanguageCode
@@ -241,10 +306,12 @@ class Native extends Gateway
     }
 
     /**
-     * Indexes a block of documents, which in our case is a Content preceded by its Locations.
-     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
+     * Indexes an array of documents.
      *
-     * @param \eZ\Publish\SPI\Search\Document[] $documents
+     * Documents are given as an array of the array of documents. The array of documents
+     * holds documents for all translations of the particular entity.
+     *
+     * @param \eZ\Publish\SPI\Search\Document[][] $documents
      *
      * @todo $documents should be generated more on demand then this and sent to Solr in chunks before final commit
      */
@@ -252,9 +319,9 @@ class Native extends Gateway
     {
         $map = array();
 
-        foreach ( $documents as $documents2 )
+        foreach ( $documents as $translationDocuments )
         {
-            foreach ( $documents2 as $document )
+            foreach ( $translationDocuments as $document )
             {
                 $map[$document->languageCode][] = $document;
             }
@@ -268,15 +335,12 @@ class Native extends Gateway
 
     protected function bulkIndexTranslationDocuments( array $documents, $languageCode )
     {
-        $server = $this->endpointProvider->getIndexingTarget(
-            $this->documentType,
-            $languageCode
-        );
-
         $updates = $this->createUpdates( $documents );
         $result = $this->client->request(
             'POST',
-            $server,
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointResolver->getIndexingTarget( $languageCode )
+            ),
             '/update?' .
             ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
@@ -296,18 +360,19 @@ class Native extends Gateway
     }
 
     /**
+     * Deletes documents by the given $query.
      *
      * @param string $query
      */
     public function deleteByQuery( $query )
     {
-        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
+        $endpoints = $this->endpointResolver->getEndpoints();
 
-        foreach ( $endpoints as $endpoint )
+        foreach ( $endpoints as $endpointName )
         {
             $this->client->request(
                 'POST',
-                $endpoint,
+                $this->endpointRegistry->getEndpoint( $endpointName ),
                 '/update?' .
                 ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
                 new Message(
@@ -327,11 +392,13 @@ class Native extends Gateway
      */
     public function purgeIndex()
     {
-        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
+        $endpoints = $this->endpointResolver->getEndpoints();
 
-        foreach ( $endpoints as $endpoint )
+        foreach ( $endpoints as $endpointName )
         {
-            $this->purgeEndpoint( $endpoint );
+            $this->purgeEndpoint(
+                $this->endpointRegistry->getEndpoint( $endpointName )
+            );
         }
     }
 

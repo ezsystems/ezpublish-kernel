@@ -41,6 +41,7 @@ EOT
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
         $databaseHandler = $this->getContainer()->get( 'ezpublish.connection' );
 
+        // Indexing Content
         $query = $databaseHandler
             ->createSelectQuery()
             ->select( "count(id)" )
@@ -62,6 +63,8 @@ EOT
         $contentSearchHandler->setCommit( false );
         $contentSearchHandler->purgeIndex();
         $contentSearchHandler->setCommit( true );
+
+        $output->writeln( "Indexing Content..." );
 
         /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
         $progress = $this->getHelperSet()->get( 'progress' );
@@ -87,6 +90,72 @@ EOT
             if ( !empty( $contentObjects ) )
             {
                 $contentSearchHandler->bulkIndexContent( $contentObjects );
+            }
+
+            $progress->advance( $k );
+        }
+        while ( ( $i += $bulkCount ) < $totalCount );
+
+        $progress->finish();
+
+        // Indexing Locations
+        $query = $databaseHandler->createSelectQuery();
+        $query
+            ->select( "count(node_id)" )
+            ->from( 'ezcontentobject_tree' )
+            ->where(
+                $query->expr->neq(
+                    $databaseHandler->quoteColumn( "contentobject_id" ),
+                    $query->bindValue( 0, null, PDO::PARAM_INT )
+                )
+            );
+        $stmt = $query->prepare();
+        $stmt->execute();
+        $totalCount = $stmt->fetchColumn();
+
+        $query = $databaseHandler->createSelectQuery();
+        $query
+            ->select( 'node_id' )
+            ->from( 'ezcontentobject_tree' )
+            ->where(
+                $query->expr->neq(
+                    $databaseHandler->quoteColumn( "contentobject_id" ),
+                    $query->bindValue( 0, null, PDO::PARAM_INT )
+                )
+            );
+
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
+        $locationSearchHandler = $searchHandler->locationSearchHandler();
+        $locationSearchHandler->setCommit( false );
+        $locationSearchHandler->purgeIndex();
+        $locationSearchHandler->setCommit( true );
+
+        $output->writeln( "Indexing Locations..." );
+
+        /** @var \Symfony\Component\Console\Helper\ProgressHelper $progress */
+        $progress = $this->getHelperSet()->get( 'progress' );
+        $progress->start( $output, $totalCount );
+        $i = 0;
+        do
+        {
+            $locations = array();
+
+            for ( $k = 0; $k <= $bulkCount; $k++ )
+            {
+                if ( !$row = $stmt->fetch( PDO::FETCH_ASSOC ) )
+                {
+                    break;
+                }
+
+                $locations[] = $persistenceHandler->locationHandler()->load( $row['node_id'] );
+            }
+
+            if ( !empty( $locations ) )
+            {
+                $locationSearchHandler->bulkIndexLocations( $locations );
             }
 
             $progress->advance( $k );

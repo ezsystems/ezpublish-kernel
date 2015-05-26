@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -19,11 +20,22 @@ use Symfony\Component\Config\FileLocator;
 class EzPublishSolrSearchEngineExtension extends Extension
 {
     const MAIN_SEARCH_ENGINE_ID = "ezpublish.spi.search.solr";
-    const HTTP_CLIENT_ID = "ezpublish.search.solr.content.gateway.client.http.stream";
     const CONTENT_SEARCH_HANDLER_ID = "ezpublish.spi.search.solr.content_handler";
     const CONTENT_SEARCH_GATEWAY_ID = "ezpublish.search.solr.content.gateway.native";
+    const CONTENT_ENDPOINT_RESOLVER_ID = "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content";
     const LOCATION_SEARCH_HANDLER_ID = "ezpublish.spi.search.solr.location_handler";
     const LOCATION_SEARCH_GATEWAY_ID = "ezpublish.search.solr.location.gateway.native";
+    const LOCATION_ENDPOINT_RESOLVER_ID = "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location";
+
+    /**
+     * Endpoint class
+     */
+    const ENDPOINT_CLASS = "eZ\\Publish\\Core\\Search\\Solr\\Content\\Gateway\\Endpoint";
+
+    /**
+     * Endpoint service tag
+     */
+    const ENDPOINT_TAG = "ezpublish.search.solr.endpoint";
 
     public function getAlias()
     {
@@ -94,6 +106,15 @@ class EzPublishSolrSearchEngineExtension extends Extension
             $this->configureSearchServices( $container, $name, $params );
             $container->setParameter( "$alias.connection.$name", $params );
         }
+
+        foreach ( $config["endpoints"] as $name => $params )
+        {
+            $this->defineEndpoint( $container, $name, $params );
+        }
+
+        // Search engine itself, for given connection name
+        $searchEngineDef = $container->findDefinition( self::MAIN_SEARCH_ENGINE_ID );
+        $searchEngineDef->setFactory( [new Reference( 'ezpublish.solr.engine_factory' ), 'buildEngine'] );
     }
 
     /**
@@ -107,15 +128,16 @@ class EzPublishSolrSearchEngineExtension extends Extension
     {
         $alias = $this->getAlias();
 
-        // Http client
-        $httpClientId = static::HTTP_CLIENT_ID . ".$connectionName";
-        $httpClientDef = new DefinitionDecorator( self::HTTP_CLIENT_ID );
-        $httpClientDef->replaceArgument( 0, $connectionParams['server'] );
-        $container->setDefinition( $httpClientId, $httpClientDef );
+        // Content endpoint resolver
+        $contentEndpointResolverId = static::CONTENT_ENDPOINT_RESOLVER_ID . ".$connectionName";
+        $contentEndpointResolverDef = new DefinitionDecorator( self::CONTENT_ENDPOINT_RESOLVER_ID );
+        $contentEndpointResolverDef->replaceArgument( 0, $connectionParams['entry_endpoints']['content'] );
+        $contentEndpointResolverDef->replaceArgument( 1, $connectionParams['cluster']['content'] );
+        $container->setDefinition( $contentEndpointResolverId, $contentEndpointResolverDef );
 
         // Content search gateway
         $contentSearchGatewayDef = new DefinitionDecorator( self::CONTENT_SEARCH_GATEWAY_ID );
-        $contentSearchGatewayDef->replaceArgument( 0, new Reference( $httpClientId ) );
+        $contentSearchGatewayDef->replaceArgument( 1, new Reference( $contentEndpointResolverId ) );
         $contentSearchGatewayId = self::CONTENT_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition( $contentSearchGatewayId, $contentSearchGatewayDef );
 
@@ -126,9 +148,16 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $container->setDefinition( $contentSearchHandlerId, $contentSearchHandlerDefinition );
         $container->setParameter( "$alias.connection.$connectionName.content_handler_id", $contentSearchHandlerId );
 
+        // Location endpoint resolver
+        $locationEndpointResolverId = static::LOCATION_ENDPOINT_RESOLVER_ID . ".$connectionName";
+        $locationEndpointResolverDef = new DefinitionDecorator( self::CONTENT_ENDPOINT_RESOLVER_ID );
+        $locationEndpointResolverDef->replaceArgument( 0, $connectionParams['entry_endpoints']['location'] );
+        $locationEndpointResolverDef->replaceArgument( 1, $connectionParams['cluster']['location'] );
+        $container->setDefinition( $locationEndpointResolverId, $locationEndpointResolverDef );
+
         // Location search gateway
         $locationSearchGatewayDef = new DefinitionDecorator( self::LOCATION_SEARCH_GATEWAY_ID );
-        $locationSearchGatewayDef->replaceArgument( 0, new Reference( $httpClientId ) );
+        $locationSearchGatewayDef->replaceArgument( 1, new Reference( $locationEndpointResolverId ) );
         $locationSearchGatewayId = self::LOCATION_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition( $locationSearchGatewayId, $locationSearchGatewayDef );
 
@@ -138,10 +167,24 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $locationSearchHandlerId = self::LOCATION_SEARCH_HANDLER_ID . ".$connectionName";
         $container->setDefinition( $locationSearchHandlerId, $locationSearchHandlerDefinition );
         $container->setParameter( "$alias.connection.$connectionName.location_handler_id", $locationSearchHandlerId );
+    }
 
-        // Search engine itself, for given connection name
-        $searchEngineDef = $container->findDefinition( self::MAIN_SEARCH_ENGINE_ID );
-        $searchEngineDef->setFactory( [new Reference( 'ezpublish.solr.engine_factory' ), 'buildEngine'] );
+    /**
+     * Creates Endpoint definition in the service container
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $alias
+     * @param array $params
+     */
+    protected function defineEndpoint( ContainerBuilder $container, $alias, $params )
+    {
+        $definition = new Definition( self::ENDPOINT_CLASS, array( $params ) );
+        $definition->addTag( self::ENDPOINT_TAG, array( "alias" => $alias ) );
+
+        $container->setDefinition(
+            sprintf( $this->getAlias() . ".endpoints.%s", $alias ),
+            $definition
+        );
     }
 
     public function getConfiguration( array $config, ContainerBuilder $container )

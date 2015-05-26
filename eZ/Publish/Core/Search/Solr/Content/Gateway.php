@@ -31,14 +31,17 @@ abstract class Gateway
     abstract public function find( Query $query, array $fieldFilters = array() );
 
     /**
-     * Indexes a block of documents, which in our case is a Content preceded by its Locations.
-     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
+     * Indexes an array of documents.
      *
-     * @param \eZ\Publish\SPI\Search\Document[] $documents
+     * Documents are given as an array of the array of documents. The array of documents
+     * holds documents for all translations of the particular entity.
+     *
+     * @param \eZ\Publish\SPI\Search\Document[][] $documents
      */
     abstract public function bulkIndexDocuments( array $documents );
 
     /**
+     * Deletes documents by the given $query.
      *
      * @param string $query
      */

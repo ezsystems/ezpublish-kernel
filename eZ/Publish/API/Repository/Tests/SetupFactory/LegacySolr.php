@@ -56,6 +56,7 @@ class LegacySolr extends Legacy
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateFacetBuilderVisitorPass() );
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateFieldValueMapperPass() );
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateSortClauseVisitorPass() );
+            $containerBuilder->addCompilerPass( new Compiler\Search\Solr\EndpointRegistryPass() );
             $containerBuilder->addCompilerPass( new Compiler\Search\FieldRegistryPass() );
             $containerBuilder->addCompilerPass( new Compiler\Search\SignalSlotPass() );
 

@@ -9,21 +9,42 @@ parameters:
     ezpublish.search.solr.connection.server: http://localhost:8983/solr/core0
     ezpublish.spi.search.solr.class: eZ\Publish\Core\Search\Solr\Handler
     ezpublish.search.solr.content.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\Native
-    ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider.class: eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider\TranslationEndpointProvider
+    ezpublish.search.solr.content.gateway.endpoint_registry.class: eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry
+    ezpublish.search.solr.content.gateway.endpoint_resolver.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver\NativeEndpointResolver
     ezpublish.spi.search.solr.content_handler.class: eZ\Publish\Core\Search\Solr\Content\Handler
-    ezpublish.search.solr.content.document_mapper.translation_document_mapper.class: eZ\Publish\Core\Search\Solr\Content\DocumentMapper\TranslationDocumentMapper
+    ezpublish.search.solr.content.document_mapper.native.class: eZ\Publish\Core\Search\Solr\Content\DocumentMapper\NativeDocumentMapper
     ezpublish.search.solr.result_extractor.loading.class: eZ\Publish\Core\Search\Solr\Content\ResultExtractor\LoadingResultExtractor
     ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
+    # Endpoint resolver arguments must be set in order to be overrideable
+    ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.content: []
+    ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.location: []
+    ezpublish.search.solr.content.gateway.endpoint_resolver.cluster.content: []
+    ezpublish.search.solr.content.gateway.endpoint_resolver.cluster.location: []
 
 services:
-    ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider:
-        class: %ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider.class%
+    ezpublish.search.solr.content.gateway.endpoint_registry:
+        class: %ezpublish.search.solr.content.gateway.endpoint_registry.class%
 
-    ezpublish.search.solr.content.gateway.endpoint_provider:
-        alias: ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider
+    ezpublish.search.solr.content.gateway.endpoint_resolver.native.content:
+        class: %ezpublish.search.solr.content.gateway.endpoint_resolver.native.class%
+        arguments:
+            - %ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.content%
+            - %ezpublish.search.solr.content.gateway.endpoint_resolver.cluster.content%
 
-    ezpublish.search.solr.content.document_mapper.translation_document_mapper:
-        class: %ezpublish.search.solr.content.document_mapper.translation_document_mapper.class%
+    ezpublish.search.solr.content.gateway.endpoint_resolver.native.location:
+        class: %ezpublish.search.solr.content.gateway.endpoint_resolver.native.class%
+        arguments:
+            - %ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.location%
+            - %ezpublish.search.solr.content.gateway.endpoint_resolver.cluster.location%
+
+    ezpublish.search.solr.content.gateway.endpoint_resolver.content:
+        alias: ezpublish.search.solr.content.gateway.endpoint_resolver.native.content
+
+    ezpublish.search.solr.content.gateway.endpoint_resolver.location:
+        alias: ezpublish.search.solr.content.gateway.endpoint_resolver.native.location
+
+    ezpublish.search.solr.content.document_mapper.native:
+        class: %ezpublish.search.solr.content.document_mapper.native.class%
         arguments:
             - @ezpublish.search.common.field_registry
             - @ezpublish.spi.persistence.content_handler
@@ -34,7 +55,7 @@ services:
             - @ezpublish.search.common.field_name_generator
 
     ezpublish.search.solr.content.document_mapper:
-        alias: ezpublish.search.solr.content.document_mapper.translation_document_mapper
+        alias: ezpublish.search.solr.content.document_mapper.native
 
     ezpublish.search.solr.result_extractor.loading:
         class: %ezpublish.search.solr.result_extractor.loading.class%
@@ -50,13 +71,13 @@ services:
         class: %ezpublish.search.solr.content.gateway.native.class%
         arguments:
             - @ezpublish.search.solr.content.gateway.client.http.stream
-            - @ezpublish.search.solr.content.gateway.endpoint_provider
+            - @ezpublish.search.solr.content.gateway.endpoint_resolver.content
+            - @ezpublish.search.solr.content.gateway.endpoint_registry
             - @ezpublish.search.solr.content.criterion_visitor.aggregate
             - @ezpublish.search.solr.content.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.content.facet_builder_visitor.aggregate
             - @ezpublish.search.solr.content.field_value_mapper.aggregate
             - @ezpublish.search.common.field_name_generator
-            - 'content'
 
     ezpublish.search.solr.content.gateway:
         alias: ezpublish.search.solr.content.gateway.native
@@ -74,13 +95,13 @@ services:
         class: %ezpublish.search.solr.content.gateway.native.class%
         arguments:
             - @ezpublish.search.solr.content.gateway.client.http.stream
-            - @ezpublish.search.solr.content.gateway.endpoint_provider
+            - @ezpublish.search.solr.content.gateway.endpoint_resolver.location
+            - @ezpublish.search.solr.content.gateway.endpoint_registry
             - @ezpublish.search.solr.location.criterion_visitor.aggregate
             - @ezpublish.search.solr.location.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.location.facet_builder_visitor.aggregate
             - @ezpublish.search.solr.content.field_value_mapper.aggregate
             - @ezpublish.search.common.field_name_generator
-            - 'location'
 
     ezpublish.search.solr.location.gateway:
         alias: ezpublish.search.solr.location.gateway.native
