@@ -28,7 +28,7 @@ services:
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.solr
 
-    ezpublish.solr.endpoint0:
+    ezpublish.search.solr.endpoint.endpoint0:
         class: %ezpublish.solr.endpoint.class%
         arguments:
             -
@@ -40,7 +40,7 @@ services:
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint0}
 
-    ezpublish.solr.endpoint1:
+    ezpublish.search.solr.endpoint.endpoint1:
         class: %ezpublish.solr.endpoint.class%
         arguments:
             -
@@ -52,7 +52,7 @@ services:
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint1}
 
-    ezpublish.solr.endpoint2:
+    ezpublish.search.solr.endpoint.endpoint2:
         class: %ezpublish.solr.endpoint.class%
         arguments:
             -
@@ -64,7 +64,7 @@ services:
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint2}
 
-    ezpublish.solr.endpoint3:
+    ezpublish.search.solr.endpoint.endpoint3:
         class: %ezpublish.solr.endpoint.class%
         arguments:
             -
@@ -76,7 +76,7 @@ services:
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint3}
 
-    ezpublish.solr.endpoint4:
+    ezpublish.search.solr.endpoint.endpoint4:
         class: %ezpublish.solr.endpoint.class%
         arguments:
             -
@@ -88,7 +88,7 @@ services:
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint4}
 
-    ezpublish.solr.endpoint5:
+    ezpublish.search.solr.endpoint.endpoint5:
         class: %ezpublish.solr.endpoint.class%
         arguments:
             -
@@ -100,7 +100,7 @@ services:
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint5}
 
-    ezpublish.solr.endpoint6:
+    ezpublish.search.solr.endpoint.endpoint6:
         class: %ezpublish.solr.endpoint.class%
         arguments:
             -
@@ -112,7 +112,7 @@ services:
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint6}
 
-    ezpublish.solr.endpoint7:
+    ezpublish.search.solr.endpoint.endpoint7:
         class: %ezpublish.solr.endpoint.class%
         arguments:
             -
