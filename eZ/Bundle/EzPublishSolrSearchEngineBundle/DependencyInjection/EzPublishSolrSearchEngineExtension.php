@@ -9,6 +9,7 @@
 
 namespace eZ\Bundle\EzPublishSolrSearchEngineBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -24,6 +25,16 @@ class EzPublishSolrSearchEngineExtension extends Extension
     const CONTENT_SEARCH_GATEWAY_ID = "ezpublish.search.solr.content.gateway.native";
     const LOCATION_SEARCH_HANDLER_ID = "ezpublish.spi.search.solr.location_handler";
     const LOCATION_SEARCH_GATEWAY_ID = "ezpublish.search.solr.location.gateway.native";
+
+    /**
+     * Endpoint class
+     */
+    const ENDPOINT_CLASS = "eZ\\Publish\\Core\\Search\\Solr\\Content\\Gateway\\Endpoint";
+
+    /**
+     * Endpoint service tag
+     */
+    const ENDPOINT_TAG = "ezpublish.search.solr.endpoint";
 
     public function getAlias()
     {
@@ -89,10 +100,15 @@ class EzPublishSolrSearchEngineExtension extends Extension
             );
         }
 
-        foreach ( $config["connections"] as $name => $params )
+        /*foreach ( $config["connections"] as $name => $params )
         {
             $this->configureSearchServices( $container, $name, $params );
             $container->setParameter( "$alias.connection.$name", $params );
+        }*/
+
+        foreach ( $config["endpoints"] as $name => $params )
+        {
+            $this->defineEndpoint( $container, $name, $params );
         }
     }
 
@@ -142,6 +158,24 @@ class EzPublishSolrSearchEngineExtension extends Extension
         // Search engine itself, for given connection name
         $searchEngineDef = $container->findDefinition( self::MAIN_SEARCH_ENGINE_ID );
         $searchEngineDef->setFactory( [new Reference( 'ezpublish.solr.engine_factory' ), 'buildEngine'] );
+    }
+
+    /**
+     * Creates Endpoint definition in the service container
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $alias
+     * @param array $params
+     */
+    protected function defineEndpoint( ContainerBuilder $container, $alias, $params )
+    {
+        $definition = new Definition( self::ENDPOINT_CLASS, array( $params ) );
+        $definition->addTag( self::ENDPOINT_TAG, array( "alias" => $alias ) );
+
+        $container->setDefinition(
+            sprintf( $this->getAlias() . ".endpoints.%s", $alias ),
+            $definition
+        );
     }
 
     public function getConfiguration( array $config, ContainerBuilder $container )

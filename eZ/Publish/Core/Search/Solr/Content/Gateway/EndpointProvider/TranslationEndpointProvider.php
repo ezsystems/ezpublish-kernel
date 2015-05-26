@@ -164,6 +164,13 @@ class TranslationEndpointProvider implements EndpointProvider
         );
     }
 
+    /**
+     * Returns an array of Endpoints for the given array of Endpoint identifiers
+     *
+     * @param array $identifiers
+     *
+     * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[]
+     */
     protected function getEndpoints( array $identifiers )
     {
         $endpoints = array();
