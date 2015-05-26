@@ -13,7 +13,7 @@ namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\Repository as APIRepository;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\REST\Common;
 
 /**
@@ -141,11 +141,23 @@ class Repository implements APIRepository
     }
 
     /**
+     * Get current user.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserReference
+     */
+    public function getCurrentUserReference()
+    {
+        return null;
+    }
+
+    /**
      * Sets the current user to the given $user.
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
+     *
+     * @return void
      */
-    public function setCurrentUser(User $user)
+    public function setCurrentUser(UserReference $user)
     {
         throw new Exceptions\MethodNotAllowedException(
             'It is not allowed to set a current user in this implementation. Please use a corresponding authenticating HttpClient instead.'
@@ -155,11 +167,11 @@ class Repository implements APIRepository
     /**
      * @param string $module
      * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
      *
      * @return bool|\eZ\Publish\API\Repository\Values\User\Limitation[] if limitations are on this function an array of limitations is returned
      */
-    public function hasAccess($module, $function, User $user = null)
+    public function hasAccess($module, $function, UserReference $user = null)
     {
         // @todo: Implement
     }

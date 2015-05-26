@@ -483,7 +483,7 @@ class ContentService implements ContentServiceInterface
         $contentCreateStruct = clone $contentCreateStruct;
 
         if ($contentCreateStruct->ownerId === null) {
-            $contentCreateStruct->ownerId = $this->repository->getCurrentUser()->id;
+            $contentCreateStruct->ownerId = $this->repository->getCurrentUserReference()->getUserId();
         }
 
         if ($contentCreateStruct->alwaysAvailable === null) {
@@ -1044,9 +1044,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if ($creator === null) {
-            $creator = $this->repository->getCurrentUser();
-        } else {
-            $creator = $this->repository->getUserService()->loadUser($creator->id);
+            $creator = $this->repository->getCurrentUserReference();
         }
 
         if (!$this->repository->canUser('content', 'edit', $contentInfo)) {
@@ -1058,7 +1056,7 @@ class ContentService implements ContentServiceInterface
             $spiContent = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
                 $contentInfo->id,
                 $versionNo,
-                $creator->id
+                $creator->getUserId()
             );
             $this->repository->commit();
         } catch (Exception $e) {
@@ -1076,14 +1074,14 @@ class ContentService implements ContentServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to load the draft list
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo the drafts ({@link VersionInfo}) owned by the given user
      */
     public function loadContentDrafts(User $user = null)
     {
         if ($user === null) {
-            $user = $this->repository->getCurrentUser();
+            $user = $this->repository->getCurrentUserReference();
         }
 
         // throw early if user has absolutely no access to versionread
@@ -1091,8 +1089,7 @@ class ContentService implements ContentServiceInterface
             throw new UnauthorizedException('content', 'versionread');
         }
 
-        $spiVersionInfoList = $this->persistenceHandler->contentHandler()->loadDraftsForUser($user->id);
-
+        $spiVersionInfoList = $this->persistenceHandler->contentHandler()->loadDraftsForUser($user->getUserId());
         $versionInfoList = array();
         foreach ($spiVersionInfoList as $spiVersionInfo) {
             $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
@@ -1271,7 +1268,7 @@ class ContentService implements ContentServiceInterface
                     $languageCodes,
                     $contentType
                 ),
-                'creatorId' => $contentUpdateStruct->creatorId ?: $this->repository->getCurrentUser()->id,
+                'creatorId' => $contentUpdateStruct->creatorId ?: $this->repository->getCurrentUserReference()->getUserId(),
                 'fields' => $spiFields,
                 'modificationDate' => time(),
                 'initialLanguageId' => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(

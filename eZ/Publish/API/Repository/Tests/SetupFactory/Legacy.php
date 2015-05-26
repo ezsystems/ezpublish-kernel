@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Tests\IdManager;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler as CachingContentTypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as CachingLanguageHandler;
 use Exception;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -128,9 +129,8 @@ class Legacy extends SetupFactory
         $this->clearInternalCaches();
         $repository = $this->getServiceContainer()->get($this->repositoryReference);
 
-        $repository->setCurrentUser(
-            $repository->getUserService()->loadUser(14)
-        );
+        // Set admin user as current user by default
+        $repository->setCurrentUser(new UserReference(14));
 
         return $repository;
     }

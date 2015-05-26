@@ -11,6 +11,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use Exception;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 
 /**
  * Test case for operations in the Repository using in memory storage.
@@ -288,31 +289,6 @@ class RepositoryTest extends BaseTest
     }
 
     /**
-     * @HACK this is a hack to get the Repository without current user being set
-     *
-     * @todo find a way to do it differently
-     *
-     * @param \eZ\Publish\API\Repository\Repository $repository
-     */
-    private function setNullAsCurrentUser($repository)
-    {
-        while (true) {
-            $repositoryReflection = new \ReflectionObject($repository);
-            // If the repository is decorated, we need to recurse in the "repository" property
-            if (!$repositoryReflection->hasProperty('repository')) {
-                break;
-            }
-
-            $repositoryProperty = $repositoryReflection->getProperty('repository');
-            $repositoryProperty->setAccessible(true);
-            $repository = $repositoryProperty->getValue($repository);
-        }
-        $currentUserProperty = new \ReflectionProperty($repository, 'currentUser');
-        $currentUserProperty->setAccessible(true);
-        $currentUserProperty->setValue($repository, null);
-    }
-
-    /**
      * Test for the getCurrentUser() method.
      *
      * @group content
@@ -323,13 +299,13 @@ class RepositoryTest extends BaseTest
     public function testGetCurrentUserReturnsAnonymousUser()
     {
         $repository = $this->getRepository();
-        $this->setNullAsCurrentUser($repository);
-
         $anonymousUserId = $this->generateId('user', 10);
+        $repository->setCurrentUser(new UserReference($anonymousUserId));
+
         /* BEGIN: Use Case */
         // $anonymousUserId is the ID of the "Anonymous" user in a eZ
         // Publish demo installation.
-        // No user was previously set to the $repository
+        // Only a UserReference has previously been set to the $repository
         $anonymousUser = $repository->getCurrentUser();
         /* END: Use Case */
 
@@ -355,7 +331,7 @@ class RepositoryTest extends BaseTest
     public function testSetCurrentUser()
     {
         $repository = $this->getRepository();
-        $this->setNullAsCurrentUser($repository);
+        $repository->setCurrentUser(new UserReference($this->generateId('user', 10)));
 
         $administratorUserId = $this->generateId('user', 14);
 
@@ -370,6 +346,16 @@ class RepositoryTest extends BaseTest
         // Set administrator user as current user
         $repository->setCurrentUser($administratorUser);
         /* END: Use Case */
+
+        $this->assertEquals(
+            $administratorUserId,
+            $repository->getCurrentUserReference()->getUserId()
+        );
+
+        $this->assertEquals(
+            $administratorUser->getUserId(),
+            $repository->getCurrentUser()->getUserId()
+        );
 
         $this->assertSame(
             $administratorUser,

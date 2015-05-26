@@ -38,6 +38,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Exception;
 
 /**
@@ -917,8 +918,8 @@ class ContentTest extends BaseServiceMockTest
         );
 
         $repositoryMock->expects($this->once())
-            ->method('getCurrentUser')
-            ->will($this->returnValue($this->getStubbedUser(169)));
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(169)));
 
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
@@ -978,8 +979,8 @@ class ContentTest extends BaseServiceMockTest
         );
 
         $repositoryMock->expects($this->once())
-            ->method('getCurrentUser')
-            ->will($this->returnValue($this->getStubbedUser(169)));
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(169)));
 
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
@@ -3134,8 +3135,8 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($contentTypeServiceMock));
 
         $repositoryMock->expects($this->once())
-            ->method('getCurrentUser')
-            ->will($this->returnValue($this->getStubbedUser(169)));
+            ->method('getCurrentUserReference')
+            ->will($this->returnValue(new UserReference(169)));
 
         $fieldTypeMock->expects($this->any())
             ->method('acceptValue')

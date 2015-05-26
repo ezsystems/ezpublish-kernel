@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\TransactionHandler;
 
 /**
@@ -158,11 +158,21 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get current user ref.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\UserReference
+     */
+    public function getCurrentUserReference()
+    {
+        return $this->repository->getCurrentUserReference();
+    }
+
+    /**
      * Sets the current user to the given $user.
      *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
      */
-    public function setCurrentUser(User $user)
+    public function setCurrentUser(UserReference $user)
     {
         return $this->repository->setCurrentUser($user);
     }
@@ -201,11 +211,11 @@ class Repository implements RepositoryInterface
      *
      * @param string $module
      * @param string $function
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
      *
      * @return bool|array Bool if user has full or no access, array if limitations if not
      */
-    public function hasAccess($module, $function, User $user = null)
+    public function hasAccess($module, $function, UserReference $user = null)
     {
         return $this->repository->hasAccess($module, $function, $user);
     }

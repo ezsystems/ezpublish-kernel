@@ -92,7 +92,7 @@ class PermissionsCriterionHandler
          * If RoleAssignment has limitation then policy OR conditions are wrapped in a AND condition with the
          * role limitation, otherwise it will be merged into RoleAssignment's OR condition.
          */
-        $currentUser = $this->repository->getCurrentUser();
+        $currentUserRef = $this->repository->getCurrentUserReference();
         $roleAssignmentOrCriteria = array();
         $roleService = $this->repository->getRoleService();
         foreach ($permissionSets as $permissionSet) {
@@ -110,7 +110,7 @@ class PermissionsCriterionHandler
                 $limitationsAndCriteria = array();
                 foreach ($limitations as $limitation) {
                     $type = $roleService->getLimitationType($limitation->getIdentifier());
-                    $limitationsAndCriteria[] = $type->getCriterion($limitation, $currentUser);
+                    $limitationsAndCriteria[] = $type->getCriterion($limitation, $currentUserRef);
                 }
 
                 $policyOrCriteria[] = isset($limitationsAndCriteria[1]) ?
@@ -129,12 +129,12 @@ class PermissionsCriterionHandler
                 if (!empty($policyOrCriteria)) {
                     $roleAssignmentOrCriteria[] = new LogicalAnd(
                         array(
-                            $type->getCriterion($permissionSet['limitation'], $currentUser),
+                            $type->getCriterion($permissionSet['limitation'], $currentUserRef),
                             isset($policyOrCriteria[1]) ? new LogicalOr($policyOrCriteria) : $policyOrCriteria[0],
                         )
                     );
                 } else {
-                    $roleAssignmentOrCriteria[] = $type->getCriterion($permissionSet['limitation'], $currentUser);
+                    $roleAssignmentOrCriteria[] = $type->getCriterion($permissionSet['limitation'], $currentUserRef);
                 }
             } elseif (!empty($policyOrCriteria)) {
                 // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria

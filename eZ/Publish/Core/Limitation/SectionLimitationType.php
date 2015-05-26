@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
@@ -106,13 +106,13 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
      *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
-     * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
      * @param \eZ\Publish\API\Repository\Values\ValueObject[]|null $targets The context of the $object, like Location of Content, if null none where provided by caller
      *
      * @return bool
      */
-    public function evaluate(APILimitationValue $value, APIUser $currentUser, ValueObject $object, array $targets = null)
+    public function evaluate(APILimitationValue $value, APIUserReference $currentUser, ValueObject $object, array $targets = null)
     {
         if (!$value instanceof APISectionLimitation) {
             throw new InvalidArgumentException('$value', 'Must be of type: APISectionLimitation');
@@ -151,11 +151,11 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
      * Returns Criterion for use in find() query.
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
-     * @param \eZ\Publish\API\Repository\Values\User\User $currentUser
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
      */
-    public function getCriterion(APILimitationValue $value, APIUser $currentUser)
+    public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
         if (empty($value->limitationValues)) {
             // no limitation values
