@@ -37,6 +37,8 @@ services:
                 port: 8983
                 path: solr
                 core: core0
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint0}
 
     ezpublish.solr.endpoint1:
         class: %ezpublish.solr.endpoint.class%
@@ -47,6 +49,8 @@ services:
                 port: 8983
                 path: solr
                 core: core1
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint1}
 
     ezpublish.solr.endpoint2:
         class: %ezpublish.solr.endpoint.class%
@@ -57,6 +61,8 @@ services:
                 port: 8983
                 path: solr
                 core: core2
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint2}
 
     ezpublish.solr.endpoint3:
         class: %ezpublish.solr.endpoint.class%
@@ -67,6 +73,8 @@ services:
                 port: 8983
                 path: solr
                 core: core3
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint3}
 
     ezpublish.solr.endpoint4:
         class: %ezpublish.solr.endpoint.class%
@@ -77,6 +85,8 @@ services:
                 port: 8983
                 path: solr
                 core: core4
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint4}
 
     ezpublish.solr.endpoint5:
         class: %ezpublish.solr.endpoint.class%
@@ -87,6 +97,8 @@ services:
                 port: 8983
                 path: solr
                 core: core5
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint5}
 
     ezpublish.solr.endpoint6:
         class: %ezpublish.solr.endpoint.class%
@@ -97,6 +109,8 @@ services:
                 port: 8983
                 path: solr
                 core: core6
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint6}
 
     ezpublish.solr.endpoint7:
         class: %ezpublish.solr.endpoint.class%
@@ -107,19 +121,11 @@ services:
                 port: 8983
                 path: solr
                 core: core7
+        tags:
+            - {name: ezpublish.search.solr.endpoint, alias: endpoint7}
 
     ezpublish.search.solr.content.gateway.endpoint_registry:
         class: %ezpublish.search.solr.content.gateway.endpoint_registry.class%
-        arguments:
-            -
-                endpoint0: @ezpublish.solr.endpoint0
-                endpoint1: @ezpublish.solr.endpoint1
-                endpoint2: @ezpublish.solr.endpoint2
-                endpoint3: @ezpublish.solr.endpoint3
-                endpoint4: @ezpublish.solr.endpoint4
-                endpoint5: @ezpublish.solr.endpoint5
-                endpoint6: @ezpublish.solr.endpoint6
-                endpoint7: @ezpublish.solr.endpoint7
 
     ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider:
         class: %ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider.class%
