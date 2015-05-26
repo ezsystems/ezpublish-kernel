@@ -19,6 +19,7 @@ parameters:
         -
             var/ezdemo_site/storage/images/design/plain-site/172-2-eng-US/eZ-Publish-Demo-Design-without-demo-content1.png
     ezpublish.solr.endpoint.class: eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint
+    ezpublish.search.solr.content.gateway.endpoint_registry.class: eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry
 
 services:
     ezpublish.cache_pool.spi.cache.decorator:
@@ -107,20 +108,34 @@ services:
                 path: solr
                 core: core7
 
+    ezpublish.search.solr.content.gateway.endpoint_registry:
+        class: %ezpublish.search.solr.content.gateway.endpoint_registry.class%
+        arguments:
+            -
+                endpoint0: @ezpublish.solr.endpoint0
+                endpoint1: @ezpublish.solr.endpoint1
+                endpoint2: @ezpublish.solr.endpoint2
+                endpoint3: @ezpublish.solr.endpoint3
+                endpoint4: @ezpublish.solr.endpoint4
+                endpoint5: @ezpublish.solr.endpoint5
+                endpoint6: @ezpublish.solr.endpoint6
+                endpoint7: @ezpublish.solr.endpoint7
+
     ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider:
         class: %ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider.class%
         arguments:
+            - @ezpublish.search.solr.content.gateway.endpoint_registry
             -
-                content: @ezpublish.solr.endpoint0
-                location: @ezpublish.solr.endpoint0
+                content: endpoint0
+                location: endpoint0
             -
                 content:
-                    eng-GB: @ezpublish.solr.endpoint0
-                    eng-US: @ezpublish.solr.endpoint1
-                    por-PT: @ezpublish.solr.endpoint2
-                    ger-DE: @ezpublish.solr.endpoint3
+                    eng-GB: endpoint0
+                    eng-US: endpoint1
+                    por-PT: endpoint2
+                    ger-DE: endpoint3
                 location:
-                    eng-GB: @ezpublish.solr.endpoint4
-                    eng-US: @ezpublish.solr.endpoint5
-                    por-PT: @ezpublish.solr.endpoint6
-                    ger-DE: @ezpublish.solr.endpoint7
+                    eng-GB: endpoint4
+                    eng-US: endpoint5
+                    por-PT: endpoint6
+                    ger-DE: endpoint7
