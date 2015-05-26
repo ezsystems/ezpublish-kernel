@@ -190,7 +190,7 @@ class Trash extends RestController
             $this->router->generate(
                 'ezpublish_rest_loadLocation',
                 array(
-                    'locationPath' => rtrim( $location->pathString, '/' ),
+                    'locationPath' => trim( $location->pathString, '/' ),
                 )
             )
         );
