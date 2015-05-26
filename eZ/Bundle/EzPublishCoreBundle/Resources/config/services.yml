@@ -8,6 +8,7 @@ parameters:
     ezpublish.controller.base.class: eZ\Publish\Core\MVC\Symfony\Controller\Controller
     ezpublish.controller.content.view.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController
     ezpublish.controller.content.preview.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController
+    ezpublish.controller.content.download.class: eZ\Publish\Core\MVC\Symfony\Controller\Content\DownloadController
     ezpublish.controller.page.view.class: eZ\Bundle\EzPublishCoreBundle\Controller\PageController
 
     # Param converters
@@ -77,6 +78,13 @@ services:
 
     ezpublish.controller.content.preview:
         alias: ezpublish.controller.content.preview.core
+
+    ezpublish.controller.content.download:
+        class: %ezpublish.controller.content.download.class%
+        arguments:
+            - @ezpublish.api.service.content
+            - @ezpublish.fieldType.ezbinaryfile.io_service
+        parent: ezpublish.controller.base
 
     ezpublish.controller.page.view:
         class: %ezpublish.controller.page.view.class%
