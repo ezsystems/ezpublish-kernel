@@ -14,11 +14,16 @@ use RuntimeException;
 
 /**
  * TranslationEndpointProvider provides Solr endpoints for a Content translations
- *
- * @todo create Endpoint class
  */
 class TranslationEndpointProvider implements EndpointProvider
 {
+    /**
+     * Holds a map of Solr entry points
+     *
+     * @var array
+     */
+    protected $entryPointMap;
+
     /**
      * Holds a map of Solr endpoints
      *
@@ -28,41 +33,31 @@ class TranslationEndpointProvider implements EndpointProvider
 
     /**
      * Create from configuration
+     *
+     * @param array $entryPointMap
+     * @param array $endpointMap
      */
-    public function __construct()
+    public function __construct( array $entryPointMap = array(), array $endpointMap = array() )
     {
-        $this->endpointMap = array(
-            self::DOCUMENT_TYPE_CONTENT => array(
-                "eng-GB" => "http://localhost:8983/solr/core0",
-                "eng-US" => "http://localhost:8983/solr/core1",
-                "por-PT" => "http://localhost:8983/solr/core2",
-                "ger-DE" => "http://localhost:8983/solr/core3",
-            ),
-            self::DOCUMENT_TYPE_LOCATION => array(
-                "eng-GB" => "http://localhost:8983/solr/core4",
-                "eng-US" => "http://localhost:8983/solr/core5",
-                "por-PT" => "http://localhost:8983/solr/core6",
-                "ger-DE" => "http://localhost:8983/solr/core7",
-            ),
-        );
+        $this->entryPointMap = $entryPointMap;
+        $this->endpointMap = $endpointMap;
     }
 
-    /**
-     *
-     *
-     * @param mixed $documentType
-     *
-     * @return string
-     */
     public function getEntryPoint( $documentType )
     {
-        // @todo implement real entry point selection
-        if ( is_array( $this->endpointMap[$documentType] ) )
+        if ( !is_array( $this->entryPointMap ) )
         {
-            return $this->endpointMap[$documentType]["eng-GB"];
+            return $this->entryPointMap;
         }
 
-        return $this->endpointMap[$documentType];
+        if ( isset( $this->entryPointMap[$documentType] ) )
+        {
+            return $this->entryPointMap[$documentType];
+        }
+
+        throw new RuntimeException(
+            "Document type '{$documentType}' is not mapped to Solr core entry point"
+        );
     }
 
     public function getIndexingTarget( $documentType, $languageCode )

@@ -33,8 +33,6 @@ class Message
      *
      * @param array $headers
      * @param string $body
-     *
-     * @return void
      */
     public function __construct( array $headers = array(), $body = '' )
     {
@@ -42,4 +40,3 @@ class Message
         $this->body    = $body;
     }
 }
-

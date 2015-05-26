@@ -31,7 +31,7 @@ interface EndpointProvider
      *
      * @param mixed $documentType
      *
-     * @return string
+     * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint
      */
     public function getEntryPoint( $documentType );
 
@@ -41,7 +41,7 @@ interface EndpointProvider
      * @param mixed $documentType
      * @param string $languageCode
      *
-     * @return string
+     * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint
      */
     public function getIndexingTarget( $documentType, $languageCode );
 
@@ -51,7 +51,7 @@ interface EndpointProvider
      * @param mixed $documentType
      * @param array $languageSettings
      *
-     * @return string[]
+     * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[]
      */
     public function getSearchTargets( $documentType, array $languageSettings );
 
@@ -60,7 +60,7 @@ interface EndpointProvider
      *
      * @param mixed $documentType
      *
-     * @return string[]
+     * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[]
      */
     public function getAllEndpoints( $documentType );
 }

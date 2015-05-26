@@ -152,7 +152,12 @@ class Native extends Gateway
         );
         if ( !empty( $endpoints ) )
         {
-            $parameters["shards"] = implode( ",", $endpoints );
+            foreach ( $endpoints as $endpoint )
+            {
+                $parameters["shards"][] = $endpoint->getIdentifier();
+            }
+
+            $parameters["shards"] = implode( ",", $parameters["shards"] );
         }
 
         // @todo: Extract method
@@ -268,15 +273,10 @@ class Native extends Gateway
 
     protected function bulkIndexTranslationDocuments( array $documents, $languageCode )
     {
-        $server = $this->endpointProvider->getIndexingTarget(
-            $this->documentType,
-            $languageCode
-        );
-
         $updates = $this->createUpdates( $documents );
         $result = $this->client->request(
             'POST',
-            $server,
+            $this->endpointProvider->getIndexingTarget( $this->documentType, $languageCode ),
             '/update?' .
             ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
