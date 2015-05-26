@@ -52,10 +52,7 @@ class Selection implements Converter
     {
         if ( $value->dataText !== '' )
         {
-            $fieldValue->data = array_map(
-                'intval',
-                explode( '-', $value->dataText )
-            );
+            $fieldValue->data = explode( '-', $value->dataText );
         }
         else
         {
@@ -113,7 +110,7 @@ class Selection implements Converter
         {
             foreach ( $simpleXml->options->option as $option )
             {
-                $options[(int)$option["id"]] = (string)$option["name"];
+                $options[(string)$option["id"]] = (string)$option["name"];
             }
         }
 
