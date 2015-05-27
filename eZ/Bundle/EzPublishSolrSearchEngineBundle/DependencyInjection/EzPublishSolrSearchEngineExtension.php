@@ -22,9 +22,9 @@ class EzPublishSolrSearchEngineExtension extends Extension
     const MAIN_SEARCH_ENGINE_ID = "ezpublish.spi.search.solr";
     const CONTENT_SEARCH_HANDLER_ID = "ezpublish.spi.search.solr.content_handler";
     const CONTENT_SEARCH_GATEWAY_ID = "ezpublish.search.solr.content.gateway.native";
+    const CONTENT_ENDPOINT_RESOLVER_ID = "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content";
     const LOCATION_SEARCH_HANDLER_ID = "ezpublish.spi.search.solr.location_handler";
     const LOCATION_SEARCH_GATEWAY_ID = "ezpublish.search.solr.location.gateway.native";
-    const CONTENT_ENDPOINT_RESOLVER_ID = "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content";
     const LOCATION_ENDPOINT_RESOLVER_ID = "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location";
 
     /**
@@ -111,6 +111,10 @@ class EzPublishSolrSearchEngineExtension extends Extension
         {
             $this->defineEndpoint( $container, $name, $params );
         }
+
+        // Search engine itself, for given connection name
+        $searchEngineDef = $container->findDefinition( self::MAIN_SEARCH_ENGINE_ID );
+        $searchEngineDef->setFactory( [new Reference( 'ezpublish.solr.engine_factory' ), 'buildEngine'] );
     }
 
     /**
@@ -163,10 +167,6 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $locationSearchHandlerId = self::LOCATION_SEARCH_HANDLER_ID . ".$connectionName";
         $container->setDefinition( $locationSearchHandlerId, $locationSearchHandlerDefinition );
         $container->setParameter( "$alias.connection.$connectionName.location_handler_id", $locationSearchHandlerId );
-
-        // Search engine itself, for given connection name
-        $searchEngineDef = $container->findDefinition( self::MAIN_SEARCH_ENGINE_ID );
-        $searchEngineDef->setFactory( [new Reference( 'ezpublish.solr.engine_factory' ), 'buildEngine'] );
     }
 
     /**
