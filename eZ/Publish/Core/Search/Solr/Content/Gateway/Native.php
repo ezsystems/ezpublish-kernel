@@ -86,8 +86,6 @@ class Native extends Gateway
      */
     protected $commit = true;
 
-    protected $documentType;
-
     /**
      * Construct from HTTP client
      *
@@ -99,7 +97,6 @@ class Native extends Gateway
      * @param FacetBuilderVisitor $facetBuilderVisitor
      * @param FieldValueMapper $fieldValueMapper
      * @param FieldNameGenerator $nameGenerator
-     * @param string $documentType
      */
     public function __construct(
         HttpClient $client,
@@ -109,8 +106,7 @@ class Native extends Gateway
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
         FieldValueMapper $fieldValueMapper,
-        FieldNameGenerator $nameGenerator,
-        $documentType
+        FieldNameGenerator $nameGenerator
     )
     {
         $this->client              = $client;
@@ -121,7 +117,6 @@ class Native extends Gateway
         $this->facetBuilderVisitor = $facetBuilderVisitor;
         $this->fieldValueMapper    = $fieldValueMapper;
         $this->nameGenerator       = $nameGenerator;
-        $this->documentType = $documentType;
     }
 
     /**
@@ -170,7 +165,7 @@ class Native extends Gateway
         $response = $this->client->request(
             'GET',
             $this->endpointRegistry->getEndpoint(
-                $this->endpointResolver->getEntryPoint( $this->documentType )
+                $this->endpointResolver->getEntryPoint()
             ),
             "/select?{$queryString}"
         );
@@ -234,10 +229,7 @@ class Native extends Gateway
     protected function getSearchTargets( $languageSettings )
     {
         $shards = array();
-        $endpoints = $this->endpointResolver->getSearchTargets(
-            $this->documentType,
-            $languageSettings
-        );
+        $endpoints = $this->endpointResolver->getSearchTargets( $languageSettings );
 
         if ( !empty( $endpoints ) )
         {
@@ -347,7 +339,7 @@ class Native extends Gateway
         $result = $this->client->request(
             'POST',
             $this->endpointRegistry->getEndpoint(
-                $this->endpointResolver->getIndexingTarget( $this->documentType, $languageCode )
+                $this->endpointResolver->getIndexingTarget( $languageCode )
             ),
             '/update?' .
             ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
@@ -374,7 +366,7 @@ class Native extends Gateway
      */
     public function deleteByQuery( $query )
     {
-        $endpoints = $this->endpointResolver->getAllEndpoints( $this->documentType );
+        $endpoints = $this->endpointResolver->getEndpoints();
 
         foreach ( $endpoints as $endpointName )
         {
@@ -400,7 +392,7 @@ class Native extends Gateway
      */
     public function purgeIndex()
     {
-        $endpoints = $this->endpointResolver->getAllEndpoints( $this->documentType );
+        $endpoints = $this->endpointResolver->getEndpoints();
 
         foreach ( $endpoints as $endpointName )
         {

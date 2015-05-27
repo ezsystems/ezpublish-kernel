@@ -17,50 +17,34 @@ use eZ\Publish\SPI\Search\FieldType;
 interface EndpointResolver
 {
     /**
-     * @todo consider moving
-     */
-    const DOCUMENT_TYPE_CONTENT = "content";
-
-    /**
-     * @todo consider moving
-     */
-    const DOCUMENT_TYPE_LOCATION = "location";
-
-    /**
-     * Returns the endpoint used for distributed search, for the given $documentType
-     *
-     * @param mixed $documentType
+     * Returns the endpoint used for distributed search
      *
      * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint
      */
-    public function getEntryPoint( $documentType );
+    public function getEntryPoint();
 
     /**
-     * Returns endpoint that indexes Content translations in the given $documentType and $languageCode
+     * Returns endpoint that indexes Content translations in the given $languageCode
      *
-     * @param mixed $documentType
      * @param string $languageCode
      *
      * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint
      */
-    public function getIndexingTarget( $documentType, $languageCode );
+    public function getIndexingTarget( $languageCode );
 
     /**
-     * Returns an array of endpoints for the given $documentType and $languageSettings
+     * Returns an array of endpoints for the given $languageSettings
      *
-     * @param mixed $documentType
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[]
      */
-    public function getSearchTargets( $documentType, array $languageSettings );
+    public function getSearchTargets( array $languageSettings );
 
     /**
-     * Returns all endpoints for the given $documentType
-     *
-     * @param mixed $documentType
+     * Returns all endpoints
      *
      * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[]
      */
-    public function getAllEndpoints( $documentType );
+    public function getEndpoints();
 }
