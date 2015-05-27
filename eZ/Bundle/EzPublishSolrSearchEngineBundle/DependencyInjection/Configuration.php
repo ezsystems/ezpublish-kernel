@@ -131,18 +131,48 @@ class Configuration implements ConfigurationInterface
             ->prototype( "array" )
                 ->children()
                     ->arrayNode( "entry_points" )
-                        ->info( "An array of endpoint names" )
+                        ->info( "A set of endpoint names, per search type" )
+                        ->addDefaultsIfNotSet()
                         ->example(
                             array(
-                                "endpoint1",
-                                "endpoint2",
-                                "endpoint3",
+                                "content" => array(
+                                    "endpoint1",
+                                    "endpoint2",
+                                ),
+                                "location" => array(
+                                    "endpoint1",
+                                    "endpoint2",
+                                ),
                             )
                         )
-                        ->prototype( "scalar" )->end()
+                        ->children()
+                            ->arrayNode( "content" )
+                                ->info( "A set of endpoint names for Content index" )
+                                ->example(
+                                    array(
+                                        "endpoint1",
+                                        "endpoint2",
+                                    )
+                                )
+                                ->prototype( "scalar" )
+                                ->end()
+                            ->end()
+                            ->arrayNode( "location" )
+                                ->info( "A set of endpoint names for Location index" )
+                                ->example(
+                                    array(
+                                        "endpoint1",
+                                        "endpoint2",
+                                    )
+                                )
+                                ->prototype( "scalar" )
+                                ->end()
+                            ->end()
+                        ->end()
                     ->end()
                     ->arrayNode( "cluster" )
-                        ->info( "A map of translation language codes and Solr endpoint names, per entity" )
+                        ->info( "A map of translation language codes and Solr endpoint names, per search type" )
+                        ->addDefaultsIfNotSet()
                         ->example(
                             array(
                                 "content" => array(
