@@ -150,25 +150,12 @@ class Native extends Gateway
                     $query->sortClauses
                 )
             ),
+            "shards" => $this->getShards( $fieldFilters ),
             "start" => $query->offset,
             "rows" => $query->limit,
             "fl" => "*,score",
             "wt" => "json",
         );
-
-        $endpoints = $this->endpointResolver->getSearchTargets(
-            $this->documentType,
-            $fieldFilters
-        );
-        if ( !empty( $endpoints ) )
-        {
-            foreach ( $endpoints as $endpoint )
-            {
-                $parameters["shards"][] = $this->endpointRegistry->getEndpoint( $endpoint )->getIdentifier();
-            }
-
-            $parameters["shards"] = implode( ",", $parameters["shards"] );
-        }
 
         // @todo: Extract method
         $response = $this->client->request(
@@ -199,6 +186,32 @@ class Native extends Gateway
         }
 
         return $result;
+    }
+
+    /**
+     * Returns search targets for given language settings
+     *
+     * @param array $languageSettings
+     *
+     * @return string
+     */
+    protected function getShards( $languageSettings )
+    {
+        $shards = array();
+        $endpoints = $this->endpointResolver->getSearchTargets(
+            $this->documentType,
+            $languageSettings
+        );
+
+        if ( !empty( $endpoints ) )
+        {
+            foreach ( $endpoints as $endpoint )
+            {
+                $shards[] = $this->endpointRegistry->getEndpoint( $endpoint )->getIdentifier();
+            }
+        }
+
+        return implode( ",", $shards );
     }
 
     /**
