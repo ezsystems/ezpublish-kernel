@@ -251,7 +251,10 @@ class Native extends Gateway
     }
 
     /**
+     * Returns a filtering condition for the given language settings.
      *
+     * The condition ensures the same Content will be matched only once across all
+     * targeted translation endpoints.
      *
      * @param array $languageSettings
      *
@@ -281,7 +284,11 @@ class Native extends Gateway
     }
 
     /**
+     * Returns a filtering condition for the given list of language codes and
+     * a selected language code among them.
      *
+     * Note that the list of language codes is assumed to be prioritized, that is sorted by
+     * priority, descending.
      *
      * @param array $languageCodes
      * @param string $selectedLanguageCode
@@ -361,6 +368,7 @@ class Native extends Gateway
     }
 
     /**
+     * Deletes documents by the given $query.
      *
      * @param string $query
      */

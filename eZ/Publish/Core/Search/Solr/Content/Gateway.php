@@ -41,6 +41,7 @@ abstract class Gateway
     abstract public function bulkIndexDocuments( array $documents );
 
     /**
+     * Deletes documents by the given $query.
      *
      * @param string $query
      */
