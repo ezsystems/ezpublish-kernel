@@ -26,7 +26,7 @@ use eZ\Publish\Core\Search\Common\FieldRegistry;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 
 /**
- *
+ * NativeDocumentMapper maps Solr backend documents per Content translation
  */
 class NativeDocumentMapper implements DocumentMapper
 {
