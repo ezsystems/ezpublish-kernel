@@ -18,24 +18,31 @@ use RuntimeException;
 class NativeEndpointResolver implements EndpointResolver
 {
     /**
-     * Holds an array of Solr entry points
+     * Holds an array of Solr entry point names
      *
      * @var string[]
      */
     protected $entryPoints;
 
     /**
-     * Holds a map of Endpoints, with language codes as keys
+     * Holds a map of Endpoint names, with language codes as keys
+     *
+     * <code>
+     *  array(
+     *      "cro-HR" => "endpoint1",
+     *      "eng-GB" => "endpoint2",
+     *  );
+     * </code>
      *
      * @var string[]
      */
     protected $endpointMap;
 
     /**
-     * Create from Endpoints
+     * Create from Endpoint names
      *
-     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[] $entryPoints
-     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[] $endpointMap
+     * @param string[] $entryPoints
+     * @param string[] $endpointMap
      */
     public function __construct( array $entryPoints = array(), array $endpointMap = array() )
     {
