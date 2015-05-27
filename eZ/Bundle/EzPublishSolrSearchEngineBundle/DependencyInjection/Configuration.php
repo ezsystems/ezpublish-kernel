@@ -129,6 +129,44 @@ class Configuration implements ConfigurationInterface
             ->useAttributeAsKey( "connection_name" )
             ->performNoDeepMerging()
             ->prototype( "array" )
+                ->beforeNormalization()
+                    ->ifTrue(
+                        function( $v )
+                        {
+                            return (
+                                empty( $v["entry_points"]["content"] ) &&
+                                !empty( $v["cluster"]["content"] )
+                            );
+                        }
+                    )
+                    ->then(
+                        function( $v )
+                        {
+                            // If Content search entry points are not provided use cluster endpoints
+                            $v["entry_points"]["content"] = array_values( $v["cluster"]["content"] );
+                            return $v;
+                        }
+                    )
+                ->end()
+                ->beforeNormalization()
+                    ->ifTrue(
+                        function( $v )
+                        {
+                            return (
+                                empty( $v["entry_points"]["location"] ) &&
+                                !empty( $v["cluster"]["location"] )
+                            );
+                        }
+                    )
+                    ->then(
+                        function( $v )
+                        {
+                            // If Location searcg entry points are not provided use cluster endpoints
+                            $v["entry_points"]["location"] = array_values( $v["cluster"]["location"] );
+                            return $v;
+                        }
+                    )
+                ->end()
                 ->children()
                     ->arrayNode( "entry_points" )
                         ->info( "A set of endpoint names, per search type" )
@@ -147,7 +185,7 @@ class Configuration implements ConfigurationInterface
                         )
                         ->children()
                             ->arrayNode( "content" )
-                                ->info( "A set of endpoint names for Content index" )
+                                ->info( "A set of endpoint names for Content index. If not set cluster endpoints will be used." )
                                 ->example(
                                     array(
                                         "endpoint1",
@@ -158,7 +196,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->arrayNode( "location" )
-                                ->info( "A set of endpoint names for Location index" )
+                                ->info( "A set of endpoint names for Location index. If not set cluster endpoints will be used." )
                                 ->example(
                                     array(
                                         "endpoint1",
