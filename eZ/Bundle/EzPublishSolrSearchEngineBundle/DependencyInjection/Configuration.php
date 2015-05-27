@@ -161,7 +161,7 @@ class Configuration implements ConfigurationInterface
                     ->then(
                         function( $v )
                         {
-                            // If Location searcg entry points are not provided use cluster endpoints
+                            // If Location search entry points are not provided use cluster endpoints
                             $v["entry_points"]["location"] = array_values( $v["cluster"]["location"] );
                             return $v;
                         }
