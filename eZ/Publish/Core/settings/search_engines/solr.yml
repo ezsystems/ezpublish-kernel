@@ -15,6 +15,7 @@ parameters:
     ezpublish.search.solr.content.document_mapper.native.class: eZ\Publish\Core\Search\Solr\Content\DocumentMapper\NativeDocumentMapper
     ezpublish.search.solr.result_extractor.loading.class: eZ\Publish\Core\Search\Solr\Content\ResultExtractor\LoadingResultExtractor
     ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
+    # Endpoint resolver arguments must be set in order to be overrideable
     ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.content: []
     ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.location: []
     ezpublish.search.solr.content.gateway.endpoint_resolver.cluster.content: []
