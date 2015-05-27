@@ -171,7 +171,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                     ->arrayNode( "cluster" )
-                        ->info( "A map of translation language codes and Solr endpoint names, per search type" )
+                        ->info( "Cluster map, consisting of a mapping of translation language codes and Solr endpoint names, per search type" )
                         ->addDefaultsIfNotSet()
                         ->example(
                             array(
