@@ -13,9 +13,9 @@ use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver;
 use RuntimeException;
 
 /**
- * TranslationEndpointResolver provides Solr endpoints for a Content translations
+ * NativeEndpointResolver provides Solr endpoints for a Content translations
  */
-class TranslationEndpointResolver implements EndpointResolver
+class NativeEndpointResolver implements EndpointResolver
 {
     /**
      * Holds a map of Solr entry points

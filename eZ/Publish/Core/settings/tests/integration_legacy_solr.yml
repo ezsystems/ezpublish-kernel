@@ -127,8 +127,8 @@ services:
     ezpublish.search.solr.content.gateway.endpoint_registry:
         class: %ezpublish.search.solr.content.gateway.endpoint_registry.class%
 
-    ezpublish.search.solr.content.gateway.endpoint_resolver.translation_endpoint_resolver:
-        class: %ezpublish.search.solr.content.gateway.endpoint_resolver.translation_endpoint_resolver.class%
+    ezpublish.search.solr.content.gateway.endpoint_resolver.native:
+        class: %ezpublish.search.solr.content.gateway.endpoint_resolver.native.class%
         arguments:
             -
                 content: endpoint0
