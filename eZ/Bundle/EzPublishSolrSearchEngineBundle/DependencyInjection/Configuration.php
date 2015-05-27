@@ -187,6 +187,7 @@ class Configuration implements ConfigurationInterface
                         )
                         ->children()
                             ->arrayNode( "content" )
+                                ->normalizeKeys( false )
                                 ->useAttributeAsKey( "language_code" )
                                 ->info( "A map of translation language codes and Solr endpoint names for Content index" )
                                 ->example(
@@ -199,6 +200,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->arrayNode( "location" )
+                                ->normalizeKeys( false )
                                 ->useAttributeAsKey( "language_code" )
                                 ->info( "A map of translation language codes and Solr endpoint names for Location index" )
                                 ->example(
