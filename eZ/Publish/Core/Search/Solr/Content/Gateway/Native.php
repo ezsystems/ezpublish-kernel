@@ -141,13 +141,7 @@ class Native extends Gateway
         $parameters = array(
             "q" => $this->criterionVisitor->visit( $query->query ),
             "fq" => $this->criterionVisitor->visit( $query->filter ),
-            "sort" => implode(
-                ", ",
-                array_map(
-                    array( $this->sortClauseVisitor, "visit" ),
-                    $query->sortClauses
-                )
-            ),
+            "sort" => $this->getSortClauses( $query->sortClauses ),
             "start" => $query->offset,
             "rows" => $query->limit,
             "fl" => "*,score",
@@ -195,6 +189,24 @@ class Native extends Gateway
         }
 
         return $result;
+    }
+
+    /**
+     * Converts an array of sort clause object to a Solr representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
+     *
+     * @return string
+     */
+    protected function getSortClauses( array $sortClauses )
+    {
+        return implode(
+            ", ",
+            array_map(
+                array( $this->sortClauseVisitor, "visit" ),
+                $sortClauses
+            )
+        );
     }
 
     /**
