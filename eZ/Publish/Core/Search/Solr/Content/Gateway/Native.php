@@ -20,7 +20,6 @@ use RuntimeException;
 use XmlWriter;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;
-use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -39,6 +38,14 @@ class Native extends Gateway
      * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider
      */
     protected $endpointProvider;
+
+    /**
+     * Endpoint registry service
+     *
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry
+     */
+    protected $endpointRegistry;
+
 
     /**
      * Query visitor
@@ -87,6 +94,7 @@ class Native extends Gateway
      *
      * @param HttpClient $client
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider $endpointProvider
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry $endpointRegistry
      * @param CriterionVisitor $criterionVisitor
      * @param SortClauseVisitor $sortClauseVisitor
      * @param FacetBuilderVisitor $facetBuilderVisitor
@@ -97,6 +105,7 @@ class Native extends Gateway
     public function __construct(
         HttpClient $client,
         EndpointProvider $endpointProvider,
+        EndpointRegistry $endpointRegistry,
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
         FacetBuilderVisitor $facetBuilderVisitor,
@@ -107,6 +116,7 @@ class Native extends Gateway
     {
         $this->client              = $client;
         $this->endpointProvider = $endpointProvider;
+        $this->endpointRegistry = $endpointRegistry;
         $this->criterionVisitor    = $criterionVisitor;
         $this->sortClauseVisitor   = $sortClauseVisitor;
         $this->facetBuilderVisitor = $facetBuilderVisitor;
@@ -154,7 +164,7 @@ class Native extends Gateway
         {
             foreach ( $endpoints as $endpoint )
             {
-                $parameters["shards"][] = $endpoint->getIdentifier();
+                $parameters["shards"][] = $this->endpointRegistry->getEndpoint( $endpoint )->getIdentifier();
             }
 
             $parameters["shards"] = implode( ",", $parameters["shards"] );
@@ -163,7 +173,9 @@ class Native extends Gateway
         // @todo: Extract method
         $response = $this->client->request(
             'GET',
-            $this->endpointProvider->getEntryPoint( $this->documentType ),
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointProvider->getEntryPoint( $this->documentType )
+            ),
             '/select?' .
             http_build_query( $parameters ) .
             ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
@@ -276,7 +288,9 @@ class Native extends Gateway
         $updates = $this->createUpdates( $documents );
         $result = $this->client->request(
             'POST',
-            $this->endpointProvider->getIndexingTarget( $this->documentType, $languageCode ),
+            $this->endpointRegistry->getEndpoint(
+                $this->endpointProvider->getIndexingTarget( $this->documentType, $languageCode )
+            ),
             '/update?' .
             ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
@@ -303,11 +317,11 @@ class Native extends Gateway
     {
         $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
 
-        foreach ( $endpoints as $endpoint )
+        foreach ( $endpoints as $endpointName )
         {
             $this->client->request(
                 'POST',
-                $endpoint,
+                $this->endpointRegistry->getEndpoint( $endpointName ),
                 '/update?' .
                 ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
                 new Message(
@@ -329,9 +343,11 @@ class Native extends Gateway
     {
         $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
 
-        foreach ( $endpoints as $endpoint )
+        foreach ( $endpoints as $endpointName )
         {
-            $this->purgeEndpoint( $endpoint );
+            $this->purgeEndpoint(
+                $this->endpointRegistry->getEndpoint( $endpointName )
+            );
         }
     }
 

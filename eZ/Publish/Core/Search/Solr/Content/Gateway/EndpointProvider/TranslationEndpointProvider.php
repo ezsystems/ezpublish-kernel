@@ -19,13 +19,6 @@ use RuntimeException;
 class TranslationEndpointProvider implements EndpointProvider
 {
     /**
-     * Endpoint registry service
-     *
-     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry
-     */
-    protected $endpointRegistry;
-
-    /**
      * Holds a map of Solr entry points
      *
      * @var array
@@ -42,17 +35,14 @@ class TranslationEndpointProvider implements EndpointProvider
     /**
      * Create from registry and mapping configuration
      *
-     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry
      * @param array $entryPointMap
      * @param array $endpointMap
      */
     public function __construct(
-        EndpointRegistry $endpointRegistry,
         array $entryPointMap = array(),
         array $endpointMap = array()
     )
     {
-        $this->endpointRegistry = $endpointRegistry;
         $this->entryPointMap = $entryPointMap;
         $this->endpointMap = $endpointMap;
     }
@@ -61,14 +51,12 @@ class TranslationEndpointProvider implements EndpointProvider
     {
         if ( !is_array( $this->entryPointMap ) )
         {
-            return $this->endpointRegistry->getEndpoint( $this->entryPointMap );
+            return $this->entryPointMap;
         }
 
         if ( isset( $this->entryPointMap[$documentType] ) )
         {
-            return $this->endpointRegistry->getEndpoint(
-                $this->entryPointMap[$documentType]
-            );
+            return $this->entryPointMap[$documentType];
         }
 
         throw new RuntimeException(
@@ -87,14 +75,10 @@ class TranslationEndpointProvider implements EndpointProvider
                 );
             }
 
-            return $this->endpointRegistry->getEndpoint(
-                $this->endpointMap[$documentType][$languageCode]
-            );
+            return $this->endpointMap[$documentType][$languageCode];
         }
 
-        return $this->endpointRegistry->getEndpoint(
-            $this->endpointMap[$documentType]
-        );
+        return $this->endpointMap[$documentType];
     }
 
     public function getSearchTargets( $documentType, array $languageSettings )
@@ -131,14 +115,10 @@ class TranslationEndpointProvider implements EndpointProvider
                 $targets[] = $this->endpointMap[$documentType][$languageCode];
             }
 
-            return $this->getEndpoints( $targets );
+            return $targets;
         }
 
-        return array(
-            $this->endpointRegistry->getEndpoint(
-                $this->endpointMap[$documentType]
-            )
-        );
+        return array( $this->endpointMap[$documentType] );
     }
 
     public function getAllEndpoints( $documentType )
@@ -152,34 +132,9 @@ class TranslationEndpointProvider implements EndpointProvider
 
         if ( is_array( $this->endpointMap[$documentType] ) )
         {
-            return $this->getEndpoints(
-                array_values( $this->endpointMap[$documentType] )
-            );
+            return array_values( $this->endpointMap[$documentType] );
         }
 
-        return array(
-            $this->endpointRegistry->getEndpoint(
-                $this->endpointMap[$documentType]
-            )
-        );
-    }
-
-    /**
-     * Returns an array of Endpoints for the given array of Endpoint identifiers
-     *
-     * @param array $identifiers
-     *
-     * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[]
-     */
-    protected function getEndpoints( array $identifiers )
-    {
-        $endpoints = array();
-
-        foreach ( $identifiers as $identifier )
-        {
-            $endpoints[] = $this->endpointRegistry->getEndpoint( $identifier );
-        }
-
-        return $endpoints;
+        return array( $this->endpointMap[$documentType] );
     }
 }

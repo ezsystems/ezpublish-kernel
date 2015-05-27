@@ -51,6 +51,7 @@ services:
         arguments:
             - @ezpublish.search.solr.content.gateway.client.http.stream
             - @ezpublish.search.solr.content.gateway.endpoint_provider
+            - @ezpublish.search.solr.content.gateway.endpoint_registry
             - @ezpublish.search.solr.content.criterion_visitor.aggregate
             - @ezpublish.search.solr.content.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.content.facet_builder_visitor.aggregate
@@ -75,6 +76,7 @@ services:
         arguments:
             - @ezpublish.search.solr.content.gateway.client.http.stream
             - @ezpublish.search.solr.content.gateway.endpoint_provider
+            - @ezpublish.search.solr.content.gateway.endpoint_registry
             - @ezpublish.search.solr.location.criterion_visitor.aggregate
             - @ezpublish.search.solr.location.sort_clause_visitor.aggregate
             - @ezpublish.search.solr.location.facet_builder_visitor.aggregate

@@ -130,7 +130,6 @@ services:
     ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider:
         class: %ezpublish.search.solr.content.gateway.endpoint_provider.translation_endpoint_provider.class%
         arguments:
-            - @ezpublish.search.solr.content.gateway.endpoint_registry
             -
                 content: endpoint0
                 location: endpoint0
