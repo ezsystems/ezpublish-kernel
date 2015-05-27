@@ -145,7 +145,7 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $container->setParameter( "$alias.connection.$connectionName.content_handler_id", $contentSearchHandlerId );
 
         // Location endpoint resolver
-        $locationEndpointResolverId = static::CONTENT_ENDPOINT_RESOLVER_ID . ".$connectionName";
+        $locationEndpointResolverId = static::LOCATION_ENDPOINT_RESOLVER_ID . ".$connectionName";
         $locationEndpointResolverDef = new DefinitionDecorator( self::CONTENT_ENDPOINT_RESOLVER_ID );
         $locationEndpointResolverDef->replaceArgument( 0, $connectionParams['entry_points']['location'] );
         $locationEndpointResolverDef->replaceArgument( 1, $connectionParams['cluster']['location'] );
