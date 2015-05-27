@@ -49,7 +49,7 @@ services:
                 scheme: http
                 host: localhost
                 port: 8983
-                path: solr
+                path: /solr
                 core: core0
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint0}
@@ -61,7 +61,7 @@ services:
                 scheme: http
                 host: localhost
                 port: 8983
-                path: solr
+                path: /solr
                 core: core1
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint1}
@@ -73,7 +73,7 @@ services:
                 scheme: http
                 host: localhost
                 port: 8983
-                path: solr
+                path: /solr
                 core: core2
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint2}
@@ -85,7 +85,7 @@ services:
                 scheme: http
                 host: localhost
                 port: 8983
-                path: solr
+                path: /solr
                 core: core3
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint3}
@@ -97,7 +97,7 @@ services:
                 scheme: http
                 host: localhost
                 port: 8983
-                path: solr
+                path: /solr
                 core: core4
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint4}
@@ -109,7 +109,7 @@ services:
                 scheme: http
                 host: localhost
                 port: 8983
-                path: solr
+                path: /solr
                 core: core5
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint5}
@@ -121,7 +121,7 @@ services:
                 scheme: http
                 host: localhost
                 port: 8983
-                path: solr
+                path: /solr
                 core: core6
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint6}
@@ -133,7 +133,7 @@ services:
                 scheme: http
                 host: localhost
                 port: 8983
-                path: solr
+                path: /solr
                 core: core7
         tags:
             - {name: ezpublish.search.solr.endpoint, alias: endpoint7}
