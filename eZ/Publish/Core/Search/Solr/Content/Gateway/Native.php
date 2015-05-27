@@ -307,8 +307,10 @@ class Native extends Gateway
     }
 
     /**
-     * Indexes a block of documents, which in our case is a Content preceded by its Locations.
-     * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
+     * Indexes an array of documents.
+     *
+     * Documents are given as an array of the array of documents. The array of documents
+     * holds documents for all translations of the particular entity.
      *
      * @param \eZ\Publish\SPI\Search\Document[][] $documents
      *
@@ -318,9 +320,9 @@ class Native extends Gateway
     {
         $map = array();
 
-        foreach ( $documents as $documents2 )
+        foreach ( $documents as $translationDocuments )
         {
-            foreach ( $documents2 as $document )
+            foreach ( $translationDocuments as $document )
             {
                 $map[$document->languageCode][] = $document;
             }
