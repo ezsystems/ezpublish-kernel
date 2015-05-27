@@ -138,11 +138,9 @@ class Native extends Gateway
      */
     public function find( Query $query, array $fieldFilters = array() )
     {
-        $coreFilter = $this->getCoreFilter( $fieldFilters );
-
         $parameters = array(
             "q" => $this->criterionVisitor->visit( $query->query ),
-            "fq" => ( !empty( $coreFilter ) ? "({$coreFilter}) AND " : "" ) . $this->criterionVisitor->visit( $query->filter ),
+            "fq" => $this->criterionVisitor->visit( $query->filter ),
             "sort" => implode(
                 ", ",
                 array_map(
@@ -150,12 +148,23 @@ class Native extends Gateway
                     $query->sortClauses
                 )
             ),
-            "shards" => $this->getShards( $fieldFilters ),
             "start" => $query->offset,
             "rows" => $query->limit,
             "fl" => "*,score",
             "wt" => "json",
         );
+
+        $coreFilter = $this->getCoreFilter( $fieldFilters );
+        if ( !empty( $coreFilter ) )
+        {
+            $parameters["fq"] = "({$coreFilter}) AND " . $parameters["fq"];
+        }
+
+        $searchTargets = $this->getSearchTargets( $fieldFilters );
+        if ( !empty( $searchTargets ) )
+        {
+            $parameters["shards"] = $searchTargets;
+        }
 
         // @todo: Extract method
         $response = $this->client->request(
@@ -195,7 +204,7 @@ class Native extends Gateway
      *
      * @return string
      */
-    protected function getShards( $languageSettings )
+    protected function getSearchTargets( $languageSettings )
     {
         $shards = array();
         $endpoints = $this->endpointResolver->getSearchTargets(
