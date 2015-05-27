@@ -24,7 +24,8 @@ class EzPublishSolrSearchEngineExtension extends Extension
     const CONTENT_SEARCH_GATEWAY_ID = "ezpublish.search.solr.content.gateway.native";
     const LOCATION_SEARCH_HANDLER_ID = "ezpublish.spi.search.solr.location_handler";
     const LOCATION_SEARCH_GATEWAY_ID = "ezpublish.search.solr.location.gateway.native";
-    const ENDPOINT_RESOLVER_ID = "ezpublish.search.solr.content.gateway.endpoint_resolver.native";
+    const CONTENT_ENDPOINT_RESOLVER_ID = "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content";
+    const LOCATION_ENDPOINT_RESOLVER_ID = "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location";
 
     /**
      * Endpoint class
@@ -123,16 +124,16 @@ class EzPublishSolrSearchEngineExtension extends Extension
     {
         $alias = $this->getAlias();
 
-        // Endpoint resolver
-        $endpointResolverId = static::ENDPOINT_RESOLVER_ID . ".$connectionName";
-        $endpointResolverDef = new DefinitionDecorator( self::ENDPOINT_RESOLVER_ID );
-        $endpointResolverDef->replaceArgument( 0, $connectionParams['entry_points'] );
-        $endpointResolverDef->replaceArgument( 1, $connectionParams['cluster'] );
-        $container->setDefinition( $endpointResolverId, $endpointResolverDef );
+        // Content endpoint resolver
+        $contentEndpointResolverId = static::CONTENT_ENDPOINT_RESOLVER_ID . ".$connectionName";
+        $contentEndpointResolverDef = new DefinitionDecorator( self::CONTENT_ENDPOINT_RESOLVER_ID );
+        $contentEndpointResolverDef->replaceArgument( 0, $connectionParams['entry_points']['content'] );
+        $contentEndpointResolverDef->replaceArgument( 1, $connectionParams['cluster']['content'] );
+        $container->setDefinition( $contentEndpointResolverId, $contentEndpointResolverDef );
 
         // Content search gateway
         $contentSearchGatewayDef = new DefinitionDecorator( self::CONTENT_SEARCH_GATEWAY_ID );
-        $contentSearchGatewayDef->replaceArgument( 1, new Reference( $endpointResolverId ) );
+        $contentSearchGatewayDef->replaceArgument( 1, new Reference( $contentEndpointResolverId ) );
         $contentSearchGatewayId = self::CONTENT_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition( $contentSearchGatewayId, $contentSearchGatewayDef );
 
@@ -143,9 +144,16 @@ class EzPublishSolrSearchEngineExtension extends Extension
         $container->setDefinition( $contentSearchHandlerId, $contentSearchHandlerDefinition );
         $container->setParameter( "$alias.connection.$connectionName.content_handler_id", $contentSearchHandlerId );
 
+        // Location endpoint resolver
+        $locationEndpointResolverId = static::CONTENT_ENDPOINT_RESOLVER_ID . ".$connectionName";
+        $locationEndpointResolverDef = new DefinitionDecorator( self::CONTENT_ENDPOINT_RESOLVER_ID );
+        $locationEndpointResolverDef->replaceArgument( 0, $connectionParams['entry_points']['location'] );
+        $locationEndpointResolverDef->replaceArgument( 1, $connectionParams['cluster']['location'] );
+        $container->setDefinition( $locationEndpointResolverId, $locationEndpointResolverDef );
+
         // Location search gateway
         $locationSearchGatewayDef = new DefinitionDecorator( self::LOCATION_SEARCH_GATEWAY_ID );
-        $locationSearchGatewayDef->replaceArgument( 1, new Reference( $endpointResolverId ) );
+        $locationSearchGatewayDef->replaceArgument( 1, new Reference( $locationEndpointResolverId ) );
         $locationSearchGatewayId = self::LOCATION_SEARCH_GATEWAY_ID . ".$connectionName";
         $container->setDefinition( $locationSearchGatewayId, $locationSearchGatewayDef );
 
