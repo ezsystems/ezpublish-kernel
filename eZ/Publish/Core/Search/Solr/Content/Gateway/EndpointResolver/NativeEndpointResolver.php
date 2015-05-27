@@ -94,7 +94,7 @@ class NativeEndpointResolver implements EndpointResolver
 
         if ( empty( $targets ) )
         {
-            throw new RuntimeException( "No endpoints defined" );
+            throw new RuntimeException( "No endpoints defined for given language settings" );
         }
 
         return $targets;
