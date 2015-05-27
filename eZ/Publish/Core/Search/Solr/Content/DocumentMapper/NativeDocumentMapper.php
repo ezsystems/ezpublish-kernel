@@ -28,7 +28,7 @@ use eZ\Publish\Core\Search\Common\FieldNameGenerator;
 /**
  *
  */
-class TranslationDocumentMapper implements DocumentMapper
+class NativeDocumentMapper implements DocumentMapper
 {
     /**
      * Field registry

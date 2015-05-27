@@ -11,7 +11,7 @@ parameters:
     ezpublish.search.solr.content.gateway.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\Native
     ezpublish.search.solr.content.gateway.endpoint_resolver.native.class: eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver\NativeEndpointResolver
     ezpublish.spi.search.solr.content_handler.class: eZ\Publish\Core\Search\Solr\Content\Handler
-    ezpublish.search.solr.content.document_mapper.translation_document_mapper.class: eZ\Publish\Core\Search\Solr\Content\DocumentMapper\TranslationDocumentMapper
+    ezpublish.search.solr.content.document_mapper.native.class: eZ\Publish\Core\Search\Solr\Content\DocumentMapper\NativeDocumentMapper
     ezpublish.search.solr.result_extractor.loading.class: eZ\Publish\Core\Search\Solr\Content\ResultExtractor\LoadingResultExtractor
     ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
 
@@ -22,8 +22,8 @@ services:
     ezpublish.search.solr.content.gateway.endpoint_resolver:
         alias: ezpublish.search.solr.content.gateway.endpoint_resolver.native
 
-    ezpublish.search.solr.content.document_mapper.translation_document_mapper:
-        class: %ezpublish.search.solr.content.document_mapper.translation_document_mapper.class%
+    ezpublish.search.solr.content.document_mapper.native:
+        class: %ezpublish.search.solr.content.document_mapper.native.class%
         arguments:
             - @ezpublish.search.common.field_registry
             - @ezpublish.spi.persistence.content_handler
@@ -34,7 +34,7 @@ services:
             - @ezpublish.search.common.field_name_generator
 
     ezpublish.search.solr.content.document_mapper:
-        alias: ezpublish.search.solr.content.document_mapper.translation_document_mapper
+        alias: ezpublish.search.solr.content.document_mapper.native
 
     ezpublish.search.solr.result_extractor.loading:
         class: %ezpublish.search.solr.result_extractor.loading.class%
