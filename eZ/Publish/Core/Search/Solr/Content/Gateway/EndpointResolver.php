@@ -12,9 +12,9 @@ namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 use eZ\Publish\SPI\Search\FieldType;
 
 /**
- * Endpoint provider provides Solr backend endpoints
+ * Endpoint resolver resolves Solr backend endpoints
  */
-interface EndpointProvider
+interface EndpointResolver
 {
     /**
      * @todo consider moving

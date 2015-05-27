@@ -35,9 +35,9 @@ class Native extends Gateway
     protected $client;
 
     /**
-     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider
+     * @var \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver
      */
-    protected $endpointProvider;
+    protected $endpointResolver;
 
     /**
      * Endpoint registry service
@@ -93,7 +93,7 @@ class Native extends Gateway
      * Construct from HTTP client
      *
      * @param HttpClient $client
-     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider $endpointProvider
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver $endpointResolver
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry $endpointRegistry
      * @param CriterionVisitor $criterionVisitor
      * @param SortClauseVisitor $sortClauseVisitor
@@ -104,7 +104,7 @@ class Native extends Gateway
      */
     public function __construct(
         HttpClient $client,
-        EndpointProvider $endpointProvider,
+        EndpointResolver $endpointResolver,
         EndpointRegistry $endpointRegistry,
         CriterionVisitor $criterionVisitor,
         SortClauseVisitor $sortClauseVisitor,
@@ -115,7 +115,7 @@ class Native extends Gateway
     )
     {
         $this->client              = $client;
-        $this->endpointProvider = $endpointProvider;
+        $this->endpointResolver = $endpointResolver;
         $this->endpointRegistry = $endpointRegistry;
         $this->criterionVisitor    = $criterionVisitor;
         $this->sortClauseVisitor   = $sortClauseVisitor;
@@ -156,7 +156,7 @@ class Native extends Gateway
             "wt" => "json",
         );
 
-        $endpoints = $this->endpointProvider->getSearchTargets(
+        $endpoints = $this->endpointResolver->getSearchTargets(
             $this->documentType,
             $fieldFilters
         );
@@ -174,7 +174,7 @@ class Native extends Gateway
         $response = $this->client->request(
             'GET',
             $this->endpointRegistry->getEndpoint(
-                $this->endpointProvider->getEntryPoint( $this->documentType )
+                $this->endpointResolver->getEntryPoint( $this->documentType )
             ),
             '/select?' .
             http_build_query( $parameters ) .
@@ -289,7 +289,7 @@ class Native extends Gateway
         $result = $this->client->request(
             'POST',
             $this->endpointRegistry->getEndpoint(
-                $this->endpointProvider->getIndexingTarget( $this->documentType, $languageCode )
+                $this->endpointResolver->getIndexingTarget( $this->documentType, $languageCode )
             ),
             '/update?' .
             ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
@@ -315,7 +315,7 @@ class Native extends Gateway
      */
     public function deleteByQuery( $query )
     {
-        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
+        $endpoints = $this->endpointResolver->getAllEndpoints( $this->documentType );
 
         foreach ( $endpoints as $endpointName )
         {
@@ -341,7 +341,7 @@ class Native extends Gateway
      */
     public function purgeIndex()
     {
-        $endpoints = $this->endpointProvider->getAllEndpoints( $this->documentType );
+        $endpoints = $this->endpointResolver->getAllEndpoints( $this->documentType );
 
         foreach ( $endpoints as $endpointName )
         {

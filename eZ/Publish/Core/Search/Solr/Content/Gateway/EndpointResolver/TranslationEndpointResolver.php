@@ -7,16 +7,15 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider;
+namespace eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver;
 
-use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointProvider;
-use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointRegistry;
+use eZ\Publish\Core\Search\Solr\Content\Gateway\EndpointResolver;
 use RuntimeException;
 
 /**
- * TranslationEndpointProvider provides Solr endpoints for a Content translations
+ * TranslationEndpointResolver provides Solr endpoints for a Content translations
  */
-class TranslationEndpointProvider implements EndpointProvider
+class TranslationEndpointResolver implements EndpointResolver
 {
     /**
      * Holds a map of Solr entry points
