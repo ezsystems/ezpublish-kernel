@@ -25,14 +25,14 @@ class NativeEndpointResolver implements EndpointResolver
     protected $entryPoints;
 
     /**
-     * Holds a map of Solr endpoints, with language codes as keys
+     * Holds a map of Endpoints, with language codes as keys
      *
      * @var string[]
      */
     protected $endpointMap;
 
     /**
-     * Create from endpoints
+     * Create from Endpoints
      *
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[] $entryPoints
      * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[] $endpointMap

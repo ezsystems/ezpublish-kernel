@@ -37,18 +37,18 @@ class EndpointRegistry
     }
 
     /**
-     * Register Endpoint
+     * Registers $endpoint with $name
      *
      * @param string $name
-     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint $endpoints
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint $endpoint
      */
-    public function registerEndpoint( $name, Endpoint $endpoints )
+    public function registerEndpoint( $name, Endpoint $endpoint )
     {
-        $this->endpoint[$name] = $endpoints;
+        $this->endpoint[$name] = $endpoint;
     }
 
     /**
-     * Get Endpoint
+     * Get Endpoint with $name
      *
      * @param string $name
      *

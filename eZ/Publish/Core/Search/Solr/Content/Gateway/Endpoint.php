@@ -24,56 +24,56 @@ use eZ\Publish\SPI\Search\FieldType;
 class Endpoint extends ValueObject
 {
     /**
-     *
+     * Holds scheme, 'http' or 'https'
      *
      * @var string
      */
     protected $scheme;
 
     /**
-     *
+     * Holds basic HTTP authentication username
      *
      * @var string
      */
     protected $user;
 
     /**
-     *
+     * Holds basic HTTP authentication password
      *
      * @var string
      */
     protected $pass;
 
     /**
-     *
+     * Holds hostname
      *
      * @var string
      */
     protected $host;
 
     /**
-     *
+     * Holds port number
      *
      * @var int
      */
     protected $port;
 
     /**
-     *
+     * Holds path
      *
      * @var string
      */
     protected $path;
 
     /**
-     *
+     * Holds core name
      *
      * @var string
      */
     protected $core;
 
     /**
-     *
+     * Returns Endpoint's identifier, to be used for targeting specific logical indexes
      *
      * @return string
      */
@@ -83,7 +83,7 @@ class Endpoint extends ValueObject
     }
 
     /**
-     *
+     * Returns full HTTP URL of the Endpoint
      *
      * @return string
      */
