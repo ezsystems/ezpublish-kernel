@@ -41,7 +41,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
 
     public function testEmpty()
     {
-        $this->load( array() );
+        $this->load();
     }
 
     public function dataProviderForTestEndpoint()
@@ -156,10 +156,86 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             array(
                 "endpoints" => array(
                     "endpoint0" => array(
-                        "dsn" => "https://12.13.14.15:4444/solr"
+                        "dsn" => "https://12.13.14.15:4444/solr",
                     ),
                 ),
             )
         );
+    }
+
+    public function dataProviderForTestConnection()
+    {
+        return array(
+            array(
+                array(
+                    "connections" => array(),
+                ),
+            ),
+            array(
+                array(
+                    "connections" => array(
+                        "connection1" => array(),
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    "connections" => array(
+                        "connection1" => array(
+                            "entry_points" => array(),
+                            "cluster" => array(),
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    "connections" => array(
+                        "connection1" => array(
+                            "entry_points" => array(
+                                "endpoint1",
+                                "endpoint2",
+                            ),
+                            "cluster" => array(
+                                "content" => array(),
+                                "location" => array(),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                array(
+                    "connections" => array(
+                        "connection1" => array(
+                            "entry_points" => array(
+                                "endpoint1",
+                                "endpoint2",
+                            ),
+                            "cluster" => array(
+                                "content" => array(
+                                    "cro-HR" => "endpoint1",
+                                    "eng-GB" => "endpoint2",
+                                    "gal-MW" => "endpoint3",
+                                ),
+                                "location" => array(
+                                    "cro-HR" => "endpoint2",
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        );
+    }
+
+    /**
+     * @param array $configurationValues
+     *
+     * @dataProvider dataProviderForTestConnection
+     */
+    public function testConnection( $configurationValues )
+    {
+        $this->load( $configurationValues );
     }
 }

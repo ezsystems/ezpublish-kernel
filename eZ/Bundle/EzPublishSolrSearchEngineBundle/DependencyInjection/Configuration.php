@@ -41,7 +41,6 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root( $this->rootNodeName );
 
         $this->addEndpointsSection( $rootNode );
-        $this->addMappingsSection( $rootNode );
         $this->addConnectionsSection( $rootNode );
 
         return $treeBuilder;
@@ -121,16 +120,70 @@ class Configuration implements ConfigurationInterface
      */
     protected function addConnectionsSection( ArrayNodeDefinition $node )
     {
-        ;
-    }
-
-    /**
-     * Adds mappings definition.
-     *
-     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $node
-     */
-    protected function addMappingsSection( ArrayNodeDefinition $node )
-    {
-        ;
+        $node->children()
+            ->scalarNode( "default_connection" )
+                ->info( "Name of the default connection" )
+            ->end()
+            ->arrayNode( "connections" )
+            ->info( "Solr Search Engine connections configuration" )
+            ->useAttributeAsKey( "connection_name" )
+            ->performNoDeepMerging()
+            ->prototype( "array" )
+                ->children()
+                    ->arrayNode( "entry_points" )
+                        ->info( "An array of endpoint names" )
+                        ->example(
+                            array(
+                                "endpoint1",
+                                "endpoint2",
+                                "endpoint3",
+                            )
+                        )
+                        ->prototype( "scalar" )->end()
+                    ->end()
+                    ->arrayNode( "cluster" )
+                        ->info( "A map of translation language codes and Solr endpoint names, per entity" )
+                        ->example(
+                            array(
+                                "content" => array(
+                                    "cro-HR" => "endpoint1",
+                                    "eng-GB" => "endpoint2",
+                                ),
+                                "location" => array(
+                                    "cro-HR" => "endpoint1",
+                                    "eng-GB" => "endpoint2",
+                                ),
+                            )
+                        )
+                        ->children()
+                            ->arrayNode( "content" )
+                                ->useAttributeAsKey( "language_code" )
+                                ->info( "A map of translation language codes and Solr endpoint names for Content index" )
+                                ->example(
+                                    array(
+                                        "cro-HR" => "endpoint1",
+                                        "eng-GB" => "endpoint2",
+                                    )
+                                )
+                                ->prototype( "scalar" )
+                                ->end()
+                            ->end()
+                            ->arrayNode( "location" )
+                                ->useAttributeAsKey( "language_code" )
+                                ->info( "A map of translation language codes and Solr endpoint names for Location index" )
+                                ->example(
+                                    array(
+                                        "cro-HR" => "endpoint1",
+                                        "eng-GB" => "endpoint2",
+                                    )
+                                )
+                                ->prototype( "scalar" )
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ->end();
     }
 }
