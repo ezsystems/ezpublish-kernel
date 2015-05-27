@@ -55,7 +55,7 @@ class Configuration implements ConfigurationInterface
     {
         $node->children()
             ->arrayNode( "endpoints" )
-                ->info( "Solr Search Engine endpoints configuration" )
+                ->info( "Solr Search Engine endpoint configuration" )
                 ->useAttributeAsKey( "endpoint_name" )
                 ->performNoDeepMerging()
                 ->prototype( "array" )
@@ -125,7 +125,7 @@ class Configuration implements ConfigurationInterface
                 ->info( "Name of the default connection" )
             ->end()
             ->arrayNode( "connections" )
-            ->info( "Solr Search Engine connections configuration" )
+            ->info( "Solr Search Engine connection configuration" )
             ->useAttributeAsKey( "connection_name" )
             ->performNoDeepMerging()
             ->prototype( "array" )
