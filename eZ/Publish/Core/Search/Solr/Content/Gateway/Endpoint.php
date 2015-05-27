@@ -79,7 +79,7 @@ class Endpoint extends ValueObject
      */
     public function getIdentifier()
     {
-        return "{$this->host}:{$this->port}/{$this->path}/{$this->core}";
+        return "{$this->host}:{$this->port}{$this->path}/{$this->core}";
     }
 
     /**
