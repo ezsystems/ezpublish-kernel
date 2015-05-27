@@ -46,7 +46,6 @@ class Native extends Gateway
      */
     protected $endpointRegistry;
 
-
     /**
      * Query visitor
      *
@@ -160,22 +159,20 @@ class Native extends Gateway
             $parameters["shards"] = $searchTargets;
         }
 
-        // @todo: Extract method
+        $queryString = http_build_query( $parameters );
+
+        $facets = $this->getFacets( $query->facetBuilders );
+        if ( !empty( $facets ) )
+        {
+            $queryString .= "&facet=true&facet.sort=count&{$facets}";
+        }
+
         $response = $this->client->request(
             'GET',
             $this->endpointRegistry->getEndpoint(
                 $this->endpointResolver->getEntryPoint( $this->documentType )
             ),
-            '/select?' .
-            http_build_query( $parameters ) .
-            ( count( $query->facetBuilders ) ? '&facet=true&facet.sort=count&' : '' ) .
-            implode(
-                '&',
-                array_map(
-                    array( $this->facetBuilderVisitor, 'visit' ),
-                    $query->facetBuilders
-                )
-            )
+            "/select?{$queryString}"
         );
 
         // @todo: Error handling?
@@ -192,7 +189,7 @@ class Native extends Gateway
     }
 
     /**
-     * Converts an array of sort clause object to a Solr representation
+     * Converts an array of sort clause objects to a proper Solr representation
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause[] $sortClauses
      *
@@ -205,6 +202,24 @@ class Native extends Gateway
             array_map(
                 array( $this->sortClauseVisitor, "visit" ),
                 $sortClauses
+            )
+        );
+    }
+
+    /**
+     * Converts an array of facet builder objects to a proper Solr representation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[] $facetBuilders
+     *
+     * @return string
+     */
+    protected function getFacets( array $facetBuilders )
+    {
+        return implode(
+            '&',
+            array_map(
+                array( $this->facetBuilderVisitor, 'visit' ),
+                $facetBuilders
             )
         );
     }
@@ -295,7 +310,7 @@ class Native extends Gateway
      * Indexes a block of documents, which in our case is a Content preceded by its Locations.
      * In Solr block is identifiable by '_root_' field which holds a parent document (Content) id.
      *
-     * @param \eZ\Publish\SPI\Search\Document[] $documents
+     * @param \eZ\Publish\SPI\Search\Document[][] $documents
      *
      * @todo $documents should be generated more on demand then this and sent to Solr in chunks before final commit
      */
