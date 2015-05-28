@@ -41,6 +41,7 @@ parameters:
 
     ezpublish.fieldType.ezrichtext.converter.input.ezxml.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/ezxml/docbook/core.xsl
     ezpublish.fieldType.ezrichtext.converter.input.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/xhtml5/edit/docbook.xsl
+    ezpublish.fieldType.ezrichtext.converter.edit.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/docbook/xhtml5/edit/xhtml5.xsl
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/docbook/xhtml5/output/xhtml5.xsl
     ezpublish.fieldType.ezrichtext.converter.output.xhtml5.fragment.resources: %ezpublish.fieldType.ezrichtext.resources%/stylesheets/xhtml5/output/fragment.xsl
 
@@ -227,7 +228,7 @@ services:
     ezpublish.fieldType.ezrichtext.converter.edit.xhtml5:
         class: %ezpublish.fieldType.ezrichtext.converter.edit.html5.class%
         arguments:
-            - %ezpublish.fieldType.ezrichtext.converter.output.xhtml5.resources%
+            - %ezpublish.fieldType.ezrichtext.converter.edit.xhtml5.resources%
             - @ezpublish.config.resolver
 
     ezpublish.fieldType.ezrichtext.validator.docbook:
