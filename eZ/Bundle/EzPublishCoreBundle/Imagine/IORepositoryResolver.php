@@ -57,17 +57,23 @@ class IORepositoryResolver implements ResolverInterface
         try
         {
             $binaryFile = $this->ioService->loadBinaryFile( $path );
+
             // Treat a MissingBinaryFile as a not loadable file.
             if ( $binaryFile instanceof MissingBinaryFile )
             {
                 throw new NotResolvableException( "Variation image not found in $path" );
             }
 
-            $path = $binaryFile->uri;
-            $path = $filter !== static::VARIATION_ORIGINAL ? $this->getFilePath(
-                $path,
-                $filter
-            ) : $path;
+            if ( $filter !== static::VARIATION_ORIGINAL )
+            {
+                $variationPath = $this->getFilePath( $path, $filter );
+                $variationBinaryFile = $this->ioService->loadBinaryFile( $variationPath );
+                $path = $variationBinaryFile->uri;
+            }
+            else
+            {
+                $path = $binaryFile->uri;
+            }
 
             return sprintf(
                 '%s%s',
@@ -134,7 +140,7 @@ class IORepositoryResolver implements ResolverInterface
      * Returns path for filtered image from original path.
      * Pattern is <original_dir>/<filename>_<filter_name>.<extension>
      *
-     * e.g. var/ezdemo_site/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg
+     * e.g. Tardis/bigger/in-the-inside/RiverSong.jpg => thumbnail/Tardis/bigger/in-the-inside/RiverSong.jpg
      *
      * @param string $path
      * @param string $filter
@@ -145,10 +151,10 @@ class IORepositoryResolver implements ResolverInterface
     {
         $info = pathinfo( $path );
         return sprintf(
-            '%s/%s_%s%s',
+            '_aliases/%s/%s/%s%s',
+            $filter,
             $info['dirname'],
             $info['filename'],
-            $filter,
             empty( $info['extension'] ) ? '' : '.' . $info['extension']
         );
     }
