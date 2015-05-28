@@ -70,4 +70,6 @@ interface IOBinarydataHandler
      * @return string
      */
     public function getIdFromUri( $binaryFileUri );
+
+    public function deleteDirectory( $spiPath );
 }

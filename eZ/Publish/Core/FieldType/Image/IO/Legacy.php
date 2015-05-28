@@ -208,6 +208,16 @@ class Legacy implements IOServiceInterface
         $this->publishedIOService->deleteBinaryFile( $binaryFile );
     }
 
+    /**
+     * Deletes a directory.
+     *
+     * @param string $path
+     */
+    public function deleteDirectory( $path )
+    {
+        $this->publishedIOService->deleteDirectory( $path );
+    }
+
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile )
     {
         return $this->publishedIOService->newBinaryCreateStructFromUploadedFile( $uploadedFile );
