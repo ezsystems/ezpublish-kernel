@@ -1,4 +1,6 @@
 # eZ Platform Kernel / eZ Publish 5.x Platform Kernel
+
+[![Join the chat at https://gitter.im/ezsystems/ezpublish-kernel](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ezsystems/ezpublish-kernel?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/ezsystems/ezpublish-kernel.png?branch=master)](https://travis-ci.org/ezsystems/ezpublish-kernel)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0/big.png)](https://insight.sensiolabs.com/projects/0885c0ce-4b9f-4b89-aa9c-e8f9f7a315e0)
