@@ -182,7 +182,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
                 array(
                     "connections" => array(
                         "connection1" => array(
-                            "entry_points" => array(),
+                            "entry_endpoints" => array(),
                             "cluster" => array(),
                         ),
                     ),
@@ -192,7 +192,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
                 array(
                     "connections" => array(
                         "connection1" => array(
-                            "entry_points" => array(
+                            "entry_endpoints" => array(
                                 "content" => array(),
                                 "location" => array(),
                             ),
@@ -222,7 +222,7 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         $configurationValues = array(
             "connections" => array(
                 "connection1" => array(
-                    "entry_points" => array(
+                    "entry_endpoints" => array(
                         "content" => array(
                             "endpoint1",
                             "endpoint2",

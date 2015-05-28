@@ -165,7 +165,7 @@ class Native extends Gateway
         $response = $this->client->request(
             'GET',
             $this->endpointRegistry->getEndpoint(
-                $this->endpointResolver->getEntryPoint()
+                $this->endpointResolver->getEntryEndpoint()
             ),
             "/select?{$queryString}"
         );

@@ -18,11 +18,11 @@ use RuntimeException;
 class NativeEndpointResolver implements EndpointResolver
 {
     /**
-     * Holds an array of Solr entry point names
+     * Holds an array of Solr entry endpoint names
      *
      * @var string[]
      */
-    protected $entryPoints;
+    protected $entryEndpoints;
 
     /**
      * Holds a map of Endpoint names, with language codes as keys
@@ -41,23 +41,23 @@ class NativeEndpointResolver implements EndpointResolver
     /**
      * Create from Endpoint names
      *
-     * @param string[] $entryPoints
+     * @param string[] $entryEndpoints
      * @param string[] $endpointMap
      */
-    public function __construct( array $entryPoints = array(), array $endpointMap = array() )
+    public function __construct( array $entryEndpoints = array(), array $endpointMap = array() )
     {
-        $this->entryPoints = $entryPoints;
+        $this->entryEndpoints = $entryEndpoints;
         $this->endpointMap = $endpointMap;
     }
 
-    public function getEntryPoint()
+    public function getEntryEndpoint()
     {
-        if ( empty( $this->entryPoints ) )
+        if ( empty( $this->entryEndpoints ) )
         {
-            throw new RuntimeException( "Not entry points defined" );
+            throw new RuntimeException( "Not entry endpoints defined" );
         }
 
-        return reset( $this->entryPoints );
+        return reset( $this->entryEndpoints );
     }
 
     public function getIndexingTarget( $languageCode )

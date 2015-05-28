@@ -21,7 +21,7 @@ interface EndpointResolver
      *
      * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint
      */
-    public function getEntryPoint();
+    public function getEntryEndpoint();
 
     /**
      * Returns Endpoint that indexes Content translations in the given $languageCode

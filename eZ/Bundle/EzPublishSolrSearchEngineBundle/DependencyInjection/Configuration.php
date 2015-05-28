@@ -134,7 +134,7 @@ class Configuration implements ConfigurationInterface
                         function( $v )
                         {
                             return (
-                                empty( $v["entry_points"]["content"] ) &&
+                                empty( $v["entry_endpoints"]["content"] ) &&
                                 !empty( $v["cluster"]["content"] )
                             );
                         }
@@ -142,8 +142,8 @@ class Configuration implements ConfigurationInterface
                     ->then(
                         function( $v )
                         {
-                            // If Content search entry points are not provided use cluster endpoints
-                            $v["entry_points"]["content"] = array_values( $v["cluster"]["content"] );
+                            // If Content search entry endpoints are not provided use cluster endpoints
+                            $v["entry_endpoints"]["content"] = array_values( $v["cluster"]["content"] );
                             return $v;
                         }
                     )
@@ -153,7 +153,7 @@ class Configuration implements ConfigurationInterface
                         function( $v )
                         {
                             return (
-                                empty( $v["entry_points"]["location"] ) &&
+                                empty( $v["entry_endpoints"]["location"] ) &&
                                 !empty( $v["cluster"]["location"] )
                             );
                         }
@@ -161,15 +161,15 @@ class Configuration implements ConfigurationInterface
                     ->then(
                         function( $v )
                         {
-                            // If Location search entry points are not provided use cluster endpoints
-                            $v["entry_points"]["location"] = array_values( $v["cluster"]["location"] );
+                            // If Location search entry endpoints are not provided use cluster endpoints
+                            $v["entry_endpoints"]["location"] = array_values( $v["cluster"]["location"] );
                             return $v;
                         }
                     )
                 ->end()
                 ->children()
-                    ->arrayNode( "entry_points" )
-                        ->info( "A set of endpoint names, per search type" )
+                    ->arrayNode( "entry_endpoints" )
+                        ->info( "A set of entry endpoint names, per search type" )
                         ->addDefaultsIfNotSet()
                         ->example(
                             array(
