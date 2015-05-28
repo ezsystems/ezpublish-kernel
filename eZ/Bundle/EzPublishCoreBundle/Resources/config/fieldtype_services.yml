@@ -248,7 +248,7 @@ services:
         arguments:
             -
                 http://docbook.org/ns/docbook: @ezpublish.fieldType.ezrichtext.validator.docbook
-                http://ez.no/namespaces/ezpublish5/xhtml5/edit: @ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5
+                http://ez.no/namespaces/ezpublish5/xhtml5/edit: null
                 http://ez.no/namespaces/ezpublish5/xhtml5: @ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5
 
     # Image
