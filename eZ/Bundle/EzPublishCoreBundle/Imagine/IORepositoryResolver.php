@@ -114,10 +114,17 @@ class IORepositoryResolver implements ResolverInterface
      */
     public function remove( array $paths, array $filters )
     {
-        // TODO: $paths may be empty, meaning that all generated images corresponding to $filters need to be removed.
         if ( empty( $filters ) )
         {
             $filters = array_keys( $this->filterConfiguration->all() );
+        }
+
+        if ( empty( $paths ) )
+        {
+            foreach ( $filters as $filter )
+            {
+                $this->ioService->deleteDirectory( $filter );
+            }
         }
 
         foreach ( $paths as $path )
