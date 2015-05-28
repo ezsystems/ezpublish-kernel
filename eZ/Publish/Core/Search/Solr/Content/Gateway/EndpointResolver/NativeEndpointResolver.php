@@ -22,7 +22,7 @@ class NativeEndpointResolver implements EndpointResolver
      *
      * @var string[]
      */
-    protected $entryEndpoints;
+    private $entryEndpoints;
 
     /**
      * Holds a map of Endpoint names, with language codes as keys
@@ -36,7 +36,7 @@ class NativeEndpointResolver implements EndpointResolver
      *
      * @var string[]
      */
-    protected $endpointMap;
+    private $endpointMap;
 
     /**
      * Create from Endpoint names
