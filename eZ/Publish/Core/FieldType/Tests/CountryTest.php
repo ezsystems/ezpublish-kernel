@@ -104,6 +104,10 @@ class CountryTest extends FieldTypeTest
             "isMultiple" => array(
                 "type" => "boolean",
                 "default" => false
+            ),
+            "defaultSelection" => array(
+                "type" => "hash",
+                "default" => array()
             )
         );
     }

@@ -28,6 +28,10 @@ class Type extends FieldType
         "isMultiple" => array(
             "type" => "boolean",
             "default" => false
+        ),
+        "defaultSelection" => array(
+            "type" => "hash",
+            "default" => array()
         )
     );
 
@@ -285,6 +289,20 @@ class Type extends FieldType
                     {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' value must be of boolean type",
+                            null,
+                            array(
+                                "setting" => $name
+                            ),
+                            "[$name]"
+                        );
+                    }
+                    break;
+
+                case "defaultSelection":
+                    if ( !is_array( $value ) )
+                    {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of array type",
                             null,
                             array(
                                 "setting" => $name
