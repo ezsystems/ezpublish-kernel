@@ -245,6 +245,13 @@ SQL
         return $row['datatype'];
     }
 
+    public function deleteDirectory( $spiPath )
+    {
+        $stmt = $this->db->prepare( 'DELETE FROM ezdfsfile WHERE name LIKE ?' );
+        $stmt->bindValue( 1, rtrim( $spiPath, '/' ) . '/%' );
+        $stmt->execute();
+    }
+
     /**
      * Maps an array of data base properties (id, size, mtime, datatype, md5_path, path...) to an SPIBinaryFile object
      *
