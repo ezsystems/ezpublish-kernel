@@ -29,6 +29,7 @@ parameters:
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList
     ezpubish.image_alias.variation_path_generator.original_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\OriginalDirectoryVariationPathGenerator
+    ezpubish.image_alias.variation_path_generator.alias_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\AliasDirectoryVariationPathGenerator
 
 services:
     # Filters
@@ -187,6 +188,10 @@ services:
         tags:
             - { name: liip_imagine.filter.loader, loader: "colorspace/gray" }
 
+    ezpublish.image_alias.variation_purger.io:
+        class: %ezpublish.image_alias.variation_purger.io.class%
+        arguments: [@ezpublish.fieldType.ezimage.io_service]
+
     ezpublish.image_alias.variation_purger.legacy_storage_image_file:
         class: %ezpublish.image_alias.variation_purger.legacy_storage_image_file.class%
         arguments:
@@ -202,3 +207,7 @@ services:
 
     ezpublish.image_alias.variation_path_generator.original_directory:
         class: %ezpubish.image_alias.variation_path_generator.original_directory.class%
+
+    ezpublish.image_alias.variation_path_generator.alias_directory:
+        class: %ezpubish.image_alias.variation_path_generator.alias_directory.class%
+
