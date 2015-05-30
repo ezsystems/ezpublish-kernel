@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Imagine;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
+use eZ\Publish\SPI\Variation\VariationPurger;
 use Liip\ImagineBundle\Binary\BinaryInterface;
 use Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException;
 use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
@@ -39,12 +40,27 @@ class IORepositoryResolver implements ResolverInterface
      * @var FilterConfiguration
      */
     private $filterConfiguration;
+    /**
+     * @var \eZ\Publish\SPI\Variation\VariationPurger
+     */
+    private $variationPurger;
 
-    public function __construct( IOServiceInterface $ioService, RequestContext $requestContext, FilterConfiguration $filterConfiguration )
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator */
+    private $variationPathGenerator;
+
+    public function __construct(
+        IOServiceInterface $ioService,
+        RequestContext $requestContext,
+        FilterConfiguration $filterConfiguration,
+        VariationPurger $variationPurger,
+        VariationPathGenerator $variationPathGenerator
+    )
     {
         $this->ioService = $ioService;
         $this->requestContext = $requestContext;
         $this->filterConfiguration = $filterConfiguration;
+        $this->variationPurger = $variationPurger;
+        $this->variationPathGenerator = $variationPathGenerator;
     }
 
     public function isStored( $path, $filter )
@@ -121,10 +137,7 @@ class IORepositoryResolver implements ResolverInterface
 
         if ( empty( $paths ) )
         {
-            foreach ( $filters as $filter )
-            {
-                $this->ioService->deleteDirectory( $filter );
-            }
+            $this->variationPurger->purge( $filters );
         }
 
         foreach ( $paths as $path )
@@ -156,14 +169,7 @@ class IORepositoryResolver implements ResolverInterface
      */
     public function getFilePath( $path, $filter )
     {
-        $info = pathinfo( $path );
-        return sprintf(
-            '_aliases/%s/%s/%s%s',
-            $filter,
-            $info['dirname'],
-            $info['filename'],
-            empty( $info['extension'] ) ? '' : '.' . $info['extension']
-        );
+        return $this->variationPathGenerator->getVariationPath( $path, $filter );
     }
 
     /**

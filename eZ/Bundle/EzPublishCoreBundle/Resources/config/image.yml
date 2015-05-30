@@ -26,6 +26,10 @@ parameters:
     ezpublish.image_alias.imagine.filter.swirl.imagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\SwirlFilter
     ezpublish.image_alias.imagine.filter.swirl.gmagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Gmagick\SwirlFilter
 
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList
+    ezpubish.image_alias.variation_path_generator.original_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\OriginalDirectoryVariationPathGenerator
+
 services:
     # Filters
     ezpublish.image_alias.imagine.filter.unsupported:
@@ -182,3 +186,19 @@ services:
         public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "colorspace/gray" }
+
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file:
+        class: %ezpublish.image_alias.variation_purger.legacy_storage_image_file.class%
+        arguments:
+            - @ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list
+            - @ezpublish.fieldType.ezimage.io_service
+            - @ezpublish.image_alias.variation_path_generator.original_directory
+        calls:
+            - [setLogger, [@?logger]]
+
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list:
+        class: %ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class%
+        arguments: [@ezpublish.api.storage_engine.legacy.dbhandler]
+
+    ezpublish.image_alias.variation_path_generator.original_directory:
+        class: %ezpubish.image_alias.variation_path_generator.original_directory.class%
