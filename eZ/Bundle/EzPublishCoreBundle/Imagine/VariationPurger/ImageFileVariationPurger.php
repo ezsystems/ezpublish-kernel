@@ -9,6 +9,7 @@ use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway as ImageStorageGateway;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\SPI\Variation\VariationPurger;
+use Iterator;
 
 /**
  * Purges image aliases based on image files referenced by the Image FieldType.
@@ -31,7 +32,7 @@ class ImageFileVariationPurger implements VariationPurger
      */
     private $logger;
 
-    public function __construct( ImageFileList $imageFileList, IOServiceInterface $ioService, VariationPathGenerator $variationPathGenerator )
+    public function __construct( Iterator $imageFileList, IOServiceInterface $ioService, VariationPathGenerator $variationPathGenerator )
     {
         $this->imageFileList = $imageFileList;
         $this->ioService = $ioService;
