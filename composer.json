@@ -49,7 +49,8 @@
         "ezsystems/ezpublish-spi": "self.version"
     },
     "conflict": {
-        "zendframework/zend-stdlib": ">=2.3"
+        "zendframework/zend-stdlib": ">=2.3",
+        "symfony/symfony": ">=2.7"
     },
     "autoload": {
         "psr-4": {
