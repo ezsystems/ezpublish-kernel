@@ -285,8 +285,8 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( 'foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg '),
-                        array( 'foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg '),
+                        array( 'foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg ' ),
+                        array( 'foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg ' ),
                         array( 'foo/bar/test.jpg', 'chaud_cacao', 'foo/bar/test_chaud_cacao.jpg' ),
                     )
                 )
@@ -338,8 +338,8 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValueMap(
                     array(
-                        array( 'foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg '),
-                        array( 'foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg '),
+                        array( 'foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg ' ),
+                        array( 'foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg ' ),
                         array( 'foo/bar/test.jpg', 'chaud_cacao', 'foo/bar/test_chaud_cacao.jpg' ),
                     )
                 )
