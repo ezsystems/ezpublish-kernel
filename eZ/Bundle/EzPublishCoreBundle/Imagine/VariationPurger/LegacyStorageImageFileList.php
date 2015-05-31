@@ -10,7 +10,7 @@ use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 /**
  * Iterator for entries in legacy's ezimagefile table.
  *
- * The returned items are uris to files, e.g. var/ezdemo_site/storage/images/...
+ * The returned items are id of Image BinaryFile (ez-mountains/mount-aconcagua/605-1-eng-GB/Mount-Aconcagua.jpg).
  */
 class LegacyStorageImageFileList implements ImageFileList
 {
@@ -37,26 +37,32 @@ class LegacyStorageImageFileList implements ImageFileList
      */
     private $cursor;
 
-    public function __construct( DatabaseHandler $dbHandler )
-    {
-        $this->dbHandler = $dbHandler;
-    }
+    /**
+     * The storage prefix used by legacy, usually the vardir + the 'storage' folder.
+     * Example: var/ezdemo_site/storage
+     * @var string
+     */
+    private $prefix;
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Return the current element
-     * @link http://php.net/manual/en/iterator.current.php
-     * @return mixed Can return any type.
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * @param string $storageDir Folder, relative to the root, where files are stored. Example: var/ezdemo_site/storage
+     * @param string $imagesDir Folder where images are stored, within the storage dir. Example: 'images'
      */
+    public function __construct( DatabaseHandler $dbHandler, $storageDir, $imagesDir )
+    {
+        $this->dbHandler = $dbHandler;
+        $this->prefix = $storageDir . '/' . $imagesDir;
+    }
+
     public function current()
     {
-        return '/' . $this->item;
+        return $this->item;
     }
 
     public function next()
     {
-        $this->cursor++;
-        $this->item = $this->statement->fetchColumn( 0 );
+        $this->fetchRow();
     }
 
     public function key()
@@ -71,17 +77,32 @@ class LegacyStorageImageFileList implements ImageFileList
 
     public function rewind()
     {
-        $this->cursor = 0;
+        $this->cursor = -1;
 
         $selectQuery = $this->dbHandler->createSelectQuery();
         $selectQuery->select( 'filepath' )->from( $this->dbHandler->quoteTable( 'ezimagefile' ) );
         $this->statement = $selectQuery->prepare();
         $this->statement->execute();
-        $this->item = $this->statement->fetchColumn( 0 );
+        $this->fetchRow();
     }
 
     public function count()
     {
         return $this->statement->rowCount();
+    }
+
+    /**
+     * Fetches the next item from the resultset, moves the cursor forward, and removes the prefix from the image id
+     */
+    private function fetchRow()
+    {
+        $this->cursor++;
+        $imageId = $this->statement->fetchColumn( 0 );
+        if ( substr( $imageId, 0, strlen( $this->prefix ) ) == $this->prefix )
+        {
+            $imageId = ltrim( substr( $imageId, strlen( $this->prefix ) ), '/' );
+        }
+
+        $this->item = $imageId;
     }
 }

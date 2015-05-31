@@ -45,23 +45,21 @@ class ImageFileVariationPurger implements VariationPurger
      */
     public function purge( array $aliasNames )
     {
-        foreach ( $this->imageFileList as $imageFile )
+        foreach ( $this->imageFileList as $originalImageId )
         {
             foreach ( $aliasNames as $aliasName )
             {
-                $variationPath = $this->variationPathGenerator->getVariationPath( $imageFile, $aliasName );
-                try
-                {
-                    $binaryFile = $this->ioService->loadBinaryFileByUri( $variationPath );
-                }
-                catch ( BinaryFileNotFoundException $e )
+                $variationImageId = $this->variationPathGenerator->getVariationPath( $originalImageId, $aliasName );
+                if ( !$this->ioService->exists( $variationImageId ) )
                 {
                     continue;
                 }
-                // $this->ioService->deleteBinaryFile( $binaryFile );
+
+                $binaryFile = $this->ioService->loadBinaryFile( $variationImageId );
+                $this->ioService->deleteBinaryFile( $binaryFile );
                 if ( isset( $this->logger ) )
                 {
-                    $this->logger->info( "Purging $aliasName variation $variationPath for original image $imageFile" );
+                    $this->logger->info( "Purging $aliasName variation $variationImageId for original image $originalImageId" );
                 }
             }
         }
