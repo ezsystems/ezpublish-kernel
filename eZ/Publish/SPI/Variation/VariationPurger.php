@@ -10,7 +10,7 @@ namespace eZ\Publish\SPI\Variation;
 interface VariationPurger
 {
     /**
-     * Purge all variations generated for aliases in $aliasName
+     * Purge all variations generated for aliases in $aliasNames
      * @param array $aliasNames
      */
     public function purge( array $aliasNames );
