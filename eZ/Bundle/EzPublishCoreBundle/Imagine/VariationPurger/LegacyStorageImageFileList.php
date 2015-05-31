@@ -15,17 +15,6 @@ use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 class LegacyStorageImageFileList implements ImageFileList
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
-    private $dbHandler;
-
-    /**
-     * Database statement
-     * @var \PDOStatement
-     */
-    private $statement;
-
-    /**
      * Last fetched item
      * @var mixed
      */
@@ -45,14 +34,20 @@ class LegacyStorageImageFileList implements ImageFileList
     private $prefix;
 
     /**
-     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
+     * Used to get ezimagefile rows
+     * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader
+     */
+    private $rowReader;
+
+    /**
+     * @param \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileRowReader $rowReader
      * @param string $storageDir Folder, relative to the root, where files are stored. Example: var/ezdemo_site/storage
      * @param string $imagesDir Folder where images are stored, within the storage dir. Example: 'images'
      */
-    public function __construct( DatabaseHandler $dbHandler, $storageDir, $imagesDir )
+    public function __construct( ImageFileRowReader $rowReader, $storageDir, $imagesDir )
     {
-        $this->dbHandler = $dbHandler;
         $this->prefix = $storageDir . '/' . $imagesDir;
+        $this->rowReader = $rowReader;
     }
 
     public function current()
@@ -78,17 +73,13 @@ class LegacyStorageImageFileList implements ImageFileList
     public function rewind()
     {
         $this->cursor = -1;
-
-        $selectQuery = $this->dbHandler->createSelectQuery();
-        $selectQuery->select( 'filepath' )->from( $this->dbHandler->quoteTable( 'ezimagefile' ) );
-        $this->statement = $selectQuery->prepare();
-        $this->statement->execute();
+        $this->rowReader->init();
         $this->fetchRow();
     }
 
     public function count()
     {
-        return $this->statement->rowCount();
+        return $this->rowReader->getCount();
     }
 
     /**
@@ -97,7 +88,8 @@ class LegacyStorageImageFileList implements ImageFileList
     private function fetchRow()
     {
         $this->cursor++;
-        $imageId = $this->statement->fetchColumn( 0 );
+        $imageId = $this->rowReader->getRow();
+
         if ( substr( $imageId, 0, strlen( $this->prefix ) ) == $this->prefix )
         {
             $imageId = ltrim( substr( $imageId, strlen( $this->prefix ) ), '/' );

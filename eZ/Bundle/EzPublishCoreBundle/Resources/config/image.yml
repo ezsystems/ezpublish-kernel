@@ -28,6 +28,7 @@ parameters:
 
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileRowReader
     ezpublish.image_alias.variation_purger.io.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IOVariationPurger
     ezpubish.image_alias.variation_path_generator.original_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\OriginalDirectoryVariationPathGenerator
     ezpubish.image_alias.variation_path_generator.alias_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\AliasDirectoryVariationPathGenerator
@@ -216,9 +217,14 @@ services:
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list:
         class: %ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class%
         arguments:
-            - @ezpublish.api.storage_engine.legacy.dbhandler
+            - @ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader
             - $io.legacy_url_prefix$
             - $image.published_images_dir$
+
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader:
+        class: %ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
 
     ezpublish.image_alias.variation_path_generator:
         # < platform 2015.05
