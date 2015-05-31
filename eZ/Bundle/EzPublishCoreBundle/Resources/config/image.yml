@@ -194,13 +194,11 @@ services:
         tags:
             - { name: liip_imagine.filter.loader, loader: "colorspace/gray" }
 
-    # < platform 2015.05
     ezpublish.image_alias.variation_purger:
+        # < platform 2015.05
         alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file
-
-    # >= platform 2015.05
-    #ezpublish.image_alias.variation_purger:
-    #    alias: ezpublish.image_alias.variation_purger.io
+        # >= platform 2015.05
+        # alias: ezpublish.image_alias.variation_purger.io
 
     ezpublish.image_alias.variation_purger.io:
         class: %ezpublish.image_alias.variation_purger.io.class%
@@ -222,13 +220,11 @@ services:
             - $io.legacy_url_prefix$
             - $image.published_images_dir$
 
-    # < platform 2015.05
     ezpublish.image_alias.variation_path_generator:
+        # < platform 2015.05
         alias: ezpublish.image_alias.variation_path_generator.original_directory
-
-    # >= platform 2015.05
-    #ezpublish.image_alias.variation_path_generator:
-    #    alias: ezpublish.image_alias.variation_path_generator.original_directory
+        # >= platform 2015.05
+        alias: ezpublish.image_alias.variation_path_generator.alias_directory
 
     ezpublish.image_alias.variation_path_generator.original_directory:
         class: %ezpubish.image_alias.variation_path_generator.original_directory.class%
