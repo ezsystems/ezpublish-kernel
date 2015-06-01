@@ -12,9 +12,6 @@
  * @doc Copy this file to config.php to get started!
  */
 
-// Optional: only for development, comment in production
-error_reporting( E_ALL | E_STRICT );
-
 // Required: Settings bellow are runtime settings that needs to be set here, you can
 // optionally also override any other setting here.
 return array(
