@@ -159,4 +159,11 @@ interface IOServiceInterface
      * @return BinaryFileCreateStruct
      */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile );
+
+    /**
+     * Deletes a directory.
+     *
+     * @param string $path
+     */
+    public function deleteDirectory( $path );
 }

@@ -29,7 +29,9 @@ parameters:
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList
     ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileRowReader
+    ezpublish.image_alias.variation_purger.io.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\IOVariationPurger
     ezpubish.image_alias.variation_path_generator.original_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\OriginalDirectoryVariationPathGenerator
+    ezpubish.image_alias.variation_path_generator.alias_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\AliasDirectoryVariationPathGenerator
 
 services:
     # Filters
@@ -194,7 +196,18 @@ services:
             - { name: liip_imagine.filter.loader, loader: "colorspace/gray" }
 
     ezpublish.image_alias.variation_purger:
+        # < platform 2015.05
         alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file
+        # >= platform 2015.05
+        # alias: ezpublish.image_alias.variation_purger.io
+
+    ezpublish.image_alias.variation_purger.io:
+        class: %ezpublish.image_alias.variation_purger.io.class%
+        arguments:
+            - @ezpublish.fieldType.ezimage.io_service
+            - @ezpublish.image_alias.variation_path_generator.alias_directory
+        calls:
+            - [setLogger, [@?logger]]
 
     ezpublish.image_alias.variation_purger.legacy_storage_image_file:
         class: %ezpublish.image_alias.variation_purger.legacy_storage_image_file.class%
@@ -218,7 +231,14 @@ services:
             - @ezpublish.api.storage_engine.legacy.dbhandler
 
     ezpublish.image_alias.variation_path_generator:
+        # < platform 2015.05
         alias: ezpublish.image_alias.variation_path_generator.original_directory
+        # >= platform 2015.05
+        # alias: ezpublish.image_alias.variation_path_generator.alias_directory
 
     ezpublish.image_alias.variation_path_generator.original_directory:
         class: %ezpubish.image_alias.variation_path_generator.original_directory.class%
+
+    ezpublish.image_alias.variation_path_generator.alias_directory:
+        class: %ezpubish.image_alias.variation_path_generator.alias_directory.class%
+

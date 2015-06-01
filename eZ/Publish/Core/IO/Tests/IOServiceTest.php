@@ -390,6 +390,27 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\IO\IOService::deleteDirectory()
+     */
+    public function testDeleteDirectory()
+    {
+        $id = "some/directory";
+        $spiId = $this->getPrefixedUri( $id );
+
+        $this->binarydataHandlerMock
+            ->expects( $this->once() )
+            ->method( 'deleteDirectory' )
+            ->with( $spiId );
+
+        $this->metadataHandlerMock
+            ->expects( $this->once() )
+            ->method( 'deleteDirectory' )
+            ->with( $spiId );
+
+        $this->getIOService()->deleteDirectory( 'some/directory' );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\IO\IOService::deleteBinaryFile
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      * @return mixed Whatever deleteBinaryFile returned

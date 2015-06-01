@@ -62,4 +62,6 @@ interface IOMetadataHandler
      * @return string
      */
     public function getMimeType( $spiBinaryFileId );
+
+    public function deleteDirectory( $spiPath );
 }
