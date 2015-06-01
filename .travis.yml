@@ -11,7 +11,7 @@ matrix:
   # misc nighlty tests we keep an eye on and aim to fix closer to stable versions
   allow_failures:
     - php: 5.5
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.7@dev"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8@dev"
     - php: hhvm-nightly
       env: TEST_CONFIG="phpunit.xml"
     - php: nightly
