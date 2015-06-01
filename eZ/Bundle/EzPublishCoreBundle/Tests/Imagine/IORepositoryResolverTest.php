@@ -11,10 +11,12 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
+use eZ\Publish\SPI\Variation\VariationPurger;
 use Liip\ImagineBundle\Model\Binary;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,6 +49,12 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
      */
     private $filterConfiguration;
 
+    /** @var \eZ\Publish\SPI\Variation\VariationPurger|\PHPUnit_Framework_MockObject_MockObject */
+    protected $variationPurger;
+
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    protected $variationPathGenerator;
+
     protected function setUp()
     {
         parent::setUp();
@@ -55,7 +63,15 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->filterConfiguration = new FilterConfiguration();
         $this->filterConfiguration->setConfigResolver( $this->configResolver );
-        $this->imageResolver = new IORepositoryResolver( $this->ioService, $this->requestContext, $this->filterConfiguration );
+        $this->variationPurger = $this->getMock( 'eZ\Publish\SPI\Variation\VariationPurger' );
+        $this->variationPathGenerator = $this->getMock( 'eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator' );
+        $this->imageResolver = new IORepositoryResolver(
+            $this->ioService,
+            $this->requestContext,
+            $this->filterConfiguration,
+            $this->variationPurger,
+            $this->variationPathGenerator
+        );
     }
 
     /**
@@ -63,6 +79,11 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFilePath( $path, $filter, $expected )
     {
+        $this->variationPathGenerator
+            ->expects( $this->once() )
+            ->method( 'getVariationPath' )
+            ->with( $path, $filter )
+            ->willReturn( $expected );
         $this->assertSame( $expected, $this->imageResolver->getFilePath( $path, $filter ) );
     }
 
@@ -82,6 +103,12 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
         $path = 'Tardis/bigger/in-the-inside/RiverSong.jpg';
         $aliasPath = 'Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg';
 
+        $this->variationPathGenerator
+            ->expects( $this->once() )
+            ->method( 'getVariationPath' )
+            ->with( $path, $filter )
+            ->willReturn( $aliasPath );
+
         $this->ioService
             ->expects( $this->once() )
             ->method( 'exists' )
@@ -97,6 +124,12 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
         $path = 'Tardis/bigger/in-the-inside/RiverSong.jpg';
         $aliasPath = 'Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg';
 
+        $this->variationPathGenerator
+            ->expects( $this->once() )
+            ->method( 'getVariationPath' )
+            ->with( $path, $filter )
+            ->willReturn( $aliasPath );
+
         $this->ioService
             ->expects( $this->once() )
             ->method( 'exists' )
@@ -109,19 +142,22 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider resolveProvider
      */
-    public function testResolve( $path, $filter, $requestUrl, $expected )
+    public function testResolve( $path, $filter, $variationPath, $requestUrl, $expected )
     {
         if ( $requestUrl )
         {
             $this->requestContext->fromRequest( Request::create( $requestUrl ) );
         }
 
-        $storageDir = '/var/doctorwho/storage/images';
         $this->ioService
-            ->expects( $this->once() )
+            ->expects( $this->any() )
             ->method( 'loadBinaryFile' )
-            ->with( $path )
-            ->will( $this->returnValue( new BinaryFile( array( 'uri' => "$storageDir/$path" ) ) ) );
+            ->will( $this->returnValue( new BinaryFile( array( 'uri' => $variationPath ) ) ) );
+
+        $this->variationPathGenerator
+            ->expects( $this->any() )
+            ->method( 'getVariationPath' )
+            ->willReturn( $variationPath );
 
         $result = $this->imageResolver->resolve( $path, $filter );
         $this->assertSame( $expected, $result );
@@ -162,37 +198,51 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 'Tardis/bigger/in-the-inside/RiverSong.jpg',
-                IORepositoryResolver::VARIATION_ORIGINAL, null,
+                IORepositoryResolver::VARIATION_ORIGINAL,
+                '/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong.jpg',
+                null,
                 'http://localhost/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong.jpg'
             ),
             array(
                 'Tardis/bigger/in-the-inside/RiverSong.jpg',
-                'thumbnail', null,
+                'thumbnail',
+                '/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg',
+                null,
                 'http://localhost/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg'
             ),
             array(
                 'Tardis/bigger/in-the-inside/RiverSong.jpg',
-                'thumbnail', 'http://localhost',
+                'thumbnail',
+                '/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg',
+                'http://localhost',
                 'http://localhost/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg'
             ),
             array(
                 'CultOfScaro/Dalek-fisherman.png',
-                'so_ridiculous', 'http://doctor.who:7890',
+                'so_ridiculous',
+                '/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png',
+                'http://doctor.who:7890',
                 'http://doctor.who:7890/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png'
             ),
             array(
                 'CultOfScaro/Dalek-fisherman.png',
-                'so_ridiculous', 'https://doctor.who',
+                'so_ridiculous',
+                '/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png',
+                'https://doctor.who',
                 'https://doctor.who/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png'
             ),
             array(
                 'CultOfScaro/Dalek-fisherman.png',
-                'so_ridiculous', 'https://doctor.who:1234',
+                'so_ridiculous',
+                '/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png',
+                'https://doctor.who:1234',
                 'https://doctor.who:1234/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png'
             ),
             array(
                 'CultOfScaro/Dalek-fisherman.png',
-                IORepositoryResolver::VARIATION_ORIGINAL, 'https://doctor.who:1234',
+                IORepositoryResolver::VARIATION_ORIGINAL,
+                '/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman.png',
+                'https://doctor.who:1234',
                 'https://doctor.who:1234/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman.png'
             ),
         );
@@ -211,12 +261,9 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
             ->method( 'newBinaryCreateStructFromLocalFile' )
             ->will( $this->returnValue( $createStruct ) );
 
-        $expectedStruct = clone $createStruct;
-        $expectedStruct->id = $aliasPath;
         $this->ioService
             ->expects( $this->once() )
-            ->method( 'createBinaryFile' )
-            ->with( $this->equalTo( $expectedStruct ) );
+            ->method( 'createBinaryFile' );
 
         $this->imageResolver->store( $binary, $path, $filter );
     }
@@ -231,6 +278,19 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
             ->method( 'getParameter' )
             ->with( 'image_variations' )
             ->will( $this->returnValue( $filters ) );
+
+        $this->variationPathGenerator
+            ->expects( $this->exactly( count( $filters ) ) )
+            ->method( 'getVariationPath' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg ' ),
+                        array( 'foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg ' ),
+                        array( 'foo/bar/test.jpg', 'chaud_cacao', 'foo/bar/test_chaud_cacao.jpg' ),
+                    )
+                )
+            );
 
         $fileToDelete = 'foo/bar/test_chaud_cacao.jpg';
         $this->ioService
@@ -252,6 +312,7 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
             ->method( 'loadBinaryFile' )
             ->with( $fileToDelete )
             ->will( $this->returnValue( $binaryFile ) );
+
         $this->ioService
             ->expects( $this->once() )
             ->method( 'deleteBinaryFile' )
@@ -271,6 +332,19 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
             ->with( 'image_variations' )
             ->will( $this->returnValue( array() ) );
 
+        $this->variationPathGenerator
+            ->expects( $this->exactly( count( $filters ) ) )
+            ->method( 'getVariationPath' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg ' ),
+                        array( 'foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg ' ),
+                        array( 'foo/bar/test.jpg', 'chaud_cacao', 'foo/bar/test_chaud_cacao.jpg' ),
+                    )
+                )
+            );
+
         $fileToDelete = 'foo/bar/test_chaud_cacao.jpg';
         $this->ioService
             ->expects( $this->exactly( count( $filters ) ) )
@@ -291,6 +365,7 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
             ->method( 'loadBinaryFile' )
             ->with( $fileToDelete )
             ->will( $this->returnValue( $binaryFile ) );
+
         $this->ioService
             ->expects( $this->once() )
             ->method( 'deleteBinaryFile' )
