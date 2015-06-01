@@ -592,6 +592,7 @@ class DoctrineDatabase extends Gateway
                 )
             )
         );
+        $q->orderBy( $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass' ) );
 
         $stmt = $q->prepare();
         $stmt->execute();
