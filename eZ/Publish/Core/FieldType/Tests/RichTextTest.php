@@ -18,6 +18,7 @@ use eZ\Publish\Core\FieldType\RichText\Validator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\FieldType\ValidationError;
 use Exception;
 use PHPUnit_Framework_TestCase;
 
@@ -33,15 +34,12 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     protected function getFieldType()
     {
         $fieldType = new RichTextType(
-            new ConverterDispatcher(array('http://docbook.org/ns/docbook' => null)),
-            new ValidatorDispatcher(
+            new ConverterDispatcher(array("http://docbook.org/ns/docbook" => null)),
+            new ValidatorDispatcher(array("http://docbook.org/ns/docbook" => null)),
+            new Validator(
                 array(
-                    'http://docbook.org/ns/docbook' => new Validator(
-                        array(
-                            $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
-                            $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
-                        )
-                    ),
+                    $this->getAbsolutePath("eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng"),
+                    $this->getAbsolutePath("eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl"),
                 )
             )
         );
@@ -107,14 +105,19 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     public static function providerForTestAcceptValueValidFormat()
     {
         return array(
-
             array(
-                $xml = '<?xml version="1.0" encoding="UTF-8"?>
+                '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
   <title>This is a heading.</title>
   <para>This is a paragraph.</para>
 </section>
 ',
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
+  <h1>This is not valid, but acceptValue() will not validate it.</h1>
+</section>'
             ),
         );
     }
@@ -132,26 +135,6 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     public static function providerForTestAcceptValueInvalidFormat()
     {
         return array(
-            array(
-                '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
-  <h1>This is a heading.</h1>
-</section>',
-                new InvalidArgumentException(
-                    '$inputValue',
-                    'Validation of XML content failed: Error in 3:0: Element section has extra content: h1'
-                ),
-            ),
-            array(
-                '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <title>This is a heading.</title>
-</section>',
-                new InvalidArgumentException(
-                    '$inputValue',
-                    "Validation of XML content failed: /*[local-name()='section' and namespace-uri()='http://docbook.org/ns/docbook']: The root element must have a version attribute."
-                ),
-            ),
             array(
                 'This is not XML at all!',
                 new InvalidArgumentException(
@@ -188,6 +171,57 @@ class RichTextTest extends PHPUnit_Framework_TestCase
                 'Unexpected exception thrown! ' . get_class($e) . ' thrown with message: ' . $e->getMessage()
             );
         }
+    }
+
+    public function providerForTestValidate()
+    {
+        return array(
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
+  <h1>This is a heading.</h1>
+</section>',
+                array(
+                    new ValidationError(
+                        "Validation of XML content failed:\n" .
+                        "Error in 3:0: Element section has extra content: h1"
+                    )
+                ),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>This is a heading.</title>
+</section>',
+                array(
+                    new ValidationError(
+                        "Validation of XML content failed:\n" .
+                        "/*[local-name()='section' and namespace-uri()='http://docbook.org/ns/docbook']: The root element must have a version attribute."
+                    )
+                ),
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider providerForTestValidate
+     *
+     * @param string $xmlString
+     * @param array $expectedValidationErrors
+     */
+    public function testValidate($xmlString, array $expectedValidationErrors)
+    {
+        $fieldType = $this->getFieldType();
+        $value = new Value($xmlString);
+
+        /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit_Framework_MockObject_MockObject $fieldDefinitionMock */
+        $fieldDefinitionMock = $this->getMock(
+            "eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition"
+        );
+
+        $validationErrors = $fieldType->validate($fieldDefinitionMock, $value);
+
+        $this->assertEquals($expectedValidationErrors, $validationErrors);
     }
 
     /**

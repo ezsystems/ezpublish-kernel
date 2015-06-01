@@ -243,11 +243,11 @@ services:
         class: %ezpublish.fieldType.ezrichtext.validator.xml.class%
         arguments: [%ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5.resources%]
 
-    ezpublish.fieldType.ezrichtext.validator.dispatcher:
+    ezpublish.fieldType.ezrichtext.validator.input.dispatcher:
         class: %ezpublish.fieldType.ezrichtext.validator.dispatcher.class%
         arguments:
             -
-                http://docbook.org/ns/docbook: @ezpublish.fieldType.ezrichtext.validator.docbook
+                http://docbook.org/ns/docbook: null
                 http://ez.no/namespaces/ezpublish5/xhtml5/edit: null
                 http://ez.no/namespaces/ezpublish5/xhtml5: @ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5
 
