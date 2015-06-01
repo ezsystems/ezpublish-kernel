@@ -420,6 +420,22 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
         );
     }
 
+    /**
+     * BinaryFile field type is not searchable with Field criterion
+     * and sort clause in Legacy search engine
+     */
+    public function testCreateTestContent()
+    {
+        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
+        {
+            $this->markTestSkipped(
+                "BinaryFile field type is not searchable with Field criterion and sort clause in Legacy search engine"
+            );
+        }
+
+        return parent::testCreateTestContent();
+    }
+
     protected function getValidSearchValueTwo()
     {
         return new BinaryFileValue(
@@ -443,192 +459,19 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
         return $value->fileName;
     }
 
-    /**
-     * Redefined here in order to execute before tests with modified fields below,
-     * which depend on it for the returned value.
-     */
-    public function testCreateTestContent()
+    protected function getAdditionallyIndexedFieldData()
     {
-        if ( ltrim( get_class( $this->getSetupFactory() ), '\\' ) === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy' )
-        {
-            $this->markTestSkipped(
-                "BinaryFile field type is not searchable with Field criterion and sort clause in Legacy search engine"
-            );
-        }
-
-        return parent::testCreateTestContent();
-    }
-
-    public function criteriaProviderModifiedFieldMimeType()
-    {
-        return $this->provideCriteria( "image/jpeg", "image/png" );
-    }
-
-    /**
-     * Tests Content Search filtering with Field criterion on the alternative text modified field
-     *
-     * @dataProvider criteriaProviderModifiedFieldMimeType
-     * @depends testCreateTestContent
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param boolean $includesOne
-     * @param boolean $includesTwo
-     * @param array $context
-     */
-    public function testFilterContentModifiedFieldMimeType(
-        Criterion $criterion,
-        $includesOne,
-        $includesTwo,
-        array $context
-    )
-    {
-        $this->assertFilterContentModifiedField(
-            $criterion,
-            $includesOne,
-            $includesTwo,
-            $context,
-            true,
-            "mime_type"
-        );
-    }
-
-    /**
-     * Tests Content Search querying with Field criterion on the alternative text modified field
-     *
-     * @dataProvider criteriaProviderModifiedFieldMimeType
-     * @depends testCreateTestContent
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param boolean $includesOne
-     * @param boolean $includesTwo
-     * @param array $context
-     */
-    public function testQueryContentModifiedFieldMimeType(
-        Criterion $criterion,
-        $includesOne,
-        $includesTwo,
-        array $context
-    )
-    {
-        $this->assertFilterContentModifiedField(
-            $criterion,
-            $includesOne,
-            $includesTwo,
-            $context,
-            false,
-            "mime_type"
-        );
-    }
-
-    public function criteriaProviderModifiedFieldFileSize()
-    {
-        $valueOne = $this->getValidSearchValueOne();
-        $valueTwo = $this->getValidSearchValueTwo();
-
-        return $this->provideCriteria( $valueOne->fileSize, $valueTwo->fileSize );
-    }
-
-    /**
-     * Tests Content Search filtering with Field criterion on the file size modified field
-     *
-     * @dataProvider criteriaProviderModifiedFieldFileSize
-     * @depends testCreateTestContent
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param boolean $includesOne
-     * @param boolean $includesTwo
-     * @param array $context
-     */
-    public function testFilterContentModifiedFieldFileSize(
-        Criterion $criterion,
-        $includesOne,
-        $includesTwo,
-        array $context
-    )
-    {
-        $this->assertFilterContentModifiedField(
-            $criterion,
-            $includesOne,
-            $includesTwo,
-            $context,
-            true,
-            "file_size"
-        );
-    }
-
-    /**
-     * Tests Content Search querying with Field criterion on the file size modified field
-     *
-     * @dataProvider criteriaProviderModifiedFieldFileSize
-     * @depends testCreateTestContent
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
-     * @param boolean $includesOne
-     * @param boolean $includesTwo
-     * @param array $context
-     */
-    public function testQueryContentModifiedFieldFileSize(
-        Criterion $criterion,
-        $includesOne,
-        $includesTwo,
-        array $context
-    )
-    {
-        $this->assertFilterContentModifiedField(
-            $criterion,
-            $includesOne,
-            $includesTwo,
-            $context,
-            false,
-            "file_size"
-        );
-    }
-
-    /**
-     * Tests Content Search sort with Field sort clause on the alternative text modified field
-     *
-     * @dataProvider sortClauseProvider
-     * @depends testCreateTestContent
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause
-     * @param boolean $ascending
-     * @param array $context
-     */
-    public function testSortContentModifiedFieldMimeType(
-        SortClause $sortClause,
-        $ascending,
-        array $context
-    )
-    {
-        $this->assertSortContentModifiedField(
-            $sortClause,
-            $ascending,
-            $context,
-            "mime_type"
-        );
-    }
-
-    /**
-     * Tests Content Search sort with Field sort clause on the file size modified field
-     *
-     * @dataProvider sortClauseProvider
-     * @depends testCreateTestContent
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause
-     * @param boolean $ascending
-     * @param array $context
-     */
-    public function testSortContentModifiedFieldFieldSize(
-        SortClause $sortClause,
-        $ascending,
-        array $context
-    )
-    {
-        $this->assertSortContentModifiedField(
-            $sortClause,
-            $ascending,
-            $context,
-            "file_size"
+        return array(
+            array(
+                "file_size",
+                $this->getValidSearchValueOne()->fileSize,
+                $this->getValidSearchValueTwo()->fileSize,
+            ),
+            array(
+                "mime_type",
+                "image/jpeg",
+                "image/png",
+            ),
         );
     }
 }
