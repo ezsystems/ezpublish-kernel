@@ -34,14 +34,14 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     protected function getFieldType()
     {
         $fieldType = new RichTextType(
-            new ConverterDispatcher(array("http://docbook.org/ns/docbook" => null)),
-            new ValidatorDispatcher(array("http://docbook.org/ns/docbook" => null)),
             new Validator(
                 array(
                     $this->getAbsolutePath("eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng"),
                     $this->getAbsolutePath("eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl"),
                 )
-            )
+            ),
+            new ConverterDispatcher(array("http://docbook.org/ns/docbook" => null)),
+            new ValidatorDispatcher(array("http://docbook.org/ns/docbook" => null))
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 

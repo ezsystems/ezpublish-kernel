@@ -395,9 +395,9 @@ services:
         class: %ezpublish.fieldType.ezrichtext.class%
         parent: ezpublish.fieldType
         arguments:
+            - @ezpublish.fieldType.ezrichtext.validator.docbook
             - @ezpublish.fieldType.ezrichtext.converter.input.dispatcher
             - @ezpublish.fieldType.ezrichtext.validator.input.dispatcher
-            - @ezpublish.fieldType.ezrichtext.validator.docbook
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
 
