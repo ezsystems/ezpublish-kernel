@@ -197,9 +197,9 @@ services:
 
     ezpublish.image_alias.variation_purger:
         # < platform 2015.05
-        alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file
+        # alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file
         # >= platform 2015.05
-        # alias: ezpublish.image_alias.variation_purger.io
+        alias: ezpublish.image_alias.variation_purger.io
 
     ezpublish.image_alias.variation_purger.io:
         class: %ezpublish.image_alias.variation_purger.io.class%
@@ -232,13 +232,12 @@ services:
 
     ezpublish.image_alias.variation_path_generator:
         # < platform 2015.05
-        alias: ezpublish.image_alias.variation_path_generator.original_directory
+        # alias: ezpublish.image_alias.variation_path_generator.original_directory
         # >= platform 2015.05
-        # alias: ezpublish.image_alias.variation_path_generator.alias_directory
+        alias: ezpublish.image_alias.variation_path_generator.alias_directory
 
     ezpublish.image_alias.variation_path_generator.original_directory:
         class: %ezpubish.image_alias.variation_path_generator.original_directory.class%
 
     ezpublish.image_alias.variation_path_generator.alias_directory:
         class: %ezpubish.image_alias.variation_path_generator.alias_directory.class%
-
