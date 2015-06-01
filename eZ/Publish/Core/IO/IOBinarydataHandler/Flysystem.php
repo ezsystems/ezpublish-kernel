@@ -111,4 +111,9 @@ class Flysystem implements IOBinaryDataHandler
             return ltrim( $binaryFileUri, '/' );
 
     }
+
+    public function deleteDirectory( $spiPath )
+    {
+        $this->filesystem->deleteDir( $spiPath );
+    }
 }

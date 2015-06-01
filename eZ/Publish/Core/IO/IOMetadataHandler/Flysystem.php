@@ -17,7 +17,7 @@ use League\Flysystem\FilesystemInterface;
 
 class Flysystem implements IOMetadataHandler
 {
-    /** @var  FilesystemInterface */
+    /** @var FilesystemInterface */
     private $filesystem;
 
     public function __construct( FilesystemInterface $filesystem )
@@ -71,5 +71,10 @@ class Flysystem implements IOMetadataHandler
     public function getMimeType( $spiBinaryFileId )
     {
         return $this->filesystem->getMimetype( $spiBinaryFileId );
+    }
+
+    public function deleteDirectory( $spiPath )
+    {
+        $this->filesystem->deleteDir( $spiPath );
     }
 }

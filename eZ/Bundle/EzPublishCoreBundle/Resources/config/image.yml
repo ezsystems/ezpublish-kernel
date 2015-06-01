@@ -26,6 +26,13 @@ parameters:
     ezpublish.image_alias.imagine.filter.swirl.imagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Imagick\SwirlFilter
     ezpublish.image_alias.imagine.filter.swirl.gmagick.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Gmagick\SwirlFilter
 
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileRowReader
+    ezpublish.image_alias.variation_purger.io.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IOVariationPurger
+    ezpubish.image_alias.variation_path_generator.original_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\OriginalDirectoryVariationPathGenerator
+    ezpubish.image_alias.variation_path_generator.alias_directory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\AliasDirectoryVariationPathGenerator
+
 services:
     # Filters
     ezpublish.image_alias.imagine.filter.unsupported:
@@ -65,7 +72,12 @@ services:
 
     ezpublish.image_alias.imagine.cache_resolver:
         class: %ezpublish.image_alias.imagine.cache_resolver.class%
-        arguments: [@ezpublish.fieldType.ezimage.io_service, @router.request_context, @liip_imagine.filter.configuration]
+        arguments:
+            - @ezpublish.fieldType.ezimage.io_service
+            - @router.request_context
+            - @liip_imagine.filter.configuration
+            - @ezpublish.image_alias.variation_purger
+            - @ezpublish.image_alias.variation_path_generator.alias_directory
         tags:
             - { name: liip_imagine.cache.resolver, resolver: ezpublish }
 
@@ -182,3 +194,47 @@ services:
         public: false
         tags:
             - { name: liip_imagine.filter.loader, loader: "colorspace/gray" }
+
+    ezpublish.image_alias.variation_purger:
+        # < platform 2015.05
+        alias: ezpublish.image_alias.variation_purger.legacy_storage_image_file
+        # >= platform 2015.05
+        # alias: ezpublish.image_alias.variation_purger.io
+
+    ezpublish.image_alias.variation_purger.io:
+        class: %ezpublish.image_alias.variation_purger.io.class%
+        arguments: [@ezpublish.fieldType.ezimage.io_service]
+
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file:
+        class: %ezpublish.image_alias.variation_purger.legacy_storage_image_file.class%
+        arguments:
+            - @ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list
+            - @ezpublish.fieldType.ezimage.io_service
+            - @ezpublish.image_alias.variation_path_generator.original_directory
+        calls:
+            - [setLogger, [@?logger]]
+
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list:
+        class: %ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_list.class%
+        arguments:
+            - @ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader
+            - $io.legacy_url_prefix$
+            - $image.published_images_dir$
+
+    ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader:
+        class: %ezpublish.image_alias.variation_purger.legacy_storage_image_file.image_file_row_reader.class%
+        arguments:
+            - @ezpublish.api.storage_engine.legacy.dbhandler
+
+    ezpublish.image_alias.variation_path_generator:
+        # < platform 2015.05
+        alias: ezpublish.image_alias.variation_path_generator.original_directory
+        # >= platform 2015.05
+        alias: ezpublish.image_alias.variation_path_generator.alias_directory
+
+    ezpublish.image_alias.variation_path_generator.original_directory:
+        class: %ezpubish.image_alias.variation_path_generator.original_directory.class%
+
+    ezpublish.image_alias.variation_path_generator.alias_directory:
+        class: %ezpubish.image_alias.variation_path_generator.alias_directory.class%
+
