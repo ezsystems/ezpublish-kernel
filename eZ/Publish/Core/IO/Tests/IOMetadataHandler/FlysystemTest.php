@@ -62,6 +62,7 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
+        $this->filesystem->expects( $this->never() )->method( 'delete' );
         $this->handler->delete( 'prefix/my/file.png' );
     }
 
@@ -136,5 +137,11 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( 'text/plain' ) );
 
         self::assertEquals( 'text/plain', $this->handler->getMimeType( 'file.txt' ) );
+    }
+
+    public function testDeleteDirectory()
+    {
+        $this->filesystem->expects( $this->never() )->method( 'deleteDir' );
+        $this->handler->deleteDirectory( 'some/path' );
     }
 }
