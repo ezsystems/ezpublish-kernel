@@ -15,12 +15,41 @@ use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\REST\Server\Values\RestViewInput;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as LogicalAndCriterion;
+use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Parser for ViewInput
  */
 class ViewInput extends CriterionParser
 {
+    /**
+     * Location service
+     *
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
+     * Parser tools
+     *
+     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     */
+    protected $parserTools;
+
+    /**
+     * Construct
+     *
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     */
+    public function __construct( LocationService $locationService, ParserTools $parserTools )
+    {
+        $this->locationService = $locationService;
+        $this->parserTools = $parserTools;
+    }
+
     /**
      * Parses input structure to a RestViewInput struct
      *
@@ -86,8 +115,24 @@ class ViewInput extends CriterionParser
         // SortClauses
         // -- SortClause
         // ---- SortField
-        if ( array_key_exists( 'SortClauses', $queryData ) )
+        // ---- SortOrder
+        if ( array_key_exists( 'SortClauses', $queryData ) && is_array( $queryData['SortClauses'] ) )
         {
+             foreach ( $queryData['SortClauses'] as $sortClause )
+             {
+                 if ( array_key_exists( 'SortField', $sortClause ) )
+                 {
+                     $sortField = $this->parserTools->parseDefaultSortField( $sortClause['SortField'] );
+
+                     $sortOrder = Location::SORT_ORDER_ASC;
+                     if ( array_key_exists( 'SortOrder', $sortClause ) )
+                     {
+                         $sortOrder = $this->parserTools->parseDefaultSortOrder( $sortClause['SortOrder'] );
+                     }
+
+                     $query->sortClauses[] = $this->locationService->getSortClauseBySortField( $sortField, $sortOrder );
+                 }
+             }
         }
 
         // FacetBuilders

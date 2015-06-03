@@ -2169,6 +2169,7 @@ Perform a query on images withing the media section, sorted by name, limiting re
         <SortClauses>
           <SortClause>
             <SortField>NAME</SortField>
+            <SortOrder>DESC</SortOrder>
           </SortClause>
         </SortClauses>
         <FacetBuilders>

@@ -359,4 +359,17 @@ class LocationService implements APILocationService, Sessionable
     {
         throw new \Exception( "@todo: Implement." );
     }
+
+    /**
+     * Instantiates a correct sort clause object based on provided location sort field and sort order
+     *
+     * @param int $sortField
+     * @param int $sortOrder
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     */
+    public function getSortClauseBySortField( $sortField, $sortOrder = Location::SORT_ORDER_ASC )
+    {
+        throw new \Exception( "@todo: Implement." );
+    }
 }
