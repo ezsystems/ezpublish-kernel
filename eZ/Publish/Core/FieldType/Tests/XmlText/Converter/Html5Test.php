@@ -344,21 +344,21 @@ class Html5Test extends PHPUnit_Framework_TestCase
 
         $convertedDocument = $this->createDocument( $result, false );
 
-        $aux = '<a name="eztoc_1_1" id="eztoc_1_1"></a><h2>Heading 2</h2>
-<a name="eztoc_1_2" id="eztoc_1_2"></a><h2>Heading 2</h2>
-<a name="eztoc_1_3_1" id="eztoc_1_3_1"></a><h3>Heading 3</h3>
+        $aux = '<a id="eztoc_1_1"></a><h2>Heading 2</h2>
+<a id="eztoc_1_2"></a><h2>Heading 2</h2>
+<a id="eztoc_1_3_1"></a><h3>Heading 3</h3>
 <table class="class1" border="1" cellpadding="2" cellspacing="0" width="100%" style="width:100%;" summary="summary1">
 <tr>
 <td valign="top" style="vertical-align: top;">
-<a name="eztoc_1_3_1_1" id="eztoc_1_3_1_1"></a><h2>Heading 2</h2>
-<a name="eztoc_1_3_1_2" id="eztoc_1_3_1_2"></a><h2>Heading 2</h2>
-<a name="eztoc_1_3_1_3_1" id="eztoc_1_3_1_3_1"></a><h3>Heading 3</h3>
-<a name="eztoc_1_3_1_3_2" id="eztoc_1_3_1_3_2"></a><h3>Heading 3</h3>
+<a id="eztoc_1_3_1_1"></a><h2>Heading 2</h2>
+<a id="eztoc_1_3_1_2"></a><h2>Heading 2</h2>
+<a id="eztoc_1_3_1_3_1"></a><h3>Heading 3</h3>
+<a id="eztoc_1_3_1_3_2"></a><h3>Heading 3</h3>
 <table class="class2" border="1" cellpadding="2" cellspacing="0" width="100%" style="width:100%;" summary="summary2">
 <tr>
 <td valign="top" style="vertical-align: top;">
-<a name="eztoc_1_3_1_1" id="eztoc_1_3_1_1"></a><h2>Heading 2</h2>
-<a name="eztoc_1_3_1_2_1" id="eztoc_1_3_1_2_1"></a><h3>Heading 3</h3>
+<a id="eztoc_1_3_1_1"></a><h2>Heading 2</h2>
+<a id="eztoc_1_3_1_2_1"></a><h3>Heading 3</h3>
 </td>
 </tr>
 </table>
