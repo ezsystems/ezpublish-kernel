@@ -79,10 +79,12 @@ class ComplexSettingsPass implements CompilerPassInterface
             array( $argumentValue )
         );
 
-        $definition->setFactoryClass(
-            'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory'
+        $definition->setFactory(
+            [
+                'eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory',
+                'getArgumentValue'
+            ]
         );
-        $definition->setFactoryMethod( 'getArgumentValue' );
         foreach ( $dynamicSettings as $dynamicSetting )
         {
             // Trim the '$'  so that the dynamic setting doesn't get transformed

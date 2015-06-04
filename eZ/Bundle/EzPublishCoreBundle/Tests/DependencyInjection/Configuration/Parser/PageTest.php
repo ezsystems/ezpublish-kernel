@@ -26,7 +26,7 @@ class PageTest extends AbstractParserTestCase
 
     protected function getMinimalConfiguration()
     {
-        return $this->config = Yaml::parse( __DIR__ . '/../../Fixtures/ezpublish_page.yml' );
+        return $this->config = Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_page.yml' ) );
     }
 
     public function testDefaultPageConfig()

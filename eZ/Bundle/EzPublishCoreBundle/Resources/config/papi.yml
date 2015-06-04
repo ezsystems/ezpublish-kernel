@@ -38,8 +38,7 @@ services:
     # Use ezpublish.api.repository lazy service instead
     ezpublish.api.repository.lazy:
         class: Closure
-        factory_service: ezpublish.api.repository.lazy_factory
-        factory_method: buildRepository
+        factory: ["@ezpublish.api.repository.lazy_factory", buildRepository]
 
     ezpublish.api.storage_engine.factory:
         class: %ezpublish.api.storage_engine.factory.class%
@@ -52,8 +51,7 @@ services:
 
     ezpublish.api.storage_engine:
         class: %ezpublish.api.storage_engine.class%
-        factory_service: ezpublish.api.storage_engine.factory
-        factory_method: buildStorageEngine
+        factory: ["@ezpublish.api.storage_engine.factory", buildStorageEngine]
         public: false
 
     ezpublish.api.search_engine.factory:

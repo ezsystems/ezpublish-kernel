@@ -28,7 +28,7 @@ class ViewTest extends AbstractParserTestCase
 
     protected function getMinimalConfiguration()
     {
-        return $this->config = Yaml::parse( __DIR__ . '/../../Fixtures/ezpublish_view.yml' );
+        return $this->config = Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_view.yml' ) );
     }
 
     public function testLocationView()

@@ -31,7 +31,6 @@ services:
     ezpublish.siteaccess:
         class: %ezpublish.siteaccess.class%
         arguments: [%ezpublish.siteaccess.default.name%]
-        synchronized: true
 
     ezpublish.config.resolver.core:
         class: %ezpublish.config.resolver.dynamic.class%

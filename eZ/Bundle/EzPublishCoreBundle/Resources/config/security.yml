@@ -43,7 +43,8 @@ services:
             - @ezpublish.api.repository
             - @ezpublish.config.resolver
             - @event_dispatcher
-            - @security.context
+            - @security.token_storage
+            - @security.authorization_checker
             - %fragment.path%
         tags:
             - { name: kernel.event_subscriber }

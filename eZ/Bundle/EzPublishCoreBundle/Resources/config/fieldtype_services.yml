@@ -87,8 +87,7 @@ services:
 
     ezpublish.fieldType.ezpage.pageService:
         class: %ezpublish.fieldType.ezpage.pageService.class%
-        factory_service: ezpublish.fieldType.ezpage.pageService.factory
-        factory_method: buildService
+        factory: ["@ezpublish.fieldType.ezpage.pageService.factory", buildService]
         arguments:
             - %ezpublish.fieldType.ezpage.pageService.class%
             - @ezpublish.config.resolver

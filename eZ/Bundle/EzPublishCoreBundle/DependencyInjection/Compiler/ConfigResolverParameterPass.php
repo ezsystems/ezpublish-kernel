@@ -159,9 +159,10 @@ class ConfigResolverParameterPass implements CompilerPassInterface
     {
         $paramConverter = new Definition( 'stdClass', $configResolverArgs );
         $paramConverter
-            ->setFactoryService( 'ezpublish.config.resolver' )
-            ->setFactoryMethod( 'getParameter' )
-            ->setSynchronized( true );
+            ->setFactory( [ new Reference( 'ezpublish.config.resolver' ), 'getParameter' ] )
+            // @deprecated Synchronized services are deprecated in Symfony 2.7 in favour of RequestStack
+            // see: https://github.com/symfony/symfony/pull/13289
+            ->setSynchronized( true, false );
 
         $serviceId = 'ezpublish.config_resolver.fake.' . implode( '_', $configResolverArgs );
         if ( !$container->hasDefinition( $serviceId ) )

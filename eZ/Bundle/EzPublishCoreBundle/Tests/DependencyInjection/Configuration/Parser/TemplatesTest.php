@@ -29,7 +29,7 @@ class TemplatesTest extends AbstractParserTestCase
 
     protected function getMinimalConfiguration()
     {
-        return $this->config = Yaml::parse( __DIR__ . '/../../Fixtures/ezpublish_templates.yml' );
+        return $this->config = Yaml::parse( file_get_contents( __DIR__ . '/../../Fixtures/ezpublish_templates.yml' ) );
     }
 
     public function testFieldTemplates()

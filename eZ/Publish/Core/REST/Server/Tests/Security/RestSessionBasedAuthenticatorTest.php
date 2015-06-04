@@ -24,7 +24,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $securityContext;
+    private $tokenStorage;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -59,14 +59,14 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->securityContext = $this->getMock( 'Symfony\Component\Security\Core\SecurityContextInterface' );
+        $this->tokenStorage = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface' );
         $this->authenticationManager = $this->getMock( 'Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface' );
         $this->eventDispatcher = $this->getMock( 'Symfony\Component\EventDispatcher\EventDispatcherInterface' );
         $this->configResolver = $this->getMock( 'eZ\Publish\Core\MVC\ConfigResolverInterface' );
         $this->sessionStorage = $this->getMock( 'Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface' );
         $this->logger = $this->getMock( 'Psr\Log\LoggerInterface' );
         $this->authenticator = new RestAuthenticator(
-            $this->securityContext,
+            $this->tokenStorage,
             $this->authenticationManager,
             self::PROVIDER_KEY,
             $this->eventDispatcher,
@@ -82,7 +82,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $password = 'publish';
 
         $existingToken = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->once() )
             ->method( 'getToken' )
             ->will( $this->returnValue( $existingToken ) );
@@ -112,7 +112,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $password = 'publish';
 
         $existingToken = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->once() )
             ->method( 'getToken' )
             ->will( $this->returnValue( $existingToken ) );
@@ -169,7 +169,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( $usernamePasswordToken ) )
             ->will( $this->returnValue( $authenticatedToken ) );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->once() )
             ->method( 'setToken' )
             ->with( $authenticatedToken );
@@ -182,7 +182,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
             );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->exactly( 2 ) )
             ->method( 'getToken' )
             ->will(
@@ -263,19 +263,19 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
             );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 0 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $existingToken ) );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 1 ) )
             ->method( 'setToken' )
             ->with( $authenticatedToken );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 2 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $authenticatedToken ) );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 3 ) )
             ->method( 'setToken' )
             ->with( $existingToken );
@@ -338,15 +338,15 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
             );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 0 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $existingToken ) );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 1 ) )
             ->method( 'setToken' )
             ->with( $authenticatedToken );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 2 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $authenticatedToken ) );
@@ -400,15 +400,15 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
             );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 0 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $existingToken ) );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 1 ) )
             ->method( 'setToken' )
             ->with( $authenticatedToken );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 2 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $authenticatedToken ) );
@@ -464,15 +464,15 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
             );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 0 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $existingToken ) );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 1 ) )
             ->method( 'setToken' )
             ->with( $authenticatedToken );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 2 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $authenticatedToken ) );
@@ -520,15 +520,15 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( new InteractiveLoginEvent( $request, $authenticatedToken ) )
             );
 
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 0 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $existingToken ) );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 1 ) )
             ->method( 'setToken' )
             ->with( $authenticatedToken );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->at( 2 ) )
             ->method( 'getToken' )
             ->will( $this->returnValue( $authenticatedToken ) );
@@ -550,7 +550,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
             ->method( 'logout' );
 
         $token = $this->getMock( 'Symfony\Component\Security\Core\Authentication\Token\TokenInterface' );
-        $this->securityContext
+        $this->tokenStorage
             ->expects( $this->once() )
             ->method( 'getToken' )
             ->will( $this->returnValue( $token ) );

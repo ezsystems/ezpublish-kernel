@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Templating\EngineInterface;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -36,9 +36,9 @@ class Renderer implements RendererInterface
     protected $repository;
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
      */
-    private $securityContext;
+    private $authorizationChecker;
 
     /**
      * @var string
@@ -67,7 +67,7 @@ class Renderer implements RendererInterface
 
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \Symfony\Component\Security\Core\SecurityContextInterface $securityContext
+     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \Symfony\Component\Templating\EngineInterface $templateEngine
      * @param string $tagConfigurationNamespace
@@ -76,7 +76,7 @@ class Renderer implements RendererInterface
      */
     public function __construct(
         Repository $repository,
-        SecurityContextInterface $securityContext,
+        AuthorizationCheckerInterface $authorizationChecker,
         ConfigResolverInterface $configResolver,
         EngineInterface $templateEngine,
         $tagConfigurationNamespace,
@@ -85,7 +85,7 @@ class Renderer implements RendererInterface
     )
     {
         $this->repository = $repository;
-        $this->securityContext = $securityContext;
+        $this->authorizationChecker = $authorizationChecker;
         $this->configResolver = $configResolver;
         $this->templateEngine = $templateEngine;
         $this->tagConfigurationNamespace = $tagConfigurationNamespace;
@@ -427,10 +427,10 @@ class Renderer implements RendererInterface
 
         // Check both 'content/read' and 'content/view_embed'.
         if (
-            !$this->securityContext->isGranted(
+            !$this->authorizationChecker->isGranted(
                 new AuthorizationAttribute( 'content', 'read', array( 'valueObject' => $content ) )
             )
-            && !$this->securityContext->isGranted(
+            && !$this->authorizationChecker->isGranted(
                 new AuthorizationAttribute( 'content', 'view_embed', array( 'valueObject' => $content ) )
             )
         )
@@ -441,7 +441,7 @@ class Renderer implements RendererInterface
         // Check that Content is published, since sudo allows loading unpublished content.
         if (
             $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED
-            && !$this->securityContext->isGranted(
+            && !$this->authorizationChecker->isGranted(
                 new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) )
             )
         )
@@ -471,14 +471,14 @@ class Renderer implements RendererInterface
 
         // Check both 'content/read' and 'content/view_embed'.
         if (
-            !$this->securityContext->isGranted(
+            !$this->authorizationChecker->isGranted(
                 new AuthorizationAttribute(
                     'content',
                     'read',
                     array( 'valueObject' => $location->contentInfo, 'targets' => $location )
                 )
             )
-            && !$this->securityContext->isGranted(
+            && !$this->authorizationChecker->isGranted(
                 new AuthorizationAttribute(
                     'content',
                     'view_embed',

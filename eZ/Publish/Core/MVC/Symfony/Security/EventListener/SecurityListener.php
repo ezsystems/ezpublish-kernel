@@ -26,7 +26,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent as BaseInteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -57,9 +58,14 @@ class SecurityListener implements EventSubscriberInterface
     protected $eventDispatcher;
 
     /**
-     * @var \Symfony\Component\Security\Core\SecurityContextInterface
+     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
      */
-    protected $securityContext;
+    protected $tokenStorage;
+
+    /**
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     */
+    protected $authorizationChecker;
 
     /**
      * The fragment path (for ESI/Hinclude...).
@@ -72,14 +78,16 @@ class SecurityListener implements EventSubscriberInterface
         Repository $repository,
         ConfigResolverInterface $configResolver,
         EventDispatcherInterface $eventDispatcher,
-        SecurityContextInterface $securityContext,
+        TokenStorageInterface $tokenStorage,
+        AuthorizationCheckerInterface $authorizationChecker,
         $fragmentPath = '/_fragment'
     )
     {
         $this->repository = $repository;
         $this->configResolver = $configResolver;
         $this->eventDispatcher = $eventDispatcher;
-        $this->securityContext = $securityContext;
+        $this->tokenStorage = $tokenStorage;
+        $this->authorizationChecker = $authorizationChecker;
         $this->fragmentPath = $fragmentPath;
     }
 
@@ -144,7 +152,7 @@ class SecurityListener implements EventSubscriberInterface
             $token->getRoles()
         );
         $interactiveToken->setAttributes( $token->getAttributes() );
-        $this->securityContext->setToken( $interactiveToken );
+        $this->tokenStorage->setToken( $interactiveToken );
     }
 
     /**
@@ -207,7 +215,7 @@ class SecurityListener implements EventSubscriberInterface
             return;
         }
 
-        $token = $this->securityContext->getToken();
+        $token = $this->tokenStorage->getToken();
         if ( $token === null )
         {
             return;
@@ -254,6 +262,8 @@ class SecurityListener implements EventSubscriberInterface
      */
     protected function hasAccess( SiteAccess $siteAccess )
     {
-        return $this->securityContext->isGranted( new Attribute( 'user', 'login', array( 'valueObject' => $siteAccess ) ) );
+        return $this->authorizationChecker->isGranted(
+            new Attribute( 'user', 'login', ['valueObject' => $siteAccess] )
+        );
     }
 }

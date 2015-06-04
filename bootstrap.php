@@ -9,9 +9,6 @@
  * @version //autogentag//
  */
 
-// Silencing deprecation errors from Symfony 2.7
-error_reporting( error_reporting() & ~E_USER_DEPRECATED );
-
 // Get global config.php settings
 if ( !file_exists( __DIR__ . '/config.php' ) )
 {
