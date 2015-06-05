@@ -6,14 +6,9 @@ Named queries are Content or Location Query objects that are predefined in the s
 
 They can be used in multiple ways:
 - From Twig templates, using a sub-request: `{{ render( controller( ez_query, {'identifier': 'latest_articles' ) ) }}`.
-- From php code, by getting the Query from a service.
-- From REST, by executing a predefined view / query.
+- From php code, by getting the Query from a a QueryType object.
 
 ## Components
-
-### REST
-
-All REST calls on `/content/views`.
 
 ### Query controller
 
@@ -30,11 +25,10 @@ Possible options, by order of priority
 
 ### Services
 
-A main `QueryService` / `ezplatform.query_service`, with methods to load queries by name (identifier).
+Automatically generated services, per query: `ezplatform.query.latest_articles`. Note that this would confict with
+the namespacing concern mentioned below.
 
-Automatically generated services, per query: `ezplatform.query.latest_articles`
-
-## Persistence of views/queries
+## Defining QueryType objects
 
 ### Code
 
@@ -63,7 +57,7 @@ all issues, would it not ?
 
 ### Expression language
 
-It could be used as a shortcut to get the Query itself, optionallyt
+It could be used as a shortcut to get the Query itself, optionally.
 
 ### Query types
 
