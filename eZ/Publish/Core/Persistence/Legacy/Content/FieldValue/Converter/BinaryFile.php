@@ -77,7 +77,7 @@ class BinaryFile implements Converter
                     'FileSizeValidator' => array(
                         'maxFileSize' => ( $storageDef->dataInt1 != 0
                             ? $storageDef->dataInt1
-                            : false ),
+                            : null ),
                     )
                 )
             )

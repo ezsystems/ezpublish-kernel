@@ -29,7 +29,7 @@ abstract class Type extends FieldType
         "FileSizeValidator" => array(
             'maxFileSize' => array(
                 'type' => 'int',
-                'default' => false,
+                'default' => null,
             )
         )
     );
@@ -347,7 +347,7 @@ abstract class Type extends FieldType
             switch ( $validatorIdentifier )
             {
                 case 'FileSizeValidator':
-                    if ( !isset( $parameters['maxFileSize'] ) )
+                    if ( !array_key_exists( 'maxFileSize', $parameters ) )
                     {
                         $validationErrors[] = new ValidationError(
                             "Validator %validator% expects parameter %parameter% to be set.",
@@ -360,7 +360,7 @@ abstract class Type extends FieldType
                         );
                         break;
                     }
-                    if ( !is_int( $parameters['maxFileSize'] ) && $parameters['maxFileSize'] !== false )
+                    if ( !is_int( $parameters['maxFileSize'] ) && $parameters['maxFileSize'] !== null )
                     {
                         $validationErrors[] = new ValidationError(
                             "Validator %validator% expects parameter %parameter% to be of %type%.",
