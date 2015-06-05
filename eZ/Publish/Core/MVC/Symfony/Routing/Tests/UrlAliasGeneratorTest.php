@@ -175,37 +175,6 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertSame( $expected, $this->urlAliasGenerator->doGenerate( $location, $parameters ) );
     }
 
-    /**
-     * @dataProvider providerTestDoGenerate
-     */
-    public function testDoGenerateWithSiteAccessParam( URLAlias $urlAlias, array $parameters, $expected )
-    {
-        $siteaccessName = 'foo';
-        $parameters += array( 'siteaccess' => $siteaccessName );
-        $languages = array( 'esl-ES', 'fre-FR', 'eng-GB' );
-        $this->configResolver
-            ->expects( $this->once() )
-            ->method( 'getParameter' )
-            ->with( 'languages', null, $siteaccessName )
-            ->will( $this->returnValue( $languages ) );
-
-        $location = new Location( array( 'id' => 123 ) );
-        $this->urlAliasService
-            ->expects( $this->exactly( 1 ) )
-            ->method( 'listLocationAliases' )
-            ->will(
-                $this->returnValueMap(
-                    array(
-                        array( $location, false, null, null, $languages, array( $urlAlias ) ),
-                    )
-                )
-            );
-
-        $this->urlAliasGenerator->setSiteAccess( new SiteAccess( 'test', 'fake', $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer' ) ) );
-
-        $this->assertSame( $expected, $this->urlAliasGenerator->doGenerate( $location, $parameters ) );
-    }
-
     public function providerTestDoGenerate()
     {
         return array(
@@ -223,6 +192,92 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
                 new URLAlias( array( 'path' => '/foo/bar' ) ),
                 array( 'some' => 'thing', 'truc' => 'muche' ),
                 '/foo/bar?some=thing&truc=muche'
+            ),
+        );
+    }
+
+    /**
+     * @dataProvider providerTestDoGenerateWithSiteaccess
+     */
+    public function testDoGenerateWithSiteAccessParam( URLAlias $urlAlias, array $parameters, $expected )
+    {
+        $siteaccessName = 'foo';
+        $parameters += array( 'siteaccess' => $siteaccessName );
+        $languages = array( 'esl-ES', 'fre-FR', 'eng-GB' );
+
+        $saRootLocations = array(
+            'foo' => 2,
+            'bar' => 100
+        );
+        $treeRootUrlAlias = array(
+            2 => new URLAlias( array( 'path' => '/' ) ),
+            100 => new URLAlias( array( 'path' => '/foo/bar' ) ),
+        );
+
+        $this->configResolver
+            ->expects( $this->any() )
+            ->method( 'getParameter' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( 'languages', null, 'foo', $languages ),
+                        array( 'languages', null, 'bar', $languages ),
+                        array( 'content.tree_root.location_id', null, 'foo', $saRootLocations['foo'] ),
+                        array( 'content.tree_root.location_id', null, 'bar', $saRootLocations['bar'] ),
+                    )
+                )
+            );
+
+        $location = new Location( array( 'id' => 123 ) );
+        $this->urlAliasService
+            ->expects( $this->exactly( 1 ) )
+            ->method( 'listLocationAliases' )
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array( $location, false, null, null, $languages, array( $urlAlias ) ),
+                    )
+                )
+            );
+
+        $this->locationService
+            ->expects( $this->once() )
+            ->method( 'loadLocation' )
+            ->will(
+                $this->returnCallback(
+                    function( $locationId ) {
+                        return new Location( array( 'id' => $locationId ) );
+                    }
+                )
+            );
+        $this->urlAliasService
+            ->expects( $this->exactly( 1 ) )
+            ->method( 'reverseLookup' )
+            ->will(
+                $this->returnCallback(
+                    function( $location ) use ( $treeRootUrlAlias ) {
+                        return $treeRootUrlAlias[$location->id];
+                    }
+                )
+            );
+
+        $this->urlAliasGenerator->setSiteAccess( new SiteAccess( 'test', 'fake', $this->getMock( 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer' ) ) );
+
+        $this->assertSame( $expected, $this->urlAliasGenerator->doGenerate( $location, $parameters ) );
+    }
+
+    public function providerTestDoGenerateWithSiteaccess()
+    {
+        return array(
+            array(
+                new URLAlias( array( 'path' => '/foo/bar' ) ),
+                array(),
+                '/foo/bar'
+            ),
+            array(
+                new URLAlias( array( 'path' => '/foo/bar/baz' ) ),
+                array( 'siteaccess' => 'bar' ),
+                '/baz'
             ),
         );
     }

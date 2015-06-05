@@ -74,17 +74,18 @@ class UrlAliasGenerator extends Generator
     public function doGenerate( $location, array $parameters )
     {
         $urlAliasService = $this->repository->getURLAliasService();
-        $siteaccess = isset( $parameters['siteaccess'] ) ? $parameters['siteaccess'] : null;
-        if ( $siteaccess )
+        if ( isset( $parameters['siteaccess'] ) )
         {
             // We generate for a different SiteAccess, so potentially in a different language.
-            $languages = $this->configResolver->getParameter( 'languages', null, $siteaccess );
+            $languages = $this->configResolver->getParameter( 'languages', null, $parameters['siteaccess'] );
             $urlAliases = $urlAliasService->listLocationAliases( $location, false, null, null, $languages );
-
+            // Use the target SiteAccess root location
+            $rootLocationId = $this->configResolver->getParameter( 'content.tree_root.location_id', null, $parameters['siteaccess'] );
             unset( $parameters['siteaccess'] );
         }
         else
         {
+            $rootLocationId = $this->rootLocationId;
             $urlAliases = $urlAliasService->listLocationAliases( $location, false );
         }
 
@@ -98,9 +99,9 @@ class UrlAliasGenerator extends Generator
         {
             $path = $urlAliases[0]->path;
             // Remove rootLocation's prefix if needed.
-            if ( $this->rootLocationId !== null )
+            if ( $rootLocationId !== null )
             {
-                $pathPrefix = $this->getPathPrefixByRootLocationId( $this->rootLocationId );
+                $pathPrefix = $this->getPathPrefixByRootLocationId( $rootLocationId );
                 // "/" cannot be considered as a path prefix since it's root, so we ignore it.
                 if ( $pathPrefix !== '/' && mb_stripos( $path, $pathPrefix ) === 0 )
                 {
@@ -110,16 +111,9 @@ class UrlAliasGenerator extends Generator
                 // This is most likely an error (from content edition or link generation logic).
                 else if ( $pathPrefix !== '/' && !$this->isUriPrefixExcluded( $path ) && $this->logger !== null )
                 {
-                    $this->logger->warning( "Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$this->rootLocationId" );
+                    $this->logger->warning( "Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$rootLocationId" );
                 }
             }
-        }
-        // Fallback to root location in language switcher
-        else if ( $siteaccess !== null && $this->rootLocationId !== null && $this->rootLocationId !== $location->id )
-        {
-            $locationService = $this->repository->getLocationService();
-            $location = $locationService->loadLocation( $this->rootLocationId );
-            return $this->doGenerate( $location, array( 'siteaccess' => $siteaccess ) );
         }
         else
         {
