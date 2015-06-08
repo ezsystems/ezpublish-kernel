@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
+use eZ\Publish\Core\REST\Common\Tests\AssertXmlTagTrait;
 use eZ\Publish\Core\REST\Server\Tests;
 
 use eZ\Publish\Core\REST\Common\Output\Generator;
@@ -16,6 +17,8 @@ use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 
 abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
 {
+     use AssertXmlTagTrait;
+
     /**
      * Visitor mock
      *

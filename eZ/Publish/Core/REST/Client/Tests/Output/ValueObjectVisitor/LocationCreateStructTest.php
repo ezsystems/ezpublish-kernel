@@ -60,7 +60,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationCreateElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'LocationCreate',
                 'children' => array(
@@ -82,7 +82,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationCreateAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'LocationCreate',
                 'attributes' => array(
@@ -104,7 +104,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsParentLocationElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ParentLocation'
             ),
@@ -123,7 +123,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsParentLocationAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ParentLocation',
                 'attributes' => array(
@@ -146,7 +146,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPriorityValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'priority',
                 'content'  => '0',
@@ -166,7 +166,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsHiddenValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'hidden',
                 'content'  => 'false',
@@ -186,7 +186,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSortFieldValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sortField',
                 'content'  => 'PATH',
@@ -206,7 +206,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSortOrderValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sortOrder',
                 'content'  => 'ASC',

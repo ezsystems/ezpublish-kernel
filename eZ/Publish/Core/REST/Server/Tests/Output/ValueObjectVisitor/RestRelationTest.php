@@ -95,7 +95,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRelationElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Relation',
                 'children' => array(
@@ -118,7 +118,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRelationAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Relation',
                 'attributes' => array(
@@ -139,7 +139,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSourceContentElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'SourceContent',
                 'attributes' => array(
@@ -160,7 +160,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDestinationContentElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'DestinationContent',
                 'attributes' => array(
@@ -181,7 +181,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSourceFieldDefinitionIdentifierElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'SourceFieldDefinitionIdentifier',
                 'content'  => 'relation_field',
@@ -199,7 +199,7 @@ class RestRelationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRelationTypeElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'RelationType',
                 'content'  => 'ATTRIBUTE',

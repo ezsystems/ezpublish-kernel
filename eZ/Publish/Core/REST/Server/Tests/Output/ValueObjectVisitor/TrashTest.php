@@ -55,7 +55,7 @@ class TrashTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsTrashElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Trash',
             ),
@@ -74,7 +74,7 @@ class TrashTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsTrashAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Trash',
                 'attributes' => array(

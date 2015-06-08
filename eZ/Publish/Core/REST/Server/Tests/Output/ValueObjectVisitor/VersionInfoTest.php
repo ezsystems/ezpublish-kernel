@@ -96,7 +96,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsVersionInfoChildren( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'VersionInfo',
                 'children' => array(
@@ -117,7 +117,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionInfoIdElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'id',
                 'content'  => '23',
@@ -135,7 +135,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionInfoVersionNoElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'versionNo',
                 'content'  => '5',
@@ -153,7 +153,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionInfoStatusElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'status',
                 'content'  => 'PUBLISHED',
@@ -171,7 +171,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionInfoCreationDateElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'creationDate',
                 'content'  => $this->creationDate->format( 'c' ),
@@ -189,7 +189,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionInfoModificationDateElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'modificationDate',
                 'content'  => $this->modificationDate->format( 'c' ),
@@ -207,7 +207,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionInfoInitialLanguageCodeElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'initialLanguageCode',
                 'content'  => 'eng-US',
@@ -225,7 +225,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionInfoLanguageCodesElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'languageCodes',
                 'content'  => 'eng-US,ger-DE',
@@ -243,7 +243,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionInfoNamesElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'names',
                 'children' => array(
@@ -264,7 +264,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
      */
     public function testVersionInfoContentElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Content',
                 'attributes' => array(

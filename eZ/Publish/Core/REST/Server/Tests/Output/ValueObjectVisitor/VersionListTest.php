@@ -71,7 +71,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsVersionListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'VersionList',
             ),
@@ -90,7 +90,7 @@ class VersionListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsVersionListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'VersionList',
                 'attributes' => array(

@@ -81,7 +81,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSessionElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Session',
                 'children' => array(
@@ -103,7 +103,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSessionAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Session',
                 'attributes' => array(
@@ -126,7 +126,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsNameValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'name',
                 'content' => 'sessionName',
@@ -146,7 +146,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdentifierValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'identifier',
                 'content' => 'sessionId',
@@ -166,7 +166,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsCsrfTokenValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'csrfToken',
                 'content' => 'csrfToken',
@@ -197,7 +197,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUserElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'User'
             ),
@@ -216,7 +216,7 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUserAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'User',
                 'attributes' => array(

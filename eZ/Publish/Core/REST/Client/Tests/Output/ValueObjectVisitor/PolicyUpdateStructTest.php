@@ -57,7 +57,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPolicyUpdateElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'PolicyUpdate',
                 'children' => array(
@@ -79,7 +79,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPolicyUpdateAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'PolicyUpdate',
                 'attributes' => array(
@@ -101,7 +101,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLimitationsElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'limitations'
             ),
@@ -120,7 +120,7 @@ class PolicyUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLimitationsAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'limitations',
                 'attributes' => array(

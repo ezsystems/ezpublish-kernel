@@ -7,9 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\REST\Server\Tests;
+namespace eZ\Publish\Core\REST\Common\Tests;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry;
+use eZ\Publish\Core\REST\Server\Tests\BaseTest;
 
 class FieldTypeProcessorRegistryTest extends BaseTest
 {

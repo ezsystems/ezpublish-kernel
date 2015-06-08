@@ -60,7 +60,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsErrorCode( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ErrorMessage',
                 'descendant' => array(
@@ -83,7 +83,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsErrorMessage( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ErrorMessage',
                 'descendant' => array(
@@ -106,7 +106,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsErrorDescription( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ErrorMessage',
                 'descendant' => array(
@@ -128,7 +128,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsExceptionAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ErrorMessage',
                 'attributes' => array(

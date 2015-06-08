@@ -93,7 +93,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsTrashItemElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'TrashItem',
                 'children' => array(
@@ -115,7 +115,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsTrashItemAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'TrashItem',
                 'attributes' => array(
@@ -138,7 +138,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'id',
                 'content'  => '42'
@@ -158,7 +158,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPriorityValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'priority',
                 'content'  => '0'
@@ -178,7 +178,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsHiddenValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'hidden',
                 'content'  => 'false'
@@ -198,7 +198,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsInvisibleValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'invisible',
                 'content'  => 'true'
@@ -218,7 +218,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRemoteIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'remoteId',
                 'content'  => 'remote-id'
@@ -238,7 +238,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsParentLocationElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ParentLocation'
             ),
@@ -257,7 +257,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsParentLocationAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ParentLocation',
                 'attributes' => array(
@@ -280,7 +280,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPathStringValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'pathString',
                 'content'  => '/1/2/21/42/'
@@ -300,7 +300,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDepthValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'depth',
                 'content'  => '3'
@@ -320,7 +320,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsChildCountValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'childCount',
                 'content'  => '0'
@@ -340,7 +340,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Content'
             ),
@@ -359,7 +359,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Content',
                 'attributes' => array(
@@ -382,7 +382,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSortFieldValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sortField',
                 'content'  => 'NAME'
@@ -402,7 +402,7 @@ class RestTrashItemTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSortOrderValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sortOrder',
                 'content'  => 'DESC'

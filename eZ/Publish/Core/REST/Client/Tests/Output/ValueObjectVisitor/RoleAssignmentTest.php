@@ -64,7 +64,7 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRoleElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Role'
             ),
@@ -83,7 +83,7 @@ class RoleAssignmentTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRoleElementAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Role',
                 'attributes' => array(

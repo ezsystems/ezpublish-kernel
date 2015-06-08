@@ -54,7 +54,7 @@ class ContentTypeInfoListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeInfoListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ContentTypeInfoList',
             ),
@@ -73,7 +73,7 @@ class ContentTypeInfoListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentTypeInfoListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ContentTypeInfoList',
                 'attributes' => array(
