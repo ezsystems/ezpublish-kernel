@@ -20,6 +20,7 @@ use eZ\Publish\Core\REST\Server\Values\NoContent;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Section controller
@@ -48,12 +49,12 @@ class Section extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\SectionList
      */
-    public function listSections()
+    public function listSections( Request $request )
     {
-        if ( $this->request->query->has( 'identifier' ) )
+        if ( $request->query->has( 'identifier' ) )
         {
             $sections = array(
-                $this->loadSectionByIdentifier()
+                $this->loadSectionByIdentifier( $request )
             );
         }
         else
@@ -61,7 +62,7 @@ class Section extends RestController
             $sections = $this->sectionService->loadSections();
         }
 
-        return new Values\SectionList( $sections, $this->request->getPathInfo() );
+        return new Values\SectionList( $sections, $request->getPathInfo() );
     }
 
     /**
@@ -69,11 +70,11 @@ class Section extends RestController
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function loadSectionByIdentifier()
+    public function loadSectionByIdentifier( Request $request )
     {
         return $this->sectionService->loadSectionByIdentifier(
             // GET variable
-            $this->request->query->get( 'identifier' )
+            $request->query->get( 'identifier' )
         );
     }
 
@@ -83,15 +84,15 @@ class Section extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedSection
      */
-    public function createSection()
+    public function createSection( Request $request )
     {
         try
         {
             $createdSection = $this->sectionService->createSection(
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                        $this->request->getContent()
+                        array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                        $request->getContent()
                     )
                 )
             );
@@ -128,12 +129,12 @@ class Section extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
-    public function updateSection( $sectionId )
+    public function updateSection( $sectionId, Request $request )
     {
         $createStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                $request->getContent()
             )
         );
 

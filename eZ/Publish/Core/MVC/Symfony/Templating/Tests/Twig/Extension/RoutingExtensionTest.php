@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator;
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig_Test_IntegrationTestCase;
 
 class RoutingExtensionTest extends Twig_Test_IntegrationTestCase
@@ -33,7 +34,10 @@ class RoutingExtensionTest extends Twig_Test_IntegrationTestCase
         $generator = new RouteReferenceGenerator(
             $this->getMock( 'Symfony\Component\EventDispatcher\EventDispatcherInterface' )
         );
-        $generator->setRequest( new Request() );
+        $request = new Request();
+        $requestStack = new RequestStack();
+        $requestStack->push( $request );
+        $generator->setRequestStack( $requestStack );
 
         return $generator;
     }

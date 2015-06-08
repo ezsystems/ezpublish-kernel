@@ -12,6 +12,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\Fragment;
 use eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentListenerFactory;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\UriSigner;
 use ReflectionObject;
 
@@ -26,9 +27,11 @@ class FragmentListenerFactoryTest extends PHPUnit_Framework_TestCase
         $uriSigner = new UriSigner( 'my_precious_secret' );
         $baseFragmentPath = '/_fragment';
         $request = Request::create( $requestUri );
+        $requestStack = new RequestStack();
+        $requestStack->push( $request );
 
         $factory = new FragmentListenerFactory();
-        $factory->setRequest( $request );
+        $factory->setRequestStack( $requestStack );
         $listener = $factory->buildFragmentListener( $uriSigner, $baseFragmentPath, $listenerClass );
         $this->assertInstanceOf( $listenerClass, $listener );
 

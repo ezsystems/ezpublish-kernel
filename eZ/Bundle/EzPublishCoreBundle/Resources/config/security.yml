@@ -34,8 +34,6 @@ services:
     ezpublish.security.controller:
         class: %ezpublish.security.controller.class%
         arguments: [@templating, @ezpublish.config.resolver, @?form.csrf_provider]
-        calls:
-            - [setRequest, [@?request=]]
 
     ezpublish.security.login_listener:
         class: %ezpublish.security.login_listener.class%

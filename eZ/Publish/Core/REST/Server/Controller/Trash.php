@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 
 use InvalidArgumentException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Trash controller
@@ -57,10 +58,10 @@ class Trash extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\Trash
      */
-    public function loadTrashItems()
+    public function loadTrashItems( Request $request )
     {
-        $offset = $this->request->query->has( 'offset' ) ? (int)$this->request->query->get( 'offset' ) : 0;
-        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : -1;
+        $offset = $request->query->has( 'offset' ) ? (int)$request->query->get( 'offset' ) : 0;
+        $limit = $request->query->has( 'limit' ) ? (int)$request->query->get( 'limit' ) : -1;
 
         $query = new Query();
         $query->offset = $offset >= 0 ? $offset : null;
@@ -82,7 +83,7 @@ class Trash extends RestController
 
         return new Values\Trash(
             $trashItems,
-            $this->request->getPathInfo()
+            $request->getPathInfo()
         );
     }
 
@@ -137,12 +138,12 @@ class Trash extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function restoreTrashItem( $trashItemId )
+    public function restoreTrashItem( $trashItemId, Request $request )
     {
         $requestDestination = null;
         try
         {
-            $requestDestination = $this->request->headers->get( 'Destination' );
+            $requestDestination = $request->headers->get( 'Destination' );
         }
         catch ( InvalidArgumentException $e )
         {
@@ -150,12 +151,12 @@ class Trash extends RestController
         }
 
         $parentLocation = null;
-        if ( $this->request->headers->has( 'Destination' ) )
+        if ( $request->headers->has( 'Destination' ) )
         {
             $locationPathParts = explode(
                 '/',
                 $this->requestParser->parseHref(
-                    $this->request->headers->get( 'Destination' ), 'locationPath'
+                    $request->headers->get( 'Destination' ), 'locationPath'
                 )
             );
 

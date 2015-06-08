@@ -94,7 +94,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->method( 'loadContent' )
             ->with( $contentId, array( $lang ), $versionNo )
             ->will( $this->throwException( new UnauthorizedException( 'foo', 'bar' ) ) );
-        $controller->previewContentAction( $contentId, $versionNo, $lang, 'test' );
+        $controller->previewContentAction( new Request(), $contentId, $versionNo, $lang, 'test' );
     }
 
     /**
@@ -127,7 +127,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->with( $this->equalTo( new AuthorizationAttribute( 'content', 'versionread', array( 'valueObject' => $content ) ) ) )
             ->will( $this->returnValue( false ) );
 
-        $controller->previewContentAction( $contentId, $versionNo, $lang, 'test' );
+        $controller->previewContentAction( new Request(), $contentId, $versionNo, $lang, 'test' );
     }
 
     public function testPreview()
@@ -213,10 +213,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $expectedResponse ) );
 
         $controller = $this->getPreviewController();
-        $controller->setRequest( $request );
         $this->assertSame(
             $expectedResponse,
-            $controller->previewContentAction( $contentId, $versionNo, $lang, $previewSiteAccessName )
+            $controller->previewContentAction( $request, $contentId, $versionNo, $lang, $previewSiteAccessName )
         );
     }
 
@@ -276,10 +275,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $expectedResponse ) );
 
         $controller = $this->getPreviewController();
-        $controller->setRequest( $request );
         $this->assertSame(
             $expectedResponse,
-            $controller->previewContentAction( $contentId, $versionNo, $lang )
+            $controller->previewContentAction( $request, $contentId, $versionNo, $lang )
         );
     }
 

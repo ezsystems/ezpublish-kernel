@@ -12,6 +12,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\RequestStackAware;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
@@ -22,6 +23,8 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class GlobalHelper
 {
+    use RequestStackAware;
+
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
@@ -37,10 +40,6 @@ class GlobalHelper
      */
     protected $router;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    protected $request;
     /**
      * @var \eZ\Publish\Core\Helper\TranslationHelper
      */
@@ -60,23 +59,16 @@ class GlobalHelper
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    public function setRequest( Request $request = null )
-    {
-        $this->request = $request;
-    }
-
-    /**
      * Returns the current siteaccess.
      *
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess|null
      */
     public function getSiteaccess()
     {
-        if ( $this->request )
+        $request = $this->getCurrentRequest();
+        if ( $request )
         {
-            return $this->request->attributes->get( 'siteaccess' );
+            return $request->attributes->get( 'siteaccess' );
         }
     }
 
@@ -87,9 +79,10 @@ class GlobalHelper
      */
     public function getViewParameters()
     {
-        if ( $this->request )
+        $request = $this->getCurrentRequest();
+        if ( $request )
         {
-            return $this->request->attributes->get( 'viewParameters' );
+            return $request->attributes->get( 'viewParameters' );
         }
     }
 
@@ -101,9 +94,10 @@ class GlobalHelper
      */
     public function getViewParametersString()
     {
-        if ( $this->request )
+        $request = $this->getCurrentRequest();
+        if ( $request )
         {
-            return $this->request->attributes->get( 'viewParametersString' );
+            return $request->attributes->get( 'viewParametersString' );
         }
     }
 
@@ -114,9 +108,10 @@ class GlobalHelper
      */
     public function getRequestedUriString()
     {
-        if ( $this->request )
+        $request = $this->getCurrentRequest();
+        if ( $request )
         {
-            return $this->request->attributes->get( 'semanticPathinfo' );
+            return $request->attributes->get( 'semanticPathinfo' );
         }
     }
 
@@ -131,16 +126,17 @@ class GlobalHelper
      */
     public function getSystemUriString()
     {
-        if ( $this->request )
+        $request = $this->getCurrentRequest();
+        if ( $request )
         {
-            if ( $this->request->attributes->get( '_route' ) === UrlAliasRouter::URL_ALIAS_ROUTE_NAME )
+            if ( $request->attributes->get( '_route' ) === UrlAliasRouter::URL_ALIAS_ROUTE_NAME )
             {
                 return $this->router
                     ->generate(
                         '_ezpublishLocation',
                         array(
-                            'locationId' => $this->request->attributes->get( 'locationId' ),
-                            'viewType' => $this->request->attributes->get( 'viewType' )
+                            'locationId' => $request->attributes->get( 'locationId' ),
+                            'viewType' => $request->attributes->get( 'viewType' )
                         )
                     );
             }

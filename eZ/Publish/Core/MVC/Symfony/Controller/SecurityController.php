@@ -33,11 +33,6 @@ class SecurityController
      */
     protected $csrfProvider;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    protected $request;
-
     public function __construct( EngineInterface $templateEngine, ConfigResolverInterface $configResolver, CsrfProviderInterface $csrfProvider = null )
     {
         $this->templateEngine = $templateEngine;
@@ -45,21 +40,13 @@ class SecurityController
         $this->csrfProvider = $csrfProvider;
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    public function setRequest( Request $request = null )
+    public function loginAction( Request $request )
     {
-        $this->request = $request;
-    }
+        $session = $request->getSession();
 
-    public function loginAction()
-    {
-        $session = $this->request->getSession();
-
-        if ( $this->request->attributes->has( Security::AUTHENTICATION_ERROR ) )
+        if ( $request->attributes->has( Security::AUTHENTICATION_ERROR ) )
         {
-            $error = $this->request->attributes->get( Security::AUTHENTICATION_ERROR );
+            $error = $request->attributes->get( Security::AUTHENTICATION_ERROR );
         }
         else
         {

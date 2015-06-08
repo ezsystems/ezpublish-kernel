@@ -109,7 +109,7 @@ services:
       class: %ezpublish.route_reference.generator.class%
       arguments: [@event_dispatcher]
       calls:
-        - [setRequest, [@?request=]]
+        - [setRequestStack, [@request_stack]]
 
     ezpublish.route_reference.listener.language_switch:
         class: %ezpublish.route_reference.listener.language_switch.class%
