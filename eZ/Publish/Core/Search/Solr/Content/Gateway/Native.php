@@ -471,11 +471,6 @@ class Native extends Gateway
             $this->writeField( $xmlWriter, $field );
         }
 
-        foreach ( $document->documents as $document )
-        {
-            $this->writeDocument( $xmlWriter, $document );
-        }
-
         $xmlWriter->endElement();
     }
 
