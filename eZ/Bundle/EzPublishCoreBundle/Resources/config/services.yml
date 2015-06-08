@@ -72,8 +72,6 @@ services:
             - @ezpublish.content_preview_helper
             - @security.context
             - @ezpublish.content_preview.location_provider
-        calls:
-            - [setRequest, [@?request=]]
 
     ezpublish.controller.content.preview:
         alias: ezpublish.controller.content.preview.core
@@ -122,7 +120,7 @@ services:
         class: %ezpublish.fragment_listener.factory.class%
         arguments: [%fragment.path%]
         calls:
-            - [setRequest, [@?request=]]
+            - [setRequestStack, [@request_stack]]
 
     ezpublish.decorated_fragment_renderer:
         class: %ezpublish.decorated_fragment_renderer.class%

@@ -21,6 +21,7 @@ use eZ\Publish\Core\REST\Common\Values\ContentObjectStates;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * ObjectState controller
@@ -59,15 +60,15 @@ class ObjectState extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedObjectStateGroup
      */
-    public function createObjectStateGroup()
+    public function createObjectStateGroup( Request $request )
     {
         try
         {
             $createdStateGroup = $this->objectStateService->createObjectStateGroup(
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                        $this->request->getContent()
+                        array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                        $request->getContent()
                     )
                 )
             );
@@ -92,7 +93,7 @@ class ObjectState extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedObjectState
      */
-    public function createObjectState( $objectStateGroupId )
+    public function createObjectState( $objectStateGroupId, Request $request )
     {
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup( $objectStateGroupId );
 
@@ -102,8 +103,8 @@ class ObjectState extends RestController
                 $objectStateGroup,
                 $this->inputDispatcher->parse(
                     new Message(
-                        array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                        $this->request->getContent()
+                        array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                        $request->getContent()
                     )
                 )
             );
@@ -219,12 +220,12 @@ class ObjectState extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
-    public function updateObjectStateGroup( $objectStateGroupId )
+    public function updateObjectStateGroup( $objectStateGroupId, Request $request )
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                $request->getContent()
             )
         );
 
@@ -250,12 +251,12 @@ class ObjectState extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Common\Values\RestObjectState
      */
-    public function updateObjectState( $objectStateGroupId, $objectStateId )
+    public function updateObjectState( $objectStateGroupId, $objectStateId, Request $request )
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                $request->getContent()
             )
         );
 
@@ -311,12 +312,12 @@ class ObjectState extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Common\Values\ContentObjectStates
      */
-    public function setObjectStatesForContent( $contentId)
+    public function setObjectStatesForContent( $contentId, Request $request )
     {
         $newObjectStates = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                $request->getContent()
             )
         );
 

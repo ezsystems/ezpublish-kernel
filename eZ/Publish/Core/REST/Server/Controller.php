@@ -19,11 +19,6 @@ use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
 abstract class Controller extends ContainerAware
 {
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    protected $request;
-
-    /**
      * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */
     protected $inputDispatcher;
@@ -55,11 +50,6 @@ abstract class Controller extends ContainerAware
         $this->router = $router;
     }
 
-    public function setRequest( Request $request = null )
-    {
-        $this->request = $request;
-    }
-
     public function setRepository( Repository $repository )
     {
         $this->repository = $repository;
@@ -76,9 +66,9 @@ abstract class Controller extends ContainerAware
      *
      * @return string
      */
-    protected function getMediaType()
+    protected function getMediaType( Request $request )
     {
-        foreach ( $this->request->getAcceptableContentTypes() as $mimeType )
+        foreach ( $request->getAcceptableContentTypes() as $mimeType )
         {
             if ( preg_match( '(^([a-z0-9-/.]+)\+.*$)', strtolower( $mimeType ), $matches ) )
             {

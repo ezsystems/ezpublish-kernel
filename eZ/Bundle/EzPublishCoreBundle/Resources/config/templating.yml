@@ -98,7 +98,7 @@ services:
         class: %ezpublish.templating.global_helper.core.class%
         arguments: [@ezpublish.config.resolver, @ezpublish.api.service.location, @router, @ezpublish.translation_helper]
         calls:
-            - [setRequest, [@?request=]]
+            - [setRequestStack, [@request_stack]]
 
     ezpublish.templating.global_helper:
         alias: ezpublish.templating.global_helper.core

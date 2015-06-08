@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\TrashService;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Location controller
@@ -68,20 +69,20 @@ class Location extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException
      * @return \eZ\Publish\Core\REST\Server\Values\TemporaryRedirect
      */
-    public function redirectLocation()
+    public function redirectLocation( Request $request )
     {
-        if ( !$this->request->query->has( 'id' ) && !$this->request->query->has( 'remoteId' ) )
+        if ( !$request->query->has( 'id' ) && !$request->query->has( 'remoteId' ) )
         {
             throw new BadRequestException( "At least one of 'id' or 'remoteId' parameters is required." );
         }
 
-        if ( $this->request->query->has( 'id' ) )
+        if ( $request->query->has( 'id' ) )
         {
-            $location = $this->locationService->loadLocation( $this->request->query->get( 'id' ) );
+            $location = $this->locationService->loadLocation( $request->query->get( 'id' ) );
         }
         else
         {
-            $location = $this->locationService->loadLocationByRemoteId( $this->request->query->get( 'remoteId' ) );
+            $location = $this->locationService->loadLocationByRemoteId( $request->query->get( 'remoteId' ) );
         }
 
         return new Values\TemporaryRedirect(
@@ -102,12 +103,12 @@ class Location extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedLocation
      */
-    public function createLocation( $contentId )
+    public function createLocation( $contentId, Request $request )
     {
         $locationCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                $request->getContent()
             )
         );
 
@@ -178,7 +179,7 @@ class Location extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function copySubtree( $locationPath )
+    public function copySubtree( $locationPath, Request $request )
     {
         $location = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $locationPath )
@@ -187,7 +188,7 @@ class Location extends RestController
         $destinationLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath(
                 $this->requestParser->parseHref(
-                    $this->request->headers->get( 'Destination' ),
+                    $request->headers->get( 'Destination' ),
                     'locationPath'
                 )
             )
@@ -213,14 +214,14 @@ class Location extends RestController
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\BadRequestException if the Destination header cannot be parsed as location or trash
      * @return \eZ\Publish\Core\REST\Server\Values\ResourceCreated
      */
-    public function moveSubtree( $locationPath )
+    public function moveSubtree( $locationPath, Request $request )
     {
         $locationToMove = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath( $locationPath )
         );
 
         $destinationLocationId = null;
-        $destinationHref = $this->request->headers->get( 'Destination' );
+        $destinationHref = $request->headers->get( 'Destination' );
         try
         {
             // First check to see if the destination is for moving within another subtree
@@ -278,7 +279,7 @@ class Location extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
-    public function swapLocation( $locationPath )
+    public function swapLocation( $locationPath, Request $request )
     {
         $locationId = $this->extractLocationIdFromPath( $locationPath );
         $location = $this->locationService->loadLocation( $locationId );
@@ -286,7 +287,7 @@ class Location extends RestController
         $destinationLocation = $this->locationService->loadLocation(
             $this->extractLocationIdFromPath(
                 $this->requestParser->parseHref(
-                    $this->request->headers->get( 'Destination' ),
+                    $request->headers->get( 'Destination' ),
                     'locationPath'
                 )
             )
@@ -303,18 +304,18 @@ class Location extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
-    public function loadLocationByRemoteId()
+    public function loadLocationByRemoteId( Request $request )
     {
         return new Values\LocationList(
             array(
                 new Values\RestLocation(
                     $location = $this->locationService->loadLocationByRemoteId(
-                        $this->request->query->get( 'remoteId' )
+                        $request->query->get( 'remoteId' )
                     ),
                     $this->locationService->getLocationChildCount( $location )
                 )
             ),
-            $this->request->getPathInfo()
+            $request->getPathInfo()
         );
     }
 
@@ -325,7 +326,7 @@ class Location extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
-    public function loadLocationsForContent( $contentId )
+    public function loadLocationsForContent( $contentId, Request $request )
     {
         $restLocations = array();
         $contentInfo = $this->contentService->loadContentInfo( $contentId );
@@ -339,7 +340,7 @@ class Location extends RestController
         }
 
         return new Values\CachedValue(
-            new Values\LocationList( $restLocations, $this->request->getPathInfo() ),
+            new Values\LocationList( $restLocations, $request->getPathInfo() ),
             array( 'locationId' => $contentInfo->mainLocationId )
         );
     }
@@ -351,10 +352,10 @@ class Location extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\LocationList
      */
-    public function loadLocationChildren( $locationPath )
+    public function loadLocationChildren( $locationPath, Request $request )
     {
-        $offset = $this->request->query->has( 'offset' ) ? (int)$this->request->query->get( 'offset' ) : 0;
-        $limit = $this->request->query->has( 'limit' ) ? (int)$this->request->query->get( 'limit' ) : 10;
+        $offset = $request->query->has( 'offset' ) ? (int)$request->query->get( 'offset' ) : 0;
+        $limit = $request->query->has( 'limit' ) ? (int)$request->query->get( 'limit' ) : 10;
 
         $restLocations = array();
         $locationId = $this->extractLocationIdFromPath( $locationPath );
@@ -375,7 +376,7 @@ class Location extends RestController
         }
 
         return new Values\CachedValue(
-            new Values\LocationList( $restLocations, $this->request->getPathInfo() ),
+            new Values\LocationList( $restLocations, $request->getPathInfo() ),
             array( 'locationId' => $locationId )
         );
     }
@@ -400,12 +401,12 @@ class Location extends RestController
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestLocation
      */
-    public function updateLocation( $locationPath )
+    public function updateLocation( $locationPath, Request $request )
     {
         $locationUpdate = $this->inputDispatcher->parse(
             new Message(
-                array( 'Content-Type' => $this->request->headers->get( 'Content-Type' ) ),
-                $this->request->getContent()
+                array( 'Content-Type' => $request->headers->get( 'Content-Type' ) ),
+                $request->getContent()
             )
         );
 

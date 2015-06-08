@@ -2,6 +2,7 @@
 namespace eZ\Bundle\EzPublishRestBundle\ApiLoader;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\RequestStackAware;
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 use eZ\Publish\Core\REST\Common;
 use eZ\Publish\API\Repository\Repository;
@@ -10,6 +11,8 @@ use Symfony\Component\Routing\RouterInterface;
 
 class Factory
 {
+    use RequestStackAware;
+
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
@@ -21,11 +24,6 @@ class Factory
     protected $repository;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    protected $request;
-
-    /**
      * @param \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
@@ -35,17 +33,10 @@ class Factory
         $this->repository = $repository;
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     */
-    public function setRequest( Request $request = null )
-    {
-        $this->request = $request;
-    }
-
     public function getBinaryFileFieldTypeProcessor()
     {
-        $hostPrefix = isset( $this->request ) ? rtrim( $this->request->getUriForPath( '/' ), '/' ) : '';
+        $request = $this->getCurrentRequest();
+        $hostPrefix = isset( $request ) ? rtrim( $request->getUriForPath( '/' ), '/' ) : '';
 
         return new FieldTypeProcessor\BinaryProcessor( sys_get_temp_dir(), $hostPrefix );
     }

@@ -47,11 +47,6 @@ class PreviewController
     private $authorizationChecker;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    private $request;
-
-    /**
      * @var \eZ\Publish\Core\Helper\PreviewLocationProvider
      */
     private $locationProvider;
@@ -71,12 +66,7 @@ class PreviewController
         $this->locationProvider = $locationProvider;
     }
 
-    public function setRequest( Request $request = null )
-    {
-        $this->request = $request;
-    }
-
-    public function previewContentAction( $contentId, $versionNo, $language, $siteAccessName = null )
+    public function previewContentAction( Request $request, $contentId, $versionNo, $language, $siteAccessName = null )
     {
         $this->previewHelper->setPreviewActive( true );
 
@@ -105,7 +95,7 @@ class PreviewController
         }
 
         $response = $this->kernel->handle(
-            $this->getForwardRequest( $location, $content, $siteAccess ),
+            $this->getForwardRequest( $location, $content, $siteAccess, $request ),
             HttpKernelInterface::SUB_REQUEST
         );
         $response->headers->remove( 'cache-control' );
@@ -123,12 +113,13 @@ class PreviewController
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $previewSiteAccess
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Request
      */
-    protected function getForwardRequest( Location $location, Content $content, SiteAccess $previewSiteAccess )
+    protected function getForwardRequest( Location $location, Content $content, SiteAccess $previewSiteAccess, Request $request )
     {
-        return $this->request->duplicate(
+        return $request->duplicate(
             null, null,
             array(
                 '_controller' => 'ez_content:viewLocation',
@@ -146,7 +137,7 @@ class PreviewController
                     'isPreview' => true
                 ),
                 'siteaccess' => $previewSiteAccess,
-                'semanticPathinfo' => $this->request->attributes->get( 'semanticPathinfo' ),
+                'semanticPathinfo' => $request->attributes->get( 'semanticPathinfo' ),
             )
         );
     }

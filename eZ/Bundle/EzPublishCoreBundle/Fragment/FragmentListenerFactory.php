@@ -9,7 +9,7 @@
 
 namespace eZ\Bundle\EzPublishCoreBundle\Fragment;
 
-use Symfony\Component\HttpFoundation\Request;
+use eZ\Publish\Core\MVC\Symfony\RequestStackAware;
 use Symfony\Component\HttpKernel\UriSigner;
 
 /**
@@ -18,22 +18,14 @@ use Symfony\Component\HttpKernel\UriSigner;
  */
 class FragmentListenerFactory
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
-    private $request;
-
-    public function setRequest( Request $request = null )
-    {
-        $this->request = $request;
-    }
+    use RequestStackAware;
 
     public function buildFragmentListener( UriSigner $uriSigner, $fragmentPath, $fragmentListenerClass )
     {
         // Ensure that current pathinfo ends with configured fragment path.
         // If so, consider it as the fragment path.
         // This ensures to have URI siteaccess compatible fragment paths.
-        $pathInfo = $this->request->getPathInfo();
+        $pathInfo = $this->getCurrentRequest()->getPathInfo();
         if ( substr( $pathInfo, -strlen( $fragmentPath ) ) === $fragmentPath )
         {
             $fragmentPath = $pathInfo;

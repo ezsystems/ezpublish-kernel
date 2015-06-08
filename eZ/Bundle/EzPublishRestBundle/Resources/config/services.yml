@@ -118,7 +118,7 @@ services:
         class: %ezpublish_rest.factory.class%
         arguments: [@ezpublish.config.resolver, @ezpublish.api.repository]
         calls:
-            - [setRequest, [@?request=]]
+            - [setRequestStack, [@request_stack]]
 
     ezpublish_rest.controller.base:
         class: %ezpublish_rest.controller.base.class%
@@ -127,7 +127,6 @@ services:
             - [ setInputDispatcher, [@ezpublish_rest.input.dispatcher] ]
             - [ setRouter, [@router] ]
             - [ setRequestParser, [@ezpublish_rest.request_parser] ]
-            - [ setRequest, [@?request=] ]
             - [ setRepository, [@ezpublish.api.repository] ]
 
     ezpublish_rest.controller.root:

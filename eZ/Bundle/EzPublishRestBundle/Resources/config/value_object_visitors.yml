@@ -797,6 +797,6 @@ services:
         arguments:
             - @ezpublish.config.resolver
         calls:
-            - [setRequest, [@?request=]]
+            - [setRequestStack, [@request_stack]]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\CachedValue }
