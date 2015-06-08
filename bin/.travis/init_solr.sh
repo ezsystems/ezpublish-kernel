@@ -185,7 +185,7 @@ download_and_run() {
 
     download $url $dir_name
 
-    // remove default cores configuration
+    # remove default cores configuration
     sed -i.bak 's/<core name="core0" instanceDir="core0" \/>//g' $dir_name/example/multicore/solr.xml
     sed -i.bak 's/<core name="core1" instanceDir="core1" \/>//g' $dir_name/example/multicore/solr.xml
 
