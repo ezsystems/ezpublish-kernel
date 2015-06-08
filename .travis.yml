@@ -21,9 +21,9 @@ matrix:
     - php: 5.4
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
     - php: 5.4
-      env: SOLR_VERSION="4.10.3" TEST_CONFIG="phpunit-integration-legacy-solr-multicore.xml" SOLR_CORES="(core0 core1 core2 core3 core4 core5 core6 core7)" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
+      env: SOLR_VERSION="4.10.3" TEST_CONFIG="phpunit-integration-legacy-solr-multicore.xml" SOLR_CORES="core0 core1 core2 core3 core4 core5 core6 core7" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
     - php: 5.4
-      env: SOLR_VERSION="4.10.3" TEST_CONFIG="phpunit-integration-legacy-solr-multicore-mix.xml" SOLR_CORES="(core0 core1 core2 core3 core4)" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
+      env: SOLR_VERSION="4.10.3" TEST_CONFIG="phpunit-integration-legacy-solr-multicore-mix.xml" SOLR_CORES="core0 core1 core2 core3 core4" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
     - php: 5.4
       env: SOLR_VERSION="4.10.3" TEST_CONFIG="phpunit-integration-legacy-solr-single-core.xml" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 # 5.5
