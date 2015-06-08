@@ -50,7 +50,7 @@ class LegacySolr extends Legacy
             $containerBuilder = include $config['container_builder_path'];
 
             /** @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
-            $loader->load( 'tests/integration_legacy_solr.yml' );
+            $loader->load( $this->getTestConfigurationFile() );
 
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateCriterionVisitorPass() );
             $containerBuilder->addCompilerPass( new Compiler\Search\Solr\AggregateFacetBuilderVisitorPass() );
@@ -120,14 +120,19 @@ class LegacySolr extends Legacy
 
         /** @var \eZ\Publish\Core\Search\Solr\Content\Handler $contentSearchHandler */
         $contentSearchHandler = $searchHandler->contentSearchHandler();
-        $contentSearchHandler->setCommit( true );
         $contentSearchHandler->purgeIndex();
-        $contentSearchHandler->bulkIndexContent( $contentObjects );
-
+        $contentSearchHandler->setCommit( true );
         /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
         $locationSearchHandler = $searchHandler->locationSearchHandler();
-        $locationSearchHandler->setCommit( true );
         $locationSearchHandler->purgeIndex();
+        $locationSearchHandler->setCommit( true );
+
+        $contentSearchHandler->bulkIndexContent( $contentObjects );
         $locationSearchHandler->bulkIndexLocations( $locations );
+    }
+
+    protected function getTestConfigurationFile()
+    {
+        return getenv( "CONTAINER_TEST_CONFIG" );
     }
 }

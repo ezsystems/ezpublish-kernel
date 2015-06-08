@@ -1667,7 +1667,7 @@ class SearchServiceLocationTest extends BaseTest
             include $fixture,
             $result,
             "Search results do not match.",
-            .1 // Be quite generous regarding delay -- most important for scores
+            .2 // Be quite generous regarding delay -- most important for scores
         );
     }
 

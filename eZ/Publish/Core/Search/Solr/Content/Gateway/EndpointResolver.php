@@ -28,7 +28,7 @@ interface EndpointResolver
      *
      * @param string $languageCode
      *
-     * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint
+     * @return string
      */
     public function getIndexingTarget( $languageCode );
 
@@ -37,14 +37,14 @@ interface EndpointResolver
      *
      * @param array $languageSettings
      *
-     * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[]
+     * @return string[]
      */
     public function getSearchTargets( array $languageSettings );
 
     /**
      * Returns all Endpoints
      *
-     * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint[]
+     * @return string[]
      */
     public function getEndpoints();
 }

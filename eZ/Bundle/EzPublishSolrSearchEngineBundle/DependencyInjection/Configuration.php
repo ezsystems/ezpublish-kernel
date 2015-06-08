@@ -134,6 +134,72 @@ class Configuration implements ConfigurationInterface
                         function( $v )
                         {
                             return (
+                                !empty( $v["cluster"] ) && !is_array( $v["cluster"] )
+                            );
+                        }
+                    )
+                    ->then(
+                        function( $v )
+                        {
+                            // If single endpoint is set for cluster, use it as default mapping
+                            // for both Content and Location clusters
+                            $v["cluster"] = array(
+                                "content" => $v["cluster"],
+                                "location" => $v["cluster"],
+                            );
+                            return $v;
+                        }
+                    )
+                ->end()
+                ->beforeNormalization()
+                    ->ifTrue(
+                        function( $v )
+                        {
+                            return (
+                                !empty( $v["cluster"]["content"] ) &&
+                                !is_array( $v["cluster"]["content"] )
+                            );
+                        }
+                    )
+                    ->then(
+                        function( $v )
+                        {
+                            // If single endpoint is set for Content cluster, use it as default
+                            // mapping for Content cluster
+                            $v["cluster"]["content"] = array(
+                                "*" => $v["cluster"]["content"],
+                            );
+                            return $v;
+                        }
+                    )
+                ->end()
+                ->beforeNormalization()
+                    ->ifTrue(
+                        function( $v )
+                        {
+                            return (
+                                !empty( $v["cluster"]["location"] ) &&
+                                !is_array( $v["cluster"]["location"] )
+                            );
+                        }
+                    )
+                    ->then(
+                        function( $v )
+                        {
+                            // If single endpoint is set for Location cluster, use it as default
+                            // mapping for Location cluster
+                            $v["cluster"]["location"] = array(
+                                "*" => $v["cluster"]["location"],
+                            );
+                            return $v;
+                        }
+                    )
+                ->end()
+                ->beforeNormalization()
+                    ->ifTrue(
+                        function( $v )
+                        {
+                            return (
                                 empty( $v["entry_endpoints"]["content"] ) &&
                                 !empty( $v["cluster"]["content"] )
                             );
@@ -142,7 +208,8 @@ class Configuration implements ConfigurationInterface
                     ->then(
                         function( $v )
                         {
-                            // If Content search entry endpoints are not provided use cluster endpoints
+                            // If Content search entry endpoints are not provided use
+                            // cluster endpoints
                             $v["entry_endpoints"]["content"] = array_values( $v["cluster"]["content"] );
                             return $v;
                         }
@@ -161,7 +228,8 @@ class Configuration implements ConfigurationInterface
                     ->then(
                         function( $v )
                         {
-                            // If Location search entry endpoints are not provided use cluster endpoints
+                            // If Location search entry endpoints are not provided use
+                            // cluster endpoints
                             $v["entry_endpoints"]["location"] = array_values( $v["cluster"]["location"] );
                             return $v;
                         }
@@ -185,7 +253,10 @@ class Configuration implements ConfigurationInterface
                         )
                         ->children()
                             ->arrayNode( "content" )
-                                ->info( "A set of endpoint names for Content index. If not set cluster endpoints will be used." )
+                                ->info(
+                                    "A set of endpoint names for Content index. " .
+                                    "If not set cluster endpoints will be used."
+                                )
                                 ->example(
                                     array(
                                         "endpoint1",
@@ -196,7 +267,10 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->arrayNode( "location" )
-                                ->info( "A set of endpoint names for Location index. If not set cluster endpoints will be used." )
+                                ->info(
+                                    "A set of endpoint names for Location index. " .
+                                    "If not set cluster endpoints will be used."
+                                )
                                 ->example(
                                     array(
                                         "endpoint1",
@@ -209,7 +283,12 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                     ->arrayNode( "cluster" )
-                        ->info( "Cluster map, consisting of a mapping of translation language codes and Solr endpoint names, per search type" )
+                        ->info(
+                            "Cluster map, consisting of a mapping of translation language codes " .
+                            "and Solr endpoint names, per index (Content and Location). If ".
+                            "single endpoint name is given, it will be used for both indexes, " .
+                            "for all translations (as if mapped with asterisk)."
+                        )
                         ->addDefaultsIfNotSet()
                         ->example(
                             array(
@@ -227,7 +306,13 @@ class Configuration implements ConfigurationInterface
                             ->arrayNode( "content" )
                                 ->normalizeKeys( false )
                                 ->useAttributeAsKey( "language_code" )
-                                ->info( "A map of translation language codes and Solr endpoint names for Content index" )
+                                ->info(
+                                    "A map of translation language codes and Solr endpoint names " .
+                                    "for Content index. Asterisk (*) can be used as a wildcard " .
+                                    "for all translations that are not explicitly mapped. If " .
+                                    "single endpoint name is given, it will be used for all " .
+                                    "translations (as if mapped with asterisk)."
+                                )
                                 ->example(
                                     array(
                                         "cro-HR" => "endpoint1",
@@ -240,7 +325,13 @@ class Configuration implements ConfigurationInterface
                             ->arrayNode( "location" )
                                 ->normalizeKeys( false )
                                 ->useAttributeAsKey( "language_code" )
-                                ->info( "A map of translation language codes and Solr endpoint names for Location index" )
+                                ->info(
+                                    "A map of translation language codes and Solr endpoint names " .
+                                    "for Location index. Asterisk (*) can be used as a wildcard " .
+                                    "for all translations that are not explicitly mapped. If " .
+                                    "single endpoint name is given, it will be used for all " .
+                                    "translations (as if mapped with asterisk)."
+                                )
                                 ->example(
                                     array(
                                         "cro-HR" => "endpoint1",

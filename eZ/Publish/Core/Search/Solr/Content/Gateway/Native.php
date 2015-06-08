@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Search\Solr\Content\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
@@ -132,9 +133,15 @@ class Native extends Gateway
      */
     public function find( Query $query, array $fieldFilters = array() )
     {
+        $documentType = "content";
+        if ( $query instanceof LocationQuery )
+        {
+            $documentType = "location";
+        }
+
         $parameters = array(
             "q" => $this->criterionVisitor->visit( $query->query ),
-            "fq" => $this->criterionVisitor->visit( $query->filter ),
+            "fq" => "document_type_id:{$documentType} AND (" . $this->criterionVisitor->visit( $query->filter ) . ")",
             "sort" => $this->getSortClauses( $query->sortClauses ),
             "start" => $query->offset,
             "rows" => $query->limit,
@@ -145,7 +152,7 @@ class Native extends Gateway
         $coreFilter = $this->getCoreFilter( $fieldFilters );
         if ( !empty( $coreFilter ) )
         {
-            $parameters["fq"] = "({$coreFilter}) AND " . $parameters["fq"];
+            $parameters["fq"] = "({$coreFilter}) AND (" . $parameters["fq"] . ")";
         }
 
         $searchTargets = $this->getSearchTargets( $fieldFilters );
@@ -254,22 +261,23 @@ class Native extends Gateway
      */
     protected function getCoreFilter( array $languageSettings )
     {
-        if ( empty( $languageSettings ) )
-        {
-            return "";
-        }
-
         $filters = array();
-        $languageCodes = $languageSettings["languages"];
 
-        foreach ( $languageCodes as $languageCode )
+        if ( !empty( $languageSettings["languages"] ) )
         {
-            $filters[] = "(" . $this->getCoreLanguageFilter( $languageCodes, $languageCode ) . ")";
+            foreach ( $languageSettings["languages"] as $languageCode )
+            {
+                $filters[] = "(" . $this->getCoreLanguageFilter( $languageSettings["languages"], $languageCode ) . ")";
+            }
         }
 
         if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true )
         {
             $filters[] = "meta_indexed_is_main_translation_and_always_available_b:true";
+        }
+        else if ( empty( $languageSettings["languages"] ) )
+        {
+            $filters[] = "meta_indexed_is_main_translation_b:true";
         }
 
         return implode( " OR ", $filters );
@@ -386,6 +394,8 @@ class Native extends Gateway
     }
 
     /**
+     * @todo implement purging for document type
+     *
      * Purges all contents from the index
      *
      * @return void
@@ -461,11 +471,6 @@ class Native extends Gateway
         foreach ( $document->fields as $field )
         {
             $this->writeField( $xmlWriter, $field );
-        }
-
-        foreach ( $document->documents as $document )
-        {
-            $this->writeDocument( $xmlWriter, $document );
         }
 
         $xmlWriter->endElement();

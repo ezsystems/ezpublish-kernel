@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 SOLR_PORT=${SOLR_PORT:-8983}
-SOLR_VERSION=${SOLR_VERSION:-4.10.3}
+SOLR_VERSION=${SOLR_VERSION:-4.10.4}
 DEBUG=${DEBUG:-false}
-SOLR_CORE=${SOLR_CORE:-core0}
 SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 
 download() {
@@ -35,25 +34,34 @@ wait_for_solr(){
 run() {
     dir_name=$1
     solr_port=$2
-    solr_core=$3
+    mode=$3
     # Run solr
-    echo "Running with folder $dir_name"
+    echo "Running with folder ${dir_name} in ${mode} mode"
     echo "Starting solr on port ${solr_port}..."
 
     # go to the solr folder
-    cd $1/example
+    cd $dir_name/example
 
     if [ "$DEBUG" = "true" ]
     then
-        java -Djetty.port=$solr_port -Dsolr.solr.home=multicore -jar start.jar &
+        if [ "$mode" = "multi" ]
+        then
+            java -Djetty.port=$solr_port -Dsolr.solr.home=multicore -jar start.jar &
+        else
+            java -Djetty.port=$solr_port -jar start.jar &
+        fi
     else
-        java -Djetty.port=$solr_port -Dsolr.solr.home=multicore -jar start.jar > /dev/null 2>&1 &
+        if [ "$mode" = "multi" ]
+        then
+            java -Djetty.port=$solr_port -Dsolr.solr.home=multicore -jar start.jar > /dev/null 2>&1 &
+        else
+            java -Djetty.port=$solr_port -jar start.jar > /dev/null 2>&1 &
+        fi
     fi
     wait_for_solr
     cd ../../
     echo "Started"
 }
-
 
 download_and_run() {
     case $1 in
@@ -182,54 +190,69 @@ download_and_run() {
             dir_name="solr-4.10.3"
             dir_conf="collection1/conf/"
             ;;
+        4.10.4)
+            url="http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz"
+            dir_name="solr-4.10.4"
+            dir_conf="collection1/conf/"
+            ;;
     esac
 
     download $url $dir_name
-    sed -i.bak 's/<shardHandlerFactory/<core name="core2" instanceDir="core2" \/><core name="core3" instanceDir="core3" \/><core name="core4" instanceDir="core4" \/><core name="core5" instanceDir="core5" \/><core name="core6" instanceDir="core6" \/><core name="core7" instanceDir="core7" \/><shardHandlerFactory/g' $dir_name/example/multicore/solr.xml
-    add_core $dir_name $dir_conf core0 $SOLR_CONFS
-    add_core $dir_name $dir_conf core1 $SOLR_CONFS
-    add_core $dir_name $dir_conf core2 $SOLR_CONFS
-    add_core $dir_name $dir_conf core3 $SOLR_CONFS
-    add_core $dir_name $dir_conf core4 $SOLR_CONFS
-    add_core $dir_name $dir_conf core5 $SOLR_CONFS
-    add_core $dir_name $dir_conf core6 $SOLR_CONFS
-    add_core $dir_name $dir_conf core7 $SOLR_CONFS
-    run $dir_name $SOLR_PORT $SOLR_CORE
 
-    if [ -z "${SOLR_DOCS}" ]
-    then
-        echo "$solr_docs not defined, skipping initial indexing"
+    if [ ${#SOLR_CORES[@]} -eq 0 ]; then
+        destination_dir_name="$dir_name/example/solr/$dir_conf"
+        copy_configuration $destination_dir_name
+        mode="single"
     else
-        post_documents $dir_name $SOLR_DOCS $SOLR_CORE $SOLR_PORT
+        # remove default cores configuration
+        sed -i.bak 's/<core name=".*" instanceDir=".*" \/>//g' $dir_name/example/multicore/solr.xml
+        for solr_core in ${SOLR_CORES[@]};
+        do
+            add_core $dir_name $dir_conf $solr_core
+        done
+        mode="multi"
     fi
+
+    run $dir_name $SOLR_PORT $mode
 }
 
 add_core() {
     dir_name=$1
     dir_conf=$2
     solr_core=$3
-    solr_confs=$4
-    # prepare our folders
+
+    # add core configuration
+    sed -i.bak "s/<shardHandlerFactory/<core name=\"$solr_core\" instanceDir=\"$solr_core\" \/><shardHandlerFactory/g" $dir_name/example/multicore/solr.xml
+
+    # prepare core directories
     [[ -d "${dir_name}/example/multicore/${solr_core}" ]] || mkdir $dir_name/example/multicore/$solr_core
     [[ -d "${dir_name}/example/multicore/${solr_core}/conf" ]] || mkdir $dir_name/example/multicore/$solr_core/conf
 
+    # copy currency.xml, stopwords.txt and synonyms.txt
     cp $dir_name/example/solr/collection1/conf/currency.xml $dir_name/example/multicore/$solr_core/conf/
     cp $dir_name/example/solr/collection1/conf/stopwords.txt $dir_name/example/multicore/$solr_core/conf/
     cp $dir_name/example/solr/collection1/conf/synonyms.txt $dir_name/example/multicore/$solr_core/conf/
 
+    # copy core0 solrconfig.xml and patch it for current core
     if [ ! -f $dir_name/example/multicore/$solr_core/conf/solrconfig.xml ]; then
         cp $dir_name/example/multicore/core0/conf/solrconfig.xml $dir_name/example/multicore/$solr_core/conf/
         sed -i.bak s/core0/"$solr_core"/g $dir_name/example/multicore/$solr_core/conf/solrconfig.xml
     fi
 
-    # copies custom configurations
-    if [ -d "${solr_confs}" ] ; then
-      cp -R $solr_confs/* $dir_name/example/multicore/$solr_core/conf/
+    destination_dir_name="$dir_name/example/multicore/$solr_core/conf"
+    copy_configuration $destination_dir_name
+}
+
+copy_configuration() {
+    destination_dir_name=$1
+
+    if [ -d "${SOLR_CONFS}" ] ; then
+      cp -R $SOLR_CONFS/* $destination_dir_name
     else
-      for file in $solr_confs
+      for file in $SOLR_CONFS
       do
         if [ -f "${file}" ]; then
-            cp $file $dir_name/example/multicore/$solr_core/conf
+            cp $file $destination_dir_name
             echo "Copied $file into solr conf directory."
         else
             echo "${file} is not valid";
@@ -239,24 +262,9 @@ add_core() {
     fi
 }
 
-post_documents() {
-    dir_name=$1
-    solr_docs=$2
-    solr_core=$3
-    solr_port=$4
-      # Post documents
-    if [ -z "${solr_docs}" ]
-    then
-        echo "SOLR_DOCS not defined, skipping initial indexing"
-    else
-        echo "Indexing $solr_docs"
-        java -Dtype=application/json -Durl=http://localhost:$solr_port/solr/$solr_core/update/json -jar $dir_name/example/exampledocs/post.jar $solr_docs
-    fi
-}
-
 check_version() {
     case $1 in
-        3.5.0|3.6.0|3.6.1|3.6.2|4.0.0|4.1.0|4.2.0|4.2.1|4.3.1|4.4.0|4.5.0|4.5.1|4.6.0|4.6.1|4.7.0|4.7.1|4.7.2|4.8.0|4.8.1|4.9.0|4.9.1|4.10.0|4.10.1|4.10.2|4.10.3);;
+        3.5.0|3.6.0|3.6.1|3.6.2|4.0.0|4.1.0|4.2.0|4.2.1|4.3.1|4.4.0|4.5.0|4.5.1|4.6.0|4.6.1|4.7.0|4.7.1|4.7.2|4.8.0|4.8.1|4.9.0|4.9.1|4.10.0|4.10.1|4.10.2|4.10.3|4.10.4);;
         *)
             echo "Sorry, $1 is not supported or not valid version."
             exit 1

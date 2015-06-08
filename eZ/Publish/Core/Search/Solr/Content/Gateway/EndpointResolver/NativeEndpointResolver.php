@@ -25,10 +25,15 @@ class NativeEndpointResolver implements EndpointResolver
     private $entryEndpoints;
 
     /**
-     * Holds a map of Endpoint names, with language codes as keys
+     * Holds a map of translations to Endpoint names, with language code as key
+     * and Endpoint name as value.
+     *
+     * Asterisk as a key defines the endpoint as available for any translation
+     * not explicitly mapped by the language code.
      *
      * <code>
      *  array(
+     *      "*" => "endpoint0",
      *      "cro-HR" => "endpoint1",
      *      "eng-GB" => "endpoint2",
      *  );
@@ -67,6 +72,11 @@ class NativeEndpointResolver implements EndpointResolver
             return $this->endpointMap[$languageCode];
         }
 
+        if ( isset( $this->endpointMap["*"] ) )
+        {
+            return $this->endpointMap["*"];
+        }
+
         throw new RuntimeException(
             "Language '{$languageCode}' is not mapped to Solr endpoint"
         );
@@ -85,26 +95,32 @@ class NativeEndpointResolver implements EndpointResolver
             return $this->getEndpoints();
         }
 
-        $targets = array();
+        $targetSet = array();
 
         foreach ( $languageSettings["languages"] as $languageCode )
         {
-            if ( !isset( $this->endpointMap[$languageCode] ) )
+            if ( isset( $this->endpointMap[$languageCode] ) )
+            {
+                $targetSet[$this->endpointMap[$languageCode]] = true;
+            }
+            else if ( isset( $this->endpointMap["*"] ) )
+            {
+                $targetSet[$this->endpointMap["*"]] = true;
+            }
+            else
             {
                 throw new RuntimeException(
                     "Language '{$languageCode}' is not mapped to Solr endpoint"
                 );
             }
-
-            $targets[] = $this->endpointMap[$languageCode];
         }
 
-        if ( empty( $targets ) )
+        if ( empty( $targetSet ) )
         {
             throw new RuntimeException( "No endpoints defined for given language settings" );
         }
 
-        return $targets;
+        return array_keys( $targetSet );
     }
 
     public function getEndpoints()
