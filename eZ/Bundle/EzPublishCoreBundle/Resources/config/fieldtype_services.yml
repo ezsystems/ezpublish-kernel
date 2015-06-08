@@ -180,7 +180,7 @@ services:
         class: %ezpublish.fieldType.ezrichtext.renderer.class%
         arguments:
             - @ezpublish.api.repository
-            - @security.context
+            - @security.authorization_checker
             - @ezpublish.config.resolver
             - @templating
             - %ezpublish.fieldType.ezrichtext.tag.namespace%

@@ -121,6 +121,6 @@ abstract class Controller extends ContainerAware
      */
     public function isGranted( AuthorizationAttribute $attribute )
     {
-        return $this->container->get( 'security.context' )->isGranted( $attribute );
+        return $this->container->get( 'security.authorization_checker' )->isGranted( $attribute );
     }
 }
