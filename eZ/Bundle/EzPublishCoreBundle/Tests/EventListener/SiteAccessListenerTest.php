@@ -108,19 +108,24 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
             $matcher = $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher' );
         }
 
+        $defaultSiteAccess = new SiteAccess( 'default' );
         $siteAccess = new SiteAccess( 'test', 'test', $matcher );
         $request = Request::create( $uri );
         $event = new PostSiteAccessMatchEvent( $siteAccess, $request, HttpKernelInterface::MASTER_REQUEST );
 
         $this->container
             ->expects( $this->once() )
-            ->method( 'set' )
-            ->with( 'ezpublish.siteaccess', $siteAccess );
+            ->method( 'get' )
+            ->with( 'ezpublish.siteaccess' )
+            ->willReturn( $defaultSiteAccess );
 
         $this->listener->onSiteAccessMatch( $event );
         $this->assertSame( $expectedSemanticPathinfo, $request->attributes->get( 'semanticPathinfo' ) );
         $this->assertSame( $expectedVPArray, $request->attributes->get( 'viewParameters' ) );
         $this->assertSame( $expectedVPString, $request->attributes->get( 'viewParametersString' ) );
+        $this->assertSame( $defaultSiteAccess->name, $siteAccess->name );
+        $this->assertSame( $defaultSiteAccess->matchingType, $siteAccess->matchingType );
+        $this->assertSame( $defaultSiteAccess->matcher, $siteAccess->matcher );
     }
 
     /**
@@ -128,6 +133,7 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
      */
     public function testOnSiteAccessMatchSubRequest( $uri, $semanticPathinfo, $vpString, $expectedViewParameters )
     {
+        $defaultSiteAccess = new SiteAccess( 'default' );
         $siteAccess = new SiteAccess( 'test', 'test', $this->getMock( 'eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher' ) );
         $request = Request::create( $uri );
         $request->attributes->set( 'semanticPathinfo', $semanticPathinfo );
@@ -139,12 +145,16 @@ class SiteAccessListenerTest extends PHPUnit_Framework_TestCase
 
         $this->container
             ->expects( $this->once() )
-            ->method( 'set' )
-            ->with( 'ezpublish.siteaccess', $siteAccess );
+            ->method( 'get' )
+            ->with( 'ezpublish.siteaccess' )
+            ->willReturn( $defaultSiteAccess );
 
         $this->listener->onSiteAccessMatch( $event );
         $this->assertSame( $semanticPathinfo, $request->attributes->get( 'semanticPathinfo' ) );
         $this->assertSame( $expectedViewParameters, $request->attributes->get( 'viewParameters' ) );
         $this->assertSame( $vpString, $request->attributes->get( 'viewParametersString' ) );
+        $this->assertSame( $defaultSiteAccess->name, $siteAccess->name );
+        $this->assertSame( $defaultSiteAccess->matchingType, $siteAccess->matchingType );
+        $this->assertSame( $defaultSiteAccess->matcher, $siteAccess->matcher );
     }
 }

@@ -46,9 +46,9 @@ class Application extends BaseApplication
         parent::registerCommands();
 
         $container = $this->getKernel()->getContainer();
-        $this->siteAccessName = $this->siteAccessName ?: $container->getParameter( 'ezpublish.siteaccess.default' );
-        $siteAccess = new SiteAccess( $this->siteAccessName, 'cli' );
-        $container->set( 'ezpublish.siteaccess', $siteAccess );
+        $siteAccess = $container->get( 'ezpublish.siteaccess' );
+        $siteAccess->name = $this->siteAccessName ?: $container->getParameter( 'ezpublish.siteaccess.default' );
+        $siteAccess->matchingType = 'cli';
     }
 
 }
