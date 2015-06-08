@@ -154,8 +154,8 @@ class NativeDocumentMapper implements DocumentMapper
 
         $fields = array(
             new Field(
-                'id',
-                'content' . $content->versionInfo->contentInfo->id,
+                'content',
+                $content->versionInfo->contentInfo->id,
                 new FieldType\IdentifierField()
             ),
             new Field(
@@ -337,6 +337,11 @@ class NativeDocumentMapper implements DocumentMapper
         foreach ( $fieldSets as $languageCode => $translationFields )
         {
             $translationFields[] = new Field(
+                'id',
+                $this->generateContentDocumentId( $content, $languageCode ),
+                new FieldType\IdentifierField()
+            );
+            $translationFields[] = new Field(
                 'meta_indexed_language_code',
                 $languageCode,
                 new FieldType\StringField()
@@ -364,6 +369,32 @@ class NativeDocumentMapper implements DocumentMapper
         }
 
         return $documents;
+    }
+
+    /**
+     * Generates the Solr backend document id for Content object
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $content
+     * @param string $languageCode
+     *
+     * @return string
+     */
+    protected function generateContentDocumentId( Content $content, $languageCode )
+    {
+        return strtolower( "content{$content->versionInfo->contentInfo->id}{$languageCode}" );
+    }
+
+    /**
+     * Generates the Solr backend document id for Content object
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     * @param string $languageCode
+     *
+     * @return string
+     */
+    protected function generateLocationDocumentId( Location $location, $languageCode )
+    {
+        return strtolower( "location{$location->id}{$languageCode}" );
     }
 
     /**
@@ -419,8 +450,8 @@ class NativeDocumentMapper implements DocumentMapper
 
         $fields = array(
             new Field(
-                'id',
-                'location' . $location->id,
+                'location',
+                $location->id,
                 new FieldType\IdentifierField()
             ),
             new Field(
@@ -588,6 +619,11 @@ class NativeDocumentMapper implements DocumentMapper
 
         foreach ( $fieldSets as $languageCode => $translationFields )
         {
+            $translationFields[] = new Field(
+                'id',
+                $this->generateLocationDocumentId( $location, $languageCode ),
+                new FieldType\IdentifierField()
+            );
             $translationFields[] = new Field(
                 'meta_indexed_language_code',
                 $languageCode,
