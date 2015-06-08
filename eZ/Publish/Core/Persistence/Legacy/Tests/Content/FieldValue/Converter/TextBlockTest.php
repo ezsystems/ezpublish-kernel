@@ -14,7 +14,7 @@ use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock as TextBlockConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use PHPUnit_Framework_TestCase;
@@ -25,7 +25,7 @@ use PHPUnit_Framework_TestCase;
 class TextBlockTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter
      */
     protected $converter;
 
@@ -48,7 +48,7 @@ EOT;
     /**
      * @group fieldType
      * @group textBlock
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -66,7 +66,7 @@ EOT;
     /**
      * @group fieldType
      * @group textBlock
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -83,7 +83,7 @@ EOT;
     /**
      * @group fieldType
      * @group textBlock
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
@@ -111,7 +111,7 @@ EOT;
     /**
      * @group fieldType
      * @group textBlock
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlock::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter::toFieldDefinition
      */
     public function testToFieldDefinition()
     {

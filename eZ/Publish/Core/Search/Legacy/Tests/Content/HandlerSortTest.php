@@ -123,18 +123,18 @@ class HandlerSortTest extends LanguageAwareTestCase
                 new ContentTypeMapper(
                     new ConverterRegistry(
                         array(
-                            'ezdatetime' => new Converter\DateAndTime(),
-                            'ezinteger' => new Converter\Integer(),
-                            'ezstring' => new Converter\TextLine(),
-                            'ezprice' => new Converter\Integer(),
-                            'ezurl' => new Converter\Url(),
-                            'ezxmltext' => new Converter\XmlText(),
-                            'ezboolean' => new Converter\Checkbox(),
-                            'ezkeyword' => new Converter\Keyword(),
-                            'ezauthor' => new Converter\Author(),
-                            'ezimage' => new Converter\Null(),
-                            'ezsrrating' => new Converter\Null(),
-                            'ezmultioption' => new Converter\Null(),
+                            'ezdatetime' => new Converter\DateAndTimeConverter(),
+                            'ezinteger' => new Converter\IntegerConverter(),
+                            'ezstring' => new Converter\TextLineConverter(),
+                            'ezprice' => new Converter\IntegerConverter(),
+                            'ezurl' => new Converter\UrlConverter(),
+                            'ezxmltext' => new Converter\XmlTextConverter(),
+                            'ezboolean' => new Converter\CheckboxConverter(),
+                            'ezkeyword' => new Converter\KeywordConverter(),
+                            'ezauthor' => new Converter\AuthorConverter(),
+                            'ezimage' => new Converter\NullConverter(),
+                            'ezsrrating' => new Converter\NullConverter(),
+                            'ezmultioption' => new Converter\NullConverter(),
                         )
                     )
                 ),

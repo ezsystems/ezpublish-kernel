@@ -1,10 +1,10 @@
 <?php
 /**
- * File containing the Url converter
+ * File containing the ISBN converter
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version //autogentag//
+ * @version 
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
@@ -14,15 +14,16 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\FieldType\FieldSettings;
 
-class Url implements Converter
+class ISBNConverter implements Converter
 {
     /**
      * Factory for current class
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return Url
+     * @return ISBN
      */
     public static function create()
     {
@@ -37,12 +38,8 @@ class Url implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = isset( $value->data['text'] )
-            ? $value->data['text']
-            : null;
-        $storageFieldValue->dataInt = isset( $value->data['urlId'] )
-            ? $value->data['urlId']
-            : null;
+        $storageFieldValue->dataText = $value->data;
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -53,11 +50,8 @@ class Url implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = array(
-            "urlId" => $value->dataInt,
-            'text' => $value->dataText,
-        );
-        $fieldValue->sortKey = false;
+        $fieldValue->data = $value->dataText;
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -68,6 +62,16 @@ class Url implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
+        if ( isset( $fieldDef->fieldTypeConstraints->fieldSettings["isISBN13"] ) )
+        {
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings["isISBN13"];
+        }
+        else
+        {
+            $storageDef->dataInt1 = 1;
+        }
+
+        $storageDef->dataText1 = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -78,9 +82,14 @@ class Url implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        // @todo: Is it possible to store a default value in the DB?
-        $fieldDef->defaultValue = new FieldValue();
-        $fieldDef->defaultValue->data = array( 'text' => null );
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
+                "isISBN13" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : true
+            )
+        );
+
+        $fieldDef->defaultValue->data = $storageDef->dataText1 ?: null;
+        $fieldDef->defaultValue->sortKey = $storageDef->dataText1 ?: "";
     }
 
     /**
@@ -90,10 +99,10 @@ class Url implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return false
+     * @return string
      */
     public function getIndexColumn()
     {
-        return false;
+        return 'sort_key_string';
     }
 }

@@ -59,7 +59,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezurl',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Url(),
+            new Legacy\Content\FieldValue\Converter\UrlConverter(),
             new FieldType\Url\UrlStorage(
                 array(
                     'LegacyStorage' => new FieldType\Url\UrlStorage\Gateway\LegacyStorage(),

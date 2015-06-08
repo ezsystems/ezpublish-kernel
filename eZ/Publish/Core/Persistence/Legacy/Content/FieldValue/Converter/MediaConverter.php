@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the TextBlock converter
+ * File containing the Image converter
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,49 +9,23 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
-use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\Core\FieldType\Media\Type as MediaType;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\FieldType\FieldSettings;
 
-class TextBlock implements Converter
+class MediaConverter extends BinaryFileConverter
 {
     /**
      * Factory for current class
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return TextBlock
+     * @return MediaConverter
      */
     public static function create()
     {
         return new self;
-    }
-
-    /**
-     * Converts data from $value to $storageFieldValue
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
-     */
-    public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
-    {
-        $storageFieldValue->dataText = $value->data;
-        $storageFieldValue->sortKeyString = $value->sortKey;
-    }
-
-    /**
-     * Converts data from $value to $fieldValue
-     *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
-     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
-     */
-    public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
-    {
-        $fieldValue->data = $value->dataText;
-        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -62,10 +36,11 @@ class TextBlock implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->fieldSettings["textRows"] ) )
-        {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings["textRows"];
-        }
+        parent::toStorageFieldDefinition( $fieldDef, $storageDef );
+
+        $storageDef->dataText1 = ( isset( $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'] )
+            ? $fieldDef->fieldTypeConstraints->fieldSettings['mediaType']
+            : MediaType::TYPE_HTML5_VIDEO );
     }
 
     /**
@@ -76,13 +51,12 @@ class TextBlock implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        parent::toFieldDefinition( $storageDef, $fieldDef );
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "textRows" => $storageDef->dataInt1
+                'mediaType' => $storageDef->dataText1,
             )
         );
-        $fieldDef->defaultValue->data = null;
-        $fieldDef->defaultValue->sortKey = "";
     }
 
     /**
@@ -96,6 +70,6 @@ class TextBlock implements Converter
      */
     public function getIndexColumn()
     {
-        return 'sort_key_string';
+        return false;
     }
 }

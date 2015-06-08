@@ -58,7 +58,7 @@ class FloatIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezfloat',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Float(),
+            new Legacy\Content\FieldValue\Converter\FloatConverter(),
             new FieldType\NullStorage()
         );
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Checkbox converter
+ * File containing the Selection converter
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,20 +9,22 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use DOMDocument;
 
-class Checkbox implements Converter
+class SelectionConverter implements Converter
 {
     /**
      * Factory for current class
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return Checkbox
+     * @return Selection
      */
     public static function create()
     {
@@ -37,8 +39,7 @@ class Checkbox implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt    = (int)$value->data;
-        $storageFieldValue->sortKeyInt = (int)$value->data;
+        $storageFieldValue->sortKeyString = $storageFieldValue->dataText = $value->sortKey;
     }
 
     /**
@@ -49,8 +50,18 @@ class Checkbox implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data    = (bool)$value->dataInt;
-        $fieldValue->sortKey = $value->dataInt;
+        if ( $value->dataText !== '' )
+        {
+            $fieldValue->data = array_map(
+                'intval',
+                explode( '-', $value->dataText )
+            );
+        }
+        else
+        {
+            $fieldValue->data = array();
+        }
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -61,7 +72,30 @@ class Checkbox implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $storageDef->dataInt3 = (int)$fieldDef->defaultValue->data;
+        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+
+        if ( isset( $fieldSettings["isMultiple"] ) )
+            $storageDef->dataInt1 = (int)$fieldSettings["isMultiple"];
+
+        if ( !empty( $fieldSettings["options"] ) )
+        {
+            $xml = new DOMDocument( "1.0", "utf-8" );
+            $xml->appendChild(
+                $selection = $xml->createElement( "ezselection" )
+            );
+            $selection->appendChild(
+                $options = $xml->createElement( "options" )
+            );
+            foreach ( $fieldSettings["options"] as $id => $name )
+            {
+                $options->appendChild(
+                    $option = $xml->createElement( "option" )
+                );
+                $option->setAttribute( "id", $id );
+                $option->setAttribute( "name", $name );
+            }
+            $storageDef->dataText5 = $xml->saveXML();
+        }
     }
 
     /**
@@ -72,7 +106,28 @@ class Checkbox implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->defaultValue->data = !empty( $storageDef->dataInt3 ) ? (bool)$storageDef->dataInt3 : false;
+        $options = array();
+        $simpleXml = simplexml_load_string( $storageDef->dataText5 );
+
+        if ( $simpleXml !== false )
+        {
+            foreach ( $simpleXml->options->option as $option )
+            {
+                $options[(int)$option["id"]] = (string)$option["name"];
+            }
+        }
+
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
+                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
+                "options" => $options,
+            )
+        );
+
+        // @todo: Can Selection store a default value in the DB?
+        $fieldDef->defaultValue = new FieldValue();
+        $fieldDef->defaultValue->data = array();
+        $fieldDef->defaultValue->sortKey = "";
     }
 
     /**
@@ -86,7 +141,7 @@ class Checkbox implements Converter
      */
     public function getIndexColumn()
     {
-        return 'sort_key_int';
+        return "sort_key_string";
     }
 
 }

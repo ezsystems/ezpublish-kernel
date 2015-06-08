@@ -14,7 +14,7 @@ use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date as DateConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use PHPUnit_Framework_TestCase;
@@ -29,7 +29,7 @@ use DateTime;
 class DateTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter
      */
     protected $converter;
 
@@ -46,7 +46,7 @@ class DateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -65,7 +65,7 @@ class DateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -88,7 +88,7 @@ class DateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionDefaultEmpty()
     {
@@ -113,7 +113,7 @@ class DateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionDefaultCurrentDate()
     {
@@ -138,7 +138,7 @@ class DateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter::toFieldDefinition
      */
     public function testToFieldDefinitionDefaultEmpty()
     {
@@ -154,7 +154,7 @@ class DateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Date::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter::toFieldDefinition
      */
     public function testToFieldDefinitionDefaultCurrentDate()
     {

@@ -59,7 +59,7 @@ class RelationIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezobjectrelation',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Relation(),
+            new Legacy\Content\FieldValue\Converter\RelationConverter(),
             new FieldType\NullStorage()
         );
     }

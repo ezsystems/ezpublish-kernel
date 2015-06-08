@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
-class Float implements Converter
+class FloatConverter implements Converter
 {
     const FLOAT_VALIDATOR_IDENTIFIER = "FloatValueValidator";
 

@@ -74,7 +74,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         return $this->getHandler(
             'ezmedia',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Media(),
+            new Legacy\Content\FieldValue\Converter\MediaConverter(),
             new FieldType\Media\MediaStorage(
                 array(
                     'LegacyStorage' => new FieldType\Media\MediaStorage\Gateway\LegacyStorage(),

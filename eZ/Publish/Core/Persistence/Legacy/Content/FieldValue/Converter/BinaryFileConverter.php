@@ -9,23 +9,45 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
-use eZ\Publish\Core\FieldType\Media\Type as MediaType;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldValue;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\FieldType\FieldSettings;
 
-class Media extends BinaryFile
+class BinaryFileConverter implements Converter
 {
     /**
      * Factory for current class
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return Image
+     * @return BinaryFileConverter
      */
     public static function create()
     {
         return new self;
+    }
+
+    /**
+     * Converts data from $value to $storageFieldValue
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
+     */
+    public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
+    {
+    }
+
+    /**
+     * Converts data from $value to $fieldValue
+     *
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
+     */
+    public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
+    {
     }
 
     /**
@@ -36,11 +58,9 @@ class Media extends BinaryFile
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        parent::toStorageFieldDefinition( $fieldDef, $storageDef );
-
-        $storageDef->dataText1 = ( isset( $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'] )
-            ? $fieldDef->fieldTypeConstraints->fieldSettings['mediaType']
-            : MediaType::TYPE_HTML5_VIDEO );
+        $storageDef->dataInt1 = ( isset( $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] )
+            ? $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize']
+            : 0 );
     }
 
     /**
@@ -51,10 +71,15 @@ class Media extends BinaryFile
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        parent::toFieldDefinition( $storageDef, $fieldDef );
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints(
             array(
-                'mediaType' => $storageDef->dataText1,
+                'validators' => array(
+                    'FileSizeValidator' => array(
+                        'maxFileSize' => ( $storageDef->dataInt1 != 0
+                            ? $storageDef->dataInt1
+                            : null ),
+                    )
+                )
             )
         );
     }
@@ -70,6 +95,7 @@ class Media extends BinaryFile
      */
     public function getIndexColumn()
     {
-        return false;
+        // @todo: Correct?
+        return 'sort_key_string';
     }
 }

@@ -58,7 +58,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezauthor',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Author(),
+            new Legacy\Content\FieldValue\Converter\AuthorConverter(),
             new FieldType\NullStorage()
         );
     }

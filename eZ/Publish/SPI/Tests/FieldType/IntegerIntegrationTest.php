@@ -58,7 +58,7 @@ class IntegerIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezinteger',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Integer(),
+            new Legacy\Content\FieldValue\Converter\IntegerConverter(),
             new FieldType\NullStorage()
         );
     }

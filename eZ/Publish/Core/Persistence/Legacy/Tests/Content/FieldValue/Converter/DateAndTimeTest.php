@@ -14,7 +14,7 @@ use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime as DateAndTimeConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use PHPUnit_Framework_TestCase;
@@ -30,7 +30,7 @@ use ReflectionObject;
 class DateAndTimeTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter
      */
     protected $converter;
 
@@ -49,7 +49,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -70,7 +70,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -95,7 +95,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionWithAdjustment()
     {
@@ -138,7 +138,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionNoDefault()
     {
@@ -172,7 +172,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionCurrentDate()
     {
@@ -223,7 +223,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::toFieldDefinition
      */
     public function testToFieldDefinitionNoDefault()
     {
@@ -242,7 +242,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::toFieldDefinition
      */
     public function testToFieldDefinitionCurrentDate()
     {
@@ -265,7 +265,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::toFieldDefinition
      */
     public function testToFieldDefinitionWithAdjustmentAndSeconds()
     {
@@ -295,7 +295,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::toFieldDefinition
      */
     public function testToFieldDefinitionWithAdjustmentNoSeconds()
     {
@@ -350,7 +350,7 @@ EOT;
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::getDateIntervalFromXML
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::getDateIntervalFromXML
      */
     public function testGetDateIntervalFromXML()
     {
@@ -369,7 +369,7 @@ EOT;
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTime::generateDateIntervalXML
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter::generateDateIntervalXML
      */
     public function testGenerateDateIntervalXML()
     {

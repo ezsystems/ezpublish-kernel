@@ -18,7 +18,7 @@ use eZ\Publish\Core\FieldType\Page\Parts;
 use DOMDocument;
 use DOMElement;
 
-class Page implements Converter
+class PageConverter implements Converter
 {
     /**
      * Converts data from $value to $storageFieldValue

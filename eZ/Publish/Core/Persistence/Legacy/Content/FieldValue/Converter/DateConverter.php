@@ -1,10 +1,10 @@
 <?php
 /**
- * File containing the ISBN converter
+ * File containing the Date field value converter class
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version 
+ * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
@@ -14,16 +14,21 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
+use eZ\Publish\Core\FieldType\Date\Type as DateType;
 use eZ\Publish\Core\FieldType\FieldSettings;
+use DateTime;
 
-class ISBN implements Converter
+/**
+ * Date field value converter class
+ */
+class DateConverter implements Converter
 {
     /**
      * Factory for current class
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return ISBN
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter
      */
     public static function create()
     {
@@ -38,8 +43,8 @@ class ISBN implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data;
-        $storageFieldValue->sortKeyString = $value->sortKey;
+        $storageFieldValue->dataInt = ( $value->data !== null ? $value->data["timestamp"] : null );
+        $storageFieldValue->sortKeyInt = (int)$value->sortKey;
     }
 
     /**
@@ -50,8 +55,16 @@ class ISBN implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = $value->dataText;
-        $fieldValue->sortKey = $value->sortKeyString;
+        if ( $value->dataInt === null || $value->dataInt == 0 )
+        {
+            return;
+        }
+
+        $fieldValue->data = array(
+            "timestamp" => $value->dataInt,
+            "rfc850" => null,
+        );
+        $fieldValue->sortKey = $value->sortKeyInt;
     }
 
     /**
@@ -62,16 +75,7 @@ class ISBN implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->fieldSettings["isISBN13"] ) )
-        {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings["isISBN13"];
-        }
-        else
-        {
-            $storageDef->dataInt1 = 1;
-        }
-
-        $storageDef->dataText1 = $fieldDef->defaultValue->data;
+        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings["defaultType"];
     }
 
     /**
@@ -84,12 +88,26 @@ class ISBN implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "isISBN13" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : true
+                "defaultType" => $storageDef->dataInt1
             )
         );
 
-        $fieldDef->defaultValue->data = $storageDef->dataText1 ?: null;
-        $fieldDef->defaultValue->sortKey = $storageDef->dataText1 ?: "";
+        // Building default value
+        switch ( $fieldDef->fieldTypeConstraints->fieldSettings["defaultType"] )
+        {
+            case DateType::DEFAULT_CURRENT_DATE:
+                $dateTime = new DateTime();
+                $dateTime->setTime( 0, 0, 0 );
+                $data = array(
+                    "timestamp" => $dateTime->getTimestamp(),
+                    "rfc850" => null,
+                );
+                break;
+            default:
+                $data = null;
+        }
+
+        $fieldDef->defaultValue->data = $data;
     }
 
     /**
@@ -103,6 +121,6 @@ class ISBN implements Converter
      */
     public function getIndexColumn()
     {
-        return 'sort_key_string';
+        return "sort_key_int";
     }
 }

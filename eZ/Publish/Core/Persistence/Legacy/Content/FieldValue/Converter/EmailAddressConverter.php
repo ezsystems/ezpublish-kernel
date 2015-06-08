@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the RichText converter
+ * File containing the Mail converter
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -14,17 +14,17 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\FieldType\FieldSettings;
-use eZ\Publish\Core\FieldType\RichText\Value;
 
-class RichText implements Converter
+class EmailAddressConverter implements Converter
 {
+    const VALIDATOR_IDENTIFIER = "EmailAddressValidator";
+
     /**
      * Factory for current class
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\EmailAddressConverter
      */
     public static function create()
     {
@@ -39,7 +39,8 @@ class RichText implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data;
+        $storageFieldValue->dataText      = $value->data;
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -50,37 +51,33 @@ class RichText implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = $value->dataText ?: Value::EMPTY_VALUE;
+        $fieldValue->data    = $value->dataText;
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
-     * Converts field definition data from $fieldDefinition into $storageFieldDefinition
+     * Converts field definition data in $fieldDef into $storageFieldDef
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      */
-    public function toStorageFieldDefinition( FieldDefinition $fieldDefinition, StorageFieldDefinition $storageDefinition )
+    public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $storageDefinition->dataInt1 = $fieldDefinition->fieldTypeConstraints->fieldSettings['numRows'];
-        $storageDefinition->dataText2 = $fieldDefinition->fieldTypeConstraints->fieldSettings['tagPreset'];
+        $storageDef->dataText1 = $fieldDef->defaultValue->data;
     }
 
     /**
-     * Converts field definition data from $storageDefinition into $fieldDefinition
+     * Converts field definition data in $storageDef into $fieldDef
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDefinition
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
-    public function toFieldDefinition( StorageFieldDefinition $storageDefinition, FieldDefinition $fieldDefinition )
+    public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                'numRows' => $storageDefinition->dataInt1,
-                'tagPreset' => $storageDefinition->dataText2
-            )
-        );
-
-        $fieldDefinition->defaultValue->data = Value::EMPTY_VALUE;
+        $validatorConstraints = array( self::VALIDATOR_IDENTIFIER => array() );
+        $fieldDef->fieldTypeConstraints->validators = $validatorConstraints;
+        $fieldDef->defaultValue->data = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
+        $fieldDef->defaultValue->sortKey = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -90,11 +87,10 @@ class RichText implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return string|false
+     * @return string
      */
     public function getIndexColumn()
     {
-        return false;
+        return 'sort_key_string';
     }
-
 }

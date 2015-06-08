@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Rating converter
+ * File containing the Url converter
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -15,14 +15,14 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
-class Rating implements Converter
+class UrlConverter implements Converter
 {
     /**
      * Factory for current class
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return Rating
+     * @return Url
      */
     public static function create()
     {
@@ -37,7 +37,12 @@ class Rating implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = $value->data ? 1 : null;
+        $storageFieldValue->dataText = isset( $value->data['text'] )
+            ? $value->data['text']
+            : null;
+        $storageFieldValue->dataInt = isset( $value->data['urlId'] )
+            ? $value->data['urlId']
+            : null;
     }
 
     /**
@@ -48,7 +53,11 @@ class Rating implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = (bool)$value->dataInt;
+        $fieldValue->data = array(
+            "urlId" => $value->dataInt,
+            'text' => $value->dataText,
+        );
+        $fieldValue->sortKey = false;
     }
 
     /**
@@ -69,7 +78,9 @@ class Rating implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->defaultValue->data = false;
+        // @todo: Is it possible to store a default value in the DB?
+        $fieldDef->defaultValue = new FieldValue();
+        $fieldDef->defaultValue->data = array( 'text' => null );
     }
 
     /**
@@ -79,7 +90,7 @@ class Rating implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return string
+     * @return false
      */
     public function getIndexColumn()
     {

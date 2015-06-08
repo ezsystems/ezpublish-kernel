@@ -21,7 +21,7 @@ use DateInterval;
 use DOMDocument;
 use SimpleXMLElement;
 
-class DateAndTime implements Converter
+class DateAndTimeConverter implements Converter
 {
     /**
      * Factory for current class

@@ -629,7 +629,7 @@ abstract class BaseIntegrationTest extends TestCase
 
         $textLineFieldType = new \eZ\Publish\Core\FieldType\TextLine\Type();
         $textLineFieldType->setTransformationProcessor( $this->getTransformationProcessor() );
-        $textLineFieldValueConverter = new Legacy\Content\FieldValue\Converter\TextLine();
+        $textLineFieldValueConverter = new Legacy\Content\FieldValue\Converter\TextLineConverter();
 
         $fieldTypeRegistry->register( "ezstring", $textLineFieldType );
         $converterRegistry->register( "ezstring", $textLineFieldValueConverter );

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText as RichTextConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -23,7 +23,7 @@ use PHPUnit_Framework_TestCase;
 class RichTextTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter
      */
     protected $converter;
 
@@ -53,7 +53,7 @@ EOT;
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -66,7 +66,7 @@ EOT;
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichText::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter::toFieldValue
      */
     public function testToFieldValue()
     {

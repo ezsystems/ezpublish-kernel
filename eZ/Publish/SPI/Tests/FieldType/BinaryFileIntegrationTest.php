@@ -75,7 +75,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
         return $this->getHandler(
             'ezbinaryfile',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\BinaryFile(),
+            new Legacy\Content\FieldValue\Converter\BinaryFileConverter(),
             new FieldType\BinaryFile\BinaryFileStorage(
                 array(
                     'LegacyStorage' => new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage(),

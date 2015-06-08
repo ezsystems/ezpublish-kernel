@@ -23,7 +23,7 @@ use PHPUnit_Framework_TestCase;
 class RelationListTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection
+     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter
      */
     protected $converter;
 
@@ -31,7 +31,7 @@ class RelationListTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->converter = $this
-            ->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\RelationList" )
+            ->getMockBuilder( "eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\RelationListConverter" )
             ->disableOriginalConstructor()
             ->setMethods( array( "getRelationXmlHashFromDB" ) )
             ->getMock();

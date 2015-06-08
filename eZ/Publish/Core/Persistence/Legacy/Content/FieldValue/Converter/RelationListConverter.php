@@ -19,7 +19,7 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use DOMDocument;
 use PDO;
 
-class RelationList implements Converter
+class RelationListConverter implements Converter
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler

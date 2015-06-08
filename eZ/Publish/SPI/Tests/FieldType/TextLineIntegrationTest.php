@@ -58,7 +58,7 @@ class TextLineIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezstring',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\TextLine(),
+            new Legacy\Content\FieldValue\Converter\TextLineConverter(),
             new FieldType\NullStorage()
         );
     }

@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating as RatingConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use PHPUnit_Framework_TestCase;
 
@@ -22,7 +22,7 @@ use PHPUnit_Framework_TestCase;
 class RatingTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter
      */
     protected $converter;
 
@@ -35,7 +35,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -51,7 +51,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toStorageValue
      */
     public function testToStorageValueDisabled()
     {
@@ -67,7 +67,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -82,7 +82,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toFieldValue
      */
     public function testToFieldValueDisabled()
     {
@@ -97,7 +97,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
@@ -107,7 +107,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group rating
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter::toFieldDefinition
      */
     public function testToFieldDefinition()
     {

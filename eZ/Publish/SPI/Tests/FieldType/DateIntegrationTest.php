@@ -58,7 +58,7 @@ class DateIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezdate',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Date(),
+            new Legacy\Content\FieldValue\Converter\DateConverter(),
             new FieldType\NullStorage()
         );
     }

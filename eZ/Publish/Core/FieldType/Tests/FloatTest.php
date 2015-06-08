@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use eZ\Publish\Core\FieldType\Float\Type as Float;
+use eZ\Publish\Core\FieldType\Float\Type as FloatType;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
 use eZ\Publish\Core\FieldType\ValidationError;
 
@@ -32,7 +32,7 @@ class FloatTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new Float();
+        $fieldType = new FloatType();
         $fieldType->setTransformationProcessor( $this->getTransformationProcessorMock() );
 
         return $fieldType;

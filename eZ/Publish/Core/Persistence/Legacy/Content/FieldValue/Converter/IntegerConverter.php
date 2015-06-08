@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Relation converter
+ * File containing the Integer converter
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -15,14 +15,19 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
-class Relation implements Converter
+class IntegerConverter implements Converter
 {
+    const FLOAT_VALIDATOR_IDENTIFIER = "IntegerValueValidator";
+
+    const HAS_MIN_VALUE = 1;
+    const HAS_MAX_VALUE = 2;
+
     /**
      * Factory for current class
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return Url
+     * @return Integer
      */
     public static function create()
     {
@@ -37,9 +42,7 @@ class Relation implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = !empty( $value->data['destinationContentId'] )
-            ? $value->data['destinationContentId']
-            : null;
+        $storageFieldValue->dataInt = $value->data;
         $storageFieldValue->sortKeyInt = (int)$value->sortKey;
     }
 
@@ -51,10 +54,8 @@ class Relation implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = array(
-            "destinationContentId" => $value->dataInt ?: null,
-        );
-        $fieldValue->sortKey = (int)$value->sortKeyInt;
+        $fieldValue->data = $value->dataInt;
+        $fieldValue->sortKey = $value->sortKeyInt;
     }
 
     /**
@@ -65,11 +66,19 @@ class Relation implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        // Selection method, 0 = browse, 1 = dropdown
-        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['selectionMethod'];
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'] ) )
+        {
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['minIntegerValue'];
+        }
 
-        // Selection root, location ID
-        $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->fieldSettings['selectionRoot'];
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'] ) )
+        {
+            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER]['maxIntegerValue'];
+        }
+
+        // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
+        $storageDef->dataInt4 = $this->getStorageDefValidatorState( $storageDef->dataInt1, $storageDef->dataInt2 );
+        $storageDef->dataInt3 = $fieldDef->defaultValue->data;
     }
 
     /**
@@ -80,15 +89,19 @@ class Relation implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        // Selection method, 0 = browse, 1 = dropdown
-        $fieldDef->fieldTypeConstraints->fieldSettings['selectionMethod'] = $storageDef->dataInt1;
+        $validatorParameters = array( 'minIntegerValue' => null, 'maxIntegerValue' => null );
+        if ( $storageDef->dataInt4 & self::HAS_MIN_VALUE )
+        {
+            $validatorParameters['minIntegerValue'] = $storageDef->dataInt1;
+        }
 
-        // Selection root, location ID
-
-        $fieldDef->fieldTypeConstraints->fieldSettings['selectionRoot'] =
-            $storageDef->dataInt2 === 0
-            ? ''
-            : $storageDef->dataInt2;
+        if ( $storageDef->dataInt4 & self::HAS_MAX_VALUE )
+        {
+            $validatorParameters['maxIntegerValue'] = $storageDef->dataInt2;
+        }
+        $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_IDENTIFIER] = $validatorParameters;
+        $fieldDef->defaultValue->data = $storageDef->dataInt3;
+        $fieldDef->defaultValue->sortKey = ( $storageDef->dataInt3 === null ? 0 : $storageDef->dataInt3 );
     }
 
     /**
@@ -98,10 +111,34 @@ class Relation implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return false
+     * @return string
      */
     public function getIndexColumn()
     {
         return 'sort_key_int';
+    }
+
+    /**
+     * Returns validator state for storage definition.
+     * Validator state is a bitfield value composed of:
+     *   - {@link self::HAS_MAX_VALUE}
+     *   - {@link self::HAS_MIN_VALUE}
+     *
+     * @param int|null $minValue Minimum int value, or null if not set
+     * @param int|null $maxValue Maximum int value, or null if not set
+     *
+     * @return int
+     */
+    private function getStorageDefValidatorState( $minValue, $maxValue )
+    {
+        $state = 0;
+
+        if ( $minValue !== null )
+            $state |= self::HAS_MIN_VALUE;
+
+        if ( $maxValue !== null )
+            $state |= self::HAS_MAX_VALUE;
+
+        return $state;
     }
 }

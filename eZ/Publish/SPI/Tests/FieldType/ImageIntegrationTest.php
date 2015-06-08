@@ -83,7 +83,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         return $this->getHandler(
             'ezimage',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Image( $this->ioService, $urlRedecorator ),
+            new Legacy\Content\FieldValue\Converter\ImageConverter( $this->ioService, $urlRedecorator ),
             new FieldType\Image\ImageStorage(
                 array(
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage( $urlRedecorator ),

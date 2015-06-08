@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use eZ\Publish\Core\FieldType\Media\Type as MediaType;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media as MediaTypeConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MediaConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use PHPUnit_Framework_TestCase;
@@ -26,13 +26,13 @@ class MediaTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->converter = MediaTypeConverter::create();
+        $this->converter = MediaConverter::create();
     }
 
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MediaConverter::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
@@ -71,7 +71,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MediaConverter::toFieldDefinition
      */
     public function testToFieldDefinition()
     {

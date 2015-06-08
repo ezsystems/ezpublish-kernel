@@ -226,14 +226,14 @@ class HandlerTest extends LanguageAwareTestCase
         {
             $this->fieldRegistry = new ConverterRegistry(
                 array(
-                    'ezdatetime' => new Converter\DateAndTime(),
-                    'ezinteger' => new Converter\Integer(),
-                    'ezstring' => new Converter\TextLine(),
-                    'ezprice' => new Converter\Integer(),
-                    'ezurl' => new Converter\Url(),
-                    'ezxmltext' => new Converter\XmlText(),
-                    'ezboolean' => new Converter\Checkbox(),
-                    'ezkeyword' => new Converter\Keyword(),
+                    'ezdatetime' => new Converter\DateAndTimeConverter(),
+                    'ezinteger' => new Converter\IntegerConverter(),
+                    'ezstring' => new Converter\TextLineConverter(),
+                    'ezprice' => new Converter\IntegerConverter(),
+                    'ezurl' => new Converter\UrlConverter(),
+                    'ezxmltext' => new Converter\XmlTextConverter(),
+                    'ezboolean' => new Converter\CheckboxConverter(),
+                    'ezkeyword' => new Converter\KeywordConverter(),
                 )
             );
         }

@@ -61,7 +61,7 @@ class UserIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezuser',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Null(),
+            new Legacy\Content\FieldValue\Converter\NullConverter(),
             new FieldType\User\UserStorage(
                 array(
                     'LegacyStorage' => new FieldType\User\UserStorage\Gateway\LegacyStorage(),

@@ -18,7 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
-class Image implements Converter
+class ImageConverter implements Converter
 {
     /** @var IOServiceInterface */
     private $imageIoService;

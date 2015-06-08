@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Page as PageConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\PageConverter;
 use eZ\Publish\Core\FieldType\Page\Parts;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
@@ -75,7 +75,7 @@ EOT;
     private $pageReference;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Page
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\PageConverter
      */
     private $converter;
 

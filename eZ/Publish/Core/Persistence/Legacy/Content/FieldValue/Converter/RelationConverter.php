@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Selection converter
+ * File containing the Relation converter
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -9,22 +9,20 @@
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
-use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use DOMDocument;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
-class Selection implements Converter
+class RelationConverter implements Converter
 {
     /**
      * Factory for current class
      *
      * @note Class should instead be configured as service if it gains dependencies.
      *
-     * @return Selection
+     * @return Url
      */
     public static function create()
     {
@@ -39,7 +37,10 @@ class Selection implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->sortKeyString = $storageFieldValue->dataText = $value->sortKey;
+        $storageFieldValue->dataInt = !empty( $value->data['destinationContentId'] )
+            ? $value->data['destinationContentId']
+            : null;
+        $storageFieldValue->sortKeyInt = (int)$value->sortKey;
     }
 
     /**
@@ -50,18 +51,10 @@ class Selection implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        if ( $value->dataText !== '' )
-        {
-            $fieldValue->data = array_map(
-                'intval',
-                explode( '-', $value->dataText )
-            );
-        }
-        else
-        {
-            $fieldValue->data = array();
-        }
-        $fieldValue->sortKey = $value->sortKeyString;
+        $fieldValue->data = array(
+            "destinationContentId" => $value->dataInt ?: null,
+        );
+        $fieldValue->sortKey = (int)$value->sortKeyInt;
     }
 
     /**
@@ -72,30 +65,11 @@ class Selection implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+        // Selection method, 0 = browse, 1 = dropdown
+        $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->fieldSettings['selectionMethod'];
 
-        if ( isset( $fieldSettings["isMultiple"] ) )
-            $storageDef->dataInt1 = (int)$fieldSettings["isMultiple"];
-
-        if ( !empty( $fieldSettings["options"] ) )
-        {
-            $xml = new DOMDocument( "1.0", "utf-8" );
-            $xml->appendChild(
-                $selection = $xml->createElement( "ezselection" )
-            );
-            $selection->appendChild(
-                $options = $xml->createElement( "options" )
-            );
-            foreach ( $fieldSettings["options"] as $id => $name )
-            {
-                $options->appendChild(
-                    $option = $xml->createElement( "option" )
-                );
-                $option->setAttribute( "id", $id );
-                $option->setAttribute( "name", $name );
-            }
-            $storageDef->dataText5 = $xml->saveXML();
-        }
+        // Selection root, location ID
+        $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->fieldSettings['selectionRoot'];
     }
 
     /**
@@ -106,28 +80,15 @@ class Selection implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $options = array();
-        $simpleXml = simplexml_load_string( $storageDef->dataText5 );
+        // Selection method, 0 = browse, 1 = dropdown
+        $fieldDef->fieldTypeConstraints->fieldSettings['selectionMethod'] = $storageDef->dataInt1;
 
-        if ( $simpleXml !== false )
-        {
-            foreach ( $simpleXml->options->option as $option )
-            {
-                $options[(int)$option["id"]] = (string)$option["name"];
-            }
-        }
+        // Selection root, location ID
 
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
-                "options" => $options,
-            )
-        );
-
-        // @todo: Can Selection store a default value in the DB?
-        $fieldDef->defaultValue = new FieldValue();
-        $fieldDef->defaultValue->data = array();
-        $fieldDef->defaultValue->sortKey = "";
+        $fieldDef->fieldTypeConstraints->fieldSettings['selectionRoot'] =
+            $storageDef->dataInt2 === 0
+            ? ''
+            : $storageDef->dataInt2;
     }
 
     /**
@@ -137,11 +98,10 @@ class Selection implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return string
+     * @return false
      */
     public function getIndexColumn()
     {
-        return "sort_key_string";
+        return 'sort_key_int';
     }
-
 }

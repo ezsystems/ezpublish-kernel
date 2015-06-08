@@ -59,7 +59,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
         return $this->getHandler(
             'ezkeyword',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\Keyword(),
+            new Legacy\Content\FieldValue\Converter\KeywordConverter(),
             new FieldType\Keyword\KeywordStorage(
                 array(
                     'LegacyStorage' => new FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage(),
