@@ -261,22 +261,23 @@ class Native extends Gateway
      */
     protected function getCoreFilter( array $languageSettings )
     {
-        if ( empty( $languageSettings ) )
-        {
-            return "";
-        }
-
         $filters = array();
-        $languageCodes = $languageSettings["languages"];
 
-        foreach ( $languageCodes as $languageCode )
+        if ( !empty( $languageSettings["languages"] ) )
         {
-            $filters[] = "(" . $this->getCoreLanguageFilter( $languageCodes, $languageCode ) . ")";
+            foreach ( $languageSettings["languages"] as $languageCode )
+            {
+                $filters[] = "(" . $this->getCoreLanguageFilter( $languageSettings["languages"], $languageCode ) . ")";
+            }
         }
 
-        if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true )
+        if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true  )
         {
             $filters[] = "meta_indexed_is_main_translation_and_always_available_b:true";
+        }
+        else if ( empty( $languageSettings["languages"] ) )
+        {
+            $filters[] = "meta_indexed_is_main_translation_b:true";
         }
 
         return implode( " OR ", $filters );
