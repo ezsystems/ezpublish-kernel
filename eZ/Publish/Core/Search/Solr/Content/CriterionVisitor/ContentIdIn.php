@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 class ContentIdIn extends CriterionVisitor
 {
     /**
-     * CHeck if visitor is applicable to current criterion
+     * Check if visitor is applicable to current criterion
      *
      * @param Criterion $criterion
      *
@@ -49,7 +49,7 @@ class ContentIdIn extends CriterionVisitor
                 array_map(
                     function ( $value )
                     {
-                        return 'id:"content' . $value . '"';
+                        return 'content_id:"' . $value . '"';
                     },
                     $criterion->value
                 )
