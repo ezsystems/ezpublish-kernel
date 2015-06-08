@@ -204,7 +204,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
-     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -250,7 +249,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
-     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -291,7 +289,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
-     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -332,7 +329,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
-     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -372,7 +368,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
-     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -392,7 +387,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\FullText( "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -418,7 +413,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
-     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -438,7 +432,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\FullText( "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -464,7 +458,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
-     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -484,7 +477,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\FullText( "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -510,7 +503,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
-     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -552,7 +544,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
      * Test for the findContent() method.
      *
      * @param string $type
-     * @group aaa
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
@@ -681,8 +672,6 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
     /**
      * Test for the findContent() method.
-     *
-     * @group aaa
      *
      * @param string $type
      *
@@ -858,7 +847,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\Field( "name", Operator::EQ, "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -901,7 +890,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\Field( "name", Operator::EQ, "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -944,7 +933,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\Field( "name", Operator::EQ, "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -1219,7 +1208,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\Field( "name", Operator::GTE, "z" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -1262,7 +1251,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\Field( "name", Operator::GTE, "z" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -1305,7 +1294,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\Field( "name", Operator::GTE, "z" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -1797,7 +1786,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => $criterion = new Criterion\Field( "short_description", Operator::EQ, "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -1844,7 +1833,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => $criterion = new Criterion\Field( "short_description", Operator::EQ, "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -1891,7 +1880,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => $criterion = new Criterion\Field( "short_description", Operator::EQ, "one" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -2194,7 +2183,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -2241,7 +2230,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -2288,7 +2277,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => $criterion = new Criterion\Field( "short_description", Operator::GTE, "z" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -2864,14 +2853,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
                     10
                 ),
                 'sortClauses' => array(
-                    new SortClause\MapLocationDistance(
-                        "folder",
-                        "map_location",
-                        10,
-                        10,
-                        Query::SORT_ASC,
-                        "eng-GB"
-                    ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -2936,14 +2918,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
                     10
                 ),
                 'sortClauses' => array(
-                    new SortClause\MapLocationDistance(
-                        "folder",
-                        "map_location",
-                        10,
-                        10,
-                        Query::SORT_ASC,
-                        "eng-GB"
-                    ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -3008,14 +2983,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
                     10
                 ),
                 'sortClauses' => array(
-                    new SortClause\MapLocationDistance(
-                        "folder",
-                        "map_location",
-                        10,
-                        10,
-                        Query::SORT_ASC,
-                        "eng-GB"
-                    ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -3454,7 +3422,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
                     "one"
                 ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -3503,7 +3471,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
                     "one"
                 ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -3552,7 +3520,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
                     "one"
                 ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_ASC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -3849,7 +3817,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -3894,7 +3862,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
@@ -3939,7 +3907,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
             array(
                 $type => new Criterion\CustomField( "folder_name_value_s", Operator::GTE, "z" ),
                 'sortClauses' => array(
-                    new SortClause\Field( "folder", "name", Query::SORT_DESC, "eng-GB" ),
+                    new SortClause\ContentId( Query::SORT_ASC ),
                 ),
             )
         );
