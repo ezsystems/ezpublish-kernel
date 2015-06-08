@@ -3,7 +3,7 @@
 SOLR_PORT=${SOLR_PORT:-8983}
 SOLR_VERSION=${SOLR_VERSION:-4.10.4}
 DEBUG=${DEBUG:-false}
-SOLR_CORES=${SOLR_CORES:-(core0)}
+SOLR_CORES=${SOLR_CORES:-core0}
 SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 
 download() {
@@ -189,7 +189,7 @@ download_and_run() {
     sed -i.bak 's/<core name="core0" instanceDir="core0" \/>//g' $dir_name/example/multicore/solr.xml
     sed -i.bak 's/<core name="core1" instanceDir="core1" \/>//g' $dir_name/example/multicore/solr.xml
 
-    for $solr_core in $SOLR_CORES
+    for solr_core in ${SOLR_CORES[@]};
     do
         add_core $dir_name $dir_conf $solr_core
     done
@@ -203,7 +203,7 @@ add_core() {
     solr_core=$3
 
     # add core configuration
-    sed -i.bak 's/<shardHandlerFactory/<core name="core2" instanceDir="core2" \/><core name="core3" instanceDir="core3" \/><core name="core4" instanceDir="core4" \/><core name="core5" instanceDir="core5" \/><core name="core6" instanceDir="core6" \/><core name="core7" instanceDir="core7" \/><shardHandlerFactory/g' $dir_name/example/multicore/solr.xml
+    sed -i.bak "s/<shardHandlerFactory/<core name=\"$solr_core\" instanceDir=\"$solr_core\" \/><shardHandlerFactory/g" $dir_name/example/multicore/solr.xml
 
     # prepare core directories
     [[ -d "${dir_name}/example/multicore/${solr_core}" ]] || mkdir $dir_name/example/multicore/$solr_core
