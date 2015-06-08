@@ -60,9 +60,13 @@ EOT
 
         /** @var \eZ\Publish\Core\Search\Solr\Content\Handler $contentSearchHandler */
         $contentSearchHandler = $searchHandler->contentSearchHandler();
-        $contentSearchHandler->setCommit( false );
-        $contentSearchHandler->purgeIndex();
         $contentSearchHandler->setCommit( true );
+        $contentSearchHandler->purgeIndex();
+
+        /** @var \eZ\Publish\Core\Search\Solr\Content\Location\Handler $locationSearchHandler */
+        $locationSearchHandler = $searchHandler->locationSearchHandler();
+        $locationSearchHandler->setCommit( true );
+        $locationSearchHandler->purgeIndex();
 
         $output->writeln( "Indexing Content..." );
 
@@ -126,12 +130,6 @@ EOT
 
         $stmt = $query->prepare();
         $stmt->execute();
-
-        /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Location\Handler $locationSearchHandler */
-        $locationSearchHandler = $searchHandler->locationSearchHandler();
-        $locationSearchHandler->setCommit( false );
-        $locationSearchHandler->purgeIndex();
-        $locationSearchHandler->setCommit( true );
 
         $output->writeln( "Indexing Locations..." );
 
