@@ -271,7 +271,7 @@ class Native extends Gateway
             }
         }
 
-        if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true  )
+        if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true )
         {
             $filters[] = "meta_indexed_is_main_translation_and_always_available_b:true";
         }
