@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\Core\Search\Solr\Content\Gateway;
 
+use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\Search\Solr\Content\Gateway;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\Core\Search\Common\FieldNameGenerator;
@@ -132,9 +133,15 @@ class Native extends Gateway
      */
     public function find( Query $query, array $fieldFilters = array() )
     {
+        $documentType = "content";
+        if ( $query instanceof LocationQuery )
+        {
+            $documentType = "location";
+        }
+
         $parameters = array(
             "q" => $this->criterionVisitor->visit( $query->query ),
-            "fq" => $this->criterionVisitor->visit( $query->filter ),
+            "fq" => "document_type_id:{$documentType} AND (" . $this->criterionVisitor->visit( $query->filter ) . ")",
             "sort" => $this->getSortClauses( $query->sortClauses ),
             "start" => $query->offset,
             "rows" => $query->limit,
