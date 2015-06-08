@@ -152,7 +152,7 @@ class Native extends Gateway
         $coreFilter = $this->getCoreFilter( $fieldFilters );
         if ( !empty( $coreFilter ) )
         {
-            $parameters["fq"] = "({$coreFilter}) AND " . $parameters["fq"];
+            $parameters["fq"] = "({$coreFilter}) AND (" . $parameters["fq"] . ")";
         }
 
         $searchTargets = $this->getSearchTargets( $fieldFilters );
