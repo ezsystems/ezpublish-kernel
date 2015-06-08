@@ -394,6 +394,8 @@ class Native extends Gateway
     }
 
     /**
+     * @todo implement purging for document type
+     *
      * Purges all contents from the index
      *
      * @return void
