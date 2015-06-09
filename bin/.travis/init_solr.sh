@@ -3,7 +3,7 @@
 SOLR_PORT=${SOLR_PORT:-8983}
 SOLR_VERSION=${SOLR_VERSION:-4.10.4}
 DEBUG=${DEBUG:-false}
-SOLR_CORES=${SOLR_CORES:-core0}
+SOLR_CORES=${SOLR_CORES:-}
 SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 
 download() {
@@ -35,24 +35,34 @@ wait_for_solr(){
 run() {
     dir_name=$1
     solr_port=$2
+    mode=$3
     # Run solr
-    echo "Running with folder $dir_name"
+    echo "Running with folder ${dir_name} in ${mode} mode"
     echo "Starting solr on port ${solr_port}..."
 
     # go to the solr folder
-    cd $1/example
+    cd $dir_name/example
 
     if [ "$DEBUG" = "true" ]
     then
-        java -Djetty.port=$solr_port -Dsolr.solr.home=multicore -jar start.jar &
+        if [ "$mode" = "multi" ]
+        then
+            java -Djetty.port=$solr_port -Dsolr.solr.home=multicore -jar start.jar &
+        else
+            java -Djetty.port=$solr_port -jar start.jar &
+        fi
     else
-        java -Djetty.port=$solr_port -Dsolr.solr.home=multicore -jar start.jar > /dev/null 2>&1 &
+        if [ "$mode" = "multi" ]
+        then
+            java -Djetty.port=$solr_port -Dsolr.solr.home=multicore -jar start.jar > /dev/null 2>&1 &
+        else
+            java -Djetty.port=$solr_port -jar start.jar > /dev/null 2>&1 &
+        fi
     fi
     wait_for_solr
     cd ../../
     echo "Started"
 }
-
 
 download_and_run() {
     case $1 in
@@ -185,16 +195,22 @@ download_and_run() {
 
     download $url $dir_name
 
-    # remove default cores configuration
-    sed -i.bak 's/<core name="core0" instanceDir="core0" \/>//g' $dir_name/example/multicore/solr.xml
-    sed -i.bak 's/<core name="core1" instanceDir="core1" \/>//g' $dir_name/example/multicore/solr.xml
+    if [ ${#SOLR_CORES[@]} -eq 0 ]; then
+        # remove default cores configuration
+        sed -i.bak 's/<core name="core0" instanceDir="core0" \/>//g' $dir_name/example/multicore/solr.xml
+        sed -i.bak 's/<core name="core1" instanceDir="core1" \/>//g' $dir_name/example/multicore/solr.xml
+        for solr_core in ${SOLR_CORES[@]};
+        do
+            add_core $dir_name $dir_conf $solr_core
+        done
+        mode="multi"
+    else
+        destination_dir_name="$dir_name/example/solr/$dir_conf"
+        copy_configuration $destination_dir_name
+        mode="single"
+    fi
 
-    for solr_core in ${SOLR_CORES[@]};
-    do
-        add_core $dir_name $dir_conf $solr_core
-    done
-
-    run $dir_name $SOLR_PORT
+    run $dir_name $SOLR_PORT $mode
 }
 
 add_core() {
@@ -220,14 +236,20 @@ add_core() {
         sed -i.bak s/core0/"$solr_core"/g $dir_name/example/multicore/$solr_core/conf/solrconfig.xml
     fi
 
-    # copies custom configurations
+    destination_dir_name="$dir_name/example/multicore/$solr_core/conf"
+    copy_configuration $destination_dir_name
+}
+
+copy_configuration() {
+    destination_dir_name=$1
+
     if [ -d "${SOLR_CONFS}" ] ; then
-      cp -R $SOLR_CONFS/* $dir_name/example/multicore/$solr_core/conf/
+      cp -R $SOLR_CONFS/* $destination_dir_name
     else
       for file in $SOLR_CONFS
       do
         if [ -f "${file}" ]; then
-            cp $file $dir_name/example/multicore/$solr_core/conf
+            cp $file $destination_dir_name
             echo "Copied $file into solr conf directory."
         else
             echo "${file} is not valid";
@@ -239,7 +261,7 @@ add_core() {
 
 check_version() {
     case $1 in
-        3.5.0|3.6.0|3.6.1|3.6.2|4.0.0|4.1.0|4.2.0|4.2.1|4.3.1|4.4.0|4.5.0|4.5.1|4.6.0|4.6.1|4.7.0|4.7.1|4.7.2|4.8.0|4.8.1|4.9.0|4.9.1|4.10.0|4.10.1|4.10.2|4.10.3);;
+        3.5.0|3.6.0|3.6.1|3.6.2|4.0.0|4.1.0|4.2.0|4.2.1|4.3.1|4.4.0|4.5.0|4.5.1|4.6.0|4.6.1|4.7.0|4.7.1|4.7.2|4.8.0|4.8.1|4.9.0|4.9.1|4.10.0|4.10.1|4.10.2|4.10.3|4.10.4);;
         *)
             echo "Sorry, $1 is not supported or not valid version."
             exit 1
