@@ -145,12 +145,7 @@ class IORepositoryResolver implements ResolverInterface
             foreach ( $filters as $filter )
             {
                 $filteredImagePath = $this->getFilePath( $path, $filter );
-                if ( !$this->ioService->exists( $filteredImagePath ) )
-                {
-                    continue;
-                }
-
-                $binaryFile = $this->ioService->loadBinaryFile( $filteredImagePath );
+                $binaryFile = $this->ioService->loadBinaryFileByUri( $filteredImagePath );
                 $this->ioService->deleteBinaryFile( $binaryFile );
             }
         }
