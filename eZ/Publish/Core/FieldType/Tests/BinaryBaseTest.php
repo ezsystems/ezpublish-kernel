@@ -25,7 +25,7 @@ abstract class BinaryBaseTest extends FieldTypeTest
             "FileSizeValidator" => array(
                 "maxFileSize" => array(
                     "type" => "int",
-                    "default" => false
+                    "default" => null
                 )
             )
         );
@@ -94,7 +94,7 @@ abstract class BinaryBaseTest extends FieldTypeTest
             array(
                 array(
                     'FileSizeValidator' => array(
-                        'maxFileSize' => false,
+                        'maxFileSize' => null,
                     )
                 )
             ),

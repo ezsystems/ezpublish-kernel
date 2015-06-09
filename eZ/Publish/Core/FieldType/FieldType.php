@@ -198,7 +198,7 @@ abstract class FieldType implements FieldTypeInterface
             foreach ( $configurationSchema as $settingName => $settingConfiguration )
             {
                 // Check that a default entry exists in the configuration schema for the validator but that no value has been provided
-                if ( !isset( $validatorConfiguration[$validatorName][$settingName] ) && isset( $settingConfiguration["default"] ) )
+                if ( !isset( $validatorConfiguration[$validatorName][$settingName] ) && array_key_exists( "default", $settingConfiguration ) )
                 {
                     $validatorConfiguration[$validatorName][$settingName] = $settingConfiguration["default"];
                 }
