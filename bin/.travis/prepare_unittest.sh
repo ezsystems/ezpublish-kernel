@@ -25,4 +25,4 @@ composer install --prefer-dist
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr-multicore.xml" ] ; then ./bin/.travis/init_solr.sh ; fi
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr-multicore-mix.xml" ] ; then ./bin/.travis/init_solr.sh ; fi
-if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr-single-core.xml" ] ; then curl -L https://raw.github.com/andrerom/travis-solr/410/travis-solr.sh | SOLR_CONFS=eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml bash ; fi
+if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr-single-core.xml" ] ; then ./bin/.travis/init_solr.sh ; fi
