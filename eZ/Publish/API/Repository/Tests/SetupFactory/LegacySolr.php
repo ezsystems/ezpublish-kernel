@@ -133,6 +133,6 @@ class LegacySolr extends Legacy
 
     protected function getTestConfigurationFile()
     {
-        return getenv( "containerConfiguration" );
+        return getenv( "CONTAINER_TEST_CONFIG" );
     }
 }

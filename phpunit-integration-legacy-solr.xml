@@ -13,6 +13,7 @@
         <env name="backendVersion" value="5" />
         <env name="fixtureDir" value="Solr" />
         <env name="solrServer" value="http://localhost:8983/" />
+        <env name="CONTAINER_TEST_CONFIG" value="tests/integration_legacy_solr_multicore.yml" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
