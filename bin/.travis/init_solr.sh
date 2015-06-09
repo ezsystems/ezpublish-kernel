@@ -202,8 +202,7 @@ download_and_run() {
 
     if [ ${#SOLR_CORES[@]} -eq 0 ]; then
         # remove default cores configuration
-        sed -i.bak 's/<core name="core0" instanceDir="core0" \/>//g' $dir_name/example/multicore/solr.xml
-        sed -i.bak 's/<core name="core1" instanceDir="core1" \/>//g' $dir_name/example/multicore/solr.xml
+        sed -i.bak 's/<core name=".*" instanceDir=".*" \/>//g' $dir_name/example/multicore/solr.xml
         for solr_core in ${SOLR_CORES[@]};
         do
             add_core $dir_name $dir_conf $solr_core
