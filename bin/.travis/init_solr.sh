@@ -3,7 +3,6 @@
 SOLR_PORT=${SOLR_PORT:-8983}
 SOLR_VERSION=${SOLR_VERSION:-4.10.4}
 DEBUG=${DEBUG:-false}
-SOLR_CORES=${SOLR_CORES:-}
 SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
 
 download() {
@@ -201,6 +200,10 @@ download_and_run() {
     download $url $dir_name
 
     if [ ${#SOLR_CORES[@]} -eq 0 ]; then
+        destination_dir_name="$dir_name/example/solr/$dir_conf"
+        copy_configuration $destination_dir_name
+        mode="single"
+    else
         # remove default cores configuration
         sed -i.bak 's/<core name=".*" instanceDir=".*" \/>//g' $dir_name/example/multicore/solr.xml
         for solr_core in ${SOLR_CORES[@]};
@@ -208,10 +211,6 @@ download_and_run() {
             add_core $dir_name $dir_conf $solr_core
         done
         mode="multi"
-    else
-        destination_dir_name="$dir_name/example/solr/$dir_conf"
-        copy_configuration $destination_dir_name
-        mode="single"
     fi
 
     run $dir_name $SOLR_PORT $mode
