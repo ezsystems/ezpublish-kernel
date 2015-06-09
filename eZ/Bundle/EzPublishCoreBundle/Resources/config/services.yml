@@ -61,7 +61,7 @@ services:
         class: %ezpublish.controller.content.view.class%
         arguments:
             - @ezpublish.view_manager
-            - @security.context
+            - @security.authorization_checker
         parent: ezpublish.controller.base
 
     ezpublish.controller.content.preview.core:
@@ -70,7 +70,7 @@ services:
             - @ezpublish.api.service.content
             - @http_kernel
             - @ezpublish.content_preview_helper
-            - @security.context
+            - @security.authorization_checker
             - @ezpublish.content_preview.location_provider
 
     ezpublish.controller.content.preview:
