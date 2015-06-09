@@ -12,8 +12,8 @@ use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DownloadController extends Controller
 {
@@ -40,6 +40,7 @@ class DownloadController extends Controller
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If the requested binary file could not be found
      */
     public function downloadBinaryFileAction( $contentId, $fieldIdentifier, $filename, Request $request )
     {
@@ -63,6 +64,10 @@ class DownloadController extends Controller
             );
         }
 
+        if ( !$this->ioService->exists( $field->value->id ) )
+        {
+            throw new NotFoundHttpException( "Could not find a downloadable binary file with id {$field->value->id}" );
+        }
         $response = new BinaryStreamResponse( $this->ioService->loadBinaryFile( $field->value->id ), $this->ioService );
         $response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename );
         return $response;
