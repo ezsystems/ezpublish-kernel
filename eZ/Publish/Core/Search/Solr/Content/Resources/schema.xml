@@ -10,7 +10,6 @@ should not remove or drastically change the existing definitions.
 -->
 
 <schema name="eZ Publish 5 base schema" version="1.5">
-  <types>
     <!--
       Default types by Solr. Will be reused for dynamic fields.
     -->
@@ -68,10 +67,8 @@ should not remove or drastically change the existing definitions.
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
     </fieldType>
-  </types>
 
 
-  <fields>
     <!--
       Required ID field.
     -->
@@ -145,8 +142,6 @@ should not remove or drastically change the existing definitions.
     <field name="custom_geolocation_field_0_coordinate" type="double" indexed="true" stored="false"/>
     <field name="custom_geolocation_field_1_coordinate" type="double" indexed="true" stored="false"/>
     <copyField source="testtype_maplocation_value_location_gl" dest="custom_geolocation_field" />
-
-  </fields>
 
   <uniqueKey>id</uniqueKey>
   <defaultSearchField>id</defaultSearchField>
