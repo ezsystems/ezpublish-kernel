@@ -17,6 +17,9 @@ should not remove or drastically change the existing definitions.
     <!--
     language specific field types are included here, there should be at least
     a field type with the name "text" be defined"
+    Included in the eZ platform distribution are configurations for various
+    languages, including additional files like stopwords or other features
+    under the directory "solr.languages"
     -->
     &langfields;
 

@@ -1,0 +1,14 @@
+<!-- Portuguese -->
+<fieldType name="text" class="solr.TextField" positionIncrementGap="100">
+    <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords_pt.txt" format="snowball" />
+        <filter class="solr.PortugueseLightStemFilterFactory"/>
+        <!-- less aggressive: <filter class="solr.PortugueseMinimalStemFilterFactory"/> -->
+        <!-- more aggressive: <filter class="solr.SnowballPorterFilterFactory" language="Portuguese"/> -->
+        <!-- most aggressive: <filter class="solr.PortugueseStemFilterFactory"/> -->
+    </analyzer>
+</fieldType>
+
+

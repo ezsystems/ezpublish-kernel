@@ -1,0 +1,12 @@
+<!-- CJK bigram  -->
+<fieldType name="text" class="solr.TextField" positionIncrementGap="100">
+    <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <!-- normalize width before bigram, as e.g. half-width dakuten combine  -->
+        <filter class="solr.CJKWidthFilterFactory"/>
+        <!-- for any non-CJK -->
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.CJKBigramFilterFactory"/>
+    </analyzer>
+</fieldType>
+

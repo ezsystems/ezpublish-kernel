@@ -1,0 +1,14 @@
+<!-- Norwegian -->
+<fieldType name="text" class="solr.TextField" positionIncrementGap="100">
+    <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords_no.txt" format="snowball" />
+        <!--<filter class="solr.SnowballPorterFilterFactory" language="Norwegian"/> -->
+        <filter class="solr.NorwegianLightStemFilterFactory" variant="no"/>
+        <!-- singular/plural: <filter class="solr.NorwegianMinimalStemFilterFactory" variant="nb"/> -->
+        <!-- The "light" and "minimal" stemmers support variants: nb=Bokmål, nn=Nynorsk, no=Both -->
+    </analyzer>
+</fieldType>
+
+

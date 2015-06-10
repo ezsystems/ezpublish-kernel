@@ -1,0 +1,13 @@
+<fieldType name="text" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="false">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords_de.txt" format="snowball" />
+        <filter class="solr.GermanNormalizationFilterFactory"/>
+        <filter class="solr.GermanLightStemFilterFactory"/>
+        <!-- less aggressive: <filter class="solr.GermanMinimalStemFilterFactory"/> -->
+        <!-- more aggressive: <filter class="solr.SnowballPorterFilterFactory" language="German2"/> -->
+      </analyzer>
+</fieldType>
+
+
