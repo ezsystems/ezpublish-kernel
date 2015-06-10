@@ -1,0 +1,19 @@
+    <!--
+      This is additional custom example fields. You can come up with similar
+      fields on your own, if you require custom indexing / query rules.
+
+      Instead of using the type "text" you might even want to define a custom
+      type. In the custom type you can define your dedicated index and query
+      rules. You can copy any existing fields into the custom field as seen
+      below.
+
+      In this case we copy the full user name and index it as a text field.
+    -->
+    <field name="custom_field" type="text" indexed="true" stored="false" required="false" multiValued="true" />
+    <copyField source="user_first_name_value_s" dest="custom_field" />
+    <copyField source="user_last_name_value_s" dest="custom_field" />
+
+    <field name="custom_geolocation_field" type="location" indexed="true" stored="false" required="false" />
+    <field name="custom_geolocation_field_0_coordinate" type="double" indexed="true" stored="false"/>
+    <field name="custom_geolocation_field_1_coordinate" type="double" indexed="true" stored="false"/>
+    <copyField source="testtype_maplocation_value_location_gl" dest="custom_geolocation_field" />
