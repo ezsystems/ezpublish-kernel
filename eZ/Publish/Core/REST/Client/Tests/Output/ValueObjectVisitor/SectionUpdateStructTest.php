@@ -58,7 +58,7 @@ class SectionUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSectionInputElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'SectionInput',
                 'children' => array(
@@ -81,7 +81,7 @@ class SectionUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSectionInputAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'SectionInput',
                 'attributes' => array(
@@ -103,7 +103,7 @@ class SectionUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdentifierValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-section',
@@ -123,7 +123,7 @@ class SectionUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsNameValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'name',
                 'content'  => 'Some Section',

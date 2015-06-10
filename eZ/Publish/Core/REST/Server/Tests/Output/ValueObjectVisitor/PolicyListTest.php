@@ -54,7 +54,7 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPolicyListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'PolicyList',
             ),
@@ -73,7 +73,7 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPolicyListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'PolicyList',
                 'attributes' => array(

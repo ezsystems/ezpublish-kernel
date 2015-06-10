@@ -54,7 +54,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlAliasListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UrlAliasList',
             ),
@@ -73,7 +73,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlAliasListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UrlAliasList',
                 'attributes' => array(

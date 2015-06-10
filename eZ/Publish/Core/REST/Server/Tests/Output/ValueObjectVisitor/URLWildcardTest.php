@@ -66,7 +66,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlWildcardElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UrlWildcard',
                 'children' => array(
@@ -89,7 +89,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlWildcardAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UrlWildcard',
                 'attributes' => array(
@@ -113,7 +113,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSourceUrlValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sourceUrl',
                 'content'  => '/source/url',
@@ -133,7 +133,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDestinationUrlValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'destinationUrl',
                 'content'  => '/destination/url',
@@ -153,7 +153,7 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsForwardValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'forward',
                 'content'  => 'true',

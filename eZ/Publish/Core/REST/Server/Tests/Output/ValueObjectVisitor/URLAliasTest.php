@@ -71,7 +71,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlAliasElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UrlAlias',
                 'children' => array(
@@ -94,7 +94,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlAliasAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UrlAlias',
                 'attributes' => array(
@@ -119,7 +119,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'resource',
                 'content'  => '/destination/url',
@@ -139,7 +139,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPathValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'path',
                 'content'  => '/some/path',
@@ -159,7 +159,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLanguageCodesValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'languageCodes',
                 'content'  => 'eng-GB,eng-US',
@@ -179,7 +179,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsAlwaysAvailableValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'alwaysAvailable',
                 'content'  => 'true',
@@ -199,7 +199,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIsHistoryValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'isHistory',
                 'content'  => 'true',
@@ -219,7 +219,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsForwardValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'forward',
                 'content'  => 'false',
@@ -239,7 +239,7 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsCustomValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'custom',
                 'content'  => 'false',

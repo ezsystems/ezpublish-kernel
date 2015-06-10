@@ -55,7 +55,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsContentUpdateElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ContentUpdate',
                 'children' => array(
@@ -78,7 +78,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultSectionElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Section',
                 'attributes' => array(
@@ -101,7 +101,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultOwnerElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Owner',
                 'attributes' => array(
@@ -140,7 +140,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
 
         $result = $generator->endDocument( null );
 
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Section',
                 'attributes' => array(
@@ -178,7 +178,7 @@ class RestContentMetadataUpdateStructTest extends ValueObjectVisitorBaseTest
 
         $result = $generator->endDocument( null );
 
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'Owner',
                 'attributes' => array(

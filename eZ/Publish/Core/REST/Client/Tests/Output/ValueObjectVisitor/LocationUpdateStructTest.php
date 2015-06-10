@@ -58,7 +58,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationUpdateElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'LocationUpdate',
                 'children' => array(
@@ -80,7 +80,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLocationUpdateAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'LocationUpdate',
                 'attributes' => array(
@@ -102,7 +102,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPriorityValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'priority',
                 'content'  => '0',
@@ -122,7 +122,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsRemoteIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'remoteId',
                 'content'  => 'remote-id',
@@ -142,7 +142,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSortFieldValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sortField',
                 'content'  => 'PATH',
@@ -162,7 +162,7 @@ class LocationUpdateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSortOrderValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sortOrder',
                 'content'  => 'ASC',

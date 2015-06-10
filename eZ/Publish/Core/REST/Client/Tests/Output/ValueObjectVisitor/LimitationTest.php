@@ -54,7 +54,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLimitationElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'limitation',
                 'children' => array(
@@ -76,7 +76,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLimitationAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'limitation',
                 'attributes' => array(
@@ -99,7 +99,7 @@ class LimitationTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsValuesElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'values',
                 'children' => array(

@@ -60,7 +60,7 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlWildcardListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UrlWildcardList',
             ),
@@ -79,7 +79,7 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUrlWildcardListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UrlWildcardList',
                 'attributes' => array(

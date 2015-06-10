@@ -80,7 +80,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsObjectStateGroupElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ObjectStateGroup',
                 'children' => array(
@@ -102,7 +102,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsObjectStateGroupAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'ObjectStateGroup',
                 'attributes' => array(
@@ -125,7 +125,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'id',
                 'content'  => '42'
@@ -145,7 +145,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdentifierValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'identifier',
                 'content'  => 'test-group'
@@ -165,7 +165,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDefaultLanguageCodeValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'defaultLanguageCode',
                 'content'  => 'eng-GB'
@@ -185,7 +185,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLanguageCodesValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'languageCodes',
                 'content'  => 'eng-GB,eng-US'
@@ -205,7 +205,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsNamesElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'names',
                 'children' => array(
@@ -227,7 +227,7 @@ class ObjectStateGroupTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsDescriptionsElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'descriptions',
                 'children' => array(

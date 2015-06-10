@@ -57,7 +57,7 @@ class ContentTypeGroupCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdentifierValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'identifier',
                 'content' => 'some-group',
@@ -77,7 +77,7 @@ class ContentTypeGroupCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsModificationDateDateValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'modificationDate',
                 'content' => '2013-02-22T14:14:00+01:00',
@@ -97,7 +97,7 @@ class ContentTypeGroupCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUserElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'User'
             ),
@@ -116,7 +116,7 @@ class ContentTypeGroupCreateStructTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUserAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'User',
                 'attributes' => array(

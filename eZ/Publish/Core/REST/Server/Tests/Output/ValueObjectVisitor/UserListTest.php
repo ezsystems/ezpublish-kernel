@@ -57,7 +57,7 @@ class UserListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUserListElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UserList',
             ),
@@ -76,7 +76,7 @@ class UserListTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsUserListAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'UserList',
                 'attributes' => array(

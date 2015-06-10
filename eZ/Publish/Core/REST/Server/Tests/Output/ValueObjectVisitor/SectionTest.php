@@ -65,7 +65,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSectionElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Section',
                 'children' => array(
@@ -88,7 +88,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSectionAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Section',
                 'attributes' => array(
@@ -111,7 +111,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsSectionIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'sectionId',
                 'content'  => '23',
@@ -131,7 +131,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdentifierValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'identifier',
                 'content'  => 'some-section',
@@ -151,7 +151,7 @@ class SectionTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsNameValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'name',
                 'content'  => 'Some Section',

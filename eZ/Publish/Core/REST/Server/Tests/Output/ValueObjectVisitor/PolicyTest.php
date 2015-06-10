@@ -72,7 +72,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPolicyElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Policy',
                 'children' => array(
@@ -95,7 +95,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsPolicyAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'Policy',
                 'attributes' => array(
@@ -118,7 +118,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsIdValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'id',
                 'content'  => '42'
@@ -138,7 +138,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsModuleValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'module',
                 'content'  => 'content'
@@ -158,7 +158,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsFunctionValueElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'function',
                 'content'  => 'delete'
@@ -178,7 +178,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLimitationsElement( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag' => 'limitations'
             ),
@@ -197,7 +197,7 @@ class PolicyTest extends ValueObjectVisitorBaseTest
      */
     public function testResultContainsLimitationsAttributes( $result )
     {
-        $this->assertTag(
+        $this->assertXMLTag(
             array(
                 'tag'      => 'limitations'
             ),
