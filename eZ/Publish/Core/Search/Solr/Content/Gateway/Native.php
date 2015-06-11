@@ -263,22 +263,57 @@ class Native extends Gateway
     protected function getCoreFilter( array $languageSettings )
     {
         $filters = array();
+        $languageFilters = array();
 
         if ( !empty( $languageSettings["languages"] ) )
         {
             foreach ( $languageSettings["languages"] as $languageCode )
             {
-                $filters[] = "(" . $this->getCoreLanguageFilter( $languageSettings["languages"], $languageCode ) . ")";
+                $languageFilter = $this->getCoreLanguageFilter(
+                    $languageSettings["languages"],
+                    $languageCode
+                );
+                $languageFilters[] = "({$languageFilter})";
             }
         }
 
+        if ( !empty( $languageFilters ) )
+        {
+            $languageFilters = implode( " OR ", $languageFilters );
+
+            // Factor in always available index if used
+            if ( $this->endpointResolver->getAlwaysAvailableEndpoint() !== null )
+            {
+                $languageFilters = "({$languageFilters}) NOT meta_indexed_always_available_b:true";
+            }
+
+            $filters[] = "({$languageFilters})";
+        }
+
+        // Handle always available fallback
         if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true )
         {
-            $filters[] = "meta_indexed_is_main_translation_and_always_available_b:true";
+            $filter = "meta_indexed_is_main_translation_and_always_available_b:true";
+
+            // For always available fallback exclude all given languages
+            if ( !empty( $languageSettings["languages"] ) )
+            {
+                $languageExclude = $this->getLanguageExcludeCondition( $languageSettings["languages"] );
+                $filter = "({$filter} {$languageExclude})";
+            }
+
+            // Exclude non AA documents if always available index if used
+            if ( $this->endpointResolver->getAlwaysAvailableEndpoint() !== null )
+            {
+                $filter = "({$filter} AND meta_indexed_always_available_b:true)";
+            }
+
+            $filters[] = $filter;
         }
+        // By default search only on the main language(s)
         else if ( empty( $languageSettings["languages"] ) )
         {
-            $filters[] = "meta_indexed_is_main_translation_b:true";
+            $filters[] = "(meta_indexed_is_main_translation_b:true NOT meta_indexed_always_available_b:true)";
         }
 
         return implode( " OR ", $filters );
@@ -298,12 +333,34 @@ class Native extends Gateway
      */
     protected function getCoreLanguageFilter( array $languageCodes, $selectedLanguageCode )
     {
+        $include = 'meta_indexed_language_code_s:"' . $selectedLanguageCode . '"';
+        $exclude = $this->getLanguageExcludeCondition( $languageCodes, $selectedLanguageCode );
+
+        if ( !empty( $exclude ) )
+        {
+            return "{$include} {$exclude}";
+        }
+
+        return $include;
+    }
+
+    /**
+     * Returns excluding condition for the given list of language codes and
+     * a selected language code among them. If $selectedLanguageCode is omitted,
+     * all languages will be included in the filtering condition.
+     *
+     * @param array $languageCodes
+     * @param null|string $selectedLanguageCode
+     *
+     * @return string
+     */
+    protected function getLanguageExcludeCondition( array $languageCodes, $selectedLanguageCode = null )
+    {
         $filters = array();
-        $filters[] = 'meta_indexed_language_code_s:"' . $selectedLanguageCode . '"';
 
         foreach ( $languageCodes as $languageCode )
         {
-            if ( $languageCode === $selectedLanguageCode )
+            if ( $selectedLanguageCode !== null && $languageCode === $selectedLanguageCode )
             {
                 break;
             }
@@ -311,7 +368,7 @@ class Native extends Gateway
             $filters[] = 'NOT language_code_ms:"' . $languageCode . '"';
         }
 
-        return implode( " AND ", $filters );
+        return implode( " ", $filters );
     }
 
     /**
