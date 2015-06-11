@@ -6,6 +6,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\IO\IOService;
@@ -35,13 +36,13 @@ class DownloadController extends Controller
 
     /**
      * @param mixed $contentId ID of a valid Content
-     * @param string $fieldIdentifier Field Definition identifier of the Field the file must be downloaded from
+     * @param string $fieldId Field Definition id of the Field the file must be downloaded from
      * @param string $filename
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
      * @return \eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse
      */
-    public function downloadBinaryFileAction( $contentId, $fieldIdentifier, $filename, Request $request )
+    public function downloadBinaryFileAction( $contentId, $fieldId, $filename, Request $request )
     {
         if ( $request->query->has( 'version' ) )
         {
@@ -52,19 +53,37 @@ class DownloadController extends Controller
             $content = $this->contentService->loadContent( $contentId );
         }
 
-        $field = $this->translationHelper->getTranslatedField(
-            $content, $fieldIdentifier,
-            $request->query->has( 'language' ) ? $request->query->get( 'language' ) : null
-        );
-        if ( !$field instanceof Field )
+        $field = $this->findField( $content, $fieldId );
+        if ( $field === false )
         {
             throw new InvalidArgumentException(
-                "'{$fieldIdentifier}' field not present on content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
+                "'No field with id $fieldId found in content #{$content->contentInfo->id} '{$content->contentInfo->name}'"
             );
         }
 
         $response = new BinaryStreamResponse( $this->ioService->loadBinaryFile( $field->value->id ), $this->ioService );
         $response->setContentDisposition( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename );
         return $response;
+    }
+
+    /**
+     * Given a Content and a Field id, returns the matching Field from the Content
+     *
+     * @param Content $content
+     * @param int $fieldId
+     *
+     * @return Field|bool the Field, or false if it was not found
+     */
+    private function findField( Content $content, $fieldId )
+    {
+        foreach ( $content->getFields() as $field )
+        {
+            if ( $field->id == $fieldId )
+            {
+                return $field;
+            }
+        }
+
+        return false;
     }
 }

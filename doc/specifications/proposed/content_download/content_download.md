@@ -14,9 +14,9 @@ It includes:
 
 ### Route
 
-Path: `/content/download/{contentId}/{fieldIdentifier}/{filename}`
+Path: `/content/download/{contentId}/{fieldId}/{filename}`
 
-Example: `/content/download/68/file/My-file.pdf`
+Example: `/content/download/68/64567/My-file.pdf`
 
 #### Arguments
 
@@ -24,13 +24,13 @@ Example: `/content/download/68/file/My-file.pdf`
 
   ID of the Content the field is part of
 
-- fieldIdentifier
+- fieldId
 
-  Field Definition identifier of the Binary / Media Field.
+  Field ID of the Binary / Media Field.
 
 - filename
 
-  Name of the file to send for download. Can be any valid file name.
+  Name of the file to send for download. Can be any valid file name, but defaults to the Field's value.
 
 #### Query parameters
 
@@ -41,10 +41,12 @@ Example: `/content/download/68/file/My-file.pdf`
 
 - language (optional)
 
+  > Should we keep this, given that the fileId binds to a particular language ?
+
   The language the file must be downloaded for.
   If not specified, the prioritized languages list of the matched siteaccess is used.
 
-The controller action will load the content based on the content id, and identify the field using the identifier. The
+The controller action will load the content based on the content and field id. The
 binary file referenced by the Field Value will then be streamed, using the active IO Service.
 
 It *should* also support HTTP caching, by making sure the proper headers are sent.
@@ -63,16 +65,16 @@ The [Route Reference](https://doc.ez.no/display/EZP/RouteReference) mechanism wi
 
 ##### Arguments
 
-The arguments are the same than the `ez_content_download` route.
-
-The only difference is that instead of providing the `contentId`, the route reference expects a `content`, as an API
-Content Value Object.
+The arguments are the `Content` and the Field Definition Identifier.
 
 #### REST
 An extra attribute will be added to Fields of BinaryFile/Media type: `downloadUri`. It will contain the download uri for
 the Field's contents.
 
 ## Backward compatibility
+
+> Not implemented yet
+
 Since it is common practice to copy/save file download links, it is possible that a legacy link will be used on occasions.
 This can be covered by adding a route that matches the legacy route, and redirects to the new route:
 
@@ -85,13 +87,3 @@ would be redirected to
 ```
 /content/download/123/file_field/bc.pdf?version=6
 ```
-
-
-## Options
-
-### IgorwFileServeBundle
-
-> https://github.com/igorw/IgorwFileServeBundle
-
-A package meant to replace the BinaryResponse we currently use. Supports server-side mechanism such as X-SendFile, but
-seems to be stalled a bit.
