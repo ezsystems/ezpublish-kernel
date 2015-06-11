@@ -8,12 +8,10 @@ use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\IO\IOService;
 use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 class DownloadController extends Controller
@@ -24,14 +22,10 @@ class DownloadController extends Controller
     /** @var \eZ\Publish\Core\IO\IOService */
     private $ioService;
 
-    /** @var \eZ\Publish\Core\Helper\TranslationHelper */
-    private $translationHelper;
-
-    public function __construct( ContentService $contentService, IOService $ioService, TranslationHelper $translationHelper )
+    public function __construct( ContentService $contentService, IOService $ioService )
     {
         $this->contentService = $contentService;
         $this->ioService = $ioService;
-        $this->translationHelper = $translationHelper;
     }
 
     /**

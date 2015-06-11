@@ -39,13 +39,6 @@ Example: `/content/download/68/64567/My-file.pdf`
   The version number the file must be downloaded for. Requires the versionview permission.
   If not specified, the published version is used.
 
-- language (optional)
-
-  > Should we keep this, given that the fileId binds to a particular language ?
-
-  The language the file must be downloaded for.
-  If not specified, the prioritized languages list of the matched siteaccess is used.
-
 The controller action will load the content based on the content and field id. The
 binary file referenced by the Field Value will then be streamed, using the active IO Service.
 
@@ -85,5 +78,5 @@ This can be covered by adding a route that matches the legacy route, and redirec
 would be redirected to
 
 ```
-/content/download/123/file_field/bc.pdf?version=6
+/content/download/123/45678/bc.pdf?version=6
 ```
