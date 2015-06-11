@@ -167,7 +167,9 @@ class Configuration implements ConfigurationInterface
                             // If single endpoint is set for Content cluster, use it as default
                             // mapping for Content cluster
                             $v["cluster"]["content"] = array(
-                                "*" => $v["cluster"]["content"],
+                                "translations" => array(
+                                    "*" => $v["cluster"]["content"],
+                                ),
                             );
                             return $v;
                         }
@@ -189,7 +191,9 @@ class Configuration implements ConfigurationInterface
                             // If single endpoint is set for Location cluster, use it as default
                             // mapping for Location cluster
                             $v["cluster"]["location"] = array(
-                                "*" => $v["cluster"]["location"],
+                                "translations" => array(
+                                    "*" => $v["cluster"]["location"],
+                                ),
                             );
                             return $v;
                         }
@@ -201,16 +205,32 @@ class Configuration implements ConfigurationInterface
                         {
                             return (
                                 empty( $v["entry_endpoints"]["content"] ) &&
-                                !empty( $v["cluster"]["content"] )
+                                (
+                                    !empty( $v["cluster"]["content"]["translations"] ) ||
+                                    !empty( $v["cluster"]["content"]["always_available"] )
+                                )
                             );
                         }
                     )
                     ->then(
+                        // If Content search entry endpoints are not provided use
+                        // cluster endpoints
                         function( $v )
                         {
-                            // If Content search entry endpoints are not provided use
-                            // cluster endpoints
-                            $v["entry_endpoints"]["content"] = array_values( $v["cluster"]["content"] );
+                            $endpoints = array();
+
+                            if ( !empty( $v["cluster"]["content"]["translations"] ) )
+                            {
+                                $endpoints = array_values( $v["cluster"]["content"]["translations"] );
+                            }
+
+                            if ( !empty( $v["cluster"]["content"]["always_available"] ) )
+                            {
+                                $endpoints[] = $v["cluster"]["content"]["always_available"];
+                            }
+
+                            $v["entry_endpoints"]["content"] = $endpoints;
+
                             return $v;
                         }
                     )
@@ -221,16 +241,32 @@ class Configuration implements ConfigurationInterface
                         {
                             return (
                                 empty( $v["entry_endpoints"]["location"] ) &&
-                                !empty( $v["cluster"]["location"] )
+                                (
+                                    !empty( $v["cluster"]["location"]["translations"] ) ||
+                                    !empty( $v["cluster"]["location"]["always_available"] )
+                                )
                             );
                         }
                     )
                     ->then(
+                        // If Location search entry endpoints are not provided use
+                        // cluster endpoints
                         function( $v )
                         {
-                            // If Location search entry endpoints are not provided use
-                            // cluster endpoints
-                            $v["entry_endpoints"]["location"] = array_values( $v["cluster"]["location"] );
+                            $endpoints = array();
+
+                            if ( !empty( $v["cluster"]["location"]["translations"] ) )
+                            {
+                                $endpoints = array_values( $v["cluster"]["location"]["translations"] );
+                            }
+
+                            if ( !empty( $v["cluster"]["location"]["always_available"] ) )
+                            {
+                                $endpoints[] = $v["cluster"]["location"]["always_available"];
+                            }
+
+                            $v["entry_endpoints"]["location"] = $endpoints;
+
                             return $v;
                         }
                     )
@@ -287,58 +323,118 @@ class Configuration implements ConfigurationInterface
                             "Cluster map, consisting of a mapping of translation language codes " .
                             "and Solr endpoint names, per index (Content and Location). If ".
                             "single endpoint name is given, it will be used for both indexes, " .
-                            "for all translations (as if mapped with asterisk)."
+                            "for all translations (as if mapped with asterisk). Optionally, you " .
+                            "can define always available endpoint(s), which will be used for " .
+                            "indexing translations that are always available."
                         )
                         ->addDefaultsIfNotSet()
                         ->example(
                             array(
                                 "content" => array(
-                                    "cro-HR" => "endpoint1",
-                                    "eng-GB" => "endpoint2",
+                                    "translations" => array(
+                                        "cro-HR" => "endpoint1",
+                                        "eng-GB" => "endpoint2",
+                                    ),
+                                    "always_available" => "endpoint3",
                                 ),
                                 "location" => array(
-                                    "cro-HR" => "endpoint1",
-                                    "eng-GB" => "endpoint2",
+                                    "translations" => array(
+                                        "cro-HR" => "endpoint1",
+                                        "eng-GB" => "endpoint2",
+                                    ),
+                                    "always_available" => "endpoint3",
                                 ),
                             )
                         )
                         ->children()
                             ->arrayNode( "content" )
-                                ->normalizeKeys( false )
-                                ->useAttributeAsKey( "language_code" )
                                 ->info(
                                     "A map of translation language codes and Solr endpoint names " .
                                     "for Content index. Asterisk (*) can be used as a wildcard " .
                                     "for all translations that are not explicitly mapped. If " .
                                     "single endpoint name is given, it will be used for all " .
-                                    "translations (as if mapped with asterisk)."
+                                    "translations (as if mapped with asterisk). Optionally, you " .
+                                    "can define always available endpoint, which will be used " .
+                                    "for indexing translations that are always available."
                                 )
+                                ->addDefaultsIfNotSet()
                                 ->example(
                                     array(
-                                        "cro-HR" => "endpoint1",
-                                        "eng-GB" => "endpoint2",
+                                        "translations" => array(
+                                            "cro-HR" => "endpoint1",
+                                            "eng-GB" => "endpoint2",
+                                        ),
+                                        "always_available" => "endpoint3",
                                     )
                                 )
-                                ->prototype( "scalar" )
+                                ->children()
+                                    ->arrayNode( "translations" )
+                                        ->normalizeKeys( false )
+                                        ->useAttributeAsKey( "language_code" )
+                                            ->info(
+                                                "A map of translation language codes and Solr endpoint names " .
+                                                "for Content index. Asterisk (*) can be used as a wildcard " .
+                                                "for all translations that are not explicitly mapped. If " .
+                                                "single endpoint name is given, it will be used for all " .
+                                                "translations (as if mapped with asterisk)."
+                                            )
+                                            ->example(
+                                                array(
+                                                    "cro-HR" => "endpoint1",
+                                                    "eng-GB" => "endpoint2",
+                                                )
+                                            )
+                                        ->prototype( "scalar" )
+                                        ->end()
+                                    ->end()
+                                    ->scalarNode( "always_available" )
+                                        ->defaultNull()
+                                    ->end()
                                 ->end()
                             ->end()
                             ->arrayNode( "location" )
-                                ->normalizeKeys( false )
-                                ->useAttributeAsKey( "language_code" )
                                 ->info(
                                     "A map of translation language codes and Solr endpoint names " .
                                     "for Location index. Asterisk (*) can be used as a wildcard " .
                                     "for all translations that are not explicitly mapped. If " .
                                     "single endpoint name is given, it will be used for all " .
-                                    "translations (as if mapped with asterisk)."
+                                    "translations (as if mapped with asterisk). Optionally, you " .
+                                    "can define always available endpoint, which will be used " .
+                                    "for indexing translations that are always available."
                                 )
+                                ->addDefaultsIfNotSet()
                                 ->example(
                                     array(
-                                        "cro-HR" => "endpoint1",
-                                        "eng-GB" => "endpoint2",
+                                        "translations" => array(
+                                            "cro-HR" => "endpoint1",
+                                            "eng-GB" => "endpoint2",
+                                        ),
+                                        "always_available" => "endpoint3",
                                     )
                                 )
-                                ->prototype( "scalar" )
+                                ->children()
+                                    ->arrayNode( "translations" )
+                                        ->normalizeKeys( false )
+                                        ->useAttributeAsKey( "language_code" )
+                                            ->info(
+                                                "A map of translation language codes and Solr endpoint names " .
+                                                "for Location index. Asterisk (*) can be used as a wildcard " .
+                                                "for all translations that are not explicitly mapped. If " .
+                                                "single endpoint name is given, it will be used for all " .
+                                                "translations (as if mapped with asterisk)."
+                                            )
+                                            ->example(
+                                                array(
+                                                    "cro-HR" => "endpoint1",
+                                                    "eng-GB" => "endpoint2",
+                                                )
+                                            )
+                                        ->prototype( "scalar" )
+                                        ->end()
+                                    ->end()
+                                    ->scalarNode( "always_available" )
+                                        ->defaultNull()
+                                    ->end()
                                 ->end()
                             ->end()
                         ->end()
