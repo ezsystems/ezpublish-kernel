@@ -19,6 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use DOMDocument;
+use DOMElement;
 use RuntimeException;
 
 /**
@@ -383,6 +384,10 @@ class Type extends FieldType
             /** @var $link \DOMElement */
             foreach ( $linkTags as $link )
             {
+                // On HHVM we get DOMText objects as well
+                if ( !$link instanceof DOMElement  )
+                    continue;
+
                 $contentId = $link->getAttribute( 'object_id' );
                 if ( !empty( $contentId ) )
                 {
