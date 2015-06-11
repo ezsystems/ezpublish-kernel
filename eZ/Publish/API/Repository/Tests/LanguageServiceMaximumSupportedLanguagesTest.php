@@ -42,18 +42,23 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
         $languageCreate = $this->languageService->newLanguageCreateStruct();
         $languageCreate->enabled = true;
 
-        // SKIP If using sqlite, PHP 5.3 and 64bit, tests will fail as int column seems to be limited to 32bit on 64bit
-        if ( PHP_VERSION_ID < 50400 && PHP_INT_SIZE === 8 )
+        // Legacy DB only supports 8 * PHP_INT_SIZE - 2 languages:
+        // One bit cannot be used because PHP uses signed integers and a second one is reserved for the
+        // "always available flag".
+        $phpIntSize = PHP_INT_SIZE;
+
+        // However one exception: On HHVM with sqlite, INT column is 32bit and not 64bit
+        if ( $phpIntSize === 8 && defined( 'HHVM_VERSION' ) )
         {
             $setupFactory = $this->getSetupFactory();
             if ( $setupFactory instanceof LegacySetupFactory && $setupFactory->getDB() === 'sqlite' )
             {
-                $this->markTestSkipped( "Skip on Sqlite, PHP 5.3 and 64bit, as int column is limited to 32bit on 64bit" );
+                $phpIntSize = 4;
             }
         }
 
         // Create as much languages as possible
-        for ( $i = count( $this->languageService->loadLanguages() ) + 1; $i <= 8 * PHP_INT_SIZE - 2; ++$i )
+        for ( $i = count( $this->languageService->loadLanguages() ) + 1; $i <= 8 * $phpIntSize - 2; ++$i )
         {
             $languageCreate->name = "Language $i";
             $languageCreate->languageCode = sprintf( "lan-%02d", $i );
@@ -64,12 +69,7 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
             }
             catch ( \Exception $e )
             {
-                if ( PHP_INT_SIZE === 8 && $i === 32 )
-                {
-                    throw new \Exception( "PHP/HHVM is 64bit, but seems INT column in db only supports 32bit", 0, $e );
-                }
-
-                throw new \Exception( "Unknown issue on iteration $i, PHP_INT_SIZE: " . PHP_INT_SIZE, 0, $e );
+                throw new \Exception( "Unknown issue on iteration $i, \$phpIntSize: " . $phpIntSize, 0, $e );
             }
         }
     }
