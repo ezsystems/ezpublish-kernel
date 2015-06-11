@@ -21,6 +21,7 @@ use RuntimeException;
 use XmlWriter;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;
+use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -325,30 +326,74 @@ class Native extends Gateway
      */
     public function bulkIndexDocuments( array $documents )
     {
-        $map = array();
+        $documentMap = array();
+        $alwaysAvailableEndpoint = $this->endpointResolver->getAlwaysAvailableEndpoint();
+        $alwaysAvailableDocuments = array();
 
         foreach ( $documents as $translationDocuments )
         {
             foreach ( $translationDocuments as $document )
             {
-                $map[$document->languageCode][] = $document;
+                $documentMap[$document->languageCode][] = $document;
+
+                if ( $alwaysAvailableEndpoint !== null && $document->alwaysAvailable )
+                {
+                    $alwaysAvailableDocuments[] = $this->getAlwaysAvailableDocument( $document );
+                }
             }
         }
 
-        foreach ( $map as $languageCode => $translationDocuments )
+        foreach ( $documentMap as $languageCode => $translationDocuments )
         {
-            $this->bulkIndexTranslationDocuments( $translationDocuments, $languageCode );
+            $this->doBulkIndexDocuments(
+                $this->endpointRegistry->getEndpoint(
+                    $this->endpointResolver->getIndexingTarget( $languageCode )
+                ),
+                $translationDocuments
+            );
+        }
+
+        if ( !empty( $alwaysAvailableDocuments ) )
+        {
+            $this->doBulkIndexDocuments(
+                $this->endpointRegistry->getEndpoint( $alwaysAvailableEndpoint ),
+                $alwaysAvailableDocuments
+            );
         }
     }
 
-    protected function bulkIndexTranslationDocuments( array $documents, $languageCode )
+    /**
+     * Returns version of the $document to be indexed in the always available core
+     *
+     * @param \eZ\Publish\SPI\Search\Document $document
+     *
+     * @return \eZ\Publish\SPI\Search\Document
+     */
+    protected function getAlwaysAvailableDocument( Document $document )
+    {
+        // Clone to prevent mutation
+        $document = clone $document;
+
+        $document->id .= "aa";
+        $document->fields[] = new Field(
+            "meta_indexed_always_available",
+            true,
+            new FieldType\BooleanField()
+        );
+
+        return $document;
+    }
+
+    /**
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint $endpoint
+     * @param \eZ\Publish\SPI\Search\Document[] $documents
+     */
+    protected function doBulkIndexDocuments( Endpoint $endpoint, array $documents )
     {
         $updates = $this->createUpdates( $documents );
         $result = $this->client->request(
             'POST',
-            $this->endpointRegistry->getEndpoint(
-                $this->endpointResolver->getIndexingTarget( $languageCode )
-            ),
+            $endpoint,
             '/update?' .
             ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
@@ -467,6 +512,15 @@ class Native extends Gateway
     protected function writeDocument( XmlWriter $xmlWriter, Document $document )
     {
         $xmlWriter->startElement( 'doc' );
+
+        $this->writeField(
+            $xmlWriter,
+            new Field(
+                'id',
+                $document->id,
+                new FieldType\IdentifierField()
+            )
+        );
 
         foreach ( $document->fields as $field )
         {
