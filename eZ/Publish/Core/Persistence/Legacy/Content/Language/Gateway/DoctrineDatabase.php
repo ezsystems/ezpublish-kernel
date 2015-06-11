@@ -46,31 +46,41 @@ class DoctrineDatabase extends Gateway
      */
     public function insertLanguage( Language $language )
     {
-        $query = $this->dbHandler->createSelectQuery();
+        $db = $this->dbHandler;
+        $query = $db->createSelectQuery();
         $query->select(
-            $query->expr->max( $this->dbHandler->quoteColumn( 'id' ) )
-        )->from( $this->dbHandler->quoteTable( 'ezcontent_language' ) );
+            $query->expr->max( $db->quoteColumn( 'id' ) )
+        )->from( $db->quoteTable( 'ezcontent_language' ) );
 
         $statement = $query->prepare();
         $statement->execute();
 
         $lastId = (int)$statement->fetchColumn();
 
-        // Legacy only supports 8 * PHP_INT_SIZE - 2 languages:
+        // Legacy DB only supports 8 * PHP_INT_SIZE - 2 languages:
         // One bit cannot be used because PHP uses signed integers and a second one is reserved for the
         // "always available flag".
-        if ( $lastId == pow( 2, 8 * PHP_INT_SIZE - 2 ) )
+        $intSize = PHP_INT_SIZE;
+
+        // However one exception: On HHVM with sqlite, INT column is 32bit and not 64bit
+        if ( $intSize === 8 && defined( 'HHVM_VERSION' ) && $db->getName() === 'sqlite' )
+        {
+            $intSize = 4;
+        }
+
+        if ( $lastId == pow( 2, 8 * $intSize - 2 ) )
         {
             throw new RuntimeException( "Maximum number of languages reached!" );
         }
+
         // Next power of 2 for bit masks
         $nextId = ( $lastId !== 0 ? $lastId << 1 : 2 );
 
-        $query = $this->dbHandler->createInsertQuery();
+        $query = $db->createInsertQuery();
         $query->insertInto(
-            $this->dbHandler->quoteTable( 'ezcontent_language' )
+            $db->quoteTable( 'ezcontent_language' )
         )->set(
-            $this->dbHandler->quoteColumn( 'id' ),
+            $db->quoteColumn( 'id' ),
             $query->bindValue( $nextId, null, \PDO::PARAM_INT )
         );
         $this->setCommonLanguageColumns( $query, $language );

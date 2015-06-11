@@ -90,6 +90,10 @@ class EmbedToHtml5 implements Converter
         /** @var $embed \DOMElement */
         foreach ( $xmlDoc->getElementsByTagName( $tagName ) as $embed )
         {
+            // On HHVM we get DOMText objects as well
+            if ( !$embed instanceof DOMElement  )
+                continue;
+
             if ( !$view = $embed->getAttribute( "view" ) )
             {
                 $view = $tagName;

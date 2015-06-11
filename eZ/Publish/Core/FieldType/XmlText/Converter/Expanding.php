@@ -55,7 +55,7 @@ class Expanding implements Converter
         /** @var \DOMElement $paragraph */
         foreach ( $document->getElementsByTagName( 'paragraph' ) as $paragraph )
         {
-            if ( $paragraph->hasAttribute( 'xmlns:tmp' ) )
+            if ( $paragraph instanceof DOMElement && $paragraph->hasAttribute( 'xmlns:tmp' ) )
             {
                 $paragraph->setAttribute( 'ez-temporary', 1 );
             }

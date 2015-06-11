@@ -15,6 +15,7 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use DOMDocument;
+use DOMElement;
 use PDO;
 use RuntimeException;
 
@@ -79,7 +80,7 @@ class LegacyStorage extends Gateway
         {
             foreach ( $linkTags as $link )
             {
-                $urlId = $link->getAttribute( 'url_id' );
+                $urlId = $link instanceof DOMElement ? $link->getAttribute( 'url_id' ) : null;
                 if ( !empty( $urlId ) )
                     $linkIds[$urlId] = true;
             }
@@ -89,7 +90,7 @@ class LegacyStorage extends Gateway
                 $linkIdUrlMap = $this->getIdUrlMap( array_keys( $linkIds ) );
                 foreach ( $linkTags as $link )
                 {
-                    $urlId = $link->getAttribute( 'url_id' );
+                    $urlId = $link instanceof DOMElement ? $link->getAttribute( 'url_id' ) : null;
                     if ( !empty( $urlId ) )
                     {
                         $link->setAttribute( 'url', $linkIdUrlMap[$urlId] );
@@ -127,6 +128,10 @@ class LegacyStorage extends Gateway
             /** @var $tag \DOMElement */
             foreach ( $tags as $tag )
             {
+                // On HHVM we get DOMText objects as well
+                if ( !$tag instanceof DOMElement  )
+                    continue;
+
                 $url = null;
                 if ( $tag->hasAttribute( 'url' ) )
                     $url = $tag->getAttribute( 'url' );

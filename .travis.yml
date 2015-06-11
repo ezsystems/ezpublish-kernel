@@ -8,40 +8,17 @@ env:
 matrix:
   # mark as finished before allow_failures are run
   fast_finish: true
-  # misc nighlty tests we keep an eye on and aim to fix closer to stable versions
-  allow_failures:
-    - php: 5.5
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8@dev"
-    - php: hhvm
-      env: TEST_CONFIG="phpunit.xml"
   include:
-# 5.4
-    - php: 5.4
-      env: TEST_CONFIG="phpunit.xml"
-    - php: 5.4
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/$DB_NAME"
-    - php: 5.4
-      env: SOLR_VERSION="4.10.3" TEST_CONFIG="phpunit-integration-legacy-solr.xml" SOLR_CONFS="eZ/Publish/Core/Search/Solr/Content/Resources/schema.xml"
-# 5.5
-    - php: 5.5
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8@dev"
-    - php: 5.5
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/$DB_NAME"
-    - php: 5.5
-      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # 5.6
     - php: 5.6
       env: TEST_CONFIG="phpunit.xml"
     - php: 5.6
       env: TEST_CONFIG="phpunit-integration-legacy.xml"
-    - php: 5.6
-      env: BEHAT_PROFILE="demo" TEST="clean"
 # hhvm
     - php: hhvm
       env: TEST_CONFIG="phpunit.xml"
-# 7.0
-    - php: 7.0
-      env: TEST_CONFIG="phpunit.xml"
+    - php: hhvm
+      env: TEST_CONFIG="phpunit-integration-legacy.xml"
 
 
 # test only master (+ Pull requests)
