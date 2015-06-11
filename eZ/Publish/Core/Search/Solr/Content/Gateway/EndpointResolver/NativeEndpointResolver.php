@@ -44,15 +44,28 @@ class NativeEndpointResolver implements EndpointResolver
     private $endpointMap;
 
     /**
+     * Holds a name of the Endpoint used for always available translations, if configured
+     *
+     * @var null|string
+     */
+    private $alwaysAvailableEndpoint;
+
+    /**
      * Create from Endpoint names
      *
      * @param string[] $entryEndpoints
      * @param string[] $endpointMap
+     * @param null|string $alwaysAvailableEndpoint
      */
-    public function __construct( array $entryEndpoints = array(), array $endpointMap = array() )
+    public function __construct(
+        array $entryEndpoints = array(),
+        array $endpointMap = array(),
+        $alwaysAvailableEndpoint = null
+    )
     {
         $this->entryEndpoints = $entryEndpoints;
         $this->endpointMap = $endpointMap;
+        $this->alwaysAvailableEndpoint = $alwaysAvailableEndpoint;
     }
 
     public function getEntryEndpoint()
@@ -82,37 +95,49 @@ class NativeEndpointResolver implements EndpointResolver
         );
     }
 
+    public function getAlwaysAvailableEndpoint()
+    {
+        return $this->alwaysAvailableEndpoint;
+    }
+
     public function getSearchTargets( array $languageSettings )
     {
-        if (
-            empty( $languageSettings ) ||
-            (
-                isset( $languageSettings["useAlwaysAvailable"] ) &&
-                $languageSettings["useAlwaysAvailable"] === true
-            )
-        )
+        $useAlwaysAvailable = (
+            isset( $languageSettings["useAlwaysAvailable"] ) &&
+            $languageSettings["useAlwaysAvailable"] === true
+        );
+
+        if ( empty( $languageSettings ) || ( $useAlwaysAvailable && !isset( $this->alwaysAvailableEndpoint ) ) )
         {
-            return $this->getEndpoints();
+            return $this->getMappedEndpoints();
         }
 
         $targetSet = array();
 
-        foreach ( $languageSettings["languages"] as $languageCode )
+        if ( isset( $languageSettings["languages"] ) )
         {
-            if ( isset( $this->endpointMap[$languageCode] ) )
+            foreach ( $languageSettings["languages"] as $languageCode )
             {
-                $targetSet[$this->endpointMap[$languageCode]] = true;
+                if ( isset( $this->endpointMap[$languageCode] ) )
+                {
+                    $targetSet[$this->endpointMap[$languageCode]] = true;
+                }
+                else if ( isset( $this->endpointMap["*"] ) )
+                {
+                    $targetSet[$this->endpointMap["*"]] = true;
+                }
+                else
+                {
+                    throw new RuntimeException(
+                        "Language '{$languageCode}' is not mapped to Solr endpoint"
+                    );
+                }
             }
-            else if ( isset( $this->endpointMap["*"] ) )
-            {
-                $targetSet[$this->endpointMap["*"]] = true;
-            }
-            else
-            {
-                throw new RuntimeException(
-                    "Language '{$languageCode}' is not mapped to Solr endpoint"
-                );
-            }
+        }
+
+        if ( $useAlwaysAvailable && isset( $this->alwaysAvailableEndpoint ) )
+        {
+            $targetSet[$this->alwaysAvailableEndpoint] = true;
         }
 
         if ( empty( $targetSet ) )
@@ -130,6 +155,23 @@ class NativeEndpointResolver implements EndpointResolver
             throw new RuntimeException( "No endpoints defined" );
         }
 
+        $endpoints = array_values( $this->endpointMap );
+
+        if ( isset( $this->alwaysAvailableEndpoint ) )
+        {
+            $endpoints[] = $this->alwaysAvailableEndpoint;
+        }
+
+        return $endpoints;
+    }
+
+    /**
+     * Returns all mapped endpoints (excludes always available endpoint)
+     *
+     * @return string[]
+     */
+    private function getMappedEndpoints()
+    {
         return array_values( $this->endpointMap );
     }
 }
