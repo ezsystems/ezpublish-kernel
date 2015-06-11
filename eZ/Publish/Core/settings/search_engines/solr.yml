@@ -16,10 +16,14 @@ parameters:
     ezpublish.search.solr.result_extractor.loading.class: eZ\Publish\Core\Search\Solr\Content\ResultExtractor\LoadingResultExtractor
     ezpublish.spi.search.solr.location_handler.class: eZ\Publish\Core\Search\Solr\Content\Location\Handler
     # Endpoint resolver arguments must be set in order to be overrideable
-    ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.content: []
-    ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.location: []
-    ezpublish.search.solr.content.gateway.endpoint_resolver.cluster.content: []
-    ezpublish.search.solr.content.gateway.endpoint_resolver.cluster.location: []
+    ezpublish.search.solr.content.entry_endpoints: []
+    ezpublish.search.solr.content.cluster_endpoints: []
+    ezpublish.search.solr.content.default_endpoint: null
+    ezpublish.search.solr.content.main_translations_endpoint: null
+    ezpublish.search.solr.location.entry_endpoints: []
+    ezpublish.search.solr.location.cluster_endpoints: []
+    ezpublish.search.solr.location.default_endpoint: null
+    ezpublish.search.solr.location.main_translations_endpoint: null
 
 services:
     ezpublish.search.solr.content.gateway.endpoint_registry:
@@ -28,14 +32,18 @@ services:
     ezpublish.search.solr.content.gateway.endpoint_resolver.native.content:
         class: %ezpublish.search.solr.content.gateway.endpoint_resolver.native.class%
         arguments:
-            - %ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.content%
-            - %ezpublish.search.solr.content.gateway.endpoint_resolver.cluster.content%
+            - %ezpublish.search.solr.content.entry_endpoints%
+            - %ezpublish.search.solr.content.cluster_endpoints%
+            - %ezpublish.search.solr.content.default_endpoint%
+            - %ezpublish.search.solr.content.main_translations_endpoint%
 
     ezpublish.search.solr.content.gateway.endpoint_resolver.native.location:
         class: %ezpublish.search.solr.content.gateway.endpoint_resolver.native.class%
         arguments:
-            - %ezpublish.search.solr.content.gateway.endpoint_resolver.entry_points.location%
-            - %ezpublish.search.solr.content.gateway.endpoint_resolver.cluster.location%
+            - %ezpublish.search.solr.location.entry_endpoints%
+            - %ezpublish.search.solr.location.cluster_endpoints%
+            - %ezpublish.search.solr.location.default_endpoint%
+            - %ezpublish.search.solr.location.main_translations_endpoint%
 
     ezpublish.search.solr.content.gateway.endpoint_resolver.content:
         alias: ezpublish.search.solr.content.gateway.endpoint_resolver.native.content
