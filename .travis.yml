@@ -38,7 +38,7 @@ before_script:
 
 # execute phpunit or behat as the script command
 script:
-  - if [ "$TEST_CONFIG" != "" ] ; then php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 vendor/bin/phpunit --debug -vc $TEST_CONFIG ; fi
+  - if [ "$TEST_CONFIG" != "" ] ; then php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 vendor/bin/phpunit -c $TEST_CONFIG ; fi
   - if [ "$BEHAT_PROFILE" != "" ] ; then cd "$HOME/build/ezplatform" && php bin/behat -vv --profile $BEHAT_PROFILE --suite $TEST ; fi
 
 # disable mail notifications
