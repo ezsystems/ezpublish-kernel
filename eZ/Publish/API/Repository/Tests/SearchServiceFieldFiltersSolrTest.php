@@ -404,9 +404,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
+        $this->assertEquals( 1, $searchResult->totalCount );
         $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -449,9 +448,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -623,6 +621,7 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
     /**
      * Test for the findContent() method.
      *
+     * @group ttt
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
     public function testFullTextFilterLanguageAlwaysAvailable()
@@ -864,9 +863,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
+        $this->assertEquals( 1, $searchResult->totalCount );
         $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -907,9 +905,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -1225,9 +1222,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
+        $this->assertEquals( 1, $searchResult->totalCount );
         $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -1268,9 +1264,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -1805,9 +1800,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
+        $this->assertEquals( 1, $searchResult->totalCount );
         $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -1852,9 +1846,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -2202,9 +2195,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
+        $this->assertEquals( 1, $searchResult->totalCount );
         $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -2249,9 +2241,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -2870,9 +2861,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
+        $this->assertEquals( 1, $searchResult->totalCount );
         $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -2935,9 +2925,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -3439,9 +3428,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
+        $this->assertEquals( 1, $searchResult->totalCount );
         $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -3488,9 +3476,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
@@ -3834,9 +3821,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
+        $this->assertEquals( 1, $searchResult->totalCount );
         $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
     }
 
     /**
@@ -3879,9 +3865,8 @@ class SearchServiceFieldFiltersSolrTest extends BaseTest
 
         $searchResult = $searchService->findContent( $query, $fieldFilters );
 
-        $this->assertEquals( 2, $searchResult->totalCount );
-        $this->assertEquals( $content1->id, $searchResult->searchHits[0]->valueObject->id );
-        $this->assertEquals( $content2->id, $searchResult->searchHits[1]->valueObject->id );
+        $this->assertEquals( 1, $searchResult->totalCount );
+        $this->assertEquals( $content2->id, $searchResult->searchHits[0]->valueObject->id );
     }
 
     /**
