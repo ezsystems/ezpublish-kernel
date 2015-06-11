@@ -21,6 +21,13 @@ class FieldTypeCollectionFactory extends ContainerAware
     protected $fieldTypes = array();
 
     /**
+     * List of identifiers for "concrete" FieldTypes (i.e. not using NullFieldType).
+     *
+     * @var array
+     */
+    private $concreteFieldTypesIdentifiers = array();
+
+    /**
      * Registers an eZ Publish field type.
      * Field types are being registered as a closure so that they will be lazy loaded.
      *
@@ -44,5 +51,20 @@ class FieldTypeCollectionFactory extends ContainerAware
     public function getFieldTypes()
     {
         return $this->fieldTypes;
+    }
+
+    /**
+     * Registers $fieldTypeIdentifier as "concrete" FieldType (i.e. not using NullFieldType).
+     *
+     * @param string $fieldTypeIdentifier
+     */
+    public function registerConcreteFieldTypeIdentifier( $fieldTypeIdentifier )
+    {
+        $this->concreteFieldTypesIdentifiers[] = $fieldTypeIdentifier;
+    }
+
+    public function getConcreteFieldTypesIdentifiers()
+    {
+        return $this->concreteFieldTypesIdentifiers;
     }
 }

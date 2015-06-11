@@ -51,7 +51,7 @@ class EzPublishCoreBundle extends Bundle
     public function build( ContainerBuilder $container )
     {
         parent::build( $container );
-        $container->addCompilerPass( new FieldTypeCollectionPass );
+        $container->addCompilerPass( new FieldTypeCollectionPass, PassConfig::TYPE_OPTIMIZE );
         $container->addCompilerPass( new FieldTypeParameterProviderRegistryPass );
         $container->addCompilerPass( new ChainRoutingPass );
         $container->addCompilerPass( new ChainConfigResolverPass );

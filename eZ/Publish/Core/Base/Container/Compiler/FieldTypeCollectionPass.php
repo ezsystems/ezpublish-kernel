@@ -53,6 +53,15 @@ class FieldTypeCollectionPass implements CompilerPassInterface
                         $attribute['alias']
                     )
                 );
+
+                // Add FieldType to the "concrete" list if it's not a fake.
+                if ( !is_a( $container->findDefinition( $id )->getClass(), '\eZ\Publish\Core\FieldType\Null\Type', true ) )
+                {
+                    $fieldTypeCollectionFactoryDef->addMethodCall(
+                        'registerConcreteFieldTypeIdentifier',
+                        array( $attribute['alias'] )
+                    );
+                }
             }
         }
     }
