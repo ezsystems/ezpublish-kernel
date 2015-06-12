@@ -33,11 +33,11 @@ interface EndpointResolver
     public function getIndexingTarget( $languageCode );
 
     /**
-     * Returns name of the Endpoint used to index always available translations
+     * Returns name of the Endpoint used to index translations in main languages
      *
      * @return null|string
      */
-    public function getAlwaysAvailableEndpoint();
+    public function getMainLanguagesEndpoint();
 
     /**
      * Returns an array of Endpoint names for the given $languageSettings

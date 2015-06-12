@@ -355,16 +355,15 @@ class NativeDocumentMapper implements DocumentMapper
                 new FieldType\BooleanField()
             );
 
-            $alwaysAvailable = (
-                $content->versionInfo->contentInfo->mainLanguageCode === $languageCode &&
-                $content->versionInfo->contentInfo->alwaysAvailable
-            );
+            $isMainTranslation = ( $content->versionInfo->contentInfo->mainLanguageCode === $languageCode );
+            $alwaysAvailable = ( $isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable );
 
             $documents[] = new Document(
                 array(
                     "id" => $this->generateContentDocumentId( $content, $languageCode ),
                     "languageCode" => $languageCode,
                     "alwaysAvailable" => $alwaysAvailable,
+                    "isMainTranslation" => $isMainTranslation,
                     "fields" => array_merge( $fields, $translationFields ),
                 )
             );
@@ -640,16 +639,15 @@ class NativeDocumentMapper implements DocumentMapper
                 new FieldType\BooleanField()
             );
 
-            $alwaysAvailable = (
-                $content->versionInfo->contentInfo->mainLanguageCode === $languageCode &&
-                $content->versionInfo->contentInfo->alwaysAvailable
-            );
+            $isMainTranslation = ( $content->versionInfo->contentInfo->mainLanguageCode === $languageCode );
+            $alwaysAvailable = ( $isMainTranslation && $content->versionInfo->contentInfo->alwaysAvailable );
 
             $documents[] = new Document(
                 array(
                     "id" => $this->generateLocationDocumentId( $location, $languageCode ),
                     "languageCode" => $languageCode,
                     "alwaysAvailable" => $alwaysAvailable,
+                    "isMainTranslation" => $isMainTranslation,
                     "fields" => array_merge( $fields, $translationFields ),
                 )
             );

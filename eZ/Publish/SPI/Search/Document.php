@@ -31,11 +31,18 @@ class Document extends ValueObject
     public $languageCode;
 
     /**
-     * Denotes that a document's translation is always available
+     * Denotes that document's translation is always available
      *
      * @var boolean
      */
     public $alwaysAvailable;
+
+    /**
+     * Denotes that document's translation is a main translation of the Content
+     *
+     * @var boolean
+     */
+    public $isMainTranslation;
 
     /**
      * An array of fields
