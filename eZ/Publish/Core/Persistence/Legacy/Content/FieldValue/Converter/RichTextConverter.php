@@ -62,7 +62,6 @@ class RichTextConverter implements Converter
     public function toStorageFieldDefinition( FieldDefinition $fieldDefinition, StorageFieldDefinition $storageDefinition )
     {
         $storageDefinition->dataInt1 = $fieldDefinition->fieldTypeConstraints->fieldSettings['numRows'];
-        $storageDefinition->dataText2 = $fieldDefinition->fieldTypeConstraints->fieldSettings['tagPreset'];
     }
 
     /**
@@ -76,7 +75,6 @@ class RichTextConverter implements Converter
         $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'numRows' => $storageDefinition->dataInt1,
-                'tagPreset' => $storageDefinition->dataText2
             )
         );
 

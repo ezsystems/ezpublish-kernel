@@ -133,10 +133,6 @@ EOT
                 'type' => 'int',
                 'default' => 10,
             ),
-            'tagPreset' => array(
-                'type' => 'choice',
-                'default' => RichTextType::TAG_PRESET_DEFAULT,
-            )
         );
     }
 
@@ -149,7 +145,6 @@ EOT
     {
         return array(
             'numRows' => 0,
-            'tagPreset' => RichTextType::TAG_PRESET_DEFAULT,
         );
     }
 

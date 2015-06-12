@@ -114,7 +114,6 @@ class RichTextIntegrationTest extends BaseIntegrationTest
                         'fieldSettings' => new FieldSettings(
                             array(
                                 'numRows' => 0,
-                                'tagPreset' => null,
                             )
                         )
                     )

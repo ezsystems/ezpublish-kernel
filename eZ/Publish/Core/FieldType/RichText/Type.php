@@ -26,16 +26,6 @@ use RuntimeException;
 class Type extends FieldType
 {
     /**
-     * Default preset of tags available in online editor
-     */
-    const TAG_PRESET_DEFAULT = 0;
-
-    /**
-     * Preset of tags for online editor intended for simple formatting options
-     */
-    const TAG_PRESET_SIMPLE_FORMATTING = 1;
-
-    /**
      * List of settings available for this FieldType
      *
      * The key is the setting name, and the value is the default value for this setting
@@ -47,10 +37,6 @@ class Type extends FieldType
             "type" => "int",
             "default" => 10
         ),
-        "tagPreset" => array(
-            "type" => "choice",
-            "default" => self::TAG_PRESET_DEFAULT
-        )
     );
 
     /**
@@ -354,23 +340,6 @@ class Type extends FieldType
                         {
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' value must be of integer type",
-                                null,
-                                array(
-                                    "setting" => $name
-                                ),
-                                "[$name]"
-                            );
-                        }
-                        break;
-                    case "tagPreset":
-                        $definedTagPresets = array(
-                            self::TAG_PRESET_DEFAULT,
-                            self::TAG_PRESET_SIMPLE_FORMATTING
-                        );
-                        if ( !in_array( $value, $definedTagPresets, true ) )
-                        {
-                            $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' is of unknown tag preset",
                                 null,
                                 array(
                                     "setting" => $name
