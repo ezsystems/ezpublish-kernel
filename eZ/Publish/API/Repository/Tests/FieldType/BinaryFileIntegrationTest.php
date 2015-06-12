@@ -353,17 +353,18 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
     public function provideToHashData()
     {
         $fixture = $this->getFixtureData();
-        $fixture['create']['downloadCount'] = 0;
-        $fixture['create']['uri'] = $fixture['create']['inputUri'];
-        $fixture['create']['path'] = $fixture['create']['inputUri'];
+        $expected = $fixture['create'];
+        $expected['downloadCount'] = 0;
+        $expected['uri'] = $expected['inputUri'];
+        $expected['path'] = $expected['inputUri'];
 
         $fieldValue = $this->getValidCreationFieldData();
-        $fieldValue->uri = $fixture['create']['uri'];
+        $fieldValue->uri = $expected['uri'];
 
         return array(
             array(
                 $fieldValue,
-                $fixture['create'],
+                $expected,
             ),
         );
     }

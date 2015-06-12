@@ -339,7 +339,7 @@ class BinaryFileTest extends BinaryBaseTest
                     'fileSize' => 2342,
                     'downloadCount' => 0,
                     'mimeType' => 'application/pdf',
-                    'uri' => 'http://some/file/here',
+                    'uri' => 'http://some/file/here'
                 )
             ),
         );

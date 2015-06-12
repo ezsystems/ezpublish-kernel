@@ -22,3 +22,7 @@ _ez_user_hash:
 ez_content_download:
     path: /content/download/{contentId}/{fieldIdentifier}/{filename}
     defaults: { _controller: ezpublish.controller.content.download:downloadBinaryFileAction }
+
+ez_content_download_field_id:
+    path: /content/download/{contentId}/{fieldId}
+    defaults: { _controller: ezpublish.controller.content.download_redirection:redirectToContentDownloadAction }

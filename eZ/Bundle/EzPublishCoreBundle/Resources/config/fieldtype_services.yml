@@ -60,6 +60,7 @@ parameters:
 
     # BinaryFile
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
+    ezpublish.fieldType.ezbinarybase.downloadUrlGenerator.class: eZ\Publish\Core\MVC\Symfony\FieldType\BinaryBase\ContentDownloadUrlGenerator
 
 services:
     # Parameter providers
@@ -293,3 +294,8 @@ services:
 
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: %ezpublish.fieldType.ezbinaryfile.pathGenerator.class%
+
+    # Will be added to binaryfile & mediafile external storage handlers by a compiler pass
+    ezpublish.fieldType.ezbinarybase.download_url_generator:
+        class: %ezpublish.fieldType.ezbinarybase.downloadUrlGenerator.class%
+        arguments: [@router]

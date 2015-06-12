@@ -44,7 +44,6 @@ services:
             - @ezpublish.fieldType.ezbinaryfile.io_service
             - @ezpublish.fieldType.ezbinaryfile.pathGenerator
             - @ezpublish.core.io.mimeTypeDetector
-            - @?logger
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezmedia}
 

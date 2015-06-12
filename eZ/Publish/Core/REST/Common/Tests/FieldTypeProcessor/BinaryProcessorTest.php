@@ -33,7 +33,7 @@ class BinaryProcessorTest extends BinaryInputProcessorTest
         $this->assertEquals(
             array(
                 'url' => $expectedUri,
-                'uri' => $expectedUri
+                'uri' => $expectedUri,
             ),
             $outputHash
         );

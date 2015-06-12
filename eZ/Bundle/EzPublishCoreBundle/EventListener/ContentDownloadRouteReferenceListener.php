@@ -7,6 +7,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent;
+use eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -20,7 +21,9 @@ class ContentDownloadRouteReferenceListener implements EventSubscriberInterface
     const OPT_CONTENT = 'content';
     const OPT_CONTENT_ID = 'contentId';
     const OPT_DOWNLOAD_NAME = 'filename';
-    const OPT_LANGUAGE = 'language';
+    const OPT_DOWNLOAD_LANGUAGE = 'inLanguage';
+    const OPT_SITEACCESS_LANGUAGE = 'language';
+    const OPT_SITEACCESS = 'siteaccess';
     const OPT_VERSION = 'version';
 
     /** @var \eZ\Publish\Core\Helper\TranslationHelper */
@@ -56,9 +59,9 @@ class ContentDownloadRouteReferenceListener implements EventSubscriberInterface
         $this->configureOptions( $resolver );
         $options = $resolver->resolve( $options );
 
-        if ( isset( $options[self::OPT_LANGUAGE]) )
+        if ( isset( $options[self::OPT_DOWNLOAD_LANGUAGE]) )
         {
-            $routeReference->set( self::OPT_LANGUAGE, $options[self::OPT_LANGUAGE] );
+            $routeReference->set( self::OPT_DOWNLOAD_LANGUAGE, $options[self::OPT_DOWNLOAD_LANGUAGE] );
         }
 
         if ( isset( $options[self::OPT_VERSION] ) )
@@ -76,9 +79,19 @@ class ContentDownloadRouteReferenceListener implements EventSubscriberInterface
     protected function configureOptions( OptionsResolver $resolver )
     {
         $resolver->setRequired( [ self::OPT_CONTENT, self::OPT_FIELD_IDENTIFIER ] );
-        $resolver->setDefaults( [ self::OPT_VERSION => null, self::OPT_LANGUAGE => null ] );
+
+        $resolver->setDefaults(
+            [
+                self::OPT_VERSION => null,
+                self::OPT_DOWNLOAD_LANGUAGE => null,
+                self::OPT_SITEACCESS_LANGUAGE => null,
+                self::OPT_SITEACCESS => null
+            ]
+        );
+
         $resolver->setAllowedTypes( self::OPT_CONTENT, 'eZ\Publish\API\Repository\Values\Content\Content' );
         $resolver->setAllowedTypes( self::OPT_FIELD_IDENTIFIER, 'string' );
+
         $resolver->setDefault(
             self::OPT_CONTENT_ID,
             function ( Options $options )
@@ -94,7 +107,7 @@ class ContentDownloadRouteReferenceListener implements EventSubscriberInterface
                 $field = $this->translationHelper->getTranslatedField(
                     $options[self::OPT_CONTENT],
                     $options[self::OPT_FIELD_IDENTIFIER],
-                    $options[self::OPT_LANGUAGE]
+                    $options[self::OPT_DOWNLOAD_LANGUAGE]
                 );
                 if ( !$field instanceof Field )
                 {

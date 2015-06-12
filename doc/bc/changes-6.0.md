@@ -141,6 +141,11 @@ Changes affecting version compatibility with former or future versions.
 * SiteAccess service (`ezpublish.siteaccess`) is not synchronized any more.
   Synchronized services are deprecated as of Symfony 2.7.
 
+* The Values for `BinaryFile` and `Media` FieldType now expose the content/download URL as the `url` property.
+  Before, it contained the physical path to the file, e.g. `var/site/storage/original/...`. Since this path isn't
+  allowed to pass through the rewrite rules for security, it was not usable.
+  This also affects REST, that will now expose a valid HTTP download URL.
+
 ## Deprecations
 
 * `eZ\Publish\Core\MVC\Symfony\Cache\GatewayCachePurger::purge()` is deprecated and will be removed in v6.1.

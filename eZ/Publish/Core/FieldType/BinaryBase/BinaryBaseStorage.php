@@ -31,10 +31,11 @@ class BinaryBaseStorage extends GatewayBasedStorage
     /** @var \eZ\Publish\SPI\FieldType\BinaryBase\PathGenerator */
     protected $pathGenerator;
 
-    /**
-     * @var \eZ\Publish\SPI\IO\MimeTypeDetector
-     */
+    /** @var \eZ\Publish\SPI\IO\MimeTypeDetector */
     protected $mimeTypeDetector;
+
+    /** @var PathGenerator */
+    protected $downloadUrlGenerator;
 
     /**
      * Construct from gateways
@@ -50,6 +51,14 @@ class BinaryBaseStorage extends GatewayBasedStorage
         $this->IOService = $IOService;
         $this->pathGenerator = $pathGenerator;
         $this->mimeTypeDetector = $mimeTypeDetector;
+    }
+
+    /**
+     * @param PathGenerator $downloadUrlGenerator
+     */
+    public function setDownloadUrlGenerator( PathGenerator $downloadUrlGenerator )
+    {
+        $this->downloadUrlGenerator = $downloadUrlGenerator;
     }
 
     public function storeFieldData( VersionInfo $versionInfo, Field $field, array $context )
@@ -80,7 +89,9 @@ class BinaryBaseStorage extends GatewayBasedStorage
             $binaryFile = $this->IOService->createBinaryFile( $createStruct );
             $storedValue['id'] = $binaryFile->id;
             $storedValue['mimeType'] = $createStruct->mimeType;
-            $storedValue['uri'] = $binaryFile->uri;
+            $storedValue['uri'] = isset( $this->downloadUrlGenerator ) ?
+                $this->downloadUrlGenerator->getStoragePathForField( $field, $versionInfo ) :
+                $binaryFile->uri;
         }
 
         $field->value->externalData = $storedValue;
@@ -140,7 +151,9 @@ class BinaryBaseStorage extends GatewayBasedStorage
         {
             $binaryFile = $this->IOService->loadBinaryFile( $field->value->externalData['id'] );
             $field->value->externalData['fileSize'] = $binaryFile->size;
-            $field->value->externalData['uri'] = $binaryFile->uri;
+            $field->value->externalData['uri'] = isset( $this->downloadUrlGenerator ) ?
+                $this->downloadUrlGenerator->getStoragePathForField( $field, $versionInfo ) :
+                $binaryFile->uri;
         }
     }
 
