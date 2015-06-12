@@ -28,12 +28,8 @@ class NativeEndpointResolver implements EndpointResolver
      * Holds a map of translations to Endpoint names, with language code as key
      * and Endpoint name as value.
      *
-     * Asterisk as a key defines the endpoint as available for any translation
-     * not explicitly mapped by the language code.
-     *
      * <code>
      *  array(
-     *      "*" => "endpoint0",
      *      "cro-HR" => "endpoint1",
      *      "eng-GB" => "endpoint2",
      *  );
@@ -42,6 +38,13 @@ class NativeEndpointResolver implements EndpointResolver
      * @var string[]
      */
     private $endpointMap;
+
+    /**
+     * Holds a name of the default Endpoint used for translations, if configured
+     *
+     * @var null|string
+     */
+    private $defaultEndpoint;
 
     /**
      * Holds a name of the Endpoint used for always available translations, if configured
@@ -55,16 +58,19 @@ class NativeEndpointResolver implements EndpointResolver
      *
      * @param string[] $entryEndpoints
      * @param string[] $endpointMap
+     * @param null|string $defaultEndpoint
      * @param null|string $alwaysAvailableEndpoint
      */
     public function __construct(
         array $entryEndpoints = array(),
         array $endpointMap = array(),
+        $defaultEndpoint = null,
         $alwaysAvailableEndpoint = null
     )
     {
         $this->entryEndpoints = $entryEndpoints;
         $this->endpointMap = $endpointMap;
+        $this->defaultEndpoint = $defaultEndpoint;
         $this->alwaysAvailableEndpoint = $alwaysAvailableEndpoint;
     }
 
@@ -85,9 +91,9 @@ class NativeEndpointResolver implements EndpointResolver
             return $this->endpointMap[$languageCode];
         }
 
-        if ( isset( $this->endpointMap["*"] ) )
+        if ( isset( $this->defaultEndpoint ) )
         {
-            return $this->endpointMap["*"];
+            return $this->defaultEndpoint;
         }
 
         throw new RuntimeException(
@@ -109,7 +115,14 @@ class NativeEndpointResolver implements EndpointResolver
 
         if ( empty( $languageSettings ) || ( $useAlwaysAvailable && !isset( $this->alwaysAvailableEndpoint ) ) )
         {
-            return $this->getMappedEndpoints();
+            $mappedEndpointSet = $this->getMappedEndpointSet();
+
+            if ( empty( $mappedEndpointSet ) )
+            {
+                throw new RuntimeException( "No endpoints defined for given language settings" );
+            }
+
+            return array_keys( $mappedEndpointSet );
         }
 
         $targetSet = array();
@@ -122,9 +135,9 @@ class NativeEndpointResolver implements EndpointResolver
                 {
                     $targetSet[$this->endpointMap[$languageCode]] = true;
                 }
-                else if ( isset( $this->endpointMap["*"] ) )
+                else if ( isset( $this->defaultEndpoint ) )
                 {
-                    $targetSet[$this->endpointMap["*"]] = true;
+                    $targetSet[$this->defaultEndpoint] = true;
                 }
                 else
                 {
@@ -150,28 +163,37 @@ class NativeEndpointResolver implements EndpointResolver
 
     public function getEndpoints()
     {
-        if ( empty( $this->endpointMap ) )
+        $endpointSet = $this->getMappedEndpointSet();
+
+        if ( isset( $this->alwaysAvailableEndpoint ) )
+        {
+            $endpointSet[$this->alwaysAvailableEndpoint] = true;
+        }
+
+        if ( empty( $endpointSet ) )
         {
             throw new RuntimeException( "No endpoints defined" );
         }
 
-        $endpoints = array_values( $this->endpointMap );
-
-        if ( isset( $this->alwaysAvailableEndpoint ) )
-        {
-            $endpoints[] = $this->alwaysAvailableEndpoint;
-        }
-
-        return $endpoints;
+        return array_keys( $endpointSet );
     }
 
     /**
-     * Returns all mapped endpoints (excludes always available endpoint)
+     * Returns the set of all mapped endpoints
+     *
+     * Includes default and excludes always available endpoint
      *
      * @return string[]
      */
-    private function getMappedEndpoints()
+    private function getMappedEndpointSet()
     {
-        return array_values( $this->endpointMap );
+        $endpointSet = array_flip( $this->endpointMap );
+
+        if ( isset( $this->defaultEndpoint ) )
+        {
+            $endpointSet[$this->defaultEndpoint] = true;
+        }
+
+        return $endpointSet;
     }
 }

@@ -238,13 +238,15 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
                                 "eng-GB" => "endpoint2",
                                 "gal-MW" => "endpoint3",
                             ),
-                            "always_available" => "endpoint4",
+                            "default" => "endpoint4",
+                            "always_available" => "endpoint5",
                         ),
                         "location" => array(
                             "translations" => array(
                                 "cro-HR" => "endpoint2",
                             ),
-                            "always_available" => "endpoint3",
+                            "default" => "endpoint3",
+                            "always_available" => "endpoint4",
                         ),
                     ),
                 ),
@@ -280,6 +282,11 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             2,
             "endpoint4"
         );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            3,
+            "endpoint5"
+        );
         $this->assertContainerBuilderHasService(
             "ezpublish.search.solr.content.gateway.native.connection1"
         );
@@ -306,6 +313,11 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             2,
             "endpoint3"
         );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            3,
+            "endpoint4"
+        );
         $this->assertContainerBuilderHasService(
             "ezpublish.search.solr.location.gateway.native.connection1"
         );
@@ -324,14 +336,16 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
                             "translations" => array(
                                 "cro-HR" => "endpoint1",
                                 "eng-GB" => "endpoint2",
-                                "*" => "endpoint5",
                             ),
+                            "default" => "endpoint3",
+                            "always_available" => "endpoint4",
                         ),
                         "location" => array(
                             "translations" => array(
-                                "cro-HR" => "endpoint2",
-                                "*" => "endpoint4",
+                                "cro-HR" => "endpoint5",
                             ),
+                            "default" => "endpoint6",
+                            "always_available" => "endpoint7",
                         ),
                     ),
                 ),
@@ -351,7 +365,8 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             array(
                 "endpoint1",
                 "endpoint2",
-                "endpoint5",
+                "endpoint3",
+                "endpoint4",
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
@@ -360,8 +375,17 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             array(
                 "cro-HR" => "endpoint1",
                 "eng-GB" => "endpoint2",
-                "*" => "endpoint5",
             )
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            2,
+            "endpoint3"
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            3,
+            "endpoint4"
         );
         $this->assertContainerBuilderHasService(
             "ezpublish.search.solr.content.gateway.native.connection1"
@@ -374,17 +398,125 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
             "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
             0,
             array(
-                "endpoint2",
-                "endpoint4",
+                "endpoint5",
+                "endpoint6",
+                "endpoint7",
             )
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
             1,
             array(
-                "cro-HR" => "endpoint2",
-                "*" => "endpoint4",
+                "cro-HR" => "endpoint5",
             )
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            2,
+            "endpoint6"
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            3,
+            "endpoint7"
+        );
+        $this->assertContainerBuilderHasService(
+            "ezpublish.search.solr.location.gateway.native.connection1"
+        );
+        $this->assertContainerBuilderHasService(
+            "ezpublish.spi.search.solr.location_handler.connection1"
+        );
+    }
+
+    public function testConnectionEndpointUniqueDefaults()
+    {
+        $configurationValues = array(
+            "connections" => array(
+                "connection1" => array(
+                    "cluster" => array(
+                        "content" => array(
+                            "translations" => array(
+                                "cro-HR" => "endpoint1",
+                                "eng-GB" => "endpoint2",
+                            ),
+                            "default" => "endpoint2",
+                            "always_available" => "endpoint2",
+                        ),
+                        "location" => array(
+                            "translations" => array(
+                                "cro-HR" => "endpoint5",
+                            ),
+                            "default" => "endpoint5",
+                            "always_available" => "endpoint5",
+                        ),
+                    ),
+                ),
+            ),
+        );
+
+        $this->load( $configurationValues );
+
+        $this->assertContainerBuilderHasParameter(
+            "ez_search_engine_solr.default_connection",
+            "connection1"
+        );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            0,
+            array(
+                "endpoint1",
+                "endpoint2",
+            )
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            1,
+            array(
+                "cro-HR" => "endpoint1",
+                "eng-GB" => "endpoint2",
+            )
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            2,
+            "endpoint2"
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            3,
+            "endpoint2"
+        );
+        $this->assertContainerBuilderHasService(
+            "ezpublish.search.solr.content.gateway.native.connection1"
+        );
+        $this->assertContainerBuilderHasService(
+            "ezpublish.spi.search.solr.content_handler.connection1"
+        );
+
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            0,
+            array(
+                "endpoint5",
+            )
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            1,
+            array(
+                "cro-HR" => "endpoint5",
+            )
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            2,
+            "endpoint5"
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            3,
+            "endpoint5"
         );
         $this->assertContainerBuilderHasService(
             "ezpublish.search.solr.location.gateway.native.connection1"
@@ -421,9 +553,17 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
             1,
-            array(
-                "*" => "endpoint1",
-            )
+            array()
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            2,
+            "endpoint1"
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            3,
+            null
         );
         $this->assertContainerBuilderHasService(
             "ezpublish.search.solr.content.gateway.native.connection1"
@@ -442,9 +582,17 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
             1,
-            array(
-                "*" => "endpoint1",
-            )
+            array()
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            2,
+            "endpoint1"
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            3,
+            null
         );
         $this->assertContainerBuilderHasService(
             "ezpublish.search.solr.location.gateway.native.connection1"
@@ -484,13 +632,16 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
             1,
-            array(
-                "*" => "endpoint1",
-            )
+            array()
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
             2,
+            "endpoint1"
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.content.connection1",
+            3,
             null
         );
         $this->assertContainerBuilderHasService(
@@ -510,13 +661,16 @@ class EzPublishSolrSearchEngineExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
             1,
-            array(
-                "*" => "endpoint2",
-            )
+            array()
         );
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
             2,
+            "endpoint2"
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+            "ezpublish.search.solr.content.gateway.endpoint_resolver.native.location.connection1",
+            3,
             null
         );
         $this->assertContainerBuilderHasService(
