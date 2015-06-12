@@ -18,9 +18,11 @@ parameters:
     # Endpoint resolver arguments must be set in order to be overrideable
     ezpublish.search.solr.content.entry_endpoints: []
     ezpublish.search.solr.content.cluster_endpoints: []
+    ezpublish.search.solr.content.default_endpoint: null
     ezpublish.search.solr.content.always_available_endpoint: null
     ezpublish.search.solr.location.entry_endpoints: []
     ezpublish.search.solr.location.cluster_endpoints: []
+    ezpublish.search.solr.location.default_endpoint: null
     ezpublish.search.solr.location.always_available_endpoint: null
 
 services:
@@ -32,6 +34,7 @@ services:
         arguments:
             - %ezpublish.search.solr.content.entry_endpoints%
             - %ezpublish.search.solr.content.cluster_endpoints%
+            - %ezpublish.search.solr.content.default_endpoint%
             - %ezpublish.search.solr.content.always_available_endpoint%
 
     ezpublish.search.solr.content.gateway.endpoint_resolver.native.location:
@@ -39,6 +42,7 @@ services:
         arguments:
             - %ezpublish.search.solr.location.entry_endpoints%
             - %ezpublish.search.solr.location.cluster_endpoints%
+            - %ezpublish.search.solr.location.default_endpoint%
             - %ezpublish.search.solr.location.always_available_endpoint%
 
     ezpublish.search.solr.content.gateway.endpoint_resolver.content:

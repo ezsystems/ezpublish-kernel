@@ -27,6 +27,7 @@ parameters:
           eng-US: endpoint1
           por-PT: endpoint2
           ger-DE: endpoint3
+    ezpublish.search.solr.content.default_endpoint: null
     ezpublish.search.solr.content.always_available_endpoint: null
     ezpublish.search.solr.location.entry_endpoints:
           - endpoint0
@@ -35,6 +36,7 @@ parameters:
           eng-US: endpoint5
           por-PT: endpoint6
           ger-DE: endpoint7
+    ezpublish.search.solr.location.default_endpoint: null
     ezpublish.search.solr.location.always_available_endpoint: null
 
 services:

@@ -167,9 +167,7 @@ class Configuration implements ConfigurationInterface
                             // If single endpoint is set for Content cluster, use it as default
                             // mapping for Content cluster
                             $v["cluster"]["content"] = array(
-                                "translations" => array(
-                                    "*" => $v["cluster"]["content"],
-                                ),
+                                "default" => $v["cluster"]["content"],
                             );
                             return $v;
                         }
@@ -191,9 +189,7 @@ class Configuration implements ConfigurationInterface
                             // If single endpoint is set for Location cluster, use it as default
                             // mapping for Location cluster
                             $v["cluster"]["location"] = array(
-                                "translations" => array(
-                                    "*" => $v["cluster"]["location"],
-                                ),
+                                "default" => $v["cluster"]["location"],
                             );
                             return $v;
                         }
@@ -207,6 +203,7 @@ class Configuration implements ConfigurationInterface
                                 empty( $v["entry_endpoints"]["content"] ) &&
                                 (
                                     !empty( $v["cluster"]["content"]["translations"] ) ||
+                                    !empty( $v["cluster"]["content"]["default"] ) ||
                                     !empty( $v["cluster"]["content"]["always_available"] )
                                 )
                             );
@@ -217,19 +214,24 @@ class Configuration implements ConfigurationInterface
                         // cluster endpoints
                         function( $v )
                         {
-                            $endpoints = array();
+                            $endpointSet = array();
 
                             if ( !empty( $v["cluster"]["content"]["translations"] ) )
                             {
-                                $endpoints = array_values( $v["cluster"]["content"]["translations"] );
+                                $endpointSet = array_flip( $v["cluster"]["content"]["translations"] );
+                            }
+
+                            if ( !empty( $v["cluster"]["content"]["default"] ) )
+                            {
+                                $endpointSet[$v["cluster"]["content"]["default"]] = true;
                             }
 
                             if ( !empty( $v["cluster"]["content"]["always_available"] ) )
                             {
-                                $endpoints[] = $v["cluster"]["content"]["always_available"];
+                                $endpointSet[$v["cluster"]["content"]["always_available"]] = true;
                             }
 
-                            $v["entry_endpoints"]["content"] = $endpoints;
+                            $v["entry_endpoints"]["content"] = array_keys( $endpointSet );
 
                             return $v;
                         }
@@ -243,6 +245,7 @@ class Configuration implements ConfigurationInterface
                                 empty( $v["entry_endpoints"]["location"] ) &&
                                 (
                                     !empty( $v["cluster"]["location"]["translations"] ) ||
+                                    !empty( $v["cluster"]["location"]["default"] ) ||
                                     !empty( $v["cluster"]["location"]["always_available"] )
                                 )
                             );
@@ -253,19 +256,24 @@ class Configuration implements ConfigurationInterface
                         // cluster endpoints
                         function( $v )
                         {
-                            $endpoints = array();
+                            $endpointSet = array();
 
                             if ( !empty( $v["cluster"]["location"]["translations"] ) )
                             {
-                                $endpoints = array_values( $v["cluster"]["location"]["translations"] );
+                                $endpointSet = array_flip( $v["cluster"]["location"]["translations"] );
+                            }
+
+                            if ( !empty( $v["cluster"]["location"]["default"] ) )
+                            {
+                                $endpointSet[$v["cluster"]["location"]["default"]] = true;
                             }
 
                             if ( !empty( $v["cluster"]["location"]["always_available"] ) )
                             {
-                                $endpoints[] = $v["cluster"]["location"]["always_available"];
+                                $endpointSet[$v["cluster"]["location"]["always_available"]] = true;
                             }
 
-                            $v["entry_endpoints"]["location"] = $endpoints;
+                            $v["entry_endpoints"]["location"] = array_keys( $endpointSet );
 
                             return $v;
                         }
@@ -290,8 +298,8 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->arrayNode( "content" )
                                 ->info(
-                                    "A set of endpoint names for Content index. " .
-                                    "If not set cluster endpoints will be used."
+                                    "A set of entry endpoint names for the Content index.\n\n" .
+                                    "If not set, cluster endpoints will be used."
                                 )
                                 ->example(
                                     array(
@@ -304,8 +312,8 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->arrayNode( "location" )
                                 ->info(
-                                    "A set of endpoint names for Location index. " .
-                                    "If not set cluster endpoints will be used."
+                                    "A set of entry endpoint names for the Location index.\n\n" .
+                                    "If not set, cluster endpoints will be used."
                                 )
                                 ->example(
                                     array(
@@ -320,12 +328,14 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->arrayNode( "cluster" )
                         ->info(
-                            "Cluster map, consisting of a mapping of translation language codes " .
-                            "and Solr endpoint names, per index (Content and Location). If ".
-                            "single endpoint name is given, it will be used for both indexes, " .
-                            "for all translations (as if mapped with asterisk). Optionally, you " .
-                            "can define always available endpoint(s), which will be used for " .
-                            "indexing translations that are always available."
+                            "Defines a map of translation language codes and Solr " .
+                            "endpoint names for Content and Location indexes.\n\n" .
+                            "Optionally, you can define default and always available " .
+                            "endpoints. Default one will be used for a translation if it " .
+                            "is not explicitly mapped, and always available will be used " .
+                            "for indexing translations that are always available.\n\n" .
+                            "If single endpoint name is given, it will be used as a " .
+                            "shortcut to define the default endpoint for both indexes."
                         )
                         ->addDefaultsIfNotSet()
                         ->example(
@@ -335,27 +345,30 @@ class Configuration implements ConfigurationInterface
                                         "cro-HR" => "endpoint1",
                                         "eng-GB" => "endpoint2",
                                     ),
-                                    "always_available" => "endpoint3",
+                                    "default" => "endpoint3",
+                                    "always_available" => "endpoint4",
                                 ),
                                 "location" => array(
                                     "translations" => array(
                                         "cro-HR" => "endpoint1",
                                         "eng-GB" => "endpoint2",
                                     ),
-                                    "always_available" => "endpoint3",
+                                    "default" => "endpoint3",
+                                    "always_available" => "endpoint4",
                                 ),
                             )
                         )
                         ->children()
                             ->arrayNode( "content" )
                                 ->info(
-                                    "A map of translation language codes and Solr endpoint names " .
-                                    "for Content index. Asterisk (*) can be used as a wildcard " .
-                                    "for all translations that are not explicitly mapped. If " .
-                                    "single endpoint name is given, it will be used for all " .
-                                    "translations (as if mapped with asterisk). Optionally, you " .
-                                    "can define always available endpoint, which will be used " .
-                                    "for indexing translations that are always available."
+                                    "Defines a map of translation language codes and Solr " .
+                                    "endpoint names for Content index.\n\n" .
+                                    "Optionally, you can define default and always available " .
+                                    "endpoints. Default one will be used for a translation if it " .
+                                    "is not explicitly mapped, and always available will be used " .
+                                    "for indexing translations that are always available.\n\n" .
+                                    "If single endpoint name is given, it will be used as a " .
+                                    "shortcut to define the default endpoint."
                                 )
                                 ->addDefaultsIfNotSet()
                                 ->example(
@@ -364,7 +377,8 @@ class Configuration implements ConfigurationInterface
                                             "cro-HR" => "endpoint1",
                                             "eng-GB" => "endpoint2",
                                         ),
-                                        "always_available" => "endpoint3",
+                                        "default" => "endpoint3",
+                                        "always_available" => "endpoint4",
                                     )
                                 )
                                 ->children()
@@ -372,11 +386,8 @@ class Configuration implements ConfigurationInterface
                                         ->normalizeKeys( false )
                                         ->useAttributeAsKey( "language_code" )
                                             ->info(
-                                                "A map of translation language codes and Solr endpoint names " .
-                                                "for Content index. Asterisk (*) can be used as a wildcard " .
-                                                "for all translations that are not explicitly mapped. If " .
-                                                "single endpoint name is given, it will be used for all " .
-                                                "translations (as if mapped with asterisk)."
+                                                "A map of translation language codes and Solr " .
+                                                "endpoint names for Content index."
                                             )
                                             ->example(
                                                 array(
@@ -387,20 +398,38 @@ class Configuration implements ConfigurationInterface
                                         ->prototype( "scalar" )
                                         ->end()
                                     ->end()
+                                    ->scalarNode( "default" )
+                                        ->defaultNull()
+                                        ->info(
+                                            "Default endpoint will be used for indexing " .
+                                            "documents of a translation that is not explicitly " .
+                                            "mapped.\n\n" .
+                                            "This setting is optional."
+                                        )
+                                    ->end()
                                     ->scalarNode( "always_available" )
                                         ->defaultNull()
+                                        ->info(
+                                            "Always available endpoint will be used to index " .
+                                            "documents of translations that are always " .
+                                            "available.\n\n" .
+                                            "This setting is optional. Use it to reduce the " .
+                                            "number of Solr endpoints that the query is " .
+                                            "distributed to when using always available fallback."
+                                        )
                                     ->end()
                                 ->end()
                             ->end()
                             ->arrayNode( "location" )
                                 ->info(
-                                    "A map of translation language codes and Solr endpoint names " .
-                                    "for Location index. Asterisk (*) can be used as a wildcard " .
-                                    "for all translations that are not explicitly mapped. If " .
-                                    "single endpoint name is given, it will be used for all " .
-                                    "translations (as if mapped with asterisk). Optionally, you " .
-                                    "can define always available endpoint, which will be used " .
-                                    "for indexing translations that are always available."
+                                    "Defines a map of translation language codes and Solr " .
+                                    "endpoint names for Location index.\n\n" .
+                                    "Optionally, you can define default and always available " .
+                                    "endpoints. Default one will be used for a translation if it " .
+                                    "is not explicitly mapped, and always available will be used " .
+                                    "for indexing translations that are always available.\n\n" .
+                                    "If single endpoint name is given, it will be used as a " .
+                                    "shortcut to define the default endpoint."
                                 )
                                 ->addDefaultsIfNotSet()
                                 ->example(
@@ -409,7 +438,8 @@ class Configuration implements ConfigurationInterface
                                             "cro-HR" => "endpoint1",
                                             "eng-GB" => "endpoint2",
                                         ),
-                                        "always_available" => "endpoint3",
+                                        "default" => "endpoint3",
+                                        "always_available" => "endpoint4",
                                     )
                                 )
                                 ->children()
@@ -417,11 +447,8 @@ class Configuration implements ConfigurationInterface
                                         ->normalizeKeys( false )
                                         ->useAttributeAsKey( "language_code" )
                                             ->info(
-                                                "A map of translation language codes and Solr endpoint names " .
-                                                "for Location index. Asterisk (*) can be used as a wildcard " .
-                                                "for all translations that are not explicitly mapped. If " .
-                                                "single endpoint name is given, it will be used for all " .
-                                                "translations (as if mapped with asterisk)."
+                                                "A map of translation language codes and Solr " .
+                                                "endpoint names for Location index."
                                             )
                                             ->example(
                                                 array(
@@ -432,8 +459,25 @@ class Configuration implements ConfigurationInterface
                                         ->prototype( "scalar" )
                                         ->end()
                                     ->end()
+                                    ->scalarNode( "default" )
+                                        ->defaultNull()
+                                        ->info(
+                                            "Default endpoint will be used for indexing " .
+                                            "documents of a translation that is not explicitly " .
+                                            "mapped.\n\n" .
+                                            "This setting is optional."
+                                        )
+                                    ->end()
                                     ->scalarNode( "always_available" )
                                         ->defaultNull()
+                                        ->info(
+                                            "Always available endpoint will be used to index " .
+                                            "documents of translations that are always " .
+                                            "available.\n\n" .
+                                            "This setting is optional. Use it to reduce the " .
+                                            "number of Solr endpoints that the query is " .
+                                            "distributed to when using always available fallback."
+                                        )
                                     ->end()
                                 ->end()
                             ->end()

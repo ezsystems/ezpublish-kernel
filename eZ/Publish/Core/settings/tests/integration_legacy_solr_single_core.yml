@@ -22,13 +22,13 @@ parameters:
 
     ezpublish.search.solr.content.entry_endpoints:
           - endpoint0
-    ezpublish.search.solr.content.cluster_endpoints:
-          "*": endpoint0
+    ezpublish.search.solr.content.cluster_endpoints: []
+    ezpublish.search.solr.content.default_endpoint: endpoint0
     ezpublish.search.solr.content.always_available_endpoint: null
     ezpublish.search.solr.location.entry_endpoints:
           - endpoint0
-    ezpublish.search.solr.location.cluster_endpoints:
-          "*": endpoint0
+    ezpublish.search.solr.location.cluster_endpoints: []
+    ezpublish.search.solr.location.default_endpoint: endpoint0
     ezpublish.search.solr.location.always_available_endpoint: null
 
 services:
