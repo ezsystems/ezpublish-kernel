@@ -262,58 +262,63 @@ class Native extends Gateway
      */
     protected function getCoreFilter( array $languageSettings )
     {
+        $languages = (
+            empty( $languageSettings["languages"] ) ?
+                array() :
+                $languageSettings["languages"]
+        );
+        $useAlwaysAvailable = (
+            isset( $languageSettings["useAlwaysAvailable"] ) &&
+            $languageSettings["useAlwaysAvailable"] === true
+        );
+        $hasMainLanguagesEndpoint = ( $this->endpointResolver->getMainLanguagesEndpoint() !== null );
+
         $filters = array();
         $languageFilters = array();
 
-        if ( !empty( $languageSettings["languages"] ) )
+        foreach ( $languages as $languageCode )
         {
-            foreach ( $languageSettings["languages"] as $languageCode )
-            {
-                $languageFilter = $this->getCoreLanguageFilter(
-                    $languageSettings["languages"],
-                    $languageCode
-                );
-                $languageFilters[] = "({$languageFilter})";
-            }
+            $languageFilter = $this->getCoreLanguageFilter( $languages, $languageCode );
+            $languageFilters[] = "({$languageFilter})";
         }
 
         if ( !empty( $languageFilters ) )
         {
             $languageFilters = implode( " OR ", $languageFilters );
 
-            // Factor in always available index if used
-            if ( $this->endpointResolver->getAlwaysAvailableEndpoint() !== null )
+            // Exclude always available index if used
+            if ( $hasMainLanguagesEndpoint )
             {
-                $languageFilters = "({$languageFilters}) NOT meta_indexed_always_available_b:true";
+                $languageFilters = "({$languageFilters}) NOT meta_indexed_main_translation_b:true";
             }
 
             $filters[] = "({$languageFilters})";
         }
 
         // Handle always available fallback
-        if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true )
+        if ( $useAlwaysAvailable )
         {
             $filter = "meta_indexed_is_main_translation_and_always_available_b:true";
 
             // For always available fallback exclude all given languages
-            if ( !empty( $languageSettings["languages"] ) )
+            if ( !empty( $languages ) )
             {
-                $languageExclude = $this->getLanguageExcludeCondition( $languageSettings["languages"] );
+                $languageExclude = $this->getLanguageExcludeCondition( $languages );
                 $filter = "({$filter} {$languageExclude})";
             }
 
-            // Exclude non AA documents if always available index if used
-            if ( $this->endpointResolver->getAlwaysAvailableEndpoint() !== null )
+            // Exclude non indexed main language documents if main language index if used
+            if ( $hasMainLanguagesEndpoint )
             {
-                $filter = "({$filter} AND meta_indexed_always_available_b:true)";
+                $filter = "({$filter} AND meta_indexed_main_translation_b:true)";
             }
 
             $filters[] = $filter;
         }
-        // By default search only on the main language(s)
-        else if ( empty( $languageSettings["languages"] ) )
+        // If no given languages and not using always available fallback, search only main languages
+        else if ( empty( $languages ) )
         {
-            $filters[] = "(meta_indexed_is_main_translation_b:true NOT meta_indexed_always_available_b:true)";
+            $filters[] = "meta_indexed_is_main_translation_b:true";
         }
 
         return implode( " OR ", $filters );
@@ -384,7 +389,7 @@ class Native extends Gateway
     public function bulkIndexDocuments( array $documents )
     {
         $documentMap = array();
-        $alwaysAvailableEndpoint = $this->endpointResolver->getAlwaysAvailableEndpoint();
+        $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
         $alwaysAvailableDocuments = array();
 
         foreach ( $documents as $translationDocuments )
@@ -393,7 +398,7 @@ class Native extends Gateway
             {
                 $documentMap[$document->languageCode][] = $document;
 
-                if ( $alwaysAvailableEndpoint !== null && $document->alwaysAvailable )
+                if ( $mainTranslationsEndpoint !== null && $document->isMainTranslation )
                 {
                     $alwaysAvailableDocuments[] = $this->getAlwaysAvailableDocument( $document );
                 }
@@ -413,7 +418,7 @@ class Native extends Gateway
         if ( !empty( $alwaysAvailableDocuments ) )
         {
             $this->doBulkIndexDocuments(
-                $this->endpointRegistry->getEndpoint( $alwaysAvailableEndpoint ),
+                $this->endpointRegistry->getEndpoint( $mainTranslationsEndpoint ),
                 $alwaysAvailableDocuments
             );
         }
@@ -431,9 +436,9 @@ class Native extends Gateway
         // Clone to prevent mutation
         $document = clone $document;
 
-        $document->id .= "aa";
+        $document->id .= "mt";
         $document->fields[] = new Field(
-            "meta_indexed_always_available",
+            "meta_indexed_main_translation",
             true,
             new FieldType\BooleanField()
         );
