@@ -52,6 +52,7 @@ matrix:
 branches:
   only:
     - master
+    - impl-EZP-24433-solr-multicore-single-core
 
 # setup requirements for running unit/integration/behat tests
 before_script:
