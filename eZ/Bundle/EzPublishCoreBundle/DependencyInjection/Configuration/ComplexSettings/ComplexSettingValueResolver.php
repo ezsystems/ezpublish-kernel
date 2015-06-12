@@ -24,7 +24,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Comple
  *
  * Example:
  * ```php
- * $argumentValue = ComplexSettingValueFactory::getArgumentValue(
+ * $argumentValue = ComplexSettingValueResolver::resolveSetting(
  *     '$var_dir$/$storage_dir$',
  *     'var_dir',
  *     '$var_dir$'
@@ -33,7 +33,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Comple
  * );
  * ```
  */
-class ComplexSettingValueFactory
+class ComplexSettingValueResolver
 {
     /**
      * Can receive as many tuples of array( argumentName ), argumentValue as necessary
@@ -44,7 +44,7 @@ class ComplexSettingValueFactory
      *
      * @return string
      */
-    public static function getArgumentValue( $argumentString )
+    public function resolveSetting( $argumentString )
     {
         $arguments = array_slice( func_get_args(), 1 );
 

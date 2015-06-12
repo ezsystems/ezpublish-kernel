@@ -25,10 +25,16 @@ class DynamicSettingsListenerTest extends PHPUnit_Framework_TestCase
      */
     private $container;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $expressionLanguage;
+
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock( 'Symfony\Component\DependencyInjection\ContainerInterface' );
+        $this->container = $this->getMock( '\Symfony\Component\DependencyInjection\IntrospectableContainerInterface' );
+        $this->expressionLanguage = $this->getMock( '\Symfony\Component\DependencyInjection\ExpressionLanguage' );
     }
 
     public function testGetSubscribedEvents()
@@ -47,16 +53,19 @@ class DynamicSettingsListenerTest extends PHPUnit_Framework_TestCase
     {
         $event = new PostSiteAccessMatchEvent( new SiteAccess( 'test' ), new Request(), HttpKernelInterface::SUB_REQUEST );
         $resettableServices = array( 'foo', 'bar.baz' );
-        $dynamicSettingsServiceIds = array( 'something', 'something_else' );
+        $updateableServices = array(
+            'some_service' => array( array( 'method' => 'some_expression' ) ),
+            'another_service' => array( array( 'method' => 'another_expression' ) )
+        );
 
         $this->container
             ->expects( $this->never() )
             ->method( 'set' );
-        $this->container
+        $this->expressionLanguage
             ->expects( $this->never() )
-            ->method( 'get' );
+            ->method( 'evaluate' );
 
-        $listener = new DynamicSettingsListener( $resettableServices, $dynamicSettingsServiceIds );
+        $listener = new DynamicSettingsListener( $resettableServices, $updateableServices, $this->expressionLanguage );
         $listener->setContainer( $this->container );
         $listener->onSiteAccessMatch( $event );
     }
@@ -65,48 +74,71 @@ class DynamicSettingsListenerTest extends PHPUnit_Framework_TestCase
     {
         $event = new PostSiteAccessMatchEvent( new SiteAccess( 'test' ), new Request(), HttpKernelInterface::MASTER_REQUEST );
         $resettableServices = array( 'foo', 'bar.baz' );
-        $dynamicSettingsServiceIds = array( 'something', 'something_else' );
+        $updateableServices = array(
+            'some_service' => array( array( 'someMethod', 'some_expression' ) ),
+            'another_service' => array( array( 'someMethod', 'another_expression' ) )
+        );
 
         $this->container
             ->expects( $this->at( 0 ) )
-            ->method( 'set' )
-            ->with( 'foo', null );
+            ->method( 'initialized' )
+            ->willReturn( true );
         $this->container
             ->expects( $this->at( 1 ) )
             ->method( 'set' )
-            ->with( 'bar.baz', null );
-
-        $fakeService1 = new \stdClass;
+            ->with( 'foo', null );
         $this->container
             ->expects( $this->at( 2 ) )
-            ->method( 'set' )
-            ->with( 'something', null );
+            ->method( 'initialized' )
+            ->willReturn( true );
         $this->container
             ->expects( $this->at( 3 ) )
-            ->method( 'get' )
-            ->with( 'something' )
-            ->will( $this->returnValue( $fakeService1 ) );
+            ->method( 'set' )
+            ->with( 'bar.baz', null );
+
+        $updateableService1 = $this->getMock( '\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface' );
+        $dynamicSetting1 = 'foo';
         $this->container
             ->expects( $this->at( 4 ) )
-            ->method( 'set' )
-            ->with( 'something', $fakeService1 );
-
-        $fakeService2 = new \stdClass;
+            ->method( 'initialized' )
+            ->willReturn( true );
         $this->container
             ->expects( $this->at( 5 ) )
-            ->method( 'set' )
-            ->with( 'something_else', null );
+            ->method( 'get' )
+            ->with( 'some_service' )
+            ->willReturn( $updateableService1 );
+        $updateableService1
+            ->expects( $this->once() )
+            ->method( 'someMethod' )
+            ->with( $dynamicSetting1 );
+
+        $updateableService2 = $this->getMock( '\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface' );
+        $dynamicSetting2 = array( 'foo' => 'bar' );
         $this->container
             ->expects( $this->at( 6 ) )
-            ->method( 'get' )
-            ->with( 'something_else' )
-            ->will( $this->returnValue( $fakeService2 ) );
+            ->method( 'initialized' )
+            ->willReturn( true );
         $this->container
             ->expects( $this->at( 7 ) )
-            ->method( 'set' )
-            ->with( 'something_else', $fakeService2 );
+            ->method( 'get' )
+            ->with( 'another_service' )
+            ->willReturn( $updateableService2 );
+        $updateableService2
+            ->expects( $this->once() )
+            ->method( 'someMethod' )
+            ->with( $dynamicSetting2 );
 
-        $listener = new DynamicSettingsListener( $resettableServices, $dynamicSettingsServiceIds );
+        $this->expressionLanguage
+            ->expects( $this->exactly( count( $updateableServices ) ) )
+            ->method( 'evaluate' )
+            ->willReturnMap(
+                array(
+                    array( 'some_expression', array( 'container' => $this->container ), $dynamicSetting1 ),
+                    array( 'another_expression', array( 'container' => $this->container ), $dynamicSetting2 ),
+                )
+            );
+
+        $listener = new DynamicSettingsListener( $resettableServices, $updateableServices, $this->expressionLanguage );
         $listener->setContainer( $this->container );
         $listener->onSiteAccessMatch( $event );
     }
@@ -116,48 +148,71 @@ class DynamicSettingsListenerTest extends PHPUnit_Framework_TestCase
         $siteAccess = new SiteAccess( 'test' );
         $event = new ScopeChangeEvent( $siteAccess );
         $resettableServices = array( 'foo', 'bar.baz' );
-        $dynamicSettingsServiceIds = array( 'something', 'something_else' );
+        $updateableServices = array(
+            'some_service' => array( array( 'someMethod', 'some_expression' ) ),
+            'another_service' => array( array( 'someMethod', 'another_expression' ) )
+        );
 
         $this->container
             ->expects( $this->at( 0 ) )
-            ->method( 'set' )
-            ->with( 'foo', null );
+            ->method( 'initialized' )
+            ->willReturn( true );
         $this->container
             ->expects( $this->at( 1 ) )
             ->method( 'set' )
-            ->with( 'bar.baz', null );
-
-        $fakeService1 = new \stdClass;
+            ->with( 'foo', null );
         $this->container
             ->expects( $this->at( 2 ) )
-            ->method( 'set' )
-            ->with( 'something', null );
+            ->method( 'initialized' )
+            ->willReturn( true );
         $this->container
             ->expects( $this->at( 3 ) )
-            ->method( 'get' )
-            ->with( 'something' )
-            ->will( $this->returnValue( $fakeService1 ) );
+            ->method( 'set' )
+            ->with( 'bar.baz', null );
+
+        $updateableService1 = $this->getMock( '\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface' );
+        $dynamicSetting1 = 'foo';
         $this->container
             ->expects( $this->at( 4 ) )
-            ->method( 'set' )
-            ->with( 'something', $fakeService1 );
-
-        $fakeService2 = new \stdClass;
+            ->method( 'initialized' )
+            ->willReturn( true );
         $this->container
             ->expects( $this->at( 5 ) )
-            ->method( 'set' )
-            ->with( 'something_else', null );
+            ->method( 'get' )
+            ->with( 'some_service' )
+            ->willReturn( $updateableService1 );
+        $updateableService1
+            ->expects( $this->once() )
+            ->method( 'someMethod' )
+            ->with( $dynamicSetting1 );
+
+        $updateableService2 = $this->getMock( '\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface' );
+        $dynamicSetting2 = array( 'foo' => 'bar' );
         $this->container
             ->expects( $this->at( 6 ) )
-            ->method( 'get' )
-            ->with( 'something_else' )
-            ->will( $this->returnValue( $fakeService2 ) );
+            ->method( 'initialized' )
+            ->willReturn( true );
         $this->container
             ->expects( $this->at( 7 ) )
-            ->method( 'set' )
-            ->with( 'something_else', $fakeService2 );
+            ->method( 'get' )
+            ->with( 'another_service' )
+            ->willReturn( $updateableService2 );
+        $updateableService2
+            ->expects( $this->once() )
+            ->method( 'someMethod' )
+            ->with( $dynamicSetting2 );
 
-        $listener = new DynamicSettingsListener( $resettableServices, $dynamicSettingsServiceIds );
+        $this->expressionLanguage
+            ->expects( $this->exactly( count( $updateableServices ) ) )
+            ->method( 'evaluate' )
+            ->willReturnMap(
+                array(
+                    array( 'some_expression', array( 'container' => $this->container ), $dynamicSetting1 ),
+                    array( 'another_expression', array( 'container' => $this->container ), $dynamicSetting2 ),
+                )
+            );
+
+        $listener = new DynamicSettingsListener( $resettableServices, $updateableServices, $this->expressionLanguage );
         $listener->setContainer( $this->container );
         $listener->onConfigScopeChange( $event );
         $this->assertSame( $siteAccess, $event->getSiteAccess() );

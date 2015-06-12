@@ -27,49 +27,15 @@ class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
 
     public function testProcess()
     {
-        $this->setDefinition(
-            'service1',
-            new Definition(
-                'stdClass', array( '/mnt/nfs/$var_dir$/$storage_dir$' )
-            )
-        );
+        $definition = new Definition( 'stdClass', array( '/mnt/nfs/$var_dir$/$storage_dir$' ) );
+        $this->setDefinition( 'service1', $definition );
 
         $this->compile();
 
-        self::assertContainerBuilderHasServiceDefinitionWithArgument(
-            'service1.__complex_setting_factory_0',
-            0,
-            '/mnt/nfs/$var_dir$/$storage_dir$'
-        );
-
-        self::assertContainerBuilderHasServiceDefinitionWithArgument(
-            'service1.__complex_setting_factory_0',
-            1,
-            'var_dir'
-        );
-
-        self::assertContainerBuilderHasServiceDefinitionWithArgument(
-            'service1.__complex_setting_factory_0',
-            2,
-            '$var_dir$'
-        );
-
-        self::assertContainerBuilderHasServiceDefinitionWithArgument(
-            'service1.__complex_setting_factory_0',
-            3,
-            'storage_dir'
-        );
-
-        self::assertContainerBuilderHasServiceDefinitionWithArgument(
-            'service1.__complex_setting_factory_0',
-            4,
-            '$storage_dir$'
-        );
-
-        self::assertContainerBuilderHasServiceDefinitionWithArgument(
-            'service1',
-            0,
-            new Reference( 'service1.__complex_setting_factory_0' )
-        );
+        $expressionString = 'service("ezpublish.config.complex_setting_value.resolver").resolveSetting("/mnt/nfs/$var_dir$/$storage_dir$", "var_dir", service("ezpublish.config.resolver").getParameter("var_dir", null, null), "storage_dir", service("ezpublish.config.resolver").getParameter("storage_dir", null, null))';
+        $arguments = $definition->getArguments();
+        self::assertSame( 1, count( $arguments ) );
+        self::assertInstanceOf( '\Symfony\Component\ExpressionLanguage\Expression', $arguments[0] );
+        self::assertSame( $expressionString, (string)$arguments[0] );
     }
 }

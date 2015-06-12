@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\ExpressionLanguage\Expression;
 
 /**
  * This compiler pass will resolve config resolver parameters, delimited by $ chars (e.g. $my_parameter$).
@@ -41,7 +42,7 @@ class ConfigResolverParameterPass implements CompilerPassInterface
     {
         $dynamicSettingsServices = array();
         $resettableServices = array();
-        $fakeServices = array();
+        $updateableServices = $container->getParameter( 'ezpublish.config_resolver.updateable_services' );
         // Pass #1 Loop against all arguments of all service definitions to replace dynamic settings by the fake service.
         foreach ( $container->getDefinitions() as $serviceId => $definition )
         {
@@ -59,9 +60,8 @@ class ConfigResolverParameterPass implements CompilerPassInterface
                 {
                     $i = (int)substr( $i, strlen( 'index_' ) );
                 }
-                $fakeServiceId = $this->injectFakeService( $container, $this->getConfigResolverArgs( $arg ) );
-                $replaceArguments[$i] = new Reference( $fakeServiceId, ContainerInterface::NULL_ON_INVALID_REFERENCE );
-                $fakeServices[] = $fakeServiceId;
+
+                $replaceArguments[$i] = $this->createExpression( $this->dynamicSettingParser->parseDynamicSetting( $arg ) );
             }
 
             if ( !empty( $replaceArguments ) )
@@ -78,6 +78,7 @@ class ConfigResolverParameterPass implements CompilerPassInterface
             foreach ( $methodCalls as $i => &$call )
             {
                 list( $method, $callArgs ) = $call;
+                $callHasDynamicSetting = false;
                 foreach ( $callArgs as &$callArg )
                 {
                     if ( !$this->dynamicSettingParser->isDynamicSetting( $callArg ) )
@@ -85,12 +86,26 @@ class ConfigResolverParameterPass implements CompilerPassInterface
                         continue;
                     }
 
-                    $fakeServiceId = $this->injectFakeService( $container, $this->getConfigResolverArgs( $callArg ) );
-                    $callArg = new Reference( $fakeServiceId, ContainerInterface::NULL_ON_INVALID_REFERENCE );
-                    $fakeServices[] = $fakeServiceId;
+                    $callArg = $this->createExpression( $this->dynamicSettingParser->parseDynamicSetting( $callArg ) );
+                    $callHasDynamicSetting = true;
                 }
 
                 $call = array( $method, $callArgs );
+                if ( $callHasDynamicSetting )
+                {
+                    // We only support single dynamic setting injection for updatable services.
+                    if ( count( $callArgs ) == 1 )
+                    {
+                        $updateableServices[$serviceId][] = [$method, (string)$callArgs[0]];
+                    }
+                    // Method call has more than 1 argument, so we will reset it instead of updating it.
+                    else
+                    {
+                        $dynamicSettingsServices[$serviceId] = true;
+                        // Ensure current service is not registered as updatable service.
+                        unset( $updateableServices[$serviceId] );
+                    }
+                }
             }
 
             $definition->setMethodCalls( $methodCalls );
@@ -129,47 +144,25 @@ class ConfigResolverParameterPass implements CompilerPassInterface
             )
         );
         $container->setParameter( 'ezpublish.config_resolver.resettable_services', $resettableServices );
-        $container->setParameter( 'ezpublish.config_resolver.dynamic_settings_services', array_unique( $fakeServices ) );
+        $container->setParameter( 'ezpublish.config_resolver.updateable_services', $updateableServices );
     }
 
     /**
-     * @param string $dynamicSetting
+     * Returns the expression object corresponding to passed dynamic setting.
      *
-     * @return array
+     * @param array $dynamicSetting Parsed dynamic setting, as returned by DynamicSettingParser.
+     *
+     * @return Expression
      */
-    private function getConfigResolverArgs( $dynamicSetting )
+    private function createExpression( array $dynamicSetting )
     {
-        $parsedParams = $this->dynamicSettingParser->parseDynamicSetting( $dynamicSetting );
-        $configResolverArgs = array(
-            $parsedParams['param'],
-            $parsedParams['namespace'],
-            $parsedParams['scope']
+        $expression = sprintf(
+            'service("ezpublish.config.resolver").getParameter("%s", %s, %s)',
+            $dynamicSetting['param'],
+            isset( $dynamicSetting['namespace'] ) ? '"' . $dynamicSetting['namespace'] . '"' : 'null',
+            isset( $dynamicSetting['scope'] ) ? '"' . $dynamicSetting['scope'] . '"' : 'null'
         );
 
-        return $configResolverArgs;
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param $configResolverArgs
-     *
-     * @return string
-     */
-    private function injectFakeService( ContainerBuilder $container, $configResolverArgs )
-    {
-        $paramConverter = new Definition( 'stdClass', $configResolverArgs );
-        $paramConverter
-            ->setFactory( [ new Reference( 'ezpublish.config.resolver' ), 'getParameter' ] )
-            // @deprecated Synchronized services are deprecated in Symfony 2.7 in favour of RequestStack
-            // see: https://github.com/symfony/symfony/pull/13289
-            ->setSynchronized( true, false );
-
-        $serviceId = 'ezpublish.config_resolver.fake.' . implode( '_', $configResolverArgs );
-        if ( !$container->hasDefinition( $serviceId ) )
-        {
-            $container->setDefinition( $serviceId, $paramConverter );
-        }
-
-        return $serviceId;
+        return new Expression( $expression );
     }
 }

@@ -21,7 +21,8 @@ class ConfigResolverParameterPassTest extends PHPUnit_Framework_TestCase
     public function testProcess()
     {
         $container = new ContainerBuilder();
-        $dynamicSettingsServices = array();
+        $container->setParameter( 'ezpublish.config_resolver.updateable_services', array() );
+        $updateableServices = array();
         $def1Arg1 = 'foo';
         $def1Arg2 = new Reference( 'foo.bar' );
         $def1 = new Definition( 'stdClass', array( $def1Arg1, $def1Arg2 ) );
@@ -62,114 +63,55 @@ class ConfigResolverParameterPassTest extends PHPUnit_Framework_TestCase
         $configResolverPass->process( $container );
 
         // Ensure that non concerned services stayed untouched.
-        $this->assertSame( $def1Arg1, $def1->getArgument( 0 ) );
-        $this->assertSame( $def1Arg2, $def1->getArgument( 1 ) );
-        $this->assertSame( $def1, $container->getDefinition( 'def1' ) );
-        $this->assertSame( $def5Arg1, $def5->getArgument( 0 ) );
-        $this->assertSame( $def5, $container->getDefinition( 'def5' ) );
-        $this->assertSame( $def6Arg1, $def6->getArgument( 0 ) );
-        $this->assertSame( $def6Arg2, $def6->getArgument( 1 ) );
-        $this->assertSame( $def6, $container->getDefinition( 'def6' ) );
-        $this->assertSame( $def7MethodCalls, $def7->getMethodCalls() );
-        $this->assertSame( $def7, $container->getDefinition( 'def7' ) );
+        self::assertSame( $def1Arg1, $def1->getArgument( 0 ) );
+        self::assertSame( $def1Arg2, $def1->getArgument( 1 ) );
+        self::assertSame( $def1, $container->getDefinition( 'def1' ) );
+        self::assertSame( $def5Arg1, $def5->getArgument( 0 ) );
+        self::assertSame( $def5, $container->getDefinition( 'def5' ) );
+        self::assertSame( $def6Arg1, $def6->getArgument( 0 ) );
+        self::assertSame( $def6Arg2, $def6->getArgument( 1 ) );
+        self::assertSame( $def6, $container->getDefinition( 'def6' ) );
+        self::assertSame( $def7MethodCalls, $def7->getMethodCalls() );
+        self::assertSame( $def7, $container->getDefinition( 'def7' ) );
 
         // Check that concerned services arguments have been correctly transformed.
-        /** @var Reference $def2arg1 */
         $def2arg1 = $def2->getArgument( 0 );
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $def2arg1 );
-        $expectedServiceHelperId1 = 'ezpublish.config_resolver.fake.bar_some_namespace_';
-        $dynamicSettingsServices[] = $expectedServiceHelperId1;
-        $this->assertSame( (string)$def2arg1, $expectedServiceHelperId1 );
-        $this->assertTrue( $container->has( $expectedServiceHelperId1 ) );
-        $defHelper1 = $container->getDefinition( $expectedServiceHelperId1 );
-        $factoryArray = $defHelper1->getFactory();
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
-        $this->assertEquals( 'getParameter', $factoryArray[1] );
-        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
-        $this->assertSame(
-            array( 'bar', 'some_namespace', null ),
-            $defHelper1->getArguments()
-        );
+        self::assertInstanceOf( 'Symfony\Component\ExpressionLanguage\Expression', $def2arg1 );
+        self::assertSame( 'service("ezpublish.config.resolver").getParameter("bar", "some_namespace", null)', (string)$def2arg1 );
         // Also check 2nd argument
-        $this->assertSame( array(), $def2->getArgument( 1 ) );
+        self::assertSame( array(), $def2->getArgument( 1 ) );
 
-        /** @var Reference $def3arg1 */
         $def3arg1 = $def3->getArgument( 0 );
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $def3arg1 );
-        $expectedServiceHelperId2 = 'ezpublish.config_resolver.fake.content.default_ttl_ezsettings_ezdemo_site_admin';
-        $dynamicSettingsServices[] = $expectedServiceHelperId2;
-        $this->assertSame( (string)$def3arg1, $expectedServiceHelperId2 );
-        $this->assertTrue( $container->has( $expectedServiceHelperId2 ) );
-        $defHelper2 = $container->getDefinition( $expectedServiceHelperId2 );
-        $factoryArray = $defHelper2->getFactory();
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
-        $this->assertEquals( 'getParameter', $factoryArray[1] );
-        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
-        $this->assertSame(
-            array( 'content.default_ttl', 'ezsettings', 'ezdemo_site_admin' ),
-            $defHelper2->getArguments()
-        );
+        self::assertInstanceOf( 'Symfony\Component\ExpressionLanguage\Expression', $def3arg1 );
+        self::assertSame( 'service("ezpublish.config.resolver").getParameter("content.default_ttl", "ezsettings", "ezdemo_site_admin")', (string)$def3arg1 );
 
-        /** @var Reference $def4arg1 */
         $def4arg1 = $def4->getArgument( 0 );
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $def4arg1 );
-        $expectedServiceHelperId3 = 'ezpublish.config_resolver.fake.languages__';
-        $dynamicSettingsServices[] = $expectedServiceHelperId3;
-        $this->assertSame( (string)$def4arg1, $expectedServiceHelperId3 );
-        $this->assertTrue( $container->has( $expectedServiceHelperId3 ) );
-        $defHelper3 = $container->getDefinition( $expectedServiceHelperId3 );
-        $factoryArray = $defHelper3->getFactory();
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
-        $this->assertEquals( 'getParameter', $factoryArray[1] );
-        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
-        $this->assertSame(
-            array( 'languages', null, null ),
-            $defHelper3->getArguments()
-        );
+        self::assertInstanceOf( 'Symfony\Component\ExpressionLanguage\Expression', $def4arg1 );
+        self::assertSame( 'service("ezpublish.config.resolver").getParameter("languages", null, null)', (string)$def4arg1 );
 
-        /** @var Reference $def4arg1 */
         $def8Calls = $def8->getMethodCalls();
-        $this->assertSame( count( $def8MethodCalls ), count( $def8Calls ) );
-        $this->assertSame( $def8MethodCalls[0][0], $def8Calls[0][0] );
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $def8Calls[0][1][0] );
-        $expectedServiceHelperId4 = 'ezpublish.config_resolver.fake.foo__';
-        $dynamicSettingsServices[] = $expectedServiceHelperId4;
-        $this->assertSame( (string)$def8Calls[0][1][0], $expectedServiceHelperId4 );
-        $this->assertTrue( $container->has( $expectedServiceHelperId4 ) );
-        $defHelper4 = $container->getDefinition( $expectedServiceHelperId4 );
-        $factoryArray = $defHelper4->getFactory();
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
-        $this->assertEquals( 'getParameter', $factoryArray[1] );
-        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
-        $this->assertSame(
-            array( 'foo', null, null ),
-            $defHelper4->getArguments()
-        );
-        $this->assertSame( $def8MethodCalls[1][0], $def8Calls[1][0] );
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $def8Calls[1][1][0] );
-        $expectedServiceHelperId5 = 'ezpublish.config_resolver.fake.bar_baz_';
-        $dynamicSettingsServices[] = $expectedServiceHelperId5;
-        $this->assertSame( (string)$def8Calls[1][1][0], $expectedServiceHelperId5 );
-        $this->assertTrue( $container->has( $expectedServiceHelperId5 ) );
-        $defHelper5 = $container->getDefinition( $expectedServiceHelperId5 );
-        $factoryArray = $defHelper5->getFactory();
-        $this->assertInstanceOf( 'Symfony\\Component\\DependencyInjection\\Reference', $factoryArray[0] );
-        $this->assertEquals( 'getParameter', $factoryArray[1] );
-        $this->assertEquals( 'ezpublish.config.resolver', $factoryArray[0] );
-        $this->assertSame(
-            array( 'bar', 'baz', null ),
-            $defHelper5->getArguments()
+        self::assertSame( count( $def8MethodCalls ), count( $def8Calls ) );
+        self::assertSame( $def8MethodCalls[0][0], $def8Calls[0][0] );
+        self::assertInstanceOf( 'Symfony\Component\ExpressionLanguage\Expression', $def8Calls[0][1][0] );
+        $exprSetFoo = 'service("ezpublish.config.resolver").getParameter("foo", null, null)';
+        self::assertSame( $exprSetFoo, (string)$def8Calls[0][1][0] );
+        self::assertSame( $def8MethodCalls[1][0], $def8Calls[1][0] );
+        self::assertInstanceOf( 'Symfony\Component\ExpressionLanguage\Expression', $def8Calls[1][1][0] );
+        $exprSetBar = 'service("ezpublish.config.resolver").getParameter("bar", "baz", null)';
+        self::assertSame( $exprSetBar, (string)$def8Calls[1][1][0] );
+        $updateableServices['def8'] = array(
+            array( 'setFoo', $exprSetFoo ),
+            array( 'setBar', $exprSetBar ),
         );
 
-        $this->assertTrue( $container->hasParameter( 'ezpublish.config_resolver.resettable_services' ) );
-        $this->assertEquals(
+        self::assertTrue( $container->hasParameter( 'ezpublish.config_resolver.resettable_services' ) );
+        self::assertEquals(
             array( 'def2', 'def3', 'def4', 'def5', 'def6' ),
             $container->getParameter( 'ezpublish.config_resolver.resettable_services' )
         );
-        $this->assertTrue( $container->hasParameter( 'ezpublish.config_resolver.dynamic_settings_services' ) );
-        $this->assertEquals(
-            $dynamicSettingsServices,
-            $container->getParameter( 'ezpublish.config_resolver.dynamic_settings_services' )
+        self::assertEquals(
+            $updateableServices,
+            $container->getParameter( 'ezpublish.config_resolver.updateable_services' )
         );
     }
 }

@@ -7,16 +7,17 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\ComplexSettings;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueFactory;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingValueResolver;
 use PHPUnit_Framework_TestCase;
 
-class ComplexSettingValueFactoryTest extends PHPUnit_Framework_TestCase
+class ComplexSettingValueResolverTest extends PHPUnit_Framework_TestCase
 {
     public function testGetArgumentValue()
     {
+        $resolver = new ComplexSettingValueResolver();
         self::assertEquals(
             '/mnt/nfs/var/ezdemo_site/storage',
-            ComplexSettingValueFactory::getArgumentValue(
+            $resolver->resolveSetting(
                 '/mnt/nfs/$var_dir$/$storage_dir$',
                 'var_dir',
                 'var/ezdemo_site',
