@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
+use InvalidArgumentException;
 
 /**
  * This class represents a UserWrapped object.
@@ -37,7 +38,7 @@ class UserWrapped implements UserInterface, EquatableInterface
 
     public function __construct( CoreUserInterface $wrappedUser, APIUser $apiUser )
     {
-        $this->wrappedUser = $wrappedUser;
+        $this->setWrappedUser( $wrappedUser );
         $this->apiUser = $apiUser;
     }
 
@@ -83,10 +84,17 @@ class UserWrapped implements UserInterface, EquatableInterface
     }
 
     /**
+     * @throws InvalidArgumentException If $wrappedUser is instance of self
+     *
      * @param \Symfony\Component\Security\Core\User\UserInterface $wrappedUser
      */
     public function setWrappedUser( CoreUserInterface $wrappedUser )
     {
+        if ( $wrappedUser instanceOf UserWrapped )
+        {
+            throw new InvalidArgumentException( "Injecting UserWrapped to itself is not allowed to avoid recursion" );
+        }
+
         $this->wrappedUser = $wrappedUser;
     }
 
