@@ -17,11 +17,11 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class Document extends ValueObject
 {
     /**
-     * An array of fields
+     * Id of the document
      *
-     * @var \eZ\Publish\SPI\Search\Field[]
+     * @var string
      */
-    public $fields = array();
+    public $id;
 
     /**
      * Translation language code that the documents represents
@@ -29,6 +29,27 @@ class Document extends ValueObject
      * @var string
      */
     public $languageCode;
+
+    /**
+     * Denotes that document's translation is always available
+     *
+     * @var boolean
+     */
+    public $alwaysAvailable;
+
+    /**
+     * Denotes that document's translation is a main translation of the Content
+     *
+     * @var boolean
+     */
+    public $isMainTranslation;
+
+    /**
+     * An array of fields
+     *
+     * @var \eZ\Publish\SPI\Search\Field[]
+     */
+    public $fields = array();
 
     /**
      * An array of sub-documents

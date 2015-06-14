@@ -28,12 +28,8 @@ class NativeEndpointResolver implements EndpointResolver
      * Holds a map of translations to Endpoint names, with language code as key
      * and Endpoint name as value.
      *
-     * Asterisk as a key defines the endpoint as available for any translation
-     * not explicitly mapped by the language code.
-     *
      * <code>
      *  array(
-     *      "*" => "endpoint0",
      *      "cro-HR" => "endpoint1",
      *      "eng-GB" => "endpoint2",
      *  );
@@ -44,15 +40,38 @@ class NativeEndpointResolver implements EndpointResolver
     private $endpointMap;
 
     /**
+     * Holds a name of the default Endpoint used for translations, if configured
+     *
+     * @var null|string
+     */
+    private $defaultEndpoint;
+
+    /**
+     * Holds a name of the Endpoint used to index translations in main languages, if configured
+     *
+     * @var null|string
+     */
+    private $mainLanguagesEndpoint;
+
+    /**
      * Create from Endpoint names
      *
      * @param string[] $entryEndpoints
      * @param string[] $endpointMap
+     * @param null|string $defaultEndpoint
+     * @param null|string $mainLanguagesEndpoint
      */
-    public function __construct( array $entryEndpoints = array(), array $endpointMap = array() )
+    public function __construct(
+        array $entryEndpoints = array(),
+        array $endpointMap = array(),
+        $defaultEndpoint = null,
+        $mainLanguagesEndpoint = null
+    )
     {
         $this->entryEndpoints = $entryEndpoints;
         $this->endpointMap = $endpointMap;
+        $this->defaultEndpoint = $defaultEndpoint;
+        $this->mainLanguagesEndpoint = $mainLanguagesEndpoint;
     }
 
     public function getEntryEndpoint()
@@ -72,9 +91,9 @@ class NativeEndpointResolver implements EndpointResolver
             return $this->endpointMap[$languageCode];
         }
 
-        if ( isset( $this->endpointMap["*"] ) )
+        if ( isset( $this->defaultEndpoint ) )
         {
-            return $this->endpointMap["*"];
+            return $this->defaultEndpoint;
         }
 
         throw new RuntimeException(
@@ -82,30 +101,39 @@ class NativeEndpointResolver implements EndpointResolver
         );
     }
 
+    public function getMainLanguagesEndpoint()
+    {
+        return $this->mainLanguagesEndpoint;
+    }
+
     public function getSearchTargets( array $languageSettings )
     {
-        if (
-            empty( $languageSettings ) ||
-            (
-                isset( $languageSettings["useAlwaysAvailable"] ) &&
-                $languageSettings["useAlwaysAvailable"] === true
-            )
-        )
+        $languages = (
+            empty( $languageSettings["languages"] ) ?
+                array() :
+                $languageSettings["languages"]
+        );
+        $useAlwaysAvailable = (
+            isset( $languageSettings["useAlwaysAvailable"] ) &&
+            $languageSettings["useAlwaysAvailable"] === true
+        );
+
+        if ( ( $useAlwaysAvailable || empty( $languages ) ) && !isset( $this->mainLanguagesEndpoint ) )
         {
             return $this->getEndpoints();
         }
 
         $targetSet = array();
 
-        foreach ( $languageSettings["languages"] as $languageCode )
+        foreach ( $languages as $languageCode )
         {
             if ( isset( $this->endpointMap[$languageCode] ) )
             {
                 $targetSet[$this->endpointMap[$languageCode]] = true;
             }
-            else if ( isset( $this->endpointMap["*"] ) )
+            else if ( isset( $this->defaultEndpoint ) )
             {
-                $targetSet[$this->endpointMap["*"]] = true;
+                $targetSet[$this->defaultEndpoint] = true;
             }
             else
             {
@@ -113,6 +141,11 @@ class NativeEndpointResolver implements EndpointResolver
                     "Language '{$languageCode}' is not mapped to Solr endpoint"
                 );
             }
+        }
+
+        if ( ( $useAlwaysAvailable || empty( $targetSet ) ) && isset( $this->mainLanguagesEndpoint ) )
+        {
+            $targetSet[$this->mainLanguagesEndpoint] = true;
         }
 
         if ( empty( $targetSet ) )
@@ -125,11 +158,23 @@ class NativeEndpointResolver implements EndpointResolver
 
     public function getEndpoints()
     {
-        if ( empty( $this->endpointMap ) )
+        $endpointSet = array_flip( $this->endpointMap );
+
+        if ( isset( $this->defaultEndpoint ) )
+        {
+            $endpointSet[$this->defaultEndpoint] = true;
+        }
+
+        if ( isset( $this->mainLanguagesEndpoint ) )
+        {
+            $endpointSet[$this->mainLanguagesEndpoint] = true;
+        }
+
+        if ( empty( $endpointSet ) )
         {
             throw new RuntimeException( "No endpoints defined" );
         }
 
-        return array_values( $this->endpointMap );
+        return array_keys( $endpointSet );
     }
 }

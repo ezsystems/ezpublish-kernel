@@ -21,6 +21,7 @@ use RuntimeException;
 use XmlWriter;
 use eZ\Publish\SPI\Search\Field;
 use eZ\Publish\SPI\Search\Document;
+use eZ\Publish\SPI\Search\FieldType;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -261,21 +262,61 @@ class Native extends Gateway
      */
     protected function getCoreFilter( array $languageSettings )
     {
+        $languages = (
+            empty( $languageSettings["languages"] ) ?
+                array() :
+                $languageSettings["languages"]
+        );
+        $useAlwaysAvailable = (
+            isset( $languageSettings["useAlwaysAvailable"] ) &&
+            $languageSettings["useAlwaysAvailable"] === true
+        );
+        $hasMainLanguagesEndpoint = ( $this->endpointResolver->getMainLanguagesEndpoint() !== null );
+
         $filters = array();
+        $languageFilters = array();
 
-        if ( !empty( $languageSettings["languages"] ) )
+        foreach ( $languages as $languageCode )
         {
-            foreach ( $languageSettings["languages"] as $languageCode )
+            $languageFilter = $this->getCoreLanguageFilter( $languages, $languageCode );
+            $languageFilters[] = "({$languageFilter})";
+        }
+
+        if ( !empty( $languageFilters ) )
+        {
+            $languageFilters = implode( " OR ", $languageFilters );
+
+            // Exclude always available index if used
+            if ( $hasMainLanguagesEndpoint )
             {
-                $filters[] = "(" . $this->getCoreLanguageFilter( $languageSettings["languages"], $languageCode ) . ")";
+                $languageFilters = "({$languageFilters}) NOT meta_indexed_main_translation_b:true";
             }
+
+            $filters[] = "({$languageFilters})";
         }
 
-        if ( isset( $languageSettings["useAlwaysAvailable"] ) && $languageSettings["useAlwaysAvailable"] === true )
+        // Handle always available fallback
+        if ( $useAlwaysAvailable )
         {
-            $filters[] = "meta_indexed_is_main_translation_and_always_available_b:true";
+            $filter = "meta_indexed_is_main_translation_and_always_available_b:true";
+
+            // For always available fallback exclude all given languages
+            if ( !empty( $languages ) )
+            {
+                $languageExclude = $this->getLanguageExcludeCondition( $languages );
+                $filter = "({$filter} {$languageExclude})";
+            }
+
+            // Exclude non indexed main language documents if main language index if used
+            if ( $hasMainLanguagesEndpoint )
+            {
+                $filter = "({$filter} AND meta_indexed_main_translation_b:true)";
+            }
+
+            $filters[] = $filter;
         }
-        else if ( empty( $languageSettings["languages"] ) )
+        // If no given languages and not using always available fallback, search only main languages
+        else if ( empty( $languages ) )
         {
             $filters[] = "meta_indexed_is_main_translation_b:true";
         }
@@ -297,12 +338,34 @@ class Native extends Gateway
      */
     protected function getCoreLanguageFilter( array $languageCodes, $selectedLanguageCode )
     {
+        $include = 'meta_indexed_language_code_s:"' . $selectedLanguageCode . '"';
+        $exclude = $this->getLanguageExcludeCondition( $languageCodes, $selectedLanguageCode );
+
+        if ( !empty( $exclude ) )
+        {
+            return "{$include} {$exclude}";
+        }
+
+        return $include;
+    }
+
+    /**
+     * Returns excluding condition for the given list of language codes and
+     * a selected language code among them. If $selectedLanguageCode is omitted,
+     * all languages will be included in the filtering condition.
+     *
+     * @param array $languageCodes
+     * @param null|string $selectedLanguageCode
+     *
+     * @return string
+     */
+    protected function getLanguageExcludeCondition( array $languageCodes, $selectedLanguageCode = null )
+    {
         $filters = array();
-        $filters[] = 'meta_indexed_language_code_s:"' . $selectedLanguageCode . '"';
 
         foreach ( $languageCodes as $languageCode )
         {
-            if ( $languageCode === $selectedLanguageCode )
+            if ( $selectedLanguageCode !== null && $languageCode === $selectedLanguageCode )
             {
                 break;
             }
@@ -310,7 +373,7 @@ class Native extends Gateway
             $filters[] = 'NOT language_code_ms:"' . $languageCode . '"';
         }
 
-        return implode( " AND ", $filters );
+        return implode( " ", $filters );
     }
 
     /**
@@ -325,30 +388,74 @@ class Native extends Gateway
      */
     public function bulkIndexDocuments( array $documents )
     {
-        $map = array();
+        $documentMap = array();
+        $mainTranslationsEndpoint = $this->endpointResolver->getMainLanguagesEndpoint();
+        $alwaysAvailableDocuments = array();
 
         foreach ( $documents as $translationDocuments )
         {
             foreach ( $translationDocuments as $document )
             {
-                $map[$document->languageCode][] = $document;
+                $documentMap[$document->languageCode][] = $document;
+
+                if ( $mainTranslationsEndpoint !== null && $document->isMainTranslation )
+                {
+                    $alwaysAvailableDocuments[] = $this->getAlwaysAvailableDocument( $document );
+                }
             }
         }
 
-        foreach ( $map as $languageCode => $translationDocuments )
+        foreach ( $documentMap as $languageCode => $translationDocuments )
         {
-            $this->bulkIndexTranslationDocuments( $translationDocuments, $languageCode );
+            $this->doBulkIndexDocuments(
+                $this->endpointRegistry->getEndpoint(
+                    $this->endpointResolver->getIndexingTarget( $languageCode )
+                ),
+                $translationDocuments
+            );
+        }
+
+        if ( !empty( $alwaysAvailableDocuments ) )
+        {
+            $this->doBulkIndexDocuments(
+                $this->endpointRegistry->getEndpoint( $mainTranslationsEndpoint ),
+                $alwaysAvailableDocuments
+            );
         }
     }
 
-    protected function bulkIndexTranslationDocuments( array $documents, $languageCode )
+    /**
+     * Returns version of the $document to be indexed in the always available core
+     *
+     * @param \eZ\Publish\SPI\Search\Document $document
+     *
+     * @return \eZ\Publish\SPI\Search\Document
+     */
+    protected function getAlwaysAvailableDocument( Document $document )
+    {
+        // Clone to prevent mutation
+        $document = clone $document;
+
+        $document->id .= "mt";
+        $document->fields[] = new Field(
+            "meta_indexed_main_translation",
+            true,
+            new FieldType\BooleanField()
+        );
+
+        return $document;
+    }
+
+    /**
+     * @param \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint $endpoint
+     * @param \eZ\Publish\SPI\Search\Document[] $documents
+     */
+    protected function doBulkIndexDocuments( Endpoint $endpoint, array $documents )
     {
         $updates = $this->createUpdates( $documents );
         $result = $this->client->request(
             'POST',
-            $this->endpointRegistry->getEndpoint(
-                $this->endpointResolver->getIndexingTarget( $languageCode )
-            ),
+            $endpoint,
             '/update?' .
             ( $this->commit ? "softCommit=true&" : "" ) . 'wt=json',
             new Message(
@@ -467,6 +574,15 @@ class Native extends Gateway
     protected function writeDocument( XmlWriter $xmlWriter, Document $document )
     {
         $xmlWriter->startElement( 'doc' );
+
+        $this->writeField(
+            $xmlWriter,
+            new Field(
+                'id',
+                $document->id,
+                new FieldType\IdentifierField()
+            )
+        );
 
         foreach ( $document->fields as $field )
         {

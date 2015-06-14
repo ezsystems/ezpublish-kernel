@@ -17,14 +17,14 @@ use eZ\Publish\SPI\Search\FieldType;
 interface EndpointResolver
 {
     /**
-     * Returns the Endpoint used as entry point for distributed search
+     * Returns name of the Endpoint used as entry point for distributed search
      *
      * @return \eZ\Publish\Core\Search\Solr\Content\Gateway\Endpoint
      */
     public function getEntryEndpoint();
 
     /**
-     * Returns Endpoint that indexes Content translations in the given $languageCode
+     * Returns name of the Endpoint that indexes Content translations in the given $languageCode
      *
      * @param string $languageCode
      *
@@ -33,7 +33,14 @@ interface EndpointResolver
     public function getIndexingTarget( $languageCode );
 
     /**
-     * Returns an array of Endpoints for the given $languageSettings
+     * Returns name of the Endpoint used to index translations in main languages
+     *
+     * @return null|string
+     */
+    public function getMainLanguagesEndpoint();
+
+    /**
+     * Returns an array of Endpoint names for the given $languageSettings
      *
      * @param array $languageSettings
      *
@@ -42,7 +49,7 @@ interface EndpointResolver
     public function getSearchTargets( array $languageSettings );
 
     /**
-     * Returns all Endpoints
+     * Returns names of all Endpoints
      *
      * @return string[]
      */

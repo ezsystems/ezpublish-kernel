@@ -1397,6 +1397,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             $indexTwo = 0;
         }
 
+        $this->assertEquals( 2, $searchResult->totalCount );
         $this->assertEquals( $contentOneId, $contentIdList[$indexOne] );
         $this->assertEquals( $contentTwoId, $contentIdList[$indexTwo] );
     }
