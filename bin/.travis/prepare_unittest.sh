@@ -13,13 +13,13 @@ if [ "$DB" = "postgresql" ] ; then psql -c "CREATE DATABASE $DB_NAME;" -U postgr
 ./bin/.travis/install_composer_github_key.sh
 
 # Update composer to newest version
-composer self-update
+composer self-update --no-interaction
 
 # Switch to another Symfony version if asked for
 if [ "$SYMFONY_VERSION" != "" ] ; then composer require --no-update symfony/symfony=$SYMFONY_VERSION ; fi;
 
 # Install packages using composer
-composer install --prefer-dist
+composer install --no-progress --no-interaction
 
 # Setup Solr / Elastic search if asked for
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
